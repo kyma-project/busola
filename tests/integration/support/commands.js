@@ -1,5 +1,4 @@
 import 'cypress-file-upload';
-import jsyaml from 'js-yaml';
 
 Cypress.skipAfterFail = ({ skipAllSuits = false } = {}) => {
   before(function () {

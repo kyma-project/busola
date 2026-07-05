@@ -84,7 +84,3 @@ kubectl_apply_url https://raw.githubusercontent.com/gardener/cert-management/mas
 
 echo "Apply OAuth2 Hydra CRD"
 kubectl_apply_url https://raw.githubusercontent.com/ory/hydra-maester/master/config/crd/bases/hydra.ory.sh_oauth2clients.yaml
-
-echo "Apply fake busola CRD"
-kubectl apply -f tests/integration/fixtures/community-modules/busola/busola-crd.yaml
-kubectl apply -f tests/integration/fixtures/community-modules/busola/busola-cr.yaml
