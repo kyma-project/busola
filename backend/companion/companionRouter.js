@@ -10,6 +10,7 @@ import {
   requireCredential,
 } from '../utils/rate-limit-key.js';
 import { createBoundedCache } from '../utils/bounded-cache.js';
+import { extractShootId } from './extractShootId.js';
 
 import config from '../src/config/config.js';
 
@@ -17,6 +18,13 @@ const tokenManager = new TokenManager();
 
 const companionApiBaseUrl =
   config.features?.KYMA_COMPANION?.config?.apiBaseUrl ?? '';
+
+// Read from our own env config, not the cluster — otherwise a cluster could
+// just claim it's on the allowed issuer.
+const allowedIssuerUrl =
+  config.features?.KYMA_COMPANION?.config?.issuerUrl ?? '';
+
+const stripTrailingSlash = (url) => url.replace(/\/+$/, '');
 
 const COMPANION_API_BASE_URL = `${companionApiBaseUrl}/api/conversations/`;
 
@@ -38,7 +46,7 @@ const companionRateLimiter = rateLimit({
   keyGenerator: (req) => hashCredential(getK8sCredentialFromBody(req), 'cred'),
 });
 
-// Cluster region is immutable — safe to cache for the process lifetime.
+// A cluster's region never changes, so we can keep it cached for the whole run.
 const CLUSTER_REGION_CACHE_MAX = 1000;
 const clusterRegionCache = createBoundedCache({
   max: CLUSTER_REGION_CACHE_MAX,
@@ -66,6 +74,18 @@ async function handlePublicKey(req, res) {
       return res
         .status(400)
         .json({ error: 'Missing or invalid public_key in request body' });
+    }
+
+    // Joule can only get the cluster's credentials through this key exchange,
+    // so blocking it here shuts Joule out even if someone skips the UI checks.
+    const { eligible, reason } = await checkJouleEligibility({
+      clusterUrl: parsed.clusterUrl,
+      oidcIssuerUrl: parsed.oidcIssuerUrl,
+    });
+    if (!eligible) {
+      return res
+        .status(403)
+        .json({ error: 'Joule is not available for this cluster', reason });
     }
 
     const headers = {
@@ -117,6 +137,7 @@ function extractAuthHeaders(req) {
     clientCertificateData,
     clientKeyData,
     sessionId,
+    oidcIssuerUrl,
   } = parsedBody;
   return {
     clusterUrl,
@@ -125,6 +146,7 @@ function extractAuthHeaders(req) {
     clientCertificateData,
     clientKeyData,
     sessionId,
+    oidcIssuerUrl,
   };
 }
 
@@ -314,61 +336,72 @@ async function handleFollowUpSuggestions(req, res) {
   }
 }
 
-const SHOOT_ID_PATTERN = /^[A-Za-z0-9]([A-Za-z0-9._-]{0,61}[A-Za-z0-9])?$/;
+async function fetchClusterRegion(shootId) {
+  const cached = clusterRegionCache.get(shootId);
+  if (cached !== undefined) return cached;
+  if (clusterRegionNegativeCache.has(shootId)) return null;
 
-async function handleClusterRegion(req, res) {
-  const { shootId } = req.params;
-  if (!SHOOT_ID_PATTERN.test(shootId)) {
-    return res.status(400).json({ error: 'Invalid shoot ID format' });
+  const url = new URL(
+    `/api/tools/cluster-region/${encodeURIComponent(shootId)}`,
+    companionApiBaseUrl,
+  );
+  const headers = { Accept: 'application/json' };
+  if (!SKIP_AUTH) {
+    const AUTH_TOKEN = await tokenManager.getToken();
+    headers.Authorization = `Bearer ${AUTH_TOKEN}`;
+  }
+  const response = await fetch(url.toString(), { method: 'GET', headers });
+
+  const isOk = response.status >= 200 && response.status < 300;
+  if (!isOk) {
+    // Only remember 4xx answers — a 5xx is probably temporary, so let it retry.
+    if (response.status >= 400 && response.status < 500) {
+      clusterRegionNegativeCache.set(shootId, true);
+    }
+    return null;
+  }
+
+  const data = await response.json();
+  clusterRegionCache.set(shootId, data);
+  return data;
+}
+
+// Works out whether Joule is allowed on this cluster. Both the issuer and the
+// region come from our side rather than the cluster, and if we can't be sure
+// we treat it as a no.
+async function checkJouleEligibility({ clusterUrl, oidcIssuerUrl }) {
+  if (
+    allowedIssuerUrl &&
+    oidcIssuerUrl &&
+    stripTrailingSlash(oidcIssuerUrl) !== stripTrailingSlash(allowedIssuerUrl)
+  ) {
+    return { eligible: false, reason: 'issuer-mismatch' };
   }
   if (!companionApiBaseUrl) {
-    return res
-      .status(500)
-      .json({ error: 'Companion API base URL is not configured' });
+    return { eligible: false, reason: 'not-configured' };
   }
 
-  const cached = clusterRegionCache.get(shootId);
-  if (cached !== undefined) {
-    return res.status(200).json(cached);
-  }
-  const negative = clusterRegionNegativeCache.get(shootId);
-  if (negative !== undefined) {
-    return res.status(negative.status).json(negative.body);
-  }
+  const shootId = extractShootId(clusterUrl ?? '');
+  if (!shootId) return { eligible: false, reason: 'not-skr' };
 
+  const region = await fetchClusterRegion(shootId);
+  if (!region || typeof region.isEUAccessOnly !== 'boolean') {
+    return { eligible: false, reason: 'unknown' };
+  }
+  if (region.isEUAccessOnly) return { eligible: false, reason: 'eu-access' };
+  return { eligible: true };
+}
+
+async function handleJouleEligibility(req, res) {
   try {
-    const url = new URL(
-      `/api/tools/cluster-region/${encodeURIComponent(shootId)}`,
-      companionApiBaseUrl,
-    );
-    const headers = { Accept: 'application/json' };
-    if (!SKIP_AUTH) {
-      const AUTH_TOKEN = await tokenManager.getToken();
-      headers.Authorization = `Bearer ${AUTH_TOKEN}`;
-    }
-    const response = await fetch(url.toString(), { method: 'GET', headers });
-
-    const isOk = response.status >= 200 && response.status < 300;
-    if (!isOk) {
-      // Upstream error body may be HTML (LB page) — don't forward it.
-      const body = { error: 'Failed to fetch cluster region data' };
-      // Cache 4xx only; 5xx are transient.
-      if (response.status >= 400 && response.status < 500) {
-        clusterRegionNegativeCache.set(shootId, {
-          status: response.status,
-          body,
-        });
-      }
-      return res.status(response.status).json(body);
-    }
-
-    const data = await response.json();
-    clusterRegionCache.set(shootId, data);
-    return res.status(200).json(data);
+    const { clusterUrl, oidcIssuerUrl } = extractAuthHeaders(req);
+    const result = await checkJouleEligibility({ clusterUrl, oidcIssuerUrl });
+    return res.status(200).json(result);
   } catch (error) {
     req.log.warn(error);
     return res.status(500).json({
-      error: `Failed to fetch cluster region data. Request ID: ${String(req.id)}`,
+      eligible: false,
+      error: `Failed to determine Joule eligibility. Request ID: ${String(req.id)}`,
     });
   }
 }
@@ -392,8 +425,12 @@ router.post(
   companionRateLimiter,
   handleFollowUpSuggestions,
 );
-// Unauthenticated; authenticating it is a pending follow-up.
-router.get('/cluster-region/:shootId', handleClusterRegion);
+router.post(
+  '/joule-eligibility',
+  requireCompanionCredential,
+  companionRateLimiter,
+  handleJouleEligibility,
+);
 
-export { handleClusterRegion, CLUSTER_REGION_CACHE_MAX };
+export { handleJouleEligibility, handlePublicKey };
 export default router;

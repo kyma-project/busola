@@ -1,5 +1,6 @@
-// Kyma SKR API hosts: `api.<shoot>.<...>.kyma.<...>`.
-export function extractShootId(serverUrl: string): string | null {
+// A Kyma SKR API URL looks like api.<shoot>.<...>.kyma.<...>, so the shoot ID
+// is the second label of the hostname.
+export function extractShootId(serverUrl) {
   try {
     const parts = new URL(serverUrl).hostname.split('.');
     if (parts[0] !== 'api' || parts.length <= 2) return null;

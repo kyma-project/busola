@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { extractShootId } from './extractShootId';
+import { extractShootId } from './extractShootId.js';
 
 describe('extractShootId', () => {
   it('extracts shoot ID from a standard Kyma SKR URL', () => {

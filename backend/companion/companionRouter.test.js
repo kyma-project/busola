@@ -12,6 +12,7 @@ vi.mock('../src/config/config.js', () => ({
       KYMA_COMPANION: {
         config: {
           apiBaseUrl: 'https://companion.example.com',
+          issuerUrl: 'https://kyma.accounts.ondemand.com',
           skipAuth: false,
         },
       },
@@ -20,6 +21,9 @@ vi.mock('../src/config/config.js', () => ({
 }));
 
 vi.mock('lodash.escape', () => ({ default: (s) => s }));
+
+const SKR_URL = 'https://api.c-abc123.kyma.example.com';
+const KYMA_ISSUER = 'https://kyma.accounts.ondemand.com';
 
 function makeMockRes() {
   const res = {
@@ -37,23 +41,31 @@ function makeMockRes() {
   return res;
 }
 
-function makeMockReq(shootId) {
+function makeMockReq(body = {}) {
   return {
-    params: { shootId },
+    body: { clusterUrl: SKR_URL, clusterToken: 'tok', ...body },
     log: { warn: vi.fn() },
     id: 'req-1234',
   };
 }
 
-describe('handleClusterRegion', () => {
-  let handleClusterRegion;
-  let CLUSTER_REGION_CACHE_MAX;
+function stubRegion({ ok = true, status = 200, data } = {}) {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn().mockResolvedValue({
+      ok,
+      status,
+      json: async () => data ?? { isEUAccessOnly: false },
+    }),
+  );
+}
+
+describe('handlePublicKey (Joule eligibility gate)', () => {
+  let handlePublicKey;
 
   beforeEach(async () => {
     vi.resetModules();
-    const mod = await import('./companionRouter.js');
-    handleClusterRegion = mod.handleClusterRegion;
-    CLUSTER_REGION_CACHE_MAX = mod.CLUSTER_REGION_CACHE_MAX;
+    handlePublicKey = (await import('./companionRouter.js')).handlePublicKey;
   });
 
   afterEach(() => {
@@ -61,86 +73,166 @@ describe('handleClusterRegion', () => {
     vi.unstubAllGlobals();
   });
 
-  it('returns 400 for a shoot ID with spaces', async () => {
-    const req = makeMockReq('invalid shoot id');
-    const res = makeMockRes();
-    await handleClusterRegion(req, res);
-    expect(res._status).toBe(400);
-    expect(res._body.error).toMatch(/Invalid shoot ID format/);
-  });
+  // The handler makes two different calls, so give each one its own fake reply.
+  function stubFetchRouted({ region = { isEUAccessOnly: false } } = {}) {
+    const fetchMock = vi.fn((url) => {
+      if (url.includes('/api/tools/cluster-region/')) {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: async () => region,
+        });
+      }
+      return Promise.resolve({
+        status: 200,
+        json: async () => ({ session_id: 's1', companion_public_key: 'k1' }),
+      });
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    return fetchMock;
+  }
 
-  it('returns 400 for a shoot ID that is too long', async () => {
-    const req = makeMockReq('a'.repeat(64));
-    const res = makeMockRes();
-    await handleClusterRegion(req, res);
-    expect(res._status).toBe(400);
-  });
-
-  it('returns 400 for a shoot ID with injection characters', async () => {
-    const req = makeMockReq('c-abc,label=x');
-    const res = makeMockRes();
-    await handleClusterRegion(req, res);
-    expect(res._status).toBe(400);
-  });
-
-  it('proxies a 200 response from kyma-companion', async () => {
-    const mockData = {
-      'shoot-id': 'c-abc123',
-      region: 'eu-west-1',
-      platformRegion: 'cf-eu11',
-      provider: 'aws',
-      isEUAccessOnly: false,
+  function makePkReq(body = {}) {
+    return {
+      body: { public_key: 'abc', clusterUrl: SKR_URL, ...body },
+      log: { warn: vi.fn() },
+      id: 'req-1234',
     };
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({ status: 200, json: async () => mockData }),
+  }
+
+  it('refuses the key exchange (403) when the OIDC issuer mismatches', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const res = makeMockRes();
+    await handlePublicKey(
+      makePkReq({ oidcIssuerUrl: 'https://other.ias.example.com' }),
+      res,
     );
 
-    const req = makeMockReq('c-abc123');
+    expect(res._status).toBe(403);
+    expect(res._body.reason).toBe('issuer-mismatch');
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('refuses the key exchange (403) for an EU Access Only cluster', async () => {
+    const fetchMock = stubFetchRouted({ region: { isEUAccessOnly: true } });
+
     const res = makeMockRes();
-    await handleClusterRegion(req, res);
+    await handlePublicKey(makePkReq(), res);
+
+    expect(res._status).toBe(403);
+    expect(res._body.reason).toBe('eu-access');
+    expect(
+      fetchMock.mock.calls.some(([url]) => url.includes('/api/public-key')),
+    ).toBe(false);
+  });
+
+  it('performs the key exchange for an eligible cluster', async () => {
+    const fetchMock = stubFetchRouted();
+
+    const res = makeMockRes();
+    await handlePublicKey(makePkReq({ oidcIssuerUrl: KYMA_ISSUER }), res);
 
     expect(res._status).toBe(200);
-    expect(res._body.isEUAccessOnly).toBe(false);
+    expect(res._body.session_id).toBe('s1');
+    expect(
+      fetchMock.mock.calls.some(([url]) => url.includes('/api/public-key')),
+    ).toBe(true);
+  });
+});
+
+describe('handleJouleEligibility', () => {
+  let handleJouleEligibility;
+
+  beforeEach(async () => {
+    vi.resetModules();
+    handleJouleEligibility = (await import('./companionRouter.js'))
+      .handleJouleEligibility;
   });
 
-  it('forwards 404 from kyma-companion', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({
-        status: 404,
-        json: async () => ({ error: 'Not Found' }),
-      }),
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it('returns eligible: false without fetching when the OIDC issuer mismatches', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const res = makeMockRes();
+    await handleJouleEligibility(
+      makeMockReq({ oidcIssuerUrl: 'https://other.ias.example.com' }),
+      res,
     );
 
-    const req = makeMockReq('c-nonexistent');
-    const res = makeMockRes();
-    await handleClusterRegion(req, res);
-
-    expect(res._status).toBe(404);
+    expect(res._body).toEqual({ eligible: false, reason: 'issuer-mismatch' });
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it('returns 500 when fetch throws', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('timeout')));
-
-    const req = makeMockReq('c-abc123');
+  it('treats issuers differing only by a trailing slash as a match', async () => {
+    stubRegion({ data: { isEUAccessOnly: false } });
     const res = makeMockRes();
-    await handleClusterRegion(req, res);
-
-    expect(res._status).toBe(500);
-    expect(res._body.error).toMatch(/Failed to fetch cluster region data/);
+    await handleJouleEligibility(
+      makeMockReq({ oidcIssuerUrl: `${KYMA_ISSUER}/` }),
+      res,
+    );
+    expect(res._body).toEqual({ eligible: true });
   });
 
-  it('calls the companion API with the Authorization header', async () => {
+  it('skips the issuer check when no OIDC issuer is provided', async () => {
+    stubRegion({ data: { isEUAccessOnly: false } });
+    const res = makeMockRes();
+    await handleJouleEligibility(makeMockReq(), res);
+    expect(res._body).toEqual({ eligible: true });
+  });
+
+  it('returns eligible: true for a non-EU cluster with a matching issuer', async () => {
+    stubRegion({ data: { isEUAccessOnly: false } });
+    const res = makeMockRes();
+    await handleJouleEligibility(
+      makeMockReq({ oidcIssuerUrl: KYMA_ISSUER }),
+      res,
+    );
+    expect(res._body).toEqual({ eligible: true });
+  });
+
+  it('returns eligible: false for an EU Access Only cluster', async () => {
+    stubRegion({ data: { isEUAccessOnly: true } });
+    const res = makeMockRes();
+    await handleJouleEligibility(makeMockReq(), res);
+    expect(res._body).toEqual({ eligible: false, reason: 'eu-access' });
+  });
+
+  it('returns eligible: false (not-skr) without fetching for a non-SKR cluster', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const res = makeMockRes();
+    await handleJouleEligibility(
+      makeMockReq({ clusterUrl: 'https://k8s.example.com' }),
+      res,
+    );
+    expect(res._body).toEqual({ eligible: false, reason: 'not-skr' });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('returns eligible: false (unknown) when the region lacks a boolean isEUAccessOnly', async () => {
+    stubRegion({ data: {} });
+    const res = makeMockRes();
+    await handleJouleEligibility(makeMockReq(), res);
+    expect(res._body).toEqual({ eligible: false, reason: 'unknown' });
+  });
+
+  it('sends the service Authorization header to the companion API', async () => {
     const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
       status: 200,
       json: async () => ({ isEUAccessOnly: false }),
     });
     vi.stubGlobal('fetch', fetchMock);
 
-    const req = makeMockReq('c-abc123');
-    const res = makeMockRes();
-    await handleClusterRegion(req, res);
+    await handleJouleEligibility(makeMockReq(), makeMockRes());
 
     expect(fetchMock).toHaveBeenCalledOnce();
     const [url, opts] = fetchMock.mock.calls[0];
@@ -148,7 +240,7 @@ describe('handleClusterRegion', () => {
     expect(opts.headers.Authorization).toBe('Bearer mock-token');
   });
 
-  it('returns cached response on second request without hitting the companion API', async () => {
+  it('caches the region so a second request does not hit the companion API', async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
@@ -156,25 +248,15 @@ describe('handleClusterRegion', () => {
     });
     vi.stubGlobal('fetch', fetchMock);
 
-    const req = makeMockReq('c-cached');
-    await handleClusterRegion(req, makeMockRes());
+    await handleJouleEligibility(makeMockReq(), makeMockRes());
+    await handleJouleEligibility(makeMockReq(), makeMockRes());
     expect(fetchMock).toHaveBeenCalledOnce();
-
-    const res2 = makeMockRes();
-    await handleClusterRegion(makeMockReq('c-cached'), res2);
-    expect(fetchMock).toHaveBeenCalledOnce(); // still only once
-    expect(res2._status).toBe(200);
-    expect(res2._body.isEUAccessOnly).toBe(false);
   });
 
-  it('does not cache transient 5xx responses (retries on next request)', async () => {
+  it('does not cache transient 5xx region failures', async () => {
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce({
-        ok: false,
-        status: 500,
-        json: async () => ({ error: 'upstream failure' }),
-      })
+      .mockResolvedValueOnce({ ok: false, status: 500, json: async () => ({}) })
       .mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -182,68 +264,34 @@ describe('handleClusterRegion', () => {
       });
     vi.stubGlobal('fetch', fetchMock);
 
-    await handleClusterRegion(makeMockReq('c-err'), makeMockRes());
-    const res2 = makeMockRes();
-    await handleClusterRegion(makeMockReq('c-err'), res2);
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-    expect(res2._status).toBe(200);
-  });
-
-  it('negatively caches 404 responses without re-hitting the companion API', async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: false,
-      status: 404,
-      json: async () => ({ error: 'Not Found' }),
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
     const res1 = makeMockRes();
-    await handleClusterRegion(makeMockReq('c-missing'), res1);
-    expect(res1._status).toBe(404);
-    expect(fetchMock).toHaveBeenCalledOnce();
+    await handleJouleEligibility(makeMockReq(), res1);
+    expect(res1._body).toEqual({ eligible: false, reason: 'unknown' });
 
     const res2 = makeMockRes();
-    await handleClusterRegion(makeMockReq('c-missing'), res2);
-    expect(res2._status).toBe(404);
+    await handleJouleEligibility(makeMockReq(), res2);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(res2._body).toEqual({ eligible: true });
+  });
+
+  it('negatively caches 404 region responses', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue({ ok: false, status: 404, json: async () => ({}) });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await handleJouleEligibility(makeMockReq(), makeMockRes());
+    const res2 = makeMockRes();
+    await handleJouleEligibility(makeMockReq(), res2);
     expect(fetchMock).toHaveBeenCalledOnce(); // served from the negative cache
+    expect(res2._body).toEqual({ eligible: false, reason: 'unknown' });
   });
 
-  it('does not leak the upstream error body to the client', async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: false,
-      status: 502,
-      json: async () => {
-        throw new Error('Unexpected token < in JSON'); // HTML error page
-      },
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
+  it('returns 500 when the region fetch throws', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('timeout')));
     const res = makeMockRes();
-    await handleClusterRegion(makeMockReq('c-bad-gateway'), res);
-    expect(res._status).toBe(502);
-    expect(res._body.error).toMatch(/Failed to fetch cluster region data/);
-  });
-
-  it('evicts the oldest entry when the cache reaches its limit', async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ isEUAccessOnly: false }),
-    });
-    vi.stubGlobal('fetch', fetchMock);
-
-    for (let i = 0; i < CLUSTER_REGION_CACHE_MAX; i++) {
-      await handleClusterRegion(makeMockReq(`c-fill${i}`), makeMockRes());
-    }
-    expect(fetchMock).toHaveBeenCalledTimes(CLUSTER_REGION_CACHE_MAX);
-
-    await handleClusterRegion(makeMockReq('c-new'), makeMockRes());
-    expect(fetchMock).toHaveBeenCalledTimes(CLUSTER_REGION_CACHE_MAX + 1);
-
-    await handleClusterRegion(makeMockReq('c-fill0'), makeMockRes());
-    expect(fetchMock).toHaveBeenCalledTimes(CLUSTER_REGION_CACHE_MAX + 2);
-
-    await handleClusterRegion(makeMockReq('c-fill2'), makeMockRes());
-    expect(fetchMock).toHaveBeenCalledTimes(CLUSTER_REGION_CACHE_MAX + 2);
+    await handleJouleEligibility(makeMockReq(), res);
+    expect(res._status).toBe(500);
+    expect(res._body.eligible).toBe(false);
   });
 });

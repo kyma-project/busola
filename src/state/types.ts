@@ -20,7 +20,6 @@ export interface KymaCompanionFeature extends ConfigFeature {
     model?: string;
     queryMaxTokens?: number;
     apiBaseUrl?: string;
-    issuerUrl?: string;
   };
   useJoule?: boolean;
   jouleConfig?: KymaCompanionJouleConfig;

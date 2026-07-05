@@ -17,6 +17,14 @@ interface ClusterAuth {
   clusterUrl: string;
   certificateAuthorityData: string;
   auth: AuthPayload;
+  oidcIssuerUrl?: string;
+}
+
+// We send this with the key exchange so the backend can check the cluster is
+// allowed to use Joule.
+interface KeyExchangeContext {
+  clusterUrl: string;
+  oidcIssuerUrl?: string;
 }
 
 export interface EncryptedAuth {
@@ -63,7 +71,9 @@ function concatBuffers(
   return merged;
 }
 
-async function performKeyExchange(): Promise<SessionKeys> {
+async function performKeyExchange(
+  context: KeyExchangeContext,
+): Promise<SessionKeys> {
   const clientKeys = await window.crypto.subtle.generateKey(
     { name: 'ECDH', namedCurve: 'P-521' },
     false,
@@ -80,7 +90,11 @@ async function performKeyExchange(): Promise<SessionKeys> {
   const response = await fetch(`${backendAddress}/ai-chat/public-key`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ public_key: toBase64(clientPublicKeyBytes) }),
+    body: JSON.stringify({
+      public_key: toBase64(clientPublicKeyBytes),
+      clusterUrl: context.clusterUrl,
+      oidcIssuerUrl: context.oidcIssuerUrl,
+    }),
   });
 
   if (!response.ok) {
@@ -145,14 +159,16 @@ async function performKeyExchange(): Promise<SessionKeys> {
  * if one exists, otherwise performs the ECDH exchange.
  * Called once per session on first Joule interaction.
  */
-export async function ensureKeyExchange(): Promise<SessionKeys> {
+export async function ensureKeyExchange(
+  context: KeyExchangeContext,
+): Promise<SessionKeys> {
   if (cachedSession) {
     return cachedSession;
   }
   if (pendingKeyExchange) {
     return pendingKeyExchange;
   }
-  pendingKeyExchange = performKeyExchange().then((session) => {
+  pendingKeyExchange = performKeyExchange(context).then((session) => {
     cachedSession = session;
     pendingKeyExchange = null;
     return session;
@@ -168,7 +184,10 @@ export async function ensureKeyExchange(): Promise<SessionKeys> {
 export async function encryptAuthPayload(
   cluster: ClusterAuth,
 ): Promise<EncryptedAuth> {
-  const session = await ensureKeyExchange();
+  const session = await ensureKeyExchange({
+    clusterUrl: cluster.clusterUrl,
+    oidcIssuerUrl: cluster.oidcIssuerUrl,
+  });
 
   // Build payload supporting both token and certificate auth
   const payloadObj: Record<string, string> = {

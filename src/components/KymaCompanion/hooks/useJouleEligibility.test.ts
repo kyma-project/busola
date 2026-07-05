@@ -10,7 +10,7 @@ import {
 import { renderHook, waitFor } from '@testing-library/react';
 import { useJouleEligibility } from './useJouleEligibility';
 import { clusterAtom } from 'state/clusterAtom';
-import { deploymentConfigurationAtom } from 'state/configuration/configurationAtom';
+import { authDataAtom } from 'state/authDataAtom';
 
 vi.mock('hooks/useFeature');
 vi.mock('jotai', async (importOriginal) => {
@@ -46,13 +46,10 @@ const makeCluster = (serverUrl = SKR_SERVER, oidcIssuerUrl?: string) => ({
   },
 });
 
-// The trusted issuer comes from the deployment config atom, not from useFeature.
-function stubAtoms(cluster: unknown, issuerUrl = '') {
+function stubAtoms(cluster: unknown, authData: unknown = { token: 'tok' }) {
   mockUseAtomValue.mockImplementation((atom: unknown) => {
-    if (atom === deploymentConfigurationAtom) {
-      return { features: { KYMA_COMPANION: { config: { issuerUrl } } } };
-    }
     if (atom === clusterAtom) return cluster;
+    if (atom === authDataAtom) return authData;
     return undefined;
   });
 }
@@ -62,6 +59,14 @@ function stubFeature(overrides: Record<string, unknown> = {}) {
     isEnabled: true,
     useJoule: true,
     ...overrides,
+  });
+}
+
+function stubFetch(result: { eligible: boolean; reason?: string }) {
+  (fetch as Mock).mockResolvedValue({
+    ok: true,
+    status: 200,
+    json: async () => result,
   });
 }
 
@@ -77,160 +82,84 @@ describe('useJouleEligibility', () => {
     vi.unstubAllGlobals();
   });
 
-  it('returns false when KYMA_COMPANION is disabled', () => {
+  it('returns false and does not fetch when KYMA_COMPANION is disabled', () => {
     stubFeature({ isEnabled: false });
     const { result } = renderHook(() => useJouleEligibility());
     expect(result.current).toBe(false);
+    expect(fetch).not.toHaveBeenCalled();
   });
 
-  it('returns false when useJoule is false in config', () => {
+  it('returns false and does not fetch when useJoule is false', () => {
     stubFeature({ useJoule: false });
     const { result } = renderHook(() => useJouleEligibility());
     expect(result.current).toBe(false);
+    expect(fetch).not.toHaveBeenCalled();
   });
 
-  it('returns false while EU check is in-flight (fail-closed)', () => {
+  it('does not fetch when the cluster has no credentials', () => {
+    stubAtoms(makeCluster(), null);
+    renderHook(() => useJouleEligibility());
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('does not fetch when the cluster has no server URL', () => {
+    stubAtoms({
+      currentContext: { cluster: { cluster: {} }, user: { user: {} } },
+    });
+    renderHook(() => useJouleEligibility());
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('returns false while the eligibility check is in-flight (fail-closed)', () => {
     (fetch as Mock).mockReturnValue(new Promise(() => {})); // never resolves
     const { result } = renderHook(() => useJouleEligibility());
     expect(result.current).toBe(false);
   });
 
-  it('returns true when EU check resolves isEUAccessOnly: false', async () => {
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ isEUAccessOnly: false }),
-    });
+  it('returns true when the backend reports eligible', async () => {
+    stubFetch({ eligible: true });
     const { result } = renderHook(() => useJouleEligibility());
     await waitFor(() => expect(result.current).toBe(true));
   });
 
-  it('returns false when EU check resolves isEUAccessOnly: true', async () => {
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ isEUAccessOnly: true }),
-    });
-    const { result } = renderHook(() => useJouleEligibility());
-    await waitFor(() => expect(result.current).toBe(false));
-  });
-
-  it('fails closed when isEUAccessOnly is missing from the response', async () => {
+  it('returns false and warns with the reason when the backend reports ineligible', async () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({}),
-    });
+    stubFetch({ eligible: false, reason: 'eu-access' });
     const { result } = renderHook(() => useJouleEligibility());
     await waitFor(() =>
       expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('missing boolean isEUAccessOnly'),
+        expect.stringContaining('eu-access'),
       ),
     );
     expect(result.current).toBe(false);
   });
 
-  it('fails closed when isEUAccessOnly is not a boolean', async () => {
+  it('remains false and warns when the request fails', async () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ isEUAccessOnly: 'false' }), // string, not boolean
-    });
+    (fetch as Mock).mockResolvedValue({ ok: false, status: 500 });
     const { result } = renderHook(() => useJouleEligibility());
     await waitFor(() =>
       expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('missing boolean isEUAccessOnly'),
+        expect.stringContaining('Could not determine eligibility'),
       ),
     );
     expect(result.current).toBe(false);
   });
 
-  it('remains false and warns when EU check fetch fails', async () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    (fetch as Mock).mockRejectedValue(new Error('network error'));
-    const { result } = renderHook(() => useJouleEligibility());
-    await waitFor(() =>
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Could not determine cluster region'),
-      ),
-    );
-    expect(result.current).toBe(false);
-  });
+  it('POSTs the cluster credentials and OIDC issuer to the backend', async () => {
+    const fetchMock = fetch as Mock;
+    stubFetch({ eligible: true });
+    stubAtoms(makeCluster(SKR_SERVER, 'https://kyma.accounts.ondemand.com'));
 
-  it('remains false when backend returns a non-OK status (fail-closed)', async () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    (fetch as Mock).mockResolvedValue({
-      ok: false,
-      status: 500,
-      json: async () => ({ error: 'upstream failure' }),
-    });
-    const { result } = renderHook(() => useJouleEligibility());
-    await waitFor(() =>
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Could not determine cluster region'),
-      ),
-    );
-    expect(result.current).toBe(false);
-  });
-
-  it('returns false and warns when OIDC issuer does not match the deployment issuer', () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    stubAtoms(
-      makeCluster(SKR_SERVER, 'https://other.ias.example.com'),
-      'https://kyma.accounts.ondemand.com',
-    );
-    const { result } = renderHook(() => useJouleEligibility());
-    expect(result.current).toBe(false);
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('OIDC issuer URL does not match'),
-    );
-  });
-
-  it('treats issuer URLs differing only by trailing slash as a match', async () => {
-    stubAtoms(
-      makeCluster(SKR_SERVER, 'https://kyma.accounts.ondemand.com/'),
-      'https://kyma.accounts.ondemand.com',
-    );
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ isEUAccessOnly: false }),
-    });
     const { result } = renderHook(() => useJouleEligibility());
     await waitFor(() => expect(result.current).toBe(true));
-  });
 
-  it('skips OIDC check when the deployment issuer is empty and proceeds to EU check', async () => {
-    (fetch as Mock).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ isEUAccessOnly: false }),
-    });
-    stubAtoms(makeCluster(SKR_SERVER, 'https://any.ias.example.com'), '');
-    const { result } = renderHook(() => useJouleEligibility());
-    await waitFor(() => expect(result.current).toBe(true));
-  });
-
-  it('does not fetch when cluster has no server URL', () => {
-    stubAtoms({
-      currentContext: {
-        cluster: { cluster: {} },
-        user: { user: { token: 'tok' } },
-      },
-    });
-    renderHook(() => useJouleEligibility());
-    expect(fetch).not.toHaveBeenCalled();
-  });
-
-  it('does not fetch and warns when server URL cannot yield a shoot ID', () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    stubAtoms(makeCluster('https://k8s.example.com'));
-    renderHook(() => useJouleEligibility());
-    expect(fetch).not.toHaveBeenCalled();
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('not a Kyma SKR endpoint'),
-    );
+    const [url, opts] = fetchMock.mock.calls[0];
+    expect(url).toContain('/ai-chat/joule-eligibility');
+    expect(opts.method).toBe('POST');
+    const body = JSON.parse(opts.body);
+    expect(body.clusterUrl).toBe(SKR_SERVER);
+    expect(body.clusterToken).toBe('tok');
+    expect(body.oidcIssuerUrl).toBe('https://kyma.accounts.ondemand.com');
   });
 });

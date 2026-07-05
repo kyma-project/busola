@@ -1,4 +1,3 @@
-// `undefined` is the miss sentinel, so never store undefined values.
 export function createBoundedCache({ max = 1000, ttlMs = 0 } = {}) {
   const store = new Map();
 

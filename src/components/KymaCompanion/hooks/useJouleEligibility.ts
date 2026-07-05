@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { clusterAtom } from 'state/clusterAtom';
-import { deploymentConfigurationAtom } from 'state/configuration/configurationAtom';
+import { authDataAtom } from 'state/authDataAtom';
 import { configFeaturesNames, KymaCompanionFeature } from 'state/types';
 import { useFeature } from 'hooks/useFeature';
 import {
@@ -9,88 +9,83 @@ import {
   tryParseOIDCparams,
 } from 'components/Clusters/components/oidc-params';
 import { KubeconfigOIDCAuth } from 'types';
-import { extractShootId } from '../utils/extractShootId';
-import { getClusterRegion } from '../api/getClusterRegion';
+import { getJouleEligibility } from '../api/getJouleEligibility';
 
-const stripTrailingSlash = (url: string) => url.replace(/\/+$/, '');
-
-// Keyed by shootId so a previous cluster's verdict never applies to another.
-type EUCheck = { shootId: string; isEUAccessOnly: boolean };
+// Remember which cluster the answer was for, so we don't reuse it after the
+// user switches clusters.
+type Verdict = { clusterUrl: string; eligible: boolean };
 
 export function useJouleEligibility(): boolean {
   const { isEnabled, useJoule } = useFeature<KymaCompanionFeature>(
     configFeaturesNames.KYMA_COMPANION,
   );
   const cluster = useAtomValue(clusterAtom);
-  const serverUrl = cluster?.currentContext?.cluster?.cluster?.server;
+  const authData = useAtomValue(authDataAtom) as {
+    token?: string;
+    'client-certificate-data'?: string;
+    'client-key-data'?: string;
+  } | null;
+
+  const clusterUrl = cluster?.currentContext?.cluster?.cluster?.server;
+  const certificateAuthorityData =
+    cluster?.currentContext?.cluster?.cluster?.['certificate-authority-data'];
   const userExec = (cluster?.currentContext?.user?.user as KubeconfigOIDCAuth)
     ?.exec;
-  const shootId = serverUrl ? extractShootId(serverUrl) : null;
+  const oidcIssuerUrl =
+    userExec && isOIDCExec(userExec)
+      ? tryParseOIDCparams({ exec: userExec } as KubeconfigOIDCAuth)?.issuerUrl
+      : undefined;
 
-  // From deployment config (not the cluster ConfigMap) so it can't be spoofed.
-  const deploymentConfig = useAtomValue(deploymentConfigurationAtom);
-  const allowedIssuerUrl = (
-    deploymentConfig?.features?.[configFeaturesNames.KYMA_COMPANION] as
-      | KymaCompanionFeature
-      | undefined
-  )?.config?.issuerUrl;
-
-  const [euCheck, setEuCheck] = useState<EUCheck | null>(null);
+  const token = authData?.token;
+  const clientCertificateData = authData?.['client-certificate-data'];
+  const clientKeyData = authData?.['client-key-data'];
+  const hasCredentials = !!token || !!(clientCertificateData && clientKeyData);
 
   const jouleConfigured = !!isEnabled && !!useJoule;
-
-  const isOIDCMismatch = (() => {
-    if (!jouleConfigured || !allowedIssuerUrl) return false;
-    if (!userExec || !isOIDCExec(userExec)) return false;
-    const params = tryParseOIDCparams({ exec: userExec } as KubeconfigOIDCAuth);
-    return (
-      !!params?.issuerUrl &&
-      stripTrailingSlash(params.issuerUrl) !==
-        stripTrailingSlash(allowedIssuerUrl)
-    );
-  })();
+  const [verdict, setVerdict] = useState<Verdict | null>(null);
 
   useEffect(() => {
-    if (!jouleConfigured) return;
-    if (isOIDCMismatch) {
-      console.warn(
-        '[Joule] Disabled: cluster OIDC issuer URL does not match the configured Kyma IAS URL.',
-      );
-      return;
-    }
-    if (!serverUrl) return;
-    if (!shootId) {
-      console.warn(
-        '[Joule] Disabled: cluster server URL is not a Kyma SKR endpoint; cannot verify region.',
-      );
-      return;
-    }
+    if (!jouleConfigured || !clusterUrl || !hasCredentials) return;
 
     const controller = new AbortController();
-    getClusterRegion(shootId, controller.signal)
-      .then((data) => {
-        if (typeof data?.isEUAccessOnly !== 'boolean') {
+    getJouleEligibility(
+      {
+        clusterUrl,
+        certificateAuthorityData,
+        token,
+        clientCertificateData,
+        clientKeyData,
+        oidcIssuerUrl,
+      },
+      controller.signal,
+    )
+      .then((result) => {
+        if (!result.eligible) {
           console.warn(
-            '[Joule] cluster-region response missing boolean isEUAccessOnly; Joule will remain disabled.',
+            `[Joule] Disabled: ${result.reason ?? 'cluster is not eligible'}.`,
           );
-          return;
         }
-        if (data.isEUAccessOnly) {
-          console.warn('[Joule] Disabled: cluster is EU Access Only.');
-        }
-        setEuCheck({ shootId, isEUAccessOnly: data.isEUAccessOnly });
+        setVerdict({ clusterUrl, eligible: !!result.eligible });
       })
       .catch((err) => {
         if (err?.name === 'AbortError') return;
         console.warn(
-          `[Joule] Could not determine cluster region (${err.message}); Joule will remain disabled.`,
+          `[Joule] Could not determine eligibility (${err.message}); Joule will remain disabled.`,
         );
       });
     return () => controller.abort();
-  }, [jouleConfigured, isOIDCMismatch, serverUrl, shootId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    jouleConfigured,
+    clusterUrl,
+    oidcIssuerUrl,
+    token,
+    clientCertificateData,
+    clientKeyData,
+  ]);
 
-  if (!jouleConfigured || isOIDCMismatch) return false;
-  const isEUAccessOnly =
-    euCheck && euCheck.shootId === shootId ? euCheck.isEUAccessOnly : null;
-  return isEUAccessOnly === false;
+  if (!jouleConfigured) return false;
+  return verdict !== null && verdict.clusterUrl === clusterUrl
+    ? verdict.eligible
+    : false;
 }

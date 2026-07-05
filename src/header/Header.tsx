@@ -84,8 +84,8 @@ export function Header() {
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
 
-  // If eligibility changes while the panel is open (e.g. cluster switch),
-  // close it rather than swap the assistant mid-session.
+  // If the answer changes while the panel is open (e.g. the user switched
+  // clusters), close it instead of swapping the assistant out mid-conversation.
   useEffect(() => {
     setShowCompanion((prevState) =>
       prevState.show
