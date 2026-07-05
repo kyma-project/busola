@@ -1,39 +1,10 @@
-const https = require('https');
-const fetch = require('node-fetch');
 import jsyaml from 'js-yaml';
 
 context('Test Community Modules views', () => {
-  async function patchBusolaStatus(state, { ca, key, cert }) {
-    const agent = new https.Agent({ ca, key, cert });
-
-    const response = await fetch(
-      'https://0.0.0.0:63467/apis/operator.kyma-project.io/v1alpha1/namespaces/default/busolas/busola/status',
-      {
-        method: 'PATCH',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        },
-        body: JSON.stringify({ status: { state } }),
-        agent,
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error(
-        `Request failed: ${response.status} ${response.statusText}`,
-      );
-    }
-
-    return response.json();
-  }
+  beforeEach(() => {});
 
   before(() => {
     cy.loginAndSelectCluster();
-    cy.extractKubeconfigTLS('kubeconfig.yaml').then(({ ca, cert, key }) => {
-      cy.wrap({ ca, cert, key }).as('kubeconfigTLS');
-      patchBusolaStatus('Installed', { ca, cert, key });
-    });
   });
 
   it('Test Community Modules Overview card', () => {

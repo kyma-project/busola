@@ -3,8 +3,6 @@
 const MODULE_NAME = 'busola';
 const OLD_VERSION = '1.0.31';
 const NEW_VERSION = '1.0.32';
-const OLD_FIXTURE_URL =
-  'https://raw.githubusercontent.com/kyma-project/busola/refs/heads/main/tests/integration/fixtures/community-modules/busola-1-0-31.yaml';
 const OLD_TEMPLATE_NAME = `${MODULE_NAME}-1-0-31`;
 const KYMA_SYSTEM_NAMESPACE = 'kyma-system';
 

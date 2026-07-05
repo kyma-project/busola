@@ -64,6 +64,7 @@ until kubectl wait --for=condition=established --timeout=10s crd/kymas.operator.
   sleep 2
 done
 kubectl apply -f tests/integration/fixtures/modules
+kubectl apply -f tests/integration/fixtures/community-modules
 
 echo "Apply Kyma provision fixture"
 kubectl apply -f tests/integration/fixtures/kyma-info-cm.yaml
@@ -85,5 +86,5 @@ echo "Apply OAuth2 Hydra CRD"
 kubectl_apply_url https://raw.githubusercontent.com/ory/hydra-maester/master/config/crd/bases/hydra.ory.sh_oauth2clients.yaml
 
 echo "Apply fake busola CRD"
-kubectl apply -f tests/integration/fixtures/busola/busola-crd.yaml
-kubectl apply -f tests/integration/fixtures/busola/busola-cr.yaml
+kubectl apply -f tests/integration/fixtures/community-modules/busola/busola-crd.yaml
+kubectl apply -f tests/integration/fixtures/community-modules/busola/busola-cr.yaml
