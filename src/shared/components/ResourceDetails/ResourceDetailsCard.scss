@@ -7,9 +7,15 @@
   background-color: var(--sapBackgroundColor);
 
   > ui5-form-group {
-    > :not(:first-child) {
-      padding-top: 1rem;
+    > *:not(:last-child) {
+      padding-bottom: 1rem;
     }
+  }
+}
+
+.resource-card-layout {
+  ui5-label {
+    margin-bottom: 4px;
   }
 }
 
