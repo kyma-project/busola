@@ -17,14 +17,20 @@ data:
         source: spec.orderDetails
         widget: Labels
     body:
-      - name: Order details
-        widget: CodeViewer
-        source: spec.orderDetails
-        language: '"yaml"'
-      - name: Pizzas
-        source: spec.pizzas
-        widget: ResourceRefs
-        kind: Pizza
+      - name: Details
+        widget: Section
+        children:
+          - name: Order details
+            widget: CodeViewer
+            source: spec.orderDetails
+            language: '"yaml"'
+      - name: Related Pizzas
+        widget: Section
+        children:
+          - name: Pizzas
+            source: spec.pizzas
+            widget: ResourceRefs
+            kind: Pizza
     resourceGraph:
       depth: 1
       colorVariant: 3

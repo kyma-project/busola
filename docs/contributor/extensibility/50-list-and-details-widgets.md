@@ -24,6 +24,7 @@ You can distinguish the following widget types:
   - [`FeatureCard`](#featuredcard)
   - [`Panel`](#panel)
   - [`Plain`](#plain)
+  - [`Section`](#section)
   - [`ResourceList`](#resourcelist)
   - [`ResourceRefs`](#resourcerefs)
   - [`StatisticalCard`](#statisticalcard)
@@ -613,6 +614,41 @@ See the following example:
 ### `Plain`
 
 The `Plain` widgets render all contents of an object or list sequentially without any decorations. This is the default behavior for all objects and arrays.
+
+### `Section`
+
+The `Section` widget groups child widgets under a named heading, providing visual separation between distinct content areas on a resource detail page.
+
+Sections are separated from each other by 2rem of vertical space. Elements within a section are separated by 1rem.
+
+These are the available `Section` widget parameters:
+
+| Parameter    | Required | Type      | Description                                     |
+| ------------ | -------- | --------- | ----------------------------------------------- |
+| **name**     | **Yes**  | string    | The section heading. Supports translation keys. |
+| **children** | No       | []objects | Widgets to render inside the section body.      |
+
+See the following example:
+
+```yaml
+- name: Specification
+  widget: Section
+  children:
+    - name: Min Replicas
+      source: spec.minReplicas
+    - name: Current Replicas
+      source: status.currentReplicas
+- name: Secrets
+  widget: Section
+  children:
+    - source: spec.secretName
+      widget: ResourceLink
+      name: Secret
+      resource:
+        name: spec.secretName
+        namespace: $root.metadata.namespace
+        kind: "'Secret'"
+```
 
 ### `ResourceList`
 
