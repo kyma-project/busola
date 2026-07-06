@@ -42,6 +42,30 @@ context('Test Community Modules views', () => {
 
     cy.get('ui5-title').contains('Add Community Modules').should('be.visible');
 
+    cy.get('ui5-card').contains('busola').should('be.visible');
+
+    cy.get('ui5-card').contains('Documentation').should('be.visible');
+
+    cy.get('ui5-panel').contains('Advanced').should('be.visible');
+
+    cy.get('ui5-title').contains('busola').click();
+
+    // TODO: This wait allows 'community modules add/edit/delete' to download needed resources to apply from backend.
+    // The download is initiated when user mark module to install and then when user click delete, it deleted what is was able to download
+    cy.wait(2000);
+
+    cy.get('[data-testid="create-form-footer-bar"]')
+      .contains('ui5-button:visible', 'Add')
+      .click();
+
+    cy.get('ui5-panel[data-testid="community-modules-list"]')
+      .contains('ui5-button', 'Add')
+      .click();
+
+    cy.wait(2000);
+  });
+
+  it('Test adding source YAML', () => {
     // Check if source YAMLs table is visible
     cy.get('[accessible-name="Source YAMLs"]')
       .contains('ui5-button:visible', 'Add')
