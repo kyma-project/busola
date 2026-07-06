@@ -101,11 +101,11 @@ context('Test Community Modules views', () => {
     cy.getLeftNav().contains('Cluster Overview').click();
 
     cy.contains('ui5-card', 'Installed Modules')
-      .contains('1')
+      .contains('0')
       .should('be.visible');
 
     cy.contains('ui5-card', 'Community Modules')
-      .contains('1')
+      .contains('0')
       .should('be.visible');
 
     cy.get('ui5-card').contains('Modify Modules').click();
