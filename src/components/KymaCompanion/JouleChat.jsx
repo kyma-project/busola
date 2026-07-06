@@ -11,6 +11,10 @@ import {
   encryptAuthPayload,
   clearSessionKeys,
 } from 'components/KymaCompanion/utils/encryption';
+import {
+  isOIDCExec,
+  tryParseOIDCparams,
+} from 'components/Clusters/components/oidc-params';
 
 export default function JouleChat() {
   const [showKymaCompanion, setShowKymaCompanion] = useAtom(
@@ -57,11 +61,18 @@ export default function JouleChat() {
           return { ...resourceContext, auth: null };
         }
 
+        const userExec = clusterRef.current?.currentContext?.user?.user?.exec;
+        const oidcIssuerUrl =
+          userExec && isOIDCExec(userExec)
+            ? tryParseOIDCparams({ exec: userExec })?.issuerUrl
+            : undefined;
+
         try {
           const encryptedAuth = await encryptAuthPayload({
             clusterUrl: clusterData.server,
             certificateAuthorityData:
               clusterData['certificate-authority-data'] ?? '',
+            oidcIssuerUrl,
             auth: {
               token: auth?.token,
               clientCertificateData: auth?.['client-certificate-data'],

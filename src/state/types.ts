@@ -8,6 +8,23 @@ export interface ConfigFeature {
   [key: string]: any;
 }
 
+export interface KymaCompanionJouleConfig {
+  url: string;
+  botname: string;
+}
+
+export interface KymaCompanionFeature extends ConfigFeature {
+  config?: {
+    feedbackLink?: string;
+    documentationLink?: string;
+    model?: string;
+    queryMaxTokens?: number;
+    apiBaseUrl?: string;
+  };
+  useJoule?: boolean;
+  jouleConfig?: KymaCompanionJouleConfig;
+}
+
 export type ConfigFeaturesNames =
   (typeof configFeaturesNames)[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {
