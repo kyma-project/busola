@@ -72,10 +72,18 @@ export function Header() {
   const isOnClustersPage = location.pathname === '/clusters';
   const isOnKubeconfigPage = location.pathname === '/kubeconfig';
 
-  const { isEnabled: isKymaCompanionEnabled } = useFeature(
+  const { isEnabled: isKymaCompanionEnabled, useJoule } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
   );
   const jouleEligible = useJouleEligibility();
+
+  // An ineligible cluster gets neither Joule nor the Companion fallback.
+  const jouleRestricted = !!useJoule && !jouleEligible;
+  const showAssistant =
+    isKymaCompanionEnabled &&
+    isSAPUser &&
+    !isOnClustersPage &&
+    !jouleRestricted;
 
   const { isEnabled: isTerminalEnabled } = useFeature(
     configFeaturesNames.TERMINAL,
@@ -159,7 +167,7 @@ export function Header() {
       >
         <SnowFeature />
         <FeedbackPopover />
-        {isKymaCompanionEnabled && isSAPUser && !isOnClustersPage && (
+        {showAssistant && (
           <>
             <ToggleButton
               accessibleName={t('kyma-companion.name')}

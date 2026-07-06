@@ -81,6 +81,7 @@ async function handlePublicKey(req, res) {
     const { eligible, reason } = await checkJouleEligibility({
       clusterUrl: parsed.clusterUrl,
       oidcIssuerUrl: parsed.oidcIssuerUrl,
+      isCertAuth: parsed.isCertAuth === true,
     });
     if (!eligible) {
       return res
@@ -366,36 +367,71 @@ async function fetchClusterRegion(shootId) {
   return data;
 }
 
-// Works out whether Joule is allowed on this cluster. Both the issuer and the
-// region come from our side rather than the cluster, and if we can't be sure
-// we treat it as a no.
-async function checkJouleEligibility({ clusterUrl, oidcIssuerUrl }) {
-  if (
-    allowedIssuerUrl &&
-    oidcIssuerUrl &&
-    stripTrailingSlash(oidcIssuerUrl) !== stripTrailingSlash(allowedIssuerUrl)
-  ) {
-    return { eligible: false, reason: 'issuer-mismatch' };
+// Classifies a cluster by region; callers decide how strict to be about it.
+async function getClusterRegionStatus(clusterUrl) {
+  const shootId = extractShootId(clusterUrl ?? '');
+  if (!shootId) return 'not-skr';
+  const region = await fetchClusterRegion(shootId);
+  if (!region || typeof region.isEUAccessOnly !== 'boolean') return 'unknown';
+  return region.isEUAccessOnly ? 'eu-access' : 'ok';
+}
+
+// Blocks the companion only on clusters we positively know are EU Access Only —
+// unlike Joule, it must keep working on non-SKR clusters and lookup failures.
+async function rejectEUAccessOnly(req, res, next) {
+  try {
+    const { clusterUrl } = extractAuthHeaders(req);
+    if ((await getClusterRegionStatus(clusterUrl)) === 'eu-access') {
+      return res.status(403).json({
+        error: 'The AI assistant is not available for EU Access Only clusters',
+      });
+    }
+    next();
+  } catch (error) {
+    req.log?.warn(error);
+    next();
+  }
+}
+
+// Issuer and region come from our side rather than the cluster, and anything
+// we can't be sure about is treated as a no.
+async function checkJouleEligibility({
+  clusterUrl,
+  oidcIssuerUrl,
+  isCertAuth,
+}) {
+  if (allowedIssuerUrl) {
+    if (oidcIssuerUrl) {
+      if (
+        stripTrailingSlash(oidcIssuerUrl) !==
+        stripTrailingSlash(allowedIssuerUrl)
+      ) {
+        return { eligible: false, reason: 'issuer-mismatch' };
+      }
+    } else if (!isCertAuth) {
+      // AI team ruling: static tokens fail (no issuer to verify), client
+      // certs are allowed and skip the issuer check.
+      return { eligible: false, reason: 'static-token' };
+    }
   }
   if (!companionApiBaseUrl) {
     return { eligible: false, reason: 'not-configured' };
   }
 
-  const shootId = extractShootId(clusterUrl ?? '');
-  if (!shootId) return { eligible: false, reason: 'not-skr' };
-
-  const region = await fetchClusterRegion(shootId);
-  if (!region || typeof region.isEUAccessOnly !== 'boolean') {
-    return { eligible: false, reason: 'unknown' };
-  }
-  if (region.isEUAccessOnly) return { eligible: false, reason: 'eu-access' };
+  const status = await getClusterRegionStatus(clusterUrl);
+  if (status !== 'ok') return { eligible: false, reason: status };
   return { eligible: true };
 }
 
 async function handleJouleEligibility(req, res) {
   try {
-    const { clusterUrl, oidcIssuerUrl } = extractAuthHeaders(req);
-    const result = await checkJouleEligibility({ clusterUrl, oidcIssuerUrl });
+    const { clusterUrl, oidcIssuerUrl, clientCertificateData, clientKeyData } =
+      extractAuthHeaders(req);
+    const result = await checkJouleEligibility({
+      clusterUrl,
+      oidcIssuerUrl,
+      isCertAuth: !!(clientCertificateData && clientKeyData),
+    });
     return res.status(200).json(result);
   } catch (error) {
     req.log.warn(error);
@@ -411,18 +447,21 @@ router.post(
   '/suggestions',
   requireCompanionCredential,
   companionRateLimiter,
+  rejectEUAccessOnly,
   handlePromptSuggestions,
 );
 router.post(
   '/messages',
   requireCompanionCredential,
   companionRateLimiter,
+  rejectEUAccessOnly,
   handleChatMessage,
 );
 router.post(
   '/followup',
   requireCompanionCredential,
   companionRateLimiter,
+  rejectEUAccessOnly,
   handleFollowUpSuggestions,
 );
 router.post(
@@ -432,5 +471,5 @@ router.post(
   handleJouleEligibility,
 );
 
-export { handleJouleEligibility, handlePublicKey };
+export { handleJouleEligibility, handlePublicKey, rejectEUAccessOnly };
 export default router;

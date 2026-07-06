@@ -6,21 +6,19 @@ vi.mock('./TokenManager.js', () => ({
   }),
 }));
 
-vi.mock('../src/config/config.js', () => ({
-  default: {
-    features: {
-      KYMA_COMPANION: {
-        config: {
-          apiBaseUrl: 'https://companion.example.com',
-          issuerUrl: 'https://kyma.accounts.ondemand.com',
-          skipAuth: false,
-        },
-      },
-    },
-  },
-}));
-
 vi.mock('lodash.escape', () => ({ default: (s) => s }));
+
+function mockConfig(
+  companionConfig = {
+    apiBaseUrl: 'https://companion.example.com',
+    issuerUrl: 'https://kyma.accounts.ondemand.com',
+    skipAuth: false,
+  },
+) {
+  vi.doMock('../src/config/config.js', () => ({
+    default: { features: { KYMA_COMPANION: { config: companionConfig } } },
+  }));
+}
 
 const SKR_URL = 'https://api.c-abc123.kyma.example.com';
 const KYMA_ISSUER = 'https://kyma.accounts.ondemand.com';
@@ -43,7 +41,12 @@ function makeMockRes() {
 
 function makeMockReq(body = {}) {
   return {
-    body: { clusterUrl: SKR_URL, clusterToken: 'tok', ...body },
+    body: {
+      clusterUrl: SKR_URL,
+      clusterToken: 'tok',
+      oidcIssuerUrl: KYMA_ISSUER,
+      ...body,
+    },
     log: { warn: vi.fn() },
     id: 'req-1234',
   };
@@ -65,6 +68,7 @@ describe('handlePublicKey (Joule eligibility gate)', () => {
 
   beforeEach(async () => {
     vi.resetModules();
+    mockConfig();
     handlePublicKey = (await import('./companionRouter.js')).handlePublicKey;
   });
 
@@ -94,7 +98,12 @@ describe('handlePublicKey (Joule eligibility gate)', () => {
 
   function makePkReq(body = {}) {
     return {
-      body: { public_key: 'abc', clusterUrl: SKR_URL, ...body },
+      body: {
+        public_key: 'abc',
+        clusterUrl: SKR_URL,
+        oidcIssuerUrl: KYMA_ISSUER,
+        ...body,
+      },
       log: { warn: vi.fn() },
       id: 'req-1234',
     };
@@ -147,6 +156,7 @@ describe('handleJouleEligibility', () => {
 
   beforeEach(async () => {
     vi.resetModules();
+    mockConfig();
     handleJouleEligibility = (await import('./companionRouter.js'))
       .handleJouleEligibility;
   });
@@ -180,10 +190,43 @@ describe('handleJouleEligibility', () => {
     expect(res._body).toEqual({ eligible: true });
   });
 
-  it('skips the issuer check when no OIDC issuer is provided', async () => {
+  it('fails static-token kubeconfigs (no OIDC issuer) without fetching', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const res = makeMockRes();
+    await handleJouleEligibility(
+      makeMockReq({ oidcIssuerUrl: undefined }),
+      res,
+    );
+    expect(res._body).toEqual({ eligible: false, reason: 'static-token' });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('lets client-cert kubeconfigs skip the issuer check', async () => {
     stubRegion({ data: { isEUAccessOnly: false } });
     const res = makeMockRes();
-    await handleJouleEligibility(makeMockReq(), res);
+    await handleJouleEligibility(
+      makeMockReq({
+        oidcIssuerUrl: undefined,
+        clusterToken: undefined,
+        clientCertificateData: 'cert',
+        clientKeyData: 'key',
+      }),
+      res,
+    );
+    expect(res._body).toEqual({ eligible: true });
+  });
+
+  it('skips the issuer check entirely when no issuerUrl is configured', async () => {
+    vi.resetModules();
+    mockConfig({ apiBaseUrl: 'https://companion.example.com' });
+    const { handleJouleEligibility: handler } =
+      await import('./companionRouter.js');
+    stubRegion({ data: { isEUAccessOnly: false } });
+
+    const res = makeMockRes();
+    await handler(makeMockReq({ oidcIssuerUrl: undefined }), res);
     expect(res._body).toEqual({ eligible: true });
   });
 
@@ -293,5 +336,70 @@ describe('handleJouleEligibility', () => {
     await handleJouleEligibility(makeMockReq(), res);
     expect(res._status).toBe(500);
     expect(res._body.eligible).toBe(false);
+  });
+});
+
+describe('rejectEUAccessOnly (companion routes gate)', () => {
+  let rejectEUAccessOnly;
+
+  beforeEach(async () => {
+    vi.resetModules();
+    mockConfig();
+    rejectEUAccessOnly = (await import('./companionRouter.js'))
+      .rejectEUAccessOnly;
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it('blocks requests for an EU Access Only cluster with 403', async () => {
+    stubRegion({ data: { isEUAccessOnly: true } });
+    const res = makeMockRes();
+    const next = vi.fn();
+
+    await rejectEUAccessOnly(makeMockReq(), res, next);
+
+    expect(res._status).toBe(403);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it('passes requests for a non-EU cluster through', async () => {
+    stubRegion({ data: { isEUAccessOnly: false } });
+    const res = makeMockRes();
+    const next = vi.fn();
+
+    await rejectEUAccessOnly(makeMockReq(), res, next);
+
+    expect(next).toHaveBeenCalledOnce();
+    expect(res._status).toBeNull();
+  });
+
+  it('passes non-SKR clusters through without a region lookup', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    const res = makeMockRes();
+    const next = vi.fn();
+
+    await rejectEUAccessOnly(
+      makeMockReq({ clusterUrl: 'https://k8s.example.com' }),
+      res,
+      next,
+    );
+
+    expect(next).toHaveBeenCalledOnce();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('passes requests through when the region lookup fails', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('timeout')));
+    const res = makeMockRes();
+    const next = vi.fn();
+
+    await rejectEUAccessOnly(makeMockReq(), res, next);
+
+    expect(next).toHaveBeenCalledOnce();
+    expect(res._status).toBeNull();
   });
 });

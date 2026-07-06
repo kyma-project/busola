@@ -25,6 +25,7 @@ interface ClusterAuth {
 interface KeyExchangeContext {
   clusterUrl: string;
   oidcIssuerUrl?: string;
+  isCertAuth?: boolean;
 }
 
 export interface EncryptedAuth {
@@ -94,6 +95,7 @@ async function performKeyExchange(
       public_key: toBase64(clientPublicKeyBytes),
       clusterUrl: context.clusterUrl,
       oidcIssuerUrl: context.oidcIssuerUrl,
+      isCertAuth: context.isCertAuth,
     }),
   });
 
@@ -187,6 +189,9 @@ export async function encryptAuthPayload(
   const session = await ensureKeyExchange({
     clusterUrl: cluster.clusterUrl,
     oidcIssuerUrl: cluster.oidcIssuerUrl,
+    isCertAuth:
+      !cluster.auth.token &&
+      !!(cluster.auth.clientCertificateData && cluster.auth.clientKeyData),
   });
 
   // Build payload supporting both token and certificate auth

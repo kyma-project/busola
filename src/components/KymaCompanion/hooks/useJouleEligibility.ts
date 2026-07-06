@@ -15,6 +15,16 @@ import { getJouleEligibility } from '../api/getJouleEligibility';
 // user switches clusters.
 type Verdict = { clusterUrl: string; eligible: boolean };
 
+const DISABLE_REASONS: Record<string, string> = {
+  'issuer-mismatch': 'the cluster OIDC issuer is not the Kyma IAS',
+  'static-token':
+    'static token kubeconfigs cannot be verified against the Kyma IAS',
+  'eu-access': 'the cluster is EU Access Only',
+  'not-skr': 'the cluster is not a Kyma SKR',
+  unknown: 'the cluster region could not be determined',
+  'not-configured': 'the companion backend is not configured',
+};
+
 export function useJouleEligibility(): boolean {
   const { isEnabled, useJoule } = useFeature<KymaCompanionFeature>(
     configFeaturesNames.KYMA_COMPANION,
@@ -61,9 +71,10 @@ export function useJouleEligibility(): boolean {
     )
       .then((result) => {
         if (!result.eligible) {
-          console.warn(
-            `[Joule] Disabled: ${result.reason ?? 'cluster is not eligible'}.`,
-          );
+          const explanation =
+            DISABLE_REASONS[result.reason ?? ''] ??
+            'the cluster is not eligible';
+          console.warn(`[Joule] Disabled: ${explanation} (${result.reason}).`);
         }
         setVerdict({ clusterUrl, eligible: !!result.eligible });
       })
