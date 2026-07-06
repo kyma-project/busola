@@ -13,7 +13,7 @@ type ResourceRadialChartProps = {
   accessibleName: string;
   tooltipInfo?: string;
   valueType?: 'cpu' | 'bytes';
-  unit: 'm' | 'Mi';
+  unit?: 'm' | 'Mi' | 'Gi';
 };
 
 export function ResourceRadialChart({
@@ -25,7 +25,7 @@ export function ResourceRadialChart({
   accessibleName,
   tooltipInfo,
   valueType,
-  unit,
+  unit = 'm',
 }: ResourceRadialChartProps) {
   return (
     <UI5RadialChart
@@ -48,13 +48,17 @@ export function ResourceRadialChart({
       }
       titleText={titleText}
       additionalInfo={`${
-        cpusToHumanReadable(value, {
-          unit,
-        }).string
+        valueType === 'cpu'
+          ? cpusToHumanReadable(value, {
+              unit,
+            }).string
+          : bytesToHumanReadable(value, { unit }).string
       } / ${
-        cpusToHumanReadable(max, {
-          unit,
-        }).string
+        valueType === 'cpu'
+          ? cpusToHumanReadable(max, {
+              unit,
+            }).string
+          : bytesToHumanReadable(max, { unit }).string
       }`}
       accessibleName={accessibleName}
     />
