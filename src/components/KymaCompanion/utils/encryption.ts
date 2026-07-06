@@ -20,8 +20,7 @@ interface ClusterAuth {
   oidcIssuerUrl?: string;
 }
 
-// We send this with the key exchange so the backend can check the cluster is
-// allowed to use Joule.
+// Sent with the key exchange so the backend can check the cluster may use Joule.
 interface KeyExchangeContext {
   clusterUrl: string;
   oidcIssuerUrl?: string;

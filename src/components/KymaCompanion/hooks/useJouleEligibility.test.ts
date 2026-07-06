@@ -82,18 +82,19 @@ describe('useJouleEligibility', () => {
     vi.unstubAllGlobals();
   });
 
-  it('returns false and does not fetch when KYMA_COMPANION is disabled', () => {
+  it('returns ineligible and does not fetch when KYMA_COMPANION is disabled', () => {
     stubFeature({ isEnabled: false });
     const { result } = renderHook(() => useJouleEligibility());
-    expect(result.current).toBe(false);
+    expect(result.current.eligible).toBe(false);
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it('returns false and does not fetch when useJoule is false', () => {
+  it('runs the check even when useJoule is false (Companion deployments)', async () => {
     stubFeature({ useJoule: false });
+    stubFetch({ eligible: true });
     const { result } = renderHook(() => useJouleEligibility());
-    expect(result.current).toBe(false);
-    expect(fetch).not.toHaveBeenCalled();
+    await waitFor(() => expect(result.current.eligible).toBe(true));
+    expect(fetch).toHaveBeenCalled();
   });
 
   it('does not fetch when the cluster has no credentials', () => {
@@ -110,31 +111,28 @@ describe('useJouleEligibility', () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it('returns false while the eligibility check is in-flight (fail-closed)', () => {
+  it('is ineligible while the eligibility check is in-flight (fail-closed)', () => {
     (fetch as Mock).mockReturnValue(new Promise(() => {})); // never resolves
     const { result } = renderHook(() => useJouleEligibility());
-    expect(result.current).toBe(false);
+    expect(result.current.eligible).toBe(false);
   });
 
-  it('returns true when the backend reports eligible', async () => {
+  it('is eligible when the backend reports eligible', async () => {
     stubFetch({ eligible: true });
     const { result } = renderHook(() => useJouleEligibility());
-    await waitFor(() => expect(result.current).toBe(true));
+    await waitFor(() => expect(result.current.eligible).toBe(true));
   });
 
-  it('returns false and warns with the reason when the backend reports ineligible', async () => {
+  it('surfaces the reason and warns when the backend reports ineligible', async () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     stubFetch({ eligible: false, reason: 'eu-access' });
     const { result } = renderHook(() => useJouleEligibility());
-    await waitFor(() =>
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('eu-access'),
-      ),
-    );
-    expect(result.current).toBe(false);
+    await waitFor(() => expect(result.current.reason).toBe('eu-access'));
+    expect(result.current.eligible).toBe(false);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('eu-access'));
   });
 
-  it('remains false and warns when the request fails', async () => {
+  it('remains ineligible and warns when the request fails', async () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     (fetch as Mock).mockResolvedValue({ ok: false, status: 500 });
     const { result } = renderHook(() => useJouleEligibility());
@@ -143,7 +141,7 @@ describe('useJouleEligibility', () => {
         expect.stringContaining('Could not determine eligibility'),
       ),
     );
-    expect(result.current).toBe(false);
+    expect(result.current.eligible).toBe(false);
   });
 
   it('POSTs the cluster credentials and OIDC issuer to the backend', async () => {
@@ -152,7 +150,7 @@ describe('useJouleEligibility', () => {
     stubAtoms(makeCluster(SKR_SERVER, 'https://kyma.accounts.ondemand.com'));
 
     const { result } = renderHook(() => useJouleEligibility());
-    await waitFor(() => expect(result.current).toBe(true));
+    await waitFor(() => expect(result.current.eligible).toBe(true));
 
     const [url, opts] = fetchMock.mock.calls[0];
     expect(url).toContain('/ai-chat/joule-eligibility');

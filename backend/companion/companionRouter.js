@@ -19,8 +19,7 @@ const tokenManager = new TokenManager();
 const companionApiBaseUrl =
   config.features?.KYMA_COMPANION?.config?.apiBaseUrl ?? '';
 
-// Read from our own env config, not the cluster — otherwise a cluster could
-// just claim it's on the allowed issuer.
+// From our env config, not the cluster, so a cluster can't fake the allowed issuer.
 const allowedIssuerUrl =
   config.features?.KYMA_COMPANION?.config?.issuerUrl ?? '';
 
@@ -76,8 +75,8 @@ async function handlePublicKey(req, res) {
         .json({ error: 'Missing or invalid public_key in request body' });
     }
 
-    // Joule can only get the cluster's credentials through this key exchange,
-    // so blocking it here shuts Joule out even if someone skips the UI checks.
+    // Denying the key exchange denies Joule its cluster credentials, so it's
+    // enforced even when the UI is bypassed.
     const { eligible, reason } = await checkJouleEligibility({
       clusterUrl: parsed.clusterUrl,
       oidcIssuerUrl: parsed.oidcIssuerUrl,
@@ -367,7 +366,6 @@ async function fetchClusterRegion(shootId) {
   return data;
 }
 
-// Classifies a cluster by region; callers decide how strict to be about it.
 async function getClusterRegionStatus(clusterUrl) {
   const shootId = extractShootId(clusterUrl ?? '');
   if (!shootId) return 'not-skr';
@@ -376,8 +374,8 @@ async function getClusterRegionStatus(clusterUrl) {
   return region.isEUAccessOnly ? 'eu-access' : 'ok';
 }
 
-// Blocks the companion only on clusters we positively know are EU Access Only —
-// unlike Joule, it must keep working on non-SKR clusters and lookup failures.
+// Blocks the companion only on confirmed EU Access Only clusters — unlike Joule
+// it must keep working on non-SKR clusters and on lookup failures.
 async function rejectEUAccessOnly(req, res, next) {
   try {
     const { clusterUrl } = extractAuthHeaders(req);
@@ -393,8 +391,7 @@ async function rejectEUAccessOnly(req, res, next) {
   }
 }
 
-// Issuer and region come from our side rather than the cluster, and anything
-// we can't be sure about is treated as a no.
+// Fail-closed: issuer and region come from our side, and any doubt is a no.
 async function checkJouleEligibility({
   clusterUrl,
   oidcIssuerUrl,
@@ -409,8 +406,7 @@ async function checkJouleEligibility({
         return { eligible: false, reason: 'issuer-mismatch' };
       }
     } else if (!isCertAuth) {
-      // AI team ruling: static tokens fail (no issuer to verify), client
-      // certs are allowed and skip the issuer check.
+      // AI team ruling: static tokens fail (nothing to verify), client certs skip.
       return { eligible: false, reason: 'static-token' };
     }
   }

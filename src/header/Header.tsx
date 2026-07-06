@@ -75,15 +75,19 @@ export function Header() {
   const { isEnabled: isKymaCompanionEnabled, useJoule } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
   );
-  const jouleEligible = useJouleEligibility();
+  const { eligible: jouleEligible, reason: eligibilityReason } =
+    useJouleEligibility();
 
-  // An ineligible cluster gets neither Joule nor the Companion fallback.
-  const jouleRestricted = !!useJoule && !jouleEligible;
+  // EU Access Only hides the assistant for everyone; other reasons hide only Joule.
+  const assistantRestricted =
+    eligibilityReason === 'eu-access' || (!!useJoule && !jouleEligible);
   const showAssistant =
     isKymaCompanionEnabled &&
     isSAPUser &&
     !isOnClustersPage &&
-    !jouleRestricted;
+    !assistantRestricted;
+
+  const useJouleMode = !!useJoule && jouleEligible;
 
   const { isEnabled: isTerminalEnabled } = useFeature(
     configFeaturesNames.TERMINAL,
@@ -92,15 +96,15 @@ export function Header() {
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
 
-  // If the answer changes while the panel is open (e.g. the user switched
-  // clusters), close it instead of swapping the assistant out mid-conversation.
+  // If eligibility changes while the panel is open (e.g. cluster switch), close
+  // it rather than swap the assistant mid-conversation.
   useEffect(() => {
     setShowCompanion((prevState) =>
       prevState.show
-        ? { ...prevState, show: false, useJoule: jouleEligible }
-        : { ...prevState, useJoule: jouleEligible },
+        ? { ...prevState, show: false, useJoule: useJouleMode }
+        : { ...prevState, useJoule: useJouleMode },
     );
-  }, [setShowCompanion, jouleEligible]);
+  }, [setShowCompanion, useJouleMode, assistantRestricted]);
 
   return (
     <>

@@ -1,5 +1,4 @@
-// A Kyma SKR API URL looks like api.<shoot>.<...>.kyma.<...>, so the shoot ID
-// is the second label of the hostname.
+// Kyma SKR API URLs are api.<shoot>.<...>.kyma.<...> — the shoot is the 2nd label.
 export function extractShootId(serverUrl) {
   try {
     const parts = new URL(serverUrl).hostname.split('.');
