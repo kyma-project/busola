@@ -1071,6 +1071,7 @@ namespaces:
       title: Resource Consumption
   title: Namespaces
 navigation:
+  about: About
   all-namespaces: All Namespaces
   back-to-cluster: Back To Cluster Overview
   errors:
