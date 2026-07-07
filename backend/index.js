@@ -123,7 +123,9 @@ if (isDocker) {
   app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
 }
 
-registerWebSocket(server);
+if (config.features?.TERMINAL?.isEnabled) {
+  registerWebSocket(server);
+}
 
 process.on('SIGINT', function () {
   console.log('SIGINT received, cleaning up...');
