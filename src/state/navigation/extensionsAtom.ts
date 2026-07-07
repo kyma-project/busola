@@ -74,19 +74,19 @@ interface ExtensionProps {
   kymaFetchFn: (_url: string, _options?: any) => Promise<Response>;
 }
 
-const isTheSameNameAndUrl = (
+export const isTheSameNameAndUrl = (
   firstCM: Partial<ExtResource>,
   secondCM: Partial<ExtResource>,
 ) =>
   firstCM?.general?.name === secondCM?.general?.name &&
   firstCM?.general?.urlPath === secondCM?.general?.urlPath;
 
-const isTheSameId = (
+export const isTheSameId = (
   firstCM: Partial<ExtResource>,
   secondCM: Partial<ExtResource>,
 ) => firstCM?.general?.id === secondCM?.general?.id;
 
-const convertYamlToObject = (
+export const convertYamlToObject = (
   yamlString: string,
 ): Record<string, any> | null => {
   try {

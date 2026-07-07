@@ -51,6 +51,22 @@ async function trySilentRefresh(): Promise<boolean> {
   }
 }
 
+// oidc-client-ts stores pending signin state as sessionStorage['oidc.<stateId>']
+// containing a JSON string with client_id and authority. Checking it tells us
+// whether the current callback URL belongs to this UserManager without relying
+// on the 'iss' query param, which varies across environments.
+function isOwnOidcCallback(clientId: string): boolean {
+  const stateId = new URLSearchParams(window.location.search).get('state');
+  if (!stateId) return false;
+  try {
+    const raw = localStorage.getItem(`oidc.${stateId}`);
+    if (!raw) return false;
+    return JSON.parse(raw)?.client_id === clientId;
+  } catch {
+    return false;
+  }
+}
+
 function getOrCreateUserManager(ssoConfig: ConfigFeature): UserManager {
   if (!userManager) {
     const { issuerUrl, clientId, scope } = ssoConfig.config;
@@ -82,10 +98,25 @@ async function handleSSOLogin(
 
   try {
     const storedUser = await userManager?.getUser();
-    const user =
-      storedUser && !storedUser.expired
-        ? storedUser
-        : await userManager?.signinRedirectCallback(window.location.href);
+
+    let user: User;
+    if (storedUser && !storedUser.expired) {
+      user = storedUser;
+    } else {
+      const hasCode = new URLSearchParams(window.location.search).has('code');
+      if (hasCode && !isOwnOidcCallback(ssoConfig.config.clientId)) {
+        // A redirect callback is in progress, but it belongs to a different
+        // UserManager (e.g. cluster OIDC). Don't touch it — just wait; the
+        // other handler will process the code and then navigate away.
+        return;
+      }
+      if (!hasCode) {
+        await userManager.clearStaleState();
+        userManager.signinRedirect();
+        return;
+      }
+      user = await userManager?.signinRedirectCallback(window.location.href);
+    }
 
     if (!handlersAttached) {
       handlersAttached = true;

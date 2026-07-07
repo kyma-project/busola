@@ -10,3 +10,4 @@ config:
       config:
         apiBaseUrl: 'https://companion.cp.kyma.cloud.sap'
         tokenUrl: 'https://kyma.accounts.ondemand.com/oauth2/token'
+        issuerUrl: 'https://kyma.accounts.ondemand.com'

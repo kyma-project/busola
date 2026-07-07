@@ -15,6 +15,7 @@ import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
+import { useJouleEligibility } from 'components/KymaCompanion/hooks/useJouleEligibility';
 
 import {
   clustersAtomEffectOnSet,
@@ -71,9 +72,22 @@ export function Header() {
   const isOnClustersPage = location.pathname === '/clusters';
   const isOnKubeconfigPage = location.pathname === '/kubeconfig';
 
-  const { isEnabled: isKymaCompanionEnabled, useJoule: usesJoule } = useFeature(
+  const { isEnabled: isKymaCompanionEnabled, useJoule } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
   );
+  const { eligible: jouleEligible, reason: eligibilityReason } =
+    useJouleEligibility();
+
+  // EU Access Only hides the assistant for everyone; other reasons hide only Joule.
+  const assistantRestricted =
+    eligibilityReason === 'eu-access' || (!!useJoule && !jouleEligible);
+  const showAssistant =
+    isKymaCompanionEnabled &&
+    isSAPUser &&
+    !isOnClustersPage &&
+    !assistantRestricted;
+
+  const useJouleMode = !!useJoule && jouleEligible;
 
   const { isEnabled: isTerminalEnabled } = useFeature(
     configFeaturesNames.TERMINAL,
@@ -82,12 +96,15 @@ export function Header() {
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
 
+  // If eligibility changes while the panel is open (e.g. cluster switch), close
+  // it rather than swap the assistant mid-conversation.
   useEffect(() => {
-    setShowCompanion((prevState) => ({
-      ...prevState,
-      useJoule: usesJoule,
-    }));
-  }, [setShowCompanion, usesJoule]);
+    setShowCompanion((prevState) =>
+      prevState.show
+        ? { ...prevState, show: false, useJoule: useJouleMode }
+        : { ...prevState, useJoule: useJouleMode },
+    );
+  }, [setShowCompanion, useJouleMode, assistantRestricted]);
 
   return (
     <>
@@ -154,7 +171,7 @@ export function Header() {
       >
         <SnowFeature />
         <FeedbackPopover />
-        {isKymaCompanionEnabled && isSAPUser && !isOnClustersPage && (
+        {showAssistant && (
           <>
             <ToggleButton
               accessibleName={t('kyma-companion.name')}
