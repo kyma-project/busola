@@ -1,13 +1,14 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { connectTerminal } from './connectTerminal';
+import { encodeBase64Url } from 'shared/utils/base64url';
 
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
 
-const AUTH_HEADERS = {
+const AUTH_HEADERS = new Headers({
   'X-Cluster-Url': 'https://cluster.example.com',
   'X-K8s-Authorization': 'Bearer tok123',
-};
+});
 
 function makeTerm() {
   return {
@@ -79,10 +80,6 @@ async function attach(
   return { term, sess, ws: ws as any, disposable };
 }
 
-function encodeBase64Url(str: string) {
-  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-}
-
 describe('connectTerminal', () => {
   it('opens the attach socket with auth encoded in protocols', async () => {
     const { ws } = await attach();
@@ -91,10 +88,10 @@ describe('connectTerminal', () => {
     );
     expect(ws.protocols).toContain('v4.channel.k8s.io');
     expect(ws.protocols).toContain(
-      `base64url.header.x-cluster-url.${encodeBase64Url('https://cluster.example.com')}`,
+      `base64url.header.x-cluster-url.value.${encodeBase64Url('https://cluster.example.com')}`,
     );
     expect(ws.protocols).toContain(
-      `base64url.header.x-k8s-authorization.${encodeBase64Url('Bearer tok123')}`,
+      `base64url.header.x-k8s-authorization.value.${encodeBase64Url('Bearer tok123')}`,
     );
   });
 
