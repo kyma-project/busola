@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { URL } from 'url';
-import { lstatSync, readdirSync, readFile, mkdirSync } from 'fs';
+import { lstatSync, readdirSync, readFile, mkdirSync, writeFileSync } from 'fs';
 import { dump, load } from 'js-yaml';
 
 import { dest, src, task } from 'gulp';
@@ -114,14 +114,17 @@ task('get-extensions', () => {
 
 task('pack-extensions', () => {
   const env = process.env.ENV;
-  return src(`temp/${env}/extensions-local/**/*.yaml`)
+  const outDir = `build/${env}/extensions`;
+  mkdirSync(outDir, { recursive: true });
+  writeFileSync(`${outDir}/extensions.yaml`, '[]');
+  return src(`temp/${env}/extensions-local/**/*.yaml`, { allowEmpty: true })
     .pipe(loadPreparedExtensions)
     .pipe(
       concat('extensions.yaml', {
         newLine: '---\n',
       }),
     )
-    .pipe(dest(`build/${env}/extensions`));
+    .pipe(dest(outDir));
 });
 
 task('clean-statics', () => {
@@ -143,6 +146,9 @@ task('get-statics', () => {
 
 task('pack-statics', () => {
   const env = process.env.ENV;
+  const outDir = `build/${env}/extensions`;
+  mkdirSync(outDir, { recursive: true });
+  writeFileSync(`${outDir}/statics.yaml`, '[]');
   return src(`temp/${env}/statics-local/**/*.yaml`, { allowEmpty: true })
     .pipe(loadPreparedExtensions)
     .pipe(
@@ -150,7 +156,7 @@ task('pack-statics', () => {
         newLine: '---\n',
       }),
     )
-    .pipe(dest(`build/${env}/extensions`));
+    .pipe(dest(outDir));
 });
 
 task('clean-wizards', () => {
@@ -170,12 +176,15 @@ task('get-wizards', () => {
 
 task('pack-wizards', () => {
   const env = process.env.ENV;
-  return src(`temp/${env}/wizards-local/**/*.yaml`)
+  const outDir = `build/${env}/extensions`;
+  mkdirSync(outDir, { recursive: true });
+  writeFileSync(`${outDir}/wizards.yaml`, '[]');
+  return src(`temp/${env}/wizards-local/**/*.yaml`, { allowEmpty: true })
     .pipe(loadPreparedExtensions)
     .pipe(
       concat('wizards.yaml', {
         newLine: '---\n',
       }),
     )
-    .pipe(dest(`build/${env}/extensions`));
+    .pipe(dest(outDir));
 });
