@@ -35,51 +35,20 @@ const session: {
   userManager: UserManager | null;
   handlersAttached: boolean;
   loginInProgress: boolean;
-  registeredSsoStateSetter: ((user: SsoDataState) => void) | null;
   silentRefreshFn: (() => Promise<User | null>) | null;
   lastTokenCheckTime: number;
 } = {
   userManager: null,
   handlersAttached: false,
   loginInProgress: false,
-  registeredSsoStateSetter: null,
   silentRefreshFn: null,
   lastTokenCheckTime: 0,
 };
 
-// Thin adapter around `attachSilentRenewHandlers` for the SSO manager.
-export function attachSSOSilentRenew(
-  um: UserManager,
-  {
-    onRenewed,
-    onRenewError,
-    onRenewingChange,
-  }: {
-    onRenewed: (u: User) => void;
-    onRenewError: (e: Error) => void;
-    onRenewingChange?: (renewing: boolean) => void;
-  },
-) {
-  return attachSilentRenewHandlers(um, {
-    onRenewed,
-    onRenewError,
-    onRenewingChange,
-  });
-}
-
 async function trySilentRefresh(): Promise<boolean> {
   if (!session.userManager || !session.silentRefreshFn) return false;
-  try {
-    const refreshedUser = await session.silentRefreshFn();
-    if (refreshedUser) return true;
-    setSSOAuthData(null);
-    session.registeredSsoStateSetter?.(null);
-    return false;
-  } catch {
-    setSSOAuthData(null);
-    session.registeredSsoStateSetter?.(null);
-    return false;
-  }
+  const refreshedUser = await session.silentRefreshFn();
+  return !!refreshedUser;
 }
 
 // See authDataAtom.ts:isOwnOidcCallback — same pattern for the SSO manager.
@@ -132,7 +101,6 @@ async function handleSSOLogin(
   if (session.loginInProgress) return;
   session.loginInProgress = true;
   const userManager = getOrCreateUserManager(ssoConfig);
-  session.registeredSsoStateSetter = setSsoState;
 
   try {
     const storedUser = await userManager?.getUser();
@@ -156,9 +124,8 @@ async function handleSSOLogin(
 
     if (!session.handlersAttached) {
       session.handlersAttached = true;
-      session.silentRefreshFn = () => userManager.signinSilent();
 
-      const detach = attachSSOSilentRenew(userManager, {
+      const { cleanup, renew } = attachSilentRenewHandlers(userManager, {
         onRenewed: (refreshedUser) => {
           setSSOAuthData(refreshedUser);
           setSsoState(refreshedUser);
@@ -170,8 +137,10 @@ async function handleSSOLogin(
         },
         onRenewingChange: setRenewing,
       });
+      // Share the single-flight with the event handlers.
+      session.silentRefreshFn = renew;
       userManager.events.addUserUnloaded(() => {
-        detach();
+        cleanup();
         session.handlersAttached = false;
         session.silentRefreshFn = null;
       });

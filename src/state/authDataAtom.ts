@@ -148,7 +148,7 @@ async function handleLogin({
     if (isCurrent && !isCurrent()) return;
 
     setAuth({ token: getToken(user, useAccessToken) });
-    const cleanup = attachSilentRenewHandlers(userManager, {
+    const { cleanup } = attachSilentRenewHandlers(userManager, {
       onRenewed: (renewedUser) => {
         setAuth({ token: getToken(renewedUser, useAccessToken) });
       },

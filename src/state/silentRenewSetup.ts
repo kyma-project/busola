@@ -9,29 +9,32 @@ interface Options {
   onRenewingChange?: (renewing: boolean) => void;
 }
 
-// Routes both silent-renewal triggers (library `addAccessTokenExpiring` and
-// browser `visibilitychange`) through one single-flight `signinSilent()` call,
-// so a rotating refresh token isn't consumed twice. Returns a cleanup that
-// detaches both listeners — call on cluster change / unmount.
+// Routes every silent-renew trigger — library `addAccessTokenExpiring`, browser
+// `visibilitychange`, and the returned `renew()` for callers like SSO
+// `checkForTokenExpiration` — through one single-flight `signinSilent()`.
 export function attachSilentRenewHandlers(
   userManager: UserManager,
   { onRenewed, onRenewError, onRenewingChange }: Options,
-) {
+): { cleanup: () => void; renew: () => Promise<User | null> } {
   const renewSilently = createSingleFlight<User | null>();
 
-  const runRenew = async (): Promise<void> => {
+  const runRenew = async (): Promise<User | null> => {
     onRenewingChange?.(true);
     try {
       const user = await renewSilently(() => userManager.signinSilent());
       if (user) onRenewed(user);
+      return user;
     } catch (e) {
       onRenewError(e instanceof Error ? e : new Error(String(e)));
+      return null;
     } finally {
       onRenewingChange?.(false);
     }
   };
 
-  const expiringHandler = () => runRenew();
+  const expiringHandler = async () => {
+    await runRenew();
+  };
   userManager.events.addAccessTokenExpiring(expiringHandler);
 
   const visibilityHandler = async () => {
@@ -44,8 +47,11 @@ export function attachSilentRenewHandlers(
   };
   document.addEventListener('visibilitychange', visibilityHandler);
 
-  return () => {
-    userManager.events.removeAccessTokenExpiring(expiringHandler);
-    document.removeEventListener('visibilitychange', visibilityHandler);
+  return {
+    cleanup: () => {
+      userManager.events.removeAccessTokenExpiring(expiringHandler);
+      document.removeEventListener('visibilitychange', visibilityHandler);
+    },
+    renew: runRenew,
   };
 }

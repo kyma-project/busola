@@ -106,7 +106,7 @@ describe('attachSilentRenewHandlers', () => {
     um.getUser.mockResolvedValue({ expired: true, expires_in: 0 });
     um.signinSilent.mockResolvedValue({ id_token: 'x', access_token: 'y' });
 
-    const cleanup = attachSilentRenewHandlers(um as any, {
+    const { cleanup } = attachSilentRenewHandlers(um as any, {
       onRenewed: () => {},
       onRenewError: () => {},
     });
@@ -137,6 +137,31 @@ describe('attachSilentRenewHandlers', () => {
 
     expect(onRenewError).toHaveBeenCalledTimes(1);
     expect(onRenewError).toHaveBeenCalledWith(err);
+  });
+
+  it('exposes a renew() that coalesces with in-flight event-driven renews', async () => {
+    // Guards the SSO trySilentRefresh call site.
+    const um = makeMockUserManager();
+    let resolveRenew: (u: any) => void = () => {};
+    um.signinSilent.mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          resolveRenew = resolve;
+        }),
+    );
+
+    const { renew } = attachSilentRenewHandlers(um as any, {
+      onRenewed: () => {},
+      onRenewError: () => {},
+    });
+
+    const p1 = um.fireExpiring();
+    const p2 = renew();
+
+    expect(um.signinSilent).toHaveBeenCalledTimes(1);
+
+    resolveRenew({ id_token: 'x', access_token: 'y' });
+    await Promise.all([p1, p2]);
   });
 
   it('reports renew-in-flight status via onRenewingChange callback', async () => {
