@@ -12,7 +12,7 @@ type ResourceRadialChartProps = {
   titleText: string;
   accessibleName: string;
   tooltipInfo?: string;
-  valueType?: 'cpu' | 'bytes';
+  valueType: 'cpu' | 'bytes';
   unit?: 'm' | 'Mi' | 'Gi';
 };
 
@@ -27,39 +27,27 @@ export function ResourceRadialChart({
   valueType,
   unit = 'm',
 }: ResourceRadialChartProps) {
+  const formattedValue =
+    valueType === 'cpu'
+      ? cpusToHumanReadable(value, {
+          unit,
+        })
+      : bytesToHumanReadable(value, { unit });
+  const formattedMax =
+    valueType === 'cpu'
+      ? cpusToHumanReadable(max, {
+          unit,
+        })
+      : bytesToHumanReadable(max, { unit });
   return (
     <UI5RadialChart
       tooltipInfo={tooltipInfo}
       cardClassName={cardClassName}
       color={color}
-      value={
-        valueType === 'cpu'
-          ? cpusToHumanReadable(value, {
-              unit,
-            }).value
-          : bytesToHumanReadable(value, { unit }).value
-      }
-      max={
-        valueType === 'cpu'
-          ? cpusToHumanReadable(max, {
-              unit,
-            }).value
-          : bytesToHumanReadable(max, { unit }).value
-      }
+      value={formattedValue.value}
+      max={formattedMax.value}
       titleText={titleText}
-      additionalInfo={`${
-        valueType === 'cpu'
-          ? cpusToHumanReadable(value, {
-              unit,
-            }).string
-          : bytesToHumanReadable(value, { unit }).string
-      } / ${
-        valueType === 'cpu'
-          ? cpusToHumanReadable(max, {
-              unit,
-            }).string
-          : bytesToHumanReadable(max, { unit }).string
-      }`}
+      additionalInfo={`${formattedValue.string} / ${formattedMax.string}`}
       accessibleName={accessibleName}
     />
   );

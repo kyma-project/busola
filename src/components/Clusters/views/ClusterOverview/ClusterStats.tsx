@@ -145,6 +145,7 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
             value={memory.usage}
             max={memory.capacity}
             valueType="bytes"
+            unit="Mi"
             titleText={t('cluster-overview.statistics.memory-usage')}
             accessibleName={t('cluster-overview.statistics.memory-usage')}
           />
