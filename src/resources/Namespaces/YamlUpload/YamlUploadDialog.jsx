@@ -114,19 +114,21 @@ export function YamlUploadDialog() {
       footer={<Bar design="Footer" endContent={<>{actions}</>} />}
       className="yaml-upload-modal__dialog"
     >
-      <Suspense fallback={<Spinner />}>
-        <div className={'yaml-upload-modal__layout'}>
-          <YamlUpload
-            resourcesData={resourcesData}
-            setResourcesData={updateYamlContent}
-            setLastOperationState={setLastOperationState}
-          />
-          <YamlResourcesList
-            resourcesData={resourcesWithStatuses}
-            namespace={namespaceId}
-          />
-        </div>
-      </Suspense>
+      {openAdd && (
+        <Suspense fallback={<Spinner />}>
+          <div className={'yaml-upload-modal__layout'}>
+            <YamlUpload
+              resourcesData={resourcesData}
+              setResourcesData={updateYamlContent}
+              setLastOperationState={setLastOperationState}
+            />
+            <YamlResourcesList
+              resourcesData={resourcesWithStatuses}
+              namespace={namespaceId}
+            />
+          </div>
+        </Suspense>
+      )}
     </Dialog>
   );
 }
