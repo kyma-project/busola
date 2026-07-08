@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { getEnv, Envs } from 'shared/utils/env';
 import { attachSilentRenewHandlers } from './silentRenewSetup';
 import { renewingAtom } from './renewingAtom';
-import { saveIntendedPath } from './intendedPathAtom';
+import { saveIntendedPath, toClusterRelative } from './intendedPathAtom';
 
 const SSO_KEY = 'SSO';
 
@@ -30,12 +30,22 @@ export function useIsSSOEnabled() {
   return configuration?.features?.SSO_LOGIN?.isEnabled ?? false;
 }
 
-let userManager: UserManager | null = null;
-let handlersAttached = false;
-let loginInProgress = false;
-let registeredSsoStateSetter: ((user: SsoDataState) => void) | null = null;
-let silentRefreshFn: (() => Promise<User | null>) | null = null;
-let lastTokenCheckTime = 0;
+// All mutable module state consolidated here.
+const session: {
+  userManager: UserManager | null;
+  handlersAttached: boolean;
+  loginInProgress: boolean;
+  registeredSsoStateSetter: ((user: SsoDataState) => void) | null;
+  silentRefreshFn: (() => Promise<User | null>) | null;
+  lastTokenCheckTime: number;
+} = {
+  userManager: null,
+  handlersAttached: false,
+  loginInProgress: false,
+  registeredSsoStateSetter: null,
+  silentRefreshFn: null,
+  lastTokenCheckTime: 0,
+};
 
 // Thin adapter around `attachSilentRenewHandlers` for the SSO manager.
 export function attachSSOSilentRenew(
@@ -58,16 +68,16 @@ export function attachSSOSilentRenew(
 }
 
 async function trySilentRefresh(): Promise<boolean> {
-  if (!userManager || !silentRefreshFn) return false;
+  if (!session.userManager || !session.silentRefreshFn) return false;
   try {
-    const refreshedUser = await silentRefreshFn();
+    const refreshedUser = await session.silentRefreshFn();
     if (refreshedUser) return true;
     setSSOAuthData(null);
-    registeredSsoStateSetter?.(null);
+    session.registeredSsoStateSetter?.(null);
     return false;
   } catch {
     setSSOAuthData(null);
-    registeredSsoStateSetter?.(null);
+    session.registeredSsoStateSetter?.(null);
     return false;
   }
 }
@@ -105,10 +115,10 @@ export function createSSOUserManager(oidcConfig: {
 }
 
 function getOrCreateUserManager(ssoConfig: ConfigFeature): UserManager {
-  if (!userManager) {
-    userManager = createSSOUserManager(ssoConfig.config);
+  if (!session.userManager) {
+    session.userManager = createSSOUserManager(ssoConfig.config);
   }
-  return userManager;
+  return session.userManager;
 }
 
 async function handleSSOLogin(
@@ -119,10 +129,10 @@ async function handleSSOLogin(
   if (!ssoConfig || !ssoConfig.config) {
     throw new Error('SSO configuration not found');
   }
-  if (loginInProgress) return;
-  loginInProgress = true;
+  if (session.loginInProgress) return;
+  session.loginInProgress = true;
   const userManager = getOrCreateUserManager(ssoConfig);
-  registeredSsoStateSetter = setSsoState;
+  session.registeredSsoStateSetter = setSsoState;
 
   try {
     const storedUser = await userManager?.getUser();
@@ -144,9 +154,9 @@ async function handleSSOLogin(
       user = await userManager?.signinRedirectCallback(window.location.href);
     }
 
-    if (!handlersAttached) {
-      handlersAttached = true;
-      silentRefreshFn = () => userManager.signinSilent();
+    if (!session.handlersAttached) {
+      session.handlersAttached = true;
+      session.silentRefreshFn = () => userManager.signinSilent();
 
       const detach = attachSSOSilentRenew(userManager, {
         onRenewed: (refreshedUser) => {
@@ -162,8 +172,8 @@ async function handleSSOLogin(
       });
       userManager.events.addUserUnloaded(() => {
         detach();
-        handlersAttached = false;
-        silentRefreshFn = null;
+        session.handlersAttached = false;
+        session.silentRefreshFn = null;
       });
     }
 
@@ -182,7 +192,7 @@ async function handleSSOLogin(
     await userManager.clearStaleState();
     userManager.signinRedirect();
   } finally {
-    loginInProgress = false;
+    session.loginInProgress = false;
   }
 }
 
@@ -218,8 +228,8 @@ export function checkForTokenExpiration(token?: string) {
   if (!token) return;
 
   const now = Date.now();
-  if (now - lastTokenCheckTime < 30000) return;
-  lastTokenCheckTime = now;
+  if (now - session.lastTokenCheckTime < 30000) return;
+  session.lastTokenCheckTime = now;
 
   const timeout = 30; // s
   try {
@@ -230,11 +240,9 @@ export function checkForTokenExpiration(token?: string) {
       trySilentRefresh().then((ok) => {
         if (!ok) {
           setSSOAuthData(null);
-          // Silent refresh failed; preserve location and round-trip through
-          // the IdP (consumed on return by useIntendedPathRestore).
-          const currentPath = window.location.pathname + window.location.search;
-          saveIntendedPath(currentPath);
-          userManager?.signinRedirect().catch((e) => {
+          const fullPath = window.location.pathname + window.location.search;
+          saveIntendedPath(toClusterRelative(fullPath));
+          session.userManager?.signinRedirect().catch((e: unknown) => {
             console.warn('SSO re-auth redirect failed:', e);
           });
         }

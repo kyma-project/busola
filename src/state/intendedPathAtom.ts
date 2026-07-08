@@ -38,6 +38,14 @@ export function clearIntendedPath(): void {
   sessionStorage.removeItem(INTENDED_PATH_KEY);
 }
 
+// Strips the `/cluster/<name>` prefix; consumers re-prepend it on restore.
+// A bare `/cluster/<name>` collapses to `/` to avoid a `/cluster/<name>/cluster/<name>` restore.
+export function toClusterRelative(fullPath: string): string {
+  const match = fullPath.match(/^\/cluster\/[^/]+(.*)$/);
+  if (!match) return fullPath;
+  return match[1] || '/';
+}
+
 export function initIntendedPathFromUrl(): void {
   const params = new URLSearchParams(window.location.search);
   const kubeconfigId = params.get('kubeconfigID');

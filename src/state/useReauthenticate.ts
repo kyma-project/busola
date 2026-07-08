@@ -2,7 +2,11 @@ import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { UserManager } from 'oidc-client-ts';
 import { useTranslation } from 'react-i18next';
-import { saveIntendedPath } from 'state/intendedPathAtom';
+import {
+  clearIntendedPath,
+  saveIntendedPath,
+  toClusterRelative,
+} from 'state/intendedPathAtom';
 
 type NotifyError = (props: { content: string }) => void;
 
@@ -21,12 +25,14 @@ export function useReauthenticate({
     async (userManager: UserManager, error?: Error) => {
       const fullPath =
         location.pathname + (location.search ? location.search : '');
-      saveIntendedPath(fullPath);
+      saveIntendedPath(toClusterRelative(fullPath));
       try {
         await userManager.clearStaleState();
         await userManager.signinRedirect();
       } catch (redirectError) {
         console.warn('Silent re-auth via IdP failed:', redirectError);
+        // Drop the stored path so a later cluster pick doesn't reuse it.
+        clearIntendedPath();
         navigate('/clusters');
         const message = error?.message || t('common.errors.session-expired');
         notifyError?.({

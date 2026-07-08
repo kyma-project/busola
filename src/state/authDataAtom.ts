@@ -44,6 +44,8 @@ type handleLoginProps = {
   onAfterLogin: () => void;
   onError: (error: Error) => void;
   onRenewingChange?: (renewing: boolean) => void;
+  // Returns false if a newer cluster has taken over — abort side-effects.
+  isCurrent?: () => boolean;
 };
 
 // Returned so callers can detach the silent-renew listeners on cluster change
@@ -116,6 +118,7 @@ async function handleLogin({
   onAfterLogin,
   onError,
   onRenewingChange,
+  isCurrent,
 }: handleLoginProps): Promise<HandleLoginResult | void> {
   const oidcParams = parseOIDCparams(userCredentials);
   const userManager = createUserManager(oidcParams);
@@ -141,6 +144,8 @@ async function handleLogin({
       }
       user = await userManager.signinRedirectCallback(window.location.href);
     }
+
+    if (isCurrent && !isCurrent()) return;
 
     setAuth({ token: getToken(user, useAccessToken) });
     const cleanup = attachSilentRenewHandlers(userManager, {
@@ -185,6 +190,9 @@ export function useAuthHandler() {
   const prevClusterRef = useRef<typeof cluster>(null);
   const cleanupRef = useRef<(() => void) | null>(null);
   const userManagerRef = useRef<UserManager | null>(null);
+  // Bumped on every cluster-change; late handleLogin resolutions with a
+  // stale generation self-clean instead of overwriting the current refs.
+  const loginGenRef = useRef(0);
   const setRenewing = useSetAtom(renewingAtom);
   const reauth = useReauthenticate({ notifyError: notification.notifyError });
 
@@ -196,6 +204,7 @@ export function useAuthHandler() {
       userManagerRef.current = null;
       authUserManagerRef.current = null;
     }
+    const gen = ++loginGenRef.current;
 
     if (!cluster) {
       setAuth(null);
@@ -266,12 +275,17 @@ export function useAuthHandler() {
           onAfterLogin,
           onError,
           onRenewingChange: setRenewing,
+          isCurrent: () => gen === loginGenRef.current,
         }).then((result) => {
-          if (result) {
-            userManagerRef.current = result.userManager;
-            authUserManagerRef.current = result.userManager;
-            cleanupRef.current = result.cleanup;
+          if (!result) return;
+          if (gen !== loginGenRef.current) {
+            // A newer cluster took over while we were awaiting; discard.
+            result.cleanup();
+            return;
           }
+          userManagerRef.current = result.userManager;
+          authUserManagerRef.current = result.userManager;
+          cleanupRef.current = result.cleanup;
         });
       }
     }

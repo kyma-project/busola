@@ -1,33 +1,34 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { createStore, atom, Provider } from 'jotai';
+import { atom, createStore, Provider } from 'jotai';
 import { createElement, PropsWithChildren } from 'react';
 
-// -----------------------------------------------------------------------------
-// This is the integration test guarding Cause C.2 — `useResourceSchemas` was
-// racing the silent-renew path by calling navigate('/clusters') the moment
-// an openapi request returned an error, even mid-renew. The fix gates on
-// `renewingAtom` and delegates recovery to `useReauthenticate`.
-// -----------------------------------------------------------------------------
-
-const mockNotifyError = vi.fn();
-const mockReauth = vi.fn();
-const mockUseReauthenticate = vi.fn(() => mockReauth);
-
-// Replace the openapi loadable so we can put it into 'hasError' at will.
-const openapiTestAtom = atom<any>({ state: 'hasData', data: {} });
+// Hoisted so the vi.mock factories below can reference these regardless of
+// statement order.
+const hoisted = vi.hoisted(() => ({
+  mockNotifyError: null as unknown as ReturnType<typeof vi.fn>,
+  mockReauth: null as unknown as ReturnType<typeof vi.fn>,
+  mockUseReauthenticate: null as unknown as ReturnType<typeof vi.fn>,
+  openapiTestAtom: null as unknown as ReturnType<typeof atom>,
+}));
+hoisted.mockNotifyError = vi.fn();
+hoisted.mockReauth = vi.fn();
+hoisted.mockUseReauthenticate = vi.fn(() => hoisted.mockReauth);
+hoisted.openapiTestAtom = atom<any>({ state: 'hasData', data: {} });
+const { mockNotifyError, mockReauth, mockUseReauthenticate, openapiTestAtom } =
+  hoisted;
 
 vi.mock('state/openapi/openapiAtom', () => ({
-  openapiAtom: openapiTestAtom,
+  openapiAtom: hoisted.openapiTestAtom,
 }));
 
 vi.mock('state/useReauthenticate', () => ({
-  useReauthenticate: mockUseReauthenticate,
+  useReauthenticate: hoisted.mockUseReauthenticate,
 }));
 
 vi.mock('shared/contexts/NotificationContext', () => ({
-  useNotification: () => ({ notifyError: mockNotifyError }),
+  useNotification: () => ({ notifyError: hoisted.mockNotifyError }),
 }));
 
 vi.mock('react-i18next', () => ({
@@ -119,6 +120,34 @@ describe('useResourceSchemas openapi-error handling', () => {
     });
 
     expect(mockNotifyError).toHaveBeenCalledTimes(1);
+    expect(mockReauth).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not call reauth twice if the effect re-runs before navigation', async () => {
+    const store = createStore();
+    store.set(clusterAtom, makeCluster('foo') as any);
+    store.set(authDataAtom, { token: 't' });
+    store.set(renewingAtom, false);
+    store.set(openapiTestAtom, {
+      state: 'hasError',
+      error: new Error('401'),
+    });
+
+    renderHook(() => useResourceSchemas(), { wrapper: makeWrapper(store) });
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(mockReauth).toHaveBeenCalledTimes(1);
+
+    // Force the effect to re-run before the browser navigates away.
+    act(() => {
+      store.set(authDataAtom, { token: 't2' });
+    });
+    await act(async () => {
+      await Promise.resolve();
+    });
+
     expect(mockReauth).toHaveBeenCalledTimes(1);
   });
 

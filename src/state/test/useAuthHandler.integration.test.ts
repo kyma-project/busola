@@ -210,12 +210,10 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
       await capturedExpiringHandler?.();
     });
 
-    // The whole point of the fix: preserve location, round-trip through IdP,
-    // no toast, no /clusters redirect.
     await waitFor(() => {
       expect(mockSigninRedirect).toHaveBeenCalledTimes(1);
     });
-    expect(getIntendedPath()?.path).toBe('/cluster/foo/namespaces/bar');
+    expect(getIntendedPath()?.path).toBe('/namespaces/bar');
     expect(mockNotifyError).not.toHaveBeenCalled();
   });
 
@@ -244,6 +242,9 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
     expect(mockNotifyError.mock.calls[0][0].content).toContain(
       'common.errors.session-not-renewed',
     );
+
+    // Cleared so a later cluster pick doesn't reuse the stale path.
+    expect(getIntendedPath()).toBeNull();
   });
 
   it('collapses two back-to-back addAccessTokenExpiring events into one signinSilent', async () => {
@@ -333,10 +334,8 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
       expect(getIntendedPath()?.path).toBeTruthy();
     });
 
-    // The stored path must be a plain in-app URL that useIntendedPathRestore
-    // can safely append to `/cluster/<name>`.
     const path = getIntendedPath()?.path;
-    expect(path).toMatch(/^\/cluster\/foo\/namespaces\/bar/);
+    expect(path).toBe('/namespaces/bar');
 
     clearIntendedPath();
     saveIntendedPath('/namespaces/qux');
@@ -385,5 +384,55 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
       await capturedExpiringHandler?.();
     });
     expect(mockSigninSilent).toHaveBeenCalledTimes(1);
+  });
+
+  it("drops A's late-resolving handleLogin when B has already taken over", async () => {
+    // Switch A → B while A's handleLogin is still awaiting getUser(). Without
+    // the stale-login guard, A's late resolution leaks its listener.
+    let resolveAGetUser: (u: any) => void = () => {};
+    let resolveBGetUser: (u: any) => void = () => {};
+    mockGetUser
+      .mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            resolveAGetUser = resolve;
+          }),
+      )
+      .mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            resolveBGetUser = resolve;
+          }),
+      );
+
+    const store = createStore();
+    store.set(clusterAtom, makeOidcCluster('foo') as any);
+    renderHook(() => useAuthHandler(), { wrapper: makeWrapper(store) });
+
+    act(() => {
+      store.set(clusterAtom, makeOidcCluster('bar') as any);
+    });
+
+    // A resolves late, then B.
+    resolveAGetUser({
+      expired: false,
+      id_token: 'A-token',
+      access_token: 'A',
+    });
+    resolveBGetUser({
+      expired: false,
+      id_token: 'B-token',
+      access_token: 'B',
+    });
+    await flushMicrotasks();
+    await flushMicrotasks();
+
+    // Net live listeners = adds - removes. Must be exactly 1 (only B's).
+    const netLive =
+      capturedAddExpiring.mock.calls.length -
+      capturedRemoveExpiring.mock.calls.length;
+    expect(netLive).toBe(1);
+
+    expect(store.get(authDataAtom)).toEqual({ token: 'B-token' });
   });
 });

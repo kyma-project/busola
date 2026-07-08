@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useMatch } from 'react-router';
 import {
   addWorkerErrorListener,
@@ -36,20 +36,28 @@ export const useResourceSchemas = () => {
   const isSSOEnabled = useIsSSOEnabled();
   const renewing = useAtomValue(renewingAtom);
   const reauth = useReauthenticate({ notifyError: notification.notifyError });
+  // Prevents a second `reauth` call if the effect re-runs before the browser
+  // navigates away. Cleared once the underlying state leaves the error branch.
+  const reauthTriggeredRef = useRef(false);
 
   const setSchemasState = useSetAtom(schemaWorkerStatusAtom);
   const [lastFetched, setLastFetched] = useAtom(openapiLastFetchedAtom);
 
   useEffect(() => {
+    if (openApi?.state !== 'hasError' || !authData) {
+      reauthTriggeredRef.current = false;
+    }
     if (
       authData &&
       activeClusterName === cluster?.contextName &&
       openApi?.state === 'hasError' &&
       !isClusterList &&
       // A transient 401 during silent renew isn't a session drop.
-      !renewing
+      !renewing &&
+      !reauthTriggeredRef.current
     ) {
       if (!isSSOEnabled || ssoData) {
+        reauthTriggeredRef.current = true;
         notification.notifyError({
           content: t('clusters.messages.connection-failed'),
         });
