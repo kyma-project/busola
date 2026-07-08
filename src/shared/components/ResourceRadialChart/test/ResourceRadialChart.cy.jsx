@@ -33,6 +33,6 @@ describe('ResourceRadialChart', () => {
 
     cy.get('.radial-chart').should('exist');
     cy.contains('0%').should('exist');
-    cy.contains('0m / 1000m').should('exist');
+    cy.contains('0m / 1000000m').should('exist');
   });
 });
