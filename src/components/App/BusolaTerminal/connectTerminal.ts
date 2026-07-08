@@ -1,7 +1,8 @@
 import { Terminal } from '@xterm/xterm';
 import { getClusterConfig } from 'state/utils/getBackendInfo';
 import { TerminalSessionState } from 'state/terminalSessionAtom';
-import { TERMINAL_NAMESPACE, CONTAINER_NAME } from './provisionPod';
+import { CONTAINER_NAME, TERMINAL_NAMESPACE } from './provisionPod';
+import { encodeBase64Url } from 'shared/utils/base64url';
 
 // Kubernetes attach stream channels — the first byte of every frame.
 const STDIN_CHANNEL = 0;
@@ -26,17 +27,12 @@ export type ConnectionMessages = {
   connectionError: string;
 };
 
-function encodeBase64Url(str: string): string {
-  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-}
-
-function buildProtocols(authHeaders: Record<string, string>): string[] {
+function buildProtocols(authHeaders: Headers): string[] {
   return [
     'v4.channel.k8s.io',
-    ...Object.entries(authHeaders).map(
-      ([key, value]) =>
-        `base64url.header.${key.toLowerCase()}.${encodeBase64Url(value)}`,
-    ),
+    ...authHeaders.entries().map(([key, value]) => {
+      return `base64url.header.${key.toLowerCase()}.value.${encodeBase64Url(value)}`;
+    }),
   ];
 }
 
@@ -64,7 +60,7 @@ export async function connectTerminal({
   signal,
   messages,
 }: {
-  authHeaders: Record<string, string>;
+  authHeaders: Headers;
   term: Terminal;
   podName: string;
   setSession: (

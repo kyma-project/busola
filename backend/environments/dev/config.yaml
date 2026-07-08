@@ -15,3 +15,5 @@ config:
         apiBaseUrl: 'https://companion.cp.dev.kyma.cloud.sap'
         tokenUrl: 'https://kymatest.accounts400.ondemand.com/oauth2/token'
         issuerUrl: 'https://kymatest.accounts400.ondemand.com'
+    TERMINAL:
+      isEnabled: true
