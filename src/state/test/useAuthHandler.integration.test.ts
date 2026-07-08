@@ -241,6 +241,27 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
     expect(getIntendedPath()).toBeNull();
   });
 
+  it('falls back to /clusters + toast when the stale-state recovery redirect fails', async () => {
+    // Stale OIDC storage triggers clearStaleState + signinRedirect. If that
+    // redirect also fails the user gets a toast, not an infinite spinner.
+    mockGetUser.mockRejectedValue(new Error('authority mismatch'));
+    mockSigninRedirect.mockRejectedValue(new Error('IdP unreachable'));
+
+    const store = createStore();
+    store.set(clusterAtom, makeOidcCluster('foo') as any);
+
+    renderHook(() => useAuthHandler(), { wrapper: makeWrapper(store) });
+    await flushMicrotasks();
+
+    await waitFor(() => {
+      expect(mockNotifyError).toHaveBeenCalledTimes(1);
+    });
+    expect(mockNotifyError.mock.calls[0][0].content).toContain(
+      'common.errors.session-not-renewed',
+    );
+    expect(mockClearStaleState).toHaveBeenCalled();
+  });
+
   it('collapses two back-to-back addAccessTokenExpiring events into one signinSilent', async () => {
     mockGetUser.mockResolvedValue({
       expired: false,

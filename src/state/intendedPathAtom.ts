@@ -39,11 +39,12 @@ export function clearIntendedPath(): void {
 }
 
 // Strips the `/cluster/<name>` prefix; callers re-prepend it on restore.
-// A bare `/cluster/<name>` collapses to `/` so restore doesn't yield
-// `/cluster/<name>/cluster/<name>`.
-export function toClusterRelative(fullPath: string): string {
+// Returns null for paths outside `/cluster/<name>` (e.g. /kubeconfig), which
+// can't be restored cluster-relatively. A bare `/cluster/<name>` collapses
+// to `/` so restore doesn't produce `/cluster/<name>/cluster/<name>`.
+export function toClusterRelative(fullPath: string): string | null {
   const match = fullPath.match(/^\/cluster\/[^/]+(.*)$/);
-  if (!match) return fullPath;
+  if (!match) return null;
   return match[1] || '/';
 }
 

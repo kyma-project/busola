@@ -113,8 +113,12 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
       return;
     }
 
-    const previousPath = getPreviousPath();
+    // Only restore when we've landed on '/'. The user is on any other URL
+    // deliberately, so don't hijack them.
+    const hasEmptyPath = window.location.pathname === '/';
+    if (!hasEmptyPath) return;
 
+    const previousPath = getPreviousPath();
     if (
       previousPath &&
       previousPath.startsWith('/') &&
@@ -122,15 +126,10 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
     ) {
       navigate(previousPath);
       removePreviousPath();
+    } else if (cluster) {
+      navigate(`/cluster/${encodeURIComponent(cluster.name)}/overview`);
     } else {
-      const hasEmptyPath = window.location.pathname === '/';
-      if (hasEmptyPath) {
-        if (cluster) {
-          navigate(`/cluster/${encodeURIComponent(cluster.name)}/overview`);
-        } else {
-          navigate('/clusters');
-        }
-      }
+      navigate('/clusters');
     }
   }, [
     cluster,

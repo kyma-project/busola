@@ -136,12 +136,18 @@ async function handleLogin({
     setAuth({ token: getToken(user, useAccessToken) });
     const { cleanup } = attachSilentRenewHandlers(userManager, {
       onRenewed: (renewedUser) => {
+        // A late renew from a superseded cluster must not overwrite the
+        // current cluster's authData.
+        if (isCurrent && !isCurrent()) return;
         setAuth({ token: getToken(renewedUser, useAccessToken) });
       },
       onRenewError: (e) => {
+        if (isCurrent && !isCurrent()) return;
         setAuth(null);
         onError(e);
       },
+      // App-global counter; must be balanced even if this cluster was
+      // superseded mid-renew.
       onRenewingChange,
     });
     onAfterLogin();
@@ -155,8 +161,17 @@ async function handleLogin({
         e.message.includes('No state in response') ||
         e.message.includes('authority mismatch')
       ) {
-        await userManager.clearStaleState();
-        userManager.signinRedirect();
+        try {
+          await userManager.clearStaleState();
+          await userManager.signinRedirect();
+        } catch (redirectError) {
+          console.warn('Login restart failed:', redirectError);
+          onError(
+            redirectError instanceof Error
+              ? redirectError
+              : new Error(String(redirectError)),
+          );
+        }
       } else {
         alert('Login error: ' + e);
       }

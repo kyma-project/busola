@@ -26,6 +26,14 @@ export function getSSOAuthData(): SsoDataState {
   return JSON.parse(sessionStorage.getItem(SSO_KEY) || 'null');
 }
 
+function hasValidStoredSSOToken(): boolean {
+  const stored = getSSOAuthData();
+  if (!stored?.id_token) return false;
+  // Older payloads have no expires_at; treat them as valid.
+  if (typeof stored.expires_at !== 'number') return true;
+  return stored.expires_at * 1000 > Date.now();
+}
+
 export function useIsSSOEnabled() {
   const configuration = useAtomValue(configurationAtom);
   return configuration?.features?.SSO_LOGIN?.isEnabled ?? false;
@@ -50,6 +58,29 @@ async function trySilentRefresh(): Promise<boolean> {
   if (!session.userManager || !session.silentRefreshFn) return false;
   const refreshedUser = await session.silentRefreshFn();
   return !!refreshedUser;
+}
+
+// Session-drop recovery outside React. Saves the current cluster-relative
+// path, then redirects through the IdP; on failure falls back to a full
+// load of /clusters. The saved path restores the location afterwards.
+function triggerReauthRedirect(userManager: UserManager | null) {
+  const fullPath = window.location.pathname + window.location.search;
+  const relative = toClusterRelative(fullPath);
+  if (relative) saveIntendedPath(relative);
+  if (!userManager) {
+    // No manager means handleSSOLogin never ran this page-load (the token
+    // was still valid at mount). The stored SSO entry is already cleared,
+    // so the full load at /clusters re-enters handleSSOLogin.
+    window.location.assign('/clusters');
+    return;
+  }
+  userManager
+    .clearStaleState()
+    .then(() => userManager.signinRedirect())
+    .catch((e: unknown) => {
+      console.warn('SSO re-auth redirect failed:', e);
+      window.location.assign('/clusters');
+    });
 }
 
 export function createSSOUserManager(oidcConfig: {
@@ -103,8 +134,7 @@ async function handleSSOLogin(
         return;
       }
       if (!hasCode) {
-        await userManager.clearStaleState();
-        userManager.signinRedirect();
+        triggerReauthRedirect(userManager);
         return;
       }
       user = await userManager?.signinRedirectCallback(window.location.href);
@@ -119,9 +149,10 @@ async function handleSSOLogin(
           setSsoState(refreshedUser);
         },
         onRenewError: (err) => {
-          console.warn('silent renew failed', err);
+          console.warn('SSO silent renew failed', err);
           setSsoState(null);
           setSSOAuthData(null);
+          triggerReauthRedirect(userManager);
         },
         onRenewingChange: setRenewing,
       });
@@ -131,6 +162,11 @@ async function handleSSOLogin(
         cleanup();
         session.handlersAttached = false;
         session.silentRefreshFn = null;
+        setSsoState(null);
+        setSSOAuthData(null);
+        // Covers IdP-side session revocation; harmless if onRenewError
+        // already started a redirect.
+        triggerReauthRedirect(userManager);
       });
     }
 
@@ -146,8 +182,7 @@ async function handleSSOLogin(
       );
       return;
     }
-    await userManager.clearStaleState();
-    userManager.signinRedirect();
+    triggerReauthRedirect(userManager);
   } finally {
     session.loginInProgress = false;
   }
@@ -161,12 +196,18 @@ export function useSSOLogin() {
   const setRenewing = useSetAtom(renewingAtom);
 
   useEffect(() => {
+    // An expired stored user must fall through so handleSSOLogin can start
+    // a new signinRedirect.
+    const hasValidLive =
+      ssoState?.id_token &&
+      (typeof ssoState.expires_at !== 'number' ||
+        ssoState.expires_at * 1000 > Date.now());
     if (
       !isSSOEnabled ||
       !window.isSecureContext ||
       !ssoConfig ||
-      getSSOAuthData()?.id_token ||
-      ssoState?.id_token
+      hasValidLive ||
+      hasValidStoredSSOToken()
     ) {
       return;
     }
@@ -197,11 +238,7 @@ export function checkForTokenExpiration(token?: string) {
       trySilentRefresh().then((ok) => {
         if (!ok) {
           setSSOAuthData(null);
-          const fullPath = window.location.pathname + window.location.search;
-          saveIntendedPath(toClusterRelative(fullPath));
-          session.userManager?.signinRedirect().catch((e: unknown) => {
-            console.warn('SSO re-auth redirect failed:', e);
-          });
+          triggerReauthRedirect(session.userManager);
         }
       });
     }

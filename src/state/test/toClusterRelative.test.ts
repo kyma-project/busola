@@ -19,9 +19,10 @@ describe('toClusterRelative', () => {
     expect(toClusterRelative('/cluster/foo')).toBe('/');
   });
 
-  it('returns the input unchanged when it is not under /cluster/', () => {
-    expect(toClusterRelative('/clusters')).toBe('/clusters');
-    expect(toClusterRelative('/gardener-login')).toBe('/gardener-login');
+  it('returns null when the path is not under /cluster/', () => {
+    expect(toClusterRelative('/clusters')).toBeNull();
+    expect(toClusterRelative('/gardener-login')).toBeNull();
+    expect(toClusterRelative('/kubeconfig')).toBeNull();
   });
 
   it('URL-decoded cluster names with dashes and dots still get stripped', () => {

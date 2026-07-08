@@ -25,7 +25,8 @@ export function useReauthenticate({
     async (userManager: UserManager, error?: Error) => {
       const fullPath =
         location.pathname + (location.search ? location.search : '');
-      saveIntendedPath(toClusterRelative(fullPath));
+      const relative = toClusterRelative(fullPath);
+      if (relative) saveIntendedPath(relative);
       try {
         await userManager.clearStaleState();
         await userManager.signinRedirect();
