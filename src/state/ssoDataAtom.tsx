@@ -1,10 +1,13 @@
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 import { User, UserManager } from 'oidc-client-ts';
-import { atom, useAtom, useAtomValue } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { configurationAtom } from './configuration/configurationAtom';
 import { ConfigFeature } from './types';
 import { useEffect } from 'react';
 import { getEnv, Envs } from 'shared/utils/env';
+import { attachSilentRenewHandlers } from './silentRenewSetup';
+import { renewingAtom } from './renewingAtom';
+import { saveIntendedPath } from './intendedPathAtom';
 
 const SSO_KEY = 'SSO';
 
@@ -31,30 +34,45 @@ let userManager: UserManager | null = null;
 let handlersAttached = false;
 let loginInProgress = false;
 let registeredSsoStateSetter: ((user: SsoDataState) => void) | null = null;
-let refreshInProgress = false;
+let silentRefreshFn: (() => Promise<User | null>) | null = null;
 let lastTokenCheckTime = 0;
 
+// Thin adapter around `attachSilentRenewHandlers` for the SSO manager.
+export function attachSSOSilentRenew(
+  um: UserManager,
+  {
+    onRenewed,
+    onRenewError,
+    onRenewingChange,
+  }: {
+    onRenewed: (u: User) => void;
+    onRenewError: (e: Error) => void;
+    onRenewingChange?: (renewing: boolean) => void;
+  },
+) {
+  return attachSilentRenewHandlers(um, {
+    onRenewed,
+    onRenewError,
+    onRenewingChange,
+  });
+}
+
 async function trySilentRefresh(): Promise<boolean> {
-  if (!userManager || refreshInProgress) return false;
-  refreshInProgress = true;
+  if (!userManager || !silentRefreshFn) return false;
   try {
-    const refreshedUser = await userManager.signinSilent();
-    setSSOAuthData(refreshedUser);
-    registeredSsoStateSetter?.(refreshedUser);
-    return true;
+    const refreshedUser = await silentRefreshFn();
+    if (refreshedUser) return true;
+    setSSOAuthData(null);
+    registeredSsoStateSetter?.(null);
+    return false;
   } catch {
     setSSOAuthData(null);
     registeredSsoStateSetter?.(null);
     return false;
-  } finally {
-    refreshInProgress = false;
   }
 }
 
-// oidc-client-ts stores pending signin state as sessionStorage['oidc.<stateId>']
-// containing a JSON string with client_id and authority. Checking it tells us
-// whether the current callback URL belongs to this UserManager without relying
-// on the 'iss' query param, which varies across environments.
+// See authDataAtom.ts:isOwnOidcCallback — same pattern for the SSO manager.
 function isOwnOidcCallback(clientId: string): boolean {
   const stateId = new URLSearchParams(window.location.search).get('state');
   if (!stateId) return false;
@@ -67,19 +85,28 @@ function isOwnOidcCallback(clientId: string): boolean {
   }
 }
 
+export function createSSOUserManager(oidcConfig: {
+  issuerUrl: string;
+  clientId: string;
+  scope?: string;
+}): UserManager {
+  return new UserManager({
+    redirect_uri: window.location.origin,
+    post_logout_redirect_uri: window.location.origin + '/logout.html',
+    loadUserInfo: false,
+    client_id: oidcConfig.clientId,
+    authority: oidcConfig.issuerUrl,
+    scope: oidcConfig.scope || 'openid',
+    response_type: 'code',
+    response_mode: 'query',
+    // See authDataAtom.ts — same rationale for disabling the library timer.
+    automaticSilentRenew: false,
+  });
+}
+
 function getOrCreateUserManager(ssoConfig: ConfigFeature): UserManager {
   if (!userManager) {
-    const { issuerUrl, clientId, scope } = ssoConfig.config;
-    userManager = new UserManager({
-      redirect_uri: window.location.origin,
-      post_logout_redirect_uri: window.location.origin + '/logout.html',
-      loadUserInfo: false,
-      client_id: clientId,
-      authority: issuerUrl,
-      scope: scope || 'openid',
-      response_type: 'code',
-      response_mode: 'query',
-    });
+    userManager = createSSOUserManager(ssoConfig.config);
   }
   return userManager;
 }
@@ -87,6 +114,7 @@ function getOrCreateUserManager(ssoConfig: ConfigFeature): UserManager {
 async function handleSSOLogin(
   ssoConfig: ConfigFeature,
   setSsoState: (user: SsoDataState) => void,
+  setRenewing?: (renewing: boolean) => void,
 ) {
   if (!ssoConfig || !ssoConfig.config) {
     throw new Error('SSO configuration not found');
@@ -105,9 +133,7 @@ async function handleSSOLogin(
     } else {
       const hasCode = new URLSearchParams(window.location.search).has('code');
       if (hasCode && !isOwnOidcCallback(ssoConfig.config.clientId)) {
-        // A redirect callback is in progress, but it belongs to a different
-        // UserManager (e.g. cluster OIDC). Don't touch it — just wait; the
-        // other handler will process the code and then navigate away.
+        // Callback in progress but not ours (e.g. cluster OIDC's); let it run.
         return;
       }
       if (!hasCode) {
@@ -120,37 +146,24 @@ async function handleSSOLogin(
 
     if (!handlersAttached) {
       handlersAttached = true;
-      userManager.events.addAccessTokenExpiring(async () => {
-        const refreshedUser = await userManager.signinSilent();
-        setSSOAuthData(refreshedUser);
-        setSsoState(refreshedUser);
+      silentRefreshFn = () => userManager.signinSilent();
+
+      const detach = attachSSOSilentRenew(userManager, {
+        onRenewed: (refreshedUser) => {
+          setSSOAuthData(refreshedUser);
+          setSsoState(refreshedUser);
+        },
+        onRenewError: (err) => {
+          console.warn('silent renew failed', err);
+          setSsoState(null);
+          setSSOAuthData(null);
+        },
+        onRenewingChange: setRenewing,
       });
-      userManager.events.addSilentRenewError((err) => {
-        console.warn('silent renew failed', err);
-        setSsoState(null);
-        setSSOAuthData(null);
-      });
-      const onVisibilityChange = async () => {
-        if (document.visibilityState !== 'visible') return;
-        const currentUser = await userManager.getUser();
-        if (
-          currentUser?.expired ||
-          (currentUser?.expires_in && currentUser.expires_in <= 2)
-        ) {
-          try {
-            const refreshedUser = await userManager.signinSilent();
-            setSSOAuthData(refreshedUser);
-            setSsoState(refreshedUser);
-          } catch {
-            setSsoState(null);
-            setSSOAuthData(null);
-          }
-        }
-      };
-      document.addEventListener('visibilitychange', onVisibilityChange);
       userManager.events.addUserUnloaded(() => {
-        document.removeEventListener('visibilitychange', onVisibilityChange);
+        detach();
         handlersAttached = false;
+        silentRefreshFn = null;
       });
     }
 
@@ -178,6 +191,7 @@ export function useSSOLogin() {
   const ssoConfig = configuration?.features?.SSO_LOGIN;
   const [ssoState, setSsoState] = useAtom(ssoDataAtom);
   const isSSOEnabled = useIsSSOEnabled();
+  const setRenewing = useSetAtom(renewingAtom);
 
   useEffect(() => {
     if (
@@ -193,7 +207,7 @@ export function useSSOLogin() {
     const startLogin = async () => {
       const bypass = await getEnv(Envs.SSO_LOGIN_BYPASS);
       if (bypass === 'true') return;
-      handleSSOLogin(ssoConfig, setSsoState);
+      handleSSOLogin(ssoConfig, setSsoState, setRenewing);
     };
     startLogin();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -216,12 +230,17 @@ export function checkForTokenExpiration(token?: string) {
       trySilentRefresh().then((ok) => {
         if (!ok) {
           setSSOAuthData(null);
-          // Reset state and trigger re-login flow. Maybe should be improved in the future.
-          window.location.reload();
+          // Silent refresh failed; preserve location and round-trip through
+          // the IdP (consumed on return by useIntendedPathRestore).
+          const currentPath = window.location.pathname + window.location.search;
+          saveIntendedPath(currentPath);
+          userManager?.signinRedirect().catch((e) => {
+            console.warn('SSO re-auth redirect failed:', e);
+          });
         }
       });
     }
   } catch (_) {
-    // ignore errors from non-JWT tokens
+    // non-JWT token — nothing to check
   }
 }

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useMatch, useNavigate } from 'react-router';
+import { useMatch } from 'react-router';
 import {
   addWorkerErrorListener,
   addWorkerListener,
@@ -18,13 +18,15 @@ import { useTranslation } from 'react-i18next';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useAtom, useSetAtom } from 'jotai';
 import { ssoDataAtom, useIsSSOEnabled } from 'state/ssoDataAtom';
+import { renewingAtom } from 'state/renewingAtom';
+import { useReauthenticate } from 'state/useReauthenticate';
+import { authUserManagerRef } from 'state/authDataAtom';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
   const authData = useAtomValue(authDataAtom);
   const ssoData = useAtomValue(ssoDataAtom);
   const openApi = useAtomValue(openapiAtom);
-  const navigate = useNavigate();
   const cluster = useAtomValue(clusterAtom);
   const isClusterList = useMatch({ path: '/clusters' });
   const notification = useNotification();
@@ -32,6 +34,8 @@ export const useResourceSchemas = () => {
   const clusterInfo = useClustersInfo();
   const { currentCluster } = clusterInfo;
   const isSSOEnabled = useIsSSOEnabled();
+  const renewing = useAtomValue(renewingAtom);
+  const reauth = useReauthenticate({ notifyError: notification.notifyError });
 
   const setSchemasState = useSetAtom(schemaWorkerStatusAtom);
   const [lastFetched, setLastFetched] = useAtom(openapiLastFetchedAtom);
@@ -41,14 +45,16 @@ export const useResourceSchemas = () => {
       authData &&
       activeClusterName === cluster?.contextName &&
       openApi?.state === 'hasError' &&
-      !isClusterList
+      !isClusterList &&
+      // A transient 401 during silent renew isn't a session drop.
+      !renewing
     ) {
       if (!isSSOEnabled || ssoData) {
         notification.notifyError({
           content: t('clusters.messages.connection-failed'),
         });
-
-        navigate('/clusters');
+        const um = authUserManagerRef.current;
+        if (um) reauth(um);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,10 +64,10 @@ export const useResourceSchemas = () => {
     authData,
     openApi.state,
     isClusterList,
-    navigate,
     t,
     ssoData,
     isSSOEnabled,
+    renewing,
   ]);
 
   useEffect(() => {

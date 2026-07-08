@@ -33,7 +33,12 @@ import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigI
 import { useMakeGardenerLoginRoute } from 'components/Gardener/useMakeGardenerLoginRoute';
 import { useHandleResetEndpoint, Users } from 'components/Clusters/shared';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
-import { removePreviousPath, useAfterInitHook } from 'state/useAfterInitHook';
+import {
+  removePreviousPath,
+  useAfterInitHook,
+  usePreviousPathTracker,
+} from 'state/useAfterInitHook';
+import { useIntendedPathRestore } from 'state/useIntendedPathRestore';
 import useSidebarCondensed from 'sidebar/useSidebarCondensed';
 import { useGetValidationEnabledSchemas } from 'state/validationEnabledSchemasAtom';
 import { multipleContextsAtom } from 'state/multipleContextsAtom';
@@ -117,6 +122,8 @@ export default function App() {
 
   useSentry();
   useAfterInitHook(kubeconfigIdState);
+  usePreviousPathTracker();
+  useIntendedPathRestore();
 
   const showCompanion = useAtomValue(showKymaCompanionAtom);
   const [showTerminalState, setShowTerminalState] = useAtom(showTerminalAtom);
