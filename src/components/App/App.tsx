@@ -49,6 +49,7 @@ import horizontalGripIcon from '@ui5/webcomponents-icons/dist/horizontal-grip.js
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { showTerminalAtom } from 'state/showTerminalAtom';
 import KymaCompanion from 'components/KymaCompanion/components/KymaCompanion';
+import { useAssistantAvailability } from 'components/KymaCompanion/hooks/useAssistantAvailability';
 import { Settings } from 'components/Settings/Settings';
 import { Header } from 'header/Header';
 import { ContentWrapper } from './ContentWrapper/ContentWrapper';
@@ -119,6 +120,10 @@ export default function App() {
   useAfterInitHook(kubeconfigIdState);
 
   const showCompanion = useAtomValue(showKymaCompanionAtom);
+  const { showAssistant } = useAssistantAvailability();
+  // Defense in depth against stale state or a future entry point forgetting to gate itself.
+  const companionPanelOpen =
+    showAssistant && showCompanion.show && !showCompanion.useJoule;
   const [showTerminalState, setShowTerminalState] = useAtom(showTerminalAtom);
   const {
     isOpen: isTerminalOpen,
@@ -194,9 +199,9 @@ export default function App() {
   return (
     <SplitterLayout id="splitter-layout">
       <SplitterElement
-        resizable={showCompanion.show && !showCompanion.useJoule}
+        resizable={companionPanelOpen}
         size={
-          showCompanion.show && !showCompanion.useJoule
+          companionPanelOpen
             ? showCompanion.fullScreen
               ? '0%'
               : '70%'
@@ -319,7 +324,7 @@ export default function App() {
           </div>
         </div>
       </SplitterElement>
-      {showCompanion.show && !showCompanion.useJoule ? (
+      {companionPanelOpen ? (
         <SplitterElement
           resizable={!showCompanion.fullScreen}
           size={showCompanion.fullScreen ? '100%' : '30%'}
