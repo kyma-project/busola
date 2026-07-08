@@ -114,14 +114,17 @@ task('get-extensions', () => {
 
 task('pack-extensions', () => {
   const env = process.env.ENV;
-  return src(`temp/${env}/extensions-local/**/*.yaml`)
+  const outDir = `build/${env}/extensions`;
+  mkdirSync(outDir, { recursive: true });
+  writeFileSync(`${outDir}/extensions.yaml`, '[]');
+  return src(`temp/${env}/extensions-local/**/*.yaml`, { allowEmpty: true })
     .pipe(loadPreparedExtensions)
     .pipe(
       concat('extensions.yaml', {
         newLine: '---\n',
       }),
     )
-    .pipe(dest(`build/${env}/extensions`));
+    .pipe(dest(outDir));
 });
 
 task('clean-statics', () => {
