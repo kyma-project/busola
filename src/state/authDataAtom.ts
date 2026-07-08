@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { attachSilentRenewHandlers } from './silentRenewSetup';
 import { useReauthenticate } from './useReauthenticate';
 import { renewingAtom } from './renewingAtom';
+import { isOwnOidcCallback } from './utils/isOwnOidcCallback';
 
 export const hasNonOidcAuth = (
   user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
@@ -44,12 +45,12 @@ type handleLoginProps = {
   onAfterLogin: () => void;
   onError: (error: Error) => void;
   onRenewingChange?: (renewing: boolean) => void;
-  // Returns false if a newer cluster has taken over — abort side-effects.
+  // Returns false if a newer cluster has taken over; caller should abort.
   isCurrent?: () => boolean;
 };
 
 // Returned so callers can detach the silent-renew listeners on cluster change
-// or unmount — otherwise handlers stack and fire multiple times per event.
+// or unmount; without cleanup the handlers stack across cluster switches.
 export type HandleLoginResult = {
   userManager: UserManager;
   cleanup: () => void;
@@ -66,21 +67,6 @@ function getToken(user: User | null, useAccessToken: boolean): string {
     return user.id_token;
   }
   throw new Error('id_token is empty');
-}
-
-// Checks the pending signin state (`oidc.<stateId>` in sessionStorage) to see
-// whether this callback URL belongs to this UserManager. More reliable than
-// matching on the `iss` param, which some IdPs omit.
-function isOwnOidcCallback(clientId: string): boolean {
-  const stateId = new URLSearchParams(window.location.search).get('state');
-  if (!stateId) return false;
-  try {
-    const raw = localStorage.getItem(`oidc.${stateId}`);
-    if (!raw) return false;
-    return JSON.parse(raw)?.client_id === clientId;
-  } catch {
-    return false;
-  }
 }
 
 export function createUserManager(
@@ -106,8 +92,8 @@ export function createUserManager(
     response_type: 'code',
     response_mode: 'query',
     // Disable the library's built-in silent renewal so our custom handler is
-    // the only signinSilent() call in flight — two racing calls consume the
-    // rotating refresh token and the second returns invalid_grant.
+    // the only signinSilent() call in flight. Two racing calls consume the
+    // rotating refresh token and the second one gets invalid_grant.
     automaticSilentRenew: false,
   });
 }
@@ -119,7 +105,7 @@ async function handleLogin({
   onError,
   onRenewingChange,
   isCurrent,
-}: handleLoginProps): Promise<HandleLoginResult | void> {
+}: handleLoginProps): Promise<HandleLoginResult | null> {
   const oidcParams = parseOIDCparams(userCredentials);
   const userManager = createUserManager(oidcParams);
 
@@ -134,18 +120,18 @@ async function handleLogin({
     } else {
       const hasCode = new URLSearchParams(window.location.search).has('code');
       if (hasCode && !isOwnOidcCallback(oidcParams.clientId)) {
-        // Callback in progress but not ours (e.g. SSO's); let its handler run.
-        return;
+        // Callback belongs to another manager (e.g. SSO); let it run.
+        return null;
       }
       if (!hasCode) {
         await userManager.clearStaleState();
         await userManager.signinRedirect();
-        return;
+        return null;
       }
       user = await userManager.signinRedirectCallback(window.location.href);
     }
 
-    if (isCurrent && !isCurrent()) return;
+    if (isCurrent && !isCurrent()) return null;
 
     setAuth({ token: getToken(user, useAccessToken) });
     const { cleanup } = attachSilentRenewHandlers(userManager, {
@@ -162,8 +148,9 @@ async function handleLogin({
     return { userManager, cleanup };
   } catch (e) {
     if (e instanceof Error) {
-      // 'No state in response' = no login in progress; 'authority mismatch' =
-      // stale storage from a prior issuer. Both recover by starting fresh.
+      // 'No state in response' means no login was in progress; 'authority
+      // mismatch' means stale storage from a prior issuer. Both recover
+      // by starting fresh.
       if (
         e.message.includes('No state in response') ||
         e.message.includes('authority mismatch')
@@ -176,6 +163,7 @@ async function handleLogin({
     } else {
       throw e;
     }
+    return null;
   }
 }
 
@@ -190,14 +178,14 @@ export function useAuthHandler() {
   const prevClusterRef = useRef<typeof cluster>(null);
   const cleanupRef = useRef<(() => void) | null>(null);
   const userManagerRef = useRef<UserManager | null>(null);
-  // Bumped on every cluster-change; late handleLogin resolutions with a
-  // stale generation self-clean instead of overwriting the current refs.
+  // Bumped on every cluster change; a late `handleLogin` resolution with an
+  // outdated generation cleans itself up instead of overwriting the refs.
   const loginGenRef = useRef(0);
   const setRenewing = useSetAtom(renewingAtom);
   const reauth = useReauthenticate({ notifyError: notification.notifyError });
 
   useEffect(() => {
-    // Detach previous cluster's silent-renew listeners before switching.
+    // Detach the previous cluster's silent-renew listeners before switching.
     if (cleanupRef.current) {
       cleanupRef.current();
       cleanupRef.current = null;
@@ -223,8 +211,8 @@ export function useAuthHandler() {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);
         setIsLoading(false);
       } else if (genericExec) {
-        // Generic exec plugins can't run in the browser; bounce to the list
-        // so the user can supply a token.
+        // Generic exec plugins can't run in the browser; send the user back
+        // to the cluster list so they can supply a token manually.
         console.warn(
           'Cluster uses a generic exec plugin with no token. Please edit the cluster and provide a token.',
         );
@@ -259,7 +247,7 @@ export function useAuthHandler() {
           if (um) {
             reauth(um, error);
           } else {
-            // No manager yet — no IdP round-trip possible; surface the error.
+            // No manager, so no IdP round-trip is possible. Surface the error.
             navigate('/clusters');
             const errorMessage =
               error?.message || t('common.errors.session-expired');
@@ -279,7 +267,7 @@ export function useAuthHandler() {
         }).then((result) => {
           if (!result) return;
           if (gen !== loginGenRef.current) {
-            // A newer cluster took over while we were awaiting; discard.
+            // A newer cluster took over while we were awaiting; discard this one.
             result.cleanup();
             return;
           }
@@ -311,9 +299,9 @@ export function useAuthHandler() {
 export const authDataAtom = atom<AuthDataState>(null);
 authDataAtom.debugLabel = 'authDataAtom';
 
-// Module-scoped mirror of `useAuthHandler`'s current UserManager, so
-// `useResourceSchemas` can trigger `useReauthenticate` without re-parsing the
-// kubeconfig. Updated on cluster change, cleared on unmount.
+// Module-scoped mirror of `useAuthHandler`'s current UserManager so
+// `useResourceSchemas` can invoke `useReauthenticate` without re-parsing
+// the kubeconfig. Set on cluster change, cleared on unmount.
 export const authUserManagerRef: { current: UserManager | null } = {
   current: null,
 };

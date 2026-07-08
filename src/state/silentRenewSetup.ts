@@ -4,14 +4,12 @@ import { createSingleFlight } from './utils/singleFlight';
 interface Options {
   onRenewed: (user: User) => void;
   onRenewError: (error: Error) => void;
-  // Fires true when a renew starts, false when it settles; lets callers
-  // suppress recovery paths that would misread the transient as a session drop.
+  // Called with true when a renew starts, false when it settles.
   onRenewingChange?: (renewing: boolean) => void;
 }
 
-// Routes every silent-renew trigger — library `addAccessTokenExpiring`, browser
-// `visibilitychange`, and the returned `renew()` for callers like SSO
-// `checkForTokenExpiration` — through one single-flight `signinSilent()`.
+// Runs `addAccessTokenExpiring`, `visibilitychange`, and external `renew()`
+// callers through one single-flight `signinSilent()`.
 export function attachSilentRenewHandlers(
   userManager: UserManager,
   { onRenewed, onRenewError, onRenewingChange }: Options,

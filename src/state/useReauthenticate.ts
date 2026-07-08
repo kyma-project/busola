@@ -10,8 +10,8 @@ import {
 
 type NotifyError = (props: { content: string }) => void;
 
-// Shared session-drop recovery: save the current path, redirect through the
-// IdP, return to the same URL. Toast only if the redirect itself fails.
+// Session-drop recovery. Saves the current path, redirects through the IdP,
+// falls back to a toast if the redirect itself fails.
 export function useReauthenticate({
   notifyError,
 }: {
@@ -31,7 +31,7 @@ export function useReauthenticate({
         await userManager.signinRedirect();
       } catch (redirectError) {
         console.warn('Silent re-auth via IdP failed:', redirectError);
-        // Drop the stored path so a later cluster pick doesn't reuse it.
+        // Otherwise a later cluster pick would reuse the stale path.
         clearIntendedPath();
         navigate('/clusters');
         const message = error?.message || t('common.errors.session-expired');

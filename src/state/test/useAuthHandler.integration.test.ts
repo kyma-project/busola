@@ -4,17 +4,11 @@ import { MemoryRouter } from 'react-router';
 import { createStore, Provider } from 'jotai';
 import { createElement, PropsWithChildren } from 'react';
 
-// -----------------------------------------------------------------------------
-// Mocks
-//
-// The goal here is to mount useAuthHandler end-to-end and drive the full silent
-// renewal loop through a mocked oidc-client-ts UserManager. This is the
-// integration test that guards the ACTUAL bug fix — the previous cycle-level
-// tests exercise pieces in isolation.
-// -----------------------------------------------------------------------------
+// Integration test for useAuthHandler: drives the full silent-renewal loop
+// through a mocked oidc-client-ts UserManager.
 
-// Handler references captured from the UserManager mock so tests can fire the
-// same events oidc-client-ts would.
+// Handler references captured from the UserManager mock so tests can fire
+// the same events oidc-client-ts would.
 let capturedExpiringHandler: (() => Promise<void>) | null = null;
 const capturedRemoveExpiring = vi.fn();
 const capturedAddExpiring = vi.fn();
@@ -43,7 +37,7 @@ vi.mock('oidc-client-ts', () => ({
   User: class {},
 }));
 
-// oidc-params.ts uses regex-based kubeconfig parsing; feed it a fake result.
+// oidc-params.ts parses the kubeconfig with regex; feed it a fake result.
 vi.mock('components/Clusters/components/oidc-params', () => ({
   parseOIDCparams: () => ({
     issuerUrl: 'https://issuer.example.com',
@@ -64,14 +58,14 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (k: string) => k }),
 }));
 
-// Import lazily so the mocks above are wired before module init.
+// Imported lazily so the mocks above are wired before module init.
 const { useAuthHandler, authDataAtom, authUserManagerRef } =
   await import('../authDataAtom');
 const { clusterAtom } = await import('../clusterAtom');
 const { saveIntendedPath, getIntendedPath, clearIntendedPath } =
   await import('../intendedPathAtom');
 
-// A minimal cluster shape that passes hasNonOidcAuth() === false and
+// Minimal cluster shape that passes hasNonOidcAuth() === false and
 // isOIDCExec() === true.
 function makeOidcCluster(name: string) {
   return {
@@ -109,7 +103,7 @@ function makeWrapper(store: ReturnType<typeof createStore>) {
 }
 
 async function flushMicrotasks() {
-  // Two flushes: one for the handleLogin() promise, one for the .then() chain.
+  // One flush for handleLogin(), one for the .then() chain.
   await act(async () => {
     await Promise.resolve();
   });
@@ -179,14 +173,14 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
     await flushMicrotasks();
     expect(store.get(authDataAtom)).toEqual({ token: 'initial-token' });
 
-    // Fire the library's addAccessTokenExpiring event.
+    // Fire the addAccessTokenExpiring event.
     await act(async () => {
       await capturedExpiringHandler?.();
     });
 
     expect(mockSigninSilent).toHaveBeenCalledTimes(1);
     expect(store.get(authDataAtom)).toEqual({ token: 'renewed-token' });
-    // No IdP redirect, no toast — the whole thing is silent.
+    // Silent path: no IdP redirect, no toast.
     expect(mockSigninRedirect).not.toHaveBeenCalled();
     expect(mockNotifyError).not.toHaveBeenCalled();
   });
@@ -243,7 +237,7 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
       'common.errors.session-not-renewed',
     );
 
-    // Cleared so a later cluster pick doesn't reuse the stale path.
+    // Otherwise a later cluster pick would reuse the stale path.
     expect(getIntendedPath()).toBeNull();
   });
 
@@ -267,7 +261,7 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
     renderHook(() => useAuthHandler(), { wrapper: makeWrapper(store) });
     await flushMicrotasks();
 
-    // Fire twice concurrently — same tick.
+    // Fire twice in the same tick.
     const p1 = capturedExpiringHandler?.();
     const p2 = capturedExpiringHandler?.();
 
@@ -278,7 +272,6 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
       await Promise.all([p1, p2]);
     });
 
-    // authDataAtom was updated only once, to the renewed value.
     expect(store.get(authDataAtom)).toEqual({ token: 'renewed' });
   });
 
@@ -299,7 +292,7 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
     renderHook(() => useAuthHandler(), { wrapper: makeWrapper(store) });
     await flushMicrotasks();
 
-    // Switch clusters — the old manager's listeners must be detached.
+    // Switch clusters; the old manager's listeners must be detached.
     act(() => {
       store.set(clusterAtom, makeOidcCluster('bar') as any);
     });
@@ -309,10 +302,8 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
   });
 
   it('clears intendedPath after useIntendedPathRestore consumes it (post-reauth)', async () => {
-    // Simulate the "back from IdP" side of the flow: intendedPath is set,
-    // auth transitions from null to a token. The dedicated
-    // useIntendedPathRestore test asserts the restore; this test confirms
-    // saveIntendedPath in the failure path stores a consumable value.
+    // The dedicated useIntendedPathRestore test asserts the restore itself;
+    // this test just confirms the failure path stores a consumable value.
     mockGetUser.mockResolvedValue({
       expired: false,
       id_token: 'initial-token',
@@ -356,30 +347,24 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
     const store = createStore();
     store.set(clusterAtom, makeOidcCluster('foo') as any);
 
-    // Simulate what StrictMode does in dev: mount → unmount → remount. The
-    // invariant is that the intermediate unmount fires cleanup, so the
-    // remount doesn't stack a second listener on top of the first.
+    // Mimic StrictMode: mount, unmount, remount. The unmount must fire
+    // cleanup so the remount doesn't stack a second listener.
     const { unmount } = renderHook(() => useAuthHandler(), {
       wrapper: makeWrapper(store),
     });
     await flushMicrotasks();
     unmount();
-    // After unmount, cleanup must have fired at least once.
     expect(capturedRemoveExpiring.mock.calls.length).toBeGreaterThanOrEqual(1);
 
-    // Now remount.
     renderHook(() => useAuthHandler(), { wrapper: makeWrapper(store) });
     await flushMicrotasks();
 
-    // Live listener count = adds - removes. Must be exactly 1: the remount's
-    // registration, with no leftover from the first mount.
+    // Adds minus removes = live listeners; must be exactly 1 after remount.
     const netLive =
       capturedAddExpiring.mock.calls.length -
       capturedRemoveExpiring.mock.calls.length;
     expect(netLive).toBe(1);
 
-    // Sanity: firing the event only triggers signinSilent once (single-flight
-    // guarantees at most one, cleanup guarantees only one live handler).
     await act(async () => {
       await capturedExpiringHandler?.();
     });
@@ -387,8 +372,8 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
   });
 
   it("drops A's late-resolving handleLogin when B has already taken over", async () => {
-    // Switch A → B while A's handleLogin is still awaiting getUser(). Without
-    // the stale-login guard, A's late resolution leaks its listener.
+    // Switch A -> B while A's handleLogin still awaits getUser(). Without the
+    // stale-login guard, A's late resolution would leak its listener.
     let resolveAGetUser: (u: any) => void = () => {};
     let resolveBGetUser: (u: any) => void = () => {};
     mockGetUser
@@ -427,7 +412,7 @@ describe('useAuthHandler integration — full silent-renew flow', () => {
     await flushMicrotasks();
     await flushMicrotasks();
 
-    // Net live listeners = adds - removes. Must be exactly 1 (only B's).
+    // Net live listeners = adds - removes; must be exactly 1 (B's).
     const netLive =
       capturedAddExpiring.mock.calls.length -
       capturedRemoveExpiring.mock.calls.length;

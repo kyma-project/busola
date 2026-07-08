@@ -36,8 +36,8 @@ export const useResourceSchemas = () => {
   const isSSOEnabled = useIsSSOEnabled();
   const renewing = useAtomValue(renewingAtom);
   const reauth = useReauthenticate({ notifyError: notification.notifyError });
-  // Prevents a second `reauth` call if the effect re-runs before the browser
-  // navigates away. Cleared once the underlying state leaves the error branch.
+  // Blocks a second `reauth` call when the effect re-runs before the browser
+  // navigates. Reset when we're no longer in the error branch.
   const reauthTriggeredRef = useRef(false);
 
   const setSchemasState = useSetAtom(schemaWorkerStatusAtom);
@@ -52,7 +52,7 @@ export const useResourceSchemas = () => {
       activeClusterName === cluster?.contextName &&
       openApi?.state === 'hasError' &&
       !isClusterList &&
-      // A transient 401 during silent renew isn't a session drop.
+      // A 401 during a silent renew is transient, not a session drop.
       !renewing &&
       !reauthTriggeredRef.current
     ) {

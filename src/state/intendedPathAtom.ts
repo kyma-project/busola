@@ -38,8 +38,9 @@ export function clearIntendedPath(): void {
   sessionStorage.removeItem(INTENDED_PATH_KEY);
 }
 
-// Strips the `/cluster/<name>` prefix; consumers re-prepend it on restore.
-// A bare `/cluster/<name>` collapses to `/` to avoid a `/cluster/<name>/cluster/<name>` restore.
+// Strips the `/cluster/<name>` prefix; callers re-prepend it on restore.
+// A bare `/cluster/<name>` collapses to `/` so restore doesn't yield
+// `/cluster/<name>/cluster/<name>`.
 export function toClusterRelative(fullPath: string): string {
   const match = fullPath.match(/^\/cluster\/[^/]+(.*)$/);
   if (!match) return fullPath;

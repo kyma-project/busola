@@ -58,13 +58,11 @@ describe('useIntendedPathRestore', () => {
       wrapper: makeWrapper(store),
     });
 
-    // Auth transitions from null to a value.
     act(() => {
       store.set(authDataAtom, { token: 'x' });
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/cluster/foo/namespaces/bar');
-    // Intended path was consumed.
     expect(getIntendedPath()).toBeNull();
   });
 
@@ -82,8 +80,7 @@ describe('useIntendedPathRestore', () => {
     });
     expect(mockNavigate).toHaveBeenCalledWith('/cluster/foo/namespaces/first');
 
-    // Simulate a session drop -> re-auth cycle:
-    // auth cleared, intended path saved again, auth restored.
+    // Session drop, re-auth, new intended path.
     mockNavigate.mockReset();
     act(() => {
       store.set(authDataAtom, null);

@@ -4,8 +4,8 @@ import { MemoryRouter } from 'react-router';
 import { createStore, Provider } from 'jotai';
 import { createElement, PropsWithChildren } from 'react';
 
-// Proves useAuthHandler + useIntendedPathRestore compose across a full
-// renew-fail → IdP redirect → restore cycle.
+// End-to-end: useAuthHandler + useIntendedPathRestore across a
+// renew-fail -> IdP redirect -> restore cycle.
 
 let capturedExpiringHandler: (() => Promise<void>) | null = null;
 const mockSigninSilent = vi.fn();
@@ -138,7 +138,7 @@ describe('session-drop recovery round-trip', () => {
     const store = createStore();
     store.set(clusterAtom, makeOidcCluster('foo') as any);
 
-    // Mount both hooks together, as App.tsx does.
+    // Mount both hooks, as App.tsx does.
     renderHook(
       () => {
         useAuthHandler();
@@ -148,7 +148,7 @@ describe('session-drop recovery round-trip', () => {
     );
     await flushMicrotasks();
 
-    // Trigger silent-renew failure → reauth path.
+    // Silent renew fails -> reauth path fires.
     await act(async () => {
       await capturedExpiringHandler?.();
     });
@@ -158,7 +158,7 @@ describe('session-drop recovery round-trip', () => {
     });
     expect(getIntendedPath()?.path).toBe('/namespaces/bar');
 
-    // Simulate return from IdP: auth transitions null → set.
+    // User returns from the IdP; auth transitions null -> set.
     act(() => {
       store.set(authDataAtom, { token: 'renewed-via-idp' });
     });

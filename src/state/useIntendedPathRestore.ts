@@ -5,8 +5,8 @@ import { authDataAtom } from './authDataAtom';
 import { clusterAtom } from './clusterAtom';
 import { getIntendedPath, clearIntendedPath } from './intendedPathAtom';
 
-// Restores `intendedPath` on every auth restore, unlike `useAfterInitHook`'s
-// one-shot `initDone` guard — required for same-tab re-auth after a session drop.
+// Runs on every auth restore, not just the first, so same-tab re-auth after
+// a session drop lands the user back on the intended path.
 export function useIntendedPathRestore() {
   const authData = useAtomValue(authDataAtom);
   const cluster = useAtomValue(clusterAtom);

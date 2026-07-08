@@ -4,8 +4,8 @@ import { MemoryRouter } from 'react-router';
 import { atom, createStore, Provider } from 'jotai';
 import { createElement, PropsWithChildren } from 'react';
 
-// Hoisted so the vi.mock factories below can reference these regardless of
-// statement order.
+// vi.hoisted so vi.mock factories below can reference these regardless of
+// declaration order.
 const hoisted = vi.hoisted(() => ({
   mockNotifyError: null as unknown as ReturnType<typeof vi.fn>,
   mockReauth: null as unknown as ReturnType<typeof vi.fn>,
@@ -35,7 +35,7 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (k: string) => k }),
 }));
 
-// The worker API touches Web Workers — stub it out.
+// The worker API touches Web Workers; stub it out.
 vi.mock('components/App/resourceSchemas/resourceSchemaWorkerApi', () => ({
   addWorkerListener: vi.fn(),
   addWorkerErrorListener: vi.fn(),
@@ -94,7 +94,6 @@ describe('useResourceSchemas openapi-error handling', () => {
 
     renderHook(() => useResourceSchemas(), { wrapper: makeWrapper(store) });
 
-    // Give the effect a chance to fire.
     await act(async () => {
       await Promise.resolve();
     });
@@ -140,7 +139,7 @@ describe('useResourceSchemas openapi-error handling', () => {
     });
     expect(mockReauth).toHaveBeenCalledTimes(1);
 
-    // Force the effect to re-run before the browser navigates away.
+    // Re-run the effect before the browser navigates.
     act(() => {
       store.set(authDataAtom, { token: 't2' });
     });
@@ -152,7 +151,6 @@ describe('useResourceSchemas openapi-error handling', () => {
   });
 
   it('does not trigger reauth on the /clusters route even without a renew', async () => {
-    // Rendered from /clusters via a wrapper override.
     const store = createStore();
     store.set(clusterAtom, makeCluster('foo') as any);
     store.set(authDataAtom, { token: 't' });

@@ -6,9 +6,8 @@ const SRC = 'src/state/ssoDataAtom.tsx';
 describe('SSO failure path preserves location', () => {
   it('does not reload the whole page on token-expiration failure', () => {
     const src = readFileSync(SRC, 'utf8');
-    // The old flow was `window.location.reload()` — that path resets
-    // everything and loses the user's location. Recovery now happens via
-    // saveIntendedPath + signinRedirect.
+    // Full-page reload loses the user's location. Recovery goes through
+    // saveIntendedPath + signinRedirect instead.
     expect(src).not.toMatch(/window\.location\.reload/);
   });
 

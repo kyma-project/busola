@@ -16,7 +16,6 @@ describe('createSingleFlight', () => {
     const p1 = run(fn);
     const p2 = run(fn);
 
-    // Both callers must observe the same in-flight promise; fn ran once.
     expect(p1).toBe(p2);
     expect(fn).toHaveBeenCalledTimes(1);
 

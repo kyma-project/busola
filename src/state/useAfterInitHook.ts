@@ -57,8 +57,8 @@ export function removePreviousPath() {
   localStorage.removeItem(PREVIOUS_PATHNAME_KEY);
 }
 
-// Keeps `busola.previous-pathname` in sync on every in-app navigation, so a
-// later session-expiry redirect can return the user where they were.
+// Updates `busola.previous-pathname` on every in-app navigation so a later
+// session-expiry redirect can return the user to their last page.
 export function usePreviousPathTracker() {
   const location = useLocation();
   useEffect(() => {

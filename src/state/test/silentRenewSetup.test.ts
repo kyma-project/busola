@@ -45,11 +45,9 @@ describe('attachSilentRenewHandlers', () => {
       onRenewError: () => {},
     });
 
-    // Fire the expiring handler twice back-to-back before the first resolves.
     const p1 = um.fireExpiring();
     const p2 = um.fireExpiring();
 
-    // Single flight: signinSilent only called once for the pair.
     expect(um.signinSilent).toHaveBeenCalledTimes(1);
 
     resolveRenew({ id_token: 'new', access_token: 'a' });
@@ -74,7 +72,6 @@ describe('attachSilentRenewHandlers', () => {
 
     const p1 = um.fireExpiring();
     document.dispatchEvent(new Event('visibilitychange'));
-    // Give the async visibility handler a tick.
     await new Promise((r) => setTimeout(r, 0));
 
     expect(um.signinSilent).toHaveBeenCalledTimes(1);
@@ -85,7 +82,6 @@ describe('attachSilentRenewHandlers', () => {
 
   it('visibility handler reads the current user, not a captured stale user', async () => {
     const um = makeMockUserManager();
-    // First read: user is still fresh (expires_in > 5).
     um.getUser.mockResolvedValueOnce({ expired: false, expires_in: 3600 });
     um.signinSilent.mockResolvedValue({ id_token: 'x', access_token: 'y' });
 
@@ -97,7 +93,6 @@ describe('attachSilentRenewHandlers', () => {
     document.dispatchEvent(new Event('visibilitychange'));
     await new Promise((r) => setTimeout(r, 0));
 
-    // Fresh user → no renew.
     expect(um.signinSilent).not.toHaveBeenCalled();
   });
 
@@ -113,12 +108,10 @@ describe('attachSilentRenewHandlers', () => {
 
     cleanup();
 
-    // After cleanup, a visibility change must not trigger a renew.
     document.dispatchEvent(new Event('visibilitychange'));
     await new Promise((r) => setTimeout(r, 0));
     expect(um.signinSilent).not.toHaveBeenCalled();
 
-    // The events.addAccessTokenExpiring handler was detached.
     expect(um.events.removeAccessTokenExpiring).toHaveBeenCalledTimes(1);
   });
 
@@ -140,7 +133,6 @@ describe('attachSilentRenewHandlers', () => {
   });
 
   it('exposes a renew() that coalesces with in-flight event-driven renews', async () => {
-    // Guards the SSO trySilentRefresh call site.
     const um = makeMockUserManager();
     let resolveRenew: (u: any) => void = () => {};
     um.signinSilent.mockImplementation(
@@ -182,11 +174,9 @@ describe('attachSilentRenewHandlers', () => {
     });
 
     const p = um.fireExpiring();
-    // Renew has begun.
     expect(onRenewingChange).toHaveBeenCalledWith(true);
     resolveRenew({ id_token: 'x', access_token: 'y' });
     await p;
-    // Renew finished.
     expect(onRenewingChange).toHaveBeenLastCalledWith(false);
   });
 });

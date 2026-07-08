@@ -1,10 +1,8 @@
 import { describe, it, expect } from 'vitest';
 
-// This test guards against re-introducing the 2-second `navigate(0)` reload
-// that previously lived inside ClusterRoutes.jsx (lines 58–77). That reload
-// tripped on every silent-renew transient (auth becomes null for ~500ms while
-// a new token is minted) and manifested as a "flash + redirect loop".
-// After removal, no code in ClusterRoutes should call `navigate(0)`.
+// Lint-style fence. Do not re-add the 2-second `navigate(0)` reload that
+// used to live in ClusterRoutes.jsx: it fired during every silent-renew
+// transient and produced the flash-and-redirect loop reported in #5101.
 
 describe('ClusterRoutes does not force-reload on auth transient', () => {
   it('does not schedule a setTimeout that calls navigate(0)', async () => {

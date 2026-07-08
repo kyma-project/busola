@@ -8,6 +8,7 @@ import { getEnv, Envs } from 'shared/utils/env';
 import { attachSilentRenewHandlers } from './silentRenewSetup';
 import { renewingAtom } from './renewingAtom';
 import { saveIntendedPath, toClusterRelative } from './intendedPathAtom';
+import { isOwnOidcCallback } from './utils/isOwnOidcCallback';
 
 const SSO_KEY = 'SSO';
 
@@ -30,7 +31,7 @@ export function useIsSSOEnabled() {
   return configuration?.features?.SSO_LOGIN?.isEnabled ?? false;
 }
 
-// All mutable module state consolidated here.
+// Mutable SSO module state, kept in one object.
 const session: {
   userManager: UserManager | null;
   handlersAttached: boolean;
@@ -51,19 +52,6 @@ async function trySilentRefresh(): Promise<boolean> {
   return !!refreshedUser;
 }
 
-// See authDataAtom.ts:isOwnOidcCallback — same pattern for the SSO manager.
-function isOwnOidcCallback(clientId: string): boolean {
-  const stateId = new URLSearchParams(window.location.search).get('state');
-  if (!stateId) return false;
-  try {
-    const raw = localStorage.getItem(`oidc.${stateId}`);
-    if (!raw) return false;
-    return JSON.parse(raw)?.client_id === clientId;
-  } catch {
-    return false;
-  }
-}
-
 export function createSSOUserManager(oidcConfig: {
   issuerUrl: string;
   clientId: string;
@@ -78,7 +66,7 @@ export function createSSOUserManager(oidcConfig: {
     scope: oidcConfig.scope || 'openid',
     response_type: 'code',
     response_mode: 'query',
-    // See authDataAtom.ts — same rationale for disabling the library timer.
+    // See createUserManager in authDataAtom.ts for the rationale.
     automaticSilentRenew: false,
   });
 }
@@ -111,7 +99,7 @@ async function handleSSOLogin(
     } else {
       const hasCode = new URLSearchParams(window.location.search).has('code');
       if (hasCode && !isOwnOidcCallback(ssoConfig.config.clientId)) {
-        // Callback in progress but not ours (e.g. cluster OIDC's); let it run.
+        // Callback belongs to another manager (e.g. cluster OIDC); let it run.
         return;
       }
       if (!hasCode) {
@@ -137,7 +125,7 @@ async function handleSSOLogin(
         },
         onRenewingChange: setRenewing,
       });
-      // Share the single-flight with the event handlers.
+      // Share the same single-flight as the event handlers.
       session.silentRefreshFn = renew;
       userManager.events.addUserUnloaded(() => {
         cleanup();
@@ -218,6 +206,6 @@ export function checkForTokenExpiration(token?: string) {
       });
     }
   } catch (_) {
-    // non-JWT token — nothing to check
+    // Not a JWT — nothing to check.
   }
 }
