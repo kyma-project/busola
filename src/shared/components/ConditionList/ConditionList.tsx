@@ -6,7 +6,7 @@ import {
 import { ReactNode } from 'react';
 
 type ConditionListProps = {
-  conditions: [ConditionItem];
+  conditions: ConditionItem[];
   className?: string;
 };
 

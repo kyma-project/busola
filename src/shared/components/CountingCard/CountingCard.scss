@@ -1,4 +1,6 @@
 .counting-card {
+  height: min-content !important;
+
   &__link {
     margin-top: -0.5rem;
   }

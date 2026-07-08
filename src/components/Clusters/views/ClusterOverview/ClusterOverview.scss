@@ -15,3 +15,7 @@
   display: flex;
   gap: 0.25rem;
 }
+
+.form-without-background::part(layout) {
+  background-color: var(--sapBackgroundColor);
+}

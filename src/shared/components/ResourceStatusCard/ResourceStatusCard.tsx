@@ -8,7 +8,7 @@ type ResourceStatusCardProps = {
   statusBadge: ReactNode;
   customColumns: ReactNode;
   customColumnsLong: ReactNode;
-  conditions: [ConditionItem];
+  conditions: ConditionItem[] | null;
   customConditionsComponent: ReactNode;
 };
 

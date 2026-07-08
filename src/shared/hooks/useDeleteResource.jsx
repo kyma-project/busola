@@ -168,7 +168,7 @@ export function useDeleteResource({
   );
 
   const handleResourceDelete = useCallback(
-    ({ resource, resourceUrl, deleteFn, noRedirectAfterDelete }) => {
+    ({ resource, resourceUrl, deleteFn, noRedirectAfterDelete = false }) => {
       if (dontConfirmDelete && !forceConfirmDelete) {
         performDelete(resource, resourceUrl, deleteFn, noRedirectAfterDelete);
       } else {

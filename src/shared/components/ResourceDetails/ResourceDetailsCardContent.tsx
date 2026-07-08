@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import ResourceDetailsCard from './ResourceDetailsCard';
-import { DynamicPageComponent } from '../DynamicPageComponent/DynamicPageComponent';
 import { HintButton } from '../HintButton/HintButton';
 import { ReadableElapsedTimeFromNow } from '../ReadableElapsedTimeFromNow/ReadableElapsedTimeFromNow';
 import { Labels } from 'shared/components/Labels/Labels';
@@ -8,6 +7,7 @@ import { K8sResource } from 'types';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
 import { Dispatch, JSX, ReactNode, SetStateAction } from 'react';
 import { CustomColumn } from './ResourceCustomStatusColumns';
+import { FormItem, Label, Text } from '@ui5/webcomponents-react';
 
 type ResourceDetailsCardContentProps = {
   resource: K8sResource & Resource;
@@ -36,15 +36,24 @@ export const ResourceDetailsCardContent = ({
 }: ResourceDetailsCardContentProps) => {
   const { t } = useTranslation();
 
+  const totalItems =
+    2 + // Resource Type + Age always present
+    (!hideLastUpdate ? 1 : 0) +
+    filteredDetailsCardColumns.length +
+    (!hideLabels ? 1 : 0) +
+    (!hideAnnotations ? 1 : 0);
+  const needsPadding = !hideLabels && !hideAnnotations && totalItems % 2 !== 0;
+
   return (
     <ResourceDetailsCard
       titleText={t('cluster-overview.headers.metadata')}
-      wrapperClassname="resource-overview__details-wrapper"
       content={
         <>
-          <DynamicPageComponent.Column
+          <FormItem
             key="Resource Type"
-            title={t('common.headers.resource-type')}
+            labelContent={
+              <Label showColon>{t('common.headers.resource-type')}</Label>
+            }
           >
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {resource.kind}
@@ -58,53 +67,66 @@ export const ResourceDetailsCardContent = ({
                 />
               )}
             </div>
-          </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column
+          </FormItem>
+          <FormItem
             key="Age"
-            title={t('common.headers.age')}
+            labelContent={<Label showColon>{t('common.headers.age')}</Label>}
           >
-            <ReadableElapsedTimeFromNow
-              timestamp={resource.metadata.creationTimestamp}
-            />
-          </DynamicPageComponent.Column>
+            <Text>
+              <ReadableElapsedTimeFromNow
+                timestamp={resource.metadata.creationTimestamp}
+              />
+            </Text>
+          </FormItem>
           {!hideLastUpdate && (
-            <DynamicPageComponent.Column
+            <FormItem
               key="Last Update"
-              title={t('common.headers.last-update')}
+              labelContent={
+                <Label showColon>{t('common.headers.last-update')}</Label>
+              }
             >
-              {renderUpdateDate(lastUpdate)}
-            </DynamicPageComponent.Column>
+              <Text>{renderUpdateDate(lastUpdate)}</Text>
+            </FormItem>
           )}
           {filteredDetailsCardColumns.map((col) => (
-            <DynamicPageComponent.Column
+            <FormItem
               key={col.header}
-              title={col.header ?? ''}
+              labelContent={<Label showColon>{col.header ?? ''}</Label>}
             >
-              {col.value(resource)}
-            </DynamicPageComponent.Column>
+              <div>{col.value(resource)}</div>
+            </FormItem>
           ))}
+          {needsPadding && (
+            <FormItem key="padding" labelContent={<Label />}>
+              <span />
+            </FormItem>
+          )}
           {!hideLabels && (
-            <DynamicPageComponent.Column
+            <FormItem
+              className="card-labels"
               key="Labels"
-              title={t('common.headers.labels')}
-              columnSpan="1/1"
+              labelContent={
+                <Label showColon>{t('common.headers.labels')}</Label>
+              }
             >
               <Labels
                 labels={resource.metadata.labels || {}}
                 shortenLongLabels
               />
-            </DynamicPageComponent.Column>
+            </FormItem>
           )}
           {!hideAnnotations && (
-            <DynamicPageComponent.Column
+            <FormItem
               key="Annotations"
-              title={t('common.headers.annotations')}
+              labelContent={
+                <Label showColon>{t('common.headers.annotations')}</Label>
+              }
             >
               <Labels
                 labels={resource.metadata.annotations || {}}
                 shortenLongLabels
               />
-            </DynamicPageComponent.Column>
+            </FormItem>
           )}
         </>
       }
