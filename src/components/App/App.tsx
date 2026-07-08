@@ -121,7 +121,7 @@ export default function App() {
 
   const showCompanion = useAtomValue(showKymaCompanionAtom);
   const { showAssistant } = useAssistantAvailability();
-  // Defense in depth against stale state or a future entry point forgetting to gate itself.
+  // Refuse to render on ineligible clusters even if some caller forgot to gate.
   const companionPanelOpen =
     showAssistant && showCompanion.show && !showCompanion.useJoule;
   const [showTerminalState, setShowTerminalState] = useAtom(showTerminalAtom);

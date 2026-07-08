@@ -12,19 +12,14 @@ import {
 import { KubeconfigOIDCAuth } from 'types';
 import { getJouleEligibility } from '../api/getJouleEligibility';
 
-/**
- * Compliance-critical single source of truth for whether the AI assistant
- * (Kyma Companion + Joule) may surface anywhere in the UI. Every entry point
- * MUST consult this hook so a new surface cannot bypass the EU Access Only
- * or Kyma IAS restrictions.
- */
+// Central gate for surfacing the AI assistant. All entry points route through
+// this hook so EU Access Only and Kyma IAS restrictions can't be bypassed.
 export type AssistantAvailability = {
   showAssistant: boolean;
   useJouleMode: boolean;
 };
 
-// Tagged with clusterUrl so a verdict left over from a previous cluster
-// (mid-switch) is treated as unknown and fail-closed.
+// clusterUrl-tagged so a verdict doesn't leak across a cluster switch.
 type Verdict = { clusterUrl: string; eligible: boolean; reason?: string };
 
 const DISABLE_REASONS: Record<string, string> = {
@@ -116,7 +111,7 @@ export function useAssistantAvailability(): AssistantAvailability {
   const eligible = !!currentClusterVerdict?.eligible;
   const reason = currentClusterVerdict?.reason;
 
-  // eu-access blocks Companion + Joule; every other reason only blocks Joule.
+  // eu-access hides Companion + Joule; other reasons hide only Joule.
   const euAccessBlocked = reason === 'eu-access';
   const jouleDisallowed = !!useJoule && !eligible;
 

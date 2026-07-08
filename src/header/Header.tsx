@@ -80,7 +80,7 @@ export function Header() {
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
 
-  // Close the panel on eligibility change (e.g. cluster switch) rather than swap modes mid-conversation.
+  // Close the panel on cluster switch instead of swapping modes mid-conversation.
   useEffect(() => {
     setShowCompanion((prevState) =>
       prevState.show
