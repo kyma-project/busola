@@ -30,9 +30,8 @@ async function isImageAvailable(url: string) {
   }
 }
 
-async function getImageSrc(module: any) {
+async function getImageSrc(iconLink: string | undefined) {
   const defaultImage = '/assets/sap-logo.svg';
-  const iconLink = module.versions[0]?.icon?.link;
 
   if (iconLink && (await isImageAvailable(iconLink))) {
     return iconLink;
@@ -50,14 +49,15 @@ export default function CommunityModuleCard({
   const { t } = useTranslation();
   const [imageSrc, setImageSrc] = useState('');
 
+  const iconLink = module.versions[0]?.icon?.link;
   useEffect(() => {
     async function checkImage() {
-      const src = await getImageSrc(module);
+      const src = await getImageSrc(iconLink);
       setImageSrc(src);
     }
 
     checkImage();
-  }, [module]);
+  }, [iconLink]);
 
   return (
     <Card
