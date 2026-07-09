@@ -14,8 +14,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
-import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
-import { useJouleEligibility } from 'components/KymaCompanion/hooks/useJouleEligibility';
+import { useAssistantAvailability } from 'components/KymaCompanion/hooks/useAssistantAvailability';
 
 import {
   clustersAtomEffectOnSet,
@@ -39,7 +38,6 @@ import './Header.scss';
 
 export function Header() {
   useAvailableNamespaces();
-  const isSAPUser = useCheckSAPUser();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -72,22 +70,8 @@ export function Header() {
   const isOnClustersPage = location.pathname === '/clusters';
   const isOnKubeconfigPage = location.pathname === '/kubeconfig';
 
-  const { isEnabled: isKymaCompanionEnabled, useJoule } = useFeature(
-    configFeaturesNames.KYMA_COMPANION,
-  );
-  const { eligible: jouleEligible, reason: eligibilityReason } =
-    useJouleEligibility();
-
-  // EU Access Only hides the assistant for everyone; other reasons hide only Joule.
-  const assistantRestricted =
-    eligibilityReason === 'eu-access' || (!!useJoule && !jouleEligible);
-  const showAssistant =
-    isKymaCompanionEnabled &&
-    isSAPUser &&
-    !isOnClustersPage &&
-    !assistantRestricted;
-
-  const useJouleMode = !!useJoule && jouleEligible;
+  const { showAssistant, useJouleMode } = useAssistantAvailability();
+  const showAssistantHere = showAssistant && !isOnClustersPage;
 
   const { isEnabled: isTerminalEnabled } = useFeature(
     configFeaturesNames.TERMINAL,
@@ -96,15 +80,14 @@ export function Header() {
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
 
-  // If eligibility changes while the panel is open (e.g. cluster switch), close
-  // it rather than swap the assistant mid-conversation.
+  // Close the panel on cluster switch instead of swapping modes mid-conversation.
   useEffect(() => {
     setShowCompanion((prevState) =>
       prevState.show
         ? { ...prevState, show: false, useJoule: useJouleMode }
         : { ...prevState, useJoule: useJouleMode },
     );
-  }, [setShowCompanion, useJouleMode, assistantRestricted]);
+  }, [setShowCompanion, useJouleMode]);
 
   return (
     <>
@@ -171,7 +154,7 @@ export function Header() {
       >
         <SnowFeature />
         <FeedbackPopover />
-        {showAssistant && (
+        {showAssistantHere && (
           <>
             <ToggleButton
               accessibleName={t('kyma-companion.name')}
