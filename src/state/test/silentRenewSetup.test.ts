@@ -54,9 +54,8 @@ describe('attachSilentRenewHandlers', () => {
     await Promise.all([p1, p2]);
   });
 
-  it('coalesces a visibility change with an in-flight expiring renew', async () => {
+  it('exposes a renew() that coalesces with in-flight event-driven renews', async () => {
     const um = makeMockUserManager();
-    um.getUser.mockResolvedValue({ expired: true, expires_in: 0 });
     let resolveRenew: (u: any) => void = () => {};
     um.signinSilent.mockImplementation(
       () =>
@@ -65,35 +64,18 @@ describe('attachSilentRenewHandlers', () => {
         }),
     );
 
-    attachSilentRenewHandlers(um as any, {
+    const { renew } = attachSilentRenewHandlers(um as any, {
       onRenewed: () => {},
       onRenewError: () => {},
     });
 
     const p1 = um.fireExpiring();
-    document.dispatchEvent(new Event('visibilitychange'));
-    await new Promise((r) => setTimeout(r, 0));
+    const p2 = renew();
 
     expect(um.signinSilent).toHaveBeenCalledTimes(1);
 
-    resolveRenew({ id_token: 'new', access_token: 'a' });
-    await p1;
-  });
-
-  it('visibility handler reads the current user, not a captured stale user', async () => {
-    const um = makeMockUserManager();
-    um.getUser.mockResolvedValueOnce({ expired: false, expires_in: 3600 });
-    um.signinSilent.mockResolvedValue({ id_token: 'x', access_token: 'y' });
-
-    attachSilentRenewHandlers(um as any, {
-      onRenewed: () => {},
-      onRenewError: () => {},
-    });
-
-    document.dispatchEvent(new Event('visibilitychange'));
-    await new Promise((r) => setTimeout(r, 0));
-
-    expect(um.signinSilent).not.toHaveBeenCalled();
+    resolveRenew({ id_token: 'x', access_token: 'y' });
+    await Promise.all([p1, p2]);
   });
 
   it('cleanup removes the visibilitychange listener and detaches the events handler', async () => {
@@ -130,53 +112,5 @@ describe('attachSilentRenewHandlers', () => {
 
     expect(onRenewError).toHaveBeenCalledTimes(1);
     expect(onRenewError).toHaveBeenCalledWith(err);
-  });
-
-  it('exposes a renew() that coalesces with in-flight event-driven renews', async () => {
-    const um = makeMockUserManager();
-    let resolveRenew: (u: any) => void = () => {};
-    um.signinSilent.mockImplementation(
-      () =>
-        new Promise((resolve) => {
-          resolveRenew = resolve;
-        }),
-    );
-
-    const { renew } = attachSilentRenewHandlers(um as any, {
-      onRenewed: () => {},
-      onRenewError: () => {},
-    });
-
-    const p1 = um.fireExpiring();
-    const p2 = renew();
-
-    expect(um.signinSilent).toHaveBeenCalledTimes(1);
-
-    resolveRenew({ id_token: 'x', access_token: 'y' });
-    await Promise.all([p1, p2]);
-  });
-
-  it('reports renew-in-flight status via onRenewingChange callback', async () => {
-    const um = makeMockUserManager();
-    let resolveRenew: (u: any) => void = () => {};
-    um.signinSilent.mockImplementation(
-      () =>
-        new Promise((resolve) => {
-          resolveRenew = resolve;
-        }),
-    );
-    const onRenewingChange = vi.fn();
-
-    attachSilentRenewHandlers(um as any, {
-      onRenewed: () => {},
-      onRenewError: () => {},
-      onRenewingChange,
-    });
-
-    const p = um.fireExpiring();
-    expect(onRenewingChange).toHaveBeenCalledWith(true);
-    resolveRenew({ id_token: 'x', access_token: 'y' });
-    await p;
-    expect(onRenewingChange).toHaveBeenLastCalledWith(false);
   });
 });

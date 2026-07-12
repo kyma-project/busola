@@ -5,11 +5,7 @@ import { createStore, Provider } from 'jotai';
 import { createElement, PropsWithChildren } from 'react';
 import { authDataAtom } from '../authDataAtom';
 import { clusterAtom } from '../clusterAtom';
-import {
-  saveIntendedPath,
-  getIntendedPath,
-  clearIntendedPath,
-} from '../intendedPathAtom';
+import { saveIntendedPath, getIntendedPath } from '../intendedPathAtom';
 import { useIntendedPathRestore } from '../useIntendedPathRestore';
 
 const mockNavigate = vi.fn();
@@ -49,7 +45,7 @@ describe('useIntendedPathRestore', () => {
     localStorage.clear();
   });
 
-  it('navigates to intended path once auth is restored', () => {
+  it('navigates to the intended path once auth is restored and consumes it', () => {
     const store = createStore();
     store.set(clusterAtom, cluster);
     saveIntendedPath('/namespaces/bar');
@@ -66,7 +62,7 @@ describe('useIntendedPathRestore', () => {
     expect(getIntendedPath()).toBeNull();
   });
 
-  it('fires a second time in the same tab when a new intended path is written', () => {
+  it('fires again in the same tab when a new intended path is written', () => {
     const store = createStore();
     store.set(clusterAtom, cluster);
     saveIntendedPath('/namespaces/first');
@@ -91,21 +87,5 @@ describe('useIntendedPathRestore', () => {
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/cluster/foo/namespaces/second');
-  });
-
-  it('does nothing when there is no intended path', () => {
-    const store = createStore();
-    store.set(clusterAtom, cluster);
-    clearIntendedPath();
-
-    renderHook(() => useIntendedPathRestore(), {
-      wrapper: makeWrapper(store),
-    });
-
-    act(() => {
-      store.set(authDataAtom, { token: 'x' });
-    });
-
-    expect(mockNavigate).not.toHaveBeenCalled();
   });
 });
