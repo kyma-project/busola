@@ -7,8 +7,7 @@ import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
 import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
 
-import { Text, Title } from '@ui5/webcomponents-react';
-import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
+import { FormItem, Text, Title, Label, Form } from '@ui5/webcomponents-react';
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 import ClusterModulesCard from './ClusterModulesCard';
 import { ClusterStorageType } from '../ClusterStorageType';
@@ -19,6 +18,8 @@ import { Tokens } from 'shared/components/Tokens';
 import { ActiveClusterState } from 'state/clusterAtom';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
+
+import './ClusterOverview.scss';
 
 const kymaResourcesAtomSync = unwrap(kymaResourcesAtom, (prev) => prev ?? null);
 
@@ -38,9 +39,11 @@ const GardenerProvider = () => {
   if (!provider) return null;
 
   return (
-    <DynamicPageComponent.Column title={t('gardener.headers.provider')}>
+    <FormItem
+      labelContent={<Label showColon>{t('gardener.headers.provider')}</Label>}
+    >
       <p className="gardener-provider">{provider}</p>
-    </DynamicPageComponent.Column>
+    </FormItem>
   );
 };
 
@@ -76,57 +79,92 @@ export default function ClusterDetails({
       >
         {t('cluster-overview.headers.cluster-overview')}
       </Title>
-      <div className="resource-details-container">
+      <Form
+        layout="S1 M2 L2 XL2"
+        labelSpan="S12 M12 L12 XL12"
+        className="form-without-background"
+      >
         <ResourceDetailsCard
           titleText={t('cluster-overview.headers.metadata')}
-          wrapperClassname="cluster-overview__details-wrapper"
           content={
             <>
               {!loading && k8sVersion && (
-                <DynamicPageComponent.Column
-                  title={t('clusters.overview.kubernetes-version')}
+                <FormItem
+                  labelContent={
+                    <Label showColon>
+                      {t('clusters.overview.kubernetes-version')}
+                    </Label>
+                  }
                 >
-                  {k8sVersion}
-                </DynamicPageComponent.Column>
+                  <Text>{k8sVersion}</Text>
+                </FormItem>
               )}
               {!loading && kymaVersion && (
-                <DynamicPageComponent.Column
-                  title={t('clusters.overview.kyma-version')}
+                <FormItem
+                  labelContent={
+                    <Label showColon>
+                      {t('clusters.overview.kyma-version')}
+                    </Label>
+                  }
                 >
-                  {kymaVersion}
-                </DynamicPageComponent.Column>
+                  <Text>{kymaVersion}</Text>
+                </FormItem>
               )}
-              <DynamicPageComponent.Column title={t('clusters.storage.title')}>
+              <FormItem
+                labelContent={
+                  <Label showColon>{t('clusters.storage.title')}</Label>
+                }
+              >
                 <ClusterStorageType clusterConfig={config} />
-              </DynamicPageComponent.Column>
-              <DynamicPageComponent.Column
-                title={t('clusters.common.api-server-address')}
+              </FormItem>
+              <FormItem
+                labelContent={
+                  <Label showColon>
+                    {t('clusters.common.api-server-address')}
+                  </Label>
+                }
               >
                 <Text>
                   {currentCluster?.currentContext?.cluster?.cluster?.server}
                 </Text>
-              </DynamicPageComponent.Column>
+              </FormItem>
               <GardenerProvider />
               {!!kymaResourceLabels?.['kyma-project.io/global-account-id'] && (
-                <DynamicPageComponent.Column
-                  title={t('clusters.overview.global-account-id')}
+                <FormItem
+                  labelContent={
+                    <Label showColon>
+                      {t('clusters.overview.global-account-id')}
+                    </Label>
+                  }
                 >
-                  {kymaResourceLabels['kyma-project.io/global-account-id']}
-                </DynamicPageComponent.Column>
+                  <Text>
+                    {kymaResourceLabels['kyma-project.io/global-account-id']}
+                  </Text>
+                </FormItem>
               )}
               {!!kymaResourceLabels?.['kyma-project.io/subaccount-id'] && (
-                <DynamicPageComponent.Column
-                  title={t('clusters.overview.subaccount-id')}
+                <FormItem
+                  labelContent={
+                    <Label showColon>
+                      {t('clusters.overview.subaccount-id')}
+                    </Label>
+                  }
                 >
-                  {kymaResourceLabels['kyma-project.io/subaccount-id']}
-                </DynamicPageComponent.Column>
+                  <Text>
+                    {kymaResourceLabels['kyma-project.io/subaccount-id']}
+                  </Text>
+                </FormItem>
               )}
               {!environmentParametersLoading && !!natGatewayIps && (
-                <DynamicPageComponent.Column
-                  title={t('clusters.overview.nat-gateway-ips')}
+                <FormItem
+                  labelContent={
+                    <Label showColon>
+                      {t('clusters.overview.nat-gateway-ips')}
+                    </Label>
+                  }
                 >
                   <Tokens tokens={natGatewayIps} />
-                </DynamicPageComponent.Column>
+                </FormItem>
               )}
             </>
           }
@@ -138,7 +176,7 @@ export default function ClusterDetails({
             </CommunityModuleContextProvider>
           </ModuleTemplatesContextProvider>
         )}
-      </div>
+      </Form>
     </section>
   );
 }

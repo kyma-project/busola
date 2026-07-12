@@ -63,9 +63,7 @@ async function isImageAvailable(url: string) {
   }
 }
 
-async function getImageSrc(module: Record<string, any>) {
-  const iconLink = module.icon.link;
-
+async function getImageSrc(iconLink: string | undefined) {
   if (iconLink && (await isImageAvailable(iconLink))) {
     return iconLink;
   } else {
@@ -88,12 +86,12 @@ export default function ModulesCard({
 
   useEffect(() => {
     async function checkImage() {
-      const src = await getImageSrc(module);
+      const src = await getImageSrc(module.icon.link);
       setImageSrc(src);
     }
 
     checkImage();
-  }, [module]);
+  }, [module.icon.link]);
 
   const defaultVersion = useMemo(
     () =>

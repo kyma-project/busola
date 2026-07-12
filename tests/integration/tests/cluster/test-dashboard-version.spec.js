@@ -12,7 +12,7 @@ context('Test Kyma Dashboard Version link', () => {
 
     cy.get('ui5-menu[opener="openShellbarMenu"]')
       .find('ui5-menu-item:visible')
-      .contains('Legal Information')
+      .contains('About')
       .click({ force: true });
 
     cy.get('li:visible')

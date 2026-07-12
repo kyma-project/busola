@@ -25,10 +25,12 @@ type ResourceActionsProps = {
     resource,
     resourceUrl,
     deleteFn,
+    noRedirectAfterDelete,
   }: {
     resource: any;
     resourceUrl: string;
     deleteFn: () => void;
+    noRedirectAfterDelete?: boolean;
   }) => void;
   protectedResource: boolean;
   showDeleteDialog: boolean;

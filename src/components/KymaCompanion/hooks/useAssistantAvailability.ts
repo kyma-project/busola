@@ -4,6 +4,7 @@ import { clusterAtom } from 'state/clusterAtom';
 import { authDataAtom } from 'state/authDataAtom';
 import { configFeaturesNames, KymaCompanionFeature } from 'state/types';
 import { useFeature } from 'hooks/useFeature';
+import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 import {
   isOIDCExec,
   tryParseOIDCparams,
@@ -11,12 +12,15 @@ import {
 import { KubeconfigOIDCAuth } from 'types';
 import { getJouleEligibility } from '../api/getJouleEligibility';
 
-// Tagged with its cluster so a stale verdict isn't reused after a switch.
-type Verdict = { clusterUrl: string; eligible: boolean; reason?: string };
+// Central gate for surfacing the AI assistant. All entry points route through
+// this hook so EU Access Only and Kyma IAS restrictions can't be bypassed.
+export type AssistantAvailability = {
+  showAssistant: boolean;
+  useJouleMode: boolean;
+};
 
-// reason lets the caller gate the Companion too (EU Access Only blocks both),
-// so the check runs whenever the assistant is enabled, not just for Joule.
-export type AssistantEligibility = { eligible: boolean; reason?: string };
+// clusterUrl-tagged so a verdict doesn't leak across a cluster switch.
+type Verdict = { clusterUrl: string; eligible: boolean; reason?: string };
 
 const DISABLE_REASONS: Record<string, string> = {
   'issuer-mismatch': 'the cluster OIDC issuer is not the Kyma IAS',
@@ -28,10 +32,11 @@ const DISABLE_REASONS: Record<string, string> = {
   'not-configured': 'the companion backend is not configured',
 };
 
-export function useJouleEligibility(): AssistantEligibility {
-  const { isEnabled } = useFeature<KymaCompanionFeature>(
+export function useAssistantAvailability(): AssistantAvailability {
+  const { isEnabled, useJoule } = useFeature<KymaCompanionFeature>(
     configFeaturesNames.KYMA_COMPANION,
   );
+  const isSAPUser = useCheckSAPUser();
   const cluster = useAtomValue(clusterAtom);
   const authData = useAtomValue(authDataAtom) as {
     token?: string;
@@ -101,8 +106,19 @@ export function useJouleEligibility(): AssistantEligibility {
     clientKeyData,
   ]);
 
-  if (!isEnabled || verdict === null || verdict.clusterUrl !== clusterUrl) {
-    return { eligible: false };
-  }
-  return { eligible: verdict.eligible, reason: verdict.reason };
+  const currentClusterVerdict =
+    verdict !== null && verdict.clusterUrl === clusterUrl ? verdict : null;
+  const eligible = !!currentClusterVerdict?.eligible;
+  const reason = currentClusterVerdict?.reason;
+
+  // eu-access hides Companion + Joule; other reasons hide only Joule.
+  const euAccessBlocked = reason === 'eu-access';
+  const jouleDisallowed = !!useJoule && !eligible;
+
+  const showAssistant =
+    !!isEnabled && !!isSAPUser && !euAccessBlocked && !jouleDisallowed;
+
+  const useJouleMode = showAssistant && !!useJoule && eligible;
+
+  return { showAssistant, useJouleMode };
 }

@@ -24,7 +24,7 @@ import { AIBanner } from 'components/KymaCompanion/components/AIBanner/AIBanner'
 
 import './ClusterOverview.scss';
 import { configFeaturesNames } from 'state/types';
-import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
+import { useAssistantAvailability } from 'components/KymaCompanion/hooks/useAssistantAvailability';
 import DeleteResourceModal from 'shared/components/DeleteResourceModal/DeleteResourceModal';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 import { KymaCLIBanner } from 'components/KymaCLIBanner/KymaCLIBanner';
@@ -35,8 +35,10 @@ const Injections = lazyWithRetries(
 
 export function ClusterOverview() {
   const { t } = useTranslation();
-  const { isEnabled: isKymaCompanionEnabled, config: companionConfig } =
-    useFeature(configFeaturesNames.KYMA_COMPANION);
+  const { config: companionConfig } = useFeature(
+    configFeaturesNames.KYMA_COMPANION,
+  );
+  const { showAssistant } = useAssistantAvailability();
   const clusterValidation = useFeature(configFeaturesNames.CLUSTER_VALIDATION);
   const clustersInfo = useClustersInfo();
   const currentCluster = clustersInfo?.currentCluster;
@@ -52,7 +54,6 @@ export function ClusterOverview() {
     resourceType: t('clusters.labels.name'),
   });
   const setShowAdd = useSetAtom(showYamlUploadDialogAtom);
-  const isSAPUser = useCheckSAPUser();
 
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
   useEffect(() => {
@@ -103,7 +104,7 @@ export function ClusterOverview() {
         content={
           <>
             <BannerCarousel>
-              {isKymaCompanionEnabled && isSAPUser && (
+              {showAssistant && (
                 <AIBanner
                   feedbackUrl={companionConfig?.feedbackLink}
                   documentationUrl={companionConfig?.documentationLink}

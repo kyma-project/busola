@@ -78,6 +78,8 @@ export function HeaderMenu({ isMenuOpen, setIsMenuOpen }: HeaderMenuProps) {
             icon="inspect"
           />
         ))}
+      </MenuItem>
+      <MenuItem key="about" text={t('navigation.about')} icon="hint">
         <MenuItem
           onClick={() => {
             window.open(githubLink, '_blank', 'noopener, noreferrer');

@@ -43,7 +43,6 @@ export function MachineInfo({
 
   return (
     <ResourceDetailsCard
-      wrapperClassname="resource-overview__details-wrapper"
       className="machine-info"
       titleText={t('node-details.machine-info.title')}
       content={

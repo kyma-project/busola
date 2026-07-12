@@ -42,7 +42,7 @@ describe('ResourceDetails Columns', () => {
       },
     );
 
-    cy.contains('some-header:', { timeout: 10000 }).should('exist');
+    cy.contains('some-header', { timeout: 10000 }).should('exist');
     cy.contains('test-resource-name | test-resource-namespace', {
       timeout: 10000,
     }).should('exist');
