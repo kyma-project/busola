@@ -427,7 +427,7 @@ export const GenericList = ({
       testid={testid}
       className={className}
       accessibleName={`${title} panel`}
-      stickyHeader
+      stickyHeader={!disableHiding}
     >
       <Table
         noData={
@@ -485,6 +485,7 @@ export const GenericList = ({
             headerRenderer={headerRenderer}
             disableHiding={disableHiding}
             noHideFields={noHideFields ?? []}
+            stickyHeader={!disableHiding}
           />
         }
       >

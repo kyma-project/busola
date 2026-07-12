@@ -12,6 +12,7 @@ type HeaderRendererProps = {
   headerRenderer: () => any;
   disableHiding: boolean;
   noHideFields: string[];
+  stickyHeader: boolean;
 };
 
 export const HeaderRenderer = ({
@@ -19,6 +20,7 @@ export const HeaderRenderer = ({
   headerRenderer,
   disableHiding = true,
   noHideFields,
+  stickyHeader,
 }: HeaderRendererProps) => {
   const { t } = useTranslation();
   let emptyColumn = null;
@@ -69,7 +71,11 @@ export const HeaderRenderer = ({
   };
   const Header =
     headerRenderer()?.length || emptyColumn ? (
-      <TableHeaderRow slot="headerRow" sticky>
+      <TableHeaderRow
+        slot="headerRow"
+        sticky={stickyHeader}
+        className={stickyHeader ? 'sticky-header-row' : ''}
+      >
         {headerRenderer()?.map((h: any, index: number) => {
           return (
             <TableHeaderCell

@@ -10,6 +10,10 @@
   }
 }
 
+ui5-panel::part(header-wrapper) {
+  top: 64px;
+}
+
 .toolbar {
   container-type: inline-size;
 }
