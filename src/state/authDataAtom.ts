@@ -12,7 +12,6 @@ import { getPreviousPath } from './useAfterInitHook';
 import { openapiLastFetchedAtom } from 'state/openapi/openapiLastFetchedAtom';
 import { isEqual } from 'lodash';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useTranslation } from 'react-i18next';
 import { attachSilentRenewHandlers } from './silentRenewSetup';
 import { useReauthenticate } from './useReauthenticate';
 import { renewingAtom } from './renewingAtom';
@@ -183,7 +182,6 @@ async function handleLogin({
 }
 
 export function useAuthHandler() {
-  const { t } = useTranslation();
   const notification = useNotification();
   const cluster = useAtomValue(clusterAtom);
   const setAuth = useSetAtom(authDataAtom);
@@ -258,18 +256,7 @@ export function useAuthHandler() {
         const onError = (error?: Error) => {
           setIsLoading(false);
           console.warn('Silent token renew failed:', error);
-          const um = userManagerRef.current;
-          if (um) {
-            reauth(um, error);
-          } else {
-            // No manager, so no IdP round-trip is possible. Surface the error.
-            navigate('/clusters');
-            const errorMessage =
-              error?.message || t('common.errors.session-expired');
-            notification.notifyError({
-              content: `${t('common.errors.session-not-renewed')} ${errorMessage}`,
-            });
-          }
+          reauth(userManagerRef.current, error);
         };
 
         handleLogin({

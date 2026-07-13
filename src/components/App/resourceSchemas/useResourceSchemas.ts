@@ -35,7 +35,8 @@ export const useResourceSchemas = () => {
   const { currentCluster } = clusterInfo;
   const isSSOEnabled = useIsSSOEnabled();
   const renewing = useAtomValue(renewingAtom);
-  const reauth = useReauthenticate({ notifyError: notification.notifyError });
+  // No notifyError: this call site shows its own connection-failed toast.
+  const reauth = useReauthenticate();
   // Blocks a second `reauth` call when the effect re-runs before the browser
   // navigates. Reset when we're no longer in the error branch.
   const reauthTriggeredRef = useRef(false);
@@ -61,8 +62,8 @@ export const useResourceSchemas = () => {
         notification.notifyError({
           content: t('clusters.messages.connection-failed'),
         });
-        const um = authUserManagerRef.current;
-        if (um) reauth(um);
+        // Falls back to the cluster list for non-OIDC clusters (null manager).
+        reauth(authUserManagerRef.current);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
