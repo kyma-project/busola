@@ -8,7 +8,6 @@ import reaachooks from 'eslint-plugin-react-hooks';
 export default defineConfig(
   eslint.configs.recommended,
   tseslint.configs.recommended,
-  // @ts-expect-error https://github.com/jsx-eslint/eslint-plugin-react/issues/3956
   react.configs.flat.recommended,
   reaachooks.configs.flat.recommended,
   [
@@ -17,6 +16,7 @@ export default defineConfig(
       '**/*.test.js*',
       '**/__mocks__/**',
       '**/build/**',
+      'backend/core-ui',
     ]),
 
     {
@@ -24,10 +24,14 @@ export default defineConfig(
       languageOptions: {
         globals: globals.browser,
       },
+      settings: {
+        react: {
+          version: 'detect',
+        },
+      },
       rules: {
         // React
         'react/react-in-jsx-scope': 'off',
-        'react/prop-types': 'off',
 
         // TypeScript
         '@typescript-eslint/no-explicit-any': 'off',

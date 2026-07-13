@@ -19,7 +19,7 @@ config:
         kyma-project-io:
           default: https://kyma-project.io
         help-sap-com:
-          default: https://help.sap.com/docs/btp/sap-business-technology-platform/btp-basic-platform-concepts?locale=en-US&profile=20054071
+          default: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-environment
     KUBECONFIG_ID:
       isEnabled: true
       config:
@@ -30,7 +30,6 @@ config:
         dsn: ''
     EXTERNAL_NODES:
       isEnabled: false
-      stage: SECONDARY
     HIDDEN_NAMESPACES:
       isEnabled: true
       config:
@@ -71,5 +70,15 @@ config:
         link: https://sapinsights.eu.qualtrics.com/jfe/form/SV_d3UPNymSgUHAb9Y?product=SAP%20BTP,%20Kyma%20Runtime&product_filter=Kyma
     SNOW:
       isEnabled: false
+    SSO_LOGIN:
+      isEnabled: false
+      config:
+        issuerUrl: https://apskyxzcl.accounts400.ondemand.com
+        scope: openid
+        clientId: d0316c58-b0fe-45cd-9960-0fea0708355a
     COMMUNITY_MODULES:
       isEnabled: true
+    TERMINAL:
+      isEnabled: false
+      config:
+        image: europe-docker.pkg.dev/kyma-project/prod/dev-toolbox:main

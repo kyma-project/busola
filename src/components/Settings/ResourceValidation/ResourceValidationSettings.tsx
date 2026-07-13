@@ -33,9 +33,10 @@ export default function ResourceValidationSettings() {
   }, [allOptions, selectedPolicies]);
 
   const toggleVisibility = () => {
-    setValidateResources({
-      isEnabled: !isEnabled,
-      policies: selectedPolicies,
+    setValidateResources((prev) => {
+      const ext =
+        typeof prev === 'object' ? prev : { isEnabled: prev as boolean };
+      return { ...ext, isEnabled: !ext.isEnabled };
     });
   };
 
@@ -45,6 +46,7 @@ export default function ResourceValidationSettings() {
       policies: selectedPolicies.filter(
         (policy: string) => policy !== policyToDelete,
       ),
+      userModified: true,
     });
   };
 
@@ -52,6 +54,7 @@ export default function ResourceValidationSettings() {
     setValidateResources({
       isEnabled,
       policies: [...selectedPolicies, policyToAdd].sort(),
+      userModified: true,
     });
   };
 

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import pluralize from 'pluralize';
-import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
+import { useGet, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 
@@ -21,9 +21,9 @@ import {
   getNotInstalledModules,
   postForCommunityResources,
 } from 'components/Modules/community/communityModulesHelpers';
-import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
-import { PostFn } from 'shared/hooks/BackendAPI/usePost';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { useTranslation } from 'react-i18next';
 
 export function useModuleStatus(resource: KymaResourceType) {
@@ -69,7 +69,7 @@ export const useFetchModuleData = (
   const singleGetFn = useSingleGet();
   const isFetching = useRef(false);
 
-  const allNodes = useAtomValue(allNodesAtom);
+  const allNodes = useAtomValue(allNodesAtomSync);
   const clusterNodes = allNodes.filter((node) => !node.namespaced);
   const namespaceNodes = allNodes.filter((node) => node.namespaced);
 
@@ -346,8 +346,49 @@ export const useGetModuleResource = (resource: any) => {
   return { data, loading, error };
 };
 
-export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
+export function useGetAllSourceYAMLModuleTemplates(sourceURLs: string[]) {
+  const post = usePost();
+  const [resources, setResources] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const filterResources = (resources: any) => {
+    return (resources || []).filter(
+      (resource: any) =>
+        resource?.kind === 'ModuleTemplate' ||
+        (resource?.kind === 'CustomResourceDefinition' &&
+          resource?.metadata?.name ===
+            'moduletemplates.operator.kyma-project.io'),
+    );
+  };
+
+  useEffect(() => {
+    const validURLs = sourceURLs.filter((url) => url?.endsWith('.yaml'));
+    if (!validURLs.length) {
+      setResources([]);
+      return;
+    }
+
+    setLoading(true);
+    Promise.allSettled(
+      validURLs.map((url) => postForCommunityResources(post, url)),
+    ).then((results) => {
+      const allResources = results
+        .filter((r) => r.status === 'fulfilled')
+        .flatMap((r) =>
+          filterResources((r as PromiseFulfilledResult<any>).value),
+        );
+      setResources(allResources);
+      setLoading(false);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sourceURLs.join(',')]);
+
+  return { resources, loading };
+}
+
+export function useGetYAMLModuleTemplates(sourceURL: string) {
   const { t } = useTranslation();
+  const post = usePost();
   const [resources, setResources] = useState([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -403,4 +444,11 @@ export function useGetYAMLModuleTemplates(sourceURL: string, post: PostFn) {
   }, [sourceURL]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { resources, error, loading };
+}
+
+export function useModuleTemplateCRDExists() {
+  const { data, loading } = useGet(
+    '/apis/apiextensions.k8s.io/v1/customresourcedefinitions/moduletemplates.operator.kyma-project.io',
+  );
+  return { exists: !!data, loading };
 }

@@ -1,16 +1,12 @@
-import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { useTranslation } from 'react-i18next';
 
-import {
-  bytesToHumanReadable,
-  cpusToHumanReadable,
-} from 'shared/helpers/resources';
 import { Card, CardHeader } from '@ui5/webcomponents-react';
 import {
   calculateMetrics,
   usePodsMetricsQuery,
 } from 'resources/Pods/podQueries';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { ResourceRadialChart } from 'shared/components/ResourceRadialChart/ResourceRadialChart';
 
 export const ResourcesUsage = ({ namespace }: { namespace?: string }) => {
   const { t } = useTranslation();
@@ -36,44 +32,27 @@ export const ResourcesUsage = ({ namespace }: { namespace?: string }) => {
   return (
     <>
       <div className="item-wrapper card-tall">
-        <UI5RadialChart
+        <ResourceRadialChart
           tooltipInfo={t('cluster-overview.statistics.cpu-usage-tooltip')}
           cardClassName="item"
           color="var(--sapChart_OrderedColor_5)"
-          value={
-            cpusToHumanReadable(cpu.usage, {
-              unit: 'm',
-            }).value
-          }
-          max={
-            cpusToHumanReadable(cpu.capacity, {
-              unit: 'm',
-            }).value
-          }
+          value={cpu.usage}
+          max={cpu.capacity}
+          valueType="cpu"
           titleText={t('cluster-overview.statistics.cpu-usage')}
-          additionalInfo={`${
-            cpusToHumanReadable(cpu.usage, {
-              unit: 'm',
-            }).string
-          } / ${
-            cpusToHumanReadable(cpu.capacity, {
-              unit: 'm',
-            }).string
-          }`}
           accessibleName={t('cluster-overview.statistics.cpu-usage')}
         />
       </div>
       <div className="item-wrapper card-tall">
-        <UI5RadialChart
+        <ResourceRadialChart
           tooltipInfo={t('cluster-overview.statistics.memory-usage-tooltip')}
           cardClassName="item"
           color="var(--sapChart_OrderedColor_6)"
-          value={bytesToHumanReadable(memory.usage, { unit: 'Mi' }).value}
-          max={bytesToHumanReadable(memory.capacity, { unit: 'Mi' }).value}
+          value={memory.usage}
+          max={memory.capacity}
           titleText={t('cluster-overview.statistics.memory-usage')}
-          additionalInfo={`${bytesToHumanReadable(memory.usage).string} / ${
-            bytesToHumanReadable(memory.capacity).string
-          }`}
+          valueType="bytes"
+          unit="Mi"
           accessibleName={t('cluster-overview.statistics.memory-usage')}
         />
       </div>

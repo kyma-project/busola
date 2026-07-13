@@ -4,15 +4,14 @@ import { useCreateResource } from '../useCreateResource';
 
 import { createPatch } from 'rfc6902';
 import { ignoreConsoleErrors } from 'setupTests';
-
-vi.mock('@ui5/webcomponents-react', () => {
-  return {
-    Button: (props) => <button {...props}>{props.children}</button>,
-  };
-});
+import React from 'react';
+import { ErrorDetails } from 'shared/ResourceForm/components/ErrorDetails';
 
 const mockNotifySuccess = vi.fn();
 const mockNotifyError = vi.fn();
+
+const errorMessage = 'very specific error message';
+
 vi.mock('shared/contexts/NotificationContext', () => ({
   useNotification: () => ({
     notifySuccess: mockNotifySuccess,
@@ -112,19 +111,25 @@ describe('useCreateResource', () => {
     rerender(<Testbed {...props} />);
 
     mockFetch.mockImplementationOnce(() => {
-      throw Error('very specific error message');
+      throw Error(errorMessage);
     });
 
-    ignoreConsoleErrors(['very specific error message']);
+    ignoreConsoleErrors([errorMessage]);
 
     fireEvent.click(getByText('Act'));
 
     await waitFor(() => {
       expect(mockNotifySuccess).not.toHaveBeenCalled();
-      expect(mockNotifyError).toHaveBeenCalledWith({
-        actions: expect.any(Function),
-        content: 'common.create-form.messages.create-failure',
-      });
+      expect(mockNotifyError).toHaveBeenCalledWith(
+        expect.objectContaining({
+          content: expect.objectContaining({
+            type: ErrorDetails,
+            props: expect.objectContaining({
+              error: expect.objectContaining({ message: errorMessage }),
+            }),
+          }),
+        }),
+      );
     });
   });
 });

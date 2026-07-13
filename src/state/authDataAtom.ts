@@ -55,6 +55,22 @@ function getToken(user: User | null, useAccessToken: boolean): string {
   throw new Error('id_token is empty');
 }
 
+// oidc-client-ts stores pending signin state as sessionStorage['oidc.<stateId>']
+// containing a JSON string with client_id and authority. Checking it tells us
+// whether the current callback URL belongs to this UserManager without relying
+// on the 'iss' query param, which varies across environments.
+function isOwnOidcCallback(clientId: string): boolean {
+  const stateId = new URLSearchParams(window.location.search).get('state');
+  if (!stateId) return false;
+  try {
+    const raw = localStorage.getItem(`oidc.${stateId}`);
+    if (!raw) return false;
+    return JSON.parse(raw)?.client_id === clientId;
+  } catch {
+    return false;
+  }
+}
+
 export function createUserManager(
   oidcParams: {
     issuerUrl: string;
@@ -77,6 +93,11 @@ export function createUserManager(
     scope: `openid ${[...uniqueScopes].join(' ')}`,
     response_type: 'code',
     response_mode: 'query',
+    // Disable library's built-in automatic renewal — we handle it manually via
+    // addAccessTokenExpiring so there is only ever one concurrent signinSilent()
+    // call. Two concurrent calls race on providers that rotate refresh tokens,
+    // causing the second request to fail with "invalid_grant".
+    automaticSilentRenew: false,
   });
 }
 
@@ -91,15 +112,16 @@ async function handleLogin({
     useAccessToken: boolean,
   ) => {
     userManager.events.addAccessTokenExpiring(async () => {
-      const user = await userManager.signinSilent();
-      setAuth({
-        token: getToken(user, useAccessToken),
-      });
-    });
-    userManager.events.addSilentRenewError((e) => {
-      console.warn('silent renew failed', e);
-      setAuth(null);
-      onError(e);
+      try {
+        const user = await userManager.signinSilent();
+        setAuth({
+          token: getToken(user, useAccessToken),
+        });
+      } catch (e) {
+        console.warn('silent renew failed', e);
+        setAuth(null);
+        onError(e instanceof Error ? e : new Error(String(e)));
+      }
     });
   };
 
@@ -133,25 +155,50 @@ async function handleLogin({
 
   try {
     const storedUser = await userManager.getUser();
-    const user =
-      storedUser && !storedUser.expired
-        ? storedUser
-        : await userManager.signinRedirectCallback(window.location.href);
+
+    let user: User;
+    if (storedUser && !storedUser.expired) {
+      user = storedUser;
+    } else {
+      // oidc-client-ts stores pending state as sessionStorage['oidc.<stateId>']
+      // before redirecting. Checking the stored client_id tells us definitively
+      // whether this callback URL belongs to this UserManager — without relying
+      // on the 'iss' URL which varies across environments.
+      const hasCode = new URLSearchParams(window.location.search).has('code');
+      if (hasCode && !isOwnOidcCallback(oidcParams.clientId)) {
+        // A redirect callback is in progress, but it belongs to a different
+        // UserManager (e.g. SSO). Don't touch it — just wait; the other
+        // handler will process the code and then navigate away.
+        return;
+      }
+      if (!hasCode) {
+        await userManager.clearStaleState();
+        await userManager.signinRedirect();
+        return;
+      }
+      user = await userManager.signinRedirectCallback(window.location.href);
+    }
+
     setAuth({ token: getToken(user, useAccessToken) });
     setupAuthEventsHooks(userManager, useAccessToken);
     setupVisibilityEventsHooks(userManager, user, useAccessToken);
     onAfterLogin();
   } catch (e) {
-    // ignore 'No state in response' error - it means we didn't fire login request yet
-    if (e instanceof Error)
-      if (!e.message.includes('No state in response')) {
-        alert('Login error: ' + e);
-      } else {
-        // no response data yet, try to log in
+    if (e instanceof Error) {
+      // Safety net: 'No state in response' means no login was initiated yet.
+      // 'authority mismatch' means stale storage from a prior session with a
+      // different issuer slipped through the iss-param guard (IdP didn't send iss).
+      // Both cases: clear stale state and start a fresh login.
+      if (
+        e.message.includes('No state in response') ||
+        e.message.includes('authority mismatch')
+      ) {
         await userManager.clearStaleState();
         userManager.signinRedirect();
+      } else {
+        alert('Login error: ' + e);
       }
-    else {
+    } else {
       throw e;
     }
   }
@@ -173,6 +220,7 @@ export function useAuthHandler() {
       setIsLoading(false);
     } else {
       if (isEqual(prevClusterRef.current, cluster)) return; // Skip if unchanged
+      prevClusterRef.current = cluster;
 
       const userCredentials = cluster.currentContext?.user?.user;
 

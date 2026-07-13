@@ -68,18 +68,14 @@ export function Panel({
       }
       headerActions={
         decodable && (
-          <Button
-            design="Transparent"
-            icon={isDecoded ? 'hide' : 'show'}
-            onClick={() => setDecoded(!isDecoded)}
-          >
+          <Button design="Transparent" onClick={() => setDecoded(!isDecoded)}>
             {isDecoded
               ? t('secrets.buttons.encode')
               : t('secrets.buttons.decode')}
           </Button>
         )
       }
-      description={description as string}
+      description={description}
     >
       {Array.isArray(structure?.children) && (
         <div className={bodyClassNames}>

@@ -3,6 +3,7 @@ import {
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/Modules/support';
+import { compareVersions } from 'compare-versions';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
 
 export type VersionInfo = {
@@ -176,6 +177,8 @@ export function getInstalledModules(
   const installedVersions = new Map<string, string>();
 
   const installedModuleTemplates = moduleTemplates.items?.filter((module) => {
+    if (!module.metadata.namespace) return false; // prefetched template, not on cluster
+
     const managerKey = `${module.metadata.name}:${module.spec?.manager?.namespace}`;
     const foundManager = managers[managerKey];
 
@@ -195,9 +198,19 @@ export function getInstalledModules(
       }
     }
 
+    // Fallback: Check manager labels if no version was found in the containers
+    if (!installedVersions.has(managerKey)) {
+      const labels = foundManager.metadata?.labels || {};
+      const versionFromLabel =
+        labels['app.kubernetes.io/version'] || labels['version'];
+
+      if (versionFromLabel) {
+        installedVersions.set(managerKey, versionFromLabel);
+      }
+    }
+
     return true;
   });
-
   return {
     items: installedModuleTemplates,
     installedVersions,
@@ -275,3 +288,21 @@ export async function getAllResourcesYamls(
   }
   return [];
 }
+
+export const getUpdateTemplate = (
+  moduleName: string,
+  repoTemplates: ModuleTemplateType[],
+  installedModules: any[],
+): ModuleTemplateType | undefined => {
+  const installedModule = installedModules.find((m) => m.name === moduleName);
+
+  if (!installedModule) return undefined;
+  const candidates = repoTemplates.filter(
+    (repoModule) =>
+      getModuleName(repoModule) === moduleName &&
+      compareVersions(repoModule.spec.version, installedModule.version) > 0,
+  );
+  return candidates.sort((a, b) =>
+    compareVersions(b.spec.version, a.spec.version),
+  )[0];
+};

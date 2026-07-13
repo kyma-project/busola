@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button } from '@ui5/webcomponents-react';
+import { Button, Icon, ObjectStatus } from '@ui5/webcomponents-react';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 
@@ -125,7 +125,17 @@ export function EditorActions({
   const { t } = useTranslation();
 
   return (
-    <section>
+    <section className="editor-actions-section">
+      {readOnly && (
+        <ObjectStatus
+          icon={<Icon name="locked" />}
+          showDefaultIcon
+          state="Critical"
+          style={{ textOverflow: 'ellipsis', marginRight: '0.5rem' }}
+        >
+          {t('common.labels.read-only')}
+        </ObjectStatus>
+      )}
       {!revertHidden && (
         <Button
           onClick={() => {
@@ -179,11 +189,6 @@ export function EditorActions({
           }
           disabled={saveDisabled || !editor}
         />
-      )}
-      {readOnly && (
-        <span style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}>
-          {t('common.labels.read-only')}
-        </span>
       )}
     </section>
   );

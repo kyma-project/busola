@@ -17,7 +17,13 @@ type DropdownProps = {
   label?: string;
   options: { key: string; text: string }[];
   selectedKey: string;
-  onSelect: (event: Event, option: any) => void;
+  onSelect: (
+    event: Event,
+    option: {
+      key: string;
+      text: string;
+    },
+  ) => void;
   required?: boolean;
   id?: string;
   disabled?: boolean;
@@ -90,7 +96,7 @@ export function Dropdown({
     const popover = comboboxRef?.current?.shadowRoot?.querySelector(
       'ui5-responsive-popover',
     );
-    popover.open = open;
+    if (popover) popover.open = open;
   };
 
   const combobox = (

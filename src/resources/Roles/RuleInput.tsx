@@ -12,7 +12,7 @@ import {
 } from './helpers';
 import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
-import { groupVersionsAtom } from 'state/discoverability/groupVersionsAtom';
+import { groupVersionsAtomSync } from 'state/discoverability/groupVersionsAtom';
 import { getDescription } from 'shared/helpers/schema';
 
 const nonResourceUrls = [
@@ -50,7 +50,7 @@ interface RuleInputProps {
 }
 
 export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
-  const groupVersions = useAtomValue(groupVersionsAtom);
+  const groupVersions = useAtomValue(groupVersionsAtomSync);
   const namespaceId = useAtomValue(activeNamespaceIdAtom);
   const { t } = useTranslation();
 
@@ -130,7 +130,7 @@ export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
         defaultOpen
         nestingLevel={2}
         actions={
-          <Button icon="add" onClick={addAllApiGroups} design="Transparent">
+          <Button onClick={addAllApiGroups} design="Transparent">
             {t('common.buttons.add-all')}
           </Button>
         }
@@ -165,7 +165,6 @@ export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
         actions={[
           <Button
             key="add"
-            icon="add"
             design="Transparent"
             onClick={addAllResources}
             disabled={loading || !apiRules?.length}
@@ -192,12 +191,7 @@ export function RuleInput({ rule, rules, setRules, schema }: RuleInputProps) {
         defaultOpen
         nestingLevel={2}
         actions={[
-          <Button
-            key="add"
-            icon="add"
-            onClick={addAllVerbs}
-            design="Transparent"
-          >
+          <Button key="add" onClick={addAllVerbs} design="Transparent">
             {t('common.buttons.add-all')}
           </Button>,
         ]}

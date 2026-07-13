@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { RefObject, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
@@ -12,7 +12,7 @@ import { EXTENSION_VERSION_LABEL } from './constants';
 
 type BusolaExtensionEditProps = {
   namespace?: string;
-  formElementRef?: React.RefObject<HTMLFormElement>;
+  formElementRef?: RefObject<HTMLFormElement | null>;
   onChange?: (newResource: Record<string, any>) => void;
   setCustomValid?: (isValid: boolean) => void;
   resource?: Record<string, any>;

@@ -1,13 +1,34 @@
 /* global Buffer, require */
+import rateLimit from 'express-rate-limit';
 import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution';
 import { filters } from '../request-filters';
 import { pipeline } from 'stream/promises';
 import { tokenAuthAgent } from '../utils/https-agent.js';
+import {
+  getK8sCredentialFromHeaders,
+  hashCredential,
+  requireCredential,
+} from '../utils/rate-limit-key.js';
 import { buildK8sRequestPath } from './path-utils.js';
 
 const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const escape = require('lodash.escape');
+
+export const requireK8sCredential = requireCredential(
+  getK8sCredentialFromHeaders,
+);
+
+export const k8sRateLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 2000,
+  message: 'Too many requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) =>
+    hashCredential(getK8sCredentialFromHeaders(req), 'k8s'),
+});
 
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
 const certs = fs.readFileSync('certs.pem', 'utf8');
@@ -35,8 +56,8 @@ export async function handleK8sRequests(req, res) {
   let headersData;
   try {
     headersData = extractHeadersData(req);
-  } catch (e) {
-    req.log.error('Headers error:' + e.message);
+  } catch (err) {
+    req.log.error({ err }, 'Headers error');
     res.contentType('text/plain; charset=utf-8');
     res.status(400).send('Headers are missing or in a wrong format.');
     return;
@@ -44,8 +65,8 @@ export async function handleK8sRequests(req, res) {
 
   try {
     filters.forEach((filter) => filter(req, headersData));
-  } catch (e) {
-    req.log.error('Filters rejected the request: ' + e.message);
+  } catch (err) {
+    req.log.error({ err }, 'Filters rejected the request');
     res.contentType('text/plain; charset=utf-8');
     res.status(400).send('Request ID: ' + escape(req.id));
     return;
@@ -61,16 +82,17 @@ export async function handleK8sRequests(req, res) {
   const useAgent = authorization && !cert && !key;
   const agent = useAgent ? tokenAuthAgent : undefined;
 
+  const isHttps = targetApiServer.protocol === 'https:';
+  const defaultPort = isHttps ? 443 : 80;
+  const requestModule = isHttps ? https : http;
+
   const options = {
     hostname: targetApiServer.hostname,
     path: buildK8sRequestPath(targetApiServer, req.originalUrl),
     headers,
     method: req.method,
-    port: targetApiServer.port || 443,
-    ca,
-    cert,
-    key,
-    agent,
+    port: targetApiServer.port || defaultPort,
+    ...(isHttps && { ca, cert, key, agent }),
   };
   workaroundForNodeMetrics(req);
 
@@ -89,40 +111,43 @@ export async function handleK8sRequests(req, res) {
 
   try {
     await new Promise((resolve, reject) => {
-      const k8sRequest = https.request(options, async function (k8sResponse) {
-        if (
-          k8sResponse.headers &&
-          (k8sResponse.headers['Content-Type']?.includes('\\') ||
-            k8sResponse.headers['content-encoding']?.includes('\\'))
-        ) {
-          reject(new Error('Response headers are potentially dangerous'));
-          return;
-        }
+      const k8sRequest = requestModule.request(
+        options,
+        async function (k8sResponse) {
+          if (
+            k8sResponse.headers &&
+            (k8sResponse.headers['Content-Type']?.includes('\\') ||
+              k8sResponse.headers['content-encoding']?.includes('\\'))
+          ) {
+            reject(new Error('Response headers are potentially dangerous'));
+            return;
+          }
 
-        // change all 503 into 502
-        const statusCode =
-          k8sResponse.statusCode === 503 ? 502 : k8sResponse.statusCode;
+          // change all 503 into 502
+          const statusCode =
+            k8sResponse.statusCode === 503 ? 502 : k8sResponse.statusCode;
 
-        // Ensure charset is specified in content type
-        let contentType = k8sResponse.headers['Content-Type'] || 'text/json';
-        if (!contentType.includes('charset=')) {
-          contentType += '; charset=utf-8';
-        }
+          // Ensure charset is specified in content type
+          let contentType = k8sResponse.headers['Content-Type'] || 'text/json';
+          if (!contentType.includes('charset=')) {
+            contentType += '; charset=utf-8';
+          }
 
-        res.writeHead(statusCode, {
-          'Content-Type': contentType,
-          'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
-          'X-Content-Type-Options': 'nosniff',
-        });
+          res.writeHead(statusCode, {
+            'Content-Type': contentType,
+            'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
+            'X-Content-Type-Options': 'nosniff',
+          });
 
-        try {
-          await pipeline(k8sResponse, res);
-          resolve();
-        } catch (err) {
-          req.log.warn('K8s response pipeline error:', err);
-          reject(err);
-        }
-      });
+          try {
+            await pipeline(k8sResponse, res);
+            resolve();
+          } catch (err) {
+            req.log.warn('K8s response pipeline error:', err);
+            reject(err);
+          }
+        },
+      );
 
       k8sRequest.on('error', (err) => {
         reject(err);

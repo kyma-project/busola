@@ -44,6 +44,7 @@ export type CustomResourceDefinitionsType = {
 export type KymaResourceSpecModuleType = {
   name: string;
   channel?: string;
+  managed?: boolean;
 };
 
 export type KymaResourceStatusTemplate = {
@@ -235,8 +236,10 @@ export const findModuleTemplate = (
         moduleTemplate.metadata.labels[
           'operator.kyma-project.io/module-name'
         ] &&
-      !moduleTemplate.spec.channel &&
-      moduleTemplate.spec.version === version &&
+      (!channel ||
+        !moduleTemplate.spec.channel ||
+        moduleTemplate.spec.channel === channel) &&
+      (!version || moduleTemplate.spec.version === version) &&
       (!namespace || moduleTemplate.metadata.namespace === namespace),
   );
 };

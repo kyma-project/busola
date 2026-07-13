@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useMessageList } from 'hooks/useMessageList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -78,26 +77,40 @@ export function EventList({
   const customColumns: CustomColumn[] = [
     {
       header: t('events.headers.type'),
+      width: '60px',
       value: (e) => (
-        <div>
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            marginRight: '6px',
+          }}
+        >
           {e.type === 'Warning' ? (
-            <Tooltip content={e.type}>
+            e.message.startsWith('Error') ? (
+              <ObjectStatus
+                aria-label="Error"
+                icon={<Icon accessibleName="Error" name="error" />}
+                state="Negative"
+                title={e.type}
+              />
+            ) : (
               <ObjectStatus
                 aria-label="Warning"
                 icon={<Icon accessibleName="Warning" name="warning" />}
-                className="has-tooltip"
                 state="Critical"
+                title={e.type}
               />
-            </Tooltip>
+            )
           ) : (
-            <Tooltip content={e.type}>
-              <ObjectStatus
-                aria-label="Normal"
-                className="has-tooltip bsl-icon-m"
-                icon={<Icon accessibleName="Normal" name="information" />}
-                state="Information"
-              />
-            </Tooltip>
+            <ObjectStatus
+              aria-label="Normal"
+              className="bsl-icon-m"
+              icon={<Icon accessibleName="Normal" name="information" />}
+              state="Information"
+              title={e.type}
+            />
           )}
         </div>
       ),
@@ -133,6 +146,7 @@ export function EventList({
       ? [
           {
             header: t('common.headers.namespace'),
+            width: '20ch',
             value: (entry: any) => entry.metadata.namespace,
             id: 'namespace',
           },
@@ -152,10 +166,12 @@ export function EventList({
     },
     {
       header: t('events.headers.count'),
+      width: '10ch',
       value: (e) => <p>{e.count || EMPTY_TEXT_PLACEHOLDER}</p>,
     },
     {
       header: t('events.headers.last-seen'),
+      width: '26ch',
       value: (e) => <ReadableCreationTimestamp timestamp={e.lastTimestamp} />,
     },
   ];

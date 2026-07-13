@@ -1,15 +1,10 @@
-import { useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
-import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import { Title } from '@ui5/webcomponents-react';
 import { CountingCard } from 'shared/components/CountingCard/CountingCard';
-import {
-  bytesToHumanReadable,
-  cpusToHumanReadable,
-  getBytes,
-} from 'shared/helpers/resources';
+import { bytesToHumanReadable, getBytes } from 'shared/helpers/resources';
 import {
   getHealthyDaemonsets,
   getHealthyReplicasCount,
@@ -21,6 +16,7 @@ import './ClusterStats.scss';
 import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
 import { UsageMetrics } from 'resources/Pods/types';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
+import { ResourceRadialChart } from 'shared/components/ResourceRadialChart/ResourceRadialChart';
 
 const Injections = lazyWithRetries(
   () => import('../../../Extensibility/ExtensibilityInjections'),
@@ -130,44 +126,27 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
       </Title>
       <div className="cluster-stats">
         <div className="item-wrapper card-tall">
-          <UI5RadialChart
+          <ResourceRadialChart
             tooltipInfo={t('cluster-overview.statistics.cpu-usage-tooltip')}
             cardClassName="item"
             color="var(--sapChart_OrderedColor_5)"
-            value={
-              cpusToHumanReadable(cpu.usage, {
-                unit: 'm',
-              }).value
-            }
-            max={
-              cpusToHumanReadable(cpu.capacity, {
-                unit: 'm',
-              }).value
-            }
+            value={cpu.usage}
+            valueType="cpu"
+            max={cpu.capacity}
             titleText={t('cluster-overview.statistics.cpu-usage')}
-            additionalInfo={`${
-              cpusToHumanReadable(cpu.usage, {
-                unit: 'm',
-              }).string
-            } / ${
-              cpusToHumanReadable(cpu.capacity, {
-                unit: 'm',
-              }).string
-            }`}
             accessibleName={t('cluster-overview.statistics.cpu-usage')}
           />
         </div>
         <div className="item-wrapper card-tall">
-          <UI5RadialChart
+          <ResourceRadialChart
             tooltipInfo={t('cluster-overview.statistics.memory-usage-tooltip')}
             cardClassName="item"
             color="var(--sapChart_OrderedColor_6)"
-            value={bytesToHumanReadable(memory.usage, { unit: 'Mi' }).value}
-            max={bytesToHumanReadable(memory.capacity, { unit: 'Mi' }).value}
+            value={memory.usage}
+            max={memory.capacity}
+            valueType="bytes"
+            unit="Mi"
             titleText={t('cluster-overview.statistics.memory-usage')}
-            additionalInfo={`${bytesToHumanReadable(memory.usage).string} / ${
-              bytesToHumanReadable(memory.capacity).string
-            }`}
             accessibleName={t('cluster-overview.statistics.memory-usage')}
           />
         </div>
@@ -325,7 +304,9 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
             />
           </div>
         )}
-        <Injections destination="ClusterOverview" slot="health" />
+        <Suspense fallback={null}>
+          <Injections destination="ClusterOverview" slot="health" />
+        </Suspense>
       </div>
     </section>
   );

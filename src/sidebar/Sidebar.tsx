@@ -6,7 +6,12 @@ import { SidebarNavigation } from 'sidebar/SidebarNavigation';
 
 import './Sidebar.scss';
 
-const noSidebarPathnames = ['/clusters', '/no-permissions', '/gardener-login'];
+const noSidebarPathnames = [
+  '/clusters',
+  '/no-permissions',
+  '/gardener-login',
+  '/kubeconfig',
+];
 
 export const Sidebar = () => {
   const { t } = useTranslation();

@@ -1,3 +1,4 @@
+# Per-IP rate limiting is not configured here; see deployment docs for guidance.
 apiVersion: gateway.kyma-project.io/v2alpha1
 kind: APIRule
 metadata:

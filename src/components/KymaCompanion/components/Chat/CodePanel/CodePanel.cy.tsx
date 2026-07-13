@@ -37,9 +37,6 @@ describe('CodePanel Component', () => {
 
     cy.get('.action-button').should('have.length', 1);
     cy.get('.action-button').eq(0).should('have.attr', 'icon', 'copy');
-    cy.get('.action-button')
-      .eq(0)
-      .should('contain.text', t('common.buttons.copy'));
   });
 
   it('displays only the copy button when resource is not correct', () => {
@@ -62,9 +59,6 @@ describe('CodePanel Component', () => {
 
     cy.get('.action-button').should('have.length', 1);
     cy.get('.action-button').eq(0).should('have.attr', 'icon', 'copy');
-    cy.get('.action-button')
-      .eq(0)
-      .should('contain.text', t('common.buttons.copy'));
   });
 
   it('displays both copy and place buttons when withAction is true, link is provided and resource is correct', () => {
@@ -96,7 +90,6 @@ describe('CodePanel Component', () => {
         'accessible-name',
         t('common.tooltips.copy-to-clipboard'),
       );
-    cy.get('.action-button').eq(1).should('have.attr', 'icon', 'sys-add');
     cy.get('.action-button')
       .eq(1)
       .should('contain.text', t('common.buttons.place'));
@@ -123,7 +116,6 @@ describe('CodePanel Component', () => {
     );
 
     cy.get('.action-button').eq(1).should('exist');
-    cy.get('.action-button').eq(1).should('have.attr', 'icon', 'sys-add');
     cy.get('.action-button')
       .eq(1)
       .should('contain.text', t('common.buttons.place'));
@@ -150,9 +142,6 @@ describe('CodePanel Component', () => {
 
     cy.get('.action-button').should('have.length', 1);
     cy.get('.action-button').eq(0).should('have.attr', 'icon', 'copy');
-    cy.get('.action-button')
-      .eq(0)
-      .should('contain.text', t('common.buttons.copy'));
   });
 
   it('renders the place button with correct attributes for cluster-level resources', () => {
@@ -176,9 +165,6 @@ describe('CodePanel Component', () => {
     );
 
     cy.get('.action-button').eq(1).should('exist');
-    cy.get('.action-button')
-      .eq(1)
-      .should('have.attr', 'icon', 'fpa-icons/replace');
     cy.get('.action-button')
       .eq(1)
       .should('contain.text', t('common.buttons.replace'));

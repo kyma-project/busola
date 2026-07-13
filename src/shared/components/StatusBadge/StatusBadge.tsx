@@ -2,10 +2,12 @@ import { I18nInterfaces } from 'types';
 import { useTranslation } from 'react-i18next';
 import { ObjectStatus } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
+import { createTranslationTextWithLinks } from '../../helpers/linkExtractor';
 
 import './StatusBadge.scss';
 import { PopoverBadge } from '../PopoverBadge/PopoverBadge';
 import { TFunction } from 'i18next';
+import { toSentenceCase } from 'shared/utils/helpers';
 
 const resolveType = (status: string | any) => {
   if (typeof status !== 'string') {
@@ -83,6 +85,7 @@ type StatusBadgeProps = {
   autoResolveType?: boolean;
   noTooltip?: boolean;
   className?: string;
+  disableLinkDetection?: boolean;
 };
 
 export const StatusBadge = ({
@@ -94,6 +97,7 @@ export const StatusBadge = ({
   autoResolveType = false,
   noTooltip = false,
   className,
+  disableLinkDetection = false,
 }: StatusBadgeProps) => {
   const { t, i18n } = useTranslation();
   if (autoResolveType) type = resolveType(value) as StatusBadgeProps['type'];
@@ -149,15 +153,21 @@ export const StatusBadge = ({
     content = `${content}: ${additionalContent}`;
   }
 
-  // TODO: tooltipContent is DEPRECATED. Use the TooltipBadge component if a Badge with a simple Tooltip is needed.
+  let tooltipContentWithLink = tooltipContent;
+
+  if (!disableLinkDetection && typeof tooltipContent === 'string') {
+    const result = createTranslationTextWithLinks(tooltipContent, t, i18n);
+    tooltipContentWithLink = result;
+  }
+
   if (tooltipContent) {
     return (
       <PopoverBadge
-        tooltipContent={tooltipContent}
+        tooltipContent={tooltipContentWithLink}
         type={type}
         className={classes}
       >
-        {badgeContent}
+        {toSentenceCase(badgeContent)}
       </PopoverBadge>
     );
   } else if (noTooltip) {
@@ -165,19 +175,19 @@ export const StatusBadge = ({
       <ObjectStatus
         aria-label={badgeContent}
         role="status"
-        inverted
+        inverted={type !== 'Positive'}
         state={type}
         className={classes}
         data-testid="no-tooltip"
         showDefaultIcon={type !== 'Information'}
       >
-        {badgeContent}
+        {toSentenceCase(badgeContent)}
       </ObjectStatus>
     );
   } else {
     return (
       <PopoverBadge tooltipContent={content} type={type} className={classes}>
-        {badgeContent}
+        {toSentenceCase(badgeContent)}
       </PopoverBadge>
     );
   }

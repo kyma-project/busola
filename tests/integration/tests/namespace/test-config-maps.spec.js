@@ -29,7 +29,7 @@ context('Test Config Maps', () => {
 
     cy.get('[placeholder="Enter key"]:visible').find('input').type(ENTRY_KEY);
 
-    cy.findMonaco().type(ENTRY_VALUE);
+    cy.findMonaco().type(ENTRY_VALUE, { force: true });
 
     cy.saveChanges('Create');
 
@@ -50,7 +50,7 @@ context('Test Config Maps', () => {
 
     cy.get('[placeholder="Enter key"]:visible').find('input').type(ENTRY_KEY2);
 
-    cy.findMonaco().type(ENTRY_VALUE2);
+    cy.findMonaco().type(ENTRY_VALUE2, { force: true });
 
     cy.saveChanges('Edit');
   });

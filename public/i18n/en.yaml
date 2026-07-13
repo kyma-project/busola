@@ -87,9 +87,9 @@ clusters:
     title: Connect Cluster
   auth-type: Authentication type
   buttons:
-    connect-cluster: Connect cluster
-    next-step: Next step
-    previous-step: Previous step
+    connect-cluster: Connect Cluster
+    next-step: Next Step
+    previous-step: Previous Step
   common:
     api-server-address: API Server Address
     download-kubeconfig: Download Kubeconfig
@@ -104,6 +104,8 @@ clusters:
   gardener:
     button: Connect a Gardener cluster
     error: 'Connecting clusters failed: {{message}}.'
+  kubeconfig-list:
+    title: Kubeconfig files
   labels:
     client-id: Client ID
     client-secret: Client Secret
@@ -268,6 +270,7 @@ common:
     retry: Retry
     revert: Revert
     save: Save
+    select-all: Select All
     submit: Submit
     update: Update
     upload: Upload
@@ -277,10 +280,15 @@ common:
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
     force-update: Force update
     messages:
-      create-failure: 'Failed to create the {{resourceType}}: {{error}}.'
+      create-failure: The {{resourceType}} creation failed.
+      create-failure-header: Creation failed
       create-success: '{{resourceType}} created'
+      error-details:
+        affected-field: 'Affected Field: {{field}}'
+        title: Errors
       force-update: All remote changes are overwritten if you force the resource update.
-      patch-failure: 'Failed to update the {{resourceType}}: {{error}}.'
+      patch-failure: The {{resourceType}} update failed.
+      patch-failure-header: Update failed
       patch-success: '{{resourceType}} updated'
     modes:
       form: Form
@@ -494,7 +502,7 @@ components:
     messages:
       delete:
         failure: 'Failed to delete the {{resourceType}}: {{error}}'
-        success: '{{resourceType}} deleted'
+        success: '{{resourceType}} set for deletion'
   rich-editor-data-field:
     language-placeholder: Choose language
 config-maps:
@@ -838,6 +846,12 @@ joule-feedback:
 kubeconfig-id:
   error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
+kyma-cli:
+  banner:
+    buttons:
+      documentation: Get Started
+    description: Kyma CLI helps you move faster - from first setup to deploying and managing apps.
+    title: Try Kyma CLI
 kyma-companion:
   banner:
     buttons:
@@ -923,10 +937,11 @@ kyma-modules:
   messages:
     failure: 'Failed to install the {{resourceType}}: {{error}}'
     module-added: Module added
-    module-uninstall: Module deleted
+    module-uninstall: Module set for deletion
     modules-update-failed: Modules update failed
     modules-updated: Modules updated
     success: '{{resourceType}} installed'
+    updated: Modules updated
   modify-modules: Modify Modules
   module-state: Module State
   modules-channel: Modules Channel
@@ -935,6 +950,7 @@ kyma-modules:
   no-modules-description: Customize your cluster by adding the modules you need.
   no-modules-installed: No modules installed
   no-version: No version available
+  outdated: Outdated
   predefined-channel: Predefined
   release-channel: Release channel
   release-channel-description: According to the <0>Kyma modules` release cycle</0>, we first release a new module’s major or minor version in the fast channel. After approximately two weeks, we promote the release to the regular channel.
@@ -942,6 +958,7 @@ kyma-modules:
   unmanaged-modules-info: One of the modules is not managed and may not work properly. We cannot guarantee any service level agreement (SLA) or provide updates and maintenance for the module.
   unmanaged-modules-save-warning: Before proceeding, be aware that disabling module management may impact the stability and data integrity of your cluster. Once the management is disabled, reverting back may not be possible. Are you sure you want to continue?
   unmanaged-modules-warning: Disabling this option can lead to potential instability and loss of data within your cluster. Proceed with caution. Once disabled, it may not be possible to revert back.
+  update: Update
   upgrade-available: Upgrade available
   version: Version
 legal:
@@ -979,6 +996,7 @@ modules:
       advanced: Community module advanced settings
       edit: Community modules edit panel
     add-module: Add Community Modules
+    crd-info-message: To use Community Modules, install the ModuleTemplate CustomResourceDefinition (CRD).
     documentation: Documentation
     installed-modules: Community Modules
     messages:
@@ -987,7 +1005,8 @@ modules:
       example-format: 'Example format: http://github.com/project/repo/file.yaml'
       install-failure: 'Failed to install the {{resourceType}}: {{error}}'
       module-added: Community Module added
-      module-uninstall: Community Module deleted
+      module-uninstall: Community Module set for deletion
+      module-update-started: Module update started
       modules-updated: Community Modules updated
       resources-delete-failure: 'Failed to delete the {{module}} because the following resources cannot be deleted: {{resources}}'
       resources-delete-in-progress: Resources are still being deleted. Try again later.
@@ -1019,6 +1038,17 @@ modules:
       source-yaml-url: Source YAML URL
       source-yamls-header: Source YAMLs
     title: Community Modules
+    update:
+      confirmation: Update <0>{{moduleName}}</0>?
+      current-version: Current version
+      delete-old-templates: Delete old module templates
+      latest-version: Latest version
+      module: Module
+      note: Note
+      title: Update Module
+      update-all: Update All
+      update-all-confirmation: Choose the modules to update.
+      update-all-title: Update Community Modules
 namespaces:
   create-modal:
     apply-limits: Apply Limits per Container
@@ -1041,6 +1071,7 @@ namespaces:
       title: Resource Consumption
   title: Namespaces
 navigation:
+  about: About
   all-namespaces: All Namespaces
   back-to-cluster: Back To Cluster Overview
   errors:
@@ -1262,7 +1293,7 @@ resource-graph:
   buttons:
     go-to-details: Go to details
   error: Something went wrong during rendering the graph.
-  save-as-dot: DOT format
+  related-resources: Related Resources
   title: Resource Graph
 resource-quotas:
   description: A <0>Resource Quota</0> provides constraints that limit aggregate resource consumption per namespace.
@@ -1521,6 +1552,16 @@ storage-classes:
     volume-binding-mode: Volume Binding Mode
   name_singular: StorageClass
   title: Storage Classes
+terminal:
+  messages:
+    closed: Connection closed.
+    connected: Connected to terminal.
+    connection-error: WebSocket connection error.
+    unknown-error: Unknown error.
+  name: Busola Terminal
+  status:
+    error: 'Error: {{error}}'
+    provisioning: Connecting…
 upload-yaml:
   errors: Errors
   info: You can upload multiple resources, separated by “---” in your YAML file. If the resource already exists, it will be updated. Otherwise, a new one is created. If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.

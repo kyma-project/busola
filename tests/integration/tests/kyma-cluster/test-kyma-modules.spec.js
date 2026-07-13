@@ -57,7 +57,10 @@ context('Test Kyma Modules views', () => {
 
     cy.get('[data-testid="create-form-footer-bar"]')
       .contains('ui5-button:visible', 'Add')
+      .should('not.be.disabled')
       .click();
+
+    cy.wait(7000);
 
     // Check if already installed module is not visible
     cy.get('ui5-panel[data-testid="kyma-modules-list"]')
@@ -73,15 +76,30 @@ context('Test Kyma Modules views', () => {
     // Add second module
     cy.get('ui5-title').contains('eventing').click();
 
+    cy.wait(1000);
+
     cy.get('[data-testid="create-form-footer-bar"]')
       .contains('ui5-button:visible', 'Add')
+      .should('not.be.disabled')
       .click();
-
-    cy.wait(7000);
 
     cy.get('ui5-table-row').contains('eventing').should('be.visible');
 
     cy.get('ui5-table-row').contains('api-gateway').should('be.visible');
+
+    // Check if illustrated message is visible if there are no modules
+    cy.get('ui5-panel[data-testid="kyma-modules-list"]')
+      .contains('ui5-button', 'Add')
+      .click();
+
+    cy.getMidColumn()
+      .get('ui5-illustrated-message')
+      .find('ui5-title', 'You have added all the modules')
+      .should('be.visible');
+
+    cy.get('[data-testid="create-form-footer-bar"]')
+      .contains('ui5-button:visible', 'Add')
+      .should('be.disabled');
   });
 
   it('Test number of Modules in Modules Overview card', () => {
@@ -135,6 +153,83 @@ context('Test Kyma Modules views', () => {
     cy.inspectTab('View');
   });
 
+  // The following tests that include opening of module details can be restored after fixing the modules' statuses in tests
+  // Currently the status is constantly 'Unknown' which makes the module row disabled for clicking
+
+  // it('Opens module details with the correct resource when a row is clicked', () => {
+  //   cy.wait(1000);
+  //   cy.reload();
+
+  //   cy.get('.modules-list')
+  //     .find('ui5-table-row')
+  //     .contains('api-gateway')
+  //     .click();
+
+  //   cy.getMidColumn().should('be.visible');
+  //   cy.getMidColumn().contains('APIGateway').should('be.visible');
+  //   cy.getMidColumn().contains('default').should('be.visible');
+
+  //   cy.closeMidColumn();
+  // });
+
+  // it('Retains row highlight and details after refresh', () => {
+  //   cy.get('.modules-list')
+  //     .find('ui5-table-row')
+  //     .contains('api-gateway')
+  //     .click();
+
+  //   cy.getMidColumn().should('be.visible');
+
+  //   cy.reload();
+  //   cy.wait(2000);
+
+  //   cy.getMidColumn().should('be.visible');
+  //   cy.get('.modules-list')
+  //     .find('ui5-table-row.row-selected')
+  //     .contains('api-gateway')
+  //     .should('be.visible');
+
+  //   cy.closeMidColumn();
+  // });
+
+  // it('Edit inside module details keeps the list in View mode', () => {
+  //   cy.get('.modules-list')
+  //     .find('ui5-table-row')
+  //     .contains('api-gateway')
+  //     .click();
+
+  //   cy.getMidColumn().should('be.visible');
+  //   cy.getMidColumn().inspectTab('Edit');
+
+  //   cy.get('.modules-list')
+  //     .find('ui5-table-row')
+  //     .contains('api-gateway')
+  //     .should('be.visible');
+
+  //   cy.closeMidColumn();
+  // });
+
+  // it('Entering Edit mode on the list closes open details', () => {
+  //   cy.get('.modules-list')
+  //     .find('ui5-table-row')
+  //     .contains('api-gateway')
+  //     .click();
+
+  //   cy.getMidColumn().should('be.visible');
+
+  //   cy.get('.kyma-modules ui5-tabcontainer')
+  //     .first()
+  //     .find('[role="tablist"]')
+  //     .find('[role="tab"]')
+  //     .contains('Edit')
+  //     .should('be.visible')
+  //     .click();
+
+  //   cy.getMidColumn().should('not.be.visible');
+
+  //   cy.inspectTab('View');
+  // });
+
   it('Test changing Module Channel', () => {
     cy.inspectTab('Edit');
 
@@ -158,17 +253,19 @@ context('Test Kyma Modules views', () => {
 
     cy.get('ui5-button').contains('Change').click();
 
-    cy.contains('Kyma updated').should('be.visible');
+    cy.contains('Modules updated').should('be.visible');
 
     cy.inspectTab('View');
 
-    cy.wait(10000);
-
-    cy.get('ui5-table-row').contains('eventing').should('be.visible');
-
-    cy.get('ui5-table-row').contains('fast').should('be.visible');
-
-    cy.get('ui5-table-row').contains('Overridden').should('be.visible');
+    cy.get('ui5-table-row', { timeout: 15000 })
+      .contains('eventing')
+      .should('be.visible');
+    cy.get('ui5-table-row', { timeout: 15000 })
+      .contains('fast')
+      .should('be.visible');
+    cy.get('ui5-table-row', { timeout: 15000 })
+      .contains('Overridden')
+      .should('be.visible');
   });
 
   it('Test changing Module Channel to Predefined', () => {
@@ -192,15 +289,16 @@ context('Test Kyma Modules views', () => {
 
     cy.get('ui5-button').contains('Change').click();
 
-    cy.contains('Kyma updated').should('be.visible');
+    cy.contains('Modules updated').should('be.visible');
 
     cy.inspectTab('View');
 
-    cy.wait(10000);
-
-    cy.get('ui5-table-row').contains('eventing').should('be.visible');
-
-    cy.get('ui5-table-row').contains('Overridden').should('not.be.exist');
+    cy.get('ui5-table-row', { timeout: 15000 })
+      .contains('eventing')
+      .should('be.visible');
+    cy.contains('ui5-table-row', 'Overridden', { timeout: 15000 }).should(
+      'not.exist',
+    );
   });
 
   it('Test deleting Modules from List and Details', { retries: 3 }, () => {
@@ -210,23 +308,29 @@ context('Test Kyma Modules views', () => {
       customHeaderText: 'Delete Module',
     });
 
-    // Uncomment after adding local KLM
-    // cy.typeInSearch('api-gateway');
-    //
-    // cy.get('ui5-table-row')
+    // Deleting from details can be restored after fixing modules' statuses in tests
+    // cy.get('.modules-list')
+    //   .find('ui5-input[id^=search-]:visible')
+    //   .find('input')
+    //   .type('api-gateway');
+
+    // cy.get('.modules-list')
+    //   .find('ui5-table-row')
     //   .contains('api-gateway')
     //   .click();
-    //
-    // cy.deleteInDetails('Module', 'api-gateway', true);
-    //
-    // cy.wait(20000);
-    //
-    // cy.get('ui5-input[id^=search-]:visible')
+
+    // cy.deleteInDetails('Module', 'api-gateway', true, {
+    //   customHeaderText: 'Delete Module',
+    // });
+
+    // cy.get('.modules-list')
+    //   .find('ui5-input[id^=search-]:visible')
     //   .find('input')
     //   .clear();
-    //
-    // cy.get('ui5-table')
-    //   .contains('ui5-illustrated-message', 'No modules')
-    //   .should('be.visible');
+
+    //   cy.get('.modules-list', { timeout: 15000 })
+    //     .find('ui5-illustrated-message')
+    //     .contains('No modules')
+    //     .should('be.visible');
   });
 });

@@ -13,13 +13,16 @@ Cypress.skipAfterFail = ({ skipAllSuits = false } = {}) => {
   });
   afterEach(function () {
     if (this.currentTest.state === 'failed') {
-      if (!Cypress.config('isInteractive')) {
+      const retriesRemaining =
+        (this.currentTest._retries ?? 0) -
+        (this.currentTest.currentRetry() ?? 0);
+      if (!Cypress.config('isInteractive') && retriesRemaining === 0) {
         // isInteractive is true for headed browsers (suite started with 'cypress open' command)
         // and false for headless ('cypress run')
         // This will skip remaining test in the current context when a test fails.
         Cypress.runner.stop();
       }
-      if (skipAllSuits) {
+      if (skipAllSuits && retriesRemaining === 0) {
         cy.task('dynamicSharedStore', {
           name: 'cancelTests',
           value: true,
@@ -41,10 +44,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add('checkItemOnGenericListLink', (resourceName) => {
-  cy.get('ui5-table-row')
-    .find('ui5-table-cell')
-    .contains('ui5-text', resourceName)
-    .should('be.visible');
+  cy.contains('ui5-table-row', resourceName).should('be.visible');
 });
 
 Cypress.Commands.add('clickGenericListLink', (resourceName) => {
@@ -85,6 +85,7 @@ Cypress.Commands.add('clearInput', { prevSubject: true }, (element) => {
 
     .type(
       `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
+      { force: true },
     );
 });
 
@@ -145,7 +146,10 @@ Cypress.Commands.add('getEndColumn', () => {
 
 Cypress.Commands.add(
   'deleteInDetails',
-  (resourceType, resourceName, columnLayout = false) => {
+  (resourceType, resourceName, columnLayout = false, options = {}) => {
+    const { customHeaderText = null } = options;
+    const headerText = customHeaderText || `Delete ${resourceType}`;
+
     if (columnLayout) {
       cy.wait(1000); //wait for button
 
@@ -157,13 +161,13 @@ Cypress.Commands.add(
       cy.get('ui5-button').contains('Delete').should('be.visible').click();
     }
 
-    cy.contains(`Delete ${resourceType} ${resourceName}`);
+    cy.contains(customHeaderText || `Delete ${resourceType} ${resourceName}`);
 
-    cy.get(`[header-text="Delete ${resourceType}"]:visible`)
+    cy.get(`[header-text="${headerText}"]:visible`)
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains(/deleted/).should('be.visible');
+    cy.contains(/set for deletion/, { timeout: 30000 }).should('be.visible');
 
     cy.getMidColumn().should('not.be.visible');
   },
@@ -184,26 +188,27 @@ Cypress.Commands.add(
       customHeaderText = null,
     } = options;
 
-    cy.wait(1000);
+    cy.wait(2000);
     if (parentSelector) {
       cy.get(parentSelector)
         .find('ui5-input[id^=search-]:visible')
         .find('input')
-        .should('not.be.disabled', { timeout: 5000 })
-        .type(resourceName);
+        .should('not.have.attr', 'disabled', { timeout: 5000 })
+        .type(resourceName, { force: true });
     } else {
       cy.get('ui5-input[id^=search-]:visible')
         .find('input')
-        .should('not.be.disabled', { timeout: 5000 })
-        .type(resourceName);
+        .should('not.have.attr', 'disabled', { timeout: 5000 })
+        .type(resourceName, { force: true });
     }
 
-    cy.wait(1000);
+    cy.wait(2000);
 
     if (selectSearchResult) {
-      cy.get('ui5-suggestion-item:visible')
+      cy.get('ui5-suggestion-item')
         .contains('li', resourceName)
-        .click();
+        .click({ force: true });
+      cy.wait(1000);
     }
 
     if (searchInPlainTableText) {
@@ -216,7 +221,15 @@ Cypress.Commands.add(
       cy.checkItemOnGenericListLink(resourceName);
     }
 
-    cy.get('ui5-button[data-testid="delete"]').click();
+    if (parentSelector) {
+      cy.get(parentSelector)
+        .find('ui5-button[data-testid="delete"]:visible')
+        .click();
+    } else {
+      cy.contains('ui5-table-row', resourceName)
+        .find('ui5-button[data-testid="delete"]')
+        .click();
+    }
 
     if (confirmationEnabled) {
       const headerText = customHeaderText || `Delete ${resourceType}`;
@@ -233,7 +246,9 @@ Cypress.Commands.add(
         .click();
 
       if (deletedVisible) {
-        cy.contains('ui5-toast', /deleted/).should('be.visible');
+        cy.contains('ui5-toast', /set for deletion/, { timeout: 30000 }).should(
+          'be.visible',
+        );
       }
 
       if (checkIfResourceIsRemoved) {
@@ -261,9 +276,11 @@ Cypress.Commands.add(
 Cypress.Commands.add('changeCluster', (clusterName) => {
   cy.get('ui5-shellbar').find('#clusterSwitcherOpener').click();
 
-  cy.get(`[accessible-name="${clusterName}"]:visible`)
-    .find('span[part="title"]')
-    .click({ force: true });
+  cy.get(`ui5-menu-item[accessible-name="${clusterName}"]:visible`)
+    .find('li[part="native-li"]')
+    .click({
+      force: true,
+    });
 });
 
 Cypress.Commands.add(
@@ -345,5 +362,12 @@ Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
   cy.get('ui5-input[id^=search-]:visible')
     .find('input')
     .should('be.visible')
+    .should('not.be.disabled')
     .type(searchPhrase, { force });
+});
+
+Cypress.Commands.add('openSettingsMenu', () => {
+  cy.get('[tooltip="User Menu"]').click({ force: true });
+
+  cy.get('ui5-menu-item:visible').contains('Settings').click({ force: true });
 });

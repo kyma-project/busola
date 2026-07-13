@@ -87,11 +87,11 @@ export const useGetResourceGraphConfig = (extensions, addStyle) => {
                     const filter = (
                       originalResource,
                       possiblyRelatedResource,
-                    ) => {
-                      expression.assign('root', originalResource);
-                      expression.assign('item', possiblyRelatedResource);
-                      return expression.evaluate();
-                    };
+                    ) =>
+                      expression.evaluate(undefined, {
+                        root: originalResource,
+                        item: possiblyRelatedResource,
+                      });
 
                     return { ...relation, filter };
                   }),

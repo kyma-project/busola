@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+import codeCoverage from '@cypress/code-coverage/task';
 
 export default defineConfig({
   component: {
@@ -13,6 +14,10 @@ export default defineConfig({
     retries: {
       runMode: 1,
       openMode: 0,
+    },
+    setupNodeEvents(on, config) {
+      codeCoverage(on, config);
+      return config;
     },
   },
 });

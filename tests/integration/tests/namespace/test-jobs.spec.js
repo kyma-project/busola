@@ -106,6 +106,8 @@ context('Test Jobs', () => {
     cy.contains(/Imagebusybox/);
     cy.contains(/Imagenode:14-alpine/);
 
+    cy.wait(500);
+
     // controlled-by
     cy.get('ui5-card')
       .should('contain.text', 'Controlled By')
@@ -155,7 +157,7 @@ context('Test Jobs', () => {
     cy.contains('After a Job is created, the containers are read-only.');
 
     cy.get('.edit-form')
-      .get('ui5-button[icon="add"][disabled]')
+      .get('ui5-button[disabled]')
       .contains('Add Container')
       .should('be.visible');
 

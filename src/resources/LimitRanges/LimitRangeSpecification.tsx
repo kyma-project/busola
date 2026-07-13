@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import './LimitRangeSpecification.scss';
 import { LimitRangeProps } from './LimitRangeDetails';
 
@@ -61,21 +61,23 @@ export default function LimitRangeSpecification({
         }
       });
 
-      const props = Array.from(resourceTypes).map((resourceType: any) => {
-        const entry: any = {
-          resource: resourceType,
-        };
+      const transformedProps = Array.from(resourceTypes).map(
+        (resourceType: any) => {
+          const entry: any = {
+            resource: resourceType,
+          };
 
-        keys.forEach((key) => {
-          if (limit[key] && limit[key][resourceType] !== undefined) {
-            entry[key] = limit[key][resourceType];
-          }
-        });
+          keys.forEach((key) => {
+            if (limit[key] && limit[key][resourceType] !== undefined) {
+              entry[key] = limit[key][resourceType];
+            }
+          });
 
-        return entry;
-      });
+          return entry;
+        },
+      );
 
-      return props.map((prop) => {
+      return transformedProps.map((prop) => {
         return { type: limit.type, ...prop };
       });
     });
@@ -99,7 +101,7 @@ export default function LimitRangeSpecification({
         keys.flatMap((key) => (limit[key] ? Object.keys(limit[key]) : [])),
       );
 
-      const props = Array.from(resourceTypes).map((resourceType) => {
+      const transLimitsProps = Array.from(resourceTypes).map((resourceType) => {
         const entry: any = { resource: resourceType };
 
         keys.forEach((key) => {
@@ -113,13 +115,14 @@ export default function LimitRangeSpecification({
 
       return {
         type: limit.type,
-        props: props.length > 0 ? props : emptyLimit[0].props,
+        props:
+          transLimitsProps.length > 0 ? transLimitsProps : emptyLimit[0].props,
       };
     });
   }, [resource]);
 
   const headerRenderer = () => [
-    isCompact ? t('limit-ranges.headers.type') : null,
+    ...(isCompact ? [t('limit-ranges.headers.type')] : []),
     t('limit-ranges.headers.resource'),
     t('limit-ranges.headers.min'),
     t('limit-ranges.headers.max'),
@@ -136,17 +139,15 @@ export default function LimitRangeSpecification({
     default: defaultValue,
     defaultRequest,
     maxLimitRequestRatio,
-  }: FlatLimitProps) => {
-    return [
-      isCompact ? type : null,
-      resource || EMPTY_TEXT_PLACEHOLDER,
-      min || EMPTY_TEXT_PLACEHOLDER,
-      max || EMPTY_TEXT_PLACEHOLDER,
-      defaultValue || EMPTY_TEXT_PLACEHOLDER,
-      defaultRequest || EMPTY_TEXT_PLACEHOLDER,
-      maxLimitRequestRatio || EMPTY_TEXT_PLACEHOLDER,
-    ];
-  };
+  }: FlatLimitProps) => [
+    ...(isCompact ? [type] : []),
+    resource || EMPTY_TEXT_PLACEHOLDER,
+    min || EMPTY_TEXT_PLACEHOLDER,
+    max || EMPTY_TEXT_PLACEHOLDER,
+    defaultRequest || EMPTY_TEXT_PLACEHOLDER,
+    defaultValue || EMPTY_TEXT_PLACEHOLDER,
+    maxLimitRequestRatio || EMPTY_TEXT_PLACEHOLDER,
+  ];
 
   return isCompact ? (
     <GenericList
@@ -159,7 +160,7 @@ export default function LimitRangeSpecification({
       className="limit-range-spec compact"
     />
   ) : (
-    <UI5Panel
+    <UI5Card
       title={t('limit-ranges.headers.limits')}
       accessibleName={t('limit-ranges.accessible-name.limits')}
       className={'limit-range-spec'}
@@ -169,7 +170,7 @@ export default function LimitRangeSpecification({
           <GenericList
             key={`${limit.type}-${index}`}
             title={limit.type || ''}
-            entries={limit.props || []}
+            entries={(limit.props || []) as any[]}
             headerRenderer={headerRenderer}
             rowRenderer={rowRenderer}
             searchSettings={{
@@ -178,6 +179,6 @@ export default function LimitRangeSpecification({
           />
         ),
       )}
-    </UI5Panel>
+    </UI5Card>
   );
 }

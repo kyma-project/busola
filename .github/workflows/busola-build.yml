@@ -17,6 +17,7 @@ on:
       - 'public/**'
       - 'src/**'
       - 'package.json'
+      - 'package-lock.json'
       - 'Makefile'
       - 'Dockerfile'
       - 'nginx/nginx.conf'
@@ -29,19 +30,35 @@ on:
       - 'public/**'
       - 'src/**'
       - 'package.json'
+      - 'package-lock.json'
       - 'Makefile'
       - 'Dockerfile*'
       - 'nginx/**'
       - '.github/workflows/pull-kyma-intergation-tests.yml'
       - 'resources/**'
       - 'tests/integration/**'
+  merge_group:
+
+concurrency:
+  group: busola-build-${{ github.workflow_ref }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   id-token: write # This is required for requesting the JWT token
   contents: read # This is required for actions/checkout
 
 jobs:
+  approve-run:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'pull_request_target' &&  'restricted' || 'no-restricted' }}
+    #uncomment after gating is allowed - environment: ${{ github.event.pull_request.author_association != 'COLLABORATOR' && github.event.pull_request.author_association != 'OWNER' && 'restricted' || 'internal' }}
+    steps:
+      - name: Approved
+        run: echo "Build approved, environment selected"
+
   build-busola-image:
+    name: Build Image
+    needs: approve-run
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: https://github.com/kyma-project/test-infra/tree/main/.github/actions/image-builder
     if: github.event.pull_request.draft == false
     with:
@@ -50,12 +67,13 @@ jobs:
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}
   build-fips-busola-image:
+    name: Build Fips Image
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: https://github.com/kyma-project/test-infra/tree/main/.github/actions/image-builder
     if: github.event.pull_request.draft == false
-    needs: [build-busola-image]
+    needs: [approve-run, build-busola-image]
     with:
       name: fips-busola
       dockerfile: Dockerfile.fips
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       use-restricted-registry: true
-      build-args: BASE_IMAGE=europe-docker.pkg.dev/kyma-project/${{ github.event_name == 'pull_request_target' && 'dev' || 'prod' }}/busola@${{ needs.build-busola-image.outputs.digest }}
+      build-args: BASE_IMAGE=europe-docker.pkg.dev/kyma-project/${{ contains(fromJSON('["pull_request_target","merge_group"]'), github.event_name) && 'dev' || 'prod' }}/busola@${{ needs.build-busola-image.outputs.digest }}

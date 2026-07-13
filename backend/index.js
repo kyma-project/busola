@@ -1,18 +1,26 @@
-/* global  require, process */
-import { handleK8sRequests } from './kubernetes/handler';
-import { proxyHandler, proxyRateLimiter } from './proxy.js';
+/* global  require, process, __dirname */
+import {
+  handleK8sRequests,
+  k8sRateLimiter,
+  requireK8sCredential,
+} from './kubernetes/handler';
+import { proxyHandler } from './proxy.js';
+import { setupJWTCheck } from './jwtCheck';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
-import { pinoMiddleware, createSlowRequestLogger } from './logging';
+import { createSlowRequestLogger, pinoMiddleware } from './logging';
 import { serveMonaco, serveStaticApp } from './statics';
 import crypto from 'crypto';
+import config from './src/config/config';
+
 import { fillActiveEnvForFrontend } from './utils/active-env';
+import registerWebSocket from './src/terminal/handler';
 
 const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
 const fs = require('fs');
-const config = require('./config.js');
+const path = require('path');
 
 const app = express();
 app.disable('x-powered-by');
@@ -51,13 +59,32 @@ if (process.env.NODE_ENV === 'development') {
 // Add Pino logging middleware (attaches req.log to all requests)
 app.use(pinoMiddleware);
 
+setupJWTCheck(app);
+
 const SLOW_REQUEST_THRESHOLD_MS = parseInt(
   process.env.SLOW_REQUEST_THRESHOLD_MS || '4000',
   10,
 );
 app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
-app.use('/proxy', proxyRateLimiter, proxyHandler);
+app.use('/proxy', proxyHandler);
+
+app.get('/backend/kubeconfig', (req, res) => {
+  const kubeconfigDir = path.join(
+    __dirname,
+    process.env.IS_DOCKER ? '/core-ui/kubeconfig' : '../public/kubeconfig',
+  );
+  fs.readdir(kubeconfigDir, (err, files) => {
+    if (err) {
+      res.status(500).json({ error: 'Failed to read kubeconfig directory' });
+      return;
+    }
+    const yamlFiles = files.filter(
+      (f) => f.endsWith('.yaml') || f.endsWith('.yml'),
+    );
+    res.json(yamlFiles);
+  });
+});
 
 let server = null;
 
@@ -86,14 +113,18 @@ if (isDocker) {
   // yup, order matters here
   serveMonaco(app);
   app.use('/backend/ai-chat', companionRouter);
-  app.use('/backend/modules', communityRouter);
-  app.use('/backend', handleK8sRequests);
+  app.use('/backend/modules', requireK8sCredential, communityRouter);
+  app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
   serveStaticApp(app, '/', '/core-ui');
 } else {
   // Running in prod mode
   app.use('/backend/ai-chat', companionRouter);
-  app.use('/backend/modules', communityRouter);
-  app.use('/backend', handleK8sRequests);
+  app.use('/backend/modules', requireK8sCredential, communityRouter);
+  app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
+}
+
+if (config.features?.TERMINAL?.isEnabled) {
+  registerWebSocket(server);
 }
 
 process.on('SIGINT', function () {

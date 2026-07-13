@@ -23,7 +23,7 @@ ENV=${ENV?"env is not set"}
 IMG=$1
 
 kubectl delete configmap environment --ignore-not-found=true
-kubectl create configmap environment --from-literal=ENVIRONMENT="${ENV}"
+kubectl create configmap environment --from-literal=ENVIRONMENT="${ENV}" --from-literal=JWT_CHECK_BYPASS=true
 echo "### Deploying busola from: ${IMG}"
 
 cd resources

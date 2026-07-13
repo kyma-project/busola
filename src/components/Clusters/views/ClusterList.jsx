@@ -179,13 +179,12 @@ function ClusterList() {
 
   const extraHeaderContent = (
     <>
-      <Button design="Transparent" icon="add" onClick={() => setShowAdd(true)}>
+      <Button design="Transparent" onClick={() => setShowAdd(true)}>
         {t('clusters.add.title')}
       </Button>
       {gardenerLoginFeature.isEnabled && (
         <Button
           design="Transparent"
-          icon="add"
           onClick={() => navigate('/gardener-login')}
         >
           {t('clusters.gardener.button')}

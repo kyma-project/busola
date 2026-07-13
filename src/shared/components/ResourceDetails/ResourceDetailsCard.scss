@@ -1,40 +1,26 @@
-.cluster-overview__details-grid {
-  display: grid;
-  gap: 1rem;
-}
-
-.cluster-overview__details-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
+.resource-card {
   min-width: 200px;
-  width: fit-content;
+  height: min-content;
 }
 
-.cluster-overview__details-grid {
-  grid-template-columns: 1fr;
-}
+.form-without-background {
+  background-color: var(--sapBackgroundColor);
 
-.resource-details-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.resource-overview__details-wrapper {
-  min-width: 200px;
-}
-
-@container (min-width: 550px) {
-  .cluster-overview__details-wrapper {
-    grid-template-columns: fit-content(100%) max-content;
+  > ui5-form-group {
+    > *:not(:last-child) {
+      padding-bottom: 1rem;
+    }
   }
+}
 
-  .cluster-overview__details-grid {
-    grid-template-columns: repeat(2, minmax(200px, max-content));
+.resource-card-layout {
+  ui5-label {
+    margin-bottom: 4px;
   }
+}
 
-  .resource-overview__details-wrapper {
-    max-width: fit-content;
-    min-width: 300px;
+@container (max-width: 420px) {
+  .resource-card-layout::part(layout) {
+    grid-template-columns: 1fr !important;
   }
 }

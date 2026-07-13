@@ -5,6 +5,8 @@ import getPromptSuggestions from '../api/getPromptSuggestions';
 import { ColumnLayoutState, columnLayoutAtom } from 'state/columnLayoutAtom';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { authDataAtom } from 'state/authDataAtom';
+import { clusterAtom } from 'state/clusterAtom';
 
 interface CurrentResource {
   resourceName: string;
@@ -40,6 +42,8 @@ export function usePromptSuggestions(
   },
 ) {
   const post = usePost();
+  const authData = useAtomValue<any>(authDataAtom);
+  const cluster = useAtomValue<any>(clusterAtom);
   const [initialSuggestions, setInitialSuggestions] = useState<string[]>([]);
   const setSessionID = useSetAtom(sessionIDAtom);
   const columnLayout = useAtomValue(columnLayoutAtom);
@@ -78,16 +82,36 @@ export function usePromptSuggestions(
       setLoading(true);
       setInitialSuggestions([]);
       try {
-        const result = await getPromptSuggestions({
-          post,
-          namespace: namespace,
-          resourceType: resourceType,
-          groupVersion: groupVersion,
-          resourceName: resourceName,
-        });
-        if (result) {
-          setInitialSuggestions(result.promptSuggestions);
-          setSessionID(result.conversationId);
+        if (
+          !cluster ||
+          !authData ||
+          !cluster.currentContext?.cluster?.cluster?.server
+        ) {
+          throw new Error(
+            'Missing required authentication context: cluster or authData is undefined.',
+          );
+        } else {
+          const result = await getPromptSuggestions({
+            post,
+            namespace,
+            resourceType,
+            groupVersion,
+            resourceName,
+            clusterUrl: cluster.currentContext?.cluster?.cluster?.server,
+            certificateAuthorityData:
+              cluster.currentContext?.cluster?.cluster?.[
+                'certificate-authority-data'
+              ],
+            clusterAuth: {
+              token: authData.token,
+              clientCertificateData: authData['client-certificate-data'],
+              clientKeyData: authData['client-key-data'],
+            },
+          });
+          if (result) {
+            setInitialSuggestions(result.promptSuggestions);
+            setSessionID(result.conversationId);
+          }
         }
       } finally {
         setLoading(false);
@@ -102,7 +126,16 @@ export function usePromptSuggestions(
       fetchSuggestions();
       setIsReset(false);
     }
-  }, [currentResource, options?.skip, post, setSessionID, isReset, setIsReset]);
+  }, [
+    currentResource,
+    options?.skip,
+    post,
+    setSessionID,
+    isReset,
+    setIsReset,
+    authData,
+    cluster,
+  ]);
 
   return {
     initialSuggestions,

@@ -1,4 +1,5 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/kyma-project/busola)](https://api.reuse.software/info/github.com/kyma-project/busola)
+[![Coverage Status](https://coveralls.io/repos/github/kyma-project/busola/badge.svg?branch=main)](https://coveralls.io/github/kyma-project/busola)
 
 # Busola
 
@@ -22,7 +23,7 @@ The Busola project contains additional sub-projects:
 
 <!-- markdown-link-check-enable -->
 
-- [`node`](https://nodejs.org/en/) in version 22.x
+- [`node`](https://nodejs.org/en/) in version 24.x
 
 ## Installation
 

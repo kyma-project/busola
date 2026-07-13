@@ -1,4 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import {
   Navigate,
@@ -33,11 +41,15 @@ import { multipleContextsAtom } from 'state/multipleContextsAtom';
 import {
   Button,
   Dialog,
+  Icon,
   SplitterElement,
   SplitterLayout,
 } from '@ui5/webcomponents-react';
+import horizontalGripIcon from '@ui5/webcomponents-icons/dist/horizontal-grip.js';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
+import { showTerminalAtom } from 'state/showTerminalAtom';
 import KymaCompanion from 'components/KymaCompanion/components/KymaCompanion';
+import { useAssistantAvailability } from 'components/KymaCompanion/hooks/useAssistantAvailability';
 import { Settings } from 'components/Settings/Settings';
 import { Header } from 'header/Header';
 import { ContentWrapper } from './ContentWrapper/ContentWrapper';
@@ -47,6 +59,8 @@ import ClusterRoutes from './ClusterRoutes';
 import { IncorrectPath } from './IncorrectPath';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ContextChooserMessage } from 'components/Clusters/components/ContextChooser/ContextChooser';
+import { KubeconfigList } from 'components/KubeconfigList/KubeconfigList';
+import { KubeconfigRedirect } from 'components/KubeconfigList/KubeconfigRedirect';
 
 import { themeAtom } from 'state/settings/themeAtom';
 import { initTheme } from './initTheme';
@@ -54,9 +68,12 @@ import { initTheme } from './initTheme';
 import './App.scss';
 import '../../web-components/index'; //Import for custom Web Components
 import { manualKubeConfigIdAtom } from 'state/manualKubeConfigIdAtom';
+import { useSSOLogin } from 'state/ssoDataAtom';
 import { AuthForm } from 'components/Clusters/components/AuthForm';
 import { ResourceForm } from 'shared/ResourceForm';
 import { checkAuthRequiredInputs } from 'components/Clusters/helper';
+import { BusolaTerminal } from './BusolaTerminal/BusolaTerminal';
+import { TERMINAL_MIN_HEIGHT } from './BusolaTerminal/terminalThemes';
 
 export default function App() {
   const theme = useAtomValue(themeAtom);
@@ -78,7 +95,7 @@ export default function App() {
   }>({});
   const [hasInvalidInputs, setHasInvalidInputs] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setNamespace(namespace);
   }, [setNamespace, namespace]);
 
@@ -87,8 +104,9 @@ export default function App() {
   useResourceSchemas();
   useSidebarCondensed();
 
-  const { isLoading } = useAuthHandler();
   useGetConfiguration();
+  useSSOLogin();
+  const { isLoading } = useAuthHandler();
   useGetExtensions();
   useGetExtensibilitySchemas();
   useGetValidationSchemas();
@@ -102,6 +120,55 @@ export default function App() {
   useAfterInitHook(kubeconfigIdState);
 
   const showCompanion = useAtomValue(showKymaCompanionAtom);
+  const { showAssistant } = useAssistantAvailability();
+  // Refuse to render on ineligible clusters even if some caller forgot to gate.
+  const companionPanelOpen =
+    showAssistant && showCompanion.show && !showCompanion.useJoule;
+  const [showTerminalState, setShowTerminalState] = useAtom(showTerminalAtom);
+  const {
+    isOpen: isTerminalOpen,
+    isDocked: isTerminalDocked,
+    isFullscreen: isTerminalFullscreen,
+    dockedHeight,
+  } = showTerminalState;
+
+  const [terminalMinHeight, setTerminalMinHeight] =
+    useState(TERMINAL_MIN_HEIGHT);
+
+  const effectiveTerminalHeight = useMemo(
+    () => dockedHeight || Math.round(window.innerHeight * 0.35),
+    [dockedHeight],
+  );
+
+  const handleSeparatorMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      const startY = e.clientY;
+      const startHeight = effectiveTerminalHeight;
+
+      const onMouseMove = (ev: MouseEvent) => {
+        const delta = startY - ev.clientY;
+        const newHeight = Math.max(
+          terminalMinHeight,
+          Math.min(startHeight + delta, window.innerHeight - 150),
+        );
+        setShowTerminalState((prev) => ({ ...prev, dockedHeight: newHeight }));
+      };
+
+      const onMouseUp = () => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        document.body.style.userSelect = '';
+        document.body.style.cursor = '';
+      };
+
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'row-resize';
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    },
+    [effectiveTerminalHeight, setShowTerminalState, terminalMinHeight],
+  );
 
   const updateManualKubeConfigIdState = (e: any) => {
     e.preventDefault();
@@ -132,9 +199,9 @@ export default function App() {
   return (
     <SplitterLayout id="splitter-layout">
       <SplitterElement
-        resizable={showCompanion.show && !showCompanion.useJoule}
+        resizable={companionPanelOpen}
         size={
-          showCompanion.show && !showCompanion.useJoule
+          companionPanelOpen
             ? showCompanion.fullScreen
               ? '0%'
               : '70%'
@@ -143,82 +210,121 @@ export default function App() {
       >
         <div id="html-wrap">
           <Header />
-          <div id="page-wrap">
-            <Sidebar key={cluster?.name} />
-            {search.get('kubeconfigID') &&
-              manualKubeConfigId.formOpen &&
-              createPortal(
-                <Dialog open={true}>
-                  <ResourceForm.Single
-                    formElementRef={authFormRef}
-                    createResource={updateManualKubeConfigIdState}
-                  >
-                    <AuthForm
-                      resource={authFormState}
-                      setResource={setAuthFormState}
-                      checkRequiredInputs={checkRequiredInputs}
-                    />
-                    <div className="auth-form-dialog-footer">
-                      <Button disabled={hasInvalidInputs} type="Submit">
-                        {t('clusters.add.title')}
-                      </Button>
-                    </div>
-                  </ResourceForm.Single>
-                </Dialog>,
-                document.body,
-              )}
-            {search.get('kubeconfigID') &&
-              !!contextsState?.contexts?.length &&
-              kubeconfigIdState === 'loading' &&
-              createPortal(
-                <ContextChooserMessage
-                  contextState={contextsState}
-                  setValue={(value: string) =>
-                    setContextsState((state) => ({
-                      ...state,
-                      chosenContext: value,
-                    }))
-                  }
-                  onCancel={() => {
-                    setContextsState({} as any);
-                    removePreviousPath();
-                    navigate('/clusters');
-                  }}
-                />,
-                document.body,
-              )}
-            <ContentWrapper>
-              <Routes key={cluster?.name}>
-                {kubeconfigIdState !== 'loading' &&
-                  !search.get('kubeconfigID') && (
-                    <Route
-                      path="*"
-                      element={
-                        <IncorrectPath
-                          to="/clusters"
-                          message={t(
-                            'components.incorrect-path.message.clusters',
-                          )}
-                        />
-                      }
-                    />
-                  )}
-                <Route path="clusters" element={<ClusterList />} />
-                <Route
-                  path="cluster/:currentClusterName"
-                  element={<Navigate to="overview" />}
-                />
-                <Route path="cluster/:currentClusterName">
-                  <Route path="*" element={<ClusterRoutes />} />
-                </Route>
-                {makeGardenerLoginRoute}
-              </Routes>
-              <Settings />
-            </ContentWrapper>
+          <div id="main-area">
+            <div id="page-wrap">
+              <Sidebar key={cluster?.name} />
+              {search.get('kubeconfigID') &&
+                manualKubeConfigId.formOpen &&
+                createPortal(
+                  <Dialog open={true}>
+                    <ResourceForm.Single
+                      formElementRef={authFormRef}
+                      createResource={updateManualKubeConfigIdState}
+                    >
+                      <AuthForm
+                        resource={authFormState}
+                        setResource={setAuthFormState}
+                        checkRequiredInputs={checkRequiredInputs}
+                      />
+                      <div className="auth-form-dialog-footer">
+                        <Button disabled={hasInvalidInputs} type="Submit">
+                          {t('clusters.add.title')}
+                        </Button>
+                      </div>
+                    </ResourceForm.Single>
+                  </Dialog>,
+                  document.body,
+                )}
+              {search.get('kubeconfigID') &&
+                !!contextsState?.contexts?.length &&
+                kubeconfigIdState === 'loading' &&
+                createPortal(
+                  <ContextChooserMessage
+                    contextState={contextsState}
+                    setValue={(value: string) =>
+                      setContextsState((state) => ({
+                        ...state,
+                        chosenContext: value,
+                      }))
+                    }
+                    onCancel={() => {
+                      setContextsState({} as any);
+                      removePreviousPath();
+                      navigate('/clusters');
+                    }}
+                  />,
+                  document.body,
+                )}
+              <ContentWrapper>
+                <Routes key={cluster?.name}>
+                  {kubeconfigIdState !== 'loading' &&
+                    !search.get('kubeconfigID') && (
+                      <Route
+                        path="*"
+                        element={
+                          <IncorrectPath
+                            to="/clusters"
+                            message={t(
+                              'components.incorrect-path.message.clusters',
+                            )}
+                          />
+                        }
+                      />
+                    )}
+                  <Route path="clusters" element={<ClusterList />} />
+                  <Route
+                    path="kubeconfig"
+                    element={
+                      <Suspense fallback={<Spinner />}>
+                        <KubeconfigList />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path="kubeconfig/:name"
+                    element={<KubeconfigRedirect />}
+                  />
+                  <Route
+                    path="cluster/:currentClusterName"
+                    element={<Navigate to="overview" />}
+                  />
+                  <Route path="cluster/:currentClusterName">
+                    <Route path="*" element={<ClusterRoutes />} />
+                  </Route>
+                  {makeGardenerLoginRoute}
+                </Routes>
+                <Settings />
+              </ContentWrapper>
+            </div>
+            {isTerminalOpen && isTerminalDocked && !isTerminalFullscreen && (
+              <div
+                className="terminal-separator"
+                onMouseDown={handleSeparatorMouseDown}
+              >
+                <span className="terminal-separator__line-before" />
+                <span className="terminal-separator__grip">
+                  <Icon
+                    name={horizontalGripIcon}
+                    className="terminal-separator__grip-icon"
+                  />
+                </span>
+                <span className="terminal-separator__line-after" />
+              </div>
+            )}
+            {isTerminalOpen && (
+              <BusolaTerminal
+                dockedHeight={
+                  isTerminalDocked && !isTerminalFullscreen
+                    ? effectiveTerminalHeight
+                    : undefined
+                }
+                onMinHeightComputed={setTerminalMinHeight}
+              />
+            )}
           </div>
         </div>
       </SplitterElement>
-      {showCompanion.show && !showCompanion.useJoule ? (
+      {companionPanelOpen ? (
         <SplitterElement
           resizable={!showCompanion.fullScreen}
           size={showCompanion.fullScreen ? '100%' : '30%'}

@@ -34,7 +34,7 @@ body {
 .panel-grid {
   display: grid;
   grid-template-columns: 2fr 2fr;
-  grid-gap: 32px;
+  gap: 1rem;
 
   @media screen and (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -151,6 +151,10 @@ ui5-tabcontainer::part(content) {
   cursor: pointer;
 }
 
+.popover-description {
+  line-height: var(--sapContent_LineHeight);
+}
+
 @mixin input-icon(
   $background-image,
   $padding-left: 48px,
@@ -171,7 +175,6 @@ ui5-tabcontainer::part(content) {
     0.75rem center,
     16px
   );
-  height: 2rem;
 
   ui5-icon {
     align-self: center;

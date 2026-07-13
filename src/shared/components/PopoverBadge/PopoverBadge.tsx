@@ -1,6 +1,6 @@
 import React, { ReactNode, useRef, useState } from 'react';
 
-import { ObjectStatus, Popover } from '@ui5/webcomponents-react';
+import { ObjectStatus, Popover, Text } from '@ui5/webcomponents-react';
 import classNames from 'classnames';
 
 import './PopoverBadge.scss';
@@ -8,7 +8,7 @@ import { createPortal } from 'react-dom';
 
 interface PopoverBadgeProps {
   children?: ReactNode;
-  tooltipContent: ReactNode;
+  tooltipContent: ReactNode | string;
   type: 'Information' | 'Positive' | 'Negative' | 'Critical' | 'None';
   className?: string;
 }
@@ -37,7 +37,7 @@ export const PopoverBadge = ({
       <ObjectStatus
         aria-label="Status"
         role="status"
-        inverted
+        inverted={type !== 'Positive'}
         state={type}
         className={classes}
         data-testid={'has-tooltip'}
@@ -60,7 +60,11 @@ export const PopoverBadge = ({
           }}
           placement="End"
         >
-          {tooltipContent}
+          {typeof tooltipContent === 'string' ? (
+            <Text className="popover-description">{tooltipContent}</Text>
+          ) : (
+            <>{tooltipContent}</>
+          )}
         </Popover>,
         document.body,
       )}

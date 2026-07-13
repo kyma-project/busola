@@ -7,7 +7,7 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Icon, ObjectStatus, Text } from '@ui5/webcomponents-react';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import { ResourceDescription } from 'resources/Events';
 import EventCreate from './EventYaml';
 import { Link } from 'shared/components/Link/Link';
@@ -38,11 +38,10 @@ const Specification = (event: any) => {
   const { t } = useTranslation();
 
   return (
-    <UI5Panel
-      key="message"
+    <UI5Card
       title={t('common.headers.configuration')}
       accessibleName={t('common.accessible-name.configuration')}
-      keyComponent="specification-panel"
+      keyComponent="configuration"
     >
       <RowComponent
         name={t('events.headers.type')}
@@ -50,18 +49,30 @@ const Specification = (event: any) => {
           <Text style={{ display: 'flex', alignItems: 'center' }}>
             {event.type}{' '}
             {event.type === 'Warning' ? (
-              <ObjectStatus
-                aria-label="Warning"
-                icon={<Icon accessibleName="Warning" name="warning" />}
-                className="has-tooltip sap-margin-begin-tiny"
-                state="Critical"
-              />
+              event.message.startsWith('Error') ? (
+                <ObjectStatus
+                  aria-label="Error"
+                  icon={<Icon accessibleName="Error" name="error" />}
+                  className="sap-margin-begin-tiny"
+                  state="Negative"
+                  title={event.type}
+                />
+              ) : (
+                <ObjectStatus
+                  aria-label="Warning"
+                  icon={<Icon accessibleName="Warning" name="warning" />}
+                  className="sap-margin-begin-tiny"
+                  state="Critical"
+                  title={event.type}
+                />
+              )
             ) : (
               <ObjectStatus
                 aria-label="Normal"
                 icon={<Icon accessibleName="Normal" name="information" />}
-                className="has-tooltip sap-margin-begin-tiny"
+                className="sap-margin-begin-tiny"
                 state="Information"
+                title={event.type}
               />
             )}
           </Text>
@@ -93,7 +104,7 @@ const Specification = (event: any) => {
         name={t('events.headers.count')}
         value={event.count || EMPTY_TEXT_PLACEHOLDER}
       />
-    </UI5Panel>
+    </UI5Card>
   );
 };
 

@@ -41,7 +41,6 @@ config:
         dsn: ''
     EXTERNAL_NODES:
       isEnabled: true
-      stage: SECONDARY
     HIDDEN_NAMESPACES:
       isEnabled: true
       config:
@@ -60,12 +59,16 @@ config:
     EXTENSIBILITY_WIZARD:
       isEnabled: false
     KYMA_COMPANION:
-      isEnabled: false
+      isEnabled: true
       config:
-        feedbackLink: ''
-        documentationLink: ''
-        model: ''
-        queryMaxTokens: 0
+        feedbackLink: https://sapinsights.eu.qualtrics.com/jfe/form/SV_dmWATTfes5SstG6
+        documentationLink: https://help.sap.com/docs/btp/sap-business-technology-platform-internal/kyma-companion?locale=en-US&version=Internal&state=DRAFT
+        model: 'gpt-4.1'
+        queryMaxTokens: 8000
+      useJoule: true
+      jouleConfig:
+        url: 'https://green-joule.eu10.sapdas.cloud.sap/resources/public/webclient/bootstrap.js'
+        botname: 'kyma'
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
@@ -84,3 +87,5 @@ config:
       isEnabled: false
     COMMUNITY_MODULES:
       isEnabled: true
+    SSO_LOGIN:
+      isEnabled: false

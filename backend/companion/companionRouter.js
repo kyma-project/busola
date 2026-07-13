@@ -1,17 +1,29 @@
-/* global require */
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { TokenManager } from './TokenManager';
 import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
 import escape from 'lodash.escape';
+import {
+  getK8sCredentialFromBody,
+  hashCredential,
+  requireCredential,
+} from '../utils/rate-limit-key.js';
+import { createBoundedCache } from '../utils/bounded-cache.js';
+import { extractShootId } from './extractShootId.js';
 
-const config = require('../config.js');
+import config from '../src/config/config.js';
 
 const tokenManager = new TokenManager();
 
 const companionApiBaseUrl =
   config.features?.KYMA_COMPANION?.config?.apiBaseUrl ?? '';
+
+// From our env config, not the cluster, so a cluster can't fake the allowed issuer.
+const allowedIssuerUrl =
+  config.features?.KYMA_COMPANION?.config?.issuerUrl ?? '';
+
+const stripTrailingSlash = (url) => url.replace(/\/+$/, '');
 
 const COMPANION_API_BASE_URL = `${companionApiBaseUrl}/api/conversations/`;
 
@@ -22,13 +34,25 @@ const COMPANION_PUBLIC_KEY_URL = companionApiBaseUrl
 const SKIP_AUTH = config.features?.KYMA_COMPANION?.config?.skipAuth ?? false;
 const router = express.Router();
 
-// Rate limiter: Max 200 requests per 1 minutes per IP
+const requireCompanionCredential = requireCredential(getK8sCredentialFromBody);
+
 const companionRateLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
   max: 200,
   message: 'Too many requests, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: (req) => hashCredential(getK8sCredentialFromBody(req), 'cred'),
+});
+
+// A cluster's region never changes, so we can keep it cached for the whole run.
+const CLUSTER_REGION_CACHE_MAX = 1000;
+const clusterRegionCache = createBoundedCache({
+  max: CLUSTER_REGION_CACHE_MAX,
+});
+const clusterRegionNegativeCache = createBoundedCache({
+  max: CLUSTER_REGION_CACHE_MAX,
+  ttlMs: 60 * 1000,
 });
 
 router.use(express.json());
@@ -49,6 +73,19 @@ async function handlePublicKey(req, res) {
       return res
         .status(400)
         .json({ error: 'Missing or invalid public_key in request body' });
+    }
+
+    // Denying the key exchange denies Joule its cluster credentials, so it's
+    // enforced even when the UI is bypassed.
+    const { eligible, reason } = await checkJouleEligibility({
+      clusterUrl: parsed.clusterUrl,
+      oidcIssuerUrl: parsed.oidcIssuerUrl,
+      isCertAuth: parsed.isCertAuth === true,
+    });
+    if (!eligible) {
+      return res
+        .status(403)
+        .json({ error: 'Joule is not available for this cluster', reason });
     }
 
     const headers = {
@@ -79,17 +116,37 @@ async function handlePublicKey(req, res) {
 }
 
 function extractAuthHeaders(req) {
+  let parsedBody;
+
+  if (typeof req.body === 'object' && !ArrayBuffer.isView(req.body)) {
+    parsedBody = req.body;
+  } else {
+    try {
+      parsedBody = JSON.parse(req.body.toString());
+    } catch (_) {
+      const error = new Error('Invalid JSON in request body');
+      error.status = 400;
+      throw error;
+    }
+  }
+
+  const {
+    clusterUrl,
+    certificateAuthorityData,
+    clusterToken,
+    clientCertificateData,
+    clientKeyData,
+    sessionId,
+    oidcIssuerUrl,
+  } = parsedBody;
   return {
-    clusterUrl: req.headers['x-cluster-url'],
-    certificateAuthorityData:
-      req.headers['x-cluster-certificate-authority-data'],
-    clusterToken: req.headers['x-k8s-authorization']?.replace(
-      /^Bearer\s+/i,
-      '',
-    ),
-    clientCertificateData: req.headers['x-client-certificate-data'],
-    clientKeyData: req.headers['x-client-key-data'],
-    sessionId: req.headers['session-id'],
+    clusterUrl,
+    certificateAuthorityData,
+    clusterToken,
+    clientCertificateData,
+    clientKeyData,
+    sessionId,
+    oidcIssuerUrl,
   };
 }
 
@@ -279,9 +336,136 @@ async function handleFollowUpSuggestions(req, res) {
   }
 }
 
-router.post('/public-key', companionRateLimiter, handlePublicKey);
-router.post('/suggestions', companionRateLimiter, handlePromptSuggestions);
-router.post('/messages', companionRateLimiter, handleChatMessage);
-router.post('/followup', companionRateLimiter, handleFollowUpSuggestions);
+async function fetchClusterRegion(shootId) {
+  const cached = clusterRegionCache.get(shootId);
+  if (cached !== undefined) return cached;
+  if (clusterRegionNegativeCache.has(shootId)) return null;
 
+  const url = new URL(
+    `/api/tools/cluster-region/${encodeURIComponent(shootId)}`,
+    companionApiBaseUrl,
+  );
+  const headers = { Accept: 'application/json' };
+  if (!SKIP_AUTH) {
+    const AUTH_TOKEN = await tokenManager.getToken();
+    headers.Authorization = `Bearer ${AUTH_TOKEN}`;
+  }
+  const response = await fetch(url.toString(), { method: 'GET', headers });
+
+  const isOk = response.status >= 200 && response.status < 300;
+  if (!isOk) {
+    // Only remember 4xx answers — a 5xx is probably temporary, so let it retry.
+    if (response.status >= 400 && response.status < 500) {
+      clusterRegionNegativeCache.set(shootId, true);
+    }
+    return null;
+  }
+
+  const data = await response.json();
+  clusterRegionCache.set(shootId, data);
+  return data;
+}
+
+async function getClusterRegionStatus(clusterUrl) {
+  const shootId = extractShootId(clusterUrl ?? '');
+  if (!shootId) return 'not-skr';
+  const region = await fetchClusterRegion(shootId);
+  if (!region || typeof region.isEUAccessOnly !== 'boolean') return 'unknown';
+  return region.isEUAccessOnly ? 'eu-access' : 'ok';
+}
+
+// Blocks the companion only on confirmed EU Access Only clusters — unlike Joule
+// it must keep working on non-SKR clusters and on lookup failures.
+async function rejectEUAccessOnly(req, res, next) {
+  try {
+    const { clusterUrl } = extractAuthHeaders(req);
+    if ((await getClusterRegionStatus(clusterUrl)) === 'eu-access') {
+      return res.status(403).json({
+        error: 'The AI assistant is not available for EU Access Only clusters',
+      });
+    }
+    next();
+  } catch (error) {
+    req.log?.warn(error);
+    next();
+  }
+}
+
+// Fail-closed: issuer and region come from our side, and any doubt is a no.
+async function checkJouleEligibility({
+  clusterUrl,
+  oidcIssuerUrl,
+  isCertAuth,
+}) {
+  if (allowedIssuerUrl) {
+    if (oidcIssuerUrl) {
+      if (
+        stripTrailingSlash(oidcIssuerUrl) !==
+        stripTrailingSlash(allowedIssuerUrl)
+      ) {
+        return { eligible: false, reason: 'issuer-mismatch' };
+      }
+    } else if (!isCertAuth) {
+      // AI team ruling: static tokens fail (nothing to verify), client certs skip.
+      return { eligible: false, reason: 'static-token' };
+    }
+  }
+  if (!companionApiBaseUrl) {
+    return { eligible: false, reason: 'not-configured' };
+  }
+
+  const status = await getClusterRegionStatus(clusterUrl);
+  if (status !== 'ok') return { eligible: false, reason: status };
+  return { eligible: true };
+}
+
+async function handleJouleEligibility(req, res) {
+  try {
+    const { clusterUrl, oidcIssuerUrl, clientCertificateData, clientKeyData } =
+      extractAuthHeaders(req);
+    const result = await checkJouleEligibility({
+      clusterUrl,
+      oidcIssuerUrl,
+      isCertAuth: !!(clientCertificateData && clientKeyData),
+    });
+    return res.status(200).json(result);
+  } catch (error) {
+    req.log.warn(error);
+    return res.status(500).json({
+      eligible: false,
+      error: `Failed to determine Joule eligibility. Request ID: ${String(req.id)}`,
+    });
+  }
+}
+
+router.post('/public-key', handlePublicKey);
+router.post(
+  '/suggestions',
+  requireCompanionCredential,
+  companionRateLimiter,
+  rejectEUAccessOnly,
+  handlePromptSuggestions,
+);
+router.post(
+  '/messages',
+  requireCompanionCredential,
+  companionRateLimiter,
+  rejectEUAccessOnly,
+  handleChatMessage,
+);
+router.post(
+  '/followup',
+  requireCompanionCredential,
+  companionRateLimiter,
+  rejectEUAccessOnly,
+  handleFollowUpSuggestions,
+);
+router.post(
+  '/joule-eligibility',
+  requireCompanionCredential,
+  companionRateLimiter,
+  handleJouleEligibility,
+);
+
+export { handleJouleEligibility, handlePublicKey, rejectEUAccessOnly };
 export default router;

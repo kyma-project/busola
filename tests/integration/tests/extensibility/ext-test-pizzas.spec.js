@@ -69,7 +69,7 @@ context('Test Pizzas', () => {
       .contains('Namespaces')
       .click();
 
-    cy.wait(500).typeInSearch('pizzas');
+    cy.wait(1500).typeInSearch('pizzas');
 
     cy.clickListLink('pizzas');
 
@@ -136,9 +136,13 @@ context('Test Pizzas', () => {
       .contains('ui5-link', 'pizzas/diavola')
       .click({ force: true });
 
-    cy.contains('Hot salami, Pickled jalapeños, Cheese').should('be.visible');
+    cy.getMidColumn()
+      .contains('Hot salami, Pickled jalapeños, Cheese')
+      .should('be.visible');
 
-    cy.contains('Diavola is such a spicy pizza').should('be.visible');
+    cy.getMidColumn()
+      .contains('Diavola is such a spicy pizza')
+      .should('be.visible');
 
     cy.getLeftNav()
       .contains(/^Pizzas$/)

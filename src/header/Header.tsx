@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
+import { SCREEN_SIZE_BREAKPOINT_M } from 'command-pallette/CommandPalletteUI/types';
 import { useAtom, useAtomValue } from 'jotai';
 import {
   Avatar,
   ShellBar,
   ShellBarItem,
   ToggleButton,
+  type ShellBarDomRef,
 } from '@ui5/webcomponents-react';
 
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
-import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
+import { useAssistantAvailability } from 'components/KymaCompanion/hooks/useAssistantAvailability';
 
 import {
   clustersAtomEffectOnSet,
@@ -20,6 +22,7 @@ import {
 } from 'state/clustersAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
+import { showTerminalAtom } from 'state/showTerminalAtom';
 import { configFeaturesNames } from 'state/types';
 
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
@@ -30,16 +33,30 @@ import { SnowFeature } from './SnowFeature';
 import FeedbackPopover from './Feedback/FeedbackPopover';
 import JouleChat from 'components/KymaCompanion/JouleChat';
 
-import './Header.scss';
 import { GetHelpMenu } from './GetHelpMenu';
+import './Header.scss';
 
 export function Header() {
   useAvailableNamespaces();
-  const isSAPUser = useCheckSAPUser();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isGetHelpOpen, setIsGetHelpOpen] = useState(false);
+  const [shellbarWidth, setShellbarWidth] = useState(window.innerWidth);
+  const isLargeScreen = shellbarWidth > SCREEN_SIZE_BREAKPOINT_M;
+  const shellbarRef = useRef<ShellBarDomRef>(null);
+
+  useEffect(() => {
+    const htmlWrapEl = document.getElementById('html-wrap');
+    if (!htmlWrapEl) return;
+    const observer = new ResizeObserver(() => {
+      setShellbarWidth(
+        shellbarRef.current?.getBoundingClientRect().width ?? window.innerWidth,
+      );
+    });
+    observer.observe(htmlWrapEl);
+    return () => observer.disconnect();
+  }, []);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -51,21 +68,26 @@ export function Header() {
   const cluster = useAtomValue(clusterAtom);
 
   const isOnClustersPage = location.pathname === '/clusters';
+  const isOnKubeconfigPage = location.pathname === '/kubeconfig';
 
-  const { isEnabled: isKymaCompanionEnabled, useJoule: usesJoule } = useFeature(
-    configFeaturesNames.KYMA_COMPANION,
+  const { showAssistant, useJouleMode } = useAssistantAvailability();
+  const showAssistantHere = showAssistant && !isOnClustersPage;
+
+  const { isEnabled: isTerminalEnabled } = useFeature(
+    configFeaturesNames.TERMINAL,
   );
 
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
+  const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
 
+  // Close the panel on cluster switch instead of swapping modes mid-conversation.
   useEffect(() => {
-    setShowCompanion((prevState) => ({
-      ...prevState,
-      useJoule: usesJoule,
-    }));
-  }, [setShowCompanion, usesJoule]);
-
-  const shellbarRef = useRef(null);
+    setShowCompanion((prevState) =>
+      prevState.show
+        ? { ...prevState, show: false, useJoule: useJouleMode }
+        : { ...prevState, useJoule: useJouleMode },
+    );
+  }, [setShowCompanion, useJouleMode]);
 
   return (
     <>
@@ -78,7 +100,9 @@ export function Header() {
               : t('clusters.overview.title-current-cluster'),
           },
         }}
-        startButton={!isOnClustersPage && <SidebarSwitcher />}
+        startButton={
+          !isOnClustersPage && !isOnKubeconfigPage && <SidebarSwitcher />
+        }
         onLogoClick={() => {
           navigateSafely(() => {
             if (cluster?.name && !isOnClustersPage) {
@@ -95,7 +119,7 @@ export function Header() {
         }}
         logo={<img alt="SAP" src="/assets/sap-logo.svg" />}
         primaryTitle={t('common.product-title')}
-        content={<ClusterSwitcher />}
+        content={!isOnKubeconfigPage && <ClusterSwitcher />}
         profile={
           <Avatar
             icon="customer"
@@ -106,16 +130,19 @@ export function Header() {
         }
         onProfileClick={() => setIsMenuOpen(true)}
         searchField={
-          !isOnClustersPage && (
+          !isOnClustersPage &&
+          !isOnKubeconfigPage && (
             <CommandPaletteSearchBar
               shouldFocus={isSearchOpen}
               slot="searchField"
               setShouldFocus={setIsSearchOpen}
-              shellbarRef={shellbarRef}
+              shellbarWidth={shellbarWidth}
             />
           )
         }
-        showSearchField
+        showSearchField={isLargeScreen}
+        hideSearchButton={isLargeScreen}
+        disableSearchCollapse={isLargeScreen}
         onSearchButtonClick={(e) => {
           if (!e.detail.searchFieldVisible) {
             setIsSearchOpen(true);
@@ -127,7 +154,7 @@ export function Header() {
       >
         <SnowFeature />
         <FeedbackPopover />
-        {isKymaCompanionEnabled && isSAPUser && !isOnClustersPage && (
+        {showAssistantHere && (
           <>
             <ToggleButton
               accessibleName={t('kyma-companion.name')}
@@ -145,6 +172,16 @@ export function Header() {
             />
             {showCompanion.useJoule && <JouleChat />}
           </>
+        )}
+        {isTerminalEnabled && !isOnClustersPage && (
+          <ToggleButton
+            icon="command-line-interfaces"
+            accessibleName={t('terminal.name')}
+            pressed={showTerminal.isOpen}
+            onClick={() =>
+              setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }))
+            }
+          />
         )}
         <ShellBarItem
           onClick={() => setIsGetHelpOpen(true)}

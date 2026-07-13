@@ -11,6 +11,10 @@ import {
   encryptAuthPayload,
   clearSessionKeys,
 } from 'components/KymaCompanion/utils/encryption';
+import {
+  isOIDCExec,
+  tryParseOIDCparams,
+} from 'components/Clusters/components/oidc-params';
 
 export default function JouleChat() {
   const [showKymaCompanion, setShowKymaCompanion] = useAtom(
@@ -57,11 +61,18 @@ export default function JouleChat() {
           return { ...resourceContext, auth: null };
         }
 
+        const userExec = clusterRef.current?.currentContext?.user?.user?.exec;
+        const oidcIssuerUrl =
+          userExec && isOIDCExec(userExec)
+            ? tryParseOIDCparams({ exec: userExec })?.issuerUrl
+            : undefined;
+
         try {
           const encryptedAuth = await encryptAuthPayload({
             clusterUrl: clusterData.server,
             certificateAuthorityData:
               clusterData['certificate-authority-data'] ?? '',
+            oidcIssuerUrl,
             auth: {
               token: auth?.token,
               clientCertificateData: auth?.['client-certificate-data'],
@@ -153,14 +164,25 @@ export default function JouleChat() {
     const webclient = window.sap?.das?.webclient;
     if (!webclient) return;
 
+    // Direct DOM fallback: webclient API is unresponsive when auth fails and
+    // isOpen() returns false while the iframe container is still visible.
+    const getWebclientEl = () => document.getElementById('cai-webclient-main');
+
     if (
       showKymaCompanion.show &&
       showKymaCompanion.useJoule &&
       !webclient.isOpen()
     ) {
+      const el = getWebclientEl();
+      if (el) el.style.display = '';
       webclient.show();
-    } else if (!showKymaCompanion.show && webclient.isOpen()) {
-      webclient.hide();
+    } else if (!showKymaCompanion.show) {
+      if (webclient.isOpen()) {
+        webclient.hide();
+      } else {
+        const el = getWebclientEl();
+        if (el) el.style.display = 'none';
+      }
     }
   }, [isEnabled, showKymaCompanion]);
 

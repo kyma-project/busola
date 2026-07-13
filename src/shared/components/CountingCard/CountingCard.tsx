@@ -5,8 +5,7 @@ import {
   NumericSideIndicator,
 } from '@ui5/webcomponents-react';
 import { useUrl } from 'hooks/useUrl';
-import { useTranslation } from 'react-i18next';
-import { Link } from '../Link/Link';
+import { useNavigate } from 'react-router';
 
 import './CountingCard.scss';
 
@@ -38,8 +37,14 @@ export const CountingCard = ({
   className = '',
   additionalContent,
 }: CountingCardProps) => {
-  const { t } = useTranslation();
   const { namespaceUrl, clusterUrl } = useUrl();
+  const navigate = useNavigate();
+
+  const targetUrl = resourceUrl
+    ? isClusterResource
+      ? clusterUrl(resourceUrl)
+      : namespaceUrl(resourceUrl, allNamespaceURL ? { namespace: '-all-' } : {})
+    : undefined;
 
   return (
     <Card
@@ -47,9 +52,23 @@ export const CountingCard = ({
       style={{
         width: extraInfo ? '325px' : '175px',
         maxWidth: extraInfo ? '325px' : '175px',
-        height: 'fit-content',
+        height: '100%',
         minHeight: '145px',
+        cursor: targetUrl ? 'pointer' : 'auto',
       }}
+      onClick={targetUrl ? () => navigate(targetUrl) : undefined}
+      onKeyDown={
+        targetUrl
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigate(targetUrl);
+              }
+            }
+          : undefined
+      }
+      tabIndex={targetUrl ? 0 : undefined}
+      role={targetUrl ? 'button' : undefined}
       header={
         <AnalyticalCardHeader
           titleText={title}
@@ -68,25 +87,13 @@ export const CountingCard = ({
         </AnalyticalCardHeader>
       }
     >
-      <div className="sap-margin-x-small sap-margin-bottom-small">
-        {resourceUrl && (
-          <Link
-            design="Default"
-            url={
-              isClusterResource
-                ? clusterUrl(resourceUrl)
-                : namespaceUrl(
-                    resourceUrl,
-                    allNamespaceURL ? { namespace: '-all-' } : {},
-                  )
-            }
-            className="counting-card__link"
-          >
-            {t('common.buttons.learn-more')}
-          </Link>
-        )}
-        {additionalContent && additionalContent}
-      </div>
+      {additionalContent ? (
+        <div className="sap-margin-x-small sap-margin-bottom-small">
+          {additionalContent}
+        </div>
+      ) : (
+        <div />
+      )}
     </Card>
   );
 };

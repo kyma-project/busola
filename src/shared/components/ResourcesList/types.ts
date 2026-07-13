@@ -16,6 +16,7 @@ export type CustomColumn = {
   value: (resource: any) => ReactNode | string;
   id?: string;
   visibility?: (resource: any) => boolean;
+  width?: string;
 };
 
 export type ResourcesListProps = {
@@ -67,6 +68,7 @@ export type ResourcesListProps = {
   loading?: boolean;
   error?: any;
   skipDataLoading?: boolean;
+  noRedirectAfterDelete?: boolean;
 };
 
 export type ResourceListRendererProps = Omit<ResourcesListProps, 'filter'> & {

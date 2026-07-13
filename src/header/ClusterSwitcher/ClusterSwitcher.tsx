@@ -1,20 +1,19 @@
-import { useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useMemo, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   Button,
-  List,
-  ListItemStandard,
-  Popover,
+  ButtonDomRef,
+  Menu,
+  MenuDomRef,
+  MenuItem,
 } from '@ui5/webcomponents-react';
 
 import { clustersAtom } from 'state/clustersAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
-import './ClusterSwitcher.scss';
 
 export function ClusterSwitcher() {
   const { t } = useTranslation();
@@ -27,6 +26,8 @@ export function ClusterSwitcher() {
   const setShowCompanion = useSetAtom(showKymaCompanionAtom);
 
   const [isOpen, setIsOpen] = useState(false);
+  const buttonRef = useRef<ButtonDomRef>(null);
+  const menuRef = useRef<MenuDomRef>(null);
 
   const isOnClustersPage = location.pathname === '/clusters';
 
@@ -63,50 +64,51 @@ export function ClusterSwitcher() {
   return (
     <div slot="content">
       <Button
+        ref={buttonRef}
         id="clusterSwitcherOpener"
         design="Transparent"
         endIcon="navigation-down-arrow"
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          // Menu renders its popover in shadow DOM and exposes no sizing API,
+          // so reach in and set minWidth to the opener's width before opening.
+          const popover =
+            menuRef.current?.shadowRoot?.querySelector<HTMLElement>(
+              'ui5-responsive-popover',
+            );
+          if (popover && buttonRef.current) {
+            popover.style.minWidth = `${buttonRef.current.offsetWidth}px`;
+          }
+          setIsOpen(true);
+        }}
       >
         {title}
       </Button>
-      {createPortal(
-        <Popover
-          id="cluster-switcher-popover"
-          opener="clusterSwitcherOpener"
-          open={isOpen}
-          onClose={() => setIsOpen(false)}
-          placement="Bottom"
-        >
-          <List
-            onItemClick={(e) => {
-              const item = e.detail.item;
-              const clusterName =
-                item.dataset.cluster || item.getAttribute('data-cluster');
-              if (clusterName) {
-                handleItemClick(clusterName);
-              }
-            }}
-          >
-            <ListItemStandard
-              data-cluster="all-clusters"
-              accessibleName={t('clusters.overview.title-all-clusters')}
-            >
-              {t('clusters.overview.title-all-clusters')}
-            </ListItemStandard>
-            {inactiveClusterNames.map((name) => (
-              <ListItemStandard
-                key={name}
-                data-cluster={name}
-                accessibleName={name}
-              >
-                {name}
-              </ListItemStandard>
-            ))}
-          </List>
-        </Popover>,
-        document.body,
-      )}
+      <Menu
+        ref={menuRef}
+        opener="clusterSwitcherOpener"
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        onItemClick={(e) => {
+          const clusterName = e.detail.item.dataset.cluster;
+          if (clusterName) {
+            handleItemClick(clusterName);
+          }
+        }}
+      >
+        <MenuItem
+          data-cluster="all-clusters"
+          text={t('clusters.overview.title-all-clusters')}
+          accessibleName={t('clusters.overview.title-all-clusters')}
+        />
+        {inactiveClusterNames.map((name) => (
+          <MenuItem
+            key={name}
+            data-cluster={name}
+            text={name}
+            accessibleName={name}
+          />
+        ))}
+      </Menu>
     </div>
   );
 }

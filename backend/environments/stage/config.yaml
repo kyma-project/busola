@@ -4,7 +4,10 @@ config:
       isEnabled: false
     GZIP:
       isEnabled: true
+    JWT_CHECK_CONFIG:
+      isEnabled: false
     KYMA_COMPANION:
       config:
         apiBaseUrl: 'https://companion.cp.stage.kyma.cloud.sap'
         tokenUrl: 'https://kymacanary.accounts.ondemand.com/oauth2/token'
+        issuerUrl: 'https://kymacanary.accounts.ondemand.com'

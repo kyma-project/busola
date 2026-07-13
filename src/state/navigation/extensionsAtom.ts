@@ -4,6 +4,7 @@ import { mapValues, partial } from 'lodash';
 import { useEffect } from 'react';
 import { ExtInjectionConfig, ExtResource } from '../types';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { unwrap } from 'jotai/utils';
 import { clusterAtom } from '../clusterAtom';
 import { authDataAtom } from '../authDataAtom';
 import { refreshExtenshionsAtom } from '../refreshExtenshionsAtom';
@@ -28,6 +29,11 @@ import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { CustomResourceDefinition } from 'command-pallette/CommandPalletteUI/handlers/crHandler';
 import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
 import { getConfigDir } from 'shared/utils/env';
+
+const permissionSetsAtomSync = unwrap(
+  permissionSetsAtom,
+  (prev) => prev ?? null,
+);
 
 /*
 the order of the overwrting extensions
@@ -68,19 +74,19 @@ interface ExtensionProps {
   kymaFetchFn: (_url: string, _options?: any) => Promise<Response>;
 }
 
-const isTheSameNameAndUrl = (
+export const isTheSameNameAndUrl = (
   firstCM: Partial<ExtResource>,
   secondCM: Partial<ExtResource>,
 ) =>
   firstCM?.general?.name === secondCM?.general?.name &&
   firstCM?.general?.urlPath === secondCM?.general?.urlPath;
 
-const isTheSameId = (
+export const isTheSameId = (
   firstCM: Partial<ExtResource>,
   secondCM: Partial<ExtResource>,
 ) => firstCM?.general?.id === secondCM?.general?.id;
 
-const convertYamlToObject = (
+export const convertYamlToObject = (
   yamlString: string,
 ): Record<string, any> | null => {
   try {
@@ -412,7 +418,7 @@ export const useGetExtensions = () => {
   const configuration = useAtomValue(configurationAtom);
   const features = configuration?.features;
   const openapiPathIdList = useAtomValue(openapiPathIdListAtom);
-  const permissionSet = useAtomValue(permissionSetsAtom);
+  const permissionSet = useAtomValue(permissionSetsAtomSync);
   const { namespace } = useUrl();
   const { isEnabled: isExtensibilityInjectionsEnabled } = useFeature(
     configFeaturesNames.EXTENSIBILITY_INJECTIONS,
@@ -479,6 +485,8 @@ export const useGetExtensions = () => {
         setWizard([]);
         return;
       }
+
+      if (!permissionSet) return;
 
       const configs = await getExtensions(
         fetchFn,

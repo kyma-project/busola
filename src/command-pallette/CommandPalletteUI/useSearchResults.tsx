@@ -11,7 +11,7 @@ import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { K8sResource } from 'types';
 import { clustersAtom } from 'state/clustersAtom';
 import { clusterAtom } from 'state/clusterAtom';
-import { availableNodesAtom } from 'state/navigation/availableNodesAtom';
+import { availableNodesAtomSync } from 'state/navigation/availableNodesAtom';
 import { CommandPaletteContext, HelpEntries, Result } from './types';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useNavigate, To } from 'react-router';
@@ -41,7 +41,7 @@ export function useSearchResults({
 }: useSearchResultsProps): SearchResults {
   const clusters = useAtomValue(clustersAtom);
   const cluster = useAtomValue(clusterAtom);
-  const availableNodes = useAtomValue(availableNodesAtom);
+  const availableNodes = useAtomValue(availableNodesAtomSync);
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
 
   const hiddenNamespaces = useGetHiddenNamespaces();

@@ -126,7 +126,6 @@ export function StringRenderer({
               <div className="bsl-col-md--1">
                 <Button
                   design="Transparent"
-                  icon={decoded ? 'hide' : 'show'}
                   onClick={() => setDecoded(!decoded)}
                 >
                   {decoded

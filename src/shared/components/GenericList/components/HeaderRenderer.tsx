@@ -10,6 +10,7 @@ import './HeaderRenderer.scss';
 type HeaderRendererProps = {
   actions: any[];
   headerRenderer: () => any;
+  columnWidths?: (string | undefined)[];
   disableHiding: boolean;
   noHideFields: string[];
   stickyHeader: boolean;
@@ -18,6 +19,7 @@ type HeaderRendererProps = {
 export const HeaderRenderer = ({
   actions,
   headerRenderer,
+  columnWidths,
   disableHiding = true,
   noHideFields,
   stickyHeader,
@@ -79,11 +81,12 @@ export const HeaderRenderer = ({
         {headerRenderer()?.map((h: any, index: number) => {
           return (
             <TableHeaderCell
-              key={typeof h === 'object' ? index : h}
+              key={`${index}-${typeof h === 'object' ? '' : h}`}
               popinText={h === 'Popin' ? t('common.headers.specification') : h}
               popinHidden={h !== 'Popin' && !noHideFields?.includes(h)}
               importance={checkCellImportance(h)}
               minWidth={setCellMinWidth(h)}
+              width={columnWidths?.[index]}
               aria-label={`${typeof h === 'object' ? index : h}-column`}
             >
               <Text>{h}</Text>

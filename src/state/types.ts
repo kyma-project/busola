@@ -5,8 +5,24 @@ export type Scope = 'namespace' | 'cluster';
 
 export interface ConfigFeature {
   isEnabled?: boolean;
-  stage?: 'PRIMARY' | 'SECONDARY';
   [key: string]: any;
+}
+
+export interface KymaCompanionJouleConfig {
+  url: string;
+  botname: string;
+}
+
+export interface KymaCompanionFeature extends ConfigFeature {
+  config?: {
+    feedbackLink?: string;
+    documentationLink?: string;
+    model?: string;
+    queryMaxTokens?: number;
+    apiBaseUrl?: string;
+  };
+  useJoule?: boolean;
+  jouleConfig?: KymaCompanionJouleConfig;
 }
 
 export type ConfigFeaturesNames =
@@ -29,7 +45,9 @@ export const configFeaturesNames = {
   CLUSTER_VALIDATION: 'CLUSTER_VALIDATION',
   FEEDBACK: 'FEEDBACK',
   SNOW: 'SNOW',
+  SSO_LOGIN: 'SSO_LOGIN',
   COMMUNITY_MODULES: 'COMMUNITY_MODULES',
+  TERMINAL: 'TERMINAL',
 } as const;
 
 export type ConfigFeatureList = {

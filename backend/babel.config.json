@@ -7,7 +7,7 @@
         "corejs": 3,
         "modules": "commonjs",
         "targets": {
-          "node": 12
+          "node": "24"
         }
       }
     ]

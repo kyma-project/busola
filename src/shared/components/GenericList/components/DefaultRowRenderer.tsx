@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import {
   TableCell,
   TableRow,
@@ -12,6 +13,7 @@ type DefaultRowRendererProps = {
   rowRenderer: JSX.Element[];
   isSelected?: boolean;
   displayArrow: boolean;
+  hasDetails?: boolean;
   enableColumnLayout: boolean;
 };
 
@@ -21,6 +23,7 @@ export const DefaultRowRenderer = ({
   rowRenderer,
   isSelected = false,
   displayArrow = false,
+  hasDetails = true,
   enableColumnLayout = false,
 }: DefaultRowRendererProps) => {
   const cells = rowRenderer.map((cell: JSX.Element | any, id: number) => {
@@ -49,7 +52,7 @@ export const DefaultRowRenderer = ({
   return (
     <TableRow
       className={isSelected ? 'row-selected' : 'row'}
-      interactive={enableColumnLayout}
+      interactive={enableColumnLayout && hasDetails}
       navigated={isSelected}
       actions={displayArrow && <TableRowActionNavigation />}
     >

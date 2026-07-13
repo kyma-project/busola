@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { Text, Panel, Title, FlexBox, Button } from '@ui5/webcomponents-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useAtom, useAtomValue } from 'jotai';
@@ -204,16 +205,11 @@ export default function CodePanel({
             {language.toLocaleUpperCase()}
           </Title>
           <FlexBox justifyContent="End" alignItems="Center">
-            <CopyButton
-              className="action-button"
-              contentToCopy={code}
-              iconOnly={false}
-            />
+            <CopyButton className="action-button" contentToCopy={code} />
             {withAction && doesNamespaceExist && link?.actionType === 'New' && (
               <Button
                 className="action-button"
                 design="Transparent"
-                icon="sys-add"
                 onClick={() =>
                   handlePlaceInEditor(link.address, code, link.actionType)
                 }
@@ -229,7 +225,6 @@ export default function CodePanel({
                 <Button
                   className="action-button"
                   design="Transparent"
-                  icon="fpa-icons/replace"
                   onClick={() =>
                     handleUpdateInEditor(link.address, code, link.actionType)
                   }

@@ -16,7 +16,7 @@ import { useUrl } from 'hooks/useUrl';
 
 import PersistentVolumesList from 'resources/PersistentVolumes/PersistentVolumeList';
 import PersistentVolumeClaimCreate from './PersistentVolumeClaimCreate';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import {
   PersistentVolumeClaim,
   ResourceDescription,
@@ -84,13 +84,12 @@ export const PVCConfiguration = (pvc: PersistentVolumeClaim) => {
   return (
     <Fragment key="pvc-configuration">
       {pvc.spec.resources && (
-        <UI5Panel
+        <UI5Card
           title={t('persistent-volume-claims.headers.resources.title')}
           accessibleName={t(
             'persistent-volume-claims.accessible-name.resources',
           )}
           keyComponent={'pvc-resources'}
-          key="pvc-resources"
         >
           <div
             className={
@@ -131,12 +130,11 @@ export const PVCConfiguration = (pvc: PersistentVolumeClaim) => {
               </div>
             )}
           </div>
-        </UI5Panel>
+        </UI5Card>
       )}
-      <UI5Panel
+      <UI5Card
         title={t('common.headers.specification')}
         keyComponent={'pvc-specification'}
-        key="pvc-specification"
       >
         <LayoutPanelRow
           key={pvc.spec?.volumeMode}
@@ -185,7 +183,7 @@ export const PVCConfiguration = (pvc: PersistentVolumeClaim) => {
             )
           }
         />
-      </UI5Panel>
+      </UI5Card>
     </Fragment>
   );
 };

@@ -59,7 +59,7 @@ context('Test Persistent Volume Claims', () => {
     cy.getMidColumn().contains(VOLUME_MODE_VALUE).should('be.visible');
 
     cy.getMidColumn()
-      .contains('ui5-panel', Cypress.env('STORAGE_CLASS_NAME'))
+      .contains('ui5-card', Cypress.env('STORAGE_CLASS_NAME'))
       .should('be.visible');
 
     cy.getMidColumn()

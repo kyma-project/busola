@@ -49,7 +49,6 @@ export function AllNamespacesDetails() {
   const headerActions = (
     <>
       <ToolbarButton
-        icon="add"
         onClick={() => {
           setShowAdd(true);
         }}

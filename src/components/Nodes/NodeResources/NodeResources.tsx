@@ -1,9 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
-import {
-  bytesToHumanReadable,
-  cpusToHumanReadable,
-} from 'shared/helpers/resources';
+import { ResourceRadialChart } from 'shared/components/ResourceRadialChart/ResourceRadialChart';
 
 interface ResourceMetric {
   usage: number;
@@ -34,110 +30,61 @@ export function NodeResources({ metrics, resources }: NodeResourcesProps) {
 
   return cpu && memory ? (
     <>
-      <UI5RadialChart
+      <ResourceRadialChart
         tooltipInfo={t('cluster-overview.statistics.cpu-usage-tooltip')}
         color="var(--sapChart_OrderedColor_5)"
-        value={
-          cpusToHumanReadable(cpu.usage, {
-            unit: 'm',
-          }).value
-        }
-        max={cpusToHumanReadable(cpu.capacity, { unit: 'm' }).value}
+        value={cpu.usage}
+        max={cpu.capacity}
         titleText={t('cluster-overview.statistics.cpu-usage')}
-        additionalInfo={`${
-          cpusToHumanReadable(cpu.usage, {
-            unit: 'm',
-          }).string
-        } / ${cpusToHumanReadable(cpu.capacity, { unit: 'm' }).string}`}
+        valueType="cpu"
         accessibleName={t('cluster-overview.statistics.cpu-usage')}
       />
-      <UI5RadialChart
+      <ResourceRadialChart
         tooltipInfo={t('cluster-overview.statistics.memory-usage-tooltip')}
         color="var(--sapChart_OrderedColor_6)"
-        value={bytesToHumanReadable(memory.usage, { unit: 'Mi' }).value}
-        max={bytesToHumanReadable(memory.capacity, { unit: 'Mi' }).value}
+        value={memory.usage}
+        max={memory.capacity}
+        valueType="bytes"
         titleText={t('cluster-overview.statistics.memory-usage')}
-        additionalInfo={`${bytesToHumanReadable(memory.usage).string} / ${
-          bytesToHumanReadable(memory.capacity).string
-        }`}
+        unit="Mi"
         accessibleName={t('cluster-overview.statistics.memory-usage')}
       />
-      <UI5RadialChart
+      <ResourceRadialChart
         tooltipInfo={t('cluster-overview.statistics.cpu-requests-tooltip')}
         color="var(--sapChart_OrderedColor_5)"
-        value={
-          cpusToHumanReadable(resources?.requests?.cpu, {
-            unit: 'm',
-          }).value
-        }
-        max={
-          cpusToHumanReadable(cpu.capacity, {
-            unit: 'm',
-          }).value
-        }
+        value={resources?.requests?.cpu || 0}
+        max={cpu.capacity}
+        valueType="cpu"
         titleText={t('cluster-overview.statistics.cpu-requests')}
-        additionalInfo={`${
-          cpusToHumanReadable(resources?.requests?.cpu, {
-            unit: 'm',
-          }).string
-        } / ${
-          cpusToHumanReadable(cpu.capacity, {
-            unit: 'm',
-          }).string
-        }`}
         accessibleName={t('cluster-overview.statistics.cpu-requests')}
       />
-      <UI5RadialChart
+      <ResourceRadialChart
         tooltipInfo={t('cluster-overview.statistics.memory-requests-tooltip')}
         color="var(--sapChart_OrderedColor_6)"
-        value={
-          bytesToHumanReadable(resources?.requests?.memory, { unit: 'Gi' })
-            .value
-        }
-        max={bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).value}
+        value={resources?.requests?.memory || 0}
+        max={memory.capacity}
+        valueType="bytes"
+        unit="Gi"
         titleText={t('cluster-overview.statistics.memory-requests')}
-        additionalInfo={`${
-          bytesToHumanReadable(resources?.requests?.memory, { unit: 'Gi' })
-            .string
-        } / ${bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).string}`}
         accessibleName={t('cluster-overview.statistics.memory-requests')}
       />
-      <UI5RadialChart
+      <ResourceRadialChart
         tooltipInfo={t('cluster-overview.statistics.cpu-limits-tooltip')}
         color="var(--sapChart_OrderedColor_5)"
-        value={
-          cpusToHumanReadable(resources?.limits?.cpu, {
-            unit: 'm',
-          }).value
-        }
-        max={
-          cpusToHumanReadable(cpu.capacity, {
-            unit: 'm',
-          }).value
-        }
+        value={resources?.limits?.cpu || 0}
+        max={cpu.capacity}
+        valueType="cpu"
         titleText={t('cluster-overview.statistics.cpu-limits')}
-        additionalInfo={`${
-          cpusToHumanReadable(resources?.limits?.cpu, {
-            unit: 'm',
-          }).string
-        } / ${
-          cpusToHumanReadable(cpu.capacity, {
-            unit: 'm',
-          }).string
-        }`}
         accessibleName={t('cluster-overview.statistics.cpu-limits')}
       />
-      <UI5RadialChart
+      <ResourceRadialChart
         tooltipInfo={t('cluster-overview.statistics.memory-limits-tooltip')}
         color="var(--sapChart_OrderedColor_6)"
-        value={
-          bytesToHumanReadable(resources?.limits?.memory, { unit: 'Gi' }).value
-        }
-        max={bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).value}
+        value={resources?.limits?.memory || 0}
+        max={memory.capacity}
+        valueType="bytes"
+        unit="Gi"
         titleText={t('cluster-overview.statistics.memory-limits')}
-        additionalInfo={`${
-          bytesToHumanReadable(resources?.limits?.memory, { unit: 'Gi' }).string
-        } / ${bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).string}`}
         accessibleName={t('cluster-overview.statistics.memory-limits')}
       />
     </>

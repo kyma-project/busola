@@ -110,7 +110,7 @@ context('Test Community Modules views', () => {
       .click()
       .clear()
       .type(
-        'https://raw.githubusercontent.com/kyma-project/busola/refs/heads/main/tests/integration/fixtures/community-modules/busola-0-12.yaml',
+        'https://raw.githubusercontent.com/kyma-project/busola/refs/heads/main/tests/integration/fixtures/community-modules/busola-1-0-32.yaml',
       );
 
     // Check if error 'all modules installed' is displayed
@@ -125,11 +125,11 @@ context('Test Community Modules views', () => {
     cy.getLeftNav().contains('Cluster Overview').click();
 
     cy.contains('ui5-card', 'Installed Modules')
-      .contains('1')
+      .contains('0')
       .should('be.visible');
 
     cy.contains('ui5-card', 'Community Modules')
-      .contains('1')
+      .contains('0')
       .should('be.visible');
 
     cy.get('ui5-card').contains('Modify Modules').click();
@@ -150,6 +150,84 @@ context('Test Community Modules views', () => {
       .should('be.visible');
   });
 
+  // The following tests that include opening of module details can be restored after fixing the modules' statuses in tests
+  // That would require sending a request to patch the status at the beginning of the tests
+  // Currently the status is constantly 'Unknown' which makes the module row disabled for clicking
+
+  // it('Opens module details with the correct resource when a row is clicked', () => {
+  //   cy.wait(1000);
+
+  //   cy.get('.community-modules-list')
+  //     .find('ui5-table-row')
+  //     .contains('busola')
+  //     .click();
+
+  //   cy.getMidColumn().should('be.visible');
+  //   cy.getMidColumn().contains('Kyma').should('be.visible');
+  //   cy.getMidColumn().contains('default').should('be.visible');
+
+  //   cy.closeMidColumn();
+  // });
+
+  // it('Retains row highlight and details after refresh', () => {
+  //   cy.get('.community-modules-list')
+  //     .find('ui5-table-row')
+  //     .contains('busola')
+  //     .click();
+
+  //   cy.getMidColumn().should('be.visible');
+
+  //   cy.reload();
+  //   cy.wait(2000);
+
+  //   cy.getMidColumn().should('be.visible');
+  //   cy.get('.community-modules-list')
+  //     .find('ui5-table-row.row-selected')
+  //     .contains('busola')
+  //     .should('be.visible');
+
+  //   cy.closeMidColumn();
+  // });
+
+  // it('Edit inside module details keeps the list in View mode', () => {
+  //   cy.get('.community-modules-list')
+  //     .find('ui5-table-row')
+  //     .contains('busola')
+  //     .click();
+
+  //   cy.getMidColumn().should('be.visible');
+  //   cy.getMidColumn().inspectTab('Edit');
+
+  //   cy.get('.community-modules-list')
+  //     .find('ui5-table-row')
+  //     .contains('busola')
+  //     .should('be.visible');
+
+  //   cy.closeMidColumn();
+  // });
+
+  // it('Entering Edit mode on the list closes open details', () => {
+  //   cy.get('.community-modules-list')
+  //     .find('ui5-table-row')
+  //     .contains('busola')
+  //     .click();
+
+  //   cy.getMidColumn().should('be.visible');
+
+  //   // Pick the outer page's tabcontainer (first one), not the midColumn's.
+  //   cy.get('.kyma-modules ui5-tabcontainer')
+  //     .first()
+  //     .find('[role="tablist"]')
+  //     .find('[role="tab"]')
+  //     .contains('Edit')
+  //     .should('be.visible')
+  //     .click();
+
+  //   cy.getMidColumn().should('not.be.visible');
+
+  //   cy.inspectTab('View');
+  // });
+
   it('Test changing Community Module version', () => {
     cy.inspectTab('Edit');
 
@@ -161,7 +239,7 @@ context('Test Community Modules views', () => {
 
     cy.wait(500);
 
-    cy.get('ui5-option:visible').contains('0.0.12').click();
+    cy.get('ui5-option:visible').contains('1.0.32').click();
 
     // TODO: This wait allows 'community modules add/edit/delete' to download needed resources to apply from backend.
     // The download is initiated when user mark module to install and then when user click delete, it deleted what is was able to download
@@ -183,7 +261,7 @@ context('Test Community Modules views', () => {
 
     cy.get('.community-modules-list')
       .find('ui5-table-row')
-      .contains('0.0.12')
+      .contains('1.0.32')
       .should('be.visible');
   });
 

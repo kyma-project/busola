@@ -7,7 +7,7 @@ import { Button } from '@ui5/webcomponents-react';
 import { Labels } from 'shared/components/Labels/Labels';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { K8sResource } from 'types';
-import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import pluralize from 'pluralize';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
@@ -23,7 +23,7 @@ export function DetailsCard({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { clusterUrl } = useUrl();
-  const nodes = useAtomValue(allNodesAtom);
+  const nodes = useAtomValue(allNodesAtomSync);
   const [, setLayoutColumn] = useAtom(columnLayoutAtom);
 
   return (
@@ -62,14 +62,28 @@ export function DetailsCard({
 
             navigate(
               clusterUrl(
-                `${namespacePart}${node.resourceType}/${resource.metadata.name}`,
+                `${namespacePart}${node.resourceType}/${resource.metadata.name}?layout=TwoColumnsMidExpanded`,
               ),
             );
 
             setLayoutColumn({
-              layout: 'OneColumn',
-              startColumn: null,
-              midColumn: null,
+              layout: 'TwoColumnsMidExpanded',
+              startColumn: {
+                resourceName: null,
+                resourceType: node.resourceType,
+                rawResourceTypeName: node.resourceTypeCased,
+                namespaceId: resource.metadata.namespace,
+                apiGroup: node.apiGroup,
+                apiVersion: node.apiVersion,
+              },
+              midColumn: {
+                resourceName: resource.metadata.name,
+                resourceType: node.resourceType,
+                rawResourceTypeName: node.resourceTypeCased,
+                namespaceId: resource.metadata.namespace,
+                apiGroup: node.apiGroup,
+                apiVersion: node.apiVersion,
+              },
               endColumn: null,
             });
           }}

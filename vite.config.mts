@@ -5,6 +5,7 @@ import svgr from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import eslint from '@nabla/vite-plugin-eslint';
+import istanbul from 'vite-plugin-istanbul';
 import fs from 'fs';
 import { glob } from 'glob';
 
@@ -26,6 +27,7 @@ export default defineConfig({
       '^/backend/.*': {
         target: 'http://localhost:3001',
         changeOrigin: true,
+        ws: true,
       },
       '/proxy': {
         target: 'http://localhost:3001',
@@ -52,6 +54,13 @@ export default defineConfig({
       ],
     }),
     eslint(),
+    process.env.CYPRESS_COVERAGE === 'true' &&
+      istanbul({
+        include: 'src/**',
+        exclude: ['**/*.cy.{ts,tsx}', 'src/setupTests.js'],
+        extension: ['.ts', '.tsx', '.js', '.jsx'],
+        requireEnv: false,
+      }),
   ],
   worker: {
     plugins: () => [viteTsconfigPaths()],
@@ -69,7 +78,7 @@ export default defineConfig({
   },
 });
 
-function mergeYamlFiles(filesPath) {
+function mergeYamlFiles(filesPath: string) {
   let mergedYamlContent = '';
 
   const files = glob.sync(filesPath);

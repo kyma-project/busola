@@ -1,0 +1,24 @@
+.update-module-dialog {
+  .module-versions-container {
+    display: grid;
+    grid-template-columns: max-content max-content max-content;
+    column-gap: 0.25rem;
+    row-gap: 0.25rem;
+    align-items: center;
+
+    .release-notes-link {
+      margin-left: 0.25rem;
+    }
+  }
+
+  ui5-text {
+    display: grid !important;
+    text-align: start;
+  }
+}
+
+.update-all-modules-dialog {
+  &::part(content) {
+    padding: 0 !important;
+  }
+}

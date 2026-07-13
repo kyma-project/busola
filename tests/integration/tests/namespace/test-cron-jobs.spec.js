@@ -89,7 +89,11 @@ context('Test Cron Jobs', () => {
   it('Checking details', () => {
     cy.getMidColumn().contains('ui5-title', CRON_JOB_NAME).should('be.visible');
 
-    cy.getMidColumn().contains('0 0 1 * *').should('be.visible');
+    cy.getMidColumn()
+      .contains('0 0 1 * *')
+      .should('be.visible')
+      .and('have.attr', 'title')
+      .and('match', /12:00 AM/i);
   });
 
   it('Edit Cron Job', () => {
@@ -151,7 +155,11 @@ context('Test Cron Jobs', () => {
 
     cy.getMidColumn().contains('ui5-title', CRON_JOB_NAME).should('be.visible');
 
-    cy.getMidColumn().contains('0 * * * *').should('be.visible');
+    cy.getMidColumn()
+      .contains('0 * * * *')
+      .should('be.visible')
+      .and('have.attr', 'title')
+      .and('match', /hour/i);
   });
 
   it('Inspect list', () => {

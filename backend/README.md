@@ -49,4 +49,4 @@ Backend feature flags include:
 - **KYMA_COMPANION** - Kyma Companion AI assistant configuration
 - **ALLOW_PRIVATE_IPS** - Control private IP access for local development (default: disabled, secure)
 
-**For detailed configuration, defaults, and security considerations, see [docs/features.md](../docs/features.md#features-list-for-backend).**
+**For detailed configuration, defaults, and security considerations, see [docs/features.md](../docs//user//technical-reference/feature-flags.md#configurable-flags-for-backend).**

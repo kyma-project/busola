@@ -12,7 +12,7 @@ import { createContainerTemplate, createReplicaSetTemplate } from './templates';
 interface ReplicaSetCreateProps {
   resourceUrl: string;
   resource: any;
-  formElementRef: RefObject<HTMLFormElement>;
+  formElementRef: RefObject<HTMLFormElement | null>;
   namespace: string;
   onChange: () => void;
   setCustomValid: (valid: boolean) => void;

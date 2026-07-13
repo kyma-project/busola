@@ -7,6 +7,24 @@
 To expose Busola, you can use [APIRule](https://github.com/kyma-project/busola/tree/main/resources/istio), [Ingress](https://github.com/kyma-project/busola/tree/main/resources/ingress), or create your own exposing mechanism.
 For more details about environment configuration, see [Environment-Specific Settings](../user/technical-reference/configuration.md#environment-specific-settings).
 
+### Per-IP Rate Limiting
+
+For self-hosted deployments, there is no edge-level protection (such as Cloud Armor) in front of Busola. The shipped Ingress configuration includes per-IP rate limiting as a default security measure, but you can configure a different approach or skip it entirely.
+
+#### ingress-nginx (default)
+
+The shipped `resources/ingress/ingress.yaml` includes per-IP rate-limit annotations for `ingress-nginx`: 50 RPS sustained (~250 burst) and 50 concurrent connections per source IP. These defaults protect the instance out of the box. To tune them, edit the values directly in `resources/ingress/ingress.yaml`.
+
+If `ingress-nginx` is installed in your cluster but is not the default IngressClass, the annotations will have no effect. In that case, add `ingressClassName: nginx` to the Ingress manifest so the controller picks them up.
+
+#### Other Ingress Controllers (Traefik, HAProxy, etc.)
+
+The nginx-specific annotations are silently ignored by other controllers. If you use a different ingress controller, configure equivalent per-IP rate limits at your own edge.
+
+#### APIRule (Istio) Deployments
+
+Per-IP rate limiting is not configured by default for APIRule-based deployments. APIRule v2alpha1 has no native rate-limit field. To add per-IP throttling, configure an [`EnvoyFilter`](https://istio.io/latest/docs/reference/config/networking/envoy-filter/) at your Istio gateway, or rely on an upstream web application firewall (WAF).
+
 ## Deploying Busola in a Kubernetes Cluster
 
 Follow these steps to deploy Busola in a Kubernetes cluster:

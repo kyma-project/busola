@@ -4,7 +4,7 @@ import { ReleaseDataPanel } from './ReleaseDataPanel';
 import { ChartContent } from './ChartContent';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
-import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 export type Release = {
   name?: string;
@@ -34,7 +34,7 @@ export function HelmReleaseData({
 
   if (!release) {
     return (
-      <UI5Panel
+      <UI5Card
         accessibleName={t('helm-releases.accessible-name.cannot-decode')}
         title={t('helm-releases.messages.cannot-decode')}
         keyComponent="helm-release-data"

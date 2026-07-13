@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 // Mock config before imports to ensure default behavior
-vi.mock('./config.js', () => ({
+vi.mock('./src/config/config.js', () => ({
   default: {
     features: {
       ALLOW_PRIVATE_IPS: {
@@ -16,6 +16,7 @@ import {
   localIpFilter,
   pathInvalidCharacterFilter,
   pathWhitelistFilter,
+  portFilter,
 } from './request-filters.js';
 
 describe('invalidRequestMethodFilter tests', () => {
@@ -255,7 +256,7 @@ describe('localIpFilter with ALLOW_PRIVATE_IPS feature flag', () => {
   });
 
   test('should allow private IPs when feature flag is enabled', async () => {
-    vi.doMock('./config.js', () => ({
+    vi.doMock('./src/config/config.js', () => ({
       default: {
         features: {
           ALLOW_PRIVATE_IPS: {
@@ -277,7 +278,7 @@ describe('localIpFilter with ALLOW_PRIVATE_IPS feature flag', () => {
   });
 
   test('should block private IPs when feature flag is disabled', async () => {
-    vi.doMock('./config.js', () => ({
+    vi.doMock('./src/config/config.js', () => ({
       default: {
         features: {
           ALLOW_PRIVATE_IPS: {
@@ -301,7 +302,7 @@ describe('localIpFilter with ALLOW_PRIVATE_IPS feature flag', () => {
   });
 
   test('should block private IPs when feature flag is missing (secure default)', async () => {
-    vi.doMock('./config.js', () => ({
+    vi.doMock('./src/config/config.js', () => ({
       default: {
         features: {},
       },
@@ -321,7 +322,7 @@ describe('localIpFilter with ALLOW_PRIVATE_IPS feature flag', () => {
   });
 
   test('should allow .cluster.local domains when feature flag is enabled', async () => {
-    vi.doMock('./config.js', () => ({
+    vi.doMock('./src/config/config.js', () => ({
       default: {
         features: {
           ALLOW_PRIVATE_IPS: {
@@ -343,7 +344,7 @@ describe('localIpFilter with ALLOW_PRIVATE_IPS feature flag', () => {
   });
 
   test('should block .cluster.local domains when feature flag is disabled', async () => {
-    vi.doMock('./config.js', () => ({
+    vi.doMock('./src/config/config.js', () => ({
       default: {
         features: {},
       },
@@ -361,4 +362,71 @@ describe('localIpFilter with ALLOW_PRIVATE_IPS feature flag', () => {
       'Local IP addresses are not allowed.',
     );
   });
+});
+
+describe('portFilter tests', () => {
+  const successTestCases = [
+    {
+      description: 'should allow port 443 (standard HTTPS port)',
+      headersData: { targetApiServer: { port: '443' } },
+    },
+    {
+      description: 'should allow port 6443 (common Kubernetes API server port)',
+      headersData: { targetApiServer: { port: '6443' } },
+    },
+    {
+      description: 'should allow port 8443',
+      headersData: { targetApiServer: { port: '8443' } },
+    },
+    {
+      description: 'should allow port 80 (standard HTTP port)',
+      headersData: { targetApiServer: { port: '80' } },
+    },
+    {
+      description: 'should allow port 1 (minimum valid port)',
+      headersData: { targetApiServer: { port: '1' } },
+    },
+    {
+      description: 'should allow port 65535 (maximum valid port)',
+      headersData: { targetApiServer: { port: '65535' } },
+    },
+    {
+      description: 'should allow empty port (protocol default will be used)',
+      headersData: { targetApiServer: { port: '' } },
+    },
+  ];
+
+  const errorTestCases = [
+    {
+      description: 'should throw an error for port 0',
+      headersData: { targetApiServer: { port: '0' } },
+      expectedError: 'Port 0 is not a valid port number.',
+    },
+    {
+      description: 'should throw an error for port 65536 (above max)',
+      headersData: { targetApiServer: { port: '65536' } },
+      expectedError: 'Port 65536 is not a valid port number.',
+    },
+    {
+      description: 'should throw an error for a negative port',
+      headersData: { targetApiServer: { port: '-1' } },
+      expectedError: 'Port -1 is not a valid port number.',
+    },
+    {
+      description: 'should throw an error for a non-numeric port',
+      headersData: { targetApiServer: { port: 'abc' } },
+      expectedError: 'Port abc is not a valid port number.',
+    },
+  ];
+
+  test.each(successTestCases)('$description', ({ headersData }) => {
+    expect(() => portFilter({}, headersData)).not.toThrow();
+  });
+
+  test.each(errorTestCases)(
+    '$description',
+    ({ headersData, expectedError }) => {
+      expect(() => portFilter({}, headersData)).toThrowError(expectedError);
+    },
+  );
 });

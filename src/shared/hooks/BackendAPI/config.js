@@ -1,7 +1,7 @@
 import { getReasonPhrase } from 'http-status-codes';
 
 export class HttpError extends Error {
-  constructor(message, status, code) {
+  constructor(message, status, code, errorDetails) {
     if ([401, 403].includes(status)) {
       super('You are not allowed to perform this operation');
     } else {
@@ -10,6 +10,7 @@ export class HttpError extends Error {
     this.code = code;
     this.status = status;
     this.originalMessage = message;
+    this.errorDetails = errorDetails;
   }
 }
 
@@ -20,6 +21,7 @@ export async function throwHttpError(response) {
       parsed.message || 'Unknown error',
       parsed.status,
       parsed.code || response.status,
+      parsed.details || null,
     );
   } catch (e) {
     console.warn('Failed to parse error response as JSON:', e);
@@ -32,7 +34,7 @@ export async function throwHttpError(response) {
       const errorMessage =
         message || `${status} ${statusText || getReasonPhrase(status)}`;
 
-      // When response status is 404 and boyd is empty it means that resoruce definition is not registered in k8s
+      // When response status is 404 and body is empty it means that resource definition is not registered in k8s
       let textStatus = '';
       if (response.status === 404) {
         textStatus = 'Definition not found';

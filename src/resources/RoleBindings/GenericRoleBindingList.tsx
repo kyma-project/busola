@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from 'shared/components/Link/Link';
 
@@ -31,9 +30,7 @@ export function GenericRoleBindingList({
   const getSubject = (subject: any) => (
     <div key={subject.kind + ' ' + subject.name}>
       {subject.name}{' '}
-      <Tooltip delay={[0, 0]} content={subject.kind}>
-        ({subject.kind?.slice(0, 1)})
-      </Tooltip>
+      <span title={subject.kind}>({subject.kind?.slice(0, 1)})</span>
     </div>
   );
 
@@ -45,11 +42,8 @@ export function GenericRoleBindingList({
         })}
       >
         {subject.name}
-      </Link>
-      <Tooltip delay={[0, 0]} content={subject.kind}>
-        {' '}
-        (SA)
-      </Tooltip>
+      </Link>{' '}
+      <span title={subject.kind}>(SA)</span>
     </div>
   );
 

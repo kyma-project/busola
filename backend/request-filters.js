@@ -1,6 +1,6 @@
 import net from 'net';
 import { isPrivateIp } from './utils/network-utils.js';
-import config from './config.js';
+import config from './src/config/config.js';
 
 export const localIpFilter = (_req, headersData) => {
   const hostname = headersData.targetApiServer.hostname || '';
@@ -81,9 +81,24 @@ export const invalidRequestMethodFilter = (req) => {
   }
 };
 
+export const portFilter = (_req, headersData) => {
+  const port = headersData.targetApiServer.port;
+
+  if (!port) {
+    // no explicit port — protocol default will be used, which is always valid
+    return;
+  }
+
+  const portNumber = Number(port);
+  if (!Number.isInteger(portNumber) || portNumber < 1 || portNumber > 65535) {
+    throw Error(`Port ${port} is not a valid port number.`);
+  }
+};
+
 export const filters = [
   invalidRequestMethodFilter,
   localIpFilter,
   pathWhitelistFilter,
   pathInvalidCharacterFilter,
+  portFilter,
 ];

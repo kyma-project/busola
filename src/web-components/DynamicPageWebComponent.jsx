@@ -12,9 +12,9 @@ const webComponentPropsAtom = atom({});
 webComponentPropsAtom.debugLabel = 'webComponentPropsAtom';
 
 const DynamicPageWrapper = () => {
-  const props = useAtomValue(webComponentPropsAtom);
+  const webComponentProps = useAtomValue(webComponentPropsAtom);
 
-  const { inlineEditForm } = props;
+  const { inlineEditForm } = webComponentProps;
 
   const transformedForm = useCallback(
     (stickyHeaderHeight) => {
@@ -29,7 +29,7 @@ const DynamicPageWrapper = () => {
   return (
     <Suspense fallback={<Spinner />}>
       <DynamicPageComponent
-        {...props}
+        {...webComponentProps}
         inlineEditForm={inlineEditForm ? transformedForm : undefined}
       />
     </Suspense>

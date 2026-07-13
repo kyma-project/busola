@@ -17,12 +17,14 @@ You can distinguish the following widget types:
   - [`TimeFromNow`](#timefromnow)
 - [Block widgets](#block-widgets) for more complex layouts used only in **data.details.body**
   - [`Alert`](#alert)
+  - [`Card`](#card)
   - [`CodeViewer`](#codeviewer)
   - [`Columns`](#columns)
   - [`EventList`](#eventlist)
   - [`FeatureCard`](#featuredcard)
   - [`Panel`](#panel)
   - [`Plain`](#plain)
+  - [`Section`](#section)
   - [`ResourceList`](#resourcelist)
   - [`ResourceRefs`](#resourcerefs)
   - [`StatisticalCard`](#statisticalcard)
@@ -43,7 +45,7 @@ These are the available `Badge` widget parameters:
 | --------------- | -------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **placeholder** | No       | string                                         | Changes the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.                                                                                                                                                                                                                                                                                                                                                                                                               |
 | **highlights**  | No       |                                                | A map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a [JSONata](100-jsonata.md) rule. Allowed keys are `informative`, `positive`, `warning` and `critical`. <br><br> When no highlights are provided, the following values are automatically handled: <br> - rendered as informative: `initial`, `pending`, `available`, `released`. <br> - rendered as positive: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`. <br> - rendered as warning: `unknown`, `warning`. <br> - rendered as critical: `error`, `failure`, `invalid`. |
-| **description** | No       | string or [JSONata](100-jsonata.md) expression | Used to fetch additional information that will be displayed in a tooltip after clicking on the badge.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| **description** | No       | string or [JSONata](100-jsonata.md) expression | Used to fetch additional information that will be displayed in a tooltip after clicking on the badge. It can contain links.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | **copyable**    | No       | boolean                                        | A flag indicating if the **Copy to clipboard** button should be displayed next to the widget. By default set to `false`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
 See the following example:
@@ -61,6 +63,21 @@ See the following example:
 ```
 
 <img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="50%">
+
+The following is an example with a link in the description:
+
+```yaml
+- source: status.value
+  widget: Badge
+  placeholder: '-'
+  highlights:
+    positive:
+      - Running
+      - ok
+    critical: $item < 0
+  description: For more information about the status, see {{[here](https://help.sap.com)}}
+```
+
 <br/><br/>
 
 ### `ControlledBy`
@@ -385,6 +402,31 @@ See the following example:
 
 <img src="./assets/display-widgets/Alert.png" alt="Example of a text widget" width="70%">
 
+### `Card`
+
+The `Card` widgets render children in a card with its own title, based on its `source` or `name`. The `description` displays custom text (if provided) next to the header after pressing the hint button. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used.
+When the source resolves to an array, all items are rendered inside a single card.
+
+See the following example:
+
+```yaml
+- name: included.domains
+  description: To check the extensibility documentation go to the {{[Busola page](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}.
+  widget: Card
+  source: spec.domains.include
+  children:
+    - source: $item
+      name: included.domains
+- name: excluded.domains
+  widget: Card
+  source: spec.domains.exclude
+  children:
+    - source: $item
+      name: excluded.domains
+```
+
+<img src="./assets/display-widgets/Card.png" alt="Example of a card widget" width="50%">
+
 ### `CodeViewer`
 
 The `CodeViewer` widgets display values using a read-only code editor.
@@ -522,12 +564,12 @@ The `Panel` widgets render an object as a separate panel with its own title (bas
 
 These are the available `Panel` widget parameters:
 
-| Parameter          | Required | Type    | Description                                                                                                                                                                                                                 |
-| ------------------ | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **header**         | No       | array   | Allows you to, for example, display labels in the panel header.                                                                                                                                                             |
-| **disablePadding** | No       | boolean | Disables the padding inside the panel body.                                                                                                                                                                                 |
-| **description**    | No       | string  | Displays a custom description on the resource list page. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used. |
-| **decodable**      | No       | boolean | Decodes the values of all the children using base64 - must be used together with the **source** parameter.                                                                                                                  |
+| Parameter          | Required | Type    | Description                                                                                                                                                                                                                                                |
+| ------------------ | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **header**         | No       | array   | Allows you to, for example, display labels in the panel header.                                                                                                                                                                                            |
+| **disablePadding** | No       | boolean | Disables the padding inside the panel body.                                                                                                                                                                                                                |
+| **description**    | No       | string  | Displays a custom description on the resource list page after pressing the hint button. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used. |
+| **decodable**      | No       | boolean | Decodes the values of all the children using base64 - must be used together with the **source** parameter.                                                                                                                                                 |
 
 See the following example:
 
@@ -572,6 +614,41 @@ See the following example:
 ### `Plain`
 
 The `Plain` widgets render all contents of an object or list sequentially without any decorations. This is the default behavior for all objects and arrays.
+
+### `Section`
+
+The `Section` widget groups child widgets under a named heading, providing visual separation between distinct content areas on a resource detail page.
+
+Sections are separated from each other by 2rem of vertical space. Elements within a section are separated by 1rem.
+
+These are the available `Section` widget parameters:
+
+| Parameter    | Required | Type      | Description                                     |
+| ------------ | -------- | --------- | ----------------------------------------------- |
+| **name**     | **Yes**  | string    | The section heading. Supports translation keys. |
+| **children** | No       | []objects | Widgets to render inside the section body.      |
+
+See the following example:
+
+```yaml
+- name: Specification
+  widget: Section
+  children:
+    - name: Min Replicas
+      source: spec.minReplicas
+    - name: Current Replicas
+      source: status.currentReplicas
+- name: Secrets
+  widget: Section
+  children:
+    - source: spec.secretName
+      widget: ResourceLink
+      name: Secret
+      resource:
+        name: spec.secretName
+        namespace: $root.metadata.namespace
+        kind: "'Secret'"
+```
 
 ### `ResourceList`
 

@@ -11,15 +11,22 @@ on:
       - 'package.json'
       - 'cypress/**'
       - 'cypress.config.component.ts'
+  merge_group:
   workflow_call:
     inputs:
       trigger_env:
         type: string
         required: false
 
+concurrency:
+  group: pull-unit-tests-${{ github.workflow_ref }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   run-unit-and-component-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: github.event.pull_request.draft == false
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
@@ -42,8 +49,56 @@ jobs:
       - name: run_unit_tests
         shell: bash
         run: |
-          npm run test
+          npm run test:coverage
       - name: run_component_tests
         shell: bash
         run: |
           npm run component-test-headless
+      - name: merge_coverage_reports
+        if: success()
+        shell: bash
+        run: |
+          npm run coverage:merge
+      - name: Upload unit coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          file: ./coverage/unit/lcov.info
+          flag-name: unit
+          parallel: true
+          fail-on-error: false
+      - name: Upload component coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          file: ./coverage/component/lcov.info
+          flag-name: component
+          parallel: true
+          fail-on-error: false
+      - name: Finalize Coveralls coverage
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true
+          fail-on-error: false
+      - name: Upload coverage report as artifact
+        uses: actions/upload-artifact@v4
+        if: success() || failure()
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14
+      - name: Generate summary
+        if: success() || failure()
+        run: |
+          pct() {
+            local file=$1
+            [ -f "$file" ] || { echo "N/A"; return; }
+            local lf=$(grep -h '^LF:' "$file" | awk -F: '{s+=$2} END {print s}')
+            local lh=$(grep -h '^LH:' "$file" | awk -F: '{s+=$2} END {print s}')
+            [ "$lf" -gt 0 ] && echo "scale=1; $lh * 100 / $lf" | bc || echo "N/A"
+          }
+          {
+            echo '# PR Unit and Component Tests'
+            echo '## Coverage'
+            echo "- Unit: $(pct coverage/unit/lcov.info)% — available in artifacts"
+            echo "- Component: $(pct coverage/component/lcov.info)% — available in artifacts"
+            echo "- Merged: $(pct coverage/merged/lcov.info)% — available in artifacts"
+          } >> $GITHUB_STEP_SUMMARY

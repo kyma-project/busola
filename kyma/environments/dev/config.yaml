@@ -41,7 +41,6 @@ config:
         dsn: https://016845744e4741cc9bea0caaabc0fe87@o399001.ingest.sentry.io/5953495
     EXTERNAL_NODES:
       isEnabled: true
-      stage: SECONDARY
     HIDDEN_NAMESPACES:
       isEnabled: true
       config:
@@ -65,10 +64,10 @@ config:
         documentationLink: https://help.sap.com/docs/btp/sap-business-technology-platform-internal/kyma-companion?locale=en-US&version=Internal&state=DRAFT
         model: 'gpt-4.1'
         queryMaxTokens: 8000
-      useJoule: false
+      useJoule: true
       jouleConfig:
         url: 'https://kcp-dev-joule-vfglrzqg.eu12.sapdas.cloud.sap/resources/public/webclient/bootstrap.js'
-        botname: 'kyma_companion'
+        botname: 'kyma'
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
@@ -87,3 +86,13 @@ config:
       isEnabled: false
     COMMUNITY_MODULES:
       isEnabled: true
+    SSO_LOGIN:
+      isEnabled: false
+      config:
+        issuerUrl: https://apskyxzcl.accounts400.ondemand.com
+        scope: openid
+        clientId: d0316c58-b0fe-45cd-9960-0fea0708355a
+    TERMINAL:
+      isEnabled: true
+      config:
+        image: europe-docker.pkg.dev/kyma-project/prod/dev-toolbox:main

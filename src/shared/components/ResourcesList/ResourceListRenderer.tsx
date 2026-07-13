@@ -77,6 +77,7 @@ export function ResourceListRenderer({
   displayArrow = enableColumnLayout,
   accessibleName,
   createFormRef = null,
+  noRedirectAfterDelete = false,
 }: ResourceListRendererProps) {
   useVersionWarning({
     resourceUrl,
@@ -122,15 +123,25 @@ export function ResourceListRenderer({
     e: Ui5CustomEvent<LinkDomRef, LinkClickEventDetail>,
   ) => {
     e.preventDefault();
+    const isNamespace = resourceType === 'Namespaces';
 
     setLayoutColumn({
-      midColumn: null,
+      midColumn: !isNamespace
+        ? {
+            resourceName: entry?.metadata?.name ?? e.target.innerText,
+            resourceType: resourceType,
+            rawResourceTypeName: rawResourceType,
+            namespaceId: entry?.metadata?.namespace ?? null,
+            apiGroup: entry.metadata.group,
+            apiVersion: entry.apiVersion,
+          }
+        : null,
       showCreate: null,
       endColumn: null,
-      layout: 'OneColumn',
+      layout: isNamespace ? 'OneColumn' : 'TwoColumnsMidExpanded',
       showEdit: null,
       startColumn: {
-        resourceName: entry?.metadata?.name ?? e.target.innerText,
+        resourceName: isNamespace ? entry?.metadata?.name : null,
         resourceType: resourceType,
         rawResourceTypeName: rawResourceType,
         namespaceId: entry?.metadata?.namespace ?? null,
@@ -138,8 +149,10 @@ export function ResourceListRenderer({
         apiVersion: entry.apiVersion,
       },
     });
+    const layoutLinkParam = isNamespace ? '' : '?layout=TwoColumnsMidExpanded';
+    const url = `${linkTo(entry)}${layoutLinkParam}`;
 
-    navigate(`${linkTo(entry)}`);
+    navigate(url);
   };
 
   const defaultColumns = [
@@ -296,6 +309,7 @@ export function ResourceListRenderer({
           handler: (resource: K8sResource) => {
             handleResourceDelete({
               resourceUrl: prepareResourceUrl(resourceUrl, resource),
+              noRedirectAfterDelete,
             } as any);
             setActiveResource(resource);
           },
@@ -311,6 +325,8 @@ export function ResourceListRenderer({
   const headerRenderer = () => {
     return customColumns?.map((col) => col?.header || null);
   };
+
+  const columnWidths = customColumns?.map((col) => col?.width);
 
   const rowRenderer = (entry: any) => {
     const rowColumns = customColumns?.map((col, index) => {
@@ -440,6 +456,7 @@ export function ResourceListRenderer({
           actions={actions}
           entries={(resources || []) as any[]}
           headerRenderer={headerRenderer}
+          columnWidths={columnWidths}
           rowRenderer={rowRenderer}
           serverDataError={error}
           serverDataLoading={loading}

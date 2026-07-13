@@ -4,7 +4,7 @@ import { SetStateAction, useAtom, useSetAtom } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { ResourceForm } from 'shared/ResourceForm';
-import { MessageStrip } from '@ui5/webcomponents-react';
+import { IllustratedMessage, MessageStrip } from '@ui5/webcomponents-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import {
   getAvailableCommunityModules,
@@ -42,7 +42,7 @@ import {
 import { State } from 'components/Modules/community/components/uploadStateAtom';
 import { MutationFn, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useAtomValue } from 'jotai/index';
-import { allNodesAtom } from 'state/navigation/allNodesAtom';
+import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import {
   CallbackFn,
   installCommunityModule,
@@ -53,6 +53,7 @@ import { createPortal } from 'react-dom';
 import { Description } from 'shared/components/Description/Description';
 import { CommunityModulesSourcesList } from './components/CommunityModulesSourcesList/CommunityModulesSourcesList';
 import { TFunction } from 'i18next';
+import { useModuleTemplateCRDExists } from '../hooks';
 
 function onVersionChange(
   moduleTemplates: ModuleTemplateListType,
@@ -194,6 +195,8 @@ export default function CommunityModulesAddModule(props: any) {
   const navigate = useNavigate();
   const { isEnabled: isCommunityModulesEnabled } =
     useFeature('COMMUNITY_MODULES');
+  const { exists: moduleTemplateCRDExists, loading: moduleTemplateCRDLoading } =
+    useModuleTemplateCRDExists();
   const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
 
   const [refreshExtenshionsCount, setRefreshExtenshions] = useAtom(
@@ -204,10 +207,10 @@ export default function CommunityModulesAddModule(props: any) {
   const patchRequest = useUpdate();
 
   const singleGet = useSingleGet();
-  const clusterNodes = useAtomValue(allNodesAtom).filter(
+  const clusterNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => !node.namespaced,
   );
-  const namespaceNodes = useAtomValue(allNodesAtom).filter(
+  const namespaceNodes = useAtomValue(allNodesAtomSync).filter(
     (node) => node.namespaced,
   );
 
@@ -220,30 +223,12 @@ export default function CommunityModulesAddModule(props: any) {
 
   const {
     notInstalledCommunityModuleTemplates,
-    installedCommunityModuleTemplates,
     installedCommunityModulesLoading: notInstalledCommunityModulesLoading,
-    installedVersions,
   } = useContext(CommunityModuleContext);
 
   const { callback, modulesDuringUpload } = useContext(
     CommunityModulesInstallationContext,
   );
-
-  const upgradeableCommunityModuleTemplates = useMemo(() => {
-    if (!installedCommunityModuleTemplates?.items) {
-      return { items: [] };
-    }
-
-    const upgradeable = installedCommunityModuleTemplates.items.filter(
-      (module) => {
-        const managerKey = `${module.metadata.name}:${module.spec?.manager?.namespace}`;
-        const installedVersion = installedVersions.get(managerKey);
-        return installedVersion && installedVersion !== module.spec.version;
-      },
-    );
-
-    return { items: upgradeable };
-  }, [installedCommunityModuleTemplates, installedVersions]);
 
   const modulesToHide = useMemo(() => {
     return new Set(
@@ -254,16 +239,11 @@ export default function CommunityModulesAddModule(props: any) {
   }, [modulesDuringUpload]);
 
   const allAvailableModuleTemplates = useMemo(() => {
-    const combinedItems = [
-      ...(notInstalledCommunityModuleTemplates?.items || []),
-      ...(upgradeableCommunityModuleTemplates?.items || []),
-    ].filter((module) => !modulesToHide.has(getModuleName(module)));
+    const combinedItems = (
+      notInstalledCommunityModuleTemplates?.items || []
+    ).filter((module) => !modulesToHide.has(getModuleName(module)));
     return { items: combinedItems };
-  }, [
-    notInstalledCommunityModuleTemplates,
-    upgradeableCommunityModuleTemplates,
-    modulesToHide,
-  ]);
+  }, [notInstalledCommunityModuleTemplates, modulesToHide]);
 
   const availableCommunityModules = useMemo(() => {
     if (!notInstalledCommunityModulesLoading) {
@@ -419,17 +399,26 @@ export default function CommunityModulesAddModule(props: any) {
                 url={'https://kyma-project.io/#/community-modules/user/README'}
               />
             </MessageStrip>
+            {!moduleTemplateCRDLoading && !moduleTemplateCRDExists && (
+              <MessageStrip
+                design="Information"
+                hideCloseButton
+                className="sap-margin-top-small"
+              >
+                {t('modules.community.crd-info-message')}
+              </MessageStrip>
+            )}
             <CommunityModulesSourcesList />
             {communityModulesToDisplay?.length !== 0 ? (
               renderCards()
             ) : (
-              <MessageStrip
-                design="Critical"
-                hideCloseButton
-                className="sap-margin-top-small"
-              >
-                {t('modules.community.no-modules')}
-              </MessageStrip>
+              <IllustratedMessage
+                name="tnt/Components"
+                design="Scene"
+                key="all-modules-added"
+                titleText={t('modules.community.no-modules')}
+                className="emptyListComponent"
+              />
             )}
           </>
         </ResourceForm>

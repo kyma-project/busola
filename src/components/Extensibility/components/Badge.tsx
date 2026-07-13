@@ -9,6 +9,7 @@ import {
   useGetTranslation,
   getBadgeType,
 } from 'components/Extensibility/helpers';
+import { toSentenceCase } from 'shared/utils/helpers';
 
 interface BadgeProps {
   value: any;
@@ -53,7 +54,9 @@ export function Badge({
   const jsonata = useJsonata(stableJsonataDeps);
 
   const [tooltip, setTooltip] = useState<string | null>(null);
-  const [tooltipError, setTooltipError] = useState<Error | null>(null);
+  const [tooltipError, setTooltipError] = useState<Error | null | undefined>(
+    null,
+  );
   const [badgeType, setBadgeType] = useState<string | null>(null);
 
   useEffect(() => {
@@ -91,11 +94,11 @@ export function Badge({
       type={badgeType as any}
       tooltipContent={getTooltipContent(structure.description)}
     >
-      {tExt(value)}
+      {toSentenceCase(tExt(value).toString())}
     </StatusBadge>
   ) : (
     <StatusBadge autoResolveType={!badgeType} type={badgeType as any}>
-      {tExt(value)}
+      {toSentenceCase(tExt(value).toString())}
     </StatusBadge>
   );
 }

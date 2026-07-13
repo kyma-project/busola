@@ -65,11 +65,11 @@ export const extractLinks = (text: string) => {
   links = links.concat(result.links);
   processedText = result.text;
 
-  result = result = getMarkdownLinks(processedText);
+  result = getMarkdownLinks(processedText);
   links = links.concat(result.links);
   processedText = result.text;
 
-  result = result = getHTMLLinks(processedText);
+  result = getHTMLLinks(processedText);
   links = links.concat(result.links);
 
   return links;

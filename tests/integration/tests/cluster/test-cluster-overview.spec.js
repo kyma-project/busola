@@ -52,9 +52,7 @@ context('Test Cluster Overview', () => {
     cy.contains(
       'ui5-card.counting-card.item',
       'HPAs Statistical Injection Example',
-    )
-      .find('ui5-link.counting-card__link')
-      .click();
+    ).click();
 
     cy.get('ui5-dynamic-page-title')
       .find('ui5-title')
@@ -85,7 +83,13 @@ context('Test Cluster Overview', () => {
     cy.wait(500);
 
     cy.contains('ui5-panel', 'Nodes').within((_) => {
-      cy.get('ui5-table-row').first().find('ui5-table-cell').first().click();
+      cy.get('ui5-table-row')
+        .first()
+        .find('ui5-table-cell')
+        .first()
+        .as('firstNode');
+
+      cy.get('@firstNode').find('ui5-link').click({ force: true });
     });
   });
 
