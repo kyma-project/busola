@@ -97,7 +97,7 @@ export class WebSocketConnection {
     );
     this.k8sWS.addEventListener('open', () => {
       this.#backoff.reset();
-      this.#sendMsg(this.k8sWS, encodeMsg('date'), 'Busola WebSocket');
+      this.#sendMsg(this.k8sWS, encodeMsg('date'), 'K8s WebSocket');
     });
 
     this.k8sWS.addEventListener('message', (event) => {
