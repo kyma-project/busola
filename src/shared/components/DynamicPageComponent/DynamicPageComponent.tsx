@@ -18,6 +18,7 @@ import {
   CSSProperties,
   ReactNode,
   RefObject,
+  startTransition,
   useEffect,
   useRef,
   useState,
@@ -218,43 +219,49 @@ export const DynamicPageComponent = ({
   );
 
   const handleColumnClose = () => {
-    layoutNumber === 'midColumn'
-      ? setLayoutColumn({
-          ...layoutColumn,
-          midColumn: null,
-          layout: 'OneColumn',
-          showCreate: null,
-          showEdit: null,
-        })
-      : setLayoutColumn({
-          ...layoutColumn,
-          endColumn: null,
-          layout: 'TwoColumnsMidExpanded',
-          showCreate: null,
-          showEdit: null,
-        });
+    const newLayoutColumn =
+      layoutNumber === 'midColumn'
+        ? {
+            ...layoutColumn,
+            midColumn: null,
+            layout: 'OneColumn' as const,
+            showCreate: null,
+            showEdit: null,
+          }
+        : {
+            ...layoutColumn,
+            endColumn: null,
+            layout: 'TwoColumnsMidExpanded' as const,
+            showCreate: null,
+            showEdit: null,
+          };
 
     const searchField = searchParams.get('search');
+    const showSearch = searchField ? `search=${searchField}` : '';
 
+    let link;
     if (layoutCloseUrl) {
       const showEdit = editColumn ? `showEdit=${!!layoutColumn.showEdit}&` : '';
-      const showSearch = searchField ? `search=${searchField}` : '';
-      const link = `${layoutCloseUrl}?${showEdit}${showSearch}`;
-      navigate(link);
-      return;
+      link = `${layoutCloseUrl}?${showEdit}${showSearch}`;
+    } else {
+      const linkBase = window.location.pathname.slice(
+        0,
+        window.location.pathname.lastIndexOf('/'),
+      );
+      const layoutType =
+        layoutNumber === 'midColumn' || layoutColumn?.showCreate?.resourceType
+          ? ''
+          : 'layout=TwoColumnsMidExpanded&';
+      link = `${linkBase}?${layoutType}${showSearch}`;
     }
 
-    const linkBase = window.location.pathname.slice(
-      0,
-      window.location.pathname.lastIndexOf('/'),
-    );
-    const layoutType =
-      layoutNumber === 'midColumn' || layoutColumn?.showCreate?.resourceType
-        ? ''
-        : 'layout=TwoColumnsMidExpanded&';
-    const showSearch = searchField ? `search=${searchField}` : '';
-    const link = `${linkBase}?${layoutType}${showSearch}`;
-    navigate(link);
+    // navigate() commits in a transition, so a plain atom update would land one
+    // render earlier, swap the start column and reset the list state (#5084) —
+    // batching both in one transition keeps layout and URL consistent
+    startTransition(() => {
+      setLayoutColumn(newLayoutColumn);
+      navigate(link);
+    });
   };
 
   const actionsBar = actions ? (

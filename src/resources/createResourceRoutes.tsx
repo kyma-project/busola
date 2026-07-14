@@ -91,14 +91,6 @@ const ColumnWrapper = ({
 
   const defaultColumn = resourceName ? 'details' : 'list';
 
-  // Details fill the start column only for deep links (no layout param); the param
-  // check also keeps the list (and its state) mounted while details are closing.
-  const layoutSearchParam = searchParams.get('layout');
-  const isDetailsInStartColumn =
-    layoutState?.layout === 'OneColumn' &&
-    defaultColumn === 'details' &&
-    (!layoutSearchParam || layoutSearchParam === 'OneColumn');
-
   const layoutCloseCreateUrl = resourceListUrl({
     kind: props.resourceType,
     metadata: {
@@ -145,12 +137,19 @@ const ColumnWrapper = ({
     ...elementDetailsProps,
   });
 
-  const startColumnComponent = isDetailsInStartColumn
-    ? detailsComponent
-    : listComponent;
+  let startColumnComponent = null;
+
+  if (layoutState.layout === 'OneColumn' && defaultColumn === 'details') {
+    startColumnComponent = detailsComponent;
+  } else {
+    startColumnComponent = listComponent;
+  }
 
   let detailsMidColumn = null;
-  if (!layoutState?.showCreate && !isDetailsInStartColumn) {
+  if (
+    !layoutState?.showCreate &&
+    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'details')
+  ) {
     detailsMidColumn = detailsComponent;
   }
 
@@ -195,12 +194,16 @@ const ColumnWrapper = ({
         }
         midColumn={
           <>
-            {!layoutState?.showCreate && !isDetailsInStartColumn && (
-              <div className="column-content">{detailsMidColumn}</div>
-            )}
-            {!layoutState?.midColumn && !isDetailsInStartColumn && (
-              <div className="column-content">{createMidColumn}</div>
-            )}
+            {!layoutState?.showCreate &&
+              (defaultColumn !== 'details' ||
+                layoutState.layout !== 'OneColumn') && (
+                <div className="column-content">{detailsMidColumn}</div>
+              )}
+            {!layoutState?.midColumn &&
+              (defaultColumn !== 'details' ||
+                layoutState.layout !== 'OneColumn') && (
+                <div className="column-content">{createMidColumn}</div>
+              )}
           </>
         }
       />
