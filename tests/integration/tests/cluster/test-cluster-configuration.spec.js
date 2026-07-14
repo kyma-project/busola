@@ -75,4 +75,27 @@ context('Test Cluster configuration', () => {
 
     cy.get('ui5-table-row').should('have.length', 10);
   });
+
+  it('Pagination is preserved when closing the details column', () => {
+    cy.loginAndSelectCluster();
+
+    cy.navigateTo('Configuration', 'Cluster Roles');
+
+    cy.get('#next-page-link:visible').click();
+
+    cy.get('.page-input:visible').find('input').should('have.value', '2');
+
+    cy.get('ui5-table-row:visible')
+      .first()
+      .find('ui5-table-cell')
+      .find('ui5-text')
+      .first()
+      .click();
+
+    cy.getMidColumn().should('be.visible');
+
+    cy.closeMidColumn();
+
+    cy.get('.page-input:visible').find('input').should('have.value', '2');
+  });
 });
