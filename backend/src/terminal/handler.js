@@ -1,5 +1,4 @@
-/* global Buffer */
-import { WebSocket, WebSocketServer } from 'ws';
+import { WebSocketServer } from 'ws';
 import parseProtocolHeaders from './protocolHeaderParser';
 import { pinoWebSocketLogger } from '../../logging/';
 import { InvalidInputError } from '../errors/errors';

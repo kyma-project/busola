@@ -1,3 +1,4 @@
+/* global Buffer */
 import { WebSocket } from 'ws';
 
 const Stream = Object.freeze({
