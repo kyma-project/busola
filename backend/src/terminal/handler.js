@@ -3,6 +3,7 @@ import { WebSocket, WebSocketServer } from 'ws';
 import parseProtocolHeaders from './protocolHeaderParser';
 import { pinoWebSocketLogger } from '../../logging/';
 import { InvalidInputError } from '../errors/errors';
+import { WebSocketConnection } from './connection';
 
 function buildRemoteURL(url, remoteURL) {
   const remoteServerAddress = remoteURL.replace('https://', '');
@@ -14,20 +15,6 @@ function buildRemoteURL(url, remoteURL) {
 const baseURLStub = 'https://localhost';
 
 const webSocketPath = '/backend/ws/';
-
-const Stream = Object.freeze({
-  STDIN: 0,
-  STDOUT: 1,
-  STDERR: 2,
-});
-
-function encodeMsg(input, std = Stream.STDIN) {
-  const msgEncoded = Buffer.from(input + '\n', 'utf-8');
-  const encodedMsgForK8s = new Uint8Array(msgEncoded.length + 1);
-  encodedMsgForK8s[0] = std; // set STD[IN,OUT,ERR]
-  encodedMsgForK8s.set(msgEncoded, 1);
-  return encodedMsgForK8s;
-}
 
 const handleUpgrade = (webSocketServer) => {
   return function (req, socket, head) {
@@ -82,6 +69,7 @@ export default function registerWebSocket(server) {
   const webSocketServer = new WebSocketServer({ noServer: true });
   server.on('upgrade', handleUpgrade(webSocketServer));
 
+  let connection = null;
   webSocketServer.on('connection', (frontWS, req) => {
     req.logger.info('Starting WebSocket connection proxy');
     try {
@@ -89,73 +77,18 @@ export default function registerWebSocket(server) {
       const remoteURL = buildRemoteURL(url, req.authHeaders.clusterURL);
       req.logger.info('Connecting to:' + remoteURL);
 
-      let opts;
-      if (req.authHeaders.token) {
-        opts = {
-          ca: req.authHeaders.ca,
-          headers: {
-            Authorization: req.authHeaders.token,
-          },
-        };
-      } else {
-        opts = {
-          ca: req.authHeaders.ca,
-          cert: req.authHeaders.clientCert,
-          key: req.authHeaders.clientKey,
-        };
-      }
-      const k8sWS = new WebSocket(remoteURL, [req.authHeaders.protocol], opts);
+      connection = new WebSocketConnection(
+        remoteURL,
+        frontWS,
+        req.authHeaders,
+        req.logger,
+      );
 
-      k8sWS.addEventListener('open', () => {
-        // TODO: Currently the busola terminal uses default service account which has 0 permissions to access k8s api.
-        // We can try to build kubeconfig and add it to env
-        // TODO: This is a help command executed at the begining of connection, we can change or remove it completely.
-        k8sWS.send(encodeMsg('kubectl'));
-      });
-
-      k8sWS.addEventListener('message', (event) => {
-        if (frontWS.readyState === WebSocket.OPEN) {
-          const data = event.data;
-          frontWS.send(data);
-        } else {
-          req.logger.info(
-            'Front WS is not open, cannot send message, status: ' +
-              frontWS.readyState,
-          );
-        }
-      });
-
-      k8sWS.addEventListener('error', (event) => {
-        req.logger.error({ err: event }, 'K8s WebSocket error: ');
-      });
-
-      k8sWS.addEventListener('close', () => {
-        req.logger.info('K8s WebSocket closed');
-        const closingMsg = 'Remote connection closed';
-        frontWS.send(encodeMsg(closingMsg, Stream.STDOUT));
-        frontWS.close();
-      });
-
-      frontWS.addEventListener('error', (event) => {
-        req.logger.error({ err: event }, 'Front WebSocket error: ');
-      });
-
-      frontWS.addEventListener('message', (event) => {
-        if (k8sWS.readyState === WebSocket.OPEN) {
-          const data = event.data;
-          k8sWS.send(data);
-        } else {
-          req.logger.info(
-            'K8s WS is not open, cannot send message, status: ' +
-              k8sWS.readyState,
-          );
-        }
-      });
-
-      frontWS.addEventListener('close', () => k8sWS.close());
+      connection.connect();
     } catch (e) {
-      frontWS.close(1011, encodeMsg('Internal Server Error', Stream.STDOUT));
       req.logger.error({ err: e }, 'Error during WebSocket proxy connections');
+    } finally {
+      connection?.close();
     }
   });
 }
