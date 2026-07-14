@@ -69,8 +69,8 @@ export default function registerWebSocket(server) {
   const webSocketServer = new WebSocketServer({ noServer: true });
   server.on('upgrade', handleUpgrade(webSocketServer));
 
-  let connection = null;
   webSocketServer.on('connection', (frontWS, req) => {
+    let connection = null;
     req.logger.info('Starting WebSocket connection proxy');
     try {
       const url = new URL(req.url, 'http://' + req.socket.remoteAddress);
@@ -87,8 +87,7 @@ export default function registerWebSocket(server) {
       connection.connect();
     } catch (e) {
       req.logger.error({ err: e }, 'Error during WebSocket proxy connections');
-    } finally {
-      connection?.close();
+      connection?.close('Internal Server Error');
     }
   });
 }
