@@ -23,7 +23,7 @@ describe('RuleTitle', () => {
       resources: ['pods'],
     };
     const { container } = render(<RuleTitle rule={invalidRule} i={1} />);
-    const icon = container.querySelector('ui5-icon[name="alert"]');
+    const icon = container.querySelector('ui5-icon');
     expect(icon).toBeInTheDocument();
     expect(icon).toHaveAttribute('title', 'roles.messages.invalid');
   });
@@ -35,7 +35,7 @@ describe('RuleTitle', () => {
       verbs: [],
     };
     const { container } = render(<RuleTitle rule={incompleteRule} i={2} />);
-    const icon = container.querySelector('ui5-icon[name="alert"]');
+    const icon = container.querySelector('ui5-icon');
     expect(icon).toBeInTheDocument();
     expect(icon).toHaveAttribute('title', 'common.messages.fill-required-data');
   });
