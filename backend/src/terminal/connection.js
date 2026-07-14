@@ -27,8 +27,36 @@ function encodeMsg(input, std = Stream.STDIN) {
   return encodedMsgForK8s;
 }
 
+class ExponentialBackoff {
+  #attempts = 0;
+
+  constructor({ maxAttempts = 3, baseDelay = 1_000, maxDelay = 10_000 } = {}) {
+    this.maxAttempts = maxAttempts;
+    this.baseDelay = baseDelay;
+    this.maxDelay = maxDelay;
+  }
+
+  reset() {
+    this.#attempts = 0;
+  }
+
+  exhausted() {
+    return this.#attempts >= this.maxAttempts;
+  }
+
+  next() {
+    const delay = Math.min(
+      this.baseDelay * Math.pow(2, this.#attempts),
+      this.maxDelay,
+    );
+    const jitter = delay * 0.2 * Math.random();
+    this.#attempts++;
+    return delay + jitter;
+  }
+}
+
 export class WebSocketConnection {
-  #reconnectionAttempts = 0;
+  #backoff;
 
   constructor(remoteURL, frontWS, authHeaders, logger, backoffConfig) {
     this.remoteURL = remoteURL;
@@ -36,9 +64,7 @@ export class WebSocketConnection {
     this.k8sWS = null;
     this.logger = logger;
     this.authHeaders = authHeaders;
-    this.maxReconnectionAttempts = backoffConfig?.maxReconnectionAttempts || 3;
-    this.baseDelay = backoffConfig?.baseDelay || 1_000;
-    this.maxDelay = backoffConfig?.maxDelay || 10_000;
+    this.#backoff = new ExponentialBackoff(backoffConfig);
   }
 
   connect() {
@@ -78,7 +104,7 @@ export class WebSocketConnection {
 
   #startMessageProxy() {
     this.k8sWS.addEventListener('open', () => {
-      this.#reconnectionAttempts = 0;
+      this.#backoff.reset();
       this.#sendMsg(this.frontWS, encodeMsg('date'), 'Busola WebSocket');
     });
 
@@ -120,14 +146,14 @@ export class WebSocketConnection {
   }
 
   #reconnect() {
-    if (this.#reconnectionAttempts >= this.maxReconnectionAttempts) {
+    if (this.#backoff.exhausted()) {
       this.logger.info(
         'Max reconnection attempts reached for: ' + this.remoteURL,
       );
       this.close('Max reconnection attempts reached, closing');
       return;
     }
-    const delay = this.#nextExponentialDelay();
+    const delay = this.#backoff.next();
     this.logger.info('reconnection in: ' + delay.toFixed(0) + '[ms]');
     this.#sendMsg(
       this.frontWS,
@@ -138,18 +164,8 @@ export class WebSocketConnection {
     );
 
     setTimeout(() => {
-      this.#reconnectionAttempts++;
       this.connect();
     }, delay);
-  }
-
-  #nextExponentialDelay() {
-    const delay = Math.min(
-      this.baseDelay * Math.pow(2, this.#reconnectionAttempts),
-      this.maxDelay,
-    );
-    const jitter = delay * 0.2 * Math.random();
-    return delay + jitter;
   }
 
   #sendMsg(webSocket, data, webSocketName) {
