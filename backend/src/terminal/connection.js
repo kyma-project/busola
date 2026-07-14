@@ -58,6 +58,7 @@ class ExponentialBackoff {
 
 export class WebSocketConnection {
   #backoff;
+  #reconnectTimeout = null;
 
   constructor(remoteURL, frontWS, authHeaders, logger, backoffConfig) {
     this.remoteURL = remoteURL;
@@ -69,6 +70,11 @@ export class WebSocketConnection {
   }
 
   connect() {
+    this.#connectToK8s();
+    this.#startProxyingMsgToBusola();
+  }
+
+  #connectToK8s() {
     let opts;
     if (this.authHeaders.token) {
       opts = {
@@ -89,21 +95,6 @@ export class WebSocketConnection {
       [this.authHeaders.protocol],
       opts,
     );
-    this.#startMessageProxy();
-  }
-
-  close(errMsg) {
-    if (errMsg) {
-      this.frontWS.close(
-        WS_CODE.INTERNAL_ERROR,
-        encodeMsg(errMsg, Stream.STDOUT),
-      );
-    } else {
-      this.frontWS.close();
-    }
-  }
-
-  #startMessageProxy() {
     this.k8sWS.addEventListener('open', () => {
       this.#backoff.reset();
       this.#sendMsg(this.frontWS, encodeMsg('date'), 'Busola WebSocket');
@@ -134,7 +125,20 @@ export class WebSocketConnection {
       );
       this.frontWS.close();
     });
+  }
 
+  close(errMsg) {
+    if (errMsg) {
+      this.frontWS.close(
+        WS_CODE.INTERNAL_ERROR,
+        encodeMsg(errMsg, Stream.STDOUT),
+      );
+    } else {
+      this.frontWS.close();
+    }
+  }
+
+  #startProxyingMsgToBusola() {
     this.frontWS.addEventListener('error', (event) => {
       this.logger.error({ err: event }, 'Front WebSocket error: ');
     });
@@ -143,7 +147,10 @@ export class WebSocketConnection {
       this.#sendMsg(this.k8sWS, event.data, 'K8s WebSocket');
     });
 
-    this.frontWS.addEventListener('close', () => this.k8sWS.close());
+    this.frontWS.addEventListener('close', () => {
+      clearTimeout(this.#reconnectTimeout);
+      this.k8sWS.close();
+    });
   }
 
   #reconnect() {
@@ -164,8 +171,8 @@ export class WebSocketConnection {
       'Busola Websocket',
     );
 
-    setTimeout(() => {
-      this.connect();
+    this.#reconnectTimeout = setTimeout(() => {
+      this.#connectToK8s();
     }, delay);
   }
 
