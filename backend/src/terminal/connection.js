@@ -10,35 +10,35 @@ const Stream = Object.freeze({
 
 export class WebSocketConnection {
   #reconnectionAttempts = 0;
-  #maxReconnectionAttemps = 3;
-  #baseDelay = 1_000;
-  #maxDelay = 10_000;
 
-  constructor(remoteURL, frontWS, authHeaders, logger) {
+  constructor(remoteURL, frontWS, authHeaders, logger, backoffConfig) {
     this.remoteURL = remoteURL;
     this.frontWS = frontWS;
     this.k8sWS = null;
     this.logger = logger;
     this.authHeaders = authHeaders;
+    this.maxReconnectionAttemps = backoffConfig?.maxReconnectionAttemps || 3;
+    this.baseDelay = backoffConfig?.baseDelay || 1_000;
+    this.maxDelay = backoffConfig?.maxDelay || 10_000;
   }
 
-  #nextDelay() {
+  #nextExponentialDelay() {
     const delay = Math.min(
-      this.#baseDelay * Math.pow(2, this.#reconnectionAttempts),
-      this.#maxDelay,
+      this.baseDelay * Math.pow(2, this.#reconnectionAttempts),
+      this.maxDelay,
     );
     const jitter = delay * 0.2 * Math.random();
     return delay + jitter;
   }
 
   #reconnect() {
-    if (this.#reconnectionAttempts > this.#maxReconnectionAttemps) {
+    if (this.#reconnectionAttempts >= this.maxReconnectionAttemps) {
       this.logger.info(
         'Max reconnection attempts reached for: ' + this.remoteURL,
       );
       return;
     }
-    const delay = this.#nextDelay();
+    const delay = this.#nextExponentialDelay();
     this.logger.info('reconnection in: ' + delay.toFixed(4) + '[ms]');
     this.frontWS.send(
       this.#encodeMsg(
