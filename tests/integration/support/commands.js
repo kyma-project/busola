@@ -363,6 +363,8 @@ Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
     .find('input')
     .should('be.visible')
     .should('not.be.disabled')
+    // the search keeps its text when the details column closes, so clear leftovers first
+    .clear({ force })
     .type(searchPhrase, { force });
 });
 
