@@ -5,12 +5,9 @@ RUN apk update
 RUN apk add --no-cache \
       curl \
       wget \
-      bash 
-
-# Install kyma cli
-# https://kyma-project.io/#/cli/user/README?id=install-kyma-cli
-RUN curl -sL "https://raw.githubusercontent.com/kyma-project/cli/refs/heads/main/hack/install_cli_latest.sh" | sh - && \
-    kyma version
+      bash \
+      jq \
+      yq
 
 # Upgrade all packages and clean up
 RUN apk upgrade --no-cache
