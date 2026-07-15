@@ -363,6 +363,7 @@ Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
     .find('input')
     .should('be.visible')
     .should('not.be.disabled')
+    .clear({ force })
     .type(searchPhrase, { force });
 });
 

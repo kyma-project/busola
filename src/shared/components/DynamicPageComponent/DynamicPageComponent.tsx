@@ -255,9 +255,7 @@ export const DynamicPageComponent = ({
       link = `${linkBase}?${layoutType}${showSearch}`;
     }
 
-    // navigate() commits in a transition, so a plain atom update would land one
-    // render earlier, swap the start column and reset the list state (#5084) —
-    // batching both in one transition keeps layout and URL consistent
+    // batch so no render sees the new layout with the old URL
     startTransition(() => {
       setLayoutColumn(newLayoutColumn);
       navigate(link);
