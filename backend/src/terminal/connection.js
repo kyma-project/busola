@@ -1,17 +1,18 @@
 /* global Buffer */
 import { WebSocket } from 'ws';
 
-const ANSI_RESET = '\x1b[0m';
+const Colors = Object.freeze({
+  SUCCESS: '\x1b[32m',
+  WARNING: '\x1b[33m',
+  ERROR: '\x1b[31m',
+});
 
-const COLOR_SUCCESS = '\x1b[32m';
-const COLOR_WARNING = '\x1b[33m';
-const COLOR_ERROR = '\x1b[31m';
-
-// \r returns the cursor to column 0 — xterm is in raw mode, so a lone \n staircases.
+// a lone \n in termianl raw mode only move cursor down, the \r makes it to return to the begging.
 const LINE_BREAK = '\n\r';
 
 function terminalMessage(text, color) {
-  return `${LINE_BREAK}${color}${text}${ANSI_RESET}${LINE_BREAK}`;
+  const colorReset = '\x1b[0m';
+  return `${LINE_BREAK}${color}${text}${colorReset}${LINE_BREAK}`;
 }
 
 const Stream = Object.freeze({
@@ -49,11 +50,7 @@ function encodeMsg(input, std = Stream.STDIN, color = '') {
 class ExponentialBackoff {
   #attempts = 0;
 
-  constructor({
-    maxAttempts = 3,
-    baseDelay = 10_000,
-    maxDelay = 100_000,
-  } = {}) {
+  constructor({ maxAttempts = 3, baseDelay = 1_000, maxDelay = 10_000 } = {}) {
     this.maxAttempts = maxAttempts;
     this.baseDelay = baseDelay;
     this.maxDelay = maxDelay;
@@ -124,7 +121,7 @@ export class WebSocketConnection {
       if (!this.#backoff.isFresh) {
         this.#sendMsg(
           this.frontWS,
-          encodeMsg('Reconnection succeeded', Stream.STDOUT, COLOR_SUCCESS),
+          encodeMsg('Reconnection succeeded', Stream.STDOUT, Colors.SUCCESS),
         );
         this.#backoff.reset();
       }
@@ -162,7 +159,7 @@ export class WebSocketConnection {
     if (errMsg) {
       this.frontWS.close(
         WS_CODE.INTERNAL_ERROR,
-        encodeMsg(errMsg, Stream.STDOUT, COLOR_ERROR),
+        encodeMsg(errMsg, Stream.STDOUT, Colors.ERROR),
       );
     } else {
       this.frontWS.close();
@@ -197,7 +194,7 @@ export class WebSocketConnection {
       encodeMsg(
         'Trying to reconnect to K8s in ' + delay.toFixed(0) + ' [ms]....',
         Stream.STDOUT,
-        COLOR_WARNING,
+        Colors.WARNING,
       ),
       'Busola Websocket',
     );
