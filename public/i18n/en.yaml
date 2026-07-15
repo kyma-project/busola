@@ -853,6 +853,7 @@ kyma-cli:
     description: Kyma CLI helps you move faster - from first setup to deploying and managing apps.
     title: Try Kyma CLI
 kyma-companion:
+  ask-joule: Ask Joule
   banner:
     buttons:
       documentation: Documentation
