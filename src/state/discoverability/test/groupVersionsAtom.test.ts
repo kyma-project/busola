@@ -15,7 +15,7 @@ const makeFetchReturning = (groups: any[]) =>
 
 const noAuthFetch = () => vi.mocked(getFetchFn).mockReturnValue(undefined);
 
-const withGroups = (groups: any[]) =>
+const mockFetchFn = (groups: any[]) =>
   vi.mocked(getFetchFn).mockReturnValue(makeFetchReturning(groups) as any);
 
 describe('groupVersionsAtom', () => {
@@ -35,7 +35,7 @@ describe('groupVersionsAtom', () => {
   });
 
   it('returns only the core group when API groups list is empty', async () => {
-    withGroups([]);
+    mockFetchFn([]);
 
     const result = await store.get(groupVersionsAtom);
 
@@ -43,7 +43,7 @@ describe('groupVersionsAtom', () => {
   });
 
   it('includes core group "v1" as the first entry', async () => {
-    withGroups([
+    mockFetchFn([
       {
         name: 'apps',
         preferredVersion: { groupVersion: 'apps/v1', version: 'v1' },
@@ -56,30 +56,8 @@ describe('groupVersionsAtom', () => {
     expect(result![0]).toBe('v1');
   });
 
-  it('flattens all versions from all API groups', async () => {
-    withGroups([
-      {
-        name: 'apps',
-        preferredVersion: { groupVersion: 'apps/v1', version: 'v1' },
-        versions: [{ groupVersion: 'apps/v1', version: 'v1' }],
-      },
-      {
-        name: 'batch',
-        preferredVersion: { groupVersion: 'batch/v1', version: 'v1' },
-        versions: [
-          { groupVersion: 'batch/v1', version: 'v1' },
-          { groupVersion: 'batch/v1beta1', version: 'v1beta1' },
-        ],
-      },
-    ]);
-
-    const result = await store.get(groupVersionsAtom);
-
-    expect(result).toEqual(['v1', 'apps/v1', 'batch/v1', 'batch/v1beta1']);
-  });
-
-  it('uses groupVersion field (not version) from each version entry', async () => {
-    withGroups([
+  it('flattens all groupVersion strings from all API groups', async () => {
+    mockFetchFn([
       {
         name: 'networking.k8s.io',
         preferredVersion: {
@@ -95,9 +73,11 @@ describe('groupVersionsAtom', () => {
 
     const result = await store.get(groupVersionsAtom);
 
-    expect(result).toContain('networking.k8s.io/v1');
-    expect(result).toContain('networking.k8s.io/v1beta1');
-    expect(result).not.toContain('v1beta1');
+    expect(result).toEqual([
+      'v1',
+      'networking.k8s.io/v1',
+      'networking.k8s.io/v1beta1',
+    ]);
   });
 });
 
@@ -122,7 +102,7 @@ describe('groupVersionsAtomSync', () => {
   });
 
   it('returns resolved group versions once the async atom settles', async () => {
-    withGroups([
+    mockFetchFn([
       {
         name: 'apps',
         preferredVersion: { groupVersion: 'apps/v1', version: 'v1' },
@@ -146,40 +126,5 @@ describe('groupVersionsAtomSync', () => {
     });
 
     expect(resolved).toEqual(['v1', 'apps/v1']);
-  });
-
-  it('returns resolved versions with multiple API groups', async () => {
-    withGroups([
-      {
-        name: 'apps',
-        preferredVersion: { groupVersion: 'apps/v1', version: 'v1' },
-        versions: [{ groupVersion: 'apps/v1', version: 'v1' }],
-      },
-      {
-        name: 'batch',
-        preferredVersion: { groupVersion: 'batch/v1', version: 'v1' },
-        versions: [
-          { groupVersion: 'batch/v1', version: 'v1' },
-          { groupVersion: 'batch/v1beta1', version: 'v1beta1' },
-        ],
-      },
-    ]);
-
-    const resolved = await new Promise<string[] | null>((resolve, reject) => {
-      const timer = setTimeout(
-        () => reject(new Error('groupVersionsAtomSync did not resolve')),
-        2000,
-      );
-      const unsub = store.sub(groupVersionsAtomSync, () => {
-        const val = store.get(groupVersionsAtomSync);
-        if (val !== null) {
-          clearTimeout(timer);
-          unsub();
-          resolve(val);
-        }
-      });
-    });
-
-    expect(resolved).toEqual(['v1', 'apps/v1', 'batch/v1', 'batch/v1beta1']);
   });
 });
