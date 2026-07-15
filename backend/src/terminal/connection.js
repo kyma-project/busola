@@ -1,6 +1,19 @@
 /* global Buffer */
 import { WebSocket } from 'ws';
 
+const ANSI_RESET = '\x1b[0m';
+
+const COLOR_SUCCESS = '\x1b[32m';
+const COLOR_WARNING = '\x1b[33m';
+const COLOR_ERROR = '\x1b[31m';
+
+// \r returns the cursor to column 0 — xterm is in raw mode, so a lone \n staircases.
+const LINE_BREAK = '\n\r';
+
+function terminalMessage(text, color) {
+  return `${LINE_BREAK}${color}${text}${ANSI_RESET}${LINE_BREAK}`;
+}
+
 const Stream = Object.freeze({
   STDIN: 0,
   STDOUT: 1,
@@ -20,8 +33,13 @@ const WS_CODE = Object.freeze({
   INTERNAL_ERROR: 1011,
 });
 
-function encodeMsg(input, std = Stream.STDIN) {
-  const msgEncoded = Buffer.from(input + '\n', 'utf-8');
+function encodeMsg(input, std = Stream.STDIN, color = '') {
+  let msgEncoded = '';
+  if (std === Stream.STDIN) {
+    msgEncoded = Buffer.from(input + '\n', 'utf-8');
+  } else {
+    msgEncoded = Buffer.from(terminalMessage(input, color), 'utf-8');
+  }
   const encodedMsgForK8s = new Uint8Array(msgEncoded.length + 1);
   encodedMsgForK8s[0] = std; // set STD[IN,OUT,ERR]
   encodedMsgForK8s.set(msgEncoded, 1);
@@ -31,7 +49,11 @@ function encodeMsg(input, std = Stream.STDIN) {
 class ExponentialBackoff {
   #attempts = 0;
 
-  constructor({ maxAttempts = 3, baseDelay = 1_000, maxDelay = 10_000 } = {}) {
+  constructor({
+    maxAttempts = 3,
+    baseDelay = 10_000,
+    maxDelay = 100_000,
+  } = {}) {
     this.maxAttempts = maxAttempts;
     this.baseDelay = baseDelay;
     this.maxDelay = maxDelay;
@@ -41,6 +63,9 @@ class ExponentialBackoff {
     this.#attempts = 0;
   }
 
+  isFresh() {
+    return this.#attempts !== 0;
+  }
   exhausted() {
     return this.#attempts >= this.maxAttempts;
   }
@@ -96,7 +121,13 @@ export class WebSocketConnection {
       opts,
     );
     this.k8sWS.addEventListener('open', () => {
-      this.#backoff.reset();
+      if (!this.#backoff.isFresh) {
+        this.#sendMsg(
+          this.frontWS,
+          encodeMsg('Reconnection succeeded', Stream.STDOUT, COLOR_SUCCESS),
+        );
+        this.#backoff.reset();
+      }
       this.#sendMsg(this.k8sWS, encodeMsg('date'), 'K8s WebSocket');
     });
 
@@ -105,7 +136,7 @@ export class WebSocketConnection {
     });
 
     this.k8sWS.addEventListener('error', (event) => {
-      this.logger.error({ err: event }, 'K8s WebSocket error: ');
+      this.logger.error({ err: event }, 'K8s WebSocket error');
     });
 
     this.k8sWS.addEventListener('close', (event) => {
@@ -131,7 +162,7 @@ export class WebSocketConnection {
     if (errMsg) {
       this.frontWS.close(
         WS_CODE.INTERNAL_ERROR,
-        encodeMsg(errMsg, Stream.STDOUT),
+        encodeMsg(errMsg, Stream.STDOUT, COLOR_ERROR),
       );
     } else {
       this.frontWS.close();
@@ -164,7 +195,9 @@ export class WebSocketConnection {
     this.#sendMsg(
       this.frontWS,
       encodeMsg(
-        'Trying to reconnect to backend in ' + delay.toFixed(0) + '....',
+        'Trying to reconnect to K8s in ' + delay.toFixed(0) + ' [ms]....',
+        Stream.STDOUT,
+        COLOR_WARNING,
       ),
       'Busola Websocket',
     );
