@@ -81,4 +81,4 @@ config:
     TERMINAL:
       isEnabled: false
       config:
-        image: europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:main
+        image: europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest
