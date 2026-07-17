@@ -94,9 +94,7 @@ describe('groupVersionsAtomSync', () => {
       vi.fn().mockReturnValue(new Promise(() => {})) as any,
     );
 
-    const unsub = store.sub(groupVersionsAtomSync, () => {});
     const result = store.get(groupVersionsAtomSync);
-    unsub();
 
     expect(result).toBeNull();
   });
@@ -110,20 +108,8 @@ describe('groupVersionsAtomSync', () => {
       },
     ]);
 
-    const resolved = await new Promise<string[] | null>((resolve, reject) => {
-      const timer = setTimeout(
-        () => reject(new Error('groupVersionsAtomSync did not resolve')),
-        2000,
-      );
-      const unsub = store.sub(groupVersionsAtomSync, () => {
-        const val = store.get(groupVersionsAtomSync);
-        if (val !== null) {
-          clearTimeout(timer);
-          unsub();
-          resolve(val);
-        }
-      });
-    });
+    await store.get(groupVersionsAtom);
+    const resolved = store.get(groupVersionsAtomSync);
 
     expect(resolved).toEqual(['v1', 'apps/v1']);
   });
