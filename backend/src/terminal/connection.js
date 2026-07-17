@@ -7,7 +7,7 @@ const Colors = Object.freeze({
   ERROR: '\x1b[31m',
 });
 
-// a lone \n in termianl raw mode only move cursor down, the \r makes it to return to the begging.
+// a lone \n in terminal raw mode only move cursor down, the \r makes it return to the beginning.
 const LINE_BREAK = '\n\r';
 
 function terminalMessage(text, color) {
@@ -60,7 +60,7 @@ class ExponentialBackoff {
     this.#attempts = 0;
   }
 
-  isFresh() {
+  hasLaunched() {
     return this.#attempts !== 0;
   }
   exhausted() {
@@ -118,7 +118,7 @@ export class WebSocketConnection {
       opts,
     );
     this.k8sWS.addEventListener('open', () => {
-      if (!this.#backoff.isFresh) {
+      if (!this.#backoff.hasLaunched()) {
         this.#sendMsg(
           this.frontWS,
           encodeMsg('Reconnection succeeded', Stream.STDOUT, Colors.SUCCESS),
