@@ -22,7 +22,7 @@ import {
 } from './connectTerminal';
 
 const DEFAULT_IMAGE =
-  'europe-docker.pkg.dev/kyma-project/prod/dev-toolbox:main';
+  'europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest';
 
 export function useTerminalSession() {
   const { t } = useTranslation();
