@@ -17,10 +17,10 @@ import {
 } from './provisionPod';
 import {
   COLOR_ERROR,
+  COLOR_WARNING,
   connectTerminal,
   terminalMessage,
 } from './connectTerminal';
-import { useReconnect } from './useReconnect';
 
 const DEFAULT_IMAGE =
   'europe-docker.pkg.dev/kyma-project/prod/dev-toolbox:main';
@@ -40,14 +40,8 @@ export function useTerminalSession() {
   const onDataDisposableRef = useRef<{ dispose: () => void } | null>(null);
   // Prevents double pod DELETE — close button and unmount cleanup both call disconnect.
   const disconnectedRef = useRef(false);
-
-  // ponytail: ref breaks the connect <-> scheduleReconnect circular dependency
-  const connectRef = useRef<(term: Terminal) => Promise<void>>(async () => {});
-
-  const { scheduleReconnect, attemptRef, resetReconnect } = useReconnect(
-    useCallback((term: Terminal) => connectRef.current(term), []),
-    t,
-  );
+  const reconnectTimer = useRef<number>(0);
+  const attemptRef = useRef(0);
 
   const connect = useCallback(
     async (term: Terminal) => {
@@ -105,7 +99,8 @@ export function useTerminalSession() {
         });
         wsRef.current = ws;
         onDataDisposableRef.current = disposable;
-        resetReconnect();
+        attemptRef.current = 0;
+        clearTimeout(reconnectTimer.current);
       } catch (err: any) {
         if (err?.name === 'AbortError') return;
         console.error(err);
@@ -123,21 +118,34 @@ export function useTerminalSession() {
         );
       }
     },
-    [
-      authData,
-      cluster,
-      ssoData,
-      fetchFn,
-      image,
-      setSession,
-      t,
-      scheduleReconnect,
-      attemptRef,
-      resetReconnect,
-    ],
+    [authData, cluster, ssoData, fetchFn, image, setSession, t, attemptRef],
   );
 
-  connectRef.current = connect;
+  const scheduleReconnect = useCallback(
+    (term: Terminal) => {
+      const attempt = attemptRef.current;
+      if (attempt >= 10) {
+        term.write(
+          terminalMessage(COLOR_ERROR, t('terminal.messages.reconnect-failed')),
+        );
+        setSession((prev) => ({ ...prev, status: 'idle' }));
+        return;
+      } // stop after 10 attempts
+
+      const baseDelay = Math.min(1000 * 2 ** attempt, 30000);
+      const jitter = Math.random() * 1000;
+      const delay = baseDelay + jitter;
+
+      term.write(
+        terminalMessage(COLOR_WARNING, `Reconnecting in ${delay} [ms]`),
+      );
+      reconnectTimer.current = setTimeout(() => {
+        attemptRef.current += 1;
+        connect(term);
+      }, delay);
+    },
+    [connect, t, setSession],
+  );
 
   const disconnect = useCallback(
     async (podName: string | null) => {
