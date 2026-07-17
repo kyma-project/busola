@@ -8,7 +8,7 @@ function configureLogger() {
   const isDev = process.env.NODE_ENV !== 'production';
 
   return PinoHttp({
-    autoLogging: !!isDev, //to disable the automatic "request completed" and "request errored" logging.
+    autoLogging: false, //!!isDev, //to disable the automatic "request completed" and "request errored" logging.
     genReqId: (req) => {
       req.id = uuid();
       return req.id;

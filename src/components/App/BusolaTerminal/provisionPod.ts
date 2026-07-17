@@ -40,6 +40,7 @@ function buildPodManifest(podName: string, image: string) {
             requests: { cpu: '100m', memory: '128Mi' },
             limits: { cpu: '500m', memory: '256Mi' },
           },
+          command: ['/bin/bash'],
           stdin: true,
           tty: true,
         },

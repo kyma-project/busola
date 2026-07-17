@@ -1557,11 +1557,15 @@ terminal:
     closed: Connection closed.
     connected: Connected to terminal.
     connection-error: WebSocket connection error.
+    connection-lost: Connection lost, reconnecting to Busola backend...
+    reconnect-failed: All attempts to reconnect failed.
+    reconnecting: Reconnecting in {{delay}}ms...
     unknown-error: Unknown error.
   name: Busola Terminal
   status:
     error: 'Error: {{error}}'
     provisioning: Connecting…
+    reconnecting: Reconnecting...
 upload-yaml:
   errors: Errors
   info: You can upload multiple resources, separated by “---” in your YAML file. If the resource already exists, it will be updated. Otherwise, a new one is created. If you don’t specify a namespace, the "<0>{{namespace}}</0>" is used.
