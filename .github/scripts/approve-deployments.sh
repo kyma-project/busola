@@ -35,7 +35,7 @@ for run_id in $run_ids; do
     --jq ".[] | select(.databaseId == $run_id) | .name")
 
   gh api "repos/$REPO/actions/runs/$run_id/pending_deployments" \
-    -X POST --input - <<EOF
+    -X POST --input - <<EOF > /dev/null
 {"environment_ids":$env_ids,"state":"approved","comment":""}
 EOF
   echo "Approved: $name (run $run_id)"
