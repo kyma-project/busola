@@ -92,6 +92,7 @@ export async function connectTerminal({
       term.write(
         terminalMessage(COLOR_WARNING, t('terminal.messages.connection-lost')),
       );
+      setSession((prev) => ({ ...prev, status: 'reconnecting' }));
       scheduleReconnect(term);
     } else {
       setSession((prev) => ({ ...prev, status: 'idle' }));
