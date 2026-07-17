@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+export GH_PAGER=cat
+
 if [[ $# -lt 1 ]]; then
   echo "Usage: $0 <pr-number> [repo]"
   echo "  repo defaults to kyma-project/busola"
