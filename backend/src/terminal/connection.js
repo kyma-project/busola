@@ -112,6 +112,12 @@ export class WebSocketConnection {
         key: this.authHeaders.clientKey,
       };
     }
+    if (this.frontWS.readyState === WebSocket.OPEN) {
+      this.logger.info(
+        'Reconnection aborted because Frontend Websocket closed.',
+      );
+      return;
+    }
     this.k8sWS = new WebSocket(
       this.remoteURL,
       [this.authHeaders.protocol],
@@ -157,10 +163,7 @@ export class WebSocketConnection {
 
   close(errMsg) {
     if (errMsg) {
-      this.frontWS.close(
-        WS_CODE.INTERNAL_ERROR,
-        encodeMsg(errMsg, Stream.STDOUT, Colors.ERROR),
-      );
+      this.frontWS.close(WS_CODE.INTERNAL_ERROR, errMsg);
     } else {
       this.frontWS.close();
     }
@@ -198,7 +201,6 @@ export class WebSocketConnection {
       ),
       'Busola Websocket',
     );
-
     this.#reconnectTimeout = setTimeout(() => {
       this.#connectToK8s();
     }, delay);

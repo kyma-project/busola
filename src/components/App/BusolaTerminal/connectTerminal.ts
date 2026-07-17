@@ -88,9 +88,10 @@ export async function connectTerminal({
     }
   };
 
-  ws.onclose = () => {
+  ws.onclose = (event) => {
     if (signal.aborted) return;
     setSession((prev) => ({ ...prev, status: 'idle' }));
+    term.write(terminalMessage(COLOR_ERROR, event.reason));
     term.write(terminalMessage(COLOR_WARNING, messages.closed));
   };
 
