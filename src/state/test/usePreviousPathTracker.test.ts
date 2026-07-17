@@ -38,9 +38,7 @@ describe('usePreviousPathTracker', () => {
       result.current('/cluster/foo/namespaces/qux/deployments');
     });
 
-    expect(localStorage.getItem(PREVIOUS_PATHNAME_KEY)).toBe(
-      '/cluster/foo/namespaces/qux/deployments',
-    );
+    expect(getPreviousPath()).toBe('/cluster/foo/namespaces/qux/deployments');
   });
 
   it('does not overwrite storage when path is /clusters', () => {

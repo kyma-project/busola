@@ -3,6 +3,9 @@ import { renderHook } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { createStore, Provider } from 'jotai';
 import { createElement, PropsWithChildren } from 'react';
+import { useAfterInitHook } from '../useAfterInitHook';
+import { authDataAtom } from '../authDataAtom';
+import { clusterAtom } from '../clusterAtom';
 
 const mockNavigate = vi.fn();
 
@@ -16,10 +19,6 @@ vi.mock('react-router', async () => {
 });
 
 vi.mock('components/App/useLoginWithKubeconfigID', () => ({}));
-
-const { useAfterInitHook } = await import('../useAfterInitHook');
-const { authDataAtom } = await import('../authDataAtom');
-const { clusterAtom } = await import('../clusterAtom');
 
 const cluster = {
   name: 'foo',
