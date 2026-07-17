@@ -59,6 +59,7 @@ export async function connectTerminal({
   setSession,
   signal,
   messages,
+  scheduleReconnect,
 }: {
   authHeaders: Headers;
   term: Terminal;
@@ -68,6 +69,7 @@ export async function connectTerminal({
   ) => void;
   signal: AbortSignal;
   messages: ConnectionMessages;
+  scheduleReconnect: (term: Terminal) => void;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
   const ws = new WebSocket(
     buildAttachUrl(podName),
@@ -90,11 +92,21 @@ export async function connectTerminal({
 
   ws.onclose = (event) => {
     if (signal.aborted) return;
-    setSession((prev) => ({ ...prev, status: 'idle' }));
-    if (event.reason) {
+    console.log(event.code);
+    if (event.code !== 1000) {
+      term.write(
+        terminalMessage(
+          COLOR_WARNING,
+          'Connection lost, reconnecting to Busola backend....',
+        ),
+      );
+      scheduleReconnect(term);
+    } else {
+      setSession((prev) => ({ ...prev, status: 'idle' }));
+      if (event.reason) {
       term.write(terminalMessage(COLOR_ERROR, event.reason));
+    }term.write(terminalMessage(COLOR_WARNING, messages.closed));
     }
-    term.write(terminalMessage(COLOR_WARNING, messages.closed));
   };
 
   ws.onerror = () => {
