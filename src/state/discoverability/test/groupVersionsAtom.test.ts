@@ -108,8 +108,10 @@ describe('groupVersionsAtomSync', () => {
       },
     ]);
 
+    const unsub = store.sub(groupVersionsAtomSync, () => {});
     await store.get(groupVersionsAtom);
     const resolved = store.get(groupVersionsAtomSync);
+    unsub();
 
     expect(resolved).toEqual(['v1', 'apps/v1']);
   });
