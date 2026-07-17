@@ -118,7 +118,7 @@ export class WebSocketConnection {
       opts,
     );
     this.k8sWS.addEventListener('open', () => {
-      if (!this.#backoff.hasLaunched()) {
+      if (this.#backoff.hasLaunched()) {
         this.#sendMsg(
           this.frontWS,
           encodeMsg('Reconnection succeeded', Stream.STDOUT, Colors.SUCCESS),
