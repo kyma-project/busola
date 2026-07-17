@@ -21,12 +21,6 @@ export function terminalMessage(color: string, text: string) {
   return `${LINE_BREAK}${color}${text}${ANSI_RESET}${LINE_BREAK}`;
 }
 
-export type ConnectionMessages = {
-  connected: string;
-  closed: string;
-  connectionError: string;
-};
-
 function buildProtocols(authHeaders: Headers): string[] {
   return [
     'v4.channel.k8s.io',
@@ -58,7 +52,7 @@ export async function connectTerminal({
   podName,
   setSession,
   signal,
-  messages,
+  t,
   scheduleReconnect,
 }: {
   authHeaders: Headers;
@@ -68,7 +62,7 @@ export async function connectTerminal({
     update: (prev: TerminalSessionState) => TerminalSessionState,
   ) => void;
   signal: AbortSignal;
-  messages: ConnectionMessages;
+  t: (key: string, options?: Record<string, unknown>) => string;
   scheduleReconnect: (term: Terminal) => void;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
   const ws = new WebSocket(
@@ -80,7 +74,9 @@ export async function connectTerminal({
   ws.onopen = () => {
     if (signal.aborted) return;
     setSession((prev) => ({ ...prev, status: 'connected' }));
-    term.write(terminalMessage(COLOR_SUCCESS, messages.connected));
+    term.write(
+      terminalMessage(COLOR_SUCCESS, t('terminal.messages.connected')),
+    );
   };
 
   ws.onmessage = (event) => {
@@ -92,18 +88,14 @@ export async function connectTerminal({
 
   ws.onclose = (event) => {
     if (signal.aborted) return;
-    console.log(event.code);
     if (event.code !== 1000) {
       term.write(
-        terminalMessage(
-          COLOR_WARNING,
-          'Connection lost, reconnecting to Busola backend....',
-        ),
+        terminalMessage(COLOR_WARNING, t('terminal.messages.connection-lost')),
       );
       scheduleReconnect(term);
     } else {
       setSession((prev) => ({ ...prev, status: 'idle' }));
-      term.write(terminalMessage(COLOR_WARNING, messages.closed));
+      term.write(terminalMessage(COLOR_WARNING, t('terminal.messages.closed')));
     }
   };
 
@@ -112,7 +104,7 @@ export async function connectTerminal({
     setSession((prev) => ({
       ...prev,
       status: 'error',
-      errorMessage: messages.connectionError,
+      errorMessage: t('terminal.messages.connection-error'),
     }));
   };
 
