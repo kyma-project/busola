@@ -94,3 +94,11 @@ jobs:
           path: |
             busola.log
           retention-days: 90
+      - name: Upload Lighthouse test results
+        uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: lighthouse-test-results-${{ github.job }}
+          path: |
+            tests/lighthouse/test-results/
+          retention-days: 90
