@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { connectTerminal } from './connectTerminal';
 import { encodeBase64Url } from 'shared/utils/base64url';
 
@@ -132,6 +132,8 @@ describe('connectTerminal', () => {
       closed: 'translated-closed',
       connectionError: 'translated-error',
     };
+    const expectedReason = 'Closing because I can';
+
     const { ws, term } = await attach(new AbortController().signal, messages);
 
     ws.onopen();
@@ -139,7 +141,10 @@ describe('connectTerminal', () => {
       expect.stringContaining('translated-connected'),
     );
 
-    ws.onclose();
+    ws.onclose({ reason: expectedReason });
+    expect(term.write).toHaveBeenCalledWith(
+      expect.stringContaining(expectedReason),
+    );
     expect(term.write).toHaveBeenCalledWith(
       expect.stringContaining('translated-closed'),
     );
