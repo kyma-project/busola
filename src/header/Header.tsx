@@ -78,7 +78,7 @@ export function Header() {
   );
 
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
-  const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
+  const [, setShowTerminal] = useAtom(showTerminalAtom);
 
   // Close the panel on cluster switch instead of swapping modes mid-conversation.
   useEffect(() => {
@@ -174,10 +174,10 @@ export function Header() {
           </>
         )}
         {isTerminalEnabled && !isOnClustersPage && (
-          <ToggleButton
+          <ShellBarItem
             icon="command-line-interfaces"
-            accessibleName={t('terminal.name')}
-            pressed={showTerminal.isOpen}
+            text={t('terminal.name')}
+            title={t('terminal.name')}
             onClick={() =>
               setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }))
             }
