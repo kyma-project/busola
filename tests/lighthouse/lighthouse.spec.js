@@ -67,6 +67,14 @@ test('Busola Lighthouse audit', async () => {
     page.locator('.ui5-sn-list-li:has-text("Cluster Overview")'),
   ).toBeVisible();
 
+  // Wait for the cluster overview content to fully load before auditing.
+  // On CI, the page loads data async (nodes, pods, charts) and Lighthouse
+  // can catch it mid-render with unlabelled skeleton/spinner elements.
+  await page.waitForLoadState('networkidle');
+  await expect(
+    page.locator('ui5-title:has-text("Cluster Overview")'),
+  ).toBeVisible();
+
   console.log('Running audit on cluster overview...');
   await playAudit({
     page,

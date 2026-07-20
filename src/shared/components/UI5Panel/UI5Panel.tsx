@@ -92,6 +92,7 @@ export const UI5Panel = ({
                 setShowTitleDescription={setShowDescription}
                 showTitleDescription={showDescription}
                 description={description}
+                ariaTitle={typeof title === 'string' ? title : undefined}
               />
             )}
             {headerActions && modeActions && (
