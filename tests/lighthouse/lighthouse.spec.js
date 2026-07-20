@@ -29,6 +29,11 @@ test('Busola Lighthouse audit', async () => {
       accessibility: 80,
       'best-practices': 100,
     },
+    reports: {
+      formats: { html: true },
+      name: 'clusters',
+      directory: 'test-results/lighthouse-reports',
+    },
     config: {
       extends: 'lighthouse:default',
       settings: { onlyCategories: ['accessibility', 'best-practices'] },
@@ -82,6 +87,11 @@ test('Busola Lighthouse audit', async () => {
     thresholds: {
       accessibility: 80,
       'best-practices': 85, //best-practices were reduced after the bump of lighthouse version - it detects Monaco which prevents passing
+    },
+    reports: {
+      formats: { html: true },
+      name: 'cluster-overview',
+      directory: 'test-results/lighthouse-reports',
     },
     config: {
       extends: 'lighthouse:default',

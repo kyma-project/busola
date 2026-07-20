@@ -86,6 +86,14 @@ jobs:
           k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
           cd tests/lighthouse
           npm run "test"
+      - name: Uploads artifacts
+        uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: playwright-${{ github.job }}
+          path: |
+            tests/lighthouse/test-results/
+          retention-days: 90
       - name: Upload Busola logs
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -93,12 +101,4 @@ jobs:
           name: busola-logs-${{ github.job }}
           path: |
             busola.log
-          retention-days: 90
-      - name: Upload Lighthouse test results
-        uses: actions/upload-artifact@v4
-        if: ${{ always() }}
-        with:
-          name: lighthouse-test-results-${{ github.job }}
-          path: |
-            tests/lighthouse/test-results/
           retention-days: 90
