@@ -1,4 +1,7 @@
 config:
+  # URL for the SAPUI5 Cloud Service instance. Required for GDC air-gapped deployments
+  # where the SAPUI5 framework cannot be loaded from public CDNs.
+  sapui5BootstrapUrl: ''
   features:
     GZIP:
       isEnabled: true

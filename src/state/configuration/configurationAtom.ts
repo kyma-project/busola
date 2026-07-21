@@ -18,6 +18,7 @@ const apiGroupAtomSync = unwrap(apiGroupAtom, (prev) => prev ?? null);
 type Configuration = {
   features?: ConfigFeatureList;
   storageType?: string;
+  sapui5BootstrapUrl?: string;
 } | null;
 
 type Config = {
