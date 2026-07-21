@@ -300,7 +300,8 @@ export const getUpdateTemplate = (
   const candidates = repoTemplates.filter(
     (repoModule) =>
       getModuleName(repoModule) === moduleName &&
-      compareVersions(repoModule.spec.version, installedModule.version) > 0,
+      (installedModule.version === 'latest' ||
+        compareVersions(repoModule.spec.version, installedModule.version) > 0),
   );
   return candidates.sort((a, b) =>
     compareVersions(b.spec.version, a.spec.version),
