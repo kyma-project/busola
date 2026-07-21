@@ -2,6 +2,7 @@ import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { toSentenceCase } from 'shared/utils/helpers';
 import { useModuleStatus } from '../hooks';
 import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
+import { ModuleTemplateStatus } from '../support';
 
 export const resolveType = (status: string): ValueState => {
   switch (status) {
@@ -42,7 +43,10 @@ export const resolveType = (status: string): ValueState => {
 export const ModuleStatus = ({ resource }: any) => {
   const { data: status } = useModuleStatus(resource?.resource);
 
-  const moduleState = status?.state || 'Unknown';
+  const moduleState =
+    resource?.state === ModuleTemplateStatus.Deleting
+      ? ModuleTemplateStatus.Deleting
+      : status?.state || 'Unknown';
   const moduleMessage = status?.description;
 
   return (
