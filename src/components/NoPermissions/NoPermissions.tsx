@@ -44,6 +44,7 @@ function NoPermissions() {
       <form className="bsl-display-flex">
         <Input
           className="no-margin"
+          accessibleName={t('no-permissions.enter-namespace-name-placeholder')}
           placeholder={t('no-permissions.enter-namespace-name-placeholder')}
           value={namespaceName}
           onInput={(e: any) => setNamespaceName(e.target.typedInValue)}

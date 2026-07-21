@@ -219,6 +219,7 @@ export default function ModulesCard({
             }}
             value={getSelectedValue()}
             className="channel-select"
+            accessibleName={t('kyma-modules.release-channel')}
           >
             {defaultVersion && (
               <Option
