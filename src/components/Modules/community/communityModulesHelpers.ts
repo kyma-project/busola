@@ -296,12 +296,12 @@ export const getUpdateTemplate = (
 ): ModuleTemplateType | undefined => {
   const installedModule = installedModules.find((m) => m.name === moduleName);
 
-  if (!installedModule) return undefined;
+  if (!installedModule || installedModule?.version === 'latest')
+    return undefined;
   const candidates = repoTemplates.filter(
     (repoModule) =>
       getModuleName(repoModule) === moduleName &&
-      (installedModule.version === 'latest' ||
-        compareVersions(repoModule.spec.version, installedModule.version) > 0),
+      compareVersions(repoModule.spec.version, installedModule.version) > 0,
   );
   return candidates.sort((a, b) =>
     compareVersions(b.spec.version, a.spec.version),
