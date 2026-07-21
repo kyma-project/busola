@@ -110,7 +110,7 @@ export function CollapsibleSection({
           active={!disabled}
           toolbarStyle="Clear"
           onClick={toggle}
-          aria-label={title}
+          aria-label={`${title}, ${open ? 'expanded' : 'collapsed'}`}
           aria-expanded={open}
         >
           {!defaultTitleType && (
