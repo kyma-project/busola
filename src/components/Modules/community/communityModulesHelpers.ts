@@ -296,7 +296,8 @@ export const getUpdateTemplate = (
 ): ModuleTemplateType | undefined => {
   const installedModule = installedModules.find((m) => m.name === moduleName);
 
-  if (!installedModule) return undefined;
+  if (!installedModule || installedModule?.version === 'latest')
+    return undefined;
   const candidates = repoTemplates.filter(
     (repoModule) =>
       getModuleName(repoModule) === moduleName &&
