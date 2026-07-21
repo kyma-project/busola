@@ -97,7 +97,7 @@ context('Test extensibility variables', () => {
       .find('[data-testid="spec.name"]:visible')
       .should('not.exist');
 
-    cy.get('[aria-label="Advanced, collapsed"]:visible', { log: false }).should(
+    cy.get('[aria-label="Advanced"]:visible', { log: false }).should(
       'not.exist',
     );
 
@@ -117,9 +117,7 @@ context('Test extensibility variables', () => {
 
     cy.get('ui5-cb-item:visible').contains('advanced').click();
 
-    cy.get('[aria-label="Advanced, collapsed"]:visible', { log: false }).should(
-      'exist',
-    );
+    cy.get('[aria-label="Advanced"]:visible', { log: false }).should('exist');
 
     // test vars with defaultValue
     cy.get('@form')
