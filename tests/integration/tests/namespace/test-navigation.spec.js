@@ -110,6 +110,7 @@ context('Test navigation features', () => {
     cy.deleteFromGenericList('Deployment', DEPLOYMENT_NAME, {
       clearSearch: false,
       checkIfResourceIsRemoved: false,
+      selectSearchResult: true,
       searchInPlainTableText: true,
     });
   });
