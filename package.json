@@ -77,7 +77,7 @@
     "http-status-codes": "^2.3.0",
     "i18next": "^25.6.0",
     "i18next-http-backend": "^3.0.5",
-    "immutable": "^5.1.5",
+    "immutable": "^5.1.9",
     "jotai": "^2.20.0",
     "jotai-effect": "^2.3.1",
     "js-tiktoken": "^1.0.20",
