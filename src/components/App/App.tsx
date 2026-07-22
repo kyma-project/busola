@@ -121,9 +121,7 @@ export default function App() {
   }, [language, i18n]);
 
   useEffect(() => {
-    if (configuration?.sapui5BootstrapUrl) {
-      applyUI5BootstrapUrl(configuration.sapui5BootstrapUrl);
-    }
+    applyUI5BootstrapUrl(configuration?.sapui5BootstrapUrl ?? '');
   }, [configuration?.sapui5BootstrapUrl]);
 
   useSentry();

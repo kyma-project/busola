@@ -13,21 +13,24 @@ export const initTheme = (theme: string) => {
   }
 };
 
-/**
- * Configures UI5 to load theme assets from a custom SAPUI5 Cloud Service URL.
- * Required for GDC air-gapped deployments where the standard CDN is unreachable.
- * The URL must point to the SAPUI5 instance installed within the GDC-A environment.
- */
+// Configures UI5 to load theme assets from a custom SAPUI5 endpoint (required for GDC air-gapped deployments).
 export const applyUI5BootstrapUrl = (sapui5BootstrapUrl: string) => {
   if (!sapui5BootstrapUrl) return;
 
-  // UI5 Web Components requires an explicit allowlist before it will fetch
-  // theme assets from a cross-origin URL.
+  let origin: string;
+  try {
+    origin = new URL(sapui5BootstrapUrl).origin;
+  } catch {
+    console.error(`Invalid sapui5BootstrapUrl: "${sapui5BootstrapUrl}"`);
+    return;
+  }
+
+  // UI5 requires this allowlist meta before fetching theme assets from a cross-origin URL.
   const metaName = 'sap-allowed-theme-origins';
   if (!document.querySelector(`meta[name="${metaName}"]`)) {
     const meta = document.createElement('meta');
     meta.name = metaName;
-    meta.content = new URL(sapui5BootstrapUrl).origin;
+    meta.content = origin;
     document.head.appendChild(meta);
   }
 
