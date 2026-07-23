@@ -115,12 +115,12 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
   const gpus = getAvailableNvidiaGPUs(nodesData);
 
   return (
-    <section aria-labelledby="monitoring-heading">
+    <section aria-labelledby="cluster-stats-heading">
       <Title
         level="H3"
         size="H3"
         className="sap-margin-top-small sap-margin-bottom-medium"
-        id="monitoring-heading"
+        id="cluster-stats-heading"
       >
         {t('common.headers.monitoring-and-health')}
       </Title>

@@ -4,4 +4,5 @@ images:
   - europe-docker.pkg.dev/kyma-project/prod/busola-backend:latest
   - europe-docker.pkg.dev/kyma-project/prod/busola-web:latest
   - europe-docker.pkg.dev/kyma-project/prod/busola:latest
-  - europe-docker.pkg.dev/kyma-project/restricted-prod/fips-busola:latest
+  - europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest
+  - europe-docker.pkg.dev/kyma-project/restricted-prod/busola-fips:latest

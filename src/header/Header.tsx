@@ -124,7 +124,7 @@ export function Header() {
           <Avatar
             icon="customer"
             colorScheme="Accent6"
-            accessibleName="Settings"
+            accessibleName={t('navigation.settings.title')}
             id="openShellbarMenu"
           />
         }

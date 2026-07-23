@@ -174,6 +174,7 @@ clusters:
     token-info: If you don't know how to get your token, ask your authentication provider.
     update: Provide Authentication
 command-palette:
+  back: Back
   crs:
     cluster: Custom Resources (Cluster)
     cluster-short: Cluster CRs
@@ -877,6 +878,8 @@ kyma-companion:
   feedback:
     subtitle: Tell us about your experience with Joule in Kyma dashboard.
     title: We’d love to hear from you!
+  input:
+    accessible-name: Message input
   input-tokens:
     calculation-error: Unable to calculate token count.
     error: Message exceeds per-query token limit ({{tokenCount}}/{{maxTokens}} tokens used)
@@ -1076,6 +1079,7 @@ navigation:
   back-to-cluster: Back To Cluster Overview
   errors:
     sidebar: Failed to load navigation items
+  label: Navigation
   menu:
     get-help: Get Help
     legal-information: Legal Information
@@ -1292,6 +1296,10 @@ resource-graph:
     resource-graph: Resource Graph panel
   buttons:
     go-to-details: Go to details
+  controls:
+    fit-to-view: Fit to view
+    zoom-in: Zoom in
+    zoom-out: Zoom out
   error: Something went wrong during rendering the graph.
   related-resources: Related Resources
   title: Resource Graph

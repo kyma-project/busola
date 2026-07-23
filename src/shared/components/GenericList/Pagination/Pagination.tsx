@@ -104,7 +104,11 @@ export const Pagination = ({
         <Text className="pagesize-label bsl-has-color-status-4">
           {t('settings.other.results-per-page') + ':'}
         </Text>
-        <Select onChange={onSelectionChange} className="pagesize-selector">
+        <Select
+          onChange={onSelectionChange}
+          className="pagesize-selector"
+          accessibleName={t('settings.other.results-per-page')}
+        >
           {AVAILABLE_PAGE_SIZES.map((available_size) => (
             <Option
               value={available_size.toString()}
@@ -168,6 +172,7 @@ export const Pagination = ({
               </Text>
               <Input
                 className="page-input"
+                accessibleName={t('settings.other.page')}
                 onChange={(event) => {
                   const newValue = Number((event.target as any).typedInValue);
                   if (newValue >= 1 && newValue <= pagesCount)
