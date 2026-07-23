@@ -181,7 +181,10 @@ export function Header() {
             onClick={() =>
               setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }))
             }
-          />
+          >
+            {/* Show label on small screens */}
+            {!isLargeScreen && t('terminal.name')}
+          </ToggleButton>
         )}
         <ShellBarItem
           onClick={() => setIsGetHelpOpen(true)}
