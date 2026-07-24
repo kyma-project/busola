@@ -69,21 +69,37 @@ app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
 app.use('/proxy', proxyHandler);
 
+const kubeconfigDir = path.resolve(
+  process.env.IS_DOCKER
+    ? '/app/core-ui/kubeconfig'
+    : path.join(__dirname, '../public/kubeconfig'),
+);
+
 app.get('/backend/kubeconfig', (req, res) => {
-  const kubeconfigDir = path.join(
-    __dirname,
-    process.env.IS_DOCKER ? '/core-ui/kubeconfig' : '../public/kubeconfig',
-  );
   fs.readdir(kubeconfigDir, (err, files) => {
     if (err) {
       res.status(500).json({ error: 'Failed to read kubeconfig directory' });
       return;
     }
-    const yamlFiles = files.filter(
-      (f) => f.endsWith('.yaml') || f.endsWith('.yml'),
-    );
-    res.json(yamlFiles);
+    res.json(files);
   });
+});
+
+app.get('/backend/kubeconfig/:name', (req, res) => {
+  const name = req.params.name;
+  const candidates = [name, `${name}.yaml`, `${name}.yml`];
+  const found = candidates.find((c) => {
+    const resolved = path.resolve(kubeconfigDir, c);
+    return (
+      resolved.startsWith(kubeconfigDir + path.sep) && fs.existsSync(resolved)
+    );
+  });
+  if (!found) {
+    return res.status(404).json({ error: 'Kubeconfig not found' });
+  }
+  res.setHeader('Content-Disposition', `attachment; filename="${name}.yaml"`);
+  res.setHeader('Content-Type', 'application/x-yaml');
+  res.sendFile(path.resolve(kubeconfigDir, found));
 });
 
 let server = null;

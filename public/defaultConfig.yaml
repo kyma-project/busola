@@ -23,7 +23,7 @@ config:
     KUBECONFIG_ID:
       isEnabled: true
       config:
-        kubeconfigUrl: /kubeconfig
+        kubeconfigUrl: /backend/kubeconfig
     SENTRY:
       isEnabled: false
       config:
