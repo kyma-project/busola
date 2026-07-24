@@ -29,7 +29,7 @@
     "ws": "^8.21.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.28.6",
+    "@babel/cli": "^8.0.4",
     "@babel/node": "^7.29.0",
     "@babel/preset-env": "^7.29.2",
     "@babel/register": "^7.28.6",
