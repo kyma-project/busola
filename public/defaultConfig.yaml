@@ -1,5 +1,9 @@
 config:
   defaultStorage: localStorage
+  # URL for the SAPUI5 Cloud Service instance. Required for GDC air-gapped deployments
+  # where the SAPUI5 framework cannot be loaded from public CDNs. Set this to the
+  # customer-specific SAPUI5 endpoint installed within the GDC-A environment.
+  sapui5BootstrapUrl: ''
   features:
     LEGAL_LINKS:
       config:

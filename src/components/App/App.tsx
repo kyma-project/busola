@@ -25,7 +25,10 @@ import { clusterAtom } from 'state/clusterAtom';
 import { languageAtom } from 'state/settings/languageAtom';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { useAuthHandler } from 'state/authDataAtom';
-import { useGetConfiguration } from 'state/configuration/configurationAtom';
+import {
+  useGetConfiguration,
+  configurationAtom,
+} from 'state/configuration/configurationAtom';
 import { useGetExtensions } from 'state/navigation/extensionsAtom';
 import { useGetExtensibilitySchemas } from 'state/extensibilitySchemasAtom';
 import { useGetValidationSchemas } from 'state/validationSchemasAtom';
@@ -68,7 +71,7 @@ import { KubeconfigList } from 'components/KubeconfigList/KubeconfigList';
 import { KubeconfigRedirect } from 'components/KubeconfigList/KubeconfigRedirect';
 
 import { themeAtom } from 'state/settings/themeAtom';
-import { initTheme } from './initTheme';
+import { initTheme, applyUI5BootstrapUrl } from './initTheme';
 
 import './App.scss';
 import '../../web-components/index'; //Import for custom Web Components
@@ -110,6 +113,7 @@ export default function App() {
   useSidebarCondensed();
 
   useGetConfiguration();
+  const configuration = useAtomValue(configurationAtom);
   useSSOLogin();
   const { isLoading } = useAuthHandler();
   useGetExtensions();
@@ -120,6 +124,10 @@ export default function App() {
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
+
+  useEffect(() => {
+    applyUI5BootstrapUrl(configuration?.sapui5BootstrapUrl ?? '');
+  }, [configuration?.sapui5BootstrapUrl]);
 
   useSentry();
   useAfterInitHook(kubeconfigIdState);
