@@ -12,7 +12,10 @@ import { getPreviousPath } from './useAfterInitHook';
 import { openapiLastFetchedAtom } from 'state/openapi/openapiLastFetchedAtom';
 import { isEqual } from 'lodash';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useTranslation } from 'react-i18next';
+import { attachSilentRenewHandlers } from './silentRenewSetup';
+import { useReauthenticate } from './useReauthenticate';
+import { renewingAtom } from './renewingAtom';
+import { isOwnOidcCallback } from './utils/isOwnOidcCallback';
 
 export const hasNonOidcAuth = (
   user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
@@ -40,6 +43,16 @@ type handleLoginProps = {
   setAuth: (_auth: AuthDataState) => void;
   onAfterLogin: () => void;
   onError: (error: Error) => void;
+  onRenewingChange?: (renewing: boolean) => void;
+  // Returns false if a newer cluster has taken over; caller should abort.
+  isCurrent?: () => boolean;
+};
+
+// Returned so callers can detach the silent-renew listeners on cluster change
+// or unmount; without cleanup the handlers stack across cluster switches.
+export type HandleLoginResult = {
+  userManager: UserManager;
+  cleanup: () => void;
 };
 
 function getToken(user: User | null, useAccessToken: boolean): string {
@@ -53,22 +66,6 @@ function getToken(user: User | null, useAccessToken: boolean): string {
     return user.id_token;
   }
   throw new Error('id_token is empty');
-}
-
-// oidc-client-ts stores pending signin state as sessionStorage['oidc.<stateId>']
-// containing a JSON string with client_id and authority. Checking it tells us
-// whether the current callback URL belongs to this UserManager without relying
-// on the 'iss' query param, which varies across environments.
-function isOwnOidcCallback(clientId: string): boolean {
-  const stateId = new URLSearchParams(window.location.search).get('state');
-  if (!stateId) return false;
-  try {
-    const raw = localStorage.getItem(`oidc.${stateId}`);
-    if (!raw) return false;
-    return JSON.parse(raw)?.client_id === clientId;
-  } catch {
-    return false;
-  }
 }
 
 export function createUserManager(
@@ -93,10 +90,9 @@ export function createUserManager(
     scope: `openid ${[...uniqueScopes].join(' ')}`,
     response_type: 'code',
     response_mode: 'query',
-    // Disable library's built-in automatic renewal — we handle it manually via
-    // addAccessTokenExpiring so there is only ever one concurrent signinSilent()
-    // call. Two concurrent calls race on providers that rotate refresh tokens,
-    // causing the second request to fail with "invalid_grant".
+    // Disable the library's built-in silent renewal so our custom handler is
+    // the only signinSilent() call in flight. Two racing calls consume the
+    // rotating refresh token and the second one gets invalid_grant.
     automaticSilentRenew: false,
   });
 }
@@ -106,48 +102,9 @@ async function handleLogin({
   setAuth,
   onAfterLogin,
   onError,
-}: handleLoginProps): Promise<void> {
-  const setupAuthEventsHooks = (
-    userManager: UserManager,
-    useAccessToken: boolean,
-  ) => {
-    userManager.events.addAccessTokenExpiring(async () => {
-      try {
-        const user = await userManager.signinSilent();
-        setAuth({
-          token: getToken(user, useAccessToken),
-        });
-      } catch (e) {
-        console.warn('silent renew failed', e);
-        setAuth(null);
-        onError(e instanceof Error ? e : new Error(String(e)));
-      }
-    });
-  };
-
-  const setupVisibilityEventsHooks = (
-    userManager: UserManager,
-    user: User | null,
-    useAccessToken: boolean,
-  ) => {
-    document.addEventListener('visibilitychange', async () => {
-      if (document.visibilityState === 'visible') {
-        if (!!user?.expired || (user?.expires_in && user?.expires_in <= 5)) {
-          try {
-            user = await userManager.signinSilent();
-            setAuth({
-              token: getToken(user, useAccessToken),
-            });
-          } catch (e) {
-            console.warn('Visibility silent renew failed: ', e);
-            setAuth(null);
-            onError(e instanceof Error ? e : new Error(String(e)));
-          }
-        }
-      }
-    });
-  };
-
+  onRenewingChange,
+  isCurrent,
+}: handleLoginProps): Promise<HandleLoginResult | null> {
   const oidcParams = parseOIDCparams(userCredentials);
   const userManager = createUserManager(oidcParams);
 
@@ -160,52 +117,71 @@ async function handleLogin({
     if (storedUser && !storedUser.expired) {
       user = storedUser;
     } else {
-      // oidc-client-ts stores pending state as sessionStorage['oidc.<stateId>']
-      // before redirecting. Checking the stored client_id tells us definitively
-      // whether this callback URL belongs to this UserManager — without relying
-      // on the 'iss' URL which varies across environments.
       const hasCode = new URLSearchParams(window.location.search).has('code');
       if (hasCode && !isOwnOidcCallback(oidcParams.clientId)) {
-        // A redirect callback is in progress, but it belongs to a different
-        // UserManager (e.g. SSO). Don't touch it — just wait; the other
-        // handler will process the code and then navigate away.
-        return;
+        // Callback belongs to another manager (e.g. SSO); let it run.
+        return null;
       }
       if (!hasCode) {
         await userManager.clearStaleState();
         await userManager.signinRedirect();
-        return;
+        return null;
       }
       user = await userManager.signinRedirectCallback(window.location.href);
     }
 
+    if (isCurrent && !isCurrent()) return null;
+
     setAuth({ token: getToken(user, useAccessToken) });
-    setupAuthEventsHooks(userManager, useAccessToken);
-    setupVisibilityEventsHooks(userManager, user, useAccessToken);
+    const { cleanup } = attachSilentRenewHandlers(userManager, {
+      onRenewed: (renewedUser) => {
+        // A late renew from a superseded cluster must not overwrite the
+        // current cluster's authData.
+        if (isCurrent && !isCurrent()) return;
+        setAuth({ token: getToken(renewedUser, useAccessToken) });
+      },
+      onRenewError: (e) => {
+        if (isCurrent && !isCurrent()) return;
+        setAuth(null);
+        onError(e);
+      },
+      // App-global counter; must be balanced even if this cluster was
+      // superseded mid-renew.
+      onRenewingChange,
+    });
     onAfterLogin();
+    return { userManager, cleanup };
   } catch (e) {
     if (e instanceof Error) {
-      // Safety net: 'No state in response' means no login was initiated yet.
-      // 'authority mismatch' means stale storage from a prior session with a
-      // different issuer slipped through the iss-param guard (IdP didn't send iss).
-      // Both cases: clear stale state and start a fresh login.
+      // 'No state in response' means no login was in progress; 'authority
+      // mismatch' means stale storage from a prior issuer. Both recover
+      // by starting fresh.
       if (
         e.message.includes('No state in response') ||
         e.message.includes('authority mismatch')
       ) {
-        await userManager.clearStaleState();
-        userManager.signinRedirect();
+        try {
+          await userManager.clearStaleState();
+          await userManager.signinRedirect();
+        } catch (redirectError) {
+          console.warn('Login restart failed:', redirectError);
+          onError(
+            redirectError instanceof Error
+              ? redirectError
+              : new Error(String(redirectError)),
+          );
+        }
       } else {
         alert('Login error: ' + e);
       }
     } else {
       throw e;
     }
+    return null;
   }
 }
 
 export function useAuthHandler() {
-  const { t } = useTranslation();
   const notification = useNotification();
   const cluster = useAtomValue(clusterAtom);
   const setAuth = useSetAtom(authDataAtom);
@@ -213,13 +189,29 @@ export function useAuthHandler() {
   const setLastFetched = useSetAtom(openapiLastFetchedAtom);
   const [isLoading, setIsLoading] = useState(true);
   const prevClusterRef = useRef<typeof cluster>(null);
+  const cleanupRef = useRef<(() => void) | null>(null);
+  const userManagerRef = useRef<UserManager | null>(null);
+  // Bumped on every cluster change; a late `handleLogin` resolution with an
+  // outdated generation cleans itself up instead of overwriting the refs.
+  const loginGenRef = useRef(0);
+  const setRenewing = useSetAtom(renewingAtom);
+  const reauth = useReauthenticate({ notifyError: notification.notifyError });
 
   useEffect(() => {
+    // Detach the previous cluster's silent-renew listeners before switching.
+    if (cleanupRef.current) {
+      cleanupRef.current();
+      cleanupRef.current = null;
+      userManagerRef.current = null;
+      authUserManagerRef.current = null;
+    }
+    const gen = ++loginGenRef.current;
+
     if (!cluster) {
       setAuth(null);
       setIsLoading(false);
     } else {
-      if (isEqual(prevClusterRef.current, cluster)) return; // Skip if unchanged
+      if (isEqual(prevClusterRef.current, cluster)) return;
       prevClusterRef.current = cluster;
 
       const userCredentials = cluster.currentContext?.user?.user;
@@ -232,8 +224,8 @@ export function useAuthHandler() {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);
         setIsLoading(false);
       } else if (genericExec) {
-        // Generic exec plugin — cannot be run in the browser and no token was
-        // provided. Redirect back to the cluster list so the user can supply one.
+        // Generic exec plugins can't run in the browser; send the user back
+        // to the cluster list so they can supply a token manually.
         console.warn(
           'Cluster uses a generic exec plugin with no token. Please edit the cluster and provide a token.',
         );
@@ -243,7 +235,7 @@ export function useAuthHandler() {
         const onAfterLogin = () => {
           setIsLoading(false);
 
-          // Only auto-navigate after an OIDC redirect (which always lands on '/').
+          // Auto-navigate only after an OIDC callback (always lands on '/').
           const isOidcCallbackPath = window.location.pathname === '/';
           if (
             isOidcCallbackPath &&
@@ -262,17 +254,9 @@ export function useAuthHandler() {
         };
 
         const onError = (error?: Error) => {
-          navigate('/clusters');
           setIsLoading(false);
-
           console.warn('Silent token renew failed:', error);
-
-          const errorMessage =
-            error?.message || t('common.errors.session-expired');
-
-          notification.notifyError({
-            content: `${t('common.errors.session-not-renewed')} ${errorMessage}`,
-          });
+          reauth(userManagerRef.current, error);
         };
 
         handleLogin({
@@ -280,6 +264,18 @@ export function useAuthHandler() {
           setAuth,
           onAfterLogin,
           onError,
+          onRenewingChange: setRenewing,
+          isCurrent: () => gen === loginGenRef.current,
+        }).then((result) => {
+          if (!result) return;
+          if (gen !== loginGenRef.current) {
+            // A newer cluster took over while we were awaiting; discard this one.
+            result.cleanup();
+            return;
+          }
+          userManagerRef.current = result.userManager;
+          authUserManagerRef.current = result.userManager;
+          cleanupRef.current = result.cleanup;
         });
       }
     }
@@ -288,8 +284,26 @@ export function useAuthHandler() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cluster]);
 
+  useEffect(() => {
+    return () => {
+      if (cleanupRef.current) {
+        cleanupRef.current();
+        cleanupRef.current = null;
+        userManagerRef.current = null;
+        authUserManagerRef.current = null;
+      }
+    };
+  }, []);
+
   return { isLoading };
 }
 
 export const authDataAtom = atom<AuthDataState>(null);
 authDataAtom.debugLabel = 'authDataAtom';
+
+// Module-scoped mirror of `useAuthHandler`'s current UserManager so
+// `useResourceSchemas` can invoke `useReauthenticate` without re-parsing
+// the kubeconfig. Set on cluster change, cleared on unmount.
+export const authUserManagerRef: { current: UserManager | null } = {
+  current: null,
+};
