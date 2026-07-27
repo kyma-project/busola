@@ -1,4 +1,5 @@
-import { ShellBarItem } from '@ui5/webcomponents-react';
+import { useEffect } from 'react';
+import { ToggleButton } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { useLocation } from 'react-router';
@@ -9,18 +10,28 @@ import JouleChat from 'components/KymaCompanion/JouleChat';
 export function AIAssistantFeature() {
   const { t } = useTranslation();
   const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
-  const { showAssistant } = useAssistantAvailability();
+  const { showAssistant, useJouleMode } = useAssistantAvailability();
   const location = useLocation();
   const isOnClustersPage = location.pathname === '/clusters';
+
+  // Close the panel on cluster switch instead of swapping modes mid-conversation.
+  useEffect(() => {
+    setShowCompanion((prevState) =>
+      prevState.show
+        ? { ...prevState, show: false, useJoule: useJouleMode }
+        : { ...prevState, useJoule: useJouleMode },
+    );
+  }, [setShowCompanion, useJouleMode]);
 
   if (!showAssistant || isOnClustersPage) return null;
 
   return (
     <>
-      <ShellBarItem
+      <ToggleButton
+        accessibleName={t('kyma-companion.name')}
         icon={showCompanion.show ? 'da-2' : 'da'}
-        text={t('kyma-companion.name')}
-        title={t('kyma-companion.name')}
+        pressed={showCompanion.show}
+        slot="assistant"
         onClick={(e) => {
           e.preventDefault();
           setShowCompanion((prevState) => ({
