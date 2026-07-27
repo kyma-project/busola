@@ -16,11 +16,11 @@ export function AIAssistantFeature() {
 
   // Close the panel on cluster switch instead of swapping modes mid-conversation.
   useEffect(() => {
-    setShowCompanion((prevState) =>
-      prevState.show
-        ? { ...prevState, show: false, useJoule: useJouleMode }
-        : { ...prevState, useJoule: useJouleMode },
-    );
+    setShowCompanion((prevState) => ({
+      ...prevState,
+      show: false,
+      useJoule: useJouleMode,
+    }));
   }, [setShowCompanion, useJouleMode]);
 
   if (!showAssistant || isOnClustersPage) return null;
