@@ -7,7 +7,38 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 import eslint from '@nabla/vite-plugin-eslint';
 import istanbul from 'vite-plugin-istanbul';
 import fs from 'fs';
+import path from 'path';
 import { glob } from 'glob';
+
+const FONTS_DEST = 'fonts/72';
+const FONT_CDN_RE =
+  /https:\/\/cdn\.jsdelivr\.net\/npm\/@sap-theming\/theming-base-content@[^/]+\/content\/Base\/baseLib\/baseTheme\/fonts\//g;
+
+// Rewrites CDN font URLs in UI5's generated FontFace.css.js to local paths,
+// and serves the font files from node_modules during dev.
+function sapui5LocalFonts() {
+  const fontsDir = path.resolve(
+    'node_modules/@sap-theming/theming-base-content/content/Base/baseLib/baseTheme/fonts',
+  );
+  return {
+    name: 'sapui5-local-fonts',
+    transform(code: string, id: string) {
+      if (!id.includes('FontFace.css.js')) return;
+      return code.replace(FONT_CDN_RE, `/${FONTS_DEST}/`);
+    },
+    configureServer(server: import('vite').ViteDevServer) {
+      server.middlewares.use(`/${FONTS_DEST}`, (req, res, next) => {
+        const file = path.join(fontsDir, req.url ?? '');
+        if (fs.existsSync(file)) {
+          res.setHeader('Content-Type', 'font/woff2');
+          fs.createReadStream(file).pipe(res);
+        } else {
+          next();
+        }
+      });
+    },
+  };
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -41,6 +72,7 @@ export default defineConfig({
     svgr({
       include: '**/*.svg?react',
     }),
+    sapui5LocalFonts(),
     viteStaticCopy({
       targets: [
         {
@@ -50,6 +82,10 @@ export default defineConfig({
           transform() {
             return mergeYamlFiles('resource-validation/rule-sets/**/*.yaml');
           },
+        },
+        {
+          src: 'node_modules/@sap-theming/theming-base-content/content/Base/baseLib/baseTheme/fonts/*.woff2',
+          dest: FONTS_DEST,
         },
       ],
     }),
@@ -67,6 +103,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     force: true,
+    exclude: ['@ui5/webcomponents-base'],
     include: [
       '@openapi-contrib/openapi-schema-to-json-schema',
       '@stoplight/json-ref-resolver',
