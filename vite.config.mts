@@ -24,11 +24,15 @@ function sapui5LocalFonts() {
     name: 'sapui5-local-fonts',
     transform(code: string, id: string) {
       if (!id.includes('FontFace.css.js')) return;
-      return code.replace(FONT_CDN_RE, `/${FONTS_DEST}/`);
+      return { code: code.replace(FONT_CDN_RE, `/${FONTS_DEST}/`), map: null };
     },
     configureServer(server: import('vite').ViteDevServer) {
       server.middlewares.use(`/${FONTS_DEST}`, (req, res, next) => {
         const file = path.join(fontsDir, req.url ?? '');
+        if (!file.startsWith(fontsDir + path.sep) && file !== fontsDir) {
+          next();
+          return;
+        }
         if (fs.existsSync(file)) {
           res.setHeader('Content-Type', 'font/woff2');
           fs.createReadStream(file).pipe(res);
@@ -103,7 +107,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     force: true,
-    exclude: ['@ui5/webcomponents-base'],
+    exclude: ['@ui5/webcomponents-base'], // pre-bundled deps bypass the transform hook, so FontFace.css.js URL rewriting would be silently skipped without this exclusion
     include: [
       '@openapi-contrib/openapi-schema-to-json-schema',
       '@stoplight/json-ref-resolver',
