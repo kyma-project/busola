@@ -3,8 +3,8 @@ import { SCREEN_SIZE_BREAKPOINT_M } from 'command-pallette/CommandPalletteUI/typ
 import { useAtom, useAtomValue } from 'jotai';
 import {
   Avatar,
+  Button,
   ShellBar,
-  ShellBarItem,
   ToggleButton,
   type ShellBarDomRef,
 } from '@ui5/webcomponents-react';
@@ -158,6 +158,7 @@ export function Header() {
           <>
             <ToggleButton
               accessibleName={t('kyma-companion.name')}
+              tooltip={t('kyma-companion.ask-joule')}
               icon={showCompanion.show ? 'da-2' : 'da'}
               onClick={(e) => {
                 e.preventDefault();
@@ -183,11 +184,13 @@ export function Header() {
             }
           />
         )}
-        <ShellBarItem
+        <Button
           onClick={() => setIsGetHelpOpen(true)}
           id="openGetHelpMenu"
           icon="sys-help"
-          text={t('navigation.menu.get-help')}
+          tooltip={t('navigation.menu.get-help')}
+          design="Transparent"
+          accessibleName={t('navigation.menu.get-help')}
         />
       </ShellBar>
       <HeaderMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
