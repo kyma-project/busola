@@ -75,10 +75,6 @@ export async function handleK8sRequests(req, res) {
   const { targetApiServer, ca, cert, key, authorization } = headersData;
 
   // Forward only the headers the Kubernetes API server needs.
-  // Passing all browser headers (user-agent, cookie, sec-fetch-*, etc.) can
-  // cause 431 errors when OIDC tokens with large group claim sets push the
-  // total header block past the API server's limit (common with custom IDPs
-  // such as GitHub Enterprise that embed many group memberships in the JWT).
   const K8S_FORWARDED_HEADERS = new Set([
     'accept',
     'content-type',
