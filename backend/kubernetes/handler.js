@@ -74,9 +74,19 @@ export async function handleK8sRequests(req, res) {
 
   const { targetApiServer, ca, cert, key, authorization } = headersData;
 
+  // Forward only the headers the Kubernetes API server needs.
+  const K8S_FORWARDED_HEADERS = new Set([
+    'accept',
+    'content-type',
+    'content-length',
+    'transfer-encoding',
+  ]);
+  const filteredHeaders = Object.fromEntries(
+    Object.entries(req.headers).filter(([k]) => K8S_FORWARDED_HEADERS.has(k)),
+  );
   const headers = authorization
-    ? { ...req.headers, authorization }
-    : req.headers;
+    ? { ...filteredHeaders, authorization }
+    : filteredHeaders;
 
   // Use keep-alive agent for token auth only (skip for cert auth)
   const useAgent = authorization && !cert && !key;
