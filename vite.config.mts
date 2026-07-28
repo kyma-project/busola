@@ -33,8 +33,18 @@ function sapui5LocalFonts() {
           next();
           return;
         }
-        if (fs.existsSync(file)) {
-          res.setHeader('Content-Type', 'font/woff2');
+        if (fs.existsSync(file) && fs.statSync(file).isFile()) {
+          const mimeTypes: Record<string, string> = {
+            '.woff2': 'font/woff2',
+            '.woff': 'font/woff',
+            '.ttf': 'font/ttf',
+            '.otf': 'font/otf',
+          };
+          const ext = path.extname(file);
+          res.setHeader(
+            'Content-Type',
+            mimeTypes[ext] ?? 'application/octet-stream',
+          );
           fs.createReadStream(file).pipe(res);
         } else {
           next();
