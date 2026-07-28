@@ -137,6 +137,7 @@ export async function handleK8sRequests(req, res) {
             'Content-Type': contentType,
             'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
             'X-Content-Type-Options': 'nosniff',
+            'Cache-Control': 'no-store',
           });
 
           try {

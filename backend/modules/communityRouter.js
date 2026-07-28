@@ -1,10 +1,8 @@
 import express from 'express';
-import cors from 'cors';
 import jsyaml from 'js-yaml';
 
 const router = express.Router();
 router.use(express.json());
-router.use(cors());
 
 async function handleGetCommunityResource(req, res) {
   const { link } = JSON.parse(req.body.toString());

@@ -67,6 +67,14 @@ const SLOW_REQUEST_THRESHOLD_MS = parseInt(
 );
 app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
+app.use((_req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Cross-Origin-Resource-Policy', 'same-site');
+  next();
+});
+
 app.use('/proxy', proxyHandler);
 
 app.get('/backend/kubeconfig', (req, res) => {
