@@ -86,7 +86,10 @@ app.get('/backend/kubeconfig', (req, res) => {
 });
 
 app.get('/backend/kubeconfig/:name', (req, res) => {
-  const name = req.params.name;
+  const name = req.params.name.replace(/[^a-zA-Z0-9._-]/g, '');
+  if (!name) {
+    return res.status(400).json({ error: 'Invalid kubeconfig name' });
+  }
   const candidates = [name, `${name}.yaml`, `${name}.yml`];
   const found = candidates.find((c) => {
     const resolved = path.resolve(kubeconfigDir, c);

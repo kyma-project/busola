@@ -32,16 +32,21 @@ export function KubeconfigList() {
           entries={files.map((file) => ({ name: file }))}
           headerRenderer={() => [t('common.headers.name')]}
           rowRenderer={(entry) => {
+            const isYaml = /\.(yaml|yml)$/.test(entry.name);
             const nameWithoutExt = entry.name.replace(/\.(yaml|yml)$/, '');
             return [
-              <Link
-                key={`${entry.name}-link`}
-                wrappingType={'Normal'}
-                design={'Emphasized'}
-                href={`/kubeconfig/${nameWithoutExt}`}
-              >
-                {entry.name}
-              </Link>,
+              isYaml ? (
+                <Link
+                  key={`${entry.name}-link`}
+                  wrappingType={'Normal'}
+                  design={'Emphasized'}
+                  href={`/kubeconfig/${nameWithoutExt}`}
+                >
+                  {entry.name}
+                </Link>
+              ) : (
+                <span key={`${entry.name}-text`}>{entry.name}</span>
+              ),
             ];
           }}
         />
