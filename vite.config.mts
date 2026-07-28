@@ -28,7 +28,7 @@ function sapui5LocalFonts() {
     },
     configureServer(server: import('vite').ViteDevServer) {
       server.middlewares.use(`/${FONTS_DEST}`, (req, res, next) => {
-        const file = path.join(fontsDir, req.url ?? '');
+        const file = path.join(fontsDir, (req.url ?? '').split('?')[0]);
         if (!file.startsWith(fontsDir + path.sep) && file !== fontsDir) {
           next();
           return;
@@ -98,7 +98,7 @@ export default defineConfig({
           },
         },
         {
-          src: 'node_modules/@sap-theming/theming-base-content/content/Base/baseLib/baseTheme/fonts/*.woff2',
+          src: 'node_modules/@sap-theming/theming-base-content/content/Base/baseLib/baseTheme/fonts/*.{woff2,woff}',
           dest: FONTS_DEST,
         },
       ],
