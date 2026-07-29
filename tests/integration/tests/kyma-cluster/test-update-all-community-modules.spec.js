@@ -245,13 +245,6 @@ context('Test Community Modules update-all functionality', () => {
   });
 
   it('Confirms update and shows success notification', () => {
-    // Delay the community-resource fetch so the "Module update started" toast is visible
-    cy.intercept('POST', '**/modules/community-resource', (req) => {
-      req.on('response', (res) => {
-        res.setDelay(2000);
-      });
-    }).as('communityResource');
-
     cy.get('ui5-panel[data-testid="community-modules-list"]')
       .find('ui5-button')
       .contains('Update All')

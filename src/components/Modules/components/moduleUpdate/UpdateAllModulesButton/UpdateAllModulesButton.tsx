@@ -192,6 +192,9 @@ export const UpdateAllModulesButton = () => {
       content: t('modules.community.messages.module-update-started'),
     });
 
+    // Yield so React flushes the toast before async work overwrites it.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     await deleteOldTemplates();
 
     const templateMap = new Map<string, ModuleTemplateType>();
