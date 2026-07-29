@@ -93,16 +93,25 @@ function navigateTo({
   const isNamespaced = crd.spec.scope === 'Namespaced';
 
   const clusterPath = `/cluster/${encodeURIComponent(activeClusterName)}`;
-  const path = matchingNode
-    ? `${matchingNode.pathSegment}/${crName || ''}` // custom nav node
-    : `customresources/${crd.metadata.name}/${crName}`; // generic route
+  const basePath = matchingNode
+    ? matchingNode.pathSegment
+    : `customresources/${crd.metadata.name}`;
+  const path = crName ? `${basePath}/${crName}` : basePath;
+
+  // A nav-node route only shows its own view, so its list stays single-column.
+  let layoutQuery = '';
+  if (crName) {
+    layoutQuery = matchingNode
+      ? '?layout=TwoColumnsMidExpanded'
+      : '?layout=ThreeColumnsEndExpanded';
+  } else if (!matchingNode) {
+    layoutQuery = '?layout=TwoColumnsMidExpanded';
+  }
 
   if (isNamespaced) {
-    navigate(
-      `${clusterPath}/namespaces/${namespace}/${path}?layout=ThreeColumnsEndExpanded`,
-    );
+    navigate(`${clusterPath}/namespaces/${namespace}/${path}${layoutQuery}`);
   } else {
-    navigate(clusterPath + '/' + path + '?layout=ThreeColumnsEndExpanded');
+    navigate(`${clusterPath}/${path}${layoutQuery}`);
   }
 }
 
