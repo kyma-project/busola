@@ -364,3 +364,17 @@
   font-family: '72Mono-Boldfull';
   src: url('/fonts/72Mono-Bold-full.woff2') format('woff2');
 }
+
+@font-face {
+  font-family: 'SAP-icons-horizon';
+  src: url('/fonts/SAP-icons-horizon.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SAP-icons-TNT-horizon';
+  src: url('/fonts/SAP-icons-TNT-horizon.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
