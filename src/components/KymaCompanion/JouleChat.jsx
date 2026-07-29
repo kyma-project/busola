@@ -34,6 +34,7 @@ export default function JouleChat() {
   const resourceRef = useRef(currentResource);
   const clusterRef = useRef(cluster);
   const authDataRef = useRef(authData);
+  const jouleThemeRef = useRef(null);
 
   useEffect(() => {
     resourceRef.current = currentResource;
@@ -140,6 +141,12 @@ export default function JouleChat() {
         console.error('Failed to load Joule Web Client');
       };
 
+      script.onload = () => {
+        if (jouleThemeRef.current) {
+          window.sap?.das?.webclient?.setTheme(jouleThemeRef.current());
+        }
+      };
+
       document.head.appendChild(script);
     }
 
@@ -174,8 +181,8 @@ export default function JouleChat() {
       window.sap?.das?.webclient?.setTheme(resolveJouleTheme());
     };
 
+    jouleThemeRef.current = resolveJouleTheme;
     applyTheme();
-
     if (theme !== 'light_dark') return;
 
     // When following system preference, update Joule if the OS theme changes
