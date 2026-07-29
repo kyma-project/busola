@@ -4,7 +4,7 @@ import jsyaml from 'js-yaml';
 import config from '../../config';
 import { loadFile } from '../../support/loadFile';
 
-const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
+const kubeconfigIdAddress = `${config.clusterAddress}/backend/kubeconfig`;
 
 context('Test login - kubeconfigID', () => {
   Cypress.skipAfterFail();
@@ -104,7 +104,7 @@ context('Test login - kubeconfigID', () => {
             KUBECONFIG_ID: {
               isEnabled: true,
               config: {
-                kubeconfigUrl: '/kubeconfig',
+                kubeconfigUrl: '/backend/kubeconfig',
                 defaultKubeconfig: 'mock-kubeconfig.yaml',
               },
             },
