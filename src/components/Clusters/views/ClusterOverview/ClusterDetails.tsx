@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 import { unwrap } from 'jotai/utils';
 
-import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
+import { useGetClusterInfo } from './useGetClusterInfo';
 import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
 
 import { FormItem, Text, Title, Label, Form } from '@ui5/webcomponents-react';
@@ -13,7 +13,6 @@ import ClusterModulesCard from './ClusterModulesCard';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
-import { useGetEnvironmentParameters } from './useGetEnvironmentParameters';
 import { Tokens } from 'shared/components/Tokens';
 import { ActiveClusterState } from 'state/clusterAtom';
 import { useFeature } from 'hooks/useFeature';
@@ -32,21 +31,6 @@ type KymaResourcesItem = {
   };
 };
 
-const GardenerProvider = () => {
-  const { t } = useTranslation();
-  const provider = useGetGardenerProvider();
-
-  if (!provider) return null;
-
-  return (
-    <FormItem
-      labelContent={<Label showColon>{t('gardener.headers.provider')}</Label>}
-    >
-      <p className="gardener-provider">{provider}</p>
-    </FormItem>
-  );
-};
-
 export default function ClusterDetails({
   currentCluster,
 }: {
@@ -63,8 +47,7 @@ export default function ClusterDetails({
       )?.metadata.labels || kymaResources?.items[0]?.metadata?.labels,
     [kymaResources],
   );
-  const { natGatewayIps, environmentParametersLoading } =
-    useGetEnvironmentParameters();
+  const { clusterInfo, loading: clusterInfoLoading } = useGetClusterInfo();
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     configFeaturesNames.COMMUNITY_MODULES,
   );
@@ -128,8 +111,19 @@ export default function ClusterDetails({
                   {currentCluster?.currentContext?.cluster?.cluster?.server}
                 </Text>
               </FormItem>
-              <GardenerProvider />
-              {!!kymaResourceLabels?.['kyma-project.io/global-account-id'] && (
+              {!clusterInfoLoading && !!clusterInfo?.provider && (
+                <FormItem
+                  labelContent={
+                    <Label showColon>{t('gardener.headers.provider')}</Label>
+                  }
+                >
+                  <p className="gardener-provider">{clusterInfo.provider}</p>
+                </FormItem>
+              )}
+              {!!(
+                kymaResourceLabels?.['kyma-project.io/global-account-id'] ||
+                clusterInfo?.globalAccountID
+              ) && (
                 <FormItem
                   labelContent={
                     <Label showColon>
@@ -138,11 +132,16 @@ export default function ClusterDetails({
                   }
                 >
                   <Text>
-                    {kymaResourceLabels['kyma-project.io/global-account-id']}
+                    {kymaResourceLabels?.[
+                      'kyma-project.io/global-account-id'
+                    ] || clusterInfo?.globalAccountID}
                   </Text>
                 </FormItem>
               )}
-              {!!kymaResourceLabels?.['kyma-project.io/subaccount-id'] && (
+              {!!(
+                kymaResourceLabels?.['kyma-project.io/subaccount-id'] ||
+                clusterInfo?.subaccountID
+              ) && (
                 <FormItem
                   labelContent={
                     <Label showColon>
@@ -151,11 +150,12 @@ export default function ClusterDetails({
                   }
                 >
                   <Text>
-                    {kymaResourceLabels['kyma-project.io/subaccount-id']}
+                    {kymaResourceLabels?.['kyma-project.io/subaccount-id'] ||
+                      clusterInfo?.subaccountID}
                   </Text>
                 </FormItem>
               )}
-              {!environmentParametersLoading && !!natGatewayIps && (
+              {!clusterInfoLoading && !!clusterInfo?.natGatewayIps && (
                 <FormItem
                   labelContent={
                     <Label showColon>
@@ -163,7 +163,7 @@ export default function ClusterDetails({
                     </Label>
                   }
                 >
-                  <Tokens tokens={natGatewayIps} />
+                  <Tokens tokens={clusterInfo.natGatewayIps} />
                 </FormItem>
               )}
             </>
