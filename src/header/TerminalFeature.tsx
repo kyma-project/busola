@@ -1,6 +1,6 @@
 import { ShellBarItem } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useAtom, useSetAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { useLocation } from 'react-router';
 import { useFeature } from 'hooks/useFeature';
 import { showTerminalAtom } from 'state/showTerminalAtom';
