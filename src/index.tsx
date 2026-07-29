@@ -22,6 +22,7 @@ import '@fundamental-styles/common-css/dist/sap-margin.css';
 import '@fundamental-styles/common-css/dist/sap-padding.css';
 
 import './styles/reset.css';
+import './styles/ui5-fonts.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
 import { createRoot } from 'react-dom/client';
