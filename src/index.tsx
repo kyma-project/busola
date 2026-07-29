@@ -13,8 +13,6 @@ import { NotificationProvider } from 'shared/contexts/NotificationContext';
 import { RouteErrorFallback } from 'shared/components/RouteErrorFallback/RouteErrorFallback';
 
 import { setDefaultFontLoading } from '@ui5/webcomponents-base/dist/config/Fonts.js';
-setDefaultFontLoading(false);
-
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents-react/dist/Assets';
 import '@ui5/webcomponents-icons/dist/AllIcons.js';
@@ -30,6 +28,8 @@ import './styles/index.scss';
 import './styles/fiori-helpers.scss';
 import { createRoot } from 'react-dom/client';
 import JotaiDevTools from 'components/JotaiDevTools/JotaiDevTools';
+
+setDefaultFontLoading(false);
 
 i18next
   .use(initReactI18next)
