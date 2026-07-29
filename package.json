@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@datasert/cronjs-parser": "^1.4.0",
-    "@fundamental-styles/common-css": "^0.30.2",
+    "@sap-ui/common-css": "^0.39.11",
     "@openapi-contrib/openapi-schema-to-json-schema": "^5.1.0",
     "@peculiar/x509": "^1.12.3",
     "@sap-theming/theming-base-content": "^11.1.28",
