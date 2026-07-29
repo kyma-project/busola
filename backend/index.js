@@ -81,7 +81,7 @@ app.get('/backend/kubeconfig', (req, res) => {
       res.status(500).json({ error: 'Failed to read kubeconfig directory' });
       return;
     }
-    res.json(files);
+    res.json(files.filter((f) => !f.startsWith('.')));
   });
 });
 
@@ -90,7 +90,17 @@ app.get('/backend/kubeconfig/:name', (req, res) => {
   if (!name) {
     return res.status(400).json({ error: 'Invalid kubeconfig name' });
   }
-  const candidates = [name, `${name}.yaml`, `${name}.yml`];
+  const stripped = name.replace(/\.ya?ml$/, '');
+  const candidates = [
+    ...new Set([
+      name,
+      `${name}.yaml`,
+      `${name}.yml`,
+      stripped,
+      `${stripped}.yaml`,
+      `${stripped}.yml`,
+    ]),
+  ];
   const found = candidates.find((c) => {
     const resolved = path.resolve(kubeconfigDir, c);
     return (
