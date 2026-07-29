@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { SCREEN_SIZE_BREAKPOINT_M } from 'command-pallette/CommandPalletteUI/types';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   Avatar,
   ShellBar,
@@ -66,7 +66,7 @@ export function Header() {
   const isOnClustersPage = location.pathname === '/clusters';
   const isOnKubeconfigPage = location.pathname === '/kubeconfig';
 
-  const [, setShowCompanion] = useAtom(showKymaCompanionAtom);
+  const setShowCompanion = useSetAtom(showKymaCompanionAtom);
 
   return (
     <>
