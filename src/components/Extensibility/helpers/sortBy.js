@@ -13,6 +13,7 @@ export const getSortingFunction = (jsonata, formula) => {
           return aValue - bValue;
         }
         case 'string': {
+          if (bValue === undefined) return 1;
           if (Date.parse(aValue)) {
             return new Date(aValue).getTime() - new Date(bValue).getTime();
           }
@@ -28,12 +29,14 @@ export const applySortFormula = (jsonata, formula) => {
   return async (a, b) => {
     if (a === undefined) return -1;
     if (b === undefined) return 1;
-    const result = await jsonata(formula, {
-      scope: {
-        first: a,
-        second: b,
-      },
-    })[0];
+    const result = (
+      await jsonata(formula, {
+        scope: {
+          first: a,
+          second: b,
+        },
+      })
+    )[0];
     return result;
   };
 };
@@ -74,37 +77,20 @@ export const sortBy = (jsonata, sortOptions, t, defaultSortOptions = {}) => {
 };
 
 export const asyncSort = async (array, asyncFn, isDesc = false) => {
-  let arrayOfSortPairs = [];
-  // Fake sort to get all pairs to sort.
-  array.sort((a, b) => {
-    arrayOfSortPairs = [
-      ...arrayOfSortPairs,
-      {
-        pair: [a, b],
-      },
-      {
-        pair: [b, a],
-      },
-    ];
-    return -1;
-  });
-  // Resolve async functions.
-  const resolved = await Promise.all(
-    arrayOfSortPairs.map(async (el) => {
-      const [a, b] = el.pair;
-      const resolvedResult = isDesc ? await asyncFn(b, a) : await asyncFn(a, b);
-      return {
-        pair: el.pair,
-        result: resolvedResult,
-      };
-    }),
+  // Pre-compute results for every ordered pair (i, j) where i !== j.
+  const results = new Map();
+  await Promise.all(
+    array.flatMap((a, i) =>
+      array.map(async (b, j) => {
+        if (i === j) return;
+        const key = `${i}:${j}`;
+        const result = isDesc ? await asyncFn(b, a) : await asyncFn(a, b);
+        results.set(key, result);
+      }),
+    ),
   );
-  // Final sort.
-  const final = array.sort((a, b) => {
-    const findResultForPair = resolved.find(
-      (res) => JSON.stringify([a, b]) === JSON.stringify(res.pair),
-    )?.result;
-    return findResultForPair;
-  });
-  return final;
+
+  const indexed = array.map((item, i) => ({ item, i }));
+  indexed.sort((a, b) => results.get(`${a.i}:${b.i}`));
+  return indexed.map(({ item }) => item);
 };
