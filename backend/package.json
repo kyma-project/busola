@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/runtime": "^7.29.2",
+    "@babel/runtime": "^8.0.0",
     "compression": "^1.8.1",
     "cors": "^2.8.6",
     "express": "^5.2.1",
@@ -29,10 +29,10 @@
     "ws": "^8.21.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.28.6",
-    "@babel/node": "^7.29.0",
-    "@babel/preset-env": "^7.29.2",
-    "@babel/register": "^7.28.6",
+    "@babel/cli": "^8.0.1",
+    "@babel/node": "^8.0.1",
+    "@babel/preset-env": "^8.0.1",
+    "@babel/register": "^8.0.1",
     "babel-loader": "^10.1.1",
     "core-js": "^3.49.0",
     "nodemon": "^3.1.14",
