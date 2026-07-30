@@ -192,8 +192,8 @@ export const UpdateAllModulesButton = () => {
       content: t('modules.community.messages.module-update-started'),
     });
 
-    // Yield so React flushes the toast before async work overwrites it.
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    // Wait for the browser to paint the toast before starting async work.
+    await new Promise((resolve) => requestAnimationFrame(resolve));
 
     await deleteOldTemplates();
 
