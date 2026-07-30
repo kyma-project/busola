@@ -108,7 +108,7 @@ const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
 const isDocker = process.env.IS_DOCKER === 'true';
 
-if (isDocker) {
+if (true) {
   // Running in dev mode
   // yup, order matters here
   serveMonaco(app);

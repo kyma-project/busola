@@ -11,3 +11,4 @@ RUN apk add --no-cache \
 
 # Upgrade all packages and clean up
 RUN apk upgrade --no-cache
+
