@@ -70,9 +70,10 @@ app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 app.use('/proxy', proxyHandler);
 
 const kubeconfigDir = path.resolve(
-  process.env.IS_DOCKER
-    ? '/app/core-ui/kubeconfig'
-    : path.join(__dirname, '../public/kubeconfig'),
+  process.env.KUBECONFIG_DIR ||
+    (process.env.IS_DOCKER
+      ? '/app/core-ui/kubeconfig'
+      : path.join(__dirname, '../public/kubeconfig')),
 );
 
 app.get('/backend/kubeconfig', (req, res) => {
