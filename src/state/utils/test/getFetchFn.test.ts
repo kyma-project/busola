@@ -73,7 +73,6 @@ describe('getFetchFn', () => {
       authData,
       cluster,
       ssoData,
-      isSSOEnabled: false,
     });
   });
 
@@ -89,7 +88,6 @@ describe('getFetchFn', () => {
       authData,
       cluster,
       ssoData: null,
-      isSSOEnabled: false,
     });
   });
 });

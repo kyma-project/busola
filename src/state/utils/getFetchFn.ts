@@ -10,7 +10,6 @@ export const getFetchFn = (get: Getter) => {
   const ssoData = get(ssoDataAtom);
 
   if (authData && cluster) {
-    if (isSSOEnabled && !ssoData) return undefined;
     return createFetchFn({
       authData,
       cluster,
