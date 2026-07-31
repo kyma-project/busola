@@ -35,6 +35,8 @@ export const applySortFormula = (jsonata, formula) => {
           first: a,
           second: b,
         },
+        first: a,
+        second: b,
       })
     )[0];
     return result;
