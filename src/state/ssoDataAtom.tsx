@@ -23,8 +23,6 @@ const defaultValue: SsoDataState = getSSOAuthData();
 
 export const ssoDataAtom = atom<SsoDataState>(defaultValue);
 
-export const ssoLoginBypassAtom = atom<boolean>(false);
-
 export function setSSOAuthData(data: SsoDataState) {
   sessionStorage.setItem(SSO_KEY, JSON.stringify(data));
 }
@@ -43,8 +41,7 @@ function hasValidStoredSSOToken(): boolean {
 
 export function useIsSSOEnabled() {
   const configuration = useAtomValue(configurationAtom);
-  const bypassed = useAtomValue(ssoLoginBypassAtom);
-  return !bypassed && (configuration?.features?.SSO_LOGIN?.isEnabled ?? false);
+  return configuration?.features?.SSO_LOGIN?.isEnabled ?? false;
 }
 
 // Mutable SSO module state, kept in one object.
@@ -214,7 +211,6 @@ export function useSSOLogin() {
   const [ssoState, setSsoState] = useAtom(ssoDataAtom);
   const isSSOEnabled = useIsSSOEnabled();
   const setRenewing = useSetAtom(renewingAtom);
-  const setBypass = useSetAtom(ssoLoginBypassAtom);
 
   useEffect(() => {
     // An expired stored user must fall through so handleSSOLogin can start
@@ -235,10 +231,7 @@ export function useSSOLogin() {
 
     const startLogin = async () => {
       const bypass = await getEnv(Envs.SSO_LOGIN_BYPASS);
-      if (bypass === 'true') {
-        setBypass(true);
-        return;
-      }
+      if (bypass === 'true') return;
       handleSSOLogin(ssoConfig, setSsoState, setRenewing);
     };
     startLogin();
