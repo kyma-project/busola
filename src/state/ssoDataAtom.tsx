@@ -151,9 +151,18 @@ async function handleSSOLogin(
       // useLoginWithKubeconfigID can still find it in the URL.
       const pendingKubeconfigId = consumePendingKubeconfigId();
       if (pendingKubeconfigId) {
+        console.log('Restoring pending kubeconfigID', pendingKubeconfigId);
         const url = new URL(window.location.href);
+        // Remove OAuth callback parameters to prevent re-triggering auth
+        url.searchParams.delete('code');
+        url.searchParams.delete('iss');
+        url.searchParams.delete('state');
+        url.searchParams.delete('session_state');
+        console.log('URL before restore', url.toString());
         url.searchParams.set('kubeconfigID', pendingKubeconfigId);
         window.history.replaceState({}, '', url.toString());
+        console.log('URL after restore', url.toString());
+        window.location.href = url.toString();
       }
     }
 
@@ -263,3 +272,4 @@ export function checkForTokenExpiration(token?: string) {
     // Not a JWT — nothing to check.
   }
 }
+ssoDataAtom.debugLabel = 'ssoDataAtom';

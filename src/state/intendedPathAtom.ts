@@ -2,13 +2,23 @@ const INTENDED_PATH_KEY = 'busola.intended-path';
 const PENDING_KUBECONFIG_ID_KEY = 'busola.pending-kubeconfig-id';
 
 export function savePendingKubeconfigId(kubeconfigId: string): void {
+  console.log(
+    'savePendingKubeconfigId called with kubeconfigId:',
+    kubeconfigId,
+  );
   localStorage.setItem(PENDING_KUBECONFIG_ID_KEY, kubeconfigId);
 }
 
 export function consumePendingKubeconfigId(): string | null {
+  console.log('consumePendingKubeconfigId called');
+  const value = localStorage.getItem(PENDING_KUBECONFIG_ID_KEY);
+  return value ? value : null;
+}
+
+export function removePendingKubeconfigId(): void {
+  console.log('removePendingKubeconfigId called');
   const value = localStorage.getItem(PENDING_KUBECONFIG_ID_KEY);
   if (value) localStorage.removeItem(PENDING_KUBECONFIG_ID_KEY);
-  return value;
 }
 
 export interface IntendedPath {

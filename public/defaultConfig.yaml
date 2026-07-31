@@ -1,59 +1,73 @@
 config:
-  defaultStorage: localStorage
+  storage: localStorage
   features:
+    PROTECTED_RESOURCES:
+      isEnabled: true
+      config:
+        resources:
+          - match:
+              $.metadata.labels['serverless.kyma-project.io/managed-by']: function-controller
+            message: 'Resource managed by: function-controller'
+          - match:
+              $.metadata.labels['reconciler.kyma-project.io/managed-by']: reconciler
+            messageSrc: >-
+              $.metadata.annotations['reconciler.kyma-project.io/managed-by-reconciler-disclaimer']
+          - match:
+              $.metadata.labels['istio.io/rev']: default
+            message: Resource managed by Istio control plane
+          - match:
+              $.metadata.labels['applicationconnector.kyma-project.io/managed-by']: compass-runtime-agent
     LEGAL_LINKS:
       config:
         legal-disclosure:
           default: https://www.sap.com/corporate/en/legal/impressum.html
           de: https://www.sap.com/corporate/de/legal/impressum.html
         privacy:
-          default: https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US
+          default: >-
+            https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US
         copyright:
           default: https://www.sap.com/corporate/en/legal/copyright.html
           de: https://www.sap.com/corporate/de/legal/copyright.html
         trademark:
           default: https://www.sap.com/corporate/en/legal/trademark.html
           de: https://www.sap.com/corporate/de/legal/trademark.html
-    GET_HELP_LINKS:
-      config:
-        kyma-project-io:
-          default: https://kyma-project.io
-        help-sap-com:
-          default: https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-environment
     KUBECONFIG_ID:
       isEnabled: true
       config:
-        kubeconfigUrl: /kubeconfig
+        kubeconfigUrl: https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig
     SENTRY:
-      isEnabled: false
+      isEnabled: true
       config:
-        dsn: ''
+        dsn: https://016845744e4741cc9bea0caaabc0fe87@o399001.ingest.sentry.io/5953495
     EXTERNAL_NODES:
-      isEnabled: false
+      isEnabled: true
     HIDDEN_NAMESPACES:
       isEnabled: true
       config:
         namespaces:
+          - istio-system
           - kube-system
+    GZIP:
+      isEnabled: true
     EXTENSIBILITY:
       isEnabled: true
     EXTENSIBILITY_INJECTIONS:
       isEnabled: true
     EXTENSIBILITY_CUSTOM_COMPONENTS:
-      isEnabled: false
+      isEnabled: true
     EXTENSIBILITY_WIZARD:
       isEnabled: false
     KYMA_COMPANION:
-      isEnabled: false
+      isEnabled: true
       config:
-        feedbackLink: https://sapinsights.eu.qualtrics.com/jfe/preview/previewId/1fa80b40-56c3-4b20-9902-877df3da3493/SV_dmWATTfes5SstG6?Q_CHL=preview&Q_SurveyVersionID=current
+        feedbackLink: https://www.youtube.com/watch?v=dQw4w9WgXcQ
         documentationLink: https://help.sap.com/docs/btp/sap-business-technology-platform-internal/kyma-companion?locale=en-US&version=Internal&state=DRAFT
         model: 'gpt-4.1'
         queryMaxTokens: 8000
-      useJoule: false
+      useJoule: true
       jouleConfig:
-        url: ''
-        botname: ''
+        url: 'https://kcp-dev-joule-vfglrzqg.eu12.sapdas.cloud.sap/resources/public/webclient/bootstrap.js'
+        botname: 'kyma'
     GARDENER_LOGIN:
       isEnabled: false
       kubeconfig: null
@@ -63,22 +77,22 @@ config:
         policies:
           - Default
     CLUSTER_VALIDATION:
-      isEnabled: false
+      isEnabled: true
     FEEDBACK:
       isEnabled: true
       config:
         link: https://sapinsights.eu.qualtrics.com/jfe/form/SV_d3UPNymSgUHAb9Y?product=SAP%20BTP,%20Kyma%20Runtime&product_filter=Kyma
     SNOW:
       isEnabled: false
+    COMMUNITY_MODULES:
+      isEnabled: true
     SSO_LOGIN:
       isEnabled: false
       config:
         issuerUrl: https://apskyxzcl.accounts400.ondemand.com
         scope: openid
         clientId: d0316c58-b0fe-45cd-9960-0fea0708355a
-    COMMUNITY_MODULES:
-      isEnabled: true
     TERMINAL:
-      isEnabled: false
+      isEnabled: true
       config:
         image: europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest
