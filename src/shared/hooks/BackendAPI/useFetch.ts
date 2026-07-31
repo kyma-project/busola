@@ -10,6 +10,7 @@ import {
   ssoDataAtom,
   SsoDataState,
   checkForTokenExpiration,
+  useIsSSOEnabled,
 } from 'state/ssoDataAtom';
 
 export type FetchFn = ({
@@ -27,10 +28,12 @@ export const createFetchFn =
     authData,
     cluster,
     ssoData,
+    isSSOEnabled,
   }: {
     authData: AuthDataState;
     cluster: ActiveClusterState;
     ssoData: SsoDataState;
+    isSSOEnabled: boolean;
   }): FetchFn =>
   async ({
     relativeUrl,
@@ -41,6 +44,10 @@ export const createFetchFn =
     init?: any;
     abortController?: AbortController;
   }) => {
+    if (isSSOEnabled && !ssoData) {
+      throw new Error('SSO login is in progress; request deferred.');
+    }
+
     checkForTokenExpiration(ssoData?.id_token);
 
     init = {
@@ -65,11 +72,13 @@ export const useFetch = () => {
   const authData = useAtomValue(authDataAtom);
   const cluster = useAtomValue(clusterAtom);
   const ssoData = useAtomValue(ssoDataAtom);
+  const isSSOEnabled = useIsSSOEnabled();
 
   const fetchFn = createFetchFn({
     authData,
     cluster,
     ssoData,
+    isSSOEnabled,
   });
   return fetchFn;
 };
