@@ -151,9 +151,16 @@ async function handleSSOLogin(
       // useLoginWithKubeconfigID can still find it in the URL.
       const pendingKubeconfigId = consumePendingKubeconfigId();
       if (pendingKubeconfigId) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('kubeconfigID', pendingKubeconfigId);
-        window.history.replaceState({}, '', url.toString());
+        // Defer URL cleanup to next event loop to avoid interfering with component updates
+        setTimeout(() => {
+          const url = new URL(window.location.href);
+          // Remove OAuth callback parameters to prevent re-triggering auth
+          url.searchParams.delete('code');
+          url.searchParams.delete('state');
+          url.searchParams.delete('session_state');
+          url.searchParams.set('kubeconfigID', pendingKubeconfigId);
+          window.history.replaceState({}, '', url.toString());
+        }, 0);
       }
     }
 
