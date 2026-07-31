@@ -15,6 +15,7 @@ export const getFetchFn = (get: Getter) => {
     !bypassed && (configuration?.features?.SSO_LOGIN?.isEnabled ?? false);
 
   if (authData && cluster) {
+    if (isSSOEnabled && !ssoData) return undefined;
     return createFetchFn({
       authData,
       cluster,
