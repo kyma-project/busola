@@ -98,6 +98,8 @@ describe('applySortFormula', () => {
     expect(result).toBe(42);
     expect(jsonata).toHaveBeenCalledWith('myFormula', {
       scope: { first: 'aVal', second: 'bVal' },
+      first: 'aVal',
+      second: 'bVal',
     });
   });
 
