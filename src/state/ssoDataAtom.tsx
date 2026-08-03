@@ -152,8 +152,14 @@ async function handleSSOLogin(
       const pendingKubeconfigId = consumePendingKubeconfigId();
       if (pendingKubeconfigId) {
         const url = new URL(window.location.href);
+        // Remove OAuth callback parameters to prevent re-triggering auth
+        url.searchParams.delete('code');
+        url.searchParams.delete('iss');
+        url.searchParams.delete('state');
+        url.searchParams.delete('session_state');
         url.searchParams.set('kubeconfigID', pendingKubeconfigId);
         window.history.replaceState({}, '', url.toString());
+        window.location.href = url.toString();
       }
     }
 
