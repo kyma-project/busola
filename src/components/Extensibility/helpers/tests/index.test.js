@@ -1,9 +1,4 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-
-vi.mock('../jsonataWrapper', () => ({
-  jsonataWrapper: vi.fn(),
-}));
-
 import { jsonataWrapper } from '../jsonataWrapper';
 import {
   createTemplate,
@@ -13,6 +8,10 @@ import {
   getResourceUrl,
   applyFormula,
 } from '../index';
+
+vi.mock('../jsonataWrapper', () => ({
+  jsonataWrapper: vi.fn(),
+}));
 
 describe('createTemplate', () => {
   it('builds apiVersion from group and version when group is present', () => {
