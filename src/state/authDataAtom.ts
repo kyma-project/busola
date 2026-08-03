@@ -16,6 +16,9 @@ import { attachSilentRenewHandlers } from './silentRenewSetup';
 import { useReauthenticate } from './useReauthenticate';
 import { renewingAtom } from './renewingAtom';
 import { isOwnOidcCallback } from './utils/isOwnOidcCallback';
+import { ssoDataAtom } from './ssoDataAtom';
+import { configFeaturesNames } from './types';
+import { useFeature } from 'hooks/useFeature';
 
 export const hasNonOidcAuth = (
   user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
@@ -196,10 +199,14 @@ export function useAuthHandler() {
   const loginGenRef = useRef(0);
   const setRenewing = useSetAtom(renewingAtom);
   const reauth = useReauthenticate({ notifyError: notification.notifyError });
+  const ssoData = useAtomValue(ssoDataAtom);
+  const isSSOEnabled = useFeature(configFeaturesNames.SSO_LOGIN)?.isEnabled;
 
   useEffect(() => {
-    // Detach the previous cluster's silent-renew listeners before switching.
+    if (isSSOEnabled === undefined) return;
+    if (!ssoData && isSSOEnabled) return;
     if (cleanupRef.current) {
+      // Detach the previous cluster's silent-renew listeners before switching.
       cleanupRef.current();
       cleanupRef.current = null;
       userManagerRef.current = null;
@@ -282,7 +289,7 @@ export function useAuthHandler() {
     setLastFetched(null);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster]);
+  }, [cluster, ssoData, isSSOEnabled]);
 
   useEffect(() => {
     return () => {

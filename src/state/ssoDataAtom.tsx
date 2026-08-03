@@ -7,7 +7,12 @@ import { useEffect } from 'react';
 import { getEnv, Envs } from 'shared/utils/env';
 import { attachSilentRenewHandlers } from './silentRenewSetup';
 import { renewingAtom } from './renewingAtom';
-import { saveIntendedPath, toClusterRelative } from './intendedPathAtom';
+import {
+  saveIntendedPath,
+  toClusterRelative,
+  savePendingKubeconfigId,
+  consumePendingKubeconfigId,
+} from './intendedPathAtom';
 import { isOwnOidcCallback } from './utils/isOwnOidcCallback';
 
 const SSO_KEY = 'SSO';
@@ -67,6 +72,10 @@ function triggerReauthRedirect(userManager: UserManager | null) {
   const fullPath = window.location.pathname + window.location.search;
   const relative = toClusterRelative(fullPath);
   if (relative) saveIntendedPath(relative);
+  const kubeconfigId = new URLSearchParams(window.location.search).get(
+    'kubeconfigID',
+  );
+  if (kubeconfigId) savePendingKubeconfigId(kubeconfigId);
   if (!userManager) {
     // No manager means handleSSOLogin never ran this page-load (the token
     // was still valid at mount). The stored SSO entry is already cleared,
@@ -138,6 +147,20 @@ async function handleSSOLogin(
         return;
       }
       user = await userManager?.signinRedirectCallback(window.location.href);
+      // Restore kubeconfigID that was saved before the SSO redirect so
+      // useLoginWithKubeconfigID can still find it in the URL.
+      const pendingKubeconfigId = consumePendingKubeconfigId();
+      if (pendingKubeconfigId) {
+        const url = new URL(window.location.href);
+        // Remove OAuth callback parameters to prevent re-triggering auth
+        url.searchParams.delete('code');
+        url.searchParams.delete('iss');
+        url.searchParams.delete('state');
+        url.searchParams.delete('session_state');
+        url.searchParams.set('kubeconfigID', pendingKubeconfigId);
+        window.history.replaceState({}, '', url.toString());
+        window.location.href = url.toString();
+      }
     }
 
     if (!session.handlersAttached) {
