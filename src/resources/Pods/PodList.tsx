@@ -54,7 +54,10 @@ export function PodList({ showNodeName, ...props }: PodListProps) {
       {
         header: t('pods.node'),
         value: (pod: PodType) => (
-          <Link url={clusterUrl(`overview/nodes/${pod.spec.nodeName}`)}>
+          <Link
+            url={clusterUrl(`overview/nodes/${pod.spec.nodeName}`)}
+            layout={false}
+          >
             {pod.spec.nodeName}
           </Link>
         ),

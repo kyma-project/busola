@@ -73,6 +73,13 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
     t('common.headers.zone'),
   ];
 
+  // A node replaces the whole Cluster Overview page, so it must not carry a
+  // `layout` param — that would split the screen into columns.
+  const nodeUrl = (entry?: RowRendererEntry) =>
+    clusterUrl(
+      `overview/nodes/${encodeURIComponent(entry?.metadata?.name ?? '')}`,
+    );
+
   const rowRenderer = (entry?: RowRendererEntry) => {
     const { cpu, memory } = entry?.metrics || {};
 
@@ -86,8 +93,9 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
           display: 'flex',
           alignItems: 'center',
         }}
-        data-testid={`node-details-link-${entry?.metadata?.name}`}
-        url={clusterUrl(`overview/nodes/${entry?.metadata?.name}`)}
+        dataTestId={`node-details-link-${entry?.metadata?.name}`}
+        url={nodeUrl(entry)}
+        layout={false}
       >
         {entry?.metadata?.name}
       </Link>,
@@ -155,6 +163,7 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
             allowSlashShortcut: false,
           }}
           hasDetailsView
+          customUrl={nodeUrl}
         />
       )}
       {error &&
