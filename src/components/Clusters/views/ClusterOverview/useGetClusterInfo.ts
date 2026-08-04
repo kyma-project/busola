@@ -1,7 +1,18 @@
 import jsyaml from 'js-yaml';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
-export function useGetClusterInfo() {
+export type ClusterInfo = {
+  provider?: string;
+  natGatewayIps?: string[];
+  globalAccountID?: string;
+  subaccountID?: string;
+  [key: string]: unknown;
+};
+
+export function useGetClusterInfo(): {
+  clusterInfo?: ClusterInfo;
+  loading: boolean;
+} {
   const { data: shootInfoCM, loading: shootInfoLoading } = useGet(
     '/api/v1/namespaces/kube-system/configmaps/shoot-info',
   );
@@ -18,10 +29,12 @@ export function useGetClusterInfo() {
 
   if (loading) return { loading: true };
 
-  let provisioningDetails = {};
+  let provisioningDetails: Partial<ClusterInfo> = {};
   try {
     provisioningDetails =
-      jsyaml.load(kymaProvisioningInfoCM?.data?.details) ?? {};
+      (jsyaml.load(
+        kymaProvisioningInfoCM?.data?.details,
+      ) as Partial<ClusterInfo>) ?? {};
   } catch (_) {
     // malformed YAML — treat as absent
   }

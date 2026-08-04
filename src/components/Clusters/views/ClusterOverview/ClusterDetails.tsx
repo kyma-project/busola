@@ -31,6 +31,18 @@ type KymaResourcesItem = {
   };
 };
 
+const GardenerProvider = ({ provider }: { provider?: string }) => {
+  const { t } = useTranslation();
+  if (!provider) return null;
+  return (
+    <FormItem
+      labelContent={<Label showColon>{t('gardener.headers.provider')}</Label>}
+    >
+      <p className="gardener-provider">{provider}</p>
+    </FormItem>
+  );
+};
+
 export default function ClusterDetails({
   currentCluster,
 }: {
@@ -111,14 +123,8 @@ export default function ClusterDetails({
                   {currentCluster?.currentContext?.cluster?.cluster?.server}
                 </Text>
               </FormItem>
-              {!clusterInfoLoading && !!clusterInfo?.provider && (
-                <FormItem
-                  labelContent={
-                    <Label showColon>{t('gardener.headers.provider')}</Label>
-                  }
-                >
-                  <p className="gardener-provider">{clusterInfo.provider}</p>
-                </FormItem>
+              {!clusterInfoLoading && (
+                <GardenerProvider provider={clusterInfo?.provider} />
               )}
               {!!(
                 kymaResourceLabels?.['kyma-project.io/global-account-id'] ||

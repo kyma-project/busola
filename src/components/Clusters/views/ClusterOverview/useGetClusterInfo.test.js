@@ -32,6 +32,23 @@ describe('useGetClusterInfo', () => {
     mockUseGet.mockReset();
   });
 
+  it('merges fields from all three CMs into a single clusterInfo object', () => {
+    setupMocks({
+      shootInfo: { data: { provider: 'azure' } },
+      kymaInfo: { data: { 'cloud.natGatewayIps': '1.2.3.4, 5.6.7.8' } },
+      kymaProvisioningInfo: {
+        data: { details: 'globalAccountID: ga-1\nsubaccountID: sa-2\n' },
+      },
+    });
+    const { result } = renderHook(() => useGetClusterInfo());
+    expect(result.current.clusterInfo).toMatchObject({
+      provider: 'azure',
+      natGatewayIps: ['1.2.3.4', '5.6.7.8'],
+      globalAccountID: 'ga-1',
+      subaccountID: 'sa-2',
+    });
+  });
+
   it('returns loading:true while any CM fetch is in progress', () => {
     setupMocks({ shootInfoLoading: true });
     const { result } = renderHook(() => useGetClusterInfo());
