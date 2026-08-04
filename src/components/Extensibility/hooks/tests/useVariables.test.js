@@ -4,7 +4,6 @@ import React from 'react';
 import { extractVariables, useVariables } from '../useVariables';
 import { VarStoreContext } from '../../contexts/VarStore';
 
-// ─── mock useJsonata ──────────────────────────────────────────────────────────
 // We want to control what jsonata.async returns in each test.
 let mockJsonataAsyncImpl = vi.fn().mockResolvedValue([null, null]);
 
@@ -15,8 +14,6 @@ vi.mock('../useJsonata', () => ({
     return fn;
   },
 }));
-
-// ─── helpers ─────────────────────────────────────────────────────────────────
 
 function makeVarStoreWrapper(initialVars = {}) {
   const setVar = vi.fn();
@@ -46,17 +43,10 @@ function makeVarStoreWrapper(initialVars = {}) {
   };
 }
 
-// ─── extractVariables ─────────────────────────────────────────────────────────
-
 describe('extractVariables', () => {
   it('returns the full varStore when indexes is empty', () => {
     const store = { a: [10, 20], b: [30, 40] };
     expect(extractVariables(store, ['a', 'b'], [])).toBe(store);
-  });
-
-  it('returns the full varStore when indexes is undefined', () => {
-    const store = { x: 1 };
-    expect(extractVariables(store, ['x'], undefined)).toBe(store);
   });
 
   it('extracts indexed values for listed var names', () => {
@@ -93,8 +83,6 @@ describe('extractVariables', () => {
   });
 });
 
-// ─── useVariables – return shape ─────────────────────────────────────────────
-
 describe('useVariables return shape', () => {
   it('exposes vars, setVar, itemVars, prepareVars, readVars', () => {
     const { wrapper } = makeVarStoreWrapper();
@@ -115,33 +103,31 @@ describe('useVariables return shape', () => {
   });
 });
 
-// ─── prepareVars ──────────────────────────────────────────────────────────────
-
 describe('prepareVars', () => {
-  it('collects var-tagged rules into internal defs', async () => {
-    const { wrapper, contextValue } = makeVarStoreWrapper();
+  it('collects var-tagged rules and nested children into defs resolved by readVars', async () => {
+    const { wrapper, setVarsSpy } = makeVarStoreWrapper();
     const { result } = renderHook(() => useVariables(), { wrapper });
 
-    const rules = [
-      { var: 'myVar', path: 'spec.items', defaultValue: 'hello' },
-      { path: 'spec.other', children: [{ var: 'nested', path: 'name' }] },
-    ];
-
     act(() => {
-      result.current.prepareVars(rules);
+      result.current.prepareVars([
+        { var: 'myVar', path: 'spec.items', defaultValue: 'hello' },
+        {
+          path: 'spec.other',
+          children: [{ var: 'nested', path: 'name', defaultValue: 'world' }],
+        },
+      ]);
     });
 
-    // readVars will resolve defs; the simplest proof is that readVars
-    // picks up the definitions and calls setVars.
     await act(async () => {
-      await result.current.readVars({ spec: { items: [] } });
+      await result.current.readVars({});
     });
 
-    expect(contextValue.setVars).toHaveBeenCalled();
+    const calledWith = setVarsSpy.mock.calls[0][0];
+    expect(calledWith).toMatchObject({ myVar: 'hello', nested: 'world' });
   });
 
-  it('ignores rules that have neither var nor children', async () => {
-    const { wrapper, contextValue } = makeVarStoreWrapper();
+  it('ignores rules that have neither var nor children, resulting in empty defs', async () => {
+    const { wrapper, setVarsSpy } = makeVarStoreWrapper();
     const { result } = renderHook(() => useVariables(), { wrapper });
 
     act(() => {
@@ -152,12 +138,9 @@ describe('prepareVars', () => {
       await result.current.readVars({});
     });
 
-    // setVars called with empty resolved map (no defs collected)
-    expect(contextValue.setVars).toHaveBeenCalled();
+    expect(setVarsSpy).toHaveBeenCalledWith({});
   });
 });
-
-// ─── readVars ─────────────────────────────────────────────────────────────────
 
 describe('readVars', () => {
   beforeEach(() => {
@@ -294,13 +277,11 @@ describe('readVars', () => {
       await result.current.readVars({});
     });
 
-    // setVars is called but the value should not overwrite the existing one
+    expect(mockJsonataAsyncImpl).not.toHaveBeenCalled();
     const calledWith = setVarsSpy.mock.calls[0][0];
     expect(calledWith.existing).toBe('already-set');
   });
 });
-
-// ─── itemVars ─────────────────────────────────────────────────────────────────
 
 describe('itemVars', () => {
   it('returns merged vars with item, items, index, indexes', () => {

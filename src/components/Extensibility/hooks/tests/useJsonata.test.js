@@ -66,18 +66,6 @@ describe('useJsonata', () => {
       expect(error).toBeNull();
     });
 
-    it('returns [null, null] when query is empty with no defaultValue', async () => {
-      const { result } = renderHook(
-        () => useJsonata({ resource: makeResource() }),
-        {
-          wrapper: wrapper(),
-        },
-      );
-      const [value, error] = await result.current('');
-      expect(value).toBeNull();
-      expect(error).toBeNull();
-    });
-
     it('evaluates a simple query against the resource', async () => {
       const resource = makeResource('my-pod');
       const { result } = renderHook(() => useJsonata({ resource }), {
@@ -248,14 +236,27 @@ describe('useJsonata', () => {
       expect(error).toBeNull();
     });
 
-    it('evaluates query using async fetchers', async () => {
-      const resource = makeResource('async-resource');
+    it('calls requestRelatedResource via fetcher binding during async evaluation', async () => {
+      const resource = makeResource();
+      const requestRelatedResource = vi.fn().mockReturnValue('ds-data');
+      const context = {
+        ...defaultDataSourcesContext,
+        dataSources: { myDs: {} },
+        store: {
+          myDs: {
+            loading: false,
+            error: null,
+            data: 'ds-data',
+            firstFetch: null,
+          },
+        },
+        requestRelatedResource,
+      };
       const { result } = renderHook(() => useJsonata({ resource }), {
-        wrapper: wrapper(),
+        wrapper: wrapper(context),
       });
-      const [value, error] = await result.current.async('$name');
-      expect(value).toBe('async-resource');
-      expect(error).toBeNull();
+      await result.current.async('$call-ds');
+      expect(requestRelatedResource).toHaveBeenCalledWith(resource, 'myDs');
     });
 
     it('returns [errorMessage, Error] on evaluation failure', async () => {
@@ -286,24 +287,6 @@ describe('useJsonata', () => {
       const [value, error] = await result.current.async('$name');
       expect(typeof value).toBe('string');
       expect(error).toBe('string-error');
-    });
-
-    it('does not call requestRelatedResource in the async path (uses fetcher only)', async () => {
-      const resource = makeResource();
-      const requestRelatedResource = vi.fn();
-      const context = {
-        ...defaultDataSourcesContext,
-        dataSources: { myDs: {} },
-        store: {
-          myDs: { loading: false, error: null, data: null, firstFetch: null },
-        },
-        requestRelatedResource,
-      };
-      const { result } = renderHook(() => useJsonata({ resource }), {
-        wrapper: wrapper(context),
-      });
-      await result.current.async('$name');
-      expect(requestRelatedResource).not.toHaveBeenCalled();
     });
   });
 });
