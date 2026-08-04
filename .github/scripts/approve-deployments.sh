@@ -15,7 +15,7 @@ REPO=${2:-kyma-project/busola}
 branch=$(gh pr view "$PR" --repo "$REPO" --json headRefName --jq '.headRefName')
 echo "Branch: $branch"
 
-run_ids=$(gh run list --repo "$REPO" --branch "$branch" --json databaseId,status \
+run_ids=$(gh run list --repo "$REPO" --branch "$branch" --limit 100 --json databaseId,status \
   --jq '[.[] | select(.status == "waiting") | .databaseId] | .[]')
 
 if [[ -z "$run_ids" ]]; then
@@ -31,7 +31,7 @@ for run_id in $run_ids; do
     continue
   fi
 
-  name=$(gh run list --repo "$REPO" --json databaseId,name \
+  name=$(gh run list --repo "$REPO" --branch "$branch" --limit 100 --json databaseId,name \
     --jq ".[] | select(.databaseId == $run_id) | .name")
 
   gh api "repos/$REPO/actions/runs/$run_id/pending_deployments" \

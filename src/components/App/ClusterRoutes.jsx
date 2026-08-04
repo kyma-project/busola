@@ -8,7 +8,6 @@ import {
 } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { unwrap } from 'jotai/utils';
 
 import { clusterAtom } from 'state/clusterAtom';
 import { clustersAtom } from 'state/clustersAtom';
@@ -23,13 +22,7 @@ import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { IncorrectPath } from './IncorrectPath';
 import { removePreviousPath } from 'state/useAfterInitHook';
 import { useUrl } from 'hooks/useUrl';
-import { sidebarNavigationNodesAtom } from 'state/navigation/sidebarNavigationNodesAtom';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-
-const sidebarNavigationNodesSync = unwrap(
-  sidebarNavigationNodesAtom,
-  (prev) => prev ?? null,
-);
 
 export default function ClusterRoutes() {
   const { currentClusterName } = useParams() || {};
@@ -38,10 +31,8 @@ export default function ClusterRoutes() {
   const { t } = useTranslation();
   const language = useAtomValue(languageAtom);
   const setAuth = useSetAtom(authDataAtom);
-  const auth = useAtomValue(authDataAtom);
   const clusters = useAtomValue(clustersAtom);
   const extensions = useAtomValue(extensionsAtom);
-  const navigationNodes = useAtomValue(sidebarNavigationNodesSync);
   const [cluster, setCluster] = useAtom(clusterAtom);
   const [search] = useSearchParams();
   const { clusterUrl } = useUrl();
@@ -54,27 +45,6 @@ export default function ClusterRoutes() {
     }
     return null;
   }, [extensions, language]);
-
-  useEffect(() => {
-    // Some browsers (e.g., Firefox) have a problem with authentication redirects.
-    // If the redirect doesn't occur, refreshing to reload helps.
-    const timeoutId = setTimeout(() => {
-      const pathname = `/cluster/${encodeURIComponent(
-        currentClusterName,
-      )}/overview`;
-      if (
-        cluster &&
-        cluster?.name === currentClusterName &&
-        navigationNodes !== null &&
-        !navigationNodes?.length &&
-        !auth &&
-        window.location.href.includes(pathname)
-      ) {
-        navigate(0, { replace: true });
-      }
-    }, 2000);
-    return () => clearTimeout(timeoutId);
-  }, [currentClusterName, cluster, navigate, navigationNodes, auth]);
 
   useEffect(() => {
     if (cluster?.name === currentClusterName) return;

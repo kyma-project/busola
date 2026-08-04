@@ -410,7 +410,7 @@ export const GenericList = ({
       );
       const link = `${linkTo(selectedEntry as any)}${
         enableColumnLayout
-          ? `?${searchQuery === '' ? '' : `search=${searchParam}&`}layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
+          ? `?${searchQuery === '' ? '' : `search=${encodeURIComponent(searchQuery)}&`}layout=${columnLayout ?? 'TwoColumnsMidExpanded'}${
               namespace === '-all-' && selectedEntry?.metadata?.namespace
                 ? `&resourceNamespace=${selectedEntry?.metadata?.namespace}`
                 : ''

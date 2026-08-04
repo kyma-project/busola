@@ -1,4 +1,15 @@
 const INTENDED_PATH_KEY = 'busola.intended-path';
+const PENDING_KUBECONFIG_ID_KEY = 'busola.pending-kubeconfig-id';
+
+export function savePendingKubeconfigId(kubeconfigId: string): void {
+  localStorage.setItem(PENDING_KUBECONFIG_ID_KEY, kubeconfigId);
+}
+
+export function consumePendingKubeconfigId(): string | null {
+  const value = localStorage.getItem(PENDING_KUBECONFIG_ID_KEY);
+  if (value) localStorage.removeItem(PENDING_KUBECONFIG_ID_KEY);
+  return value;
+}
 
 export interface IntendedPath {
   path: string;
@@ -38,12 +49,22 @@ export function clearIntendedPath(): void {
   sessionStorage.removeItem(INTENDED_PATH_KEY);
 }
 
+// Strips the `/cluster/<name>` prefix; callers re-prepend it on restore.
+// Returns null for paths outside `/cluster/<name>` (e.g. /kubeconfig), which
+// can't be restored cluster-relatively. A bare `/cluster/<name>` collapses
+// to `/` so restore doesn't produce `/cluster/<name>/cluster/<name>`.
+export function toClusterRelative(fullPath: string): string | null {
+  const match = fullPath.match(/^\/cluster\/[^/]+(.*)$/);
+  if (!match) return null;
+  return match[1] || '/';
+}
+
 export function initIntendedPathFromUrl(): void {
   const params = new URLSearchParams(window.location.search);
   const kubeconfigId = params.get('kubeconfigID');
   const path = params.get('path');
 
-  if (kubeconfigId && path) {
-    saveIntendedPath(path, kubeconfigId);
+  if (kubeconfigId) {
+    saveIntendedPath(path ?? '', kubeconfigId);
   }
 }
