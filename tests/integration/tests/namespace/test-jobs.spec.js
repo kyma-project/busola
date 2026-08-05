@@ -180,6 +180,10 @@ context('Test Jobs', () => {
 
     cy.inspectTab('View');
 
+    cy.get('ui5-card')
+      .find("ui5-panel[class='labels-annotations-panel']")
+      .click();
+
     cy.get('ui5-card').contains('a=b', { timeout: 10000 }).should('be.visible');
   });
 
