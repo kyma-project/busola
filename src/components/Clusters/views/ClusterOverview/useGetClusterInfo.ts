@@ -44,7 +44,7 @@ export function useGetClusterInfo(): {
         (jsyaml.load(detailsYaml) as Partial<ClusterInfo>) ?? {};
     }
   } catch (error) {
-    console.log(
+    console.warn(
       'Failed to parse kyma-provisioning-info details configmap',
       error,
     );
