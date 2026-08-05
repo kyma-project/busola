@@ -40,7 +40,7 @@ export function useTerminalSession() {
   const onDataDisposableRef = useRef<{ dispose: () => void } | null>(null);
   // Prevents double pod DELETE — close button and unmount cleanup both call disconnect.
   const disconnectedRef = useRef(false);
-  const reconnectTimer = useRef<number>(0);
+  const reconnectTimer = useRef<NodeJS.Timeout>(undefined);
   const attemptRef = useRef(0);
 
   const connect = useCallback(
