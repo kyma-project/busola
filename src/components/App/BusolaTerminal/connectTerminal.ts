@@ -97,8 +97,9 @@ export async function connectTerminal({
     } else {
       setSession((prev) => ({ ...prev, status: 'idle' }));
       if (event.reason) {
-      term.write(terminalMessage(COLOR_ERROR, event.reason));
-    }term.write(terminalMessage(COLOR_WARNING, t('terminal.messages.closed')));
+        term.write(terminalMessage(COLOR_ERROR, event.reason));
+      }
+      term.write(terminalMessage(COLOR_WARNING, t('terminal.messages.closed')));
     }
   };
 
