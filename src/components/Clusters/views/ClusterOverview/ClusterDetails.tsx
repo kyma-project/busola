@@ -4,7 +4,6 @@ import { useAtomValue } from 'jotai';
 import { unwrap } from 'jotai/utils';
 
 import { useGetVersions } from './useGetVersions';
-import { useGetClusterInfo } from './useGetClusterInfo';
 import { ClusterInfoFields } from './ClusterInfoFields';
 import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
 
@@ -47,7 +46,6 @@ export default function ClusterDetails({
       )?.metadata.labels || kymaResources?.items[0]?.metadata?.labels,
     [kymaResources],
   );
-  const { clusterInfo, loading: clusterInfoLoading } = useGetClusterInfo();
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     configFeaturesNames.COMMUNITY_MODULES,
   );
@@ -111,11 +109,7 @@ export default function ClusterDetails({
                   {currentCluster?.currentContext?.cluster?.cluster?.server}
                 </Text>
               </FormItem>
-              <ClusterInfoFields
-                clusterInfo={clusterInfo}
-                kymaResourceLabels={kymaResourceLabels}
-                loading={clusterInfoLoading}
-              />
+              <ClusterInfoFields kymaResourceLabels={kymaResourceLabels} />
             </>
           }
         />

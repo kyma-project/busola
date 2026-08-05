@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { FormItem, Text, Label } from '@ui5/webcomponents-react';
 import { Tokens } from 'shared/components/Tokens';
-import { ClusterInfo } from './useGetClusterInfo';
+import { useGetClusterInfo } from './useGetClusterInfo';
 
 const GardenerProvider = ({ provider }: { provider?: string }) => {
   const { t } = useTranslation();
+
   if (!provider) return null;
   return (
     <FormItem
@@ -16,18 +17,17 @@ const GardenerProvider = ({ provider }: { provider?: string }) => {
 };
 
 type ClusterInfoFieldsProps = {
-  clusterInfo?: ClusterInfo;
   kymaResourceLabels?: { [key: string]: string };
-  loading: boolean;
 };
 
 export const ClusterInfoFields = ({
-  clusterInfo,
   kymaResourceLabels,
-  loading,
 }: ClusterInfoFieldsProps) => {
   const { t } = useTranslation();
+  const { clusterInfo, loading } = useGetClusterInfo();
+
   if (loading) return null;
+
   return (
     <>
       <GardenerProvider provider={clusterInfo?.provider} />
