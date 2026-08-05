@@ -192,6 +192,9 @@ export const UpdateAllModulesButton = () => {
       content: t('modules.community.messages.module-update-started'),
     });
 
+    // Wait for the browser to paint the toast before starting async work.
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
     await deleteOldTemplates();
 
     const templateMap = new Map<string, ModuleTemplateType>();
