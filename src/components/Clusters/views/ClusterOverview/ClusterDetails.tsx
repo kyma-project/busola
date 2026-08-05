@@ -5,6 +5,7 @@ import { unwrap } from 'jotai/utils';
 
 import { useGetVersions } from './useGetVersions';
 import { useGetClusterInfo } from './useGetClusterInfo';
+import { ClusterInfoFields } from './ClusterInfoFields';
 import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
 
 import { FormItem, Text, Title, Label, Form } from '@ui5/webcomponents-react';
@@ -13,7 +14,6 @@ import ClusterModulesCard from './ClusterModulesCard';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
-import { Tokens } from 'shared/components/Tokens';
 import { ActiveClusterState } from 'state/clusterAtom';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
@@ -29,18 +29,6 @@ type KymaResourcesItem = {
       [key: string]: string;
     };
   };
-};
-
-const GardenerProvider = ({ provider }: { provider?: string }) => {
-  const { t } = useTranslation();
-  if (!provider) return null;
-  return (
-    <FormItem
-      labelContent={<Label showColon>{t('gardener.headers.provider')}</Label>}
-    >
-      <p className="gardener-provider">{provider}</p>
-    </FormItem>
-  );
 };
 
 export default function ClusterDetails({
@@ -123,55 +111,11 @@ export default function ClusterDetails({
                   {currentCluster?.currentContext?.cluster?.cluster?.server}
                 </Text>
               </FormItem>
-              {!clusterInfoLoading && (
-                <GardenerProvider provider={clusterInfo?.provider} />
-              )}
-              {!!(
-                kymaResourceLabels?.['kyma-project.io/global-account-id'] ||
-                clusterInfo?.globalAccountID
-              ) && (
-                <FormItem
-                  labelContent={
-                    <Label showColon>
-                      {t('clusters.overview.global-account-id')}
-                    </Label>
-                  }
-                >
-                  <Text>
-                    {kymaResourceLabels?.[
-                      'kyma-project.io/global-account-id'
-                    ] || clusterInfo?.globalAccountID}
-                  </Text>
-                </FormItem>
-              )}
-              {!!(
-                kymaResourceLabels?.['kyma-project.io/subaccount-id'] ||
-                clusterInfo?.subaccountID
-              ) && (
-                <FormItem
-                  labelContent={
-                    <Label showColon>
-                      {t('clusters.overview.subaccount-id')}
-                    </Label>
-                  }
-                >
-                  <Text>
-                    {kymaResourceLabels?.['kyma-project.io/subaccount-id'] ||
-                      clusterInfo?.subaccountID}
-                  </Text>
-                </FormItem>
-              )}
-              {!clusterInfoLoading && !!clusterInfo?.natGatewayIps && (
-                <FormItem
-                  labelContent={
-                    <Label showColon>
-                      {t('clusters.overview.nat-gateway-ips')}
-                    </Label>
-                  }
-                >
-                  <Tokens tokens={clusterInfo.natGatewayIps} />
-                </FormItem>
-              )}
+              <ClusterInfoFields
+                clusterInfo={clusterInfo}
+                kymaResourceLabels={kymaResourceLabels}
+                loading={clusterInfoLoading}
+              />
             </>
           }
         />
