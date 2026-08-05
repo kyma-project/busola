@@ -17,10 +17,28 @@
   ui5-label {
     margin-bottom: 4px;
   }
+
+  &::part(column) {
+    padding-bottom: 0;
+  }
 }
 
 @container (max-width: 420px) {
   .resource-card-layout::part(layout) {
     grid-template-columns: 1fr !important;
+  }
+}
+
+.labels-annotations-panel {
+  &::part(header) {
+    font-family: var(--sapFontFamily);
+    font-size: var(--sapFontSize);
+    border-bottom: none;
+  }
+}
+
+.labels-annotations-panel__content {
+  &::part(layout) {
+    padding-top: 0;
   }
 }

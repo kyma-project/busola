@@ -324,6 +324,7 @@ common:
     items: Items
     key: Key
     labels: Labels
+    labels-annotations: Labels and Annotations
     last-update: Last Update
     link: Link
     loading: Loading...
