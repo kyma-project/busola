@@ -146,9 +146,8 @@ describe('prepareSchemaRules', () => {
       const spec = result.children[0];
       const items = spec.children[0];
       const arrayNode = items.children.find((c) => c.path.includes('[]'));
-      if (arrayNode) {
-        expect(arrayNode.itemVars).toContain('item');
-      }
+      expect(arrayNode).toBeDefined();
+      expect(arrayNode.itemVars).toContain('item');
     });
   });
 

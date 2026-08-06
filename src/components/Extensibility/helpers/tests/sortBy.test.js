@@ -79,7 +79,7 @@ describe('getSortingFunction', () => {
 });
 
 describe('applySortFormula', () => {
-  it('returns undefined when a is undefined', async () => {
+  it('returns -1 when a is undefined', async () => {
     const jsonata = vi.fn();
     const fn = applySortFormula(jsonata, 'formula');
     expect(await fn(undefined, 'b')).toBe(-1);
