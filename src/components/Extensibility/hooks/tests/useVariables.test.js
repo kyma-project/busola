@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import React from 'react';
+import { createElement } from 'react';
 import { extractVariables, useVariables } from '../useVariables';
 import { VarStoreContext } from '../../contexts/VarStore';
 
@@ -33,7 +33,7 @@ function makeVarStoreWrapper(initialVars = {}) {
 
   return {
     wrapper: ({ children }) =>
-      React.createElement(
+      createElement(
         VarStoreContext.Provider,
         { value: contextValue },
         children,
