@@ -7,7 +7,7 @@ export function useFeature<T extends ConfigFeature>(
 ): T {
   const configuration = useAtomValue(configurationAtom);
   const feature = configuration?.features?.[featureName] ?? {
-    isEnabled: undefined,
+    isEnabled: false,
   };
   return feature as T;
 }
