@@ -71,6 +71,7 @@ async function attach(signal = new AbortController().signal, t = DEFAULT_T) {
     signal,
     t,
     scheduleReconnect: vi.fn(),
+    onConnected: vi.fn(),
   });
   return { term, sess, ws: ws as any, disposable };
 }

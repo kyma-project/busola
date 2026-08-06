@@ -55,7 +55,7 @@ const reconnect = (
   term.write(
     terminalMessage(
       COLOR_WARNING,
-      t('terminal.messages.reconnecting', { delay: Math.round(delay) }),
+      t('terminal.messages.reconnecting', { delay: Math.round(delay / 1000) }),
     ),
   );
   reconnectTimer.current = setTimeout(() => {
@@ -137,14 +137,16 @@ export function useTerminalSession() {
           scheduleReconnect: (term: Terminal) => {
             reconnect(attemptRef, term, t, setSession, reconnectTimer, connect);
           },
+          onConnected: () => {
+            attemptRef.current = 0;
+            clearTimeout(reconnectTimer.current);
+          },
         });
         wsRef.current = ws;
         onDataDisposableRef.current = disposable;
-        attemptRef.current = 0;
-        clearTimeout(reconnectTimer.current);
       } catch (err: any) {
         if (err?.name === 'AbortError') return;
-        console.error(err);
+        console.error('ERROOOOR', err);
         const message = err?.message ?? t('terminal.messages.unknown-error');
         setSession((prev) => ({
           ...prev,

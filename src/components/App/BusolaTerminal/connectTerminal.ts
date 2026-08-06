@@ -55,6 +55,7 @@ export async function connectTerminal({
   signal,
   t,
   scheduleReconnect,
+  onConnected,
 }: {
   authHeaders: Headers;
   term: Terminal;
@@ -65,6 +66,7 @@ export async function connectTerminal({
   signal: AbortSignal;
   t: TFunction;
   scheduleReconnect: (term: Terminal) => void;
+  onConnected: () => void;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
   const ws = new WebSocket(
     buildAttachUrl(podName),
@@ -78,6 +80,7 @@ export async function connectTerminal({
     term.write(
       terminalMessage(COLOR_SUCCESS, t('terminal.messages.connected')),
     );
+    onConnected();
   };
 
   ws.onmessage = (event) => {
