@@ -136,10 +136,11 @@ describe('connectTerminal', () => {
       expect.stringContaining('translated-connected'),
     );
 
-    ws.onclose({ reason: expectedReason });
+    ws.onclose({ reason: expectedReason, code: 1000 });
     expect(term.write).toHaveBeenCalledWith(
       expect.stringContaining(expectedReason),
     );
+
     expect(term.write).toHaveBeenCalledWith(
       expect.stringContaining('translated-closed'),
     );
