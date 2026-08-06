@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { RefObject, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Terminal } from '@xterm/xterm';
@@ -9,7 +9,10 @@ import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
-import { terminalSessionAtom } from 'state/terminalSessionAtom';
+import {
+  terminalSessionAtom,
+  TerminalSessionState,
+} from 'state/terminalSessionAtom';
 import {
   generateTerminalPodName,
   provisionPod,
@@ -21,9 +24,45 @@ import {
   connectTerminal,
   terminalMessage,
 } from './connectTerminal';
+import { TFunction } from 'i18next';
 
 const DEFAULT_IMAGE =
   'europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest';
+
+const reconnect = (
+  attemptRef: RefObject<number>,
+  term: Terminal,
+  t: TFunction,
+  setSession: (
+    update: (prev: TerminalSessionState) => TerminalSessionState,
+  ) => void,
+  reconnectTimer: RefObject<NodeJS.Timeout | undefined>,
+  connect: (term: Terminal) => Promise<void>,
+) => {
+  const attempt = attemptRef.current;
+  if (attempt >= 10) {
+    term.write(
+      terminalMessage(COLOR_ERROR, t('terminal.messages.reconnect-failed')),
+    );
+    setSession((prev) => ({ ...prev, status: 'idle' }));
+    return;
+  }
+
+  const baseDelay = Math.min(1000 * 2 ** attempt, 30000);
+  const jitter = Math.random() * 1000;
+  const delay = baseDelay + jitter;
+
+  term.write(
+    terminalMessage(
+      COLOR_WARNING,
+      t('terminal.messages.reconnecting', { delay: Math.round(delay) }),
+    ),
+  );
+  reconnectTimer.current = setTimeout(() => {
+    attemptRef.current += 1;
+    connect(term);
+  }, delay);
+};
 
 export function useTerminalSession() {
   const { t } = useTranslation();
@@ -95,7 +134,9 @@ export function useTerminalSession() {
           setSession,
           signal: abort.signal,
           t,
-          scheduleReconnect,
+          scheduleReconnect: (term: Terminal) => {
+            reconnect(attemptRef, term, t, setSession, reconnectTimer, connect);
+          },
         });
         wsRef.current = ws;
         onDataDisposableRef.current = disposable;
@@ -118,36 +159,7 @@ export function useTerminalSession() {
         );
       }
     },
-    [authData, cluster, ssoData, fetchFn, image, setSession, t, attemptRef],
-  );
-
-  const scheduleReconnect = useCallback(
-    (term: Terminal) => {
-      const attempt = attemptRef.current;
-      if (attempt >= 10) {
-        term.write(
-          terminalMessage(COLOR_ERROR, t('terminal.messages.reconnect-failed')),
-        );
-        setSession((prev) => ({ ...prev, status: 'idle' }));
-        return;
-      } // stop after 10 attempts
-
-      const baseDelay = Math.min(1000 * 2 ** attempt, 30000);
-      const jitter = Math.random() * 1000;
-      const delay = baseDelay + jitter;
-
-      term.write(
-        terminalMessage(
-          COLOR_WARNING,
-          t('terminal.messages.reconnecting', { delay }),
-        ),
-      );
-      reconnectTimer.current = setTimeout(() => {
-        attemptRef.current += 1;
-        connect(term);
-      }, delay);
-    },
-    [connect, t, setSession],
+    [authData, cluster, ssoData, fetchFn, image, setSession, t],
   );
 
   const disconnect = useCallback(

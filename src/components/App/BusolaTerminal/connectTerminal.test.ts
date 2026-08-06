@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { connectTerminal } from './connectTerminal';
 import { encodeBase64Url } from 'shared/utils/base64url';
+import { TFunction } from 'i18next';
 
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
@@ -57,7 +58,7 @@ const applyLast = (fn: any) => {
   return typeof arg === 'function' ? arg({}) : arg;
 };
 
-const DEFAULT_T = (key: string) => key;
+const DEFAULT_T = ((key: string) => key) as TFunction;
 
 async function attach(signal = new AbortController().signal, t = DEFAULT_T) {
   const term = makeTerm();
@@ -121,12 +122,12 @@ describe('connectTerminal', () => {
   });
 
   it('writes the provided (translatable) status messages', async () => {
-    const t = (key: string) =>
+    const t = ((key: string) =>
       ({
         'terminal.messages.connected': 'translated-connected',
         'terminal.messages.closed': 'translated-closed',
         'terminal.messages.connection-error': 'translated-error',
-      })[key] ?? key;
+      })[key] ?? key) as TFunction;
     const expectedReason = 'Closing because I can';
 
     const { ws, term } = await attach(new AbortController().signal, t);
