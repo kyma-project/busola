@@ -137,7 +137,10 @@ export function useTerminalSession() {
       const delay = baseDelay + jitter;
 
       term.write(
-        terminalMessage(COLOR_WARNING, `Reconnecting in ${delay} [ms]`),
+        terminalMessage(
+          COLOR_WARNING,
+          t('terminal.messages.reconnecting', { delay }),
+        ),
       );
       reconnectTimer.current = setTimeout(() => {
         attemptRef.current += 1;

@@ -3,6 +3,7 @@ import { getClusterConfig } from 'state/utils/getBackendInfo';
 import { TerminalSessionState } from 'state/terminalSessionAtom';
 import { CONTAINER_NAME, TERMINAL_NAMESPACE } from './provisionPod';
 import { encodeBase64Url } from 'shared/utils/base64url';
+import { TFunction } from 'i18next';
 
 // Kubernetes attach stream channels — the first byte of every frame.
 const STDIN_CHANNEL = 0;
@@ -62,7 +63,7 @@ export async function connectTerminal({
     update: (prev: TerminalSessionState) => TerminalSessionState,
   ) => void;
   signal: AbortSignal;
-  t: (key: string, options?: Record<string, unknown>) => string;
+  t: TFunction;
   scheduleReconnect: (term: Terminal) => void;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
   const ws = new WebSocket(
@@ -88,7 +89,9 @@ export async function connectTerminal({
 
   ws.onclose = (event) => {
     if (signal.aborted) return;
-    if (event.code !== 1000) {
+    const isUnexpectedDrop =
+      event.code !== 1000 && event.code !== 1005 && !event.reason;
+    if (isUnexpectedDrop) {
       term.write(
         terminalMessage(COLOR_WARNING, t('terminal.messages.connection-lost')),
       );
