@@ -40,5 +40,10 @@
 .labels-annotations-panel__content {
   &::part(layout) {
     padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  ui5-label {
+    margin-bottom: 4px;
   }
 }
