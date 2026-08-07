@@ -1,17 +1,19 @@
 import { Card, CardHeader, Form } from '@ui5/webcomponents-react';
-import './ResourceDetailsCard.scss';
 import { ReactNode } from 'react';
+import './ResourceDetailsCard.scss';
 
 interface ResourceDetailsCardProps {
   content: ReactNode;
   titleText: string;
   className?: string;
+  bottomContent?: ReactNode;
 }
 
 export default function ResourceDetailsCard({
   content,
   titleText,
   className = '',
+  bottomContent,
 }: ResourceDetailsCardProps) {
   return (
     <Card
@@ -25,6 +27,7 @@ export default function ResourceDetailsCard({
       >
         {content}
       </Form>
+      {bottomContent && <div>{bottomContent}</div>}
     </Card>
   );
 }
