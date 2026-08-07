@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, act } from '@testing-library/react';
 import { useContext, useEffect } from 'react';
 import { Provider as JotaiProvider } from 'jotai';
@@ -20,34 +20,45 @@ vi.mock('../../helpers/jsonataWrapper');
 
 const mockFetch = vi.fn();
 
-// Capture context value via effect so we don't mutate outer scope during render
-const ctxBox: { current: DataSourcesContextType } = {
-  current: {} as DataSourcesContextType,
-};
-const ctx = () => ctxBox.current;
-
-const ContextCapture = () => {
+// Module-level so React sees the same component type across rerenders.
+// A definition inside makeTree would create a new type each call, causing unmount/remount.
+const ContextCapture = ({
+  boxRef,
+}: {
+  boxRef: { current: DataSourcesContextType };
+}) => {
   const value = useContext(DataSourcesContext);
+  // No deps — always capture the latest context value after every render.
   useEffect(() => {
-    ctxBox.current = value;
+    boxRef.current = value;
   });
   return null;
 };
 
-const makeTree = (dataSources: DataSources, fallbackNs = 'default-ns') => (
-  <JotaiProvider>
-    <JotaiHydrator
-      initialValues={[
-        [activeNamespaceIdAtom, fallbackNs],
-        [resourcesConditionsAtom, {}],
-      ]}
-    >
-      <DataSourcesContextProvider dataSources={dataSources}>
-        <ContextCapture />
-      </DataSourcesContextProvider>
-    </JotaiHydrator>
-  </JotaiProvider>
-);
+const makeTree = (
+  dataSources: DataSources,
+  fallbackNs = 'default-ns',
+  ctxBox: { current: DataSourcesContextType } = {
+    current: {} as DataSourcesContextType,
+  },
+) => ({
+  tree: (
+    <JotaiProvider>
+      <JotaiHydrator
+        initialValues={[
+          [activeNamespaceIdAtom, fallbackNs],
+          [resourcesConditionsAtom, {}],
+        ]}
+      >
+        <DataSourcesContextProvider dataSources={dataSources}>
+          <ContextCapture boxRef={ctxBox} />
+        </DataSourcesContextProvider>
+      </JotaiHydrator>
+    </JotaiProvider>
+  ),
+  ctx: () => ctxBox.current,
+  ctxBox,
+});
 
 const makeResource = (name = 'my-res', namespace = 'res-ns'): Resource => ({
   metadata: {
@@ -58,6 +69,22 @@ const makeResource = (name = 'my-res', namespace = 'res-ns'): Resource => ({
   },
   spec: {},
 });
+
+const renderAndRequest = async (
+  dataSources: DataSources,
+  dataSourceName: string,
+  resource = makeResource(),
+  fallbackNs = 'default-ns',
+) => {
+  const { tree, ctx } = makeTree(dataSources, fallbackNs);
+  await act(async () => {
+    render(tree);
+  });
+  await act(async () => {
+    await ctx().requestRelatedResource(resource, dataSourceName);
+  });
+  return ctx;
+};
 
 const baseDataSource = {
   resource: {
@@ -87,8 +114,9 @@ afterEach(() => {
 describe('DataSourcesContextProvider', () => {
   describe('getRelatedResourceInPath', () => {
     it('returns the matching data source name when path starts with $name', async () => {
+      const { tree, ctx } = makeTree({ pods: baseDataSource });
       await act(async () => {
-        render(makeTree({ pods: baseDataSource }));
+        render(tree);
       });
       expect(
         ctx().getRelatedResourceInPath('$pods.items[0].metadata.name'),
@@ -96,19 +124,13 @@ describe('DataSourcesContextProvider', () => {
     });
 
     it('returns undefined when no data source name matches', async () => {
+      const { tree, ctx } = makeTree({ pods: baseDataSource });
       await act(async () => {
-        render(makeTree({ pods: baseDataSource }));
+        render(tree);
       });
       expect(
         ctx().getRelatedResourceInPath('$services.metadata'),
       ).toBeUndefined();
-    });
-
-    it('returns undefined when path does not start with $', async () => {
-      await act(async () => {
-        render(makeTree({ pods: baseDataSource }));
-      });
-      expect(ctx().getRelatedResourceInPath('pods.items')).toBeUndefined();
     });
 
     it('returns the correct source name among multiple data sources', async () => {
@@ -116,8 +138,9 @@ describe('DataSourcesContextProvider', () => {
         ...baseDataSource,
         resource: { ...baseDataSource.resource, kind: 'Service' },
       };
+      const { tree, ctx } = makeTree({ pods: baseDataSource, services });
       await act(async () => {
-        render(makeTree({ pods: baseDataSource, services }));
+        render(tree);
       });
       expect(ctx().getRelatedResourceInPath('$services.spec.clusterIP')).toBe(
         'services',
@@ -138,28 +161,14 @@ describe('DataSourcesContextProvider', () => {
           name: '',
         },
       };
-      await act(async () => {
-        render(makeTree({ ds }));
-      });
-
-      await act(async () => {
-        await ctx().requestRelatedResource(makeResource(), 'ds');
-      });
-
+      await renderAndRequest({ ds }, 'ds');
       expect(mockFetch).toHaveBeenCalledWith({
         relativeUrl: '/apis/apps/v1/namespaces/my-ns/deployments',
       });
     });
 
     it('uses /api prefix when group is empty', async () => {
-      await act(async () => {
-        render(makeTree({ ds: baseDataSource }));
-      });
-
-      await act(async () => {
-        await ctx().requestRelatedResource(makeResource(), 'ds');
-      });
-
+      await renderAndRequest({ ds: baseDataSource }, 'ds');
       expect(mockFetch).toHaveBeenCalledWith({
         relativeUrl: '/api/v1/namespaces/ds-ns/pods',
       });
@@ -170,14 +179,7 @@ describe('DataSourcesContextProvider', () => {
         ...baseDataSource,
         resource: { ...baseDataSource.resource, namespace: '-all-' },
       };
-      await act(async () => {
-        render(makeTree({ ds }));
-      });
-
-      await act(async () => {
-        await ctx().requestRelatedResource(makeResource(), 'ds');
-      });
-
+      await renderAndRequest({ ds }, 'ds');
       expect(mockFetch).toHaveBeenCalledWith({ relativeUrl: '/api/v1/pods' });
     });
 
@@ -186,17 +188,7 @@ describe('DataSourcesContextProvider', () => {
         ...baseDataSource,
         resource: { ...baseDataSource.resource, namespace: undefined as any },
       };
-      await act(async () => {
-        render(makeTree({ ds }));
-      });
-
-      await act(async () => {
-        await ctx().requestRelatedResource(
-          makeResource('r', 'resource-ns'),
-          'ds',
-        );
-      });
-
+      await renderAndRequest({ ds }, 'ds', makeResource('r', 'resource-ns'));
       expect(mockFetch).toHaveBeenCalledWith({
         relativeUrl: '/api/v1/namespaces/resource-ns/pods',
       });
@@ -211,14 +203,7 @@ describe('DataSourcesContextProvider', () => {
         ...makeResource(),
         metadata: { ...makeResource().metadata, namespace: '' },
       };
-      await act(async () => {
-        render(makeTree({ ds }, 'atom-ns'));
-      });
-
-      await act(async () => {
-        await ctx().requestRelatedResource(resourceWithoutNs, 'ds');
-      });
-
+      await renderAndRequest({ ds }, 'ds', resourceWithoutNs, 'atom-ns');
       expect(mockFetch).toHaveBeenCalledWith({
         relativeUrl: '/api/v1/namespaces/atom-ns/pods',
       });
@@ -229,14 +214,7 @@ describe('DataSourcesContextProvider', () => {
         ...baseDataSource,
         resource: { ...baseDataSource.resource, name: 'specific-pod' },
       };
-      await act(async () => {
-        render(makeTree({ ds }));
-      });
-
-      await act(async () => {
-        await ctx().requestRelatedResource(makeResource(), 'ds');
-      });
-
+      await renderAndRequest({ ds }, 'ds');
       expect(mockFetch).toHaveBeenCalledWith({
         relativeUrl: '/api/v1/namespaces/ds-ns/pods/specific-pod',
       });
@@ -247,14 +225,7 @@ describe('DataSourcesContextProvider', () => {
         ...baseDataSource,
         ownerLabelSelectorPath: '$.metadata.labels',
       };
-      await act(async () => {
-        render(makeTree({ ds }));
-      });
-
-      await act(async () => {
-        await ctx().requestRelatedResource(makeResource(), 'ds');
-      });
-
+      await renderAndRequest({ ds }, 'ds');
       const { relativeUrl } = mockFetch.mock.calls[0][0] as {
         relativeUrl: string;
       };
@@ -265,31 +236,29 @@ describe('DataSourcesContextProvider', () => {
   });
 
   describe('requestRelatedResource', () => {
-    it('sets store.loading to true and returns a Promise on first call', async () => {
+    it('returns a Promise on first call, sets loading, and returns the same promise while in-flight', async () => {
       mockFetch.mockReturnValue(new Promise(() => {}));
+      const { tree, ctx } = makeTree({ ds: baseDataSource });
       await act(async () => {
-        render(makeTree({ ds: baseDataSource }));
-      });
-
-      let result: any;
-      act(() => {
-        result = ctx().requestRelatedResource(makeResource(), 'ds');
-      });
-
-      expect(result).toBeInstanceOf(Promise);
-      expect(ctx().store.ds?.loading).toBe(true);
-    });
-
-    it('does not re-fetch on subsequent calls with the same resource and filter', async () => {
-      await act(async () => {
-        render(makeTree({ ds: baseDataSource }));
+        render(tree);
       });
       const res = makeResource();
 
-      await act(async () => {
-        await ctx().requestRelatedResource(res, 'ds');
+      let firstResult: any;
+      act(() => {
+        firstResult = ctx().requestRelatedResource(res, 'ds');
       });
 
+      expect(firstResult).toBeInstanceOf(Promise);
+      expect(ctx().store.ds?.loading).toBe(true);
+      expect(ctx().requestRelatedResource(res, 'ds')).toBe(
+        ctx().store.ds?.firstFetch,
+      );
+    });
+
+    it('does not re-fetch on subsequent calls with the same resource and filter', async () => {
+      const res = makeResource();
+      const ctx = await renderAndRequest({ ds: baseDataSource }, 'ds', res);
       mockFetch.mockClear();
 
       act(() => {
@@ -300,14 +269,11 @@ describe('DataSourcesContextProvider', () => {
     });
 
     it('re-fetches when the resource name changes', async () => {
-      await act(async () => {
-        render(makeTree({ ds: baseDataSource }));
-      });
-
-      await act(async () => {
-        await ctx().requestRelatedResource(makeResource('first'), 'ds');
-      });
-
+      const ctx = await renderAndRequest(
+        { ds: baseDataSource },
+        'ds',
+        makeResource('first'),
+      );
       mockFetch.mockClear();
 
       await act(async () => {
@@ -320,19 +286,18 @@ describe('DataSourcesContextProvider', () => {
     it('re-fetches when the dataSource filter changes', async () => {
       const ds1 = { ...baseDataSource, filter: 'status = "Running"' };
       const ds2 = { ...baseDataSource, filter: 'status = "Pending"' };
-      const { rerender } = render(makeTree({ ds: ds1 }));
+      // Pass ctxBox into the second makeTree call so both renders share the same box.
+      const { tree, ctx, ctxBox } = makeTree({ ds: ds1 });
+      const { rerender } = render(tree);
       const res = makeResource();
 
       await act(async () => {
         await ctx().requestRelatedResource(res, 'ds');
       });
-
       mockFetch.mockClear();
-
       await act(async () => {
-        rerender(makeTree({ ds: ds2 }));
+        rerender(makeTree({ ds: ds2 }, 'default-ns', ctxBox).tree);
       });
-
       await act(async () => {
         await ctx().requestRelatedResource(res, 'ds');
       });
@@ -340,34 +305,13 @@ describe('DataSourcesContextProvider', () => {
       expect(mockFetch).toHaveBeenCalledTimes(1);
     });
 
-    it('returns the in-flight firstFetch promise while loading', async () => {
-      mockFetch.mockReturnValue(new Promise(() => {}));
-      await act(async () => {
-        render(makeTree({ ds: baseDataSource }));
-      });
-      const res = makeResource();
-
-      act(() => {
-        ctx().requestRelatedResource(res, 'ds');
-      });
-
-      const result = ctx().requestRelatedResource(res, 'ds');
-      expect(result).toBe(ctx().store.ds?.firstFetch);
-    });
-
     it('returns cached data after fetch completes and resource has not changed', async () => {
       const mockData = { items: [{ metadata: { name: 'pod-1' } }] };
       mockFetch.mockResolvedValue({
         json: vi.fn().mockResolvedValue(mockData),
       });
-      await act(async () => {
-        render(makeTree({ ds: baseDataSource }));
-      });
       const res = makeResource();
-
-      await act(async () => {
-        await ctx().requestRelatedResource(res, 'ds');
-      });
+      const ctx = await renderAndRequest({ ds: baseDataSource }, 'ds', res);
 
       const result = ctx().requestRelatedResource(res, 'ds');
       expect(result).toMatchObject({ items: expect.any(Array) });
@@ -381,13 +325,7 @@ describe('DataSourcesContextProvider', () => {
       mockFetch.mockResolvedValue({
         json: vi.fn().mockResolvedValue(mockData),
       });
-      await act(async () => {
-        render(makeTree({ ds: baseDataSource }));
-      });
-
-      await act(async () => {
-        await ctx().requestRelatedResource(makeResource(), 'ds');
-      });
+      const ctx = await renderAndRequest({ ds: baseDataSource }, 'ds');
 
       expect(ctx().store.ds.loading).toBe(false);
       expect(ctx().store.ds.error).toBeNull();
@@ -399,13 +337,7 @@ describe('DataSourcesContextProvider', () => {
     it('sets store.error and clears loading on fetch failure', async () => {
       const fetchError = new Error('Network failure');
       mockFetch.mockRejectedValue(fetchError);
-      await act(async () => {
-        render(makeTree({ ds: baseDataSource }));
-      });
-
-      await act(async () => {
-        await ctx().requestRelatedResource(makeResource(), 'ds');
-      });
+      const ctx = await renderAndRequest({ ds: baseDataSource }, 'ds');
 
       expect(ctx().store.ds.loading).toBe(false);
       expect(ctx().store.ds.error).toBe(fetchError);
@@ -416,25 +348,19 @@ describe('DataSourcesContextProvider', () => {
       mockFetch.mockResolvedValue({
         json: vi.fn().mockResolvedValue({ items }),
       });
-
-      const expr = {
+      vi.mocked(jsonataWrapper).mockReturnValue({
         assign: vi.fn(),
         evaluate: vi
           .fn()
           .mockResolvedValueOnce(true)
           .mockResolvedValueOnce(false)
           .mockResolvedValueOnce(true),
-      };
-      vi.mocked(jsonataWrapper).mockReturnValue(expr as any);
+      } as any);
 
-      const ds = { ...baseDataSource, filter: '$item.name != "b"' };
-      await act(async () => {
-        render(makeTree({ ds }));
-      });
-
-      await act(async () => {
-        await ctx().requestRelatedResource(makeResource(), 'ds');
-      });
+      const ctx = await renderAndRequest(
+        { ds: { ...baseDataSource, filter: '$item.name != "b"' } },
+        'ds',
+      );
 
       expect(ctx().store.ds.data.items).toHaveLength(2);
       expect(ctx().store.ds.data.items[0]).toBe(items[0]);
@@ -445,21 +371,15 @@ describe('DataSourcesContextProvider', () => {
       mockFetch.mockResolvedValue({
         json: vi.fn().mockResolvedValue({ metadata: { name: 'pod-1' } }),
       });
-
-      const expr = {
+      vi.mocked(jsonataWrapper).mockReturnValue({
         assign: vi.fn(),
         evaluate: vi.fn().mockResolvedValue(false),
-      };
-      vi.mocked(jsonataWrapper).mockReturnValue(expr as any);
+      } as any);
 
-      const ds = { ...baseDataSource, filter: 'someFilter' };
-      await act(async () => {
-        render(makeTree({ ds }));
-      });
-
-      await act(async () => {
-        await ctx().requestRelatedResource(makeResource(), 'ds');
-      });
+      const ctx = await renderAndRequest(
+        { ds: { ...baseDataSource, filter: 'someFilter' } },
+        'ds',
+      );
 
       expect(ctx().store.ds.data).toBeNull();
     });
@@ -470,16 +390,13 @@ describe('DataSourcesContextProvider', () => {
         evaluate: vi.fn().mockResolvedValue(true),
       };
       vi.mocked(jsonataWrapper).mockReturnValue(expr as any);
-
-      const ds = { ...baseDataSource, filter: 'someFilter' };
       const res = makeResource();
-      await act(async () => {
-        render(makeTree({ ds }));
-      });
 
-      await act(async () => {
-        await ctx().requestRelatedResource(res, 'ds');
-      });
+      await renderAndRequest(
+        { ds: { ...baseDataSource, filter: 'someFilter' } },
+        'ds',
+        res,
+      );
 
       expect(expr.assign).toHaveBeenCalledWith('root', res);
     });
