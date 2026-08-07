@@ -46,10 +46,8 @@ export const ResourceDetailsCardContent = ({
   const totalItems =
     2 + // Resource Type + Age always present
     (!hideLastUpdate ? 1 : 0) +
-    filteredDetailsCardColumns.length +
-    (!hideLabels ? 1 : 0) +
-    (!hideAnnotations ? 1 : 0);
-  const needsPadding = !hideLabels && !hideAnnotations && totalItems % 2 !== 0;
+    filteredDetailsCardColumns.length;
+  const needsPadding = totalItems % 2 !== 0;
 
   const labelsAnnotationsHeader = () => {
     if (!hideLabels && !hideAnnotations)
@@ -92,77 +90,77 @@ export const ResourceDetailsCardContent = ({
       titleText={t('cluster-overview.headers.metadata')}
       content={
         <div>
-          <div>
+          <FormItem
+            key="Resource Type"
+            labelContent={
+              <Label showColon>{t('common.headers.resource-type')}</Label>
+            }
+          >
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              {resource.kind}
+              {description && (
+                <HintButton
+                  className="sap-margin-begin-tiny"
+                  setShowTitleDescription={setShowTitleDescription}
+                  showTitleDescription={showTitleDescription}
+                  description={description}
+                  ariaTitle={resource?.kind}
+                />
+              )}
+            </div>
+          </FormItem>
+          <FormItem
+            key="Age"
+            labelContent={<Label showColon>{t('common.headers.age')}</Label>}
+          >
+            <Text>
+              <ReadableElapsedTimeFromNow
+                timestamp={resource.metadata.creationTimestamp}
+              />
+            </Text>
+          </FormItem>
+          {!hideLastUpdate && (
             <FormItem
-              key="Resource Type"
+              key="Last Update"
               labelContent={
-                <Label showColon>{t('common.headers.resource-type')}</Label>
+                <Label showColon>{t('common.headers.last-update')}</Label>
               }
             >
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                {resource.kind}
-                {description && (
-                  <HintButton
-                    className="sap-margin-begin-tiny"
-                    setShowTitleDescription={setShowTitleDescription}
-                    showTitleDescription={showTitleDescription}
-                    description={description}
-                    ariaTitle={resource?.kind}
-                  />
-                )}
-              </div>
+              <Text>{renderUpdateDate(lastUpdate)}</Text>
             </FormItem>
+          )}
+          {filteredDetailsCardColumns.map((col) => (
             <FormItem
-              key="Age"
-              labelContent={<Label showColon>{t('common.headers.age')}</Label>}
+              key={col.header}
+              labelContent={<Label showColon>{col.header ?? ''}</Label>}
             >
-              <Text>
-                <ReadableElapsedTimeFromNow
-                  timestamp={resource.metadata.creationTimestamp}
-                />
-              </Text>
+              <div>{col.value(resource)}</div>
             </FormItem>
-            {!hideLastUpdate && (
-              <FormItem
-                key="Last Update"
-                labelContent={
-                  <Label showColon>{t('common.headers.last-update')}</Label>
-                }
-              >
-                <Text>{renderUpdateDate(lastUpdate)}</Text>
-              </FormItem>
-            )}
-            {filteredDetailsCardColumns.map((col) => (
-              <FormItem
-                key={col.header}
-                labelContent={<Label showColon>{col.header ?? ''}</Label>}
-              >
-                <div>{col.value(resource)}</div>
-              </FormItem>
-            ))}
-            {needsPadding && (
-              <FormItem key="padding" labelContent={<Label />}>
-                <span />
-              </FormItem>
-            )}
-          </div>
+          ))}
+          {needsPadding && (
+            <FormItem key="padding" labelContent={<Label />}>
+              <span />
+            </FormItem>
+          )}
         </div>
       }
       bottomContent={
-        <Panel
-          headerText={labelsAnnotationsHeader()}
-          className="labels-annotations-panel"
-          collapsed
-        >
-          <Form
-            className="labels-annotations-panel__content"
-            labelSpan="S12 M12 L12 XL12"
-            layout="S2 M2 L2 XL2"
+        hideLabels && hideAnnotations ? null : (
+          <Panel
+            headerText={labelsAnnotationsHeader()}
+            className="labels-annotations-panel"
+            collapsed
           >
-            {!hideLabels && labels}
-            {!hideAnnotations && annotations}
-          </Form>
-        </Panel>
+            <Form
+              className="labels-annotations-panel__content"
+              labelSpan="S12 M12 L12 XL12"
+              layout="S2 M2 L2 XL2"
+            >
+              {!hideLabels && labels}
+              {!hideAnnotations && annotations}
+            </Form>
+          </Panel>
+        )
       }
     />
   );
