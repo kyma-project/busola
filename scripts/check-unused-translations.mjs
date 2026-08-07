@@ -46,19 +46,22 @@ const RE_DESC_KEY = /i18nDescriptionKey\s*=\s*['"]([^'"]+)['"]/g;
 // subtitleText: 'some.key'
 const RE_SUBTITLE = /subtitleText:\s*['"]([^'"]+)['"]/g;
 
-// t(`prefix.${expr}`) — captures everything before ${ as a prefix, then marks all
-// YAML keys that start with it (e.g. `command-palette.resource-names.${type}`)
+// t(`prefix.${expr}`) — marks all YAML keys starting with the static prefix
 const RE_DYNAMIC = /`([a-z][a-z0-9.-]*[.-])\$\{/g;
+// t('prefix.' + expr) — marks all YAML keys starting with the static prefix
+const RE_CONCAT = /(?:t|tExt)\(\s*['"]([a-z][a-z0-9.-]+[.-])['"]\s*\+/g;
 
-function* walkFiles(dir) {
+function walkFiles(dir) {
+  const files = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const full = resolve(dir, entry.name);
     if (entry.isDirectory()) {
-      yield* walkFiles(full);
+      files.push(...walkFiles(full));
     } else if (SOURCE_EXTS.some(ext => entry.name.endsWith(ext))) {
-      yield full;
+      files.push(full);
     }
   }
+  return files;
 }
 
 let staticMatches = 0;
@@ -79,16 +82,17 @@ for (const file of walkFiles(SRC)) {
     }
   }
 
-  RE_DYNAMIC.lastIndex = 0;
-  let m;
-  while ((m = RE_DYNAMIC.exec(content)) !== null) {
-    const prefix = m[1]; // e.g. "command-palette.resource-names." or "common.value-units.seconds-"
-    // Require at least 2 parts to avoid overly broad matches
-    if (prefix.split(/[.-]/).filter(Boolean).length < 2) continue;
-    for (const k of counts.keys()) {
-      if (k.startsWith(prefix)) {
-        counts.set(k, counts.get(k) + 1);
-        dynamicMatches++;
+  for (const re of [RE_DYNAMIC, RE_CONCAT]) {
+    re.lastIndex = 0;
+    let m;
+    while ((m = re.exec(content)) !== null) {
+      const prefix = m[1];
+      if (!prefix.slice(0, -1)) continue;
+      for (const k of counts.keys()) {
+        if (k.startsWith(prefix)) {
+          counts.set(k, counts.get(k) + 1);
+          dynamicMatches++;
+        }
       }
     }
   }
