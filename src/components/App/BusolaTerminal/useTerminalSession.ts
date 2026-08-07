@@ -29,6 +29,9 @@ import { TFunction } from 'i18next';
 const DEFAULT_IMAGE =
   'europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest';
 
+const RECONNECTION_MIN_DELAY_MS = 1_000;
+const RECONNECTION_MAX_DELAY_MS = 30_000;
+
 const reconnect = (
   attemptRef: RefObject<number>,
   term: Terminal,
@@ -48,7 +51,10 @@ const reconnect = (
     return;
   }
 
-  const baseDelay = Math.min(1000 * 2 ** attempt, 30000);
+  const baseDelay = Math.min(
+    Math.pow(RECONNECTION_MIN_DELAY_MS * 2, attempt),
+    RECONNECTION_MAX_DELAY_MS,
+  );
   const jitter = Math.random() * 1000;
   const delay = baseDelay + jitter;
 
@@ -146,7 +152,6 @@ export function useTerminalSession() {
         onDataDisposableRef.current = disposable;
       } catch (err: any) {
         if (err?.name === 'AbortError') return;
-        console.error('ERROOOOR', err);
         const message = err?.message ?? t('terminal.messages.unknown-error');
         setSession((prev) => ({
           ...prev,
