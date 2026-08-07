@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from 'react';
 import { Route, useParams } from 'react-router';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { FlexibleColumnLayout } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
@@ -15,22 +15,18 @@ const NodeOverview = lazyWithRetries(
   () => import('../../components/Nodes/NodeDetails/NodeDetails'),
 );
 
-const ColumnWrapper = () => {
+export const ColumnWrapper = () => {
   const { t } = useTranslation();
-  const layoutState = useAtomValue(columnLayoutAtom);
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
   const { nodeName } = useParams();
   const { clusterUrl } = useUrl();
 
+  // The Cluster Overview is a dashboard, not a list of nodes, so a node takes
+  // over the whole page instead of opening beside it.
   useEffect(() => {
     setLayoutColumn({
-      layout: nodeName ? 'TwoColumnsMidExpanded' : 'OneColumn',
-      startColumn: {
-        resourceName: null,
-        resourceType: 'Cluster',
-        rawResourceTypeName: 'Cluster',
-      },
-      midColumn: nodeName
+      layout: 'OneColumn',
+      startColumn: nodeName
         ? {
             resourceName: nodeName,
             resourceType: 'Nodes',
@@ -38,37 +34,36 @@ const ColumnWrapper = () => {
             apiGroup: '',
             apiVersion: 'v1',
           }
-        : null,
+        : {
+            resourceName: null,
+            resourceType: 'Cluster',
+            rawResourceTypeName: 'Cluster',
+          },
+      midColumn: null,
       endColumn: null,
     });
   }, [nodeName, setLayoutColumn]);
 
-  const nodeNameResolved = layoutState?.midColumn?.resourceName || nodeName;
-
   return (
     <FlexibleColumnLayout
       style={{ height: '100%' }}
-      layout={layoutState?.layout || 'OneColumn'}
+      layout="OneColumn"
       startColumn={
         <div className="column-content">
-          <WithTitle title={t('clusters.overview.title-current-cluster')}>
-            <ClusterOverview />
-          </WithTitle>
-        </div>
-      }
-      midColumn={
-        nodeNameResolved ? (
-          <div className="column-content">
+          {nodeName ? (
             <Suspense fallback={<Spinner />}>
               <NodeOverview
-                nodeName={nodeNameResolved}
+                nodeName={nodeName}
+                layoutNumber="startColumn"
                 layoutCloseCreateUrl={clusterUrl('overview')}
               />
             </Suspense>
-          </div>
-        ) : (
-          <></>
-        )
+          ) : (
+            <WithTitle title={t('clusters.overview.title-current-cluster')}>
+              <ClusterOverview />
+            </WithTitle>
+          )}
+        </div>
       }
     />
   );

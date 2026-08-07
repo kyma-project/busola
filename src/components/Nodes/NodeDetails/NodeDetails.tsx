@@ -17,15 +17,18 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourceForm } from 'shared/ResourceForm';
 import { Description } from 'shared/components/Description/Description';
 import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
+import { LayoutColumnName } from 'types';
 
 interface NodeDetailsProps {
   nodeName: string;
   layoutCloseCreateUrl?: string;
+  layoutNumber?: LayoutColumnName;
 }
 
 export default function NodeDetails({
   nodeName,
   layoutCloseCreateUrl,
+  layoutNumber,
 }: NodeDetailsProps) {
   const { data, error, loading } = useNodeQuery(nodeName);
   const { t } = useTranslation();
@@ -89,6 +92,7 @@ export default function NodeDetails({
         hideAnnotations
         customColumns={customColumns}
         layoutCloseCreateUrl={layoutCloseCreateUrl}
+        layoutNumber={layoutNumber}
         description={
           <Description
             i18nKey={'nodes.description'}
