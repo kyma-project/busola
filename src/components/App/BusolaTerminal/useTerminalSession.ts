@@ -52,7 +52,7 @@ const reconnect = (
   }
 
   const baseDelay = Math.min(
-    Math.pow(RECONNECTION_MIN_DELAY_MS * 2, attempt),
+    RECONNECTION_MIN_DELAY_MS * Math.pow(2, attempt),
     RECONNECTION_MAX_DELAY_MS,
   );
   const jitter = Math.random() * 1000;
@@ -152,6 +152,7 @@ export function useTerminalSession() {
         onDataDisposableRef.current = disposable;
       } catch (err: any) {
         if (err?.name === 'AbortError') return;
+        console.error(err);
         const message = err?.message ?? t('terminal.messages.unknown-error');
         setSession((prev) => ({
           ...prev,
