@@ -55,34 +55,24 @@ describe('Cluster Overview node navigation layout', () => {
     expect(layoutState.midColumn).toBeNull();
   });
 
-  it('replaces the overview with node details instead of splitting columns', async () => {
+  it('replaces the overview with node details in a single start column', async () => {
     const store = await renderAt(
       '/cluster/my-cluster/overview/nodes/shoot--node-1',
     );
 
-    expect(screen.getByTestId('node-details')).toHaveTextContent(
-      'shoot--node-1',
-    );
+    const nodeDetails = screen.getByTestId('node-details');
+    expect(nodeDetails).toHaveTextContent('shoot--node-1');
     expect(screen.queryByTestId('cluster-overview')).not.toBeInTheDocument();
+    // startColumn => no fullscreen/close buttons on the node view
+    expect(nodeDetails).toHaveAttribute('data-layout-number', 'startColumn');
 
     const layoutState = store.get(columnLayoutAtom);
     expect(layoutState.layout).toBe('OneColumn');
-    expect(layoutState.midColumn).toBeNull();
-    expect(layoutState.endColumn).toBeNull();
-  });
-
-  it('puts the node in the start column so it shows no fullscreen/close buttons', async () => {
-    const store = await renderAt(
-      '/cluster/my-cluster/overview/nodes/shoot--node-1',
-    );
-
-    expect(store.get(columnLayoutAtom).startColumn).toMatchObject({
+    expect(layoutState.startColumn).toMatchObject({
       resourceName: 'shoot--node-1',
       resourceType: 'Nodes',
     });
-    expect(screen.getByTestId('node-details')).toHaveAttribute(
-      'data-layout-number',
-      'startColumn',
-    );
+    expect(layoutState.midColumn).toBeNull();
+    expect(layoutState.endColumn).toBeNull();
   });
 });

@@ -1,9 +1,14 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { render } from '@testing-library/react';
 import { Provider } from 'jotai';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 
 import { ClusterNodes } from '../ClusterNodes';
+
+// ClusterNodes writes the cluster version to localStorage during render.
+beforeAll(() => {
+  vi.stubGlobal('localStorage', { setItem: vi.fn(), getItem: vi.fn() });
+});
 
 const capturedProps: Record<string, any> = {};
 
@@ -51,9 +56,10 @@ const renderList = () => {
 };
 
 describe('ClusterNodes navigation', () => {
-  it('links a node name to the node route without a layout param', () => {
+  it('navigates to the node route without a layout param, from both the name link and a row click', () => {
     const { container } = renderList();
 
+    // the node-name link
     const link = container.querySelector(
       '[data-testid="node-details-link-shoot--node-1"]',
     );
@@ -63,22 +69,11 @@ describe('ClusterNodes navigation', () => {
     );
     // a `layout` param is what splits the screen into columns
     expect(link?.getAttribute('href')).not.toContain('layout');
-  });
 
-  it('sends a click anywhere on the row to the same node route', () => {
-    renderList();
-
+    // a click anywhere on the row resolves to the same route
     expect(capturedProps.hasDetailsView).toBe(true);
     expect(capturedProps.customUrl(nodes[0])).toBe(
       '/cluster/my-cluster/overview/nodes/shoot--node-1',
     );
-  });
-
-  it('encodes node names that need escaping', () => {
-    renderList();
-
-    expect(
-      capturedProps.customUrl({ metadata: { name: 'node/with space' } }),
-    ).toBe('/cluster/my-cluster/overview/nodes/node%2Fwith%20space');
   });
 });

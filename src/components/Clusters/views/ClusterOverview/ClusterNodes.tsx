@@ -73,8 +73,9 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
     t('common.headers.zone'),
   ];
 
-  // A node replaces the whole Cluster Overview page, so it must not carry a
-  // `layout` param — that would split the screen into columns.
+  // A node takes over the whole Cluster Overview page,
+  // so the link omits the `layout` param to avoid leaving a stale, misleading
+  // value in the URL for what is a single-column view.
   const nodeUrl = (entry?: RowRendererEntry) =>
     clusterUrl(
       `overview/nodes/${encodeURIComponent(entry?.metadata?.name ?? '')}`,
@@ -93,7 +94,7 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
           display: 'flex',
           alignItems: 'center',
         }}
-        dataTestId={`node-details-link-${entry?.metadata?.name}`}
+        data-testid={`node-details-link-${entry?.metadata?.name}`}
         url={nodeUrl(entry)}
         layout={false}
       >
