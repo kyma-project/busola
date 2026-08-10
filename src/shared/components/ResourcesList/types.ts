@@ -8,6 +8,7 @@ import {
   PaginationType,
   SearchSettingsType,
 } from '../GenericList/components/TableBody';
+import { Sort } from '../GenericList/SortModalPanel';
 import { LayoutColumnName } from 'types';
 import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
 
@@ -57,6 +58,7 @@ export type ResourcesListProps = {
   customColumnLayout?: (entry: any) => any;
   layoutCloseCreateUrl?: string;
   sortBy?: SortByObject | ((a: any) => SortByObject);
+  initialSort?: Sort;
   searchSettings?: Omit<SearchSettingsType, 'textSearchProperties'> & {
     textSearchProperties?: any[] | ((entry: any) => any[]);
   };

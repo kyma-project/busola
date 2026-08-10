@@ -1,4 +1,5 @@
 import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
+import { memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { EventsList } from 'shared/components/EventsList';
@@ -19,6 +20,11 @@ type ClusterNodesProps = {
   error?: Error;
   loading?: boolean;
 };
+
+// Memoized so parent (node/stats) polling doesn't re-render the events table.
+const WarningEvents = memo(function WarningEvents() {
+  return <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
+});
 
 type RowRendererEntry = {
   metadata?: {
@@ -128,14 +134,14 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
         EMPTY_TEXT_PLACEHOLDER,
     ];
   };
-  const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
+  const Events = <WarningEvents />;
 
   // This sets and unsets cluster version.
   // Should be stored and cleared if cluster is changed in a central state once Redux is installed
-  window.localStorage.setItem(
-    'cluster.version',
-    data?.[0]?.status?.nodeInfo?.kubeletVersion,
-  );
+  const kubeletVersion = data?.[0]?.status?.nodeInfo?.kubeletVersion;
+  useEffect(() => {
+    window.localStorage.setItem('cluster.version', kubeletVersion);
+  }, [kubeletVersion]);
 
   return (
     <>
