@@ -3,6 +3,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { authDataAtom } from 'state/authDataAtom';
+import { themeAtom, isSystemThemeDark } from 'state/settings/themeAtom';
 
 import { useCurrentResource } from 'components/KymaCompanion/utils/useResource';
 import { useFeature } from 'hooks/useFeature';
@@ -22,6 +23,7 @@ export default function JouleChat() {
   );
   const cluster = useAtomValue(clusterAtom);
   const authData = useAtomValue(authDataAtom);
+  const theme = useAtomValue(themeAtom);
 
   const { isEnabled, jouleConfig } = useFeature(
     configFeaturesNames.KYMA_COMPANION,
@@ -32,6 +34,7 @@ export default function JouleChat() {
   const resourceRef = useRef(currentResource);
   const clusterRef = useRef(cluster);
   const authDataRef = useRef(authData);
+  const resolveJouleThemeRef = useRef(null);
 
   useEffect(() => {
     resourceRef.current = currentResource;
@@ -138,6 +141,12 @@ export default function JouleChat() {
         console.error('Failed to load Joule Web Client');
       };
 
+      script.onload = () => {
+        if (resolveJouleThemeRef.current) {
+          window.sap?.das?.webclient?.setTheme(resolveJouleThemeRef.current());
+        }
+      };
+
       document.head.appendChild(script);
     }
 
@@ -156,6 +165,31 @@ export default function JouleChat() {
       }
     };
   }, [isEnabled, jouleConfig, setShowKymaCompanion]);
+
+  // Sync Busola theme to Joule
+  useEffect(() => {
+    if (!isEnabled) return;
+
+    const resolveJouleTheme = () =>
+      theme === 'light_dark'
+        ? isSystemThemeDark()
+          ? 'sap_horizon_dark'
+          : 'sap_horizon'
+        : theme;
+
+    const applyTheme = () => {
+      window.sap?.das?.webclient?.setTheme(resolveJouleTheme());
+    };
+
+    resolveJouleThemeRef.current = resolveJouleTheme;
+    applyTheme();
+    if (theme !== 'light_dark') return;
+
+    // When following system preference, update Joule if the OS theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', applyTheme);
+    return () => mediaQuery.removeEventListener('change', applyTheme);
+  }, [isEnabled, theme]);
 
   // Control visibility based on Jotai state
   useEffect(() => {

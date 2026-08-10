@@ -46,23 +46,23 @@ context('Test login - kubeconfigID', () => {
     });
   });
 
-  // it('Adds cluster by kubeconfigID - saves path', () => {
-  //   cy.wrap(loadFile('kubeconfig.yaml')).then((kubeconfig) => {
-  //     cy.intercept(
-  //       {
-  //         method: 'GET',
-  //         url: `${kubeconfigIdAddress}/*`,
-  //       },
-  //       kubeconfig,
-  //     );
+  it('Adds cluster by kubeconfigID - saves path', () => {
+    cy.wrap(loadFile('kubeconfig.yaml')).then((kubeconfig) => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: `${kubeconfigIdAddress}/*`,
+        },
+        kubeconfig,
+      );
 
-  //     const clusterName = kubeconfig['current-context'];
-  //     const path = `cluster/${clusterName}/namespaces/default/deployments`;
+      const clusterName = kubeconfig['current-context'];
+      const path = `cluster/${clusterName}/namespaces/default/deployments`;
 
-  //     cy.visit(`${config.clusterAddress}/${path}/?kubeconfigID=tests`);
-  //     cy.url().should('match', /deployments\/?$/);
-  //   });
-  // });
+      cy.visit(`${config.clusterAddress}/${path}/?kubeconfigID=tests`);
+      cy.url().should('match', /deployments\/?$/);
+    });
+  });
 
   it('Does not change storage for already added cluster', () => {
     cy.loginAndSelectCluster({

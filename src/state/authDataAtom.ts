@@ -19,6 +19,7 @@ import { isOwnOidcCallback } from './utils/isOwnOidcCallback';
 import { ssoDataAtom } from './ssoDataAtom';
 import { configFeaturesNames } from './types';
 import { useFeature } from 'hooks/useFeature';
+import { configurationAtom } from './configuration/configurationAtom';
 
 export const hasNonOidcAuth = (
   user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
@@ -201,9 +202,10 @@ export function useAuthHandler() {
   const reauth = useReauthenticate({ notifyError: notification.notifyError });
   const ssoData = useAtomValue(ssoDataAtom);
   const isSSOEnabled = useFeature(configFeaturesNames.SSO_LOGIN)?.isEnabled;
+  const configuration = useAtomValue(configurationAtom);
 
   useEffect(() => {
-    if (isSSOEnabled === undefined) return;
+    if (!configuration?.features) return;
     if (!ssoData && isSSOEnabled) return;
     if (cleanupRef.current) {
       // Detach the previous cluster's silent-renew listeners before switching.
@@ -289,7 +291,7 @@ export function useAuthHandler() {
     setLastFetched(null);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster, ssoData, isSSOEnabled]);
+  }, [cluster, ssoData, isSSOEnabled, configuration]);
 
   useEffect(() => {
     return () => {
