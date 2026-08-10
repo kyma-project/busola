@@ -73,9 +73,7 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
     t('common.headers.zone'),
   ];
 
-  // A node takes over the whole Cluster Overview page,
-  // so the link omits the `layout` param to avoid leaving a stale, misleading
-  // value in the URL for what is a single-column view.
+  // No `layout` param: node details open full-page, not in a split view.
   const nodeUrl = (entry?: RowRendererEntry) =>
     clusterUrl(
       `overview/nodes/${encodeURIComponent(entry?.metadata?.name ?? '')}`,

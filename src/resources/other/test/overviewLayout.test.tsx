@@ -63,7 +63,7 @@ describe('Cluster Overview node navigation layout', () => {
     const nodeDetails = screen.getByTestId('node-details');
     expect(nodeDetails).toHaveTextContent('shoot--node-1');
     expect(screen.queryByTestId('cluster-overview')).not.toBeInTheDocument();
-    // startColumn => no fullscreen/close buttons on the node view
+    // startColumn means no fullscreen/close buttons
     expect(nodeDetails).toHaveAttribute('data-layout-number', 'startColumn');
 
     const layoutState = store.get(columnLayoutAtom);

@@ -21,8 +21,7 @@ export const ColumnWrapper = () => {
   const { nodeName } = useParams();
   const { clusterUrl } = useUrl();
 
-  // The Cluster Overview is a dashboard, not a list of nodes, so a node takes
-  // over the whole page instead of opening beside it.
+  // A node opens full-page (OneColumn), not beside the overview.
   useEffect(() => {
     setLayoutColumn({
       layout: 'OneColumn',

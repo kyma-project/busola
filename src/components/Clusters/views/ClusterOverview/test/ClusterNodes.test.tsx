@@ -59,7 +59,6 @@ describe('ClusterNodes navigation', () => {
   it('navigates to the node route without a layout param, from both the name link and a row click', () => {
     const { container } = renderList();
 
-    // the node-name link
     const link = container.querySelector(
       '[data-testid="node-details-link-shoot--node-1"]',
     );
@@ -67,10 +66,9 @@ describe('ClusterNodes navigation', () => {
       'href',
       '/cluster/my-cluster/overview/nodes/shoot--node-1',
     );
-    // a `layout` param is what splits the screen into columns
     expect(link?.getAttribute('href')).not.toContain('layout');
 
-    // a click anywhere on the row resolves to the same route
+    // row click uses customUrl when hasDetailsView is set
     expect(capturedProps.hasDetailsView).toBe(true);
     expect(capturedProps.customUrl(nodes[0])).toBe(
       '/cluster/my-cluster/overview/nodes/shoot--node-1',
