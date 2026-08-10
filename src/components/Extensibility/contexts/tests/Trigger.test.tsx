@@ -40,7 +40,9 @@ const makeSub = (
   storeKeys: any,
   modifiers: string[],
   callback: () => void,
+  identifier: object = {},
 ) => ({
+  sub: identifier,
   current: {
     [name]: { storeKeys, modifiers, callback },
   },
@@ -91,42 +93,50 @@ describe('TriggerContextProvider', () => {
   });
 
   describe('subscribe / unsubscribe', () => {
-    it('increases subs count when a subscriber is added', async () => {
+    it('calls the callback after subscribing', async () => {
       const { tree, ctx } = makeTree();
       await act(async () => {
         render(tree);
       });
-      const sub = makeSub('onChange', fromJS([]) as any, [], vi.fn());
+      const callback = vi.fn();
       act(() => {
-        ctx().subscribe(sub);
+        ctx().subscribe(
+          makeSub('onChange', fromJS(['items', 0]) as any, [], callback),
+        );
       });
-      expect(ctx().subs.current).toHaveLength(1);
+      act(() => {
+        ctx().trigger('onChange', fromJS(['items', 0]) as any);
+      });
+      vi.runAllTimers();
+      expect(callback).toHaveBeenCalledTimes(1);
     });
 
-    it('removes the subscriber when unsubscribe is called with its identifier', async () => {
+    it('does not call the callback after unsubscribing', async () => {
       const { tree, ctx } = makeTree();
       await act(async () => {
         render(tree);
       });
+      const callback = vi.fn();
       const identifier = {};
-      const sub = {
-        sub: identifier,
-        current: {
-          onChange: {
-            storeKeys: fromJS(['items', 0]) as any,
-            modifiers: [],
-            callback: vi.fn(),
-          },
-        },
-      };
       act(() => {
-        ctx().subscribe(sub);
+        ctx().subscribe(
+          makeSub(
+            'onChange',
+            fromJS(['items', 0]) as any,
+            [],
+            callback,
+            identifier,
+          ),
+        );
       });
-      expect(ctx().subs.current).toHaveLength(1);
       act(() => {
         ctx().unsubscribe(identifier as any);
       });
-      expect(ctx().subs.current).toHaveLength(0);
+      act(() => {
+        ctx().trigger('onChange', fromJS(['items', 0]) as any);
+      });
+      vi.runAllTimers();
+      expect(callback).not.toHaveBeenCalled();
     });
   });
 
