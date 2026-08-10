@@ -83,7 +83,8 @@ export const widgets: BindingTypeGeneric = {
     schema: SomeSchema;
     required: boolean;
   } & Record<string, any>) => {
-    required = schema.get('required') ?? required;
+    const schemaReq = schema.get('required');
+    required = typeof schemaReq === 'boolean' ? schemaReq : required;
     return (WidgetRenderer as FunctionComponent<any>)({
       schema,
       required,

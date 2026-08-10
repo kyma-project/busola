@@ -195,7 +195,8 @@ export const throwConfigError = (message, code) => {
 };
 
 export const getPropsFromSchema = (schema, required, t) => {
-  const schemaRequired = schema.get('required');
+  const schemaReq = schema.get('required');
+  const schemaRequired = typeof schemaReq === 'boolean' ? schemaReq : undefined;
   const inputInfo = schema.get('inputInfo');
   const tooltipContent = schema.get('description');
 

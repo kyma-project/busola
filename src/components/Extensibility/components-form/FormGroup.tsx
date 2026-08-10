@@ -27,7 +27,8 @@ export function FormGroup({
   const gridTemplateColumns = `repeat(${columns}, 1fr)`;
 
   const defaultOpen = schema.get('defaultExpanded') ?? false;
-  const schemaRequired = schema.get('required') ?? required;
+  const schemaReq = schema.get('required');
+  const schemaRequired = typeof schemaReq === 'boolean' ? schemaReq : required;
   const tooltipContent = schema.get('description');
 
   return (
