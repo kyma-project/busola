@@ -42,6 +42,9 @@ const makeSub = (
   callback: () => void,
   identifier: object = {},
 ) => ({
+  // `identifier` is the object used as the unsubscribe key: unsubscribe(identifier) removes
+  // the subscriber by reference identity (s.sub !== sub). Pass a distinct object per subscriber
+  // when you need to unsubscribe individually; the default ({}) is fine for fire-and-forget cases.
   sub: identifier,
   current: {
     [name]: { storeKeys, modifiers, callback },
