@@ -28,6 +28,7 @@ vi.mock('../../helpers/jsonataWrapper', () => ({
         if (query === '$item') return bindings?.item ?? null;
         if (query === '$items') return bindings?.items ?? null;
         if (query === '$call-ds') return bindings?.myDs?.();
+        if (query === '$embedResource') return bindings?.embedResource ?? null;
         if (query === 'throw') throw new Error('bad query');
         return null;
       },
@@ -202,6 +203,17 @@ describe('useJsonata', () => {
       const [value] = await result.current('$item');
       expect(value).toEqual(resource);
     });
+
+    it('exposes embedResource binding in sync path', async () => {
+      const resource = makeResource('main');
+      const embedResource = makeResource('embedded');
+      const { result } = renderHook(
+        () => useJsonata({ resource, embedResource }),
+        { wrapper: wrapper() },
+      );
+      const [value] = await result.current('$embedResource');
+      expect(value).toEqual(embedResource);
+    });
   });
 
   describe('data source fetchers', () => {
@@ -280,6 +292,17 @@ describe('useJsonata', () => {
       const [value, error] = await result.current.async('throw');
       expect(typeof value).toBe('string');
       expect(error).toBeInstanceOf(Error);
+    });
+
+    it('exposes embedResource binding in async path', async () => {
+      const resource = makeResource('main');
+      const embedResource = makeResource('embedded');
+      const { result } = renderHook(
+        () => useJsonata({ resource, embedResource }),
+        { wrapper: wrapper() },
+      );
+      const [value] = await result.current.async('$embedResource');
+      expect(value).toEqual(embedResource);
     });
 
     it('returns [errorMessage, non-Error] for non-Error throws', async () => {
