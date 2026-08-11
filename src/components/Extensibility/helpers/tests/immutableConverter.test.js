@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { cleanResource } from './immutableConverter';
+import { cleanResource } from '../immutableConverter';
 
 describe('cleanResource', () => {
   describe('removes empty strings not in template', () => {
