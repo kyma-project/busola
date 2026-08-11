@@ -278,6 +278,7 @@ export const DynamicPageComponent = ({
             layoutNumber !== 'midColumn')) && (
           <ToolbarButton
             accessibleName="enter-full-screen"
+            overflowPriority="NeverOverflow"
             design="Transparent"
             icon="full-screen"
             onClick={() => {
@@ -306,6 +307,7 @@ export const DynamicPageComponent = ({
           layoutColumn.layout === 'EndColumnFullScreen') && (
           <ToolbarButton
             accessibleName="close-full-screen"
+            overflowPriority="NeverOverflow"
             design="Transparent"
             icon="exit-full-screen"
             onClick={() => {
@@ -334,6 +336,7 @@ export const DynamicPageComponent = ({
         )}
         <ToolbarButton
           accessibleName="close-column"
+          overflowPriority="NeverOverflow"
           design="Transparent"
           icon="decline"
           onClick={() => {
