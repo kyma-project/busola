@@ -22,8 +22,8 @@ export type JsonataFunction = {
   ): Promise<JsonataValue>;
   async: (
     query: string,
-    extras: { [key: string]: any },
-    defaultValue: any,
+    extras?: { [key: string]: any },
+    defaultValue?: any,
   ) => Promise<JsonataValue>;
 };
 

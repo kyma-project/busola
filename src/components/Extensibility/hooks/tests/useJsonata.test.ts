@@ -1,51 +1,62 @@
 import { renderHook } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useJsonata } from '../useJsonata';
-import { DataSourcesContext } from '../../contexts/DataSources';
+import {
+  DataSourcesContext,
+  DataSourcesContextType,
+  DataSource,
+  Resource,
+} from '../../contexts/DataSources';
 import React from 'react';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key, opts) => (opts?.error ? `config-error: ${opts.error}` : key),
+    t: (key: string, opts?: { error?: string }) =>
+      opts?.error ? `config-error: ${opts.error}` : key,
   }),
 }));
 
 vi.mock('../../helpers/jsonataWrapper', () => ({
-  jsonataWrapper: vi.fn((query) => ({
-    evaluate: vi.fn(async (scope, bindings) => {
-      if (query === '$name') return scope?.metadata?.name ?? null;
-      if (query === '$root.metadata.name')
-        return bindings?.root?.metadata?.name ?? null;
-      if (query === '$parent.metadata.name')
-        return bindings?.parent?.metadata?.name ?? null;
-      if (query === '$item') return bindings?.item ?? null;
-      if (query === '$items') return bindings?.items ?? null;
-      if (query === '$call-ds') return bindings?.myDs?.();
-      if (query === 'throw') throw new Error('bad query');
-      return null;
-    }),
+  jsonataWrapper: vi.fn((query: string) => ({
+    evaluate: vi.fn(
+      async (scope: Resource | null, bindings: Record<string, any>) => {
+        if (query === '$name') return scope?.metadata?.name ?? null;
+        if (query === '$root.metadata.name')
+          return bindings?.root?.metadata?.name ?? null;
+        if (query === '$parent.metadata.name')
+          return bindings?.parent?.metadata?.name ?? null;
+        if (query === '$item') return bindings?.item ?? null;
+        if (query === '$items') return bindings?.items ?? null;
+        if (query === '$call-ds') return bindings?.myDs?.();
+        if (query === 'throw') throw new Error('bad query');
+        return null;
+      },
+    ),
   })),
 }));
 
-const makeResource = (name = 'test-resource') => ({
+const makeResource = (name = 'test-resource'): Resource => ({
   metadata: { name, namespace: 'default', labels: {}, annotations: {} },
   spec: {},
 });
 
-const defaultDataSourcesContext = {
+const defaultDataSourcesContext: DataSourcesContextType = {
   store: {},
   dataSources: {},
   getRelatedResourceInPath: vi.fn(),
   requestRelatedResource: vi.fn(),
 };
 
-function wrapper(contextValue = defaultDataSourcesContext) {
-  return ({ children }) =>
+function wrapper(
+  contextValue: DataSourcesContextType = defaultDataSourcesContext,
+) {
+  const Wrapper = ({ children }: { children: React.ReactNode }) =>
     React.createElement(
       DataSourcesContext.Provider,
       { value: contextValue },
       children,
     );
+  return Wrapper;
 }
 
 describe('useJsonata', () => {
@@ -85,7 +96,7 @@ describe('useJsonata', () => {
       );
       const [value, error] = await result.current('throw');
       expect(typeof value).toBe('string');
-      expect(value.startsWith('config-error:')).toBe(true);
+      expect((value as string).startsWith('config-error:')).toBe(true);
       expect(error).toBeInstanceOf(Error);
     });
   });
@@ -197,9 +208,9 @@ describe('useJsonata', () => {
     it('calls requestRelatedResource via value() fetcher during sync evaluation', async () => {
       const resource = makeResource();
       const requestRelatedResource = vi.fn().mockReturnValue('ds-data');
-      const context = {
+      const context: DataSourcesContextType = {
         ...defaultDataSourcesContext,
-        dataSources: { myDs: {} },
+        dataSources: { myDs: {} as unknown as DataSource },
         store: {
           myDs: {
             loading: false,
@@ -239,9 +250,9 @@ describe('useJsonata', () => {
     it('calls requestRelatedResource via fetcher binding during async evaluation', async () => {
       const resource = makeResource();
       const requestRelatedResource = vi.fn().mockReturnValue('ds-data');
-      const context = {
+      const context: DataSourcesContextType = {
         ...defaultDataSourcesContext,
-        dataSources: { myDs: {} },
+        dataSources: { myDs: {} as unknown as DataSource },
         store: {
           myDs: {
             loading: false,
@@ -273,11 +284,14 @@ describe('useJsonata', () => {
 
     it('returns [errorMessage, non-Error] for non-Error throws', async () => {
       const { jsonataWrapper } = await import('../../helpers/jsonataWrapper');
-      jsonataWrapper.mockImplementationOnce(() => ({
-        evaluate: async () => {
-          throw 'string-error';
-        },
-      }));
+      vi.mocked(jsonataWrapper).mockImplementationOnce(
+        () =>
+          ({
+            evaluate: async () => {
+              throw 'string-error';
+            },
+          }) as any,
+      );
       const { result } = renderHook(
         () => useJsonata({ resource: makeResource() }),
         {
