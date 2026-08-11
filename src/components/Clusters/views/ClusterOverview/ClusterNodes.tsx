@@ -73,7 +73,7 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
     t('common.headers.zone'),
   ];
 
-  // No `layout` param: node details open full-page, not in a split view.
+  // Create a link without layout parameter as the node view is full page.
   const nodeUrl = (entry?: RowRendererEntry) =>
     clusterUrl(
       `overview/nodes/${encodeURIComponent(entry?.metadata?.name ?? '')}`,
