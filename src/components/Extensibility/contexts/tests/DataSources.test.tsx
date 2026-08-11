@@ -118,9 +118,9 @@ describe('DataSourcesContextProvider', () => {
       await act(async () => {
         render(tree);
       });
-      expect(
-        ctx().getRelatedResourceInPath('$pods.items[0].metadata.name'),
-      ).toBe('pods');
+      expect(ctx().getRelatedResourceInPath('$pods.metadata.name')).toBe(
+        'pods',
+      );
     });
 
     it('returns undefined when no data source name matches', async () => {
