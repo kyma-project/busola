@@ -7,7 +7,7 @@ import {
   DataSource,
   Resource,
 } from '../../contexts/DataSources';
-import React from 'react';
+import { createElement, ReactNode } from 'react';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -51,8 +51,8 @@ const defaultDataSourcesContext: DataSourcesContextType = {
 function wrapper(
   contextValue: DataSourcesContextType = defaultDataSourcesContext,
 ) {
-  const Wrapper = ({ children }: { children: React.ReactNode }) =>
-    React.createElement(
+  const Wrapper = ({ children }: { children: ReactNode }) =>
+    createElement(
       DataSourcesContext.Provider,
       { value: contextValue },
       children,
@@ -222,7 +222,7 @@ describe('useJsonata', () => {
       const requestRelatedResource = vi.fn().mockReturnValue('ds-data');
       const context: DataSourcesContextType = {
         ...defaultDataSourcesContext,
-        dataSources: { myDs: {} as unknown as DataSource },
+        dataSources: { myDs: {} as DataSource },
         store: {
           myDs: {
             loading: false,
@@ -264,7 +264,7 @@ describe('useJsonata', () => {
       const requestRelatedResource = vi.fn().mockReturnValue('ds-data');
       const context: DataSourcesContextType = {
         ...defaultDataSourcesContext,
-        dataSources: { myDs: {} as unknown as DataSource },
+        dataSources: { myDs: {} as DataSource },
         store: {
           myDs: {
             loading: false,
