@@ -15,7 +15,7 @@ const NodeOverview = lazyWithRetries(
   () => import('../../components/Nodes/NodeDetails/NodeDetails'),
 );
 
-export const ColumnWrapper = () => {
+const ColumnWrapper = () => {
   const { t } = useTranslation();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
   const { nodeName } = useParams();

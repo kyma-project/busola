@@ -1,10 +1,15 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Provider, createStore } from 'jotai';
-import { createMemoryRouter, RouterProvider } from 'react-router';
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  RouterProvider,
+  Route,
+} from 'react-router';
 
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
-import { ColumnWrapper } from '../overview.routes';
+import overviewRoutes from '../overview.routes';
 
 vi.mock('components/Clusters/views/ClusterOverview/ClusterOverview', () => ({
   ClusterOverview: () => <div data-testid="cluster-overview" />,
@@ -21,13 +26,9 @@ vi.mock('components/Nodes/NodeDetails/NodeDetails', () => ({
 const renderAt = async (path: string) => {
   const store = createStore();
   const router = createMemoryRouter(
-    [
-      { path: '/cluster/:cluster/overview', element: <ColumnWrapper /> },
-      {
-        path: '/cluster/:cluster/overview/nodes/:nodeName',
-        element: <ColumnWrapper />,
-      },
-    ],
+    createRoutesFromElements(
+      <Route path="/cluster/:cluster">{overviewRoutes}</Route>,
+    ),
     { initialEntries: [path] },
   );
 
