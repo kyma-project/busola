@@ -8,10 +8,14 @@ import {
 } from 'react';
 import jp from 'jsonpath';
 
-export const VarStoreContext = createContext({
+export const VarStoreContext = createContext<{
+  vars: Record<string, any>;
+  setVar: (path: string, value: any) => void;
+  setVars: (value: SetStateAction<Record<string, any>>) => void;
+}>({
   vars: {},
-  setVar: (() => {}) as (path: string, value: any) => void,
-  setVars: (() => {}) as (value: SetStateAction<Record<string, any>>) => void,
+  setVar: () => {},
+  setVars: () => {},
 });
 
 export function VarStoreContextProvider({ children }: { children: ReactNode }) {
