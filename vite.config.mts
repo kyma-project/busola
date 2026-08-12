@@ -28,6 +28,21 @@ export default defineConfig({
         target: 'http://localhost:3001',
         changeOrigin: true,
         ws: true,
+        configure: (proxy) => {
+          proxy.on('error', (err, req, res) => {
+            if (
+              ['ECONNREFUSED', 'ECONNRESET', 'ETIMEDOUT', 'ENOTFOUND'].includes(
+                err.code,
+              )
+            ) {
+              res.statusCode = 503
+              res.end(JSON.stringify({ error: 'Service unavailable' }));
+            } else {
+              res.statusCode = 500;
+              res.end(JSON.stringify({ error: err.message }));
+            }
+          });
+        },
       },
       '/proxy': {
         target: 'http://localhost:3001',
