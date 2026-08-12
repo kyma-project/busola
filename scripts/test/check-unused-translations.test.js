@@ -90,4 +90,15 @@ describe('findUsedKeys', () => {
   it('does not mark unreferenced keys as used', () => {
     expect(used.has('unused.key.example')).toBe(false);
   });
+
+  it('returns correct unused keys list', () => {
+    const unused = allKeys.filter((k) => !used.has(k));
+    expect(unused).toEqual(['unused.key.example']);
+  });
+
+  it('counts static and dynamic matches separately', () => {
+    const { staticMatches, dynamicMatches } = findUsedKeys(allKeys, fixture);
+    expect(staticMatches).toBeGreaterThan(0);
+    expect(dynamicMatches).toBeGreaterThan(0);
+  });
 });
