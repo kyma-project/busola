@@ -1,10 +1,10 @@
-import { ShellBarItem } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useSetAtom } from 'jotai';
 import { useLocation } from 'react-router';
 import { useFeature } from 'hooks/useFeature';
 import { showTerminalAtom } from 'state/showTerminalAtom';
 import { configFeaturesNames } from 'state/types';
+import { ShellBarAction } from './ShellBarAction';
 
 export function TerminalFeature() {
   const { t } = useTranslation();
@@ -18,7 +18,7 @@ export function TerminalFeature() {
   if (!isTerminalEnabled || isOnClustersPage) return null;
 
   return (
-    <ShellBarItem
+    <ShellBarAction
       icon="command-line-interfaces"
       text={t('terminal.name')}
       title={t('terminal.name')}

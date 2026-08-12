@@ -4,7 +4,6 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   Avatar,
   ShellBar,
-  ShellBarItem,
   type ShellBarDomRef,
 } from '@ui5/webcomponents-react';
 
@@ -30,6 +29,7 @@ import FeedbackPopover from './Feedback/FeedbackPopover';
 import { TerminalFeature } from './TerminalFeature';
 import { AIAssistantFeature } from './AIAssistantFeature';
 import { GetHelpMenu } from './GetHelpMenu';
+import { ShellBarAction } from './ShellBarAction';
 import './Header.scss';
 
 export function Header() {
@@ -135,7 +135,7 @@ export function Header() {
         <FeedbackPopover />
         <AIAssistantFeature />
         <TerminalFeature />
-        <ShellBarItem
+        <ShellBarAction
           onClick={() => setIsGetHelpOpen(true)}
           id="openGetHelpMenu"
           icon="sys-help"
