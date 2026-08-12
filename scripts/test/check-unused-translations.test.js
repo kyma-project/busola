@@ -2,103 +2,37 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { load } from 'js-yaml';
 import { flattenKeys, findUsedKeys } from '../check-unused-translations.mjs';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
-const fixture = readFileSync(
-  resolve(__dir, 'fixtures/example-source.txt'),
-  'utf8',
-);
+const FIXTURES = resolve(__dir, 'fixtures');
 
-describe('flattenKeys', () => {
-  it('flattens a nested object into dot-separated keys', () => {
-    const yaml = {
-      common: { buttons: { create: 'Create', cancel: 'Cancel' } },
-    };
-    expect(flattenKeys(yaml)).toEqual([
-      'common.buttons.create',
-      'common.buttons.cancel',
-    ]);
-  });
+const yaml = load(readFileSync(resolve(FIXTURES, 'fake.en.yaml'), 'utf8'));
+const allKeys = flattenKeys(yaml);
+const source = [
+  readFileSync(resolve(FIXTURES, 'fake-resource-list.jsx'), 'utf8'),
+  readFileSync(resolve(FIXTURES, 'fake-resource-details.jsx'), 'utf8'),
+].join('\n');
 
-  it('includes top-level scalar keys', () => {
-    expect(flattenKeys({ apps: { title: 'Apps' } })).toEqual(['apps.title']);
-  });
+const { used } = findUsedKeys(allKeys, source);
+const unused = allKeys.filter((k) => !used.has(k));
 
-  it('handles multiple nesting levels', () => {
-    const yaml = { a: { b: { c: 'val' } } };
-    expect(flattenKeys(yaml)).toEqual(['a.b.c']);
-  });
-});
+const EXPECTED_UNUSED = [
+  'translation.single-quotes.unused',
+  'translation.double-quotes.unused',
+  'translation.backtick.unused',
+  'translation.multiline.unused',
+  'translation.template.unused',
+  'translation.concat.unused',
+  'translation.text-variant.unused',
+  'translation.trans.unused',
+  'translation.description-key.unused',
+  'translation.nav-label.unused',
+];
 
-describe('findUsedKeys', () => {
-  const allKeys = [
-    'common.buttons.create', // single quotes
-    'common.buttons.cancel', // double quotes
-    'common.buttons.delete', // backtick static
-    'common.buttons.edit', // multiline call
-    'apps.title', // indirect via data structure
-    'upload-yaml.info', // i18nKey prop
-    'common.value-units.seconds-ago', // template literal prefix
-    'common.value-units.minutes-ago', // template literal prefix (same prefix, different key)
-    'cron-jobs.create-modal.minute', // string concatenation
-    'cron-jobs.create-modal.hour', // string concatenation (same prefix, different key)
-    'extensibility.sections.general', // tExt template literal
-    'unused.key.example', // must NOT be detected
-  ];
-
-  const { used } = findUsedKeys(allKeys, fixture);
-
-  it("detects single-quoted key: t('key')", () => {
-    expect(used.has('common.buttons.create')).toBe(true);
-  });
-
-  it('detects double-quoted key: t("key")', () => {
-    expect(used.has('common.buttons.cancel')).toBe(true);
-  });
-
-  it('detects backtick static key: t(`key`)', () => {
-    expect(used.has('common.buttons.delete')).toBe(true);
-  });
-
-  it('detects key on next line after t(', () => {
-    expect(used.has('common.buttons.edit')).toBe(true);
-  });
-
-  it('detects key in a data structure (indirect usage)', () => {
-    expect(used.has('apps.title')).toBe(true);
-  });
-
-  it('detects i18nKey prop', () => {
-    expect(used.has('upload-yaml.info')).toBe(true);
-  });
-
-  it('detects keys via template literal prefix: t(`prefix.${expr}`)', () => {
-    expect(used.has('common.value-units.seconds-ago')).toBe(true);
-    expect(used.has('common.value-units.minutes-ago')).toBe(true);
-  });
-
-  it("detects keys via string concatenation: t('prefix.' + expr)", () => {
-    expect(used.has('cron-jobs.create-modal.minute')).toBe(true);
-    expect(used.has('cron-jobs.create-modal.hour')).toBe(true);
-  });
-
-  it('detects keys via tExt template literal', () => {
-    expect(used.has('extensibility.sections.general')).toBe(true);
-  });
-
-  it('does not mark unreferenced keys as used', () => {
-    expect(used.has('unused.key.example')).toBe(false);
-  });
-
-  it('returns correct unused keys list', () => {
-    const unused = allKeys.filter((k) => !used.has(k));
-    expect(unused).toEqual(['unused.key.example']);
-  });
-
-  it('counts static and dynamic matches separately', () => {
-    const { staticMatches, dynamicMatches } = findUsedKeys(allKeys, fixture);
-    expect(staticMatches).toBeGreaterThan(0);
-    expect(dynamicMatches).toBeGreaterThan(0);
+describe('check-unused-translations', () => {
+  it('detects all unused keys and no more', () => {
+    expect(unused.sort()).toEqual(EXPECTED_UNUSED.sort());
   });
 });
