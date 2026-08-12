@@ -73,7 +73,11 @@ export const FormatSourceObject = (obj) => {
   const { clusterUrl } = useUrl();
   if (!obj || Object.keys(obj).length === 0) return EMPTY_TEXT_PLACEHOLDER;
   return obj.host ? (
-    <Link style={linkStyle} url={clusterUrl(`overview/nodes/${obj.host}`)}>
+    <Link
+      style={linkStyle}
+      url={clusterUrl(`overview/nodes/${obj.host}`)}
+      layout={false}
+    >
       {obj.host}
     </Link>
   ) : (

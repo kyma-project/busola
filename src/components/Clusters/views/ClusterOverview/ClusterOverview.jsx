@@ -101,6 +101,7 @@ export function ClusterOverview() {
       <DynamicPageComponent
         title={currentCluster?.currentContext?.cluster?.name ?? ''}
         actions={actions}
+        layoutNumber="startColumn"
         content={
           <>
             <BannerCarousel>

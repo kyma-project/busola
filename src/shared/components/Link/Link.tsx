@@ -66,7 +66,7 @@ type LinkProps = {
   url: string;
   className?: string;
   children?: ReactNode;
-  dataTestId?: string;
+  'data-testid'?: string;
   design?: 'Default' | 'Subtle' | 'Emphasized';
   resetLayout?: boolean;
   layout?: string | false;
@@ -78,7 +78,7 @@ export const Link = ({
   url,
   className = '',
   children,
-  dataTestId,
+  'data-testid': dataTestId,
   design = 'Emphasized',
   layout = 'TwoColumnsMidExpanded',
   resetLayout = true,
