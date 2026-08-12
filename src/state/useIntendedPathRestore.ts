@@ -17,6 +17,11 @@ export function useIntendedPathRestore() {
     if (!authData || !cluster) return;
     const intended = getIntendedPath();
     if (!intended?.path) return;
+    // Paths saved during a kubeconfigID login flow are consumed by
+    // addCurrentCluster / useAfterInitHook once the flow completes.
+    // Restoring them here (which fires as soon as any cached cluster from a
+    // previous session is loaded) would steal the path before that flow runs.
+    if (intended.kubeconfigId) return;
     if (restoredRef.current === intended.path) return;
     restoredRef.current = intended.path;
 

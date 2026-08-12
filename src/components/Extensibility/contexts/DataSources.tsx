@@ -181,7 +181,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
         }
       }
 
-      if (!data?.namespace) {
+      if (data && !data.namespace) {
         data.namespace = dataSource.resource.namespace;
       }
       updateStore(dataSourceName, {

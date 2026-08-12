@@ -50,6 +50,9 @@ context('Test Certificates', () => {
 
     cy.saveChanges('Edit');
     cy.getMidColumn().inspectTab('View');
+    cy.getMidColumn()
+      .find("ui5-panel[class='labels-annotations-panel']")
+      .click();
 
     cy.getMidColumn()
       .contains(`${ANNOTATION_KEY}=${ANNOTATION_VALUE}`)

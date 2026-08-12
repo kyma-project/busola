@@ -7,7 +7,14 @@ import { K8sResource } from 'types';
 import { Resource } from 'components/Extensibility/contexts/DataSources';
 import { Dispatch, JSX, ReactNode, SetStateAction } from 'react';
 import { CustomColumn } from './ResourceCustomStatusColumns';
-import { FormItem, Label, Text } from '@ui5/webcomponents-react';
+import {
+  FormItem,
+  Label,
+  Text,
+  Panel,
+  FormGroup,
+  Form,
+} from '@ui5/webcomponents-react';
 
 type ResourceDetailsCardContentProps = {
   resource: K8sResource & Resource;
@@ -39,16 +46,50 @@ export const ResourceDetailsCardContent = ({
   const totalItems =
     2 + // Resource Type + Age always present
     (!hideLastUpdate ? 1 : 0) +
-    filteredDetailsCardColumns.length +
-    (!hideLabels ? 1 : 0) +
-    (!hideAnnotations ? 1 : 0);
-  const needsPadding = !hideLabels && !hideAnnotations && totalItems % 2 !== 0;
+    filteredDetailsCardColumns.length;
+  const needsPadding = totalItems % 2 !== 0;
+
+  const labelsAnnotationsHeader = () => {
+    if (!hideLabels && !hideAnnotations)
+      return t('common.headers.labels-annotations');
+    else if (!hideLabels) return t('common.headers.labels');
+    else if (!hideAnnotations) return t('common.headers.annotations');
+    else return undefined;
+  };
+
+  const labels = hideLabels ? null : (
+    <FormGroup>
+      <FormItem
+        className="card-labels"
+        key="Labels"
+        labelContent={<Label showColon>{t('common.headers.labels')}</Label>}
+      >
+        <Labels labels={resource.metadata.labels || {}} shortenLongLabels />
+      </FormItem>
+    </FormGroup>
+  );
+
+  const annotations = hideAnnotations ? null : (
+    <FormGroup>
+      <FormItem
+        key="Annotations"
+        labelContent={
+          <Label showColon>{t('common.headers.annotations')}</Label>
+        }
+      >
+        <Labels
+          labels={resource.metadata.annotations || {}}
+          shortenLongLabels
+        />
+      </FormItem>
+    </FormGroup>
+  );
 
   return (
     <ResourceDetailsCard
       titleText={t('cluster-overview.headers.metadata')}
       content={
-        <>
+        <div>
           <FormItem
             key="Resource Type"
             labelContent={
@@ -101,34 +142,25 @@ export const ResourceDetailsCardContent = ({
               <span />
             </FormItem>
           )}
-          {!hideLabels && (
-            <FormItem
-              className="card-labels"
-              key="Labels"
-              labelContent={
-                <Label showColon>{t('common.headers.labels')}</Label>
-              }
+        </div>
+      }
+      bottomContent={
+        hideLabels && hideAnnotations ? null : (
+          <Panel
+            headerText={labelsAnnotationsHeader()}
+            className="labels-annotations-panel"
+            collapsed
+          >
+            <Form
+              className="labels-annotations-panel__content"
+              labelSpan="S12 M12 L12 XL12"
+              layout="S2 M2 L2 XL2"
             >
-              <Labels
-                labels={resource.metadata.labels || {}}
-                shortenLongLabels
-              />
-            </FormItem>
-          )}
-          {!hideAnnotations && (
-            <FormItem
-              key="Annotations"
-              labelContent={
-                <Label showColon>{t('common.headers.annotations')}</Label>
-              }
-            >
-              <Labels
-                labels={resource.metadata.annotations || {}}
-                shortenLongLabels
-              />
-            </FormItem>
-          )}
-        </>
+              {!hideLabels && labels}
+              {!hideAnnotations && annotations}
+            </Form>
+          </Panel>
+        )
       }
     />
   );
