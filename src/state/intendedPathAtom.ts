@@ -65,6 +65,9 @@ export function initIntendedPathFromUrl(): void {
   const path = params.get('path');
 
   if (kubeconfigId) {
-    saveIntendedPath(path ?? '', kubeconfigId);
+    saveIntendedPath(
+      path ?? toClusterRelative(window.location.pathname) ?? '',
+      kubeconfigId,
+    );
   }
 }
