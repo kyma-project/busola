@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 
-import { useUrl } from 'hooks/useUrl';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 
@@ -13,18 +12,12 @@ import {
   docsURL,
   PodType,
 } from 'resources/Pods';
-import { Link } from 'shared/components/Link/Link';
 import { ResourcesListProps } from 'shared/components/ResourcesList/types';
 
-type PodListProps = ResourcesListProps & {
-  showNodeName?: boolean;
-};
-
-export function PodList({ showNodeName, ...props }: PodListProps) {
-  const { clusterUrl } = useUrl();
+export function PodList(props: ResourcesListProps) {
   const { t } = useTranslation();
 
-  let customColumns = [
+  const customColumns = [
     {
       header: t('common.headers.owner'),
       value: (pod: PodType) => {
@@ -47,20 +40,6 @@ export function PodList({ showNodeName, ...props }: PodListProps) {
       ),
     },
   ];
-
-  if (showNodeName) {
-    customColumns = [
-      ...customColumns,
-      {
-        header: t('pods.node'),
-        value: (pod: PodType) => (
-          <Link url={clusterUrl(`overview/nodes/${pod.spec.nodeName}`)}>
-            {pod.spec.nodeName}
-          </Link>
-        ),
-      },
-    ];
-  }
 
   return (
     <ResourcesList
