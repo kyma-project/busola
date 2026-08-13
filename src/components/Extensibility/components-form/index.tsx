@@ -5,6 +5,7 @@ import {
   FunctionComponent,
   ReactNode,
 } from 'react';
+import { List } from 'immutable';
 import { WidgetRenderer } from '@ui-schema/react/WidgetRenderer';
 
 import { DefaultHandler } from '@ui-schema/react/DefaultHandler';
@@ -84,7 +85,14 @@ export const widgets: BindingTypeGeneric = {
     required: boolean;
   } & Record<string, any>) => {
     const schemaReq = schema.get('required');
-    required = typeof schemaReq === 'boolean' ? schemaReq : required;
+    if (typeof schemaReq === 'boolean') {
+      required = schemaReq;
+    } else if (schemaReq === undefined) {
+      const parentRequired = props.parentSchema?.get('required');
+      if (List.isList(parentRequired)) {
+        required = parentRequired.includes(props.storeKeys?.last());
+      }
+    }
     return (WidgetRenderer as FunctionComponent<any>)({
       schema,
       required,
