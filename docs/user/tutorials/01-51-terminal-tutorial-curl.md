@@ -18,7 +18,7 @@ Use the Kyma dashboard terminal to verify that Services running inside your clus
 
 5. Go to **Discovery and Network** > **Services** and choose **Create**.
 
-6. Enter `nginx-test` as the name. Under **Port Mapping**, set the port and target port both to `80`. Under **Selector**, add the label `app: nginx-test`, then choose **Create**.
+6. Enter `nginx-test` as the name. Under **Ports**, set **Port** and **Target Port** both to `80` and enter a port name, for example `http`. Under **Selectors**, add the key `app` and value `nginx-test`, then choose **Create**.
 
 7. In the top navigation bar of Kyma dashboard, choose the **Terminal** icon.
 
