@@ -42,18 +42,6 @@ Use the Kyma dashboard terminal to verify that Services running inside your clus
    curl -o /dev/null -w "%{http_code}\n" http://<service-name>.<namespace>.svc.cluster.local:<port>
    ```
 
-10. To view response headers and the status line without the body, use the `-I` flag:
-
-    ```bash
-    curl -I http://<service-name>.<namespace>.svc.cluster.local:<port>
-    ```
-
-    To see both headers and the body, use `-i` instead:
-
-    ```bash
-    curl -i http://<service-name>.<namespace>.svc.cluster.local:<port>
-    ```
-
 ## Result
 
 The terminal displays the HTTP response from the Service. A status code of `200` confirms the Service is reachable and responding correctly. Other common status codes:
