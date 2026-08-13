@@ -1,13 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { ToolbarButton } from '@ui5/webcomponents-react';
-import { useNavigate } from 'react-router';
-import { useSetAtom } from 'jotai';
-import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import PodDisruptionBudgetCreate from './PodDisruptionBudgetCreate';
 import { docsURL, i18nDescriptionKey } from '.';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { useUrl } from 'hooks/useUrl';
-import pluralize from 'pluralize';
 
 type PodDisruptionBudgetsListProps = {
   namespace: string;
@@ -38,9 +33,6 @@ export default function PodDisruptionBudgetsList(
   props: PodDisruptionBudgetsListProps,
 ) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const setLayoutColumn = useSetAtom(columnLayoutAtom);
-  const { namespaceUrl } = useUrl();
 
   const customColumns = [
     {
@@ -71,54 +63,16 @@ export default function PodDisruptionBudgetsList(
     },
   ];
 
-  const handleShowCreate = () => {
-    setLayoutColumn({
-      startColumn: {
-        resourceName: null,
-        resourceType: 'PodDisruptionBudget',
-        rawResourceTypeName: 'PodDisruptionBudget',
-        namespaceId: props.namespace,
-        apiGroup: '',
-        apiVersion: 'policy/v1',
-      },
-      midColumn: null,
-      endColumn: null,
-      showCreate: {
-        resourceType: props.resourceType,
-        rawResourceTypeName: props.resourceType,
-        namespaceId: props.namespace,
-        resourceUrl: props.resourceUrl,
-      },
-      layout: 'TwoColumnsMidExpanded',
-    });
-    navigate(
-      namespaceUrl(
-        `${pluralize(
-          props.resourceType.toLowerCase() || '',
-        )}?layout=TwoColumnsMidExpanded&showCreate=true`,
-      ),
-    );
-  };
-
-  const createButton = (
-    <ToolbarButton
-      key={`create-pod-disruption-budgets`}
-      data-testid={`create-pod-disruption-budgets`}
-      onClick={handleShowCreate}
-      text={t('components.resources-list.create')}
-    />
-  );
-
   return (
     <ResourcesList
       resourceTitle={t('pod-disruption-budgets.title')}
       {...props}
+      createResourceForm={PodDisruptionBudgetCreate}
       emptyListProps={{
         subtitleText: i18nDescriptionKey,
         url: docsURL,
       }}
       customColumns={customColumns}
-      listHeaderActions={createButton}
     />
   );
 }
