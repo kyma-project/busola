@@ -1171,6 +1171,20 @@ persistent-volume-claims:
     bound: Binding between PersistentVolume and PersistentVolumeClaim established
     lost: Lost binding between PersistentVolume and PersistentVolumeClaim
     pending: Checking if binding between PersistentVolume and PersistentVolumeClaim is established.
+pod-disruption-budgets:
+  description: <0>Pod Disruption Budget (PDB)</0> is an object that defines the minimum number or percentage of Pods that must be available during voluntary disruptions.
+  headers:
+    allowed-disruptions: Allowed Disruptions
+    current-healthy: Current Healthy
+    desired-healthy: Desired Healthy
+    disruptions-allowed: Disruptions Allowed
+    expected-pods: Expected Pods
+    max-unavailable: Maximum Unavailable
+    min-available: Minimum Available
+    observed-generation: Observed Generation
+    selector: Selector
+  name_singular: PodDisruptionBudget
+  title: Pod Disruption Budgets
 pods:
   accessible-name:
     logs: Logs panel
