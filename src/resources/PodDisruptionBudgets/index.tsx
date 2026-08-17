@@ -6,6 +6,9 @@ export const resourceType = 'PodDisruptionBudgets';
 export const namespaced = true;
 export const apiGroup = 'policy';
 export const apiVersion = 'v1';
+export const category = '';
+export const icon = 'shield';
+export const topLevelNode = true;
 
 export const List = lazyWithRetries(() => import('./PodDisruptionBudgetsList'));
 export const Details = lazyWithRetries(
