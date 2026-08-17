@@ -2,6 +2,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import process from 'node:process';
 import { load } from 'js-yaml';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
@@ -77,30 +78,32 @@ function walkFiles(dir) {
   return files;
 }
 
-const yaml = load(readFileSync(resolve(ROOT, 'public/i18n/en.yaml'), 'utf8'));
-// 1. Load and flatten all translation keys from en.yaml
-const allKeys = flattenKeys(yaml);
-console.log(`Loaded ${allKeys.length} translation keys from en.yaml\n`);
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  // 1. Load and flatten all translation keys from en.yaml
+  const yaml = load(readFileSync(resolve(ROOT, 'public/i18n/en.yaml'), 'utf8'));
+  const allKeys = flattenKeys(yaml);
+  console.log(`Loaded ${allKeys.length} translation keys from en.yaml\n`);
 
-// 2. Walk source files and build a single searchable string
-const allSource = walkFiles(SRC)
-  .map(f => readFileSync(f, 'utf8'))
-  .join('\n');
+  // 2. Walk source files and build a single searchable string
+  const allSource = walkFiles(SRC)
+    .map(f => readFileSync(f, 'utf8'))
+    .join('\n');
 
-const { used, staticMatches, dynamicMatches } = findUsedKeys(allKeys, allSource);
-// 3. Report
-const unused = allKeys.filter(k => !used.has(k));
+  const { used, staticMatches, dynamicMatches } = findUsedKeys(allKeys, allSource);
+  // 3. Report
+  const unused = allKeys.filter(k => !used.has(k));
 
-console.log(`Static key matches:  ${staticMatches}`);
-console.log(`Dynamic prefix hits: ${dynamicMatches}`);
-console.log(`Used keys:           ${used.size}`);
-console.log(`Unused keys:         ${unused.length}\n`);
+  console.log(`Static key matches:  ${staticMatches}`);
+  console.log(`Dynamic prefix hits: ${dynamicMatches}`);
+  console.log(`Used keys:           ${used.size}`);
+  console.log(`Unused keys:         ${unused.length}\n`);
 
-if (unused.length === 0) {
-  console.log('No unused keys found.');
-} else {
-  console.log('Unused translation keys:');
-  for (const key of unused) {
-    console.log(`  ${key}`);
+  if (unused.length === 0) {
+    console.log('No unused keys found.');
+  } else {
+    console.log('Unused translation keys:');
+    for (const key of unused) {
+      console.log(`  ${key}`);
+    }
   }
 }
