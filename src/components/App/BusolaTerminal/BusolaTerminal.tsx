@@ -108,12 +108,22 @@ export function BusolaTerminal({
       ? { height: `${dockedHeight}px`, flexShrink: 0 as const }
       : undefined;
 
-  const statusLabel =
-    sessionState.status === 'provisioning'
-      ? t('terminal.status.provisioning')
-      : sessionState.status === 'error'
-        ? t('terminal.status.error', { error: sessionState.errorMessage })
-        : null;
+  let statusLabel: string | null;
+  switch (sessionState.status) {
+    case 'provisioning':
+      statusLabel = t('terminal.status.provisioning');
+      break;
+    case 'error':
+      statusLabel = t('terminal.status.error', {
+        error: sessionState.errorMessage,
+      });
+      break;
+    case 'reconnecting':
+      statusLabel = t('terminal.status.reconnecting');
+      break;
+    default:
+      statusLabel = null;
+  }
 
   return (
     <div className={containerClass} style={containerStyle}>

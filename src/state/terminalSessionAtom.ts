@@ -4,7 +4,8 @@ export type TerminalSessionStatus =
   | 'idle'
   | 'provisioning'
   | 'connected'
-  | 'error';
+  | 'error'
+  | 'reconnecting';
 
 export type TerminalSessionState = {
   status: TerminalSessionStatus;
