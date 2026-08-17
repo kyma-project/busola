@@ -58,11 +58,11 @@ function onSave(
       });
 
       notification.notifySuccess({
-        content: t('kyma-modules.messages.modules-updated'),
+        content: t('modules.community.messages.modules-updated'),
       });
     } catch (e) {
       notification.notifyError({
-        content: t('kyma-modules.messages.modules-update-failed'),
+        content: t('modules.community.messages.modules-update-failed'),
       });
       console.error(e);
     }
