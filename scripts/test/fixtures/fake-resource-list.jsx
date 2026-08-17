@@ -2,16 +2,17 @@
 import { useTranslation } from 'react-i18next';
 import { Trans } from 'react-i18next';
 
-export function ResourceList({ resourceType, format }) {
+export function ResourceList({ resourceType, format, items }) {
   const { t } = useTranslation();
 
   const columns = [
     { header: t('translation.single-quotes.used') },
-    { header: t('translation.double-quotes.used') },
     { header: t(`translation.backtick.used`) },
   ];
 
-  const age = t('translation.multiline.used');
+  const age = t('translation.multiline.used', {
+    count: items.length,
+  });
 
   const statusText = t(`translation.template.used-${format}`);
   const actionText = t('translation.concat.used-' + resourceType);
@@ -19,6 +20,7 @@ export function ResourceList({ resourceType, format }) {
   return (
     <GenericList
       columns={columns}
+      label="translation.double-quotes.used"
       emptyListProps={{
         subtitleText: age,
       }}
