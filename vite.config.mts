@@ -52,7 +52,7 @@ export default defineConfig({
   },
   test: {
     coverage: {
-      exclude: ['**/*md'],
+      exclude: ['**/*.md'],
     },
   },
   plugins: [

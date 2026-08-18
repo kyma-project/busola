@@ -21,7 +21,7 @@ describe('getSuggestionForSingleResource', () => {
       resources: [],
       resourceTypeNames: ['crd'],
     };
-    let result = getSuggestionForSingleResource(ctx);
+    const result = getSuggestionForSingleResource(ctx);
 
     expect(result).toBe('crd');
   });
@@ -33,7 +33,7 @@ describe('getSuggestionForSingleResource', () => {
       resources: [],
     };
 
-    let result = getSuggestionForSingleResource(ctx);
+    const result = getSuggestionForSingleResource(ctx);
 
     expect(result).toBeNull();
   });
@@ -45,7 +45,7 @@ describe('getSuggestionForSingleResource', () => {
       resources: [fixCRD('my-crd')],
     };
 
-    let result = getSuggestionForSingleResource(ctx);
+    const result = getSuggestionForSingleResource(ctx);
 
     expect(result).toBe('crd my-crd');
   });
@@ -57,7 +57,7 @@ describe('getSuggestionForSingleResource', () => {
       resources: [fixCRD('my-crd'), fixCRD('other-crd')],
     };
 
-    let result = getSuggestionForSingleResource(ctx);
+    const result = getSuggestionForSingleResource(ctx);
 
     expect(result).toBe('crd my-crd');
   });
@@ -69,7 +69,7 @@ describe('getSuggestionForSingleResource', () => {
       resources: [fixCRD('my-crd')],
     };
 
-    let result = getSuggestionForSingleResource(ctx);
+    const result = getSuggestionForSingleResource(ctx);
 
     expect(result).toBeUndefined();
   });

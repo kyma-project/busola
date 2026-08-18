@@ -35,7 +35,7 @@ function fixContext({
   tokens: string[];
   resourceCache?: Record<string, K8sResource[]>;
 }): CommandPaletteContext {
-  // @ts-ignore
+  // @ts-expect-error Other fields are not needed
   return {
     resourceCache,
     t: fakeT,
@@ -167,7 +167,6 @@ describe('get createResults', () => {
     expect(result).toHaveLength(1);
 
     const firstResult = result![0];
-    console.log(result);
     expect(firstResult.category).toEqual(
       `configuration.title > ${expectedTranslation}`,
     );
