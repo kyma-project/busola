@@ -1,8 +1,10 @@
 import { ResourceForm } from 'shared/ResourceForm';
-import { useGetTranslation } from 'components/Extensibility/helpers';
+import {
+  checkRequiredType,
+  useGetTranslation,
+} from 'components/Extensibility/helpers';
 import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 import './FormGroup.scss';
-import { List } from 'immutable';
 
 type FormGroupProps = {
   schema: SomeSchema;
@@ -30,14 +32,12 @@ export function FormGroup({
   const defaultOpen = schema.get('defaultExpanded') ?? false;
   const schemaReq = schema.get('required');
   let schemaRequired = required;
-  if (typeof schemaReq === 'boolean') {
-    schemaRequired = schemaReq;
-  } else if (schemaReq === undefined) {
-    const parentRequired = props.parentSchema?.get('required');
-    if (List.isList(parentRequired)) {
-      schemaRequired = parentRequired.includes(props.storeKeys?.last());
-    }
-  }
+  schemaRequired = checkRequiredType(
+    schemaReq,
+    required,
+    props?.parentSchema,
+    storeKeys,
+  );
   const tooltipContent = schema.get('description');
 
   return (

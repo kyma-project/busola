@@ -5,7 +5,6 @@ import {
   FunctionComponent,
   ReactNode,
 } from 'react';
-import { List } from 'immutable';
 import { WidgetRenderer } from '@ui-schema/react/WidgetRenderer';
 
 import { DefaultHandler } from '@ui-schema/react/DefaultHandler';
@@ -45,6 +44,7 @@ import { MultiType } from './MultiType';
 import { Modules } from './Modules/Modules';
 import { BindingTypeGeneric } from '@ui-schema/react';
 import { SomeSchema } from '@ui-schema/ui-schema';
+import { checkRequiredType } from '../helpers';
 
 const SchemaPluginsAdapter = schemaPluginsAdapterBuilder([validatorPlugin]);
 
@@ -85,14 +85,12 @@ export const widgets: BindingTypeGeneric = {
     required: boolean;
   } & Record<string, any>) => {
     const schemaReq = schema.get('required');
-    if (typeof schemaReq === 'boolean') {
-      required = schemaReq;
-    } else if (schemaReq === undefined) {
-      const parentRequired = props.parentSchema?.get('required');
-      if (List.isList(parentRequired)) {
-        required = parentRequired.includes(props.storeKeys?.last());
-      }
-    }
+    required = checkRequiredType(
+      schemaReq,
+      required,
+      props?.parentSchema,
+      props?.storeKeys,
+    );
     return (WidgetRenderer as FunctionComponent<any>)({
       schema,
       required,
