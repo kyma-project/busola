@@ -1,0 +1,33 @@
+translation:
+  single-quotes:
+    used: value
+    unused: value
+  double-quotes:
+    used: value
+    unused: value
+  backtick:
+    used: value
+    unused: value
+  multiline:
+    used: value
+    unused: value
+  template:
+    used-ago: value
+    used-old: value
+    unused: value
+  concat:
+    used-minute: value
+    used-hour: value
+    unused: value
+  text-variant:
+    used: value
+    unused: value
+  trans:
+    used: value
+    unused: value
+  description-key:
+    used: value
+    unused: value
+  nav-label:
+    used: value
+    unused: value

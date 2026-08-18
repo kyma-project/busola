@@ -33,7 +33,13 @@ export const PopoverBadge = ({
   };
 
   const badgeElement = (
-    <button ref={openerRef} onClick={handleOpenerClick} className="badge-wrap">
+    <button
+      ref={openerRef}
+      onClick={handleOpenerClick}
+      className="badge-wrap"
+      aria-haspopup="dialog"
+      aria-expanded={openPopover}
+    >
       <ObjectStatus
         aria-label="Status"
         role="status"

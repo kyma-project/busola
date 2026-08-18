@@ -95,4 +95,4 @@ config:
     TERMINAL:
       isEnabled: true
       config:
-        image: europe-docker.pkg.dev/kyma-project/prod/dev-toolbox:main
+        image: europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest

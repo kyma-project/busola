@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { connectTerminal } from './connectTerminal';
 import { encodeBase64Url } from 'shared/utils/base64url';
+import { TFunction } from 'i18next';
 
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
@@ -57,16 +58,9 @@ const applyLast = (fn: any) => {
   return typeof arg === 'function' ? arg({}) : arg;
 };
 
-const DEFAULT_TEST_MESSAGES = {
-  connected: 'Connected to terminal.',
-  closed: 'Connection closed.',
-  connectionError: 'WebSocket connection error.',
-};
+const DEFAULT_T = ((key: string) => key) as TFunction;
 
-async function attach(
-  signal = new AbortController().signal,
-  messages = DEFAULT_TEST_MESSAGES,
-) {
+async function attach(signal = new AbortController().signal, t = DEFAULT_T) {
   const term = makeTerm();
   const sess = vi.fn();
   const { ws, disposable } = await connectTerminal({
@@ -75,7 +69,9 @@ async function attach(
     podName: POD,
     setSession: sess,
     signal,
-    messages,
+    t,
+    scheduleReconnect: vi.fn(),
+    onConnected: vi.fn(),
   });
   return { term, sess, ws: ws as any, disposable };
 }
@@ -127,19 +123,26 @@ describe('connectTerminal', () => {
   });
 
   it('writes the provided (translatable) status messages', async () => {
-    const messages = {
-      connected: 'translated-connected',
-      closed: 'translated-closed',
-      connectionError: 'translated-error',
-    };
-    const { ws, term } = await attach(new AbortController().signal, messages);
+    const t = ((key: string) =>
+      ({
+        'terminal.messages.connected': 'translated-connected',
+        'terminal.messages.closed': 'translated-closed',
+        'terminal.messages.connection-error': 'translated-error',
+      })[key] ?? key) as TFunction;
+    const expectedReason = 'Closing because I can';
+
+    const { ws, term } = await attach(new AbortController().signal, t);
 
     ws.onopen();
     expect(term.write).toHaveBeenCalledWith(
       expect.stringContaining('translated-connected'),
     );
 
-    ws.onclose();
+    ws.onclose({ reason: expectedReason, code: 1000 });
+    expect(term.write).toHaveBeenCalledWith(
+      expect.stringContaining(expectedReason),
+    );
+
     expect(term.write).toHaveBeenCalledWith(
       expect.stringContaining('translated-closed'),
     );

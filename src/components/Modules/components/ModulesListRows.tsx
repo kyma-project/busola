@@ -86,6 +86,12 @@ export const ModulesListRows = ({
   let moduleStatus;
   if (kymaResource) {
     moduleStatus = findModuleStatus(kymaResource, resource.name);
+    const isPendingDeletion =
+      !kymaResource?.spec?.modules?.some((m) => m?.name === resource?.name) &&
+      kymaResource?.status?.modules?.some((m) => m?.name === resource?.name);
+    if (isPendingDeletion && moduleStatus) {
+      moduleStatus = { ...moduleStatus, state: ModuleTemplateStatus.Deleting };
+    }
   }
   const currentModuleTemplate = findModuleTemplate(
     moduleTemplates,

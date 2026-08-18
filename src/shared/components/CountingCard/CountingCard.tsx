@@ -49,6 +49,7 @@ export const CountingCard = ({
   return (
     <Card
       className={`counting-card ${className}`}
+      accessibleName={targetUrl ? title : undefined}
       style={{
         width: extraInfo ? '325px' : '175px',
         maxWidth: extraInfo ? '325px' : '175px',

@@ -66,13 +66,13 @@ jobs:
       dockerfile: Dockerfile
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}
-  build-fips-busola-image:
+  build-busola-fips-image:
     name: Build Fips Image
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main # Usage: https://github.com/kyma-project/test-infra/tree/main/.github/actions/image-builder
     if: github.event.pull_request.draft == false
     needs: [approve-run, build-busola-image]
     with:
-      name: fips-busola
+      name: busola-fips
       dockerfile: Dockerfile.fips
       tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
       use-restricted-registry: true

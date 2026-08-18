@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useMatch, useNavigate } from 'react-router';
+import { useEffect, useRef } from 'react';
+import { useMatch } from 'react-router';
 import {
   addWorkerErrorListener,
   addWorkerListener,
@@ -18,13 +18,15 @@ import { useTranslation } from 'react-i18next';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useAtom, useSetAtom } from 'jotai';
 import { ssoDataAtom, useIsSSOEnabled } from 'state/ssoDataAtom';
+import { renewingAtom } from 'state/renewingAtom';
+import { useReauthenticate } from 'state/useReauthenticate';
+import { authUserManagerRef } from 'state/authDataAtom';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
   const authData = useAtomValue(authDataAtom);
   const ssoData = useAtomValue(ssoDataAtom);
   const openApi = useAtomValue(openapiAtom);
-  const navigate = useNavigate();
   const cluster = useAtomValue(clusterAtom);
   const isClusterList = useMatch({ path: '/clusters' });
   const notification = useNotification();
@@ -32,23 +34,36 @@ export const useResourceSchemas = () => {
   const clusterInfo = useClustersInfo();
   const { currentCluster } = clusterInfo;
   const isSSOEnabled = useIsSSOEnabled();
+  const renewing = useAtomValue(renewingAtom);
+  // No notifyError: this call site shows its own connection-failed toast.
+  const reauth = useReauthenticate();
+  // Blocks a second `reauth` call when the effect re-runs before the browser
+  // navigates. Reset when we're no longer in the error branch.
+  const reauthTriggeredRef = useRef(false);
 
   const setSchemasState = useSetAtom(schemaWorkerStatusAtom);
   const [lastFetched, setLastFetched] = useAtom(openapiLastFetchedAtom);
 
   useEffect(() => {
+    if (openApi?.state !== 'hasError' || !authData) {
+      reauthTriggeredRef.current = false;
+    }
     if (
       authData &&
       activeClusterName === cluster?.contextName &&
       openApi?.state === 'hasError' &&
-      !isClusterList
+      !isClusterList &&
+      // A 401 during a silent renew is transient, not a session drop.
+      !renewing &&
+      !reauthTriggeredRef.current
     ) {
       if (!isSSOEnabled || ssoData) {
+        reauthTriggeredRef.current = true;
         notification.notifyError({
           content: t('clusters.messages.connection-failed'),
         });
-
-        navigate('/clusters');
+        // Falls back to the cluster list for non-OIDC clusters (null manager).
+        reauth(authUserManagerRef.current);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,10 +73,10 @@ export const useResourceSchemas = () => {
     authData,
     openApi.state,
     isClusterList,
-    navigate,
     t,
     ssoData,
     isSSOEnabled,
+    renewing,
   ]);
 
   useEffect(() => {

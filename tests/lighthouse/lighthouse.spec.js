@@ -29,6 +29,11 @@ test('Busola Lighthouse audit', async () => {
       accessibility: 80,
       'best-practices': 100,
     },
+    reports: {
+      formats: { html: true },
+      name: 'clusters',
+      directory: 'test-results/lighthouse-reports',
+    },
     config: {
       extends: 'lighthouse:default',
       settings: { onlyCategories: ['accessibility', 'best-practices'] },
@@ -67,6 +72,14 @@ test('Busola Lighthouse audit', async () => {
     page.locator('.ui5-sn-list-li:has-text("Cluster Overview")'),
   ).toBeVisible();
 
+  // Wait for the cluster overview content to fully load before auditing.
+  // On CI, the page loads data async (nodes, pods, charts) and Lighthouse
+  // can catch it mid-render with unlabelled skeleton/spinner elements.
+  await page.waitForLoadState('networkidle');
+  await expect(
+    page.locator('ui5-title:has-text("Cluster Overview")'),
+  ).toBeVisible();
+
   console.log('Running audit on cluster overview...');
   await playAudit({
     page,
@@ -74,6 +87,11 @@ test('Busola Lighthouse audit', async () => {
     thresholds: {
       accessibility: 80,
       'best-practices': 85, //best-practices were reduced after the bump of lighthouse version - it detects Monaco which prevents passing
+    },
+    reports: {
+      formats: { html: true },
+      name: 'cluster-overview',
+      directory: 'test-results/lighthouse-reports',
     },
     config: {
       extends: 'lighthouse:default',

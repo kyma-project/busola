@@ -1,20 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { SCREEN_SIZE_BREAKPOINT_M } from 'command-pallette/CommandPalletteUI/types';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   Avatar,
   ShellBar,
   ShellBarItem,
-  ToggleButton,
   type ShellBarDomRef,
 } from '@ui5/webcomponents-react';
 
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
-import { useFeature } from 'hooks/useFeature';
 import { useAvailableNamespaces } from 'hooks/useAvailableNamespaces';
-import { useAssistantAvailability } from 'components/KymaCompanion/hooks/useAssistantAvailability';
 
 import {
   clustersAtomEffectOnSet,
@@ -22,8 +19,6 @@ import {
 } from 'state/clustersAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
-import { showTerminalAtom } from 'state/showTerminalAtom';
-import { configFeaturesNames } from 'state/types';
 
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 import { ClusterSwitcher } from './ClusterSwitcher/ClusterSwitcher';
@@ -31,8 +26,9 @@ import { HeaderMenu } from './HeaderMenu';
 import { CommandPaletteSearchBar } from 'command-pallette/CommandPalletteUI/CommandPaletteSearchBar';
 import { SnowFeature } from './SnowFeature';
 import FeedbackPopover from './Feedback/FeedbackPopover';
-import JouleChat from 'components/KymaCompanion/JouleChat';
 
+import { TerminalFeature } from './TerminalFeature';
+import { AIAssistantFeature } from './AIAssistantFeature';
 import { GetHelpMenu } from './GetHelpMenu';
 import './Header.scss';
 
@@ -70,24 +66,7 @@ export function Header() {
   const isOnClustersPage = location.pathname === '/clusters';
   const isOnKubeconfigPage = location.pathname === '/kubeconfig';
 
-  const { showAssistant, useJouleMode } = useAssistantAvailability();
-  const showAssistantHere = showAssistant && !isOnClustersPage;
-
-  const { isEnabled: isTerminalEnabled } = useFeature(
-    configFeaturesNames.TERMINAL,
-  );
-
-  const [showCompanion, setShowCompanion] = useAtom(showKymaCompanionAtom);
-  const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
-
-  // Close the panel on cluster switch instead of swapping modes mid-conversation.
-  useEffect(() => {
-    setShowCompanion((prevState) =>
-      prevState.show
-        ? { ...prevState, show: false, useJoule: useJouleMode }
-        : { ...prevState, useJoule: useJouleMode },
-    );
-  }, [setShowCompanion, useJouleMode]);
+  const setShowCompanion = useSetAtom(showKymaCompanionAtom);
 
   return (
     <>
@@ -124,7 +103,7 @@ export function Header() {
           <Avatar
             icon="customer"
             colorScheme="Accent6"
-            accessibleName="Settings"
+            accessibleName={t('navigation.settings.title')}
             id="openShellbarMenu"
           />
         }
@@ -154,35 +133,8 @@ export function Header() {
       >
         <SnowFeature />
         <FeedbackPopover />
-        {showAssistantHere && (
-          <>
-            <ToggleButton
-              accessibleName={t('kyma-companion.name')}
-              icon={showCompanion.show ? 'da-2' : 'da'}
-              onClick={(e) => {
-                e.preventDefault();
-                setShowCompanion((prevState) => ({
-                  ...prevState,
-                  show: prevState.useJoule ? !prevState.show : true,
-                  fullScreen: false,
-                }));
-              }}
-              pressed={showCompanion.show}
-              slot="assistant"
-            />
-            {showCompanion.useJoule && <JouleChat />}
-          </>
-        )}
-        {isTerminalEnabled && !isOnClustersPage && (
-          <ToggleButton
-            icon="command-line-interfaces"
-            accessibleName={t('terminal.name')}
-            pressed={showTerminal.isOpen}
-            onClick={() =>
-              setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }))
-            }
-          />
-        )}
+        <AIAssistantFeature />
+        <TerminalFeature />
         <ShellBarItem
           onClick={() => setIsGetHelpOpen(true)}
           id="openGetHelpMenu"

@@ -83,6 +83,7 @@ export function SingleSubjectForm({
             onChange={onChange}
             className="bsl-col-md--12"
             data-testid="role-binding-kind"
+            accessibleName={t('role-bindings.create-modal.kind')}
           >
             {SUBJECT_KINDS.map((kind) => (
               <Option

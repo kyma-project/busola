@@ -393,6 +393,9 @@ export const AddSourceYamls = () => {
                       <Select
                         id="add-to-namespace-select"
                         data-testid="add-to-namespace-select"
+                        accessibleName={t(
+                          'modules.community.source-yaml.add-to-namespace',
+                        )}
                         onChange={(e) => applyNamespace(e.target.value)}
                         className="full-width"
                       >

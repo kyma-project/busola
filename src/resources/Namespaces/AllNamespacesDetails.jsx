@@ -63,14 +63,14 @@ export function AllNamespacesDetails() {
       title={t('navigation.all-namespaces')}
       content={
         <section
-          aria-labelledby="monitoring-heading"
+          aria-labelledby="namespace-monitoring-heading"
           className="monitoring-section"
         >
           <Title
             level="H3"
             size="H3"
             className="sap-margin-y-small"
-            id="monitoring-heading"
+            id="namespace-monitoring-heading"
           >
             {t('common.headers.monitoring-and-health')}
           </Title>

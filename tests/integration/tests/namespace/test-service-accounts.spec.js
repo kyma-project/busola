@@ -75,6 +75,10 @@ context('Test Service Accounts', () => {
 
     cy.getMidColumn().contains('Disabled').should('be.visible');
 
+    cy.getMidColumn()
+      .find("ui5-panel[class='labels-annotations-panel']")
+      .click();
+
     cy.getMidColumn().contains('test.key=test-value').should('be.visible');
   });
 

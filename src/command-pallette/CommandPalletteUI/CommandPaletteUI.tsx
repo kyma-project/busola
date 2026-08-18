@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 import { useEventListener } from 'hooks/useEventListener';
 import { getHistoryEntries } from './search-history';
@@ -56,6 +57,7 @@ export function CommandPaletteUI({
   updateResourceCache,
   shellbarWidth,
 }: CommandPaletteProps) {
+  const { t } = useTranslation();
   const namespace = useAtomValue(activeNamespaceIdAtom);
   const { navigateSafely } = useFormNavigation();
 
@@ -247,6 +249,7 @@ export function CommandPaletteUI({
             <Button
               className="input-back-button"
               design="Transparent"
+              accessibleName={t('command-palette.back')}
               onClick={hide}
             >
               <Icon name="nav-back"></Icon>

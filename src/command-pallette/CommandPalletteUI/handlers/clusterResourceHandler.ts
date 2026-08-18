@@ -76,6 +76,12 @@ function makeListItem(
     `command-palette.resource-names.${resourceType}`,
   ]);
 
+  // Namespaces are single-column by design; other resources open two columns.
+  const layoutQuery =
+    resourceType.toLowerCase() === 'namespaces'
+      ? ''
+      : '?layout=TwoColumnsMidExpanded';
+
   return {
     label: name,
     query: `${resourceType}/${name}`,
@@ -84,7 +90,7 @@ function makeListItem(
     onActivate: () => {
       const pathname = `/cluster/${encodeURIComponent(
         activeClusterName ?? '',
-      )}/${pathSegment}/${name}?layout=TwoColumnsMidExpanded`;
+      )}/${pathSegment}/${name}${layoutQuery}`;
       navigate(pathname);
     },
     customActionText: customActionText
@@ -172,7 +178,7 @@ function makeSingleNamespaceLinks(
     onActivate: () => {
       const pathname = `/cluster/${encodeURIComponent(
         activeClusterName ?? '',
-      )}/namespaces/${name}?layout=TwoColumnsMidExpanded`;
+      )}/namespaces/${name}`;
       navigate(pathname);
     },
     customActionText: 'command-palette.item-actions.navigate',

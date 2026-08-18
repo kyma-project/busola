@@ -176,6 +176,7 @@ export default function QueryInput({
           growing
           growingMaxRows={maxRows}
           rows={1}
+          accessibleName={t('kyma-companion.input.accessible-name')}
           placeholder={t('kyma-companion.placeholder')}
           value={inputValue}
           valueState={getValueState()}
@@ -198,12 +199,14 @@ export default function QueryInput({
             name="decline"
             mode="Interactive"
             design="Default"
+            accessibleName={t('common.buttons.cancel')}
             onClick={() => setInputValue('')}
           />
           <Button
             id="submit-icon"
             icon="paper-plane"
             design="Emphasized"
+            accessibleName={t('common.buttons.submit')}
             disabled={
               loading ||
               inputValue.length === 0 ||

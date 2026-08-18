@@ -194,11 +194,13 @@ Cypress.Commands.add(
         .find('ui5-input[id^=search-]:visible')
         .find('input')
         .should('not.have.attr', 'disabled', { timeout: 5000 })
+        .clear({ force: true })
         .type(resourceName, { force: true });
     } else {
       cy.get('ui5-input[id^=search-]:visible')
         .find('input')
         .should('not.have.attr', 'disabled', { timeout: 5000 })
+        .clear({ force: true })
         .type(resourceName, { force: true });
     }
 
@@ -363,6 +365,7 @@ Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
     .find('input')
     .should('be.visible')
     .should('not.be.disabled')
+    .clear({ force })
     .type(searchPhrase, { force });
 });
 

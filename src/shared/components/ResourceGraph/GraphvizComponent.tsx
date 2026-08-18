@@ -20,6 +20,7 @@ function GraphControls({
   downloadName?: string;
 }) {
   const { zoomIn, zoomOut } = useControls();
+  const { t } = useTranslation();
   return (
     <div className="graph-controls">
       {downloadContent && (
@@ -28,9 +29,24 @@ function GraphControls({
           name={downloadName ?? ''}
         />
       )}
-      <Button icon="zoom-in" design="Transparent" onClick={() => zoomIn()} />
-      <Button icon="zoom-out" design="Transparent" onClick={() => zoomOut()} />
-      <Button icon="reset" design="Transparent" onClick={onFitToView} />
+      <Button
+        icon="zoom-in"
+        design="Transparent"
+        accessibleName={t('resource-graph.controls.zoom-in')}
+        onClick={() => zoomIn()}
+      />
+      <Button
+        icon="zoom-out"
+        design="Transparent"
+        accessibleName={t('resource-graph.controls.zoom-out')}
+        onClick={() => zoomOut()}
+      />
+      <Button
+        icon="reset"
+        design="Transparent"
+        accessibleName={t('resource-graph.controls.fit-to-view')}
+        onClick={onFitToView}
+      />
     </div>
   );
 }

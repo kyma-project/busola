@@ -205,6 +205,7 @@ export const ClusterValidation = () => {
           }
         >
           <ProgressIndicator
+            accessibleName={t('cluster-validation.scan.progress')}
             value={
               scanProgress && scanProgress.total
                 ? Math.floor(

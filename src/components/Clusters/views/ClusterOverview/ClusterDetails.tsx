@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 import { unwrap } from 'jotai/utils';
 
-import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
+import { ClusterInfoFields } from './ClusterInfoFields';
 import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
 
 import { FormItem, Text, Title, Label, Form } from '@ui5/webcomponents-react';
@@ -13,8 +13,6 @@ import ClusterModulesCard from './ClusterModulesCard';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
-import { useGetEnvironmentParameters } from './useGetEnvironmentParameters';
-import { Tokens } from 'shared/components/Tokens';
 import { ActiveClusterState } from 'state/clusterAtom';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
@@ -30,21 +28,6 @@ type KymaResourcesItem = {
       [key: string]: string;
     };
   };
-};
-
-const GardenerProvider = () => {
-  const { t } = useTranslation();
-  const provider = useGetGardenerProvider();
-
-  if (!provider) return null;
-
-  return (
-    <FormItem
-      labelContent={<Label showColon>{t('gardener.headers.provider')}</Label>}
-    >
-      <p className="gardener-provider">{provider}</p>
-    </FormItem>
-  );
 };
 
 export default function ClusterDetails({
@@ -63,8 +46,6 @@ export default function ClusterDetails({
       )?.metadata.labels || kymaResources?.items[0]?.metadata?.labels,
     [kymaResources],
   );
-  const { natGatewayIps, environmentParametersLoading } =
-    useGetEnvironmentParameters();
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     configFeaturesNames.COMMUNITY_MODULES,
   );
@@ -128,44 +109,7 @@ export default function ClusterDetails({
                   {currentCluster?.currentContext?.cluster?.cluster?.server}
                 </Text>
               </FormItem>
-              <GardenerProvider />
-              {!!kymaResourceLabels?.['kyma-project.io/global-account-id'] && (
-                <FormItem
-                  labelContent={
-                    <Label showColon>
-                      {t('clusters.overview.global-account-id')}
-                    </Label>
-                  }
-                >
-                  <Text>
-                    {kymaResourceLabels['kyma-project.io/global-account-id']}
-                  </Text>
-                </FormItem>
-              )}
-              {!!kymaResourceLabels?.['kyma-project.io/subaccount-id'] && (
-                <FormItem
-                  labelContent={
-                    <Label showColon>
-                      {t('clusters.overview.subaccount-id')}
-                    </Label>
-                  }
-                >
-                  <Text>
-                    {kymaResourceLabels['kyma-project.io/subaccount-id']}
-                  </Text>
-                </FormItem>
-              )}
-              {!environmentParametersLoading && !!natGatewayIps && (
-                <FormItem
-                  labelContent={
-                    <Label showColon>
-                      {t('clusters.overview.nat-gateway-ips')}
-                    </Label>
-                  }
-                >
-                  <Tokens tokens={natGatewayIps} />
-                </FormItem>
-              )}
+              <ClusterInfoFields kymaResourceLabels={kymaResourceLabels} />
             </>
           }
         />

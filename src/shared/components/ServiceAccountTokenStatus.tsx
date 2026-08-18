@@ -44,7 +44,13 @@ export const ServiceAccountTokenStatus = ({
       };
 
   const tokenElement = (
-    <button ref={openerRef} onClick={handleOpenerClick} className="badge-wrap">
+    <button
+      ref={openerRef}
+      onClick={handleOpenerClick}
+      className="badge-wrap"
+      aria-haspopup="dialog"
+      aria-expanded={openPopover}
+    >
       <Token
         style={{ textTransform: 'capitalize' }}
         text={accountTokenValues.status}

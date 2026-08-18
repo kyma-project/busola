@@ -1,6 +1,6 @@
 import { KubeconfigIdHandleState } from 'components/App/useLoginWithKubeconfigID';
 import { useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useLocation, useNavigate, useSearchParams } from 'react-router';
 import { useAtomValue } from 'jotai';
 import { authDataAtom } from './authDataAtom';
 import { clusterAtom } from './clusterAtom';
@@ -9,8 +9,11 @@ import { ssoDataAtom, useIsSSOEnabled } from './ssoDataAtom';
 
 const PREVIOUS_PATHNAME_KEY = 'busola.previous-pathname';
 
-export function savePreviousPath() {
-  const queryParams = new URLSearchParams(window.location.search);
+export function savePreviousPath(
+  pathname: string = window.location.pathname,
+  search: string = window.location.search,
+) {
+  const queryParams = new URLSearchParams(search);
 
   const layoutParam = queryParams.get('layout');
   const resourceNamespaceParam = queryParams.get('resourceNamespace');
@@ -19,7 +22,7 @@ export function savePreviousPath() {
   const showEditParam = queryParams.get('showEdit');
   const editColumnParam = queryParams.get('editColumn');
 
-  let previousPath = window.location.pathname;
+  let previousPath = pathname;
 
   if (
     layoutParam ||
@@ -52,6 +55,15 @@ export function getPreviousPath() {
 
 export function removePreviousPath() {
   localStorage.removeItem(PREVIOUS_PATHNAME_KEY);
+}
+
+// Updates `busola.previous-pathname` on every in-app navigation so a later
+// session-expiry redirect can return the user to their last page.
+export function usePreviousPathTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    savePreviousPath(location.pathname, location.search);
+  }, [location.pathname, location.search]);
 }
 
 export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
@@ -101,8 +113,12 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
       return;
     }
 
-    const previousPath = getPreviousPath();
+    // Only restore when we've landed on '/'. The user is on any other URL
+    // deliberately, so don't hijack them.
+    const hasEmptyPath = window.location.pathname === '/';
+    if (!hasEmptyPath) return;
 
+    const previousPath = getPreviousPath();
     if (
       previousPath &&
       previousPath.startsWith('/') &&
@@ -110,15 +126,10 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
     ) {
       navigate(previousPath);
       removePreviousPath();
+    } else if (cluster) {
+      navigate(`/cluster/${encodeURIComponent(cluster.name)}/overview`);
     } else {
-      const hasEmptyPath = window.location.pathname === '/';
-      if (hasEmptyPath) {
-        if (cluster) {
-          navigate(`/cluster/${encodeURIComponent(cluster.name)}/overview`);
-        } else {
-          navigate('/clusters');
-        }
-      }
+      navigate('/clusters');
     }
   }, [
     cluster,

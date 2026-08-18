@@ -19,7 +19,7 @@ export const Sidebar = () => {
   if (noSidebarPathnames.includes(pathname)) return null;
 
   return (
-    <aside>
+    <aside aria-label={t('navigation.label')}>
       <section className="sidebar__content">
         <Suspense fallback={<Spinner />}>
           <ErrorBoundary

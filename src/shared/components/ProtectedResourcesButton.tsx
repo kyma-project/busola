@@ -93,6 +93,7 @@ export const ProtectedResourceWarning = ({
           setPopoverMessage(message);
         }}
         design="Transparent"
+        accessibleName={t('common.protected-resource')}
       >
         {withText ? (
           <ObjectStatus

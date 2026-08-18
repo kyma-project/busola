@@ -3,6 +3,7 @@ import { getClusterConfig } from 'state/utils/getBackendInfo';
 import { TerminalSessionState } from 'state/terminalSessionAtom';
 import { CONTAINER_NAME, TERMINAL_NAMESPACE } from './provisionPod';
 import { encodeBase64Url } from 'shared/utils/base64url';
+import { TFunction } from 'i18next';
 
 // Kubernetes attach stream channels — the first byte of every frame.
 const STDIN_CHANNEL = 0;
@@ -20,12 +21,6 @@ export const LINE_BREAK = '\r\n';
 export function terminalMessage(color: string, text: string) {
   return `${LINE_BREAK}${color}${text}${ANSI_RESET}${LINE_BREAK}`;
 }
-
-export type ConnectionMessages = {
-  connected: string;
-  closed: string;
-  connectionError: string;
-};
 
 function buildProtocols(authHeaders: Headers): string[] {
   return [
@@ -58,7 +53,9 @@ export async function connectTerminal({
   podName,
   setSession,
   signal,
-  messages,
+  t,
+  scheduleReconnect,
+  onConnected,
 }: {
   authHeaders: Headers;
   term: Terminal;
@@ -67,7 +64,9 @@ export async function connectTerminal({
     update: (prev: TerminalSessionState) => TerminalSessionState,
   ) => void;
   signal: AbortSignal;
-  messages: ConnectionMessages;
+  t: TFunction;
+  scheduleReconnect: (term: Terminal) => void;
+  onConnected: () => void;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
   const ws = new WebSocket(
     buildAttachUrl(podName),
@@ -78,7 +77,10 @@ export async function connectTerminal({
   ws.onopen = () => {
     if (signal.aborted) return;
     setSession((prev) => ({ ...prev, status: 'connected' }));
-    term.write(terminalMessage(COLOR_SUCCESS, messages.connected));
+    term.write(
+      terminalMessage(COLOR_SUCCESS, t('terminal.messages.connected')),
+    );
+    onConnected();
   };
 
   ws.onmessage = (event) => {
@@ -88,10 +90,23 @@ export async function connectTerminal({
     }
   };
 
-  ws.onclose = () => {
+  ws.onclose = (event) => {
     if (signal.aborted) return;
-    setSession((prev) => ({ ...prev, status: 'idle' }));
-    term.write(terminalMessage(COLOR_WARNING, messages.closed));
+    const isUnexpectedDrop =
+      event.code !== 1000 && event.code !== 1005 && !event.reason;
+    if (isUnexpectedDrop) {
+      term.write(
+        terminalMessage(COLOR_WARNING, t('terminal.messages.connection-lost')),
+      );
+      setSession((prev) => ({ ...prev, status: 'reconnecting' }));
+      scheduleReconnect(term);
+    } else {
+      setSession((prev) => ({ ...prev, status: 'idle' }));
+      if (event.reason) {
+        term.write(terminalMessage(COLOR_ERROR, event.reason));
+      }
+      term.write(terminalMessage(COLOR_WARNING, t('terminal.messages.closed')));
+    }
   };
 
   ws.onerror = () => {
@@ -99,7 +114,7 @@ export async function connectTerminal({
     setSession((prev) => ({
       ...prev,
       status: 'error',
-      errorMessage: messages.connectionError,
+      errorMessage: t('terminal.messages.connection-error'),
     }));
   };
 
