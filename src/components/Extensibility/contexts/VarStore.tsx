@@ -23,10 +23,14 @@ export function VarStoreContextProvider({ children }: { children: ReactNode }) {
 
   const setVar = useCallback(
     (path: string, value: any) => {
-      const oldVal = jp.value(vars, path);
-      if (typeof value !== 'undefined' && value !== oldVal) {
-        jp.value(vars, path, value);
-        setVars({ ...vars });
+      try {
+        const oldVal = jp.value(vars, path);
+        if (typeof value !== 'undefined' && value !== oldVal) {
+          jp.value(vars, path, value);
+          setVars({ ...vars });
+        }
+      } catch {
+        return;
       }
     },
     [vars],

@@ -17,6 +17,12 @@ describe('VarStoreContext defaults', () => {
     expect(typeof result.current.setVar).toBe('function');
     expect(typeof result.current.setVars).toBe('function');
   });
+
+  it('default no-op functions do not throw when called', () => {
+    const { result } = renderHook(() => useContext(VarStoreContext));
+    expect(() => result.current.setVar('$.x', 1)).not.toThrow();
+    expect(() => result.current.setVars({ x: 1 })).not.toThrow();
+  });
 });
 
 describe('VarStoreContextProvider', () => {
@@ -78,6 +84,30 @@ describe('VarStoreContextProvider', () => {
       expect(result.current.vars.filter).toBe('active');
     });
 
+    it('is a no-op when path is missing the $ prefix', () => {
+      const { result } = renderHook(() => useContext(VarStoreContext), {
+        wrapper: makeWrapper(),
+      });
+
+      const snapshotBefore = result.current.vars;
+
+      act(() => result.current.setVar('selectedItem', 'pod-1'));
+
+      expect(result.current.vars).toBe(snapshotBefore);
+    });
+
+    it('is a no-op when path is an empty string', () => {
+      const { result } = renderHook(() => useContext(VarStoreContext), {
+        wrapper: makeWrapper(),
+      });
+
+      const snapshotBefore = result.current.vars;
+
+      act(() => result.current.setVar('', 'pod-1'));
+
+      expect(result.current.vars).toBe(snapshotBefore);
+    });
+
     it('supports nested jsonpath when the intermediate object already exists', () => {
       const { result } = renderHook(() => useContext(VarStoreContext), {
         wrapper: makeWrapper(),
@@ -87,6 +117,16 @@ describe('VarStoreContextProvider', () => {
       act(() => result.current.setVar('$.filters.namespace', 'kube-system'));
 
       expect(result.current.vars.filters.namespace).toBe('kube-system');
+    });
+
+    it('creates intermediate objects when the nested path does not yet exist', () => {
+      const { result } = renderHook(() => useContext(VarStoreContext), {
+        wrapper: makeWrapper(),
+      });
+
+      act(() => result.current.setVar('$.filters.namespace', 'default'));
+
+      expect(result.current.vars.filters.namespace).toBe('default');
     });
   });
 
