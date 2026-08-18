@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 const discoveryCache = new Map<string, boolean>();
 
-export async function isOidcInteractive(issuerUrl: string): Promise<boolean> {
+async function isOidcInteractive(issuerUrl: string): Promise<boolean> {
   if (discoveryCache.has(issuerUrl)) return discoveryCache.get(issuerUrl)!;
   try {
     const base = issuerUrl.replace(/\/$/, '');
