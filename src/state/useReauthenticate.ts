@@ -55,7 +55,7 @@ export function useReauthenticate({
         clearIntendedPath();
         // Clear the cluster so the login effect runs again on the next attempt.
         setCluster(null);
-        notifyLoginFailure({
+        notifyLoginFailure(undefined, {
           onRetry: () => {
             resetAuthRedirectGuard();
             navigate(fullPath);

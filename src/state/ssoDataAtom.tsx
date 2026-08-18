@@ -15,6 +15,7 @@ import {
 } from './intendedPathAtom';
 import {
   decideOidcCallbackAction,
+  OidcErrorParams,
   reportStoppedLogin,
 } from './utils/oidcCallbackDecision';
 import { useNavigate } from 'react-router';
@@ -138,7 +139,7 @@ async function handleSSOLogin(
   ssoConfig: ConfigFeature,
   setSsoState: (user: SsoDataState) => void,
   setRenewing?: (renewing: boolean) => void,
-  onLoginFailed?: () => void,
+  onLoginFailed?: (failure?: OidcErrorParams) => void,
 ) {
   if (!ssoConfig || !ssoConfig.config) {
     throw new Error('SSO configuration not found');
@@ -220,7 +221,7 @@ async function handleSSOLogin(
     // Usually a failed code exchange, IdP error callbacks never get this far.
     console.error('SSO login failed:', e);
     if (isAuthRedirectLoop()) {
-      onLoginFailed?.();
+      onLoginFailed?.({ error: e instanceof Error ? e.message : String(e) });
     } else {
       triggerReauthRedirect(userManager);
     }
@@ -260,12 +261,12 @@ export function useSSOLogin() {
     const startLogin = async () => {
       const bypass = await getEnv(Envs.SSO_LOGIN_BYPASS);
       if (bypass === 'true') return;
-      handleSSOLogin(ssoConfig, setSsoState, setRenewing, () => {
+      handleSSOLogin(ssoConfig, setSsoState, setRenewing, (failure) => {
         // Unblock the app behind the dialog, navigating also removes the error params.
         setSsoLoginStopped(true);
         setCluster(null);
         navigate('/clusters', { replace: true });
-        notifyLoginFailure({
+        notifyLoginFailure(failure, {
           // Retry reloads the page, so SSO login starts again with a clean URL.
           onRetry: () => {
             resetAuthRedirectGuard();

@@ -17,6 +17,7 @@ import { useReauthenticate } from './useReauthenticate';
 import { renewingAtom } from './renewingAtom';
 import {
   decideOidcCallbackAction,
+  OidcErrorParams,
   reportStoppedLogin,
 } from './utils/oidcCallbackDecision';
 import {
@@ -57,7 +58,7 @@ type handleLoginProps = {
   onAfterLogin: () => void;
   onError: (error: Error) => void;
   // Called when the login failed and we don't want to retry automatically.
-  onLoginFailed: () => void;
+  onLoginFailed: (failure?: OidcErrorParams) => void;
   onRenewingChange?: (renewing: boolean) => void;
   // Returns false if a newer cluster has taken over; caller should abort.
   isCurrent?: () => boolean;
@@ -195,7 +196,7 @@ async function handleLogin({
         }
       } else {
         console.error('Cluster login failed:', e);
-        onLoginFailed();
+        onLoginFailed({ error: e.message });
       }
     } else {
       throw e;
@@ -291,13 +292,13 @@ export function useAuthHandler() {
           reauth(userManagerRef.current, error);
         };
 
-        const onLoginFailed = () => {
+        const onLoginFailed = (failure?: OidcErrorParams) => {
           if (gen !== loginGenRef.current) return;
           setIsLoading(false);
           setAuth(null);
           // Clear the cluster so picking it again (or Retry) starts a new login.
           setCluster(null);
-          notifyLoginFailure({
+          notifyLoginFailure(failure, {
             onRetry: () => {
               resetAuthRedirectGuard();
               navigate(`/cluster/${encodeURIComponent(cluster.name)}`);

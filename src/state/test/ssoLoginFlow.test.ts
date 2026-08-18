@@ -81,6 +81,25 @@ describe('useSSOLogin', () => {
     });
   });
 
+  it('stops and reports when the IdP returns an error callback', async () => {
+    window.history.replaceState(
+      {},
+      '',
+      '/?error=access_denied&error_description=provisioning+mismatch&state=s1',
+    );
+    const { Wrapper } = makeWrapper();
+
+    renderHook(() => useSSOLogin(), { wrapper: Wrapper });
+
+    await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
+    expect(notifyLoginFailureMock.mock.calls[0][0]).toEqual({
+      error: 'access_denied',
+      errorDescription: 'provisioning mismatch',
+      fromIdp: true,
+    });
+    expect(managerMock.signinRedirect).not.toHaveBeenCalled();
+  });
+
   it('stops and reports instead of redirecting again when a loop is detected', async () => {
     registerAuthRedirect();
     registerAuthRedirect();
@@ -90,7 +109,7 @@ describe('useSSOLogin', () => {
     renderHook(() => useSSOLogin(), { wrapper: Wrapper });
 
     await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
-    expect(notifyLoginFailureMock.mock.calls[0][0]).toHaveProperty('onRetry');
+    expect(notifyLoginFailureMock.mock.calls[0][0]).toBeUndefined();
     expect(managerMock.signinRedirect).not.toHaveBeenCalled();
   });
 
