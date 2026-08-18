@@ -12,21 +12,23 @@ vi.mock('command-pallette/CommandPalletteUI/handlers/helpers', () => ({
   getSuggestionForSingleResource: vi.fn().mockReturnValue('crd'),
 }));
 
-function fakeCrd(name: string): K8sResource {
+function fixCRD(name: string): K8sResource {
   return {
     metadata: {
       name: name,
       uid: '',
       creationTimestamp: '',
       resourceVersion: '',
-      labels: undefined,
+      labels: {},
     },
   };
 }
-const fakeT = ((key: string) =>
-  ({
-    'custom-resource-definitions.title': 'TEST',
-  })[key] ?? key) as TFunction;
+
+const fakeTranslation: Record<string, string> = {
+  'custom-resource-definitions.title': 'TEST',
+};
+
+const fakeT = ((key: string) => fakeTranslation[key] ?? key) as TFunction;
 
 function fixContext({
   tokens,
@@ -35,38 +37,10 @@ function fixContext({
   tokens: string[];
   resourceCache?: Record<string, K8sResource[]>;
 }): CommandPaletteContext {
+  // @ts-ignore
   return {
-    activeClusterName: undefined,
-    clusterNames: [],
-    clusterNodes: [],
-    clustersInfo: {
-      currentCluster: undefined,
-      clusters: null,
-      setCurrentCluster: function (args_0: ActiveClusterState): void {
-        throw new Error('Function not implemented.');
-      },
-      setClusters: function (
-        args_0: ClustersState | ((prev: ClustersState) => ClustersState),
-      ): void {
-        throw new Error('Function not implemented.');
-      },
-      removeCluster: () => null,
-      navigate: undefined,
-    },
-    fetch(relativeUrl: string): Promise<any> {
-      return Promise.resolve(undefined);
-    },
-    hiddenNamespaces: [],
-    namespace: '',
-    namespaceNodes: [],
-    navigate(_: string): void {},
-    query: '',
     resourceCache,
-    setOpenSettingsModal(open: boolean): void {},
-    setShowYamlUpload(show: boolean): void {},
-    showHiddenNamespaces: false,
     t: fakeT,
-    updateResourceCache(key: string, resources: K8sResource[]): void {},
     tokens,
   };
 }
@@ -77,7 +51,7 @@ describe('getAutocompleteEntries', () => {
     let result = crdHandler.getAutocompleteEntries(ctx);
 
     expect(result).toHaveLength(1);
-    expect(result[0]).toBe('customresourcedefinitions ');
+    expect(result![0]).toBe('customresourcedefinitions ');
   });
 
   it('AutoComplete with which should match plural shortname of crd', () => {
@@ -86,7 +60,7 @@ describe('getAutocompleteEntries', () => {
     let result = crdHandler.getAutocompleteEntries(ctx);
 
     expect(result).toHaveLength(1);
-    expect(result[0]).toBe('crds');
+    expect(result![0]).toBe('crds');
   });
 
   it('AutoComplete doesnt match anything', () => {
@@ -102,16 +76,16 @@ describe('getAutocompleteEntries', () => {
       tokens: ['crd', '/', 'xyz'],
       resourceCache: {
         customresourcedefinitions: [
-          fakeCrd('abcd'),
-          fakeCrd('xyzResource'),
-          fakeCrd('resoruceXyz'),
+          fixCRD('abcd'),
+          fixCRD('xyzResource'),
+          fixCRD('resoruceXyz'),
         ],
       },
     });
     let result = crdHandler.getAutocompleteEntries(ctx);
 
     expect(result).toHaveLength(1);
-    expect(result[0]).toBe('crd xyzResource ');
+    expect(result![0]).toBe('crd xyzResource ');
   });
 
   it('AutoComplete with 2 tokens returns empty suggestion array', () => {
@@ -119,9 +93,9 @@ describe('getAutocompleteEntries', () => {
       tokens: ['crd', 'xyz'],
       resourceCache: {
         customresourcedefinitions: [
-          fakeCrd('abcd'),
-          fakeCrd('xyzResource'),
-          fakeCrd('resoruceXyz'),
+          fixCRD('abcd'),
+          fixCRD('xyzResource'),
+          fixCRD('resoruceXyz'),
         ],
       },
     });
@@ -138,20 +112,19 @@ describe('getSuggestion', () => {
       getSuggestionForSingleResource,
     );
 
-    const ctx: CommandPaletteContext = {
+    const ctx = fixContext({
       tokens: ['cred'],
-      t: fakeT,
       resourceCache: {
-        customresourcedefinitions: [fakeCrd('test')],
+        customresourcedefinitions: [fixCRD('test')],
       },
-    };
+    });
     let result = crdHandler.getSuggestion(ctx);
 
     expect(result).toBe('crd');
     expect(mockSuggestionForSingleResource).toHaveBeenCalledOnce();
     expect(mockSuggestionForSingleResource).toHaveBeenCalledWith({
       tokens: ['cred'],
-      resources: [fakeCrd('test')],
+      resources: [fixCRD('test')],
       resourceTypeNames: expect.arrayContaining([
         'customresourcedefinitions',
         'crd',
@@ -162,15 +135,81 @@ describe('getSuggestion', () => {
 });
 
 describe('get createResults', () => {
-  it('test', () => {
-    const ctx: CommandPaletteContext = {
+  it('One token', () => {
+    const expectedTranslation = 'TEST';
+    const ctx: CommandPaletteContext = fixContext({
       tokens: ['c'],
-      t: fakeT,
       resourceCache: {
         customresourcedefinitions: [],
       },
-    };
+    });
     let result = crdHandler.createResults(ctx);
+
+    expect(result).toHaveLength(1);
+
+    const firstResult = result![0];
+    expect(firstResult.aliases).toStrictEqual(['crds']);
+    expect(firstResult.category).toEqual(
+      `configuration.title > ${expectedTranslation}`,
+    );
+    expect(firstResult.query).toEqual('crds');
+    expect(firstResult.label).toEqual(expectedTranslation);
+  });
+
+  it('type and name in tokens', () => {
+    const expectedTranslation = 'TEST';
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['crd', '/', 'custom'],
+      resourceCache: {
+        customresourcedefinitions: [fixCRD('custom')],
+      },
+    });
+    let result = crdHandler.createResults(ctx);
+
+    expect(result).toHaveLength(1);
+
+    const firstResult = result![0];
     console.log(result);
+    expect(firstResult.category).toEqual(
+      `configuration.title > ${expectedTranslation}`,
+    );
+    expect(firstResult.query).toEqual('crds/custom');
+    expect(firstResult.label).toEqual('custom');
+    expect(firstResult.customActionText).toEqual(
+      'command-palette.item-actions.navigate',
+    );
+  });
+
+  it('type and delimeter in tokens', () => {
+    const expectedTranslation = 'TEST';
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['crd', '/'],
+      resourceCache: {
+        customresourcedefinitions: [fixCRD('custom'), fixCRD('custom2')],
+      },
+    });
+    let result = crdHandler.createResults(ctx);
+
+    expect(result).toHaveLength(2);
+
+    const firstResult = result![0];
+    expect(firstResult.category).toEqual(
+      `configuration.title > ${expectedTranslation}`,
+    );
+    expect(firstResult.query).toEqual('crds/custom');
+    expect(firstResult.label).toEqual('custom');
+    expect(firstResult.customActionText).toEqual(
+      'command-palette.item-actions.navigate',
+    );
+
+    const secondResult = result![1];
+    expect(secondResult.category).toEqual(
+      `configuration.title > ${expectedTranslation}`,
+    );
+    expect(secondResult.query).toEqual('crds/custom2');
+    expect(secondResult.label).toEqual('custom2');
+    expect(secondResult.customActionText).toEqual(
+      'command-palette.item-actions.navigate',
+    );
   });
 });
