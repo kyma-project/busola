@@ -3,7 +3,6 @@ import {
   FlexBox,
   ObjectStatus,
   Popover,
-  ShellBarItem,
   Text,
   Title,
 } from '@ui5/webcomponents-react';
@@ -18,6 +17,7 @@ import {
   getShowFeedbackStorageKey,
   setNoFeedbackShowNextTime,
 } from 'components/KymaCompanion/components/JouleFeedbackDialog/helpers/feedbackViewHelpers';
+import { ShellBarAction } from '../ShellBarAction';
 
 export default function FeedbackPopover() {
   const { isEnabled: isFeedbackEnabled, config: kymaFeedbackConfig } =
@@ -69,7 +69,7 @@ export default function FeedbackPopover() {
 
   return (
     <>
-      <ShellBarItem
+      <ShellBarAction
         id="feedbackOpener"
         onClick={() => setFeedbackOpen(true)}
         icon="feedback"
