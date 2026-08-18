@@ -31,3 +31,5 @@ jobs:
           npm ci
           npm run eslint-check
           npm run lint-check
+          npx vitest run scripts/test/check-unused-translations.test.js
+          npm run check-unused-translations
