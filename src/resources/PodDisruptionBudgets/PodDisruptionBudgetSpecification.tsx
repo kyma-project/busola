@@ -29,44 +29,6 @@ export default function PodDisruptionBudgetSpecification({
           <Text>{resource.spec.maxUnavailable ?? EMPTY_TEXT_PLACEHOLDER}</Text>
         }
       />
-      <LayoutPanelRow
-        name={t('pod-disruption-budgets.headers.current-healthy')}
-        value={
-          <Text>
-            {resource.status.currentHealthy ?? EMPTY_TEXT_PLACEHOLDER}
-          </Text>
-        }
-      />
-      <LayoutPanelRow
-        name={t('pod-disruption-budgets.headers.desired-healthy')}
-        value={
-          <Text>
-            {resource.status.desiredHealthy ?? EMPTY_TEXT_PLACEHOLDER}
-          </Text>
-        }
-      />
-      <LayoutPanelRow
-        name={t('pod-disruption-budgets.headers.disruptions-allowed')}
-        value={
-          <Text>
-            {resource.status.disruptionsAllowed ?? EMPTY_TEXT_PLACEHOLDER}
-          </Text>
-        }
-      />
-      <LayoutPanelRow
-        name={t('pod-disruption-budgets.headers.expected-pods')}
-        value={
-          <Text>{resource.status.expectedPods ?? EMPTY_TEXT_PLACEHOLDER}</Text>
-        }
-      />
-      <LayoutPanelRow
-        name={t('pod-disruption-budgets.headers.observed-generation')}
-        value={
-          <Text>
-            {resource.status.observedGeneration ?? EMPTY_TEXT_PLACEHOLDER}
-          </Text>
-        }
-      />
     </UI5Card>
   ) : null;
 }

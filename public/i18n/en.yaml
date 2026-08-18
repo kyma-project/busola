@@ -217,6 +217,7 @@ command-palette:
     oauth2clients: OAuth2 Clients
     persistentvolumeclaims: Persistent Volume Claims
     persistentvolumes: Persistent Volumes
+    poddisruptionbudgets: Pod Disruption Budgets
     replicasets: Replica Sets
     resourcequotas: Resource Quotas
     rolebindings: Role Bindings

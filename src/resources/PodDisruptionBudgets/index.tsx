@@ -1,6 +1,7 @@
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { Description } from 'shared/components/Description/Description';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
+import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
 
 export const resourceType = 'PodDisruptionBudgets';
 export const namespaced = true;
@@ -29,5 +30,15 @@ export const ResourceDescription = (
 export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,
   networkFlowLevel: -1,
-  depth: 1,
+  relations: [
+    {
+      resource: { kind: 'Pod' },
+      filter: (pdb, pod) =>
+        matchBySelector(pdb.spec.selector.matchLabels, pod.metadata.labels) ||
+        matchByOwnerReference({
+          resource: pod,
+          owner: pdb,
+        }),
+    },
+  ],
 });

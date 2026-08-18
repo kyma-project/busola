@@ -19,6 +19,10 @@ export type PodDisruptionBudget = {
   spec: {
     minAvailable: number;
     maxUnavailable: number;
+    selector: {
+      matchLabels: Record<string, string>;
+      matchExpressions?: any[];
+    };
   };
   status: {
     currentHealthy?: number;
