@@ -1,12 +1,20 @@
 import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import { useSetAtom } from 'jotai';
 import { UserManager } from 'oidc-client-ts';
 import { useTranslation } from 'react-i18next';
+import { clusterAtom } from 'state/clusterAtom';
 import {
   clearIntendedPath,
   saveIntendedPath,
   toClusterRelative,
 } from 'state/intendedPathAtom';
+import {
+  isAuthRedirectLoop,
+  registerAuthRedirect,
+  resetAuthRedirectGuard,
+} from 'state/utils/authRedirectLoopGuard';
+import { useNotifyLoginFailure } from './useLoginFailureNotification';
 
 type NotifyError = (props: { content: string }) => void;
 
@@ -20,6 +28,8 @@ export function useReauthenticate({
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const setCluster = useSetAtom(clusterAtom);
+  const notifyLoginFailure = useNotifyLoginFailure();
 
   return useCallback(
     async (userManager: UserManager | null, error?: Error) => {
@@ -38,9 +48,28 @@ export function useReauthenticate({
 
       const fullPath =
         location.pathname + (location.search ? location.search : '');
+
+      // If the API server keeps rejecting the token we would redirect forever,
+      // so stop here and show the error instead.
+      if (isAuthRedirectLoop()) {
+        clearIntendedPath();
+        // Clear the cluster so the login effect runs again on the next attempt.
+        setCluster(null);
+        notifyLoginFailure({
+          onRetry: () => {
+            resetAuthRedirectGuard();
+            navigate(fullPath);
+          },
+        });
+        navigate('/clusters');
+        return;
+      }
+
       const relative = toClusterRelative(fullPath);
       if (relative) saveIntendedPath(relative);
       try {
+        // Count the redirect so we can detect a loop when the IdP sends us back.
+        registerAuthRedirect();
         await userManager.clearStaleState();
         await userManager.signinRedirect();
       } catch (redirectError) {
@@ -50,6 +79,14 @@ export function useReauthenticate({
         fallBackToClusterList();
       }
     },
-    [location.pathname, location.search, navigate, t, notifyError],
+    [
+      location.pathname,
+      location.search,
+      navigate,
+      t,
+      notifyError,
+      notifyLoginFailure,
+      setCluster,
+    ],
   );
 }
