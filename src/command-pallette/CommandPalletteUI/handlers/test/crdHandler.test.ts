@@ -5,8 +5,6 @@ import { CommandPaletteContext } from 'command-pallette/CommandPalletteUI/types'
 import { K8sResource } from 'types';
 import { getSuggestionForSingleResource } from 'command-pallette/CommandPalletteUI/handlers/helpers';
 import { TFunction } from 'i18next';
-import { ActiveClusterState } from 'state/clusterAtom';
-import { ClustersState } from 'state/clustersAtom';
 
 vi.mock('command-pallette/CommandPalletteUI/handlers/helpers', () => ({
   getSuggestionForSingleResource: vi.fn().mockReturnValue('crd'),
@@ -48,7 +46,7 @@ describe('getAutocompleteEntries', () => {
   it('AutoComplete with which should match fullname of crd', () => {
     const ctx = fixContext({ tokens: ['c'] });
 
-    let result = crdHandler.getAutocompleteEntries(ctx);
+    const result = crdHandler.getAutocompleteEntries(ctx);
 
     expect(result).toHaveLength(1);
     expect(result![0]).toBe('customresourcedefinitions ');
@@ -57,7 +55,7 @@ describe('getAutocompleteEntries', () => {
   it('AutoComplete with which should match plural shortname of crd', () => {
     const ctx = fixContext({ tokens: ['cr'] });
 
-    let result = crdHandler.getAutocompleteEntries(ctx);
+    const result = crdHandler.getAutocompleteEntries(ctx);
 
     expect(result).toHaveLength(1);
     expect(result![0]).toBe('crds');
@@ -66,7 +64,7 @@ describe('getAutocompleteEntries', () => {
   it('AutoComplete doesnt match anything', () => {
     const ctx = fixContext({ tokens: ['anything'] });
 
-    let result = crdHandler.getAutocompleteEntries(ctx);
+    const result = crdHandler.getAutocompleteEntries(ctx);
 
     expect(result).toHaveLength(0);
   });
@@ -82,7 +80,7 @@ describe('getAutocompleteEntries', () => {
         ],
       },
     });
-    let result = crdHandler.getAutocompleteEntries(ctx);
+    const result = crdHandler.getAutocompleteEntries(ctx);
 
     expect(result).toHaveLength(1);
     expect(result![0]).toBe('crd xyzResource ');
@@ -100,7 +98,7 @@ describe('getAutocompleteEntries', () => {
       },
     });
 
-    let result = crdHandler.getAutocompleteEntries(ctx);
+    const result = crdHandler.getAutocompleteEntries(ctx);
 
     expect(result).toHaveLength(0);
   });
@@ -118,7 +116,7 @@ describe('getSuggestion', () => {
         customresourcedefinitions: [fixCRD('test')],
       },
     });
-    let result = crdHandler.getSuggestion(ctx);
+    const result = crdHandler.getSuggestion(ctx);
 
     expect(result).toBe('crd');
     expect(mockSuggestionForSingleResource).toHaveBeenCalledOnce();
@@ -143,7 +141,7 @@ describe('get createResults', () => {
         customresourcedefinitions: [],
       },
     });
-    let result = crdHandler.createResults(ctx);
+    const result = crdHandler.createResults(ctx);
 
     expect(result).toHaveLength(1);
 
@@ -164,7 +162,7 @@ describe('get createResults', () => {
         customresourcedefinitions: [fixCRD('custom')],
       },
     });
-    let result = crdHandler.createResults(ctx);
+    const result = crdHandler.createResults(ctx);
 
     expect(result).toHaveLength(1);
 
@@ -188,7 +186,7 @@ describe('get createResults', () => {
         customresourcedefinitions: [fixCRD('custom'), fixCRD('custom2')],
       },
     });
-    let result = crdHandler.createResults(ctx);
+    const result = crdHandler.createResults(ctx);
 
     expect(result).toHaveLength(2);
 
