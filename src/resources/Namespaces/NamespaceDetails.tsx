@@ -122,8 +122,8 @@ export default function NamespaceDetails(props: NamespaceDetailsProps) {
     >
       {LimitrangesList}
       {ResourceQuotasList}
-      {Events}
       {PodDisruptionBudgets}
+      {Events}
     </ResourceDetails>
   );
 }
