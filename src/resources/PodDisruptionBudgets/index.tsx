@@ -2,14 +2,13 @@ import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { Description } from 'shared/components/Description/Description';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
+import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'PodDisruptionBudgets';
 export const namespaced = true;
 export const apiGroup = 'policy';
 export const apiVersion = 'v1';
-export const category = '';
-export const icon = 'shield';
-export const topLevelNode = true;
+export const category = predefinedCategories.configuration;
 
 export const List = lazyWithRetries(() => import('./PodDisruptionBudgetsList'));
 export const Details = lazyWithRetries(
