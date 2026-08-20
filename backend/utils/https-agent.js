@@ -19,3 +19,14 @@ export const tokenAuthAgent = new https.Agent({
   timeout: 60000, // Match typical load balancer timeouts
   scheduling: 'lifo',
 });
+
+// Shared keep-alive agent for outbound proxy requests (/proxy route).
+// Without this, every proxied request pays a full TCP+TLS handshake (~100-200ms).
+export const proxyAgent = new https.Agent({
+  keepAlive: true,
+  keepAliveMsecs: 1000,
+  maxSockets: 50,
+  maxFreeSockets: 10,
+  timeout: 30000,
+  scheduling: 'lifo',
+});
