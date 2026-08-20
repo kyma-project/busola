@@ -14,8 +14,8 @@ import https from 'https';
 export const tokenAuthAgent = new https.Agent({
   keepAlive: true,
   keepAliveMsecs: 1000, // Detect dead connections quickly
-  maxSockets: 100,
-  maxFreeSockets: 20,
+  maxSockets: 200,
+  maxFreeSockets: 50,
   timeout: 60000, // Match typical load balancer timeouts
   scheduling: 'lifo',
 });
