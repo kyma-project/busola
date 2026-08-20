@@ -31,8 +31,8 @@ const fakeT = ((key: string) => fakeTranslation[key] ?? key) as TFunction;
 function fixContext({
   tokens,
   resourceCache = {},
-  fetch = (relativeURL: string) => new Promise(() => undefined),
-  updateResourceCache = (key: string, value: K8sResource[]) => {},
+  fetch = (_: string) => new Promise(() => undefined),
+  updateResourceCache = (_: string, __: K8sResource[]) => {},
 }: {
   tokens: string[];
   resourceCache?: Record<string, K8sResource[]>;
@@ -260,7 +260,7 @@ describe('fetchCRDs', () => {
       resourceCache: {
         customresourcedefinitions: [fixCRD('custom'), fixCRD('custom2')],
       },
-      fetch: vi.fn((url: string) => {
+      fetch: vi.fn((_: string) => {
         expect.fail('Fetch should not be called');
       }),
     });
@@ -282,7 +282,7 @@ describe('fetchCRDs', () => {
         customresourcedefinitions: [fixCRD('custom'), fixCRD('custom2')],
       },
       updateResourceCache,
-      fetch: vi.fn((url: string) => {
+      fetch: vi.fn((_: string) => {
         return new Promise((_, reject) => reject(new Error('testing error')));
       }),
     });
