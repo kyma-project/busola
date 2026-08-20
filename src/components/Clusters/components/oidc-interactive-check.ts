@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react';
+import {
+  KubeconfigContext,
+  KubeconfigOIDCAuth,
+  KubeconfigUser,
+  NestedPartial,
+} from 'types';
+import { isOIDCExec } from './oidc-params';
 
+// No TTL — entries persist for the page lifetime. A full reload clears the cache.
 const discoveryCache = new Map<string, boolean>();
 
-async function isOidcInteractive(issuerUrl: string): Promise<boolean> {
+export async function isOidcInteractive(issuerUrl: string): Promise<boolean> {
   if (discoveryCache.has(issuerUrl)) return discoveryCache.get(issuerUrl)!;
   try {
     const base = issuerUrl.replace(/\/$/, '');
@@ -29,22 +37,9 @@ async function isOidcInteractive(issuerUrl: string): Promise<boolean> {
   }
 }
 
-function getOidcIssuerUrlForContext(
-  contextName: string,
-  users: Array<{ name?: string; user?: { exec?: { args?: string[] } } }>,
-): string | null {
-  const user = users.find((u) => u.name === contextName);
-  const args = user?.user?.exec?.args;
-  if (!args) return null;
-  const arg = args.find((a) => a?.startsWith('--oidc-issuer-url='));
-  return arg ? arg.replace('--oidc-issuer-url=', '') : null;
-}
-
 export function useNonInteractiveOidcContexts(
-  contexts: Array<{ name?: string } | undefined> | undefined,
-  users:
-    | Array<{ name?: string; user?: { exec?: { args?: string[] } } }>
-    | undefined,
+  contexts: Array<NestedPartial<KubeconfigContext> | undefined> | undefined,
+  users: Array<NestedPartial<KubeconfigUser> | undefined> | undefined,
 ): Set<string> {
   const [nonInteractive, setNonInteractive] = useState<Set<string>>(new Set());
 
@@ -57,8 +52,26 @@ export function useNonInteractiveOidcContexts(
       oidcContexts.map(async (context) => {
         const name = context?.name;
         if (!name) return null;
-        const issuerUrl = getOidcIssuerUrlForContext(name, oidcUsers);
+
+        // Resolve the user entry via context.context.user (kubeconfig spec mapping)
+        const userName = context?.context?.user;
+        if (!userName) return null;
+        const user = oidcUsers.find((u) => u?.name === userName);
+
+        // interactiveMode "Never" unambiguously marks an exec plugin as non-interactive
+        const exec = (
+          user?.user as NestedPartial<KubeconfigOIDCAuth> | undefined
+        )?.exec;
+        if (exec?.interactiveMode === 'Never') return name;
+
+        // Only proceed with OIDC discovery for exec plugins carrying --oidc-issuer-url
+        if (!isOIDCExec(exec as { args?: string[] } | undefined)) return null;
+
+        const issuerUrl = exec?.args
+          ?.find((a) => a?.startsWith('--oidc-issuer-url='))
+          ?.replace('--oidc-issuer-url=', '');
         if (!issuerUrl) return null;
+
         const interactive = await isOidcInteractive(issuerUrl);
         return interactive ? null : name;
       }),

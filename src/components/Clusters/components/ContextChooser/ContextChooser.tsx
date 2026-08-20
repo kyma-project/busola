@@ -17,6 +17,7 @@ import { getUserDetail } from './helpers';
 import { ResourceFormWrapperProps } from 'shared/ResourceForm/components/Wrapper';
 import { ListItemClickEventDetail } from '@ui5/webcomponents/dist/List';
 import { useNonInteractiveOidcContexts } from '../oidc-interactive-check';
+import { KubeconfigContext, KubeconfigUser, NestedPartial } from 'types';
 
 import './ContextChooser.scss';
 import { KubeConfigMultipleState } from 'state/multipleContextsAtom';
@@ -67,8 +68,8 @@ export function ContextChooser({
 }
 
 type ContextButtonsProps = {
-  users?: Array<{ name: string; user: { exec: { args?: string[] } } }>;
-  contexts: { name: string }[];
+  users?: KubeconfigUser[];
+  contexts: KubeconfigContext[];
   chosenContext: string;
   setValue: (context: string) => void;
   setChosenContext?: (context: string) => void;
@@ -82,7 +83,7 @@ export function ContextButtons({
   setChosenContext,
 }: ContextButtonsProps) {
   const { t } = useTranslation();
-  const nonInteractive = useNonInteractiveOidcContexts(contexts, users as any);
+  const nonInteractive = useNonInteractiveOidcContexts(contexts, users);
 
   return (
     <List
@@ -146,7 +147,7 @@ export function ContextChooserMessage({
   const [chosenContext, setChosenContext] = useState('');
   const nonInteractive = useNonInteractiveOidcContexts(
     contextState?.contexts,
-    contextState?.users as any,
+    contextState?.users,
   );
 
   if (!Array.isArray(contextState?.contexts)) {
@@ -221,7 +222,7 @@ export function ContextChooserMessage({
 
 type AuthContextDataProps = {
   contextName: string;
-  users?: Array<{ name: string; user: { exec: { args?: string[] } } }>;
+  users?: Array<NestedPartial<KubeconfigUser>>;
 };
 
 function AuthContextData({ contextName, users }: AuthContextDataProps) {

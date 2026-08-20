@@ -75,7 +75,7 @@ export function AddClusterWizard({
 
   const nonInteractiveContexts = useNonInteractiveOidcContexts(
     kubeconfig?.contexts,
-    kubeconfig?.users as any,
+    kubeconfig?.users,
   );
 
   const updateKubeconfig = (kubeconfig?: Kubeconfig) => {
