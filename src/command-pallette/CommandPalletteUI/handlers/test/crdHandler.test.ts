@@ -43,7 +43,7 @@ function fixContext({
   };
 }
 describe('getAutocompleteEntries', () => {
-  it('AutoComplete with which should match fullname of crd', () => {
+  it('AutoComplete given one token returns matched fullname', () => {
     const ctx = fixContext({ tokens: ['c'] });
 
     const result = crdHandler.getAutocompleteEntries(ctx);
@@ -52,7 +52,7 @@ describe('getAutocompleteEntries', () => {
     expect(result![0]).toBe('customresourcedefinitions ');
   });
 
-  it('AutoComplete with which should match plural shortname of crd', () => {
+  it('AutoComplete given one token returns plural shortname of crd', () => {
     const ctx = fixContext({ tokens: ['cr'] });
 
     const result = crdHandler.getAutocompleteEntries(ctx);
@@ -61,7 +61,7 @@ describe('getAutocompleteEntries', () => {
     expect(result![0]).toBe('crds');
   });
 
-  it('AutoComplete doesnt match anything', () => {
+  it('AutoComplete given random token returns empty result', () => {
     const ctx = fixContext({ tokens: ['anything'] });
 
     const result = crdHandler.getAutocompleteEntries(ctx);
@@ -69,7 +69,7 @@ describe('getAutocompleteEntries', () => {
     expect(result).toHaveLength(0);
   });
 
-  it('AutoComplete with 3 tokens', () => {
+  it('AutoComplete given 3 tokens returns matched customresourcedefinition', () => {
     const ctx = fixContext({
       tokens: ['crd', '/', 'xyz'],
       resourceCache: {
@@ -86,7 +86,7 @@ describe('getAutocompleteEntries', () => {
     expect(result![0]).toBe('crd xyzResource ');
   });
 
-  it('AutoComplete with 2 tokens returns empty suggestion array', () => {
+  it('AutoComplete given 2 tokens returns empty result', () => {
     const ctx = fixContext({
       tokens: ['crd', 'xyz'],
       resourceCache: {
@@ -133,7 +133,7 @@ describe('getSuggestion', () => {
 });
 
 describe('get createResults', () => {
-  it('One token', () => {
+  it('createResults given one token returns matched result', () => {
     const expectedTranslation = 'TEST';
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['c'],
@@ -154,7 +154,7 @@ describe('get createResults', () => {
     expect(firstResult.label).toEqual(expectedTranslation);
   });
 
-  it('type and name in tokens', () => {
+  it('createResults given type and name in tokens returns matched result', () => {
     const expectedTranslation = 'TEST';
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['crd', '/', 'custom'],
@@ -177,7 +177,7 @@ describe('get createResults', () => {
     );
   });
 
-  it('type and delimeter in tokens', () => {
+  it('createResults given type and delimeter in tokens returns matched 2 elements', () => {
     const expectedTranslation = 'TEST';
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['crd', '/'],
