@@ -33,6 +33,7 @@ import {
   KubeconfigContext,
   KubeconfigNonOIDCAuthToken,
 } from 'types';
+import { useNonInteractiveOidcContexts } from './oidc-interactive-check';
 
 import './AddClusterWizard.scss';
 import { WizardStepChangeEventDetail } from '@ui5/webcomponents-fiori/dist/Wizard';
@@ -71,6 +72,11 @@ export function AddClusterWizard({
     setCustomValid,
     revalidate,
   } = useCustomFormValidator();
+
+  const nonInteractiveContexts = useNonInteractiveOidcContexts(
+    kubeconfig?.contexts,
+    kubeconfig?.users,
+  );
 
   const updateKubeconfig = (kubeconfig?: Kubeconfig) => {
     if (!kubeconfig) {
@@ -117,17 +123,20 @@ export function AddClusterWizard({
           clustersInfo,
         );
       } else if (contextName === '-all-') {
-        kubeconfig.contexts.forEach((context, index) => {
+        let firstAdded = true;
+        kubeconfig.contexts.forEach((context) => {
+          if (nonInteractiveContexts.has(context?.name ?? '')) return;
           addByContext(
             {
               kubeconfig,
               context: context as KubeconfigContext,
-              switchCluster: !index,
+              switchCluster: firstAdded,
               storage,
               config,
             },
             clustersInfo,
           );
+          firstAdded = false;
         });
       } else {
         const context = kubeconfig.contexts.find(

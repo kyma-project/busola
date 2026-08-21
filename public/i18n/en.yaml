@@ -167,6 +167,7 @@ clusters:
     kubeconfig: Kubeconfig
     kubeconfig-provide: Provide Kubeconfig
     kubeconfig-upload: Drop a .kubeconfig file or click to
+    non-interactive-oidc: Not available for interactive login
     not-an-object: kubeconfig is not an object
     provide-context: Provide Context
     review: Review
