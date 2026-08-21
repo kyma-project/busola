@@ -1,6 +1,6 @@
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ResourceDescription } from '.';
-import { PodDisruptionBudget } from './PodDisruptionBudgetsList';
+import { PodDisruptionBudget } from './PodDisruptionBudgetList';
 import PodDisruptionBudgetSpecification from './PodDisruptionBudgetSpecification';
 import PodDisruptionBudgetCreate from './PodDisruptionBudgetCreate';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -57,12 +57,31 @@ export default function PodDisruptionBudgetDetails(props: any) {
     },
   ];
 
+  const statusConditions = (pdb: PodDisruptionBudget) => {
+    return pdb?.status?.conditions?.map((condition: Record<string, any>) => {
+      const overridenStatus = () => {
+        if (condition.type === 'DisruptionAllowed')
+          return condition.status === 'True' ? 'Positive' : 'Negative';
+        return undefined;
+      };
+      return {
+        header: {
+          titleText: condition.type,
+          status: condition.status,
+          overrideStatusType: overridenStatus(),
+        },
+        message: condition.message || condition.reason,
+      };
+    });
+  };
+
   return (
     <ResourceDetails
       description={ResourceDescription}
       createResourceForm={PodDisruptionBudgetCreate}
       customComponents={customComponents}
       customStatusColumns={customStatusColumns}
+      statusConditions={statusConditions}
       {...props}
     />
   );

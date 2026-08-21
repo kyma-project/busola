@@ -10,7 +10,7 @@ export const apiGroup = 'policy';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.configuration;
 
-export const List = lazyWithRetries(() => import('./PodDisruptionBudgetsList'));
+export const List = lazyWithRetries(() => import('./PodDisruptionBudgetList'));
 export const Details = lazyWithRetries(
   () => import('./PodDisruptionBudgetDetails'),
 );
