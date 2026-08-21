@@ -7,14 +7,15 @@ import {
 } from 'types';
 import { isOIDCExec } from './oidc-params';
 
-// No TTL — entries persist for the page lifetime. A full reload clears the cache.
+// No TTL (Time To Live) — entries persist for the page lifetime. A full reload clears the cache.
 const discoveryCache = new Map<string, boolean>();
 
 export async function isOidcInteractive(issuerUrl: string): Promise<boolean> {
   if (discoveryCache.has(issuerUrl)) return discoveryCache.get(issuerUrl)!;
   try {
-    const base = issuerUrl.replace(/\/$/, '');
-    const response = await fetch(`${base}/.well-known/openid-configuration`);
+    const response = await fetch(
+      `/backend/oidc-discovery?issuer=${encodeURIComponent(issuerUrl)}`,
+    );
     if (!response.ok) {
       discoveryCache.set(issuerUrl, true);
       return true;
@@ -31,7 +32,7 @@ export async function isOidcInteractive(issuerUrl: string): Promise<boolean> {
     discoveryCache.set(issuerUrl, result);
     return result;
   } catch {
-    // fail-open: if the discovery endpoint is unreachable, allow the provider
+    // fail-open: if the backend is unreachable, allow the provider
     discoveryCache.set(issuerUrl, true);
     return true;
   }
