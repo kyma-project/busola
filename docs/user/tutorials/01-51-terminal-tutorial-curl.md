@@ -44,7 +44,7 @@ Use the Kyma dashboard terminal to verify that Services running inside your clus
 
 ## Result
 
-The terminal displays the HTTP response from the Service. A status code of `200` confirms the Service is reachable and responding correctly. Other common status codes:
+The terminal displays the HTTP response from the Service. A status code of `200` confirms the Service is reachable and responding correctly. Other common status codes are the following:
 
 | Code  | Meaning                                                        |
 | ----- | -------------------------------------------------------------- |
