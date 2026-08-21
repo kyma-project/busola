@@ -1,14 +1,14 @@
 import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { Description } from 'shared/components/Description/Description';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
-import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
+import { matchBySelector } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'PodDisruptionBudgets';
 export const namespaced = true;
 export const apiGroup = 'policy';
 export const apiVersion = 'v1';
-export const category = predefinedCategories.configuration;
+export const category = predefinedCategories.workloads;
 
 export const List = lazyWithRetries(() => import('./PodDisruptionBudgetList'));
 export const Details = lazyWithRetries(
@@ -33,11 +33,7 @@ export const resourceGraphConfig = (): ResourceRelationConfig => ({
     {
       resource: { kind: 'Pod' },
       filter: (pdb, pod) =>
-        matchBySelector(pdb.spec.selector.matchLabels, pod.metadata.labels) ||
-        matchByOwnerReference({
-          resource: pod,
-          owner: pdb,
-        }),
+        matchBySelector(pdb.spec.selector.matchLabels, pod.metadata.labels),
     },
   ],
 });
