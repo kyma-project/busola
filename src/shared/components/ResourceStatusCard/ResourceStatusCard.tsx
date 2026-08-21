@@ -7,7 +7,6 @@ import { ReactNode } from 'react';
 type ResourceStatusCardProps = {
   statusBadge: ReactNode;
   customColumns: ReactNode;
-  customColumnsLong: ReactNode;
   conditions: ConditionItem[] | null;
   customConditionsComponent: ReactNode;
 };
@@ -15,7 +14,6 @@ type ResourceStatusCardProps = {
 export function ResourceStatusCard({
   statusBadge,
   customColumns,
-  customColumnsLong,
   conditions,
   customConditionsComponent,
 }: ResourceStatusCardProps) {
@@ -33,16 +31,7 @@ export function ResourceStatusCard({
         }
         className="resource-status-card"
       >
-        {customColumns && (
-          <div className="resource-status-card__details-grid sap-margin-small sap-margin-top-tiny">
-            {customColumns}
-          </div>
-        )}
-        {customColumnsLong && (
-          <div className="sap-margin-small sap-margin-top-tiny">
-            {customColumnsLong}
-          </div>
-        )}
+        {customColumns && customColumns}
         {conditions && (
           <>
             <div
