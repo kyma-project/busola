@@ -12,8 +12,6 @@ The terminal feature is disabled by default. To enable it, set the `TERMINAL` fe
 2. In the top navigation bar, choose the **Terminal** icon.
 3. The terminal panel opens at the bottom of the screen.
 
-You can resize the panel by dragging the separator between the terminal and the page content. To switch to full-screen mode, choose the **Full Screen** icon in the terminal header. To close the terminal, choose **X**.
-
 ## What Happens When You Open the Terminal
 
 Opening the terminal triggers the following sequence:
@@ -22,7 +20,7 @@ Opening the terminal triggers the following sequence:
 2. A terminal Pod is created in that namespace, using the `busola-dev-toolbox` container image.
 3. Your browser connects to the Pod's shell through a WebSocket proxy running in the Busola backend.
 
-> [!IMPORTANT]
+> [!WARNING]
 > When you close the terminal, the Pod is deleted. Any tools, files, or configurations you installed or created during the session are lost. The next time you open the terminal, the Pod starts fresh.
 
 ## Available Commands
@@ -37,12 +35,13 @@ The terminal provides a full interactive Bash shell (`/bin/bash`) inside the `bu
 
 ## Limitations
 
-| Limitation                 | Details                                                                                                                                                                 |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **No `kubectl` access**    | The terminal Pod has no Kubernetes ServiceAccount. `kubectl` commands are not available.                                                                                |
-| **Ephemeral session**      | Closing the terminal deletes the Pod. Everything installed or created in the session is lost. If you installed a tool in a previous session, you must install it again. |
-| **Single Pod per cluster** | Each user has one terminal Pod per cluster connection.                                                                                                                  |
-| **No persistence**         | Files and settings are not preserved between terminal sessions.                                                                                                         |
+The following table summarizes the key limitations of the terminal feature:
+
+| Limitation                 | Details                                                                                              |
+| -------------------------- | ---------------------------------------------------------------------------------------------------- | --- |
+| **No `kubectl` access**    | The terminal Pod has no Kubernetes ServiceAccount. `kubectl` commands are not available.             |
+| **Ephemeral session**      | Closing the terminal deletes the Pod. Files, tools, and settings are not preserved between sessions. |
+| **Single Pod per cluster** | Each user has one terminal Pod per cluster connection.                                               |     |
 
 ## Related Information
 
