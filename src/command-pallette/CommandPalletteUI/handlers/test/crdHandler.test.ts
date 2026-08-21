@@ -1,0 +1,300 @@
+import { describe, expect, it, vi } from 'vitest';
+
+import { crdHandler } from 'command-pallette/CommandPalletteUI/handlers/crdHandler';
+import { CommandPaletteContext } from 'command-pallette/CommandPalletteUI/types';
+import { K8sResource } from 'types';
+import { getSuggestionForSingleResource } from 'command-pallette/CommandPalletteUI/handlers/helpers';
+import { TFunction } from 'i18next';
+
+vi.mock('command-pallette/CommandPalletteUI/handlers/helpers', () => ({
+  getSuggestionForSingleResource: vi.fn().mockReturnValue('crd'),
+}));
+
+function fixCRD(name: string): K8sResource {
+  return {
+    metadata: {
+      name: name,
+      uid: '',
+      creationTimestamp: '',
+      resourceVersion: '',
+      labels: {},
+    },
+  };
+}
+
+const fakeTranslation: Record<string, string> = {
+  'custom-resource-definitions.title': 'TEST',
+};
+
+const fakeT = ((key: string) => fakeTranslation[key] ?? key) as TFunction;
+
+function fixContext({
+  tokens,
+  resourceCache = {},
+  fetch = (_: string) => new Promise(() => undefined),
+  updateResourceCache = (_: string, __: K8sResource[]) => {},
+}: {
+  tokens: string[];
+  resourceCache?: Record<string, K8sResource[]>;
+  fetch?: (a: string) => Promise<any>;
+  updateResourceCache?: (key: string, value: K8sResource[]) => void;
+}): CommandPaletteContext {
+  // @ts-expect-error Other fields are not needed
+  return {
+    resourceCache,
+    t: fakeT,
+    updateResourceCache,
+    tokens,
+    fetch,
+  };
+}
+describe('getAutocompleteEntries', () => {
+  it('AutoComplete given one token returns matched fullname', () => {
+    const ctx = fixContext({ tokens: ['c'] });
+
+    const result = crdHandler.getAutocompleteEntries(ctx);
+
+    expect(result).toHaveLength(1);
+    expect(result![0]).toBe('customresourcedefinitions ');
+  });
+
+  it('AutoComplete given one token returns plural shortname of crd', () => {
+    const ctx = fixContext({ tokens: ['cr'] });
+
+    const result = crdHandler.getAutocompleteEntries(ctx);
+
+    expect(result).toHaveLength(1);
+    expect(result![0]).toBe('crds');
+  });
+
+  it('AutoComplete given random token returns empty result', () => {
+    const ctx = fixContext({ tokens: ['anything'] });
+
+    const result = crdHandler.getAutocompleteEntries(ctx);
+
+    expect(result).toHaveLength(0);
+  });
+
+  it('AutoComplete given 3 tokens returns matched customresourcedefinition', () => {
+    const ctx = fixContext({
+      tokens: ['crd', '/', 'xyz'],
+      resourceCache: {
+        customresourcedefinitions: [
+          fixCRD('abcd'),
+          fixCRD('xyzResource'),
+          fixCRD('resoruceXyz'),
+        ],
+      },
+    });
+    const result = crdHandler.getAutocompleteEntries(ctx);
+
+    expect(result).toHaveLength(1);
+    expect(result![0]).toBe('crd xyzResource ');
+  });
+
+  it('AutoComplete given 2 tokens returns empty result', () => {
+    const ctx = fixContext({
+      tokens: ['crd', 'xyz'],
+      resourceCache: {
+        customresourcedefinitions: [
+          fixCRD('abcd'),
+          fixCRD('xyzResource'),
+          fixCRD('resoruceXyz'),
+        ],
+      },
+    });
+
+    const result = crdHandler.getAutocompleteEntries(ctx);
+
+    expect(result).toHaveLength(0);
+  });
+});
+
+describe('getSuggestion', () => {
+  it('Check if helper is called with proper arguments', () => {
+    const mockSuggestionForSingleResource = vi.mocked(
+      getSuggestionForSingleResource,
+    );
+
+    const ctx = fixContext({
+      tokens: ['cred'],
+      resourceCache: {
+        customresourcedefinitions: [fixCRD('test')],
+      },
+    });
+    const result = crdHandler.getSuggestion(ctx);
+
+    expect(result).toBe('crd');
+    expect(mockSuggestionForSingleResource).toHaveBeenCalledOnce();
+    expect(mockSuggestionForSingleResource).toHaveBeenCalledWith({
+      tokens: ['cred'],
+      resources: [fixCRD('test')],
+      resourceTypeNames: expect.arrayContaining([
+        'customresourcedefinitions',
+        'crd',
+        'crds',
+      ]),
+    });
+  });
+});
+
+describe('get createResults', () => {
+  it('createResults given one token returns matched result', () => {
+    const expectedTranslation = 'TEST';
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['c'],
+      resourceCache: {
+        customresourcedefinitions: [],
+      },
+    });
+    const result = crdHandler.createResults(ctx);
+
+    expect(result).toHaveLength(1);
+
+    const firstResult = result![0];
+    expect(firstResult.aliases).toStrictEqual(['crds']);
+    expect(firstResult.category).toEqual(
+      `configuration.title > ${expectedTranslation}`,
+    );
+    expect(firstResult.query).toEqual('crds');
+    expect(firstResult.label).toEqual(expectedTranslation);
+  });
+
+  it('createResults given type and name in tokens returns matched result', () => {
+    const expectedTranslation = 'TEST';
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['crd', '/', 'custom'],
+      resourceCache: {
+        customresourcedefinitions: [fixCRD('custom')],
+      },
+    });
+    const result = crdHandler.createResults(ctx);
+
+    expect(result).toHaveLength(1);
+
+    const firstResult = result![0];
+    expect(firstResult.category).toEqual(
+      `configuration.title > ${expectedTranslation}`,
+    );
+    expect(firstResult.query).toEqual('crds/custom');
+    expect(firstResult.label).toEqual('custom');
+    expect(firstResult.customActionText).toEqual(
+      'command-palette.item-actions.navigate',
+    );
+  });
+
+  it('createResults given type and delimeter in tokens returns matched 2 elements', () => {
+    const expectedTranslation = 'TEST';
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['crd', '/'],
+      resourceCache: {
+        customresourcedefinitions: [fixCRD('custom'), fixCRD('custom2')],
+      },
+    });
+    const result = crdHandler.createResults(ctx);
+
+    expect(result).toHaveLength(2);
+
+    const firstResult = result![0];
+    expect(firstResult.category).toEqual(
+      `configuration.title > ${expectedTranslation}`,
+    );
+    expect(firstResult.query).toEqual('crds/custom');
+    expect(firstResult.label).toEqual('custom');
+    expect(firstResult.customActionText).toEqual(
+      'command-palette.item-actions.navigate',
+    );
+
+    const secondResult = result![1];
+    expect(secondResult.category).toEqual(
+      `configuration.title > ${expectedTranslation}`,
+    );
+    expect(secondResult.query).toEqual('crds/custom2');
+    expect(secondResult.label).toEqual('custom2');
+    expect(secondResult.customActionText).toEqual(
+      'command-palette.item-actions.navigate',
+    );
+  });
+});
+
+describe('fetchCRDs', () => {
+  it('Fetch CRDs and update cache', async () => {
+    const cache = new Map<string, K8sResource[]>();
+    const updateResourceCache = (key: string, value: K8sResource[]) => {
+      cache.set(key, value);
+    };
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['crd', '/'],
+      resourceCache: {
+        customresourcedefinitions: [fixCRD('custom'), fixCRD('custom2')],
+      },
+      updateResourceCache,
+      fetch: vi.fn((url: string) => {
+        expect(url).toContain(
+          '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
+        );
+        return new Promise((resolve) =>
+          resolve({
+            json: () => {
+              return new Promise((resolve) =>
+                resolve({
+                  items: [fixCRD('test')],
+                }),
+              );
+            },
+          }),
+        );
+      }),
+    });
+
+    await crdHandler.fetchResources(ctx);
+
+    expect(ctx.fetch).toHaveResolved();
+    expect(cache).toHaveLength(1);
+    expect(cache.get('customresourcedefinitions')).toEqual([fixCRD('test')]);
+  });
+
+  it('Fetch CRDs do not fetch not related resources ', async () => {
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['random-crd'],
+      resourceCache: {
+        customresourcedefinitions: [fixCRD('custom'), fixCRD('custom2')],
+      },
+      fetch: vi.fn((_: string) => {
+        expect.fail('Fetch should not be called');
+      }),
+    });
+
+    await crdHandler.fetchResources(ctx);
+  });
+
+  it('Fetch CRDs fails and cache not updated', async () => {
+    const consoleMock = vi
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
+    const cache = new Map<string, K8sResource[]>();
+    const updateResourceCache = (key: string, value: K8sResource[]) => {
+      cache.set(key, value);
+    };
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['crd', '/'],
+      resourceCache: {
+        customresourcedefinitions: [fixCRD('custom'), fixCRD('custom2')],
+      },
+      updateResourceCache,
+      fetch: vi.fn((_: string) => {
+        return new Promise((_, reject) => reject(new Error('testing error')));
+      }),
+    });
+
+    await crdHandler.fetchResources(ctx);
+
+    await expect(ctx.fetch).rejects.toThrow();
+    expect(cache).toHaveLength(0);
+    expect(consoleMock).toHaveBeenCalledWith(
+      'Failed to fetch CRDs:',
+      new Error('testing error'),
+    );
+    consoleMock.mockRestore();
+  });
+});
