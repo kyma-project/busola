@@ -12,13 +12,7 @@ The terminal feature is disabled by default. To enable it, set the `TERMINAL` fe
 2. In the top navigation bar, choose the **Terminal** icon.
 3. The terminal panel opens at the bottom of the screen.
 
-## What Happens When You Open the Terminal
-
-Opening the terminal triggers the following sequence:
-
-1. Kyma dashboard creates the `busola-terminal` namespace in your cluster (if it does not exist yet).
-2. A terminal Pod is created in that namespace, using the `busola-dev-toolbox` container image.
-3. Your browser connects to the Pod's shell through a WebSocket proxy running in the Busola backend.
+Kyma dashboard creates the `busola-terminal` namespace in your cluster (if it does not exist yet) and starts a Pod using the `busola-dev-toolbox` container image.
 
 > [!WARNING]
 > When you close the terminal, the Pod is deleted. Any tools, files, or configurations you installed or created during the session are lost. The next time you open the terminal, the Pod starts fresh.
