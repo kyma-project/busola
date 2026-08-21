@@ -32,7 +32,7 @@ The terminal provides a full interactive Bash shell (`/bin/bash`) inside the `bu
 The following table summarizes the key limitations of the terminal feature:
 
 | Limitation                 | Details                                                                                              |
-| -------------------------- | ---------------------------------------------------------------------------------------------------- | --- |
+| -------------------------- | ---------------------------------------------------------------------------------------------------- |
 | **No `kubectl` access**    | The terminal Pod has no Kubernetes ServiceAccount. `kubectl` commands are not available.             |
 | **Ephemeral session**      | Closing the terminal deletes the Pod. Files, tools, and settings are not preserved between sessions. |
 | **Single Pod per cluster** | Each user has one terminal Pod per cluster connection.                                               |     |
