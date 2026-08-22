@@ -303,6 +303,10 @@ common:
     couldnt-fetch-resources: Couldn't fetch resources.
     error: Error
     generic: Invalid field data
+    idp-rejected-login: 'The identity provider rejected the login: {{error}}.'
+    login-error: 'The login attempt failed: {{error}}.'
+    login-failed: Login failed
+    login-loop-stopped: Login was stopped after several attempts failed in a row. Check the identity provider configuration and try again.
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions
     no-permissions-message: Contact your administrator to grant you access.
