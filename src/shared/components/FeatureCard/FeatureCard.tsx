@@ -61,6 +61,9 @@ const getIllustration = (
   }
 };
 
+const isBannerHidden = (hideBannerKey: string): boolean =>
+  localStorage.getItem(hideBannerKey) === 'true';
+
 export function FeatureCardBanner({
   id,
   title,
@@ -72,15 +75,16 @@ export function FeatureCardBanner({
   className = '',
 }: FeatureCardBannerProps) {
   const { t } = useTranslation();
-  const [hideBanner, setHideBanner] = useState(false);
   const hideBannerKey = `hideBanner${id}`;
+  const [hideBanner, setHideBanner] = useState(() =>
+    isBannerHidden(hideBannerKey),
+  );
   const theme = useAtomValue(themeAtom);
   const [prevId, setPrevId] = useState(id);
 
   if (id !== prevId) {
     setPrevId(id);
-    const storedHideValue = localStorage.getItem(hideBannerKey);
-    if (storedHideValue !== null) setHideBanner(storedHideValue === 'true');
+    setHideBanner(isBannerHidden(hideBannerKey));
   }
 
   if (!id || hideBanner) {
