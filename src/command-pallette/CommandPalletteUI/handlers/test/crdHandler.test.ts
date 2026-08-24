@@ -1,7 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { crdHandler } from 'command-pallette/CommandPalletteUI/handlers/crdHandler';
-import { CommandPaletteContext } from 'command-pallette/CommandPalletteUI/types';
+import {
+  CommandPaletteContext,
+  LOADING_INDICATOR,
+  Result,
+} from 'command-pallette/CommandPalletteUI/types';
 import { K8sResource } from 'types';
 import { getSuggestionForSingleResource } from 'command-pallette/CommandPalletteUI/handlers/helpers';
 import { TFunction } from 'i18next';
@@ -22,8 +26,9 @@ function fixCRD(name: string): K8sResource {
   };
 }
 
+const expectedCRDTitleTranslation = 'TEST';
 const fakeTranslation: Record<string, string> = {
-  'custom-resource-definitions.title': 'TEST',
+  'custom-resource-definitions.title': expectedCRDTitleTranslation,
 };
 
 const fakeT = ((key: string) => fakeTranslation[key] ?? key) as TFunction;
@@ -42,6 +47,27 @@ function fixContext({
     tokens,
   };
 }
+
+function expectLinkToListToHaveCorrectFixedProps(linkToList: Result) {
+  expect(linkToList.aliases).toStrictEqual(['crds']);
+  expect(linkToList.category).toEqual(
+    `configuration.title > ${expectedCRDTitleTranslation}`,
+  );
+  expect(linkToList.query).toEqual('crds');
+  expect(linkToList.label).toEqual(expectedCRDTitleTranslation);
+}
+
+function expectCustomLinkToListHaveProperProps(result: Result, name: string) {
+  expect(result.category).toEqual(
+    `configuration.title > ${expectedCRDTitleTranslation}`,
+  );
+  expect(result.query).toEqual(`crds/${name}`);
+  expect(result.label).toEqual(name);
+  expect(result.customActionText).toEqual(
+    'command-palette.item-actions.navigate',
+  );
+}
+
 describe('getAutocompleteEntries', () => {
   it('AutoComplete given one token returns matched fullname', () => {
     const ctx = fixContext({ tokens: ['c'] });
@@ -86,6 +112,16 @@ describe('getAutocompleteEntries', () => {
     expect(result![0]).toBe('crd xyzResource ');
   });
 
+  it('AutoComplete given 3 tokens and emptyResourceCache returns empty result', () => {
+    const ctx = fixContext({
+      tokens: ['crd', '/', 'xyz'],
+      resourceCache: {},
+    });
+    const result = crdHandler.getAutocompleteEntries(ctx);
+
+    expect(result).toHaveLength(0);
+  });
+
   it('AutoComplete given 2 tokens returns empty result', () => {
     const ctx = fixContext({
       tokens: ['crd', 'xyz'],
@@ -93,7 +129,7 @@ describe('getAutocompleteEntries', () => {
         customresourcedefinitions: [
           fixCRD('abcd'),
           fixCRD('xyzResource'),
-          fixCRD('resoruceXyz'),
+          fixCRD('resourceXyz'),
         ],
       },
     });
@@ -132,9 +168,8 @@ describe('getSuggestion', () => {
   });
 });
 
-describe('get createResults', () => {
-  it('createResults given one token returns matched result', () => {
-    const expectedTranslation = 'TEST';
+describe('createResults', () => {
+  it('createResults given one token returns fixed results with linkToList', () => {
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['c'],
       resourceCache: {
@@ -146,16 +181,10 @@ describe('get createResults', () => {
     expect(result).toHaveLength(1);
 
     const firstResult = result![0];
-    expect(firstResult.aliases).toStrictEqual(['crds']);
-    expect(firstResult.category).toEqual(
-      `configuration.title > ${expectedTranslation}`,
-    );
-    expect(firstResult.query).toEqual('crds');
-    expect(firstResult.label).toEqual(expectedTranslation);
+    expectLinkToListToHaveCorrectFixedProps(firstResult);
   });
 
   it('createResults given type and name in tokens returns matched result', () => {
-    const expectedTranslation = 'TEST';
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['crd', '/', 'custom'],
       resourceCache: {
@@ -167,18 +196,10 @@ describe('get createResults', () => {
     expect(result).toHaveLength(1);
 
     const firstResult = result![0];
-    expect(firstResult.category).toEqual(
-      `configuration.title > ${expectedTranslation}`,
-    );
-    expect(firstResult.query).toEqual('crds/custom');
-    expect(firstResult.label).toEqual('custom');
-    expect(firstResult.customActionText).toEqual(
-      'command-palette.item-actions.navigate',
-    );
+    expectCustomLinkToListHaveProperProps(firstResult, 'custom');
   });
 
   it('createResults given type and delimeter in tokens returns matched 2 elements', () => {
-    const expectedTranslation = 'TEST';
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['crd', '/'],
       resourceCache: {
@@ -190,23 +211,50 @@ describe('get createResults', () => {
     expect(result).toHaveLength(2);
 
     const firstResult = result![0];
-    expect(firstResult.category).toEqual(
-      `configuration.title > ${expectedTranslation}`,
-    );
-    expect(firstResult.query).toEqual('crds/custom');
-    expect(firstResult.label).toEqual('custom');
-    expect(firstResult.customActionText).toEqual(
-      'command-palette.item-actions.navigate',
-    );
+    expectCustomLinkToListHaveProperProps(firstResult, 'custom');
 
     const secondResult = result![1];
-    expect(secondResult.category).toEqual(
-      `configuration.title > ${expectedTranslation}`,
-    );
-    expect(secondResult.query).toEqual('crds/custom2');
-    expect(secondResult.label).toEqual('custom2');
-    expect(secondResult.customActionText).toEqual(
-      'command-palette.item-actions.navigate',
-    );
+    expectCustomLinkToListHaveProperProps(secondResult, 'custom2');
+  });
+
+  it('createResults given one unrelated token type returns nothing', () => {
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['unrelated-type'],
+      resourceCache: {
+        customresourcedefinitions: [],
+      },
+    });
+    const result = crdHandler.createResults(ctx);
+
+    expect(result).toHaveLength(0);
+  });
+
+  it('createResults given one unrelated token name returns nothing', () => {
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['crd', '/', 'unrelated-resource-name'],
+      resourceCache: {
+        customresourcedefinitions: [],
+      },
+    });
+    const result = crdHandler.createResults(ctx);
+
+    expect(result).toHaveLength(0);
+  });
+
+  it('createResults given empty cache returns loading status', () => {
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['crd', '/', 'unrelated-resource-name'],
+      resourceCache: {},
+    });
+    const result = crdHandler.createResults(ctx);
+
+    expect(result).toHaveLength(2);
+
+    const linkToList = result![0];
+    expectLinkToListToHaveCorrectFixedProps(linkToList);
+    const loadingIndicator = result![1];
+    expect(loadingIndicator).toEqual({
+      type: LOADING_INDICATOR,
+    });
   });
 });

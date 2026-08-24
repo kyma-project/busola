@@ -26,9 +26,9 @@ describe('getSuggestionForSingleResource', () => {
     expect(result).toBe('crd');
   });
 
-  it('Random tokens, no suggetions', () => {
+  it('Random tokens, no suggestions', () => {
     const ctx = {
-      tokens: ['random-toekns'],
+      tokens: ['random-tokens'],
       resourceTypeNames: ['crd'],
       resources: [],
     };
