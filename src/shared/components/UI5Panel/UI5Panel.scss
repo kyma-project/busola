@@ -12,6 +12,7 @@
 
 ui5-panel::part(header-wrapper) {
   top: 64px;
+  border-radius: var(--_ui5_panel_border_radius) 0;
 }
 
 .toolbar {
