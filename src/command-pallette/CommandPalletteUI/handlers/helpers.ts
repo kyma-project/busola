@@ -1,4 +1,4 @@
-import { ResourceTypeWithAliases } from './../../../shared/constants';
+import { ResourceTypeWithAliases } from 'shared/constants';
 import didYouMean from 'didyoumean';
 import pluralize from 'pluralize';
 import { K8sResource } from 'types';
