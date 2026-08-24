@@ -22,7 +22,7 @@ context('Test Pod Disruption Budgets', () => {
   });
 
   it('Creates a Pod Disruption Budget', () => {
-    cy.navigateTo('Configuration', 'Pod Disruption Budgets');
+    cy.navigateTo('Workloads', 'Pod Disruption Budgets');
 
     cy.openCreate();
 
