@@ -233,7 +233,7 @@ describe('createResults', () => {
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['crd', '/', 'unrelated-resource-name'],
       resourceCache: {
-        customresourcedefinitions: [],
+        customresourcedefinitions: [fixCRD('crd1')],
       },
     });
     const result = crdHandler.createResults(ctx);
