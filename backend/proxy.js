@@ -3,6 +3,7 @@ import { request as httpsRequest } from 'https';
 import { URL } from 'url';
 import { pipeline } from 'stream/promises';
 import { isPrivateAddressCached, isValidHost } from './utils/network-utils.js';
+import { proxyAgent } from './utils/https-agent.js';
 
 async function proxyHandler(req, res) {
   const targetUrl = req.query.url;
@@ -32,6 +33,7 @@ async function proxyHandler(req, res) {
       method: req.method,
       headers: { ...req.headers, host: parsedUrl.host },
       timeout: 30000,
+      agent: proxyAgent,
     };
 
     await new Promise((resolve, reject) => {
