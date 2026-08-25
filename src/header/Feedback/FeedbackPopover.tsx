@@ -34,39 +34,41 @@ export default function FeedbackPopover() {
 
   const { t } = useTranslation();
   const [feedbackOpen, setFeedbackOpen] = useState(false);
-  const [showNewIndicators, setShowNewIndicators] = useState(false);
+  const [cloudSurveyNew, setCloudSurveyNew] = useState(false);
+  const [kymaSurveyNew, setKymaSurveyNew] = useState(false);
   const showFeedback = getShowFeedbackStorageKey();
 
   useEffect(() => {
-    if (
+    const shouldShow =
       showFeedback === null ||
       showFeedback === FEEDBACK_SHOW_TYPE.SHOW ||
-      showFeedback === FEEDBACK_SHOW_TYPE.DISMISSED_ONCE
-    ) {
-      const timeoutId = setTimeout(() => {
-        setShowNewIndicators(true);
-      }, 0);
+      showFeedback === FEEDBACK_SHOW_TYPE.DISMISSED_ONCE;
 
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    } else {
-      const timeoutId = setTimeout(() => {
-        setShowNewIndicators(false);
-      }, 0);
+    const timeoutId = setTimeout(() => {
+      setCloudSurveyNew(shouldShow);
+      setKymaSurveyNew(shouldShow);
+    }, 0);
 
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    }
+    return () => clearTimeout(timeoutId);
   }, [showFeedback]);
 
-  const handleNewFeedbackViewed = () => {
-    if (showNewIndicators) {
-      setNoFeedbackShowNextTime();
-      setShowNewIndicators(false);
-    }
+  const handleCloudSurveyViewed = () => {
+    setCloudSurveyNew(false);
+    if (!kymaSurveyNew) setNoFeedbackShowNextTime();
   };
+
+  const handleKymaSurveyViewed = () => {
+    setKymaSurveyNew(false);
+    if (!cloudSurveyNew) setNoFeedbackShowNextTime();
+  };
+
+  const cloudSurveyActive =
+    isCloudServiceSurveyEnabled && !!cloudServiceSurveySignUpLink;
+  const newCount =
+    window.location.pathname !== '/clusters'
+      ? (cloudSurveyActive && cloudSurveyNew ? 1 : 0) +
+        (isKymaSurveyEnabled && kymaSurveyNew ? 1 : 0)
+      : 0;
 
   if (!isFeedbackEnabled) {
     return null;
@@ -80,15 +82,7 @@ export default function FeedbackPopover() {
         icon="feedback"
         text={t('feedback.feedback')}
         title={t('feedback.give-feedback')}
-        count={
-          showNewIndicators &&
-          isKymaSurveyEnabled &&
-          window.location.pathname !== '/clusters'
-            ? isCloudServiceSurveyEnabled
-              ? '2'
-              : '1'
-            : undefined
-        }
+        count={newCount > 0 ? String(newCount) : undefined}
       />
       {createPortal(
         <Popover
@@ -112,20 +106,18 @@ export default function FeedbackPopover() {
             </Title>
             <Text className="info-text">{t('feedback.intro.info')}</Text>
           </FlexBox>
-          {isCloudServiceSurveyEnabled && cloudServiceSurveySignUpLink && (
+          {cloudSurveyActive && (
             <CloudServiceSurveyCard
               signUpLink={cloudServiceSurveySignUpLink}
-              showNewIndicators={showNewIndicators}
-              onSignUp={handleNewFeedbackViewed}
+              showNewIndicators={cloudSurveyNew}
+              onSignUp={handleCloudSurveyViewed}
             />
           )}
           <KymaSurveyCard
             signUpLink={kymaSurveySignUpLink}
-            showNewIndicators={showNewIndicators}
-            emphasized={
-              !isCloudServiceSurveyEnabled || !cloudServiceSurveySignUpLink
-            }
-            onSignUp={handleNewFeedbackViewed}
+            showNewIndicators={kymaSurveyNew}
+            emphasized={!cloudSurveyActive}
+            onSignUp={handleKymaSurveyViewed}
           />
           {isKymaCompanionEnabled &&
             companionFeedbackLink &&
