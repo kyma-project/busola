@@ -18,7 +18,7 @@ const config__noFeedback = {
   },
 };
 
-const config__withCloudServiceSurvey = {
+const config__withKymaSurvey = {
   data: {
     config: JSON.stringify({
       config: {
@@ -29,7 +29,7 @@ const config__withCloudServiceSurvey = {
               link: 'https://www.google.com/',
             },
           },
-          CLOUD_SERVICE_SURVEY: {
+          KYMA_SURVEY: {
             isEnabled: true,
             config: {
               signUpLink: 'https://kyma-project.io/',
@@ -81,8 +81,8 @@ context('Test Feedback Popover', () => {
       .should('not.exist');
   });
 
-  it('Test feedback with cloud service survey', () => {
-    cy.intercept(configRequest, config__withCloudServiceSurvey);
+  it('Test feedback with Kyma survey', () => {
+    cy.intercept(configRequest, config__withKymaSurvey);
     cy.loginAndSelectCluster();
 
     cy.wait(2000);
@@ -104,7 +104,7 @@ context('Test Feedback Popover', () => {
       .should('be.visible')
       .should('contain.text', 'Hello,')
       .should('contain.text', "Tell us what's on your mind")
-      .should('contain.text', 'What services do you need?')
+      .should('contain.text', 'Help us make Kyma better!')
       .should('contain.text', 'New')
       .should('not.contain.text', 'Joule Feedback')
       .find('ui5-button[design="Emphasized"]')
