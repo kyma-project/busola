@@ -144,7 +144,7 @@ export default function FeedbackPopover() {
                 </Text>
                 <Button
                   accessibleRole="Link"
-                  accessibleName={t('feedback.cloud-services-survey.sign-up')}
+                  accessibleName={t('feedback.sign-up')}
                   accessibleDescription="Open in new tab link"
                   endIcon="inspect"
                   design={'Emphasized'}
@@ -187,7 +187,7 @@ export default function FeedbackPopover() {
             <Text className="info-text">{t('feedback.kyma-survey.info')}</Text>
             <Button
               accessibleRole="Link"
-              accessibleName={t('feedback.kyma-survey.sign-up')}
+              accessibleName={t('feedback.sign-up')}
               accessibleDescription="Open in new tab link"
               endIcon="inspect"
               design={
@@ -224,7 +224,7 @@ export default function FeedbackPopover() {
                 <Text className="info-text">{t('feedback.joule.info')}</Text>
                 <Button
                   accessibleRole="Link"
-                  accessibleName={t('feedback.give-feedback-joule')}
+                  accessibleName={t('feedback.give-feedback')}
                   accessibleDescription="Open in new tab link"
                   design="Default"
                   endIcon="inspect"
@@ -253,7 +253,7 @@ export default function FeedbackPopover() {
             <Text className="info-text">{t('feedback.kyma.info')}</Text>
             <Button
               accessibleRole="Link"
-              accessibleName={t('feedback.give-feedback-kyma')}
+              accessibleName={t('feedback.give-feedback')}
               accessibleDescription="Open in new tab link"
               endIcon="inspect"
               design={'Default'}
