@@ -112,7 +112,7 @@ export default function FeedbackPopover() {
             </Title>
             <Text className="info-text">{t('feedback.intro.info')}</Text>
           </FlexBox>
-          {!isCloudServiceSurveyEnabled && !cloudServiceSurveySignUpLink && (
+          {isCloudServiceSurveyEnabled && cloudServiceSurveySignUpLink && (
             <CloudServiceSurveyCard
               signUpLink={cloudServiceSurveySignUpLink}
               showNewIndicators={showNewIndicators}
