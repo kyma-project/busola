@@ -9,22 +9,11 @@ import {
 import { K8sResource } from 'types';
 import { getSuggestionForSingleResource } from 'command-pallette/CommandPalletteUI/handlers/helpers';
 import { TFunction } from 'i18next';
+import { fixCRD } from 'command-pallette/CommandPalletteUI/handlers/test/fixtures.test';
 
 vi.mock('command-pallette/CommandPalletteUI/handlers/helpers', () => ({
   getSuggestionForSingleResource: vi.fn().mockReturnValue('crd'),
 }));
-
-function fixCRD(name: string): K8sResource {
-  return {
-    metadata: {
-      name: name,
-      uid: '',
-      creationTimestamp: '',
-      resourceVersion: '',
-      labels: {},
-    },
-  };
-}
 
 const expectedCRDTitleTranslation = 'TEST';
 const fakeTranslation: Record<string, string> = {

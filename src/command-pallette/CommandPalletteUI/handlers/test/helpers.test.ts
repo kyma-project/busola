@@ -1,23 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
   autocompleteForResources,
-  getSuggestionForSingleResource,
-  findMatchingResourceType,
   findAllPossibleResourceTypes,
+  findMatchingResourceType,
+  getSuggestionForSingleResource,
 } from 'command-pallette/CommandPalletteUI/handlers/helpers';
-import { K8sResource } from 'types';
-
-function fixCRD(name: string): K8sResource {
-  return {
-    metadata: {
-      name: name,
-      uid: '',
-      creationTimestamp: '',
-      resourceVersion: '',
-      labels: {},
-    },
-  };
-}
+import { fixCRD } from 'command-pallette/CommandPalletteUI/handlers/test/fixtures.test';
 
 describe('getSuggestionForSingleResource', () => {
   it('Typo in tokens, matched short type', () => {
