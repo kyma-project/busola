@@ -5,7 +5,7 @@ import {
   findMatchingResourceType,
   getSuggestionForSingleResource,
 } from 'command-pallette/CommandPalletteUI/handlers/helpers';
-import { fixCRD } from 'command-pallette/CommandPalletteUI/handlers/test/fixtures.test';
+import { fixK8sResource } from 'command-pallette/CommandPalletteUI/handlers/test/fixtures.test';
 
 describe('getSuggestionForSingleResource', () => {
   it('Typo in tokens, matched short type', () => {
@@ -35,7 +35,7 @@ describe('getSuggestionForSingleResource', () => {
     const ctx = {
       tokens: ['crd', 'mycred'],
       resourceTypeNames: ['crd'],
-      resources: [fixCRD('my-crd')],
+      resources: [fixK8sResource('my-crd')],
     };
 
     const result = getSuggestionForSingleResource(ctx);
@@ -47,7 +47,7 @@ describe('getSuggestionForSingleResource', () => {
     const ctx = {
       tokens: ['crd', 'mycred'],
       resourceTypeNames: ['crd'],
-      resources: [fixCRD('my-crd'), fixCRD('other-crd')],
+      resources: [fixK8sResource('my-crd'), fixK8sResource('other-crd')],
     };
 
     const result = getSuggestionForSingleResource(ctx);
@@ -59,7 +59,7 @@ describe('getSuggestionForSingleResource', () => {
     const ctx = {
       tokens: ['crd', 'some-random-string'],
       resourceTypeNames: ['crd'],
-      resources: [fixCRD('my-crd')],
+      resources: [fixK8sResource('my-crd')],
     };
 
     const result = getSuggestionForSingleResource(ctx);
@@ -69,14 +69,14 @@ describe('getSuggestionForSingleResource', () => {
 });
 
 describe('autocompleteForResources', () => {
-  it('autocompleteForResources returns matched resource instance by alias', () => {
+  it('autocompleteForResources returns matched resource instance', () => {
     const ctx = {
       tokens: ['al', '/', 'pi'],
-      resources: [fixCRD('pipe')],
+      resources: [fixK8sResource('pipe')],
       resourceTypes: [
         {
-          resourceType: 'metal',
-          aliases: ['al', 'cu'],
+          resourceType: 'any-resource',
+          aliases: ['ab', 'xy'],
         },
       ],
     };
@@ -85,26 +85,10 @@ describe('autocompleteForResources', () => {
     expect(results).toEqual(['al pipe ']);
   });
 
-  it('autocompleteForResources returns matched resource instance', () => {
-    const ctx = {
-      tokens: ['any-resource', '/', 'pi'],
-      resources: [fixCRD('pipe')],
-      resourceTypes: [
-        {
-          resourceType: 'metal',
-          aliases: ['al', 'cu'],
-        },
-      ],
-    };
-    const results = autocompleteForResources(ctx);
-
-    expect(results).toEqual(['any-resource pipe ']);
-  });
-
-  it('autocompleteForResources returns results based on resource aliases', () => {
+  it('autocompleteForResources returns resource type based on resource aliases', () => {
     const ctx = {
       tokens: ['c'],
-      resources: [fixCRD('pipe')],
+      resources: [fixK8sResource('pipe')],
       resourceTypes: [
         {
           resourceType: 'metal',
@@ -117,10 +101,10 @@ describe('autocompleteForResources', () => {
     expect(results).toEqual(['cu']);
   });
 
-  it('autocompleteForResources returns nothing when there is not enoght tokens', () => {
+  it('autocompleteForResources returns nothing when there is not enough tokens', () => {
     const ctx = {
       tokens: ['c', '/'],
-      resources: [fixCRD('pipe')],
+      resources: [fixK8sResource('pipe')],
       resourceTypes: [
         {
           resourceType: 'metal',
@@ -197,5 +181,3 @@ describe('findAllPossibleResourceTypes', () => {
     expect(result).toEqual([resourceType]);
   });
 });
-
-//TODO: extractShortNames
