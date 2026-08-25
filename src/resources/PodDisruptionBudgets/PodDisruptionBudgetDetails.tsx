@@ -1,6 +1,6 @@
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ResourceDescription } from '.';
-import { PodDisruptionBudget } from './PodDisruptionBudgetList';
+import { PodDisruptionBudget } from './types';
 import PodDisruptionBudgetSpecification from './PodDisruptionBudgetSpecification';
 import PodDisruptionBudgetCreate from './PodDisruptionBudgetCreate';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';

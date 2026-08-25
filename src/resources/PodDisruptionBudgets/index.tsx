@@ -33,7 +33,7 @@ export const resourceGraphConfig = (): ResourceRelationConfig => ({
     {
       resource: { kind: 'Pod' },
       filter: (pdb, pod) =>
-        matchBySelector(pdb.spec.selector.matchLabels, pod.metadata.labels),
+        matchBySelector(pdb.spec?.selector?.matchLabels, pod.metadata?.labels),
     },
   ],
 });

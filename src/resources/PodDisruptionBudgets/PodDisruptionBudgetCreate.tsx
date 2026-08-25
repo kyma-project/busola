@@ -5,13 +5,14 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { cloneDeep } from 'lodash';
 import { createPodDisruptionBudgetTemplate } from './templates';
+import type { PodDisruptionBudget } from './types';
 
 interface PodDisruptionBudgetCreateProps {
   formElementRef: RefObject<HTMLFormElement | null>;
   onChange: FormEventHandler<HTMLElement>;
   setCustomValid: (valid: boolean) => void;
   resourceUrl: string;
-  resource?: any;
+  resource?: PodDisruptionBudget;
   [key: string]: any;
 }
 

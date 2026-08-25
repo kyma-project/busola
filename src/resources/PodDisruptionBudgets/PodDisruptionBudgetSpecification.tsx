@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Text } from '@ui5/webcomponents-react';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
-import { PodDisruptionBudget } from './PodDisruptionBudgetsList';
+import type { PodDisruptionBudget } from './types';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 export default function PodDisruptionBudgetSpecification({

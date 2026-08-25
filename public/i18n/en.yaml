@@ -1175,7 +1175,6 @@ persistent-volume-claims:
 pod-disruption-budgets:
   description: <0>Pod Disruption Budget (PDB)</0> is an object that defines the minimum number or percentage of Pods that must be available during voluntary disruptions.
   headers:
-    allowed-disruptions: Allowed Disruptions
     current-healthy: Current Healthy
     desired-healthy: Desired Healthy
     disruptions-allowed: Disruptions Allowed

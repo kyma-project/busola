@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { customColumns } from './PodDisruptionBudgetColumns';
 import { Button } from '@ui5/webcomponents-react';
 import pluralize from 'pluralize';
 import { useNavigate } from 'react-router';
@@ -7,12 +8,8 @@ import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useUrl } from 'hooks/useUrl';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import PodDisruptionBudgetCreate from './PodDisruptionBudgetCreate';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourceDescription } from '.';
-import type {
-  PodDisruptionBudgetsListProps,
-  PodDisruptionBudget,
-} from './PodDisruptionBudgetList';
+import type { PodDisruptionBudgetsListProps } from './types';
 
 export default function PodDisruptionBudgetsList(
   props: PodDisruptionBudgetsListProps,
@@ -21,35 +18,6 @@ export default function PodDisruptionBudgetsList(
   const navigate = useNavigate();
   const setLayoutColumn = useSetAtom(columnLayoutAtom);
   const { namespaceUrl } = useUrl();
-
-  const customColumns = [
-    {
-      header: t('pod-disruption-budgets.headers.min-available'),
-      value: (podDisruptionBudget: PodDisruptionBudget) =>
-        podDisruptionBudget.spec?.minAvailable ?? EMPTY_TEXT_PLACEHOLDER,
-    },
-    {
-      header: t('pod-disruption-budgets.headers.max-unavailable'),
-      value: (podDisruptionBudget: PodDisruptionBudget) =>
-        podDisruptionBudget.spec?.maxUnavailable ?? EMPTY_TEXT_PLACEHOLDER,
-    },
-    {
-      header: t('pod-disruption-budgets.headers.current-healthy'),
-      value: (podDisruptionBudget: PodDisruptionBudget) =>
-        podDisruptionBudget.status?.currentHealthy ?? EMPTY_TEXT_PLACEHOLDER,
-    },
-    {
-      header: t('pod-disruption-budgets.headers.desired-healthy'),
-      value: (podDisruptionBudget: PodDisruptionBudget) =>
-        podDisruptionBudget.status?.desiredHealthy ?? EMPTY_TEXT_PLACEHOLDER,
-    },
-    {
-      header: t('pod-disruption-budgets.headers.disruptions-allowed'),
-      value: (podDisruptionBudget: PodDisruptionBudget) =>
-        podDisruptionBudget.status?.disruptionsAllowed ??
-        EMPTY_TEXT_PLACEHOLDER,
-    },
-  ];
 
   const handleShowCreate = () => {
     setLayoutColumn({
@@ -98,7 +66,7 @@ export default function PodDisruptionBudgetsList(
       createResourceForm={PodDisruptionBudgetCreate}
       listHeaderActions={createButton}
       simpleEmptyListMessage
-      customColumns={customColumns}
+      customColumns={customColumns(t)}
     />
   );
 }

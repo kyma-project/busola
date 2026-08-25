@@ -1,7 +1,7 @@
 import { loadFile } from '../../support/loadFile';
 
 const PDB_NAME = `test-pdb-${Math.floor(Math.random() * 9999) + 1000}`;
-const FILE_NAME = 'test-pod-disruption-budgets.yaml'; //stworzyc// w calym pliku testowym sprawdzic pozostalosci limit ranges i puscic lokalnie
+const FILE_NAME = 'test-pod-disruption-budgets.yaml';
 
 async function loadPDB(name, namespace, fileName) {
   const resource = await loadFile(fileName);
@@ -40,6 +40,14 @@ context('Test Pod Disruption Budgets', () => {
     cy.contains(PDB_NAME);
 
     cy.contains('Minimum Available').parent().contains('1');
+
+    cy.contains('Current Healthy').parent().contains('1');
+
+    cy.contains('Desired Healthy').parent().contains('1');
+
+    cy.contains('Disruptions Allowed').parent().contains('0');
+
+    cy.contains('Expected Pods').parent().contains('1');
   });
 
   it('Checks the list view', () => {
