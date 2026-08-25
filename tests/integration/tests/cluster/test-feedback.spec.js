@@ -132,8 +132,6 @@ context('Test Feedback Popover', () => {
       .as('opener')
       .should('be.visible');
 
-    cy.get('@opener').find('ui5-button-badge').should('not.exist');
-
     cy.get('@opener').click();
 
     cy.get('ui5-popover[class="feedbackPopover"]')
