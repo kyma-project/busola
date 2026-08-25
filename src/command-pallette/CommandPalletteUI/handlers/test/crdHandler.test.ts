@@ -9,7 +9,7 @@ import {
 import { K8sResource } from 'types';
 import { getSuggestionForSingleResource } from 'command-pallette/CommandPalletteUI/handlers/helpers';
 import { TFunction } from 'i18next';
-import { fixK8sResource } from 'command-pallette/CommandPalletteUI/handlers/test/fixtures.test';
+import { fixK8sResource } from 'command-pallette/CommandPalletteUI/handlers/test/fixtures';
 
 vi.mock('command-pallette/CommandPalletteUI/handlers/helpers', () => ({
   getSuggestionForSingleResource: vi.fn().mockReturnValue('crd'),

@@ -5,7 +5,7 @@ import {
   findMatchingResourceType,
   getSuggestionForSingleResource,
 } from 'command-pallette/CommandPalletteUI/handlers/helpers';
-import { fixK8sResource } from 'command-pallette/CommandPalletteUI/handlers/test/fixtures.test';
+import { fixK8sResource } from 'command-pallette/CommandPalletteUI/handlers/test/fixtures';
 
 describe('getSuggestionForSingleResource', () => {
   it('Typo in tokens, matched short type', () => {
