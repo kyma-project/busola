@@ -15,6 +15,12 @@ import { CloudServiceSurveyCard } from './CloudServiceSurveyCard';
 import { JouleFeedbackCard } from './JouleFeedbackCard';
 import { KymaFeedbackCard } from './KymaFeedbackCard';
 import { KymaSurveyCard } from './KymaSurveyCard';
+import {
+  CLOUD_SERVICE_SURVEY_VIEWED_KEY,
+  KYMA_SURVEY_VIEWED_KEY,
+  isSurveyViewed,
+  markSurveyViewed,
+} from './surveyHelpers';
 
 export default function FeedbackPopover() {
   const { isEnabled: isFeedbackEnabled, config: kymaFeedbackConfig } =
@@ -45,19 +51,23 @@ export default function FeedbackPopover() {
       showFeedback === FEEDBACK_SHOW_TYPE.DISMISSED_ONCE;
 
     const timeoutId = setTimeout(() => {
-      setCloudSurveyNew(shouldShow);
-      setKymaSurveyNew(shouldShow);
+      setCloudSurveyNew(
+        shouldShow && !isSurveyViewed(CLOUD_SERVICE_SURVEY_VIEWED_KEY),
+      );
+      setKymaSurveyNew(shouldShow && !isSurveyViewed(KYMA_SURVEY_VIEWED_KEY));
     }, 0);
 
     return () => clearTimeout(timeoutId);
   }, [showFeedback]);
 
   const handleCloudSurveyViewed = () => {
+    markSurveyViewed(CLOUD_SERVICE_SURVEY_VIEWED_KEY);
     setCloudSurveyNew(false);
     if (!kymaSurveyNew) setNoFeedbackShowNextTime();
   };
 
   const handleKymaSurveyViewed = () => {
+    markSurveyViewed(KYMA_SURVEY_VIEWED_KEY);
     setKymaSurveyNew(false);
     if (!cloudSurveyNew) setNoFeedbackShowNextTime();
   };
