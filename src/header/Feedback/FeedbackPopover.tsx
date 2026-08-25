@@ -1,11 +1,4 @@
-import {
-  Button,
-  FlexBox,
-  ObjectStatus,
-  Popover,
-  Text,
-  Title,
-} from '@ui5/webcomponents-react';
+import { FlexBox, Popover, Text, Title } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
@@ -18,6 +11,10 @@ import {
   setNoFeedbackShowNextTime,
 } from 'components/KymaCompanion/components/JouleFeedbackDialog/helpers/feedbackViewHelpers';
 import { ShellBarAction } from '../ShellBarAction';
+import { CloudServiceSurveyCard } from './CloudServiceSurveyCard';
+import { JouleFeedbackCard } from './JouleFeedbackCard';
+import { KymaFeedbackCard } from './KymaFeedbackCard';
+import { KymaSurveyCard } from './KymaSurveyCard';
 
 export default function FeedbackPopover() {
   const { isEnabled: isFeedbackEnabled, config: kymaFeedbackConfig } =
@@ -115,160 +112,27 @@ export default function FeedbackPopover() {
             </Title>
             <Text className="info-text">{t('feedback.intro.info')}</Text>
           </FlexBox>
-          {!isCloudServiceSurveyEnabled ||
-            (!cloudServiceSurveySignUpLink && (
-              <FlexBox
-                alignItems="Start"
-                direction="Column"
-                justifyContent="Start"
-                gap={16}
-                className="sap-margin-bottom-medium"
-              >
-                <FlexBox
-                  direction="Row"
-                  alignItems="Center"
-                  justifyContent="Start"
-                  gap={12}
-                >
-                  <Title level="H6" size="H6">
-                    {t('feedback.cloud-services-survey.title')}
-                  </Title>
-                  {showNewIndicators && (
-                    <ObjectStatus state="Information" inverted>
-                      {t('feedback.new')}
-                    </ObjectStatus>
-                  )}
-                </FlexBox>
-                <Text className="info-text">
-                  {t('feedback.cloud-services-survey.info')}
-                </Text>
-                <Button
-                  accessibleRole="Link"
-                  accessibleName={t('feedback.sign-up')}
-                  accessibleDescription="Open in new tab link"
-                  endIcon="inspect"
-                  design={'Emphasized'}
-                  onClick={() => {
-                    handleNewFeedbackViewed();
-                    const newWindow = window.open(
-                      cloudServiceSurveySignUpLink,
-                      '_blank',
-                      'noopener, noreferrer',
-                    );
-                    if (newWindow) newWindow.opener = null;
-                  }}
-                >
-                  {t('feedback.sign-up')}
-                </Button>
-              </FlexBox>
-            ))}
-          <FlexBox
-            alignItems="Start"
-            direction="Column"
-            justifyContent="Start"
-            gap={16}
-            className="sap-margin-bottom-medium"
-          >
-            <FlexBox
-              direction="Row"
-              alignItems="Center"
-              justifyContent="Start"
-              gap={12}
-            >
-              <Title level="H6" size="H6">
-                {t('feedback.kyma-survey.title')}
-              </Title>
-              {showNewIndicators && (
-                <ObjectStatus state="Information" inverted>
-                  {t('feedback.new')}
-                </ObjectStatus>
-              )}
-            </FlexBox>
-            <Text className="info-text">{t('feedback.kyma-survey.info')}</Text>
-            <Button
-              accessibleRole="Link"
-              accessibleName={t('feedback.sign-up')}
-              accessibleDescription="Open in new tab link"
-              endIcon="inspect"
-              design={
-                !isCloudServiceSurveyEnabled || !cloudServiceSurveySignUpLink
-                  ? 'Emphasized'
-                  : 'Default'
-              }
-              onClick={() => {
-                handleNewFeedbackViewed();
-                const newWindow = window.open(
-                  kymaSurveySignUpLink,
-                  '_blank',
-                  'noopener, noreferrer',
-                );
-                if (newWindow) newWindow.opener = null;
-              }}
-            >
-              {t('feedback.sign-up')}
-            </Button>
-          </FlexBox>
+          {!isCloudServiceSurveyEnabled && !cloudServiceSurveySignUpLink && (
+            <CloudServiceSurveyCard
+              signUpLink={cloudServiceSurveySignUpLink}
+              showNewIndicators={showNewIndicators}
+              onSignUp={handleNewFeedbackViewed}
+            />
+          )}
+          <KymaSurveyCard
+            signUpLink={kymaSurveySignUpLink}
+            showNewIndicators={showNewIndicators}
+            emphasized={
+              !isCloudServiceSurveyEnabled || !cloudServiceSurveySignUpLink
+            }
+            onSignUp={handleNewFeedbackViewed}
+          />
           {isKymaCompanionEnabled &&
             companionFeedbackLink &&
             window.location.pathname !== '/clusters' && (
-              <FlexBox
-                alignItems="Start"
-                direction="Column"
-                justifyContent="Start"
-                gap={16}
-                className="sap-margin-bottom-medium"
-              >
-                <Title level="H6" size="H6">
-                  {t('feedback.joule.title')}
-                </Title>
-                <Text className="info-text">{t('feedback.joule.info')}</Text>
-                <Button
-                  accessibleRole="Link"
-                  accessibleName={t('feedback.give-feedback')}
-                  accessibleDescription="Open in new tab link"
-                  design="Default"
-                  endIcon="inspect"
-                  onClick={() => {
-                    const newWindow = window.open(
-                      companionFeedbackLink,
-                      '_blank',
-                      'noopener, noreferrer',
-                    );
-                    if (newWindow) newWindow.opener = null;
-                  }}
-                >
-                  {t('feedback.give-feedback')}
-                </Button>
-              </FlexBox>
+              <JouleFeedbackCard feedbackLink={companionFeedbackLink} />
             )}
-          <FlexBox
-            alignItems="Start"
-            direction="Column"
-            justifyContent="Start"
-            gap={16}
-          >
-            <Title level="H6" size="H6">
-              {t('feedback.kyma.title')}
-            </Title>
-            <Text className="info-text">{t('feedback.kyma.info')}</Text>
-            <Button
-              accessibleRole="Link"
-              accessibleName={t('feedback.give-feedback')}
-              accessibleDescription="Open in new tab link"
-              endIcon="inspect"
-              design={'Default'}
-              onClick={() => {
-                const newWindow = window.open(
-                  kymaFeedbackConfig.link,
-                  '_blank',
-                  'noopener, noreferrer',
-                );
-                if (newWindow) newWindow.opener = null;
-              }}
-            >
-              {t('feedback.give-feedback')}
-            </Button>
-          </FlexBox>
+          <KymaFeedbackCard feedbackLink={kymaFeedbackConfig.link} />
         </Popover>,
         document.body,
       )}
