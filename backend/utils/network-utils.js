@@ -6,6 +6,11 @@ const MAX_CACHE_SIZE = 1000;
 
 const dnsCache = new Map();
 
+export class PrivateIPUsedError extends Error {}
+
+export function clearCache() {
+  dnsCache.clear();
+}
 export function isLocalDomain(hostname) {
   const localDomains = ['localhost', '127.0.0.1', '::1'];
   const localSuffixes = ['.localhost', '.local', '.internal'];
@@ -44,19 +49,24 @@ export async function isPrivateAddressCached(hostname) {
   if (dnsCache.has(hostname)) {
     const entry = dnsCache.get(hostname);
 
-    dnsCache.delete(hostname);
-    dnsCache.set(hostname, entry);
-
     if (Date.now() - entry.timestamp < CACHE_TTL_MS) {
-      return entry.isPrivate;
+      return {
+        isPrivate: entry.isPrivate,
+        ipAddress: entry.ipAddress,
+        familyAddress: entry.familyAddress,
+      };
     }
   }
 
   // Perform Lookup
   let isPrivate = false;
+  let ipAddress = '';
+  let familyAddress = 0;
   try {
     const addresses = await dns.lookup(hostname, { all: true });
     for (const addr of addresses) {
+      ipAddress = addr.address;
+      familyAddress = addr.family;
       if (isPrivateIp(addr.address)) {
         isPrivate = true;
         break;
@@ -73,6 +83,20 @@ export async function isPrivateAddressCached(hostname) {
     dnsCache.delete(oldestKey);
   }
 
-  dnsCache.set(hostname, { timestamp: Date.now(), isPrivate });
-  return isPrivate;
+  dnsCache.set(hostname, {
+    timestamp: Date.now(),
+    isPrivate,
+    ipAddress,
+    familyAddress,
+  });
+  return { isPrivate, ipAddress, familyAddress };
+}
+
+export async function resolveOrBlockPrivateIpAddress(hostname, opts, callback) {
+  const result = await isPrivateAddressCached(hostname);
+  if (result.isPrivate) {
+    callback(new PrivateIPUsedError());
+  } else {
+    callback(null, result.ipAddress, result.familyAddress);
+  }
 }
