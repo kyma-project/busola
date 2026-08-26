@@ -266,7 +266,10 @@ describe('fetchCRDs', () => {
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['crd', '/'],
       resourceCache: {
-        customresourcedefinitions: [fixCRD('custom'), fixCRD('custom2')],
+        customresourcedefinitions: [
+          fixK8sResource('custom'),
+          fixK8sResource('custom2'),
+        ],
       },
       updateResourceCache,
       fetch: vi.fn((url: string) => {
@@ -278,7 +281,7 @@ describe('fetchCRDs', () => {
             json: () => {
               return new Promise((resolve) =>
                 resolve({
-                  items: [fixCRD('test')],
+                  items: [fixK8sResource('test')],
                 }),
               );
             },
@@ -291,14 +294,19 @@ describe('fetchCRDs', () => {
 
     expect(ctx.fetch).toHaveResolved();
     expect(cache).toHaveLength(1);
-    expect(cache.get('customresourcedefinitions')).toEqual([fixCRD('test')]);
+    expect(cache.get('customresourcedefinitions')).toEqual([
+      fixK8sResource('test'),
+    ]);
   });
 
   it('Fetch CRDs do not fetch not related resources ', async () => {
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['random-crd'],
       resourceCache: {
-        customresourcedefinitions: [fixCRD('custom'), fixCRD('custom2')],
+        customresourcedefinitions: [
+          fixK8sResource('custom'),
+          fixK8sResource('custom2'),
+        ],
       },
       fetch: vi.fn((_: string) => {
         expect.fail('Fetch should not be called');
@@ -319,7 +327,10 @@ describe('fetchCRDs', () => {
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['crd', '/'],
       resourceCache: {
-        customresourcedefinitions: [fixCRD('custom'), fixCRD('custom2')],
+        customresourcedefinitions: [
+          fixK8sResource('custom'),
+          fixK8sResource('custom2'),
+        ],
       },
       updateResourceCache,
       fetch: vi.fn((_: string) => {
