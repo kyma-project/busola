@@ -9,22 +9,11 @@ import {
 import { K8sResource } from 'types';
 import { getSuggestionForSingleResource } from 'command-pallette/CommandPalletteUI/handlers/helpers';
 import { TFunction } from 'i18next';
+import { fixK8sResource } from 'command-pallette/CommandPalletteUI/handlers/test/fixtures';
 
 vi.mock('command-pallette/CommandPalletteUI/handlers/helpers', () => ({
   getSuggestionForSingleResource: vi.fn().mockReturnValue('crd'),
 }));
-
-function fixCRD(name: string): K8sResource {
-  return {
-    metadata: {
-      name: name,
-      uid: '',
-      creationTimestamp: '',
-      resourceVersion: '',
-      labels: {},
-    },
-  };
-}
 
 const expectedCRDTitleTranslation = 'TEST';
 const fakeTranslation: Record<string, string> = {
@@ -100,9 +89,9 @@ describe('getAutocompleteEntries', () => {
       tokens: ['crd', '/', 'xyz'],
       resourceCache: {
         customresourcedefinitions: [
-          fixCRD('abcd'),
-          fixCRD('xyzResource'),
-          fixCRD('resoruceXyz'),
+          fixK8sResource('abcd'),
+          fixK8sResource('xyzResource'),
+          fixK8sResource('resoruceXyz'),
         ],
       },
     });
@@ -127,9 +116,9 @@ describe('getAutocompleteEntries', () => {
       tokens: ['crd', 'xyz'],
       resourceCache: {
         customresourcedefinitions: [
-          fixCRD('abcd'),
-          fixCRD('xyzResource'),
-          fixCRD('resourceXyz'),
+          fixK8sResource('abcd'),
+          fixK8sResource('xyzResource'),
+          fixK8sResource('resourceXyz'),
         ],
       },
     });
@@ -149,7 +138,7 @@ describe('getSuggestion', () => {
     const ctx = fixContext({
       tokens: ['cred'],
       resourceCache: {
-        customresourcedefinitions: [fixCRD('test')],
+        customresourcedefinitions: [fixK8sResource('test')],
       },
     });
     const result = crdHandler.getSuggestion(ctx);
@@ -158,7 +147,7 @@ describe('getSuggestion', () => {
     expect(mockSuggestionForSingleResource).toHaveBeenCalledOnce();
     expect(mockSuggestionForSingleResource).toHaveBeenCalledWith({
       tokens: ['cred'],
-      resources: [fixCRD('test')],
+      resources: [fixK8sResource('test')],
       resourceTypeNames: expect.arrayContaining([
         'customresourcedefinitions',
         'crd',
@@ -188,7 +177,7 @@ describe('createResults', () => {
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['crd', '/', 'custom'],
       resourceCache: {
-        customresourcedefinitions: [fixCRD('custom')],
+        customresourcedefinitions: [fixK8sResource('custom')],
       },
     });
     const result = crdHandler.createResults(ctx);
@@ -203,7 +192,10 @@ describe('createResults', () => {
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['crd', '/'],
       resourceCache: {
-        customresourcedefinitions: [fixCRD('custom'), fixCRD('custom2')],
+        customresourcedefinitions: [
+          fixK8sResource('custom'),
+          fixK8sResource('custom2'),
+        ],
       },
     });
     const result = crdHandler.createResults(ctx);
@@ -233,7 +225,7 @@ describe('createResults', () => {
     const ctx: CommandPaletteContext = fixContext({
       tokens: ['crd', '/', 'unrelated-resource-name'],
       resourceCache: {
-        customresourcedefinitions: [fixCRD('crd1')],
+        customresourcedefinitions: [fixK8sResource('crd1')],
       },
     });
     const result = crdHandler.createResults(ctx);

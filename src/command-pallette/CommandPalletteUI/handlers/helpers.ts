@@ -9,7 +9,7 @@ export function makeSuggestion(phrase: string, itemList: string[]): string {
   return Array.isArray(suggestions) ? suggestions[0] : suggestions;
 }
 
-export function toFullResourceType(
+export function findMatchingResourceType(
   resourceType: string,
   resources: ResourceTypeWithAliases[],
 ) {
@@ -19,7 +19,7 @@ export function toFullResourceType(
   return fullResourceType || resourceType;
 }
 
-export function toFullResourceTypeList(
+export function findAllPossibleResourceTypes(
   resourceType: string,
   resources: ResourceTypeWithAliases[],
 ) {
@@ -104,7 +104,10 @@ export function getApiPathForQuery(
   nodes: NavNode[],
   availableResourceTypes: ResourceTypeWithAliases[],
 ) {
-  const resourceType = toFullResourceType(tokens[0], availableResourceTypes);
+  const resourceType = findMatchingResourceType(
+    tokens[0],
+    availableResourceTypes,
+  );
   const navNode = findNavigationNode(resourceType, nodes);
 
   if (!navNode) return null;
