@@ -95,7 +95,11 @@ export async function isPrivateAddressCached(hostname) {
 export async function resolveOrBlockPrivateIpAddress(hostname, opts, callback) {
   const result = await isPrivateAddressCached(hostname);
   if (result.isPrivate) {
-    callback(new PrivateIPUsedError());
+    callback(
+      new PrivateIPUsedError(
+        `The provided hostname: ${hostname} is private IP`,
+      ),
+    );
   } else {
     callback(null, result.ipAddress, result.familyAddress);
   }
