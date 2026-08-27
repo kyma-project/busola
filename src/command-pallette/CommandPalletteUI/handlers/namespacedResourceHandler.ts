@@ -1,11 +1,11 @@
 import {
   makeSuggestion,
-  toFullResourceType,
+  findMatchingResourceType,
   autocompleteForResources,
   extractShortNames,
   findNavigationNode,
   getApiPathForQuery,
-  toFullResourceTypeList,
+  findAllPossibleResourceTypes,
   getShortAliases,
 } from './helpers';
 import { namespaceNativeResourceTypes as resourceTypes } from 'shared/constants';
@@ -23,7 +23,7 @@ function getAutocompleteEntries({
   namespace,
   resourceCache,
 }: CommandPaletteContext) {
-  const fullResourceType = toFullResourceType(tokens[0], resourceTypes);
+  const fullResourceType = findMatchingResourceType(tokens[0], resourceTypes);
   const resources = resourceCache[`${namespace}/${fullResourceType}`] || [];
 
   return autocompleteForResources({
@@ -45,7 +45,7 @@ function getSuggestion({
     resourceTypes.flatMap((n) => n.aliases),
   );
   if (name) {
-    const resourceType = toFullResourceType(
+    const resourceType = findMatchingResourceType(
       suggestedType || type,
       resourceTypes,
     );
@@ -97,7 +97,7 @@ async function fetchNamespacedResource(context: CommandPaletteContext) {
   if (!apiPath) {
     return;
   }
-  const resourceType = toFullResourceType(tokens[0], resourceTypes);
+  const resourceType = findMatchingResourceType(tokens[0], resourceTypes);
   const matchedNode = findNavigationNode(resourceType, namespaceNodes);
 
   if (!matchedNode) {
@@ -179,7 +179,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   }
 
   if (!delimiter) {
-    const resourceTypeList = toFullResourceTypeList(type, resourceTypes);
+    const resourceTypeList = findAllPossibleResourceTypes(type, resourceTypes);
     const results = resourceTypeList
       .map((resourceType) => {
         const matchedNode = findNavigationNode(resourceType, namespaceNodes);
@@ -194,7 +194,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     return results;
   }
 
-  const resourceType = toFullResourceType(type, resourceTypes);
+  const resourceType = findMatchingResourceType(type, resourceTypes);
   const matchedNode = findNavigationNode(resourceType, namespaceNodes);
 
   if (!matchedNode) {

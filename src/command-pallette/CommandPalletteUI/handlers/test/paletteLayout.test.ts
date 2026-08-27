@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { clusterResourceHandler } from '../clusterResourceHandler';
 import { namespacedResourceHandler } from '../namespacedResourceHandler';
 import { crHandler } from '../crHandler';
+import { nodesHandler } from '../nodesHandler';
 import { CommandPaletteContext } from '../../types';
 
 const baseContext = (
@@ -58,6 +59,23 @@ describe('command palette navigation layout', () => {
 
       expect(navigatedPath(results[0], navigate)).toBe(
         '/cluster/my-cluster/namespaces/my-ns',
+      );
+    });
+  });
+
+  describe('nodes (single-column by design)', () => {
+    it('opens node details with no layout param', () => {
+      const navigate = vi.fn();
+      const results = nodesHandler.createResults(
+        baseContext({
+          navigate,
+          tokens: ['nodes', '/', 'node-1'],
+          resourceCache: { nodes: [{ metadata: { name: 'node-1' } } as any] },
+        }),
+      )!;
+
+      expect(navigatedPath(results[0], navigate)).toBe(
+        '/cluster/my-cluster/overview/nodes/node-1',
       );
     });
   });

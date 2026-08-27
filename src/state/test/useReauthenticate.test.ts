@@ -4,9 +4,21 @@ import { MemoryRouter } from 'react-router';
 import { createElement, PropsWithChildren } from 'react';
 import { UserManager } from 'oidc-client-ts';
 import { getIntendedPath } from '../intendedPathAtom';
+import {
+  isAuthRedirectLoop,
+  registerAuthRedirect,
+} from '../utils/authRedirectLoopGuard';
 import { useReauthenticate } from '../useReauthenticate';
 
 const mockNavigate = vi.fn();
+
+const { notifyLoginFailureMock } = vi.hoisted(() => ({
+  notifyLoginFailureMock: vi.fn(),
+}));
+
+vi.mock('../useLoginFailureNotification', () => ({
+  useNotifyLoginFailure: () => notifyLoginFailureMock,
+}));
 
 vi.mock('react-router', async () => {
   const actual =
@@ -35,6 +47,7 @@ function makeUserManager(overrides: Partial<UserManager> = {}) {
 describe('useReauthenticate', () => {
   beforeEach(() => {
     mockNavigate.mockReset();
+    notifyLoginFailureMock.mockReset();
     sessionStorage.clear();
   });
 
@@ -52,6 +65,38 @@ describe('useReauthenticate', () => {
     expect(getIntendedPath()?.path).toBe('/namespaces/bar');
     expect(mockNavigate).not.toHaveBeenCalled();
     expect(notifyError).not.toHaveBeenCalled();
+  });
+
+  it('counts its redirects towards the loop guard', async () => {
+    const userManager = makeUserManager();
+    const { result } = renderHook(() => useReauthenticate(), {
+      wrapper: makeWrapper('/cluster/foo'),
+    });
+
+    await result.current(userManager);
+    await result.current(userManager);
+    expect(isAuthRedirectLoop()).toBe(false);
+    await result.current(userManager);
+    expect(isAuthRedirectLoop()).toBe(true);
+  });
+
+  it('stops and reports a failure instead of redirecting again once a loop is detected', async () => {
+    // A redirect loop is already in progress (API server keeps rejecting the token).
+    registerAuthRedirect();
+    registerAuthRedirect();
+    registerAuthRedirect();
+    expect(isAuthRedirectLoop()).toBe(true);
+
+    const userManager = makeUserManager();
+    const { result } = renderHook(() => useReauthenticate(), {
+      wrapper: makeWrapper('/cluster/foo/namespaces/bar'),
+    });
+
+    await result.current(userManager);
+
+    expect(userManager.signinRedirect).not.toHaveBeenCalled();
+    expect(notifyLoginFailureMock).toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith('/clusters');
   });
 
   it('falls back to the cluster list when no UserManager is available', async () => {
