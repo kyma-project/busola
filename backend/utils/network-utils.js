@@ -68,15 +68,12 @@ async function isPrivateAddressCached(hostname) {
   try {
     const addresses = await dns.lookup(hostname, { all: true });
     for (const addr of addresses) {
+      ipAddress = addr.address;
+      familyAddress = addr.family;
       if (isPrivateIp(addr.address)) {
         isPrivate = true;
         break;
       }
-    }
-    // Connect to the first resolved address we validated above.
-    if (addresses.length > 0) {
-      ipAddress = addresses[0].address;
-      familyAddress = addresses[0].family;
     }
   } catch (err) {
     // Fail closed (secure) if DNS fails
