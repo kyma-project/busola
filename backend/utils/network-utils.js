@@ -8,9 +8,6 @@ const dnsCache = new Map();
 
 export class PrivateIPUsedError extends Error {}
 
-export function clearCache() {
-  dnsCache.clear();
-}
 export function isLocalDomain(hostname) {
   const localDomains = ['localhost', '127.0.0.1', '::1'];
   const localSuffixes = ['.localhost', '.local', '.internal'];
@@ -44,10 +41,16 @@ export function isPrivateIp(ip) {
   return false;
 }
 
-export async function isPrivateAddressCached(hostname) {
+async function isPrivateAddressCached(hostname) {
   // Check Cache
   if (dnsCache.has(hostname)) {
     const entry = dnsCache.get(hostname);
+
+    /* When something is inserted into the map, the insertion order is remembered.
+   We move the most-recently-touched DNS entry to the end so it isn't removed
+   first when the cache is full. */
+    dnsCache.delete(hostname);
+    dnsCache.set(hostname, entry);
 
     if (Date.now() - entry.timestamp < CACHE_TTL_MS) {
       return {
@@ -93,14 +96,18 @@ export async function isPrivateAddressCached(hostname) {
 }
 
 export async function resolveOrBlockPrivateIpAddress(hostname, opts, callback) {
-  const result = await isPrivateAddressCached(hostname);
-  if (result.isPrivate) {
-    callback(
-      new PrivateIPUsedError(
-        `The provided hostname: ${hostname} is private IP`,
-      ),
-    );
-  } else {
-    callback(null, result.ipAddress, result.familyAddress);
+  try {
+    const result = await isPrivateAddressCached(hostname);
+    if (result.isPrivate) {
+      callback(
+        new PrivateIPUsedError(
+          `The provided hostname: ${hostname} is private IP`,
+        ),
+      );
+    } else {
+      callback(null, result.ipAddress, result.familyAddress);
+    }
+  } catch (err) {
+    callback(err);
   }
 }
