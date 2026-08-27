@@ -86,9 +86,6 @@ describe('useNonInteractiveOidcContexts', () => {
   });
 
   it('resolves the user via context.context.user, not by context name', async () => {
-    // context name is 'my-cluster', but the user ref is 'oidc-user'
-    // user 'my-cluster' has a token (no OIDC exec) — old buggy code would find this and skip
-    // user 'oidc-user' has a non-interactive OIDC issuer — new code correctly finds this
     mockFetch({ response_types_supported: ['id_token'] });
     const contexts = [
       { name: 'my-cluster', context: { cluster: 'c', user: 'oidc-user' } },
