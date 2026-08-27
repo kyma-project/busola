@@ -4,6 +4,7 @@ import {
   Title,
   RadioButton,
   MessageBox,
+  MessageStrip,
   Button,
   Text,
   Label,
@@ -35,6 +36,10 @@ export function ContextChooser({
   ...props
 }: ContextChooserProps) {
   const { t } = useTranslation();
+  const nonInteractive = useNonInteractiveOidcContexts(
+    resource?.contexts,
+    resource?.users,
+  );
 
   if (!Array.isArray(resource?.contexts)) {
     return '';
@@ -44,8 +49,19 @@ export function ContextChooser({
     <div className="add-cluster__content-container">
       <ResourceForm.Wrapper resource={resource} {...props}>
         <Title className="sap-margin-bottom-small" level="H5">
-          {t('clusters.wizard.provide-context')}
+          {t('clusters.messages.choose-cluster')}
         </Title>
+        {resource?.contexts?.find((context) =>
+          nonInteractive.has(context.name),
+        ) && (
+          <MessageStrip
+            hideCloseButton
+            design="Critical"
+            className="sap-margin-bottom-small"
+          >
+            {t('clusters.wizard.non-interactive-oidc')}
+          </MessageStrip>
+        )}
         <ResourceForm.FormField
           required
           value={chosenContext}
@@ -82,7 +98,6 @@ export function ContextButtons({
   setValue,
   setChosenContext,
 }: ContextButtonsProps) {
-  const { t } = useTranslation();
   const nonInteractive = useNonInteractiveOidcContexts(contexts, users);
 
   return (
@@ -99,7 +114,7 @@ export function ContextButtons({
       }}
     >
       {contexts?.map((context) => {
-        const isNonInteractive = nonInteractive.has(context.name);
+        if (nonInteractive.has(context.name)) return null;
         return (
           <ListItemCustom key={context.name} style={{}}>
             <div>
@@ -107,20 +122,13 @@ export function ContextButtons({
                 key={context.name}
                 name={context.name}
                 value={context.name}
-                disabled={isNonInteractive}
                 checked={chosenContext === context.name}
                 text={context.name}
                 onChange={() => {
-                  if (isNonInteractive) return;
                   setValue(context.name);
                   if (setChosenContext) setChosenContext(context.name);
                 }}
               />
-              {isNonInteractive && (
-                <div className="sap-margin-begin-medium sap-margin-bottom-small">
-                  <Text>{t('clusters.wizard.non-interactive-oidc')}</Text>
-                </div>
-              )}
               {users && (
                 <AuthContextData contextName={context.name} users={users} />
               )}
@@ -173,6 +181,17 @@ export function ContextChooserMessage({
         </Button>,
       ]}
     >
+      {contextState?.contexts?.find((context) =>
+        nonInteractive.has(context.name),
+      ) && (
+        <MessageStrip
+          hideCloseButton
+          design="Critical"
+          className="sap-margin-small"
+        >
+          {t('clusters.wizard.non-interactive-oidc')}
+        </MessageStrip>
+      )}
       <List
         onItemClick={(e) => {
           const contextElement = e?.detail?.item?.children?.[0]
@@ -183,28 +202,21 @@ export function ContextChooserMessage({
         }}
       >
         {contextState?.contexts?.map((context) => {
-          const isNonInteractive = nonInteractive.has(context.name);
+          if (nonInteractive.has(context.name)) return null;
           return (
-            <ListItemCustom key={context.name} style={{}}>
+            <ListItemCustom key={context.name}>
               <div>
                 <RadioButton
                   id={'context-chooser' + context.name}
                   key={context.name}
                   name={context.name}
                   value={context.name}
-                  disabled={isNonInteractive}
                   checked={chosenContext === context.name}
                   text={context.name}
                   onChange={() => {
-                    if (isNonInteractive) return;
                     setChosenContext(context.name);
                   }}
                 />
-                {isNonInteractive && (
-                  <div className="sap-margin-begin-medium sap-margin-bottom-small">
-                    <Text>{t('clusters.wizard.non-interactive-oidc')}</Text>
-                  </div>
-                )}
                 {contextState?.users && (
                   <AuthContextData
                     contextName={context?.name}
