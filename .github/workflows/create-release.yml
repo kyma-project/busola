@@ -94,13 +94,23 @@ jobs:
     if: ${{ github.event.inputs.name != '' }}
     steps:
       # Checkout the target busola-deploy repository on the dev branch
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.BUSOLA_DEPLOY_APP_ID }}
+          private-key: ${{ secrets.BUSOLA_DEPLOY_APP_PRIVATE_KEY }}
+          owner: kyma
+          repositories: busola-deploy
+          github-api-url: https://github.tools.sap/api/v3
+
       - name: Checkout busola-deploy repo
         uses: actions/checkout@v4
         with:
           repository: kyma/busola-deploy
           github-server-url: 'https://github.tools.sap'
           ref: dev
-          token: ${{ secrets.BUSOLA_DEPLOY_PAT }} # Needs write access
+          token: ${{ steps.app-token.outputs.token }}
 
       # Update the version part of the image tags in dev/main.tf
       - name: Update image versions in main.tf
@@ -113,7 +123,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.BUSOLA_DEPLOY_PAT }}
+          token: ${{ steps.app-token.outputs.token }}
           commit-message: 'chore: promote busola images to ${{ github.event.inputs.name }}'
           branch: promote-busola-images-${{ github.event.inputs.name }}
           title: 'chore: promote busola images to ${{ github.event.inputs.name }}'
