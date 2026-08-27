@@ -1,6 +1,7 @@
 import {
   Button,
   FlexBox,
+  Icon,
   ObjectStatus,
   Text,
   Title,
@@ -22,7 +23,7 @@ export function CloudServiceSurveyCard({
 
   return (
     <FlexBox
-      alignItems="Start"
+      alignItems="Stretch"
       direction="Column"
       justifyContent="Start"
       gap={16}
@@ -50,7 +51,6 @@ export function CloudServiceSurveyCard({
         accessibleRole="Link"
         accessibleName={t('feedback.sign-up')}
         accessibleDescription="Open in new tab link"
-        endIcon="inspect"
         design="Emphasized"
         onClick={() => {
           onSignUp();
@@ -63,6 +63,11 @@ export function CloudServiceSurveyCard({
         }}
       >
         {t('feedback.sign-up')}
+        <Icon
+          name="inspect"
+          className="sap-margin-begin-tiny"
+          style={{ color: 'inherit' }}
+        />
       </Button>
     </FlexBox>
   );

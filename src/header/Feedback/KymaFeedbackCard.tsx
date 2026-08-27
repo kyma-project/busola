@@ -1,4 +1,4 @@
-import { Button, FlexBox, Text, Title } from '@ui5/webcomponents-react';
+import { Button, FlexBox, Icon, Text, Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
@@ -10,7 +10,7 @@ export function KymaFeedbackCard({ feedbackLink }: Props) {
 
   return (
     <FlexBox
-      alignItems="Start"
+      alignItems="Stretch"
       direction="Column"
       justifyContent="Start"
       gap={16}
@@ -23,7 +23,6 @@ export function KymaFeedbackCard({ feedbackLink }: Props) {
         accessibleRole="Link"
         accessibleName={t('feedback.give-feedback')}
         accessibleDescription="Open in new tab link"
-        endIcon="inspect"
         design="Default"
         onClick={() => {
           const newWindow = window.open(
@@ -35,6 +34,11 @@ export function KymaFeedbackCard({ feedbackLink }: Props) {
         }}
       >
         {t('feedback.give-feedback')}
+        <Icon
+          name="inspect"
+          className="sap-margin-begin-tiny"
+          style={{ color: 'inherit' }}
+        />
       </Button>
     </FlexBox>
   );
