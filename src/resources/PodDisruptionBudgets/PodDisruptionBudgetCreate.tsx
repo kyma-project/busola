@@ -1,4 +1,4 @@
-import { useEffect, useState, FormEventHandler, RefObject } from 'react';
+import { useEffect, useState, RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue } from 'jotai';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -9,7 +9,7 @@ import type { PodDisruptionBudget } from './types';
 
 interface PodDisruptionBudgetCreateProps {
   formElementRef: RefObject<HTMLFormElement | null>;
-  onChange: FormEventHandler<HTMLElement>;
+  onChange: () => void;
   setCustomValid: (valid: boolean) => void;
   resourceUrl: string;
   resource?: PodDisruptionBudget;
