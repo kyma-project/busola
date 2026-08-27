@@ -6,6 +6,8 @@ const MAX_CACHE_SIZE = 1000;
 
 const dnsCache = new Map();
 
+export class PrivateIPUsedError extends Error {}
+
 export function isLocalDomain(hostname) {
   const localDomains = ['localhost', '127.0.0.1', '::1'];
   const localSuffixes = ['.localhost', '.local', '.internal'];
@@ -39,24 +41,35 @@ export function isPrivateIp(ip) {
   return false;
 }
 
-export async function isPrivateAddressCached(hostname) {
+async function isPrivateAddressCached(hostname) {
   // Check Cache
   if (dnsCache.has(hostname)) {
     const entry = dnsCache.get(hostname);
 
+    /* When something is inserted into the map, the insertion order is remembered.
+   We move the most-recently-touched DNS entry to the end so it isn't removed
+   first when the cache is full. */
     dnsCache.delete(hostname);
     dnsCache.set(hostname, entry);
 
     if (Date.now() - entry.timestamp < CACHE_TTL_MS) {
-      return entry.isPrivate;
+      return {
+        isPrivate: entry.isPrivate,
+        ipAddress: entry.ipAddress,
+        familyAddress: entry.familyAddress,
+      };
     }
   }
 
   // Perform Lookup
   let isPrivate = false;
+  let ipAddress = '';
+  let familyAddress = 0;
   try {
     const addresses = await dns.lookup(hostname, { all: true });
     for (const addr of addresses) {
+      ipAddress = addr.address;
+      familyAddress = addr.family;
       if (isPrivateIp(addr.address)) {
         isPrivate = true;
         break;
@@ -73,6 +86,34 @@ export async function isPrivateAddressCached(hostname) {
     dnsCache.delete(oldestKey);
   }
 
-  dnsCache.set(hostname, { timestamp: Date.now(), isPrivate });
-  return isPrivate;
+  dnsCache.set(hostname, {
+    timestamp: Date.now(),
+    isPrivate,
+    ipAddress,
+    familyAddress,
+  });
+  return { isPrivate, ipAddress, familyAddress };
+}
+
+export async function resolveOrBlockPrivateIpAddress(hostname, opts, callback) {
+  try {
+    const result = await isPrivateAddressCached(hostname);
+    if (result.isPrivate) {
+      callback(
+        new PrivateIPUsedError(
+          `The provided hostname: ${hostname} is private IP`,
+        ),
+      );
+    } else if (opts?.all) {
+      // With the all option set to true, the arguments for callback change to (err, addresses),
+      // with addresses being an array of objects with the properties address and family.
+      callback(null, [
+        { address: result.ipAddress, family: result.familyAddress },
+      ]);
+    } else {
+      callback(null, result.ipAddress, result.familyAddress);
+    }
+  } catch (err) {
+    callback(err);
+  }
 }
