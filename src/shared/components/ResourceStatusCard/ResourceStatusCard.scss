@@ -7,10 +7,12 @@
     flex-direction: row;
     align-items: center;
   }
+}
 
-  &__details-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
+ui5-form::part(column) {
+  padding: 0;
+}
+
+.text-with-padding {
+  padding-top: 0.25rem;
 }

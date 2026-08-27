@@ -1,18 +1,15 @@
 import { NavNode } from 'state/types';
 import {
   makeSuggestion,
-  toFullResourceType,
+  findMatchingResourceType,
   autocompleteForResources,
   extractShortNames,
   findNavigationNode,
   getApiPathForQuery,
-  toFullResourceTypeList,
+  findAllPossibleResourceTypes,
   getShortAliases,
 } from './helpers';
-import {
-  clusterNativeResourceTypes,
-  clusterNativeResourceTypes as resourceTypes,
-} from 'shared/constants';
+import { clusterNativeResourceTypes } from 'shared/constants';
 import {
   CommandPaletteContext,
   Handler,
@@ -26,13 +23,16 @@ function getAutocompleteEntries({
   tokens,
   resourceCache,
 }: CommandPaletteContext) {
-  const fullResourceType = toFullResourceType(tokens[0], resourceTypes);
+  const fullResourceType = findMatchingResourceType(
+    tokens[0],
+    clusterNativeResourceTypes,
+  );
   const resources = resourceCache[fullResourceType] || [];
 
   return autocompleteForResources({
     tokens,
     resources,
-    resourceTypes,
+    resourceTypes: clusterNativeResourceTypes,
   });
 }
 
@@ -43,13 +43,13 @@ function getSuggestion({
   const [type, , name] = tokens;
   const suggestedType = makeSuggestion(
     type,
-    resourceTypes.flatMap((n) => n.aliases),
+    clusterNativeResourceTypes.flatMap((n) => n.aliases),
   );
 
   if (name) {
-    const fullResourceType = toFullResourceType(
+    const fullResourceType = findMatchingResourceType(
       suggestedType || type,
-      resourceTypes,
+      clusterNativeResourceTypes,
     );
     const resourceNames = (resourceCache[fullResourceType] || [])?.map(
       (n) => n.metadata.name,
@@ -110,7 +110,10 @@ async function fetchClusterResources(context: CommandPaletteContext) {
     return;
   }
 
-  const resourceType = toFullResourceType(tokens[0], resourceTypes);
+  const resourceType = findMatchingResourceType(
+    tokens[0],
+    clusterNativeResourceTypes,
+  );
   const matchedNode = findNavigationNode(resourceType, clusterNodes);
 
   if (!matchedNode) {
@@ -142,7 +145,6 @@ function sendNamespaceSwitchMessage(
     );
   if (!matchedRoute) return;
 
-  //@ts-expect-error Property is accessible
   const resourceType = matchedRoute.params.resourceType || '';
 
   navigate(
@@ -215,7 +217,7 @@ function createAllResults(context: CommandPaletteContext) {
           clusterNode.aliases ??
           getShortAliases(
             clusterNode.resourceType,
-            resourceTypes,
+            clusterNativeResourceTypes,
             clusterNodes,
           ),
       };
@@ -248,7 +250,7 @@ function createSingleResult(
     },
     aliases:
       matchedNode.aliases ??
-      getShortAliases(resourceType, resourceTypes, clusterNodes),
+      getShortAliases(resourceType, clusterNativeResourceTypes, clusterNodes),
   };
 
   return linkToList;
@@ -273,7 +275,10 @@ function createResults(context: CommandPaletteContext): Result[] {
   }
 
   if (!delimiter) {
-    const resourceTypeList = toFullResourceTypeList(type, resourceTypes);
+    const resourceTypeList = findAllPossibleResourceTypes(
+      type,
+      clusterNativeResourceTypes,
+    );
 
     const results = resourceTypeList
       .map((resourceType) => {
@@ -288,7 +293,10 @@ function createResults(context: CommandPaletteContext): Result[] {
     return results ?? [];
   }
 
-  const resourceType = toFullResourceType(type, resourceTypes);
+  const resourceType = findMatchingResourceType(
+    type,
+    clusterNativeResourceTypes,
+  );
   const matchedNode = findNavigationNode(resourceType, clusterNodes);
 
   if (!matchedNode) {
@@ -400,7 +408,7 @@ export const clusterResourceHandler: Handler = {
   fetchResources: fetchClusterResources,
   createResults,
   getNavigationHelp: ({ clusterNodes }: CommandPaletteContext) =>
-    resourceTypes
+    clusterNativeResourceTypes
       .filter((rT) => findNavigationNode(rT.resourceType, clusterNodes))
       .map((rT) => ({ name: rT.resourceType, aliases: extractShortNames(rT) })),
 };
