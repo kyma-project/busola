@@ -26,14 +26,14 @@ describe('DNS Proxy Cache', () => {
     vi.spyOn(dns, 'lookup').mockResolvedValueOnce(localIpAddress);
 
     let callbackCalls = 0;
-    const callback = (result, ipAddress, familyAddress) => {
+    const callback = (err, ipAddress, familyAddress) => {
       callbackCalls++;
       if (mockedLookup.mock.calls.length === 1) {
-        expect(result).toBeNull();
+        expect(err).toBeNull();
         expect(ipAddress).toBe(internetIPAddress[0].address);
         expect(familyAddress).toBe(internetIPAddress[0].family);
       } else {
-        expect(result).toBeInstanceOf(PrivateIPUsedError);
+        expect(err).toBeInstanceOf(PrivateIPUsedError);
       }
     };
 
@@ -46,6 +46,27 @@ describe('DNS Proxy Cache', () => {
     expect(mockedLookup).toHaveBeenCalledWith(addressToCheck, { all: true });
     expect(mockedLookup).toHaveBeenCalledTimes(2);
     expect(callbackCalls).toBe(3);
+  });
+
+  it('resolveOrBlockPrivateIpAddress when opts.all is true, call callback with array', async () => {
+    const addressToCheck = 'all-ips.com';
+    vi.spyOn(dns, 'lookup').mockResolvedValueOnce(internetIPAddress);
+
+    let receivedErr = undefined;
+    let receivedAddresses;
+    const callback = (err, ipAddresses) => {
+      receivedErr = err;
+      receivedAddresses = ipAddresses;
+    };
+
+    await resolveOrBlockPrivateIpAddress(
+      addressToCheck,
+      { all: true },
+      callback,
+    );
+
+    expect(receivedErr).toBeNull();
+    expect(receivedAddresses).toEqual(internetIPAddress);
   });
 
   it('resolveOrBlockPrivateIpAddress when dns.lookup throws error, callback with error', async () => {
