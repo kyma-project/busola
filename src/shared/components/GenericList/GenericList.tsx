@@ -437,6 +437,7 @@ export const GenericList = ({
       testid={testid}
       className={className}
       accessibleName={`${title} panel`}
+      stickyHeader={!disableHiding}
     >
       <Table
         noData={
@@ -495,6 +496,7 @@ export const GenericList = ({
             columnWidths={columnWidths}
             disableHiding={disableHiding}
             noHideFields={noHideFields ?? []}
+            stickyHeader={!disableHiding}
           />
         }
       >
