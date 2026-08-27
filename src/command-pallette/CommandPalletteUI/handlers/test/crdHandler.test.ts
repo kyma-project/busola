@@ -25,15 +25,21 @@ const fakeT = ((key: string) => fakeTranslation[key] ?? key) as TFunction;
 function fixContext({
   tokens,
   resourceCache = {},
+  fetch = (_: string) => new Promise(() => undefined),
+  updateResourceCache = (_: string, __: K8sResource[]) => {},
 }: {
   tokens: string[];
   resourceCache?: Record<string, K8sResource[]>;
+  fetch?: (a: string) => Promise<any>;
+  updateResourceCache?: (key: string, value: K8sResource[]) => void;
 }): CommandPaletteContext {
   // @ts-expect-error Other fields are not needed
   return {
     resourceCache,
     t: fakeT,
+    updateResourceCache,
     tokens,
+    fetch,
   };
 }
 
@@ -248,5 +254,98 @@ describe('createResults', () => {
     expect(loadingIndicator).toEqual({
       type: LOADING_INDICATOR,
     });
+  });
+});
+
+describe('fetchCRDs', () => {
+  it('Fetch CRDs and update cache', async () => {
+    const cache = new Map<string, K8sResource[]>();
+    const updateResourceCache = (key: string, value: K8sResource[]) => {
+      cache.set(key, value);
+    };
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['crd', '/'],
+      resourceCache: {
+        customresourcedefinitions: [
+          fixK8sResource('custom'),
+          fixK8sResource('custom2'),
+        ],
+      },
+      updateResourceCache,
+      fetch: vi.fn((url: string) => {
+        expect(url).toContain(
+          '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
+        );
+        return new Promise((resolve) =>
+          resolve({
+            json: () => {
+              return new Promise((resolve) =>
+                resolve({
+                  items: [fixK8sResource('test')],
+                }),
+              );
+            },
+          }),
+        );
+      }),
+    });
+
+    await crdHandler.fetchResources(ctx);
+
+    expect(ctx.fetch).toHaveResolved();
+    expect(cache).toHaveLength(1);
+    expect(cache.get('customresourcedefinitions')).toEqual([
+      fixK8sResource('test'),
+    ]);
+  });
+
+  it('Fetch CRDs do not fetch not related resources ', async () => {
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['random-crd'],
+      resourceCache: {
+        customresourcedefinitions: [
+          fixK8sResource('custom'),
+          fixK8sResource('custom2'),
+        ],
+      },
+      fetch: vi.fn((_: string) => {
+        expect.fail('Fetch should not be called');
+      }),
+    });
+
+    await crdHandler.fetchResources(ctx);
+  });
+
+  it('Fetch CRDs fails and cache not updated', async () => {
+    const consoleMock = vi
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
+    const cache = new Map<string, K8sResource[]>();
+    const updateResourceCache = (key: string, value: K8sResource[]) => {
+      cache.set(key, value);
+    };
+    const ctx: CommandPaletteContext = fixContext({
+      tokens: ['crd', '/'],
+      resourceCache: {
+        customresourcedefinitions: [
+          fixK8sResource('custom'),
+          fixK8sResource('custom2'),
+        ],
+      },
+      updateResourceCache,
+      fetch: vi.fn((_: string) => {
+        return new Promise((_, reject) => reject(new Error('testing error')));
+      }),
+    });
+
+    await crdHandler.fetchResources(ctx);
+
+    await expect(ctx.fetch).rejects.toThrow();
+    expect(cache).toHaveLength(0);
+    expect(consoleMock).toHaveBeenCalledWith(
+      'Failed to fetch CRDs:',
+      new Error('testing error'),
+    );
+    consoleMock.mockRestore();
   });
 });
