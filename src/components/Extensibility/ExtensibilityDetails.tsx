@@ -167,7 +167,6 @@ export const ExtensibilityDetailsCore = ({
               .filter((def) => def.widget !== 'ConditionList')
               .map((def, i) => ({
                 header: widgetT(def),
-                fullWidth: def.fullWidth,
                 visibility: (resource) => prepareVisibility(def, resource),
                 value: (resource) => (
                   <Widget
