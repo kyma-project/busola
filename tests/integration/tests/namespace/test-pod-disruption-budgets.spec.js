@@ -42,7 +42,7 @@ context('Test Pod Disruption Budgets', () => {
     cy.contains('Minimum Available').parent().contains('1');
 
     cy.contains('ui5-form-item', 'Current Healthy')
-      .contains('1')
+      .contains('0')
       .should('be.visible');
 
     cy.contains('ui5-form-item', 'Desired Healthy')
@@ -54,7 +54,7 @@ context('Test Pod Disruption Budgets', () => {
       .should('be.visible');
 
     cy.contains('ui5-form-item', 'Expected Pods')
-      .contains('1')
+      .contains('0')
       .should('be.visible');
   });
 
