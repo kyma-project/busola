@@ -164,8 +164,8 @@ clusters:
     kubeconfig: Kubeconfig
     kubeconfig-provide: Provide Kubeconfig
     kubeconfig-upload: Drop a .kubeconfig file or click to
+    non-interactive-oidc: Some contexts from your kubeconfig were excluded from this list because their OIDC providers do not support interactive login.
     not-an-object: kubeconfig is not an object
-    provide-context: Provide Context
     review: Review
     storage: Privacy
     token-info: If you don't know how to get your token, ask your authentication provider.
