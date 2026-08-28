@@ -41,21 +41,21 @@ context('Test Pod Disruption Budgets', () => {
 
     cy.contains('Minimum Available').parent().contains('1');
 
-    cy.get('.page-header__column')
-      .should('contain.text', 'Current Healthy')
-      .contains('1');
+    cy.contains('ui5-form-item', 'Current Healthy')
+      .contains('1')
+      .should('be.visible');
 
-    cy.get('.page-header__column')
-      .should('contain.text', 'Desired Healthy')
-      .contains('1');
+    cy.contains('ui5-form-item', 'Desired Healthy')
+      .contains('1')
+      .should('be.visible');
 
-    cy.get('.page-header__column')
-      .should('contain.text', 'Disruptions Allowed')
-      .contains('0');
+    cy.contains('ui5-form-item', 'Disruptions Allowed')
+      .contains('0')
+      .should('be.visible');
 
-    cy.get('.page-header__column')
-      .should('contain.text', 'Expected Pods')
-      .contains('1');
+    cy.contains('ui5-form-item', 'Expected Pods')
+      .contains('1')
+      .should('be.visible');
   });
 
   it('Checks the list view', () => {
