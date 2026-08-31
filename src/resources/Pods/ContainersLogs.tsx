@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { saveAs } from 'file-saver';
 import {
   Button,
@@ -21,6 +21,7 @@ import { LogsPanel } from 'resources/Pods/LogsPanel';
 const HOUR_IN_SECONDS = 3600;
 const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
+const THRESHOLD = 50;
 
 interface ContainersLogsProps {
   namespace: string;
@@ -53,9 +54,50 @@ const ContainersLogs = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [showTimestamps, setShowTimestamps] = useState(false);
   const [reverseLogs, setReverseLogs] = useState(false);
-  const [logsToSave, setLogsToSave] = useState([]);
   const [sinceSeconds, setSinceSeconds] = useState(String(DEFAULT_TIMEFRAME));
+  const [displayData, setDisplayData] = useState<string[]>([]);
+  // The actual scrollable container lives inside ui5-dynamic-page's shadow DOM.
+  // We store it as a ref (for imperative DOM access) and track readiness via boolean
+  // state so that effects re-run when the container becomes available.
+  const scrollContainerRef = useRef<HTMLElement | null>(null);
+  const [scrollContainerReady, setScrollContainerReady] = useState(false);
   const selectedLogIndex = useRef(0);
+  const isAtNewestEdge = useRef(true);
+  const reverseLogsRef = useRef(reverseLogs);
+  const displayDataLengthRef = useRef(0);
+
+  const handleScrollContainerReady = useCallback(
+    (container: HTMLElement | null) => {
+      scrollContainerRef.current = container;
+      setScrollContainerReady(!!container);
+    },
+    [],
+  );
+
+  // Track whether the user is at the newest-logs edge (bottom in normal, top in reversed).
+  const handleScroll = useCallback(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    isAtNewestEdge.current = reverseLogs
+      ? el.scrollTop <= THRESHOLD
+      : el.scrollTop + el.clientHeight >= el.scrollHeight - THRESHOLD;
+  }, [reverseLogs]);
+
+  // Attach the scroll listener to the real scroll container whenever it changes.
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', handleScroll);
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, [scrollContainerReady, handleScroll]);
+
+  // When reverseLogs toggles: update the ref, re-enable auto-scroll, snap to new edge.
+  useEffect(() => {
+    reverseLogsRef.current = reverseLogs;
+    isAtNewestEdge.current = true;
+    const el = scrollContainerRef.current;
+    if (el) el.scrollTop = reverseLogs ? 0 : el.scrollHeight;
+  }, [reverseLogs, scrollContainerReady]);
 
   const logTimeframeOptions = [
     { text: '1 hour', key: String(HOUR_IN_SECONDS) },
@@ -68,13 +110,44 @@ const ContainersLogs = ({
   const url = `/api/v1/namespaces/${namespace}/pods/${podName}/log?container=${containerName}&follow=true&tailLines=1000&timestamps=true&sinceSeconds=${sinceSeconds}`;
   const streamData = useGetStream(url);
 
+  // On an explicit timeframe change reset the length threshold so the first arriving chunk
+  // is shown immediately, and re-enable auto-scroll.
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setLogsToSave(streamData.data || []);
-    }, 0);
+    displayDataLengthRef.current = 0;
+    isAtNewestEdge.current = true;
+  }, [sinceSeconds]);
 
+  // Gate displayData updates to prevent the DOM from shrinking during background reconnects.
+  //
+  // useGetStream resets data to [] every ~55 s (keep-alive reconnect). Passing that empty
+  // array to LogsPanel would clear the DOM and force the browser to clamp scrollTop to 0
+  // before any React effect can run, losing the user's scroll position irreversibly.
+  //
+  // Instead, skip empty resets and only switch to new data when:
+  //   - the user is tailing (isAtNewestEdge = true): show live updates immediately, or
+  //   - the new stream has caught back up to at least the previous length: the DOM won't
+  //     shrink, so the user's approximate scroll position is preserved.
+  useEffect(() => {
+    const newLength = streamData.data.length;
+    if (newLength === 0) return;
+    if (!isAtNewestEdge.current && newLength < displayDataLengthRef.current)
+      return;
+
+    displayDataLengthRef.current = newLength;
+    const snapshot = streamData.data;
+    const timeoutId = setTimeout(() => {
+      setDisplayData(snapshot);
+    }, 0);
     return () => clearTimeout(timeoutId);
   }, [streamData.data]);
+
+  // Auto-scroll to the newest-logs edge on each displayData update, but only if the user
+  // was already at that edge (i.e. tailing). If they scrolled away, leave them alone.
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el || !isAtNewestEdge.current) return;
+    el.scrollTop = reverseLogsRef.current ? 0 : el.scrollHeight;
+  }, [displayData, scrollContainerReady]);
 
   useEffect(() => {
     selectedLogIndex.current = 0;
@@ -114,7 +187,7 @@ const ContainersLogs = ({
 
     try {
       const file = new Blob(
-        logsToSave.map((log) => `${log}\n`),
+        displayData.map((log) => `${log}\n`),
         { type: 'text/plain' },
       );
       saveAs(file, `${podName}-${containerName}-${date}.txt`);
@@ -130,6 +203,7 @@ const ContainersLogs = ({
   return (
     <DynamicPageComponent
       title={containerName}
+      onScrollContainerReady={handleScrollContainerReady}
       content={
         <UI5Panel
           title={t('pods.labels.logs')}
@@ -157,23 +231,26 @@ const ContainersLogs = ({
               </Select>
               <Label>{t('pods.labels.show-timestamps')}</Label>
               <Switch
-                disabled={!logsToSave?.length}
+                disabled={!displayData.length}
                 onChange={onSwitchChange}
               />
               <Label>{t('pods.labels.reverse-logs')}</Label>
               <Switch
-                disabled={!logsToSave?.length}
+                disabled={!displayData.length}
                 onChange={onReverseChange}
               />
               <Button
-                disabled={!logsToSave?.length}
+                disabled={!displayData.length}
                 onClick={() => saveToFile(podName, containerName)}
               >
                 {t('pods.labels.save-to-file')}
               </Button>
               <SearchInput
-                disabled={!logsToSave?.length}
+                disabled={!displayData.length}
                 entriesKind={'Logs'}
+                filteredEntries={[]}
+                suggestionProperties={[]}
+                allowSlashShortcut={false}
                 searchQuery={searchQuery}
                 handleQueryChange={setSearchQuery}
                 showSuggestion={false}
@@ -184,7 +261,7 @@ const ContainersLogs = ({
         >
           <div className="logs-panel-body">
             <LogsPanel
-              streamData={streamData}
+              streamData={{ data: displayData, error: streamData.error }}
               containerName={containerName}
               searchQuery={searchQuery}
               reverseLogs={reverseLogs}
