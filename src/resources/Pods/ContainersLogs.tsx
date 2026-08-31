@@ -107,7 +107,13 @@ const ContainersLogs = ({
     { text: 'all', key: String(MAX_TIMEFRAME_IN_SECONDS) },
   ];
 
-  const url = `/api/v1/namespaces/${namespace}/pods/${podName}/log?container=${containerName}&follow=true&tailLines=1000&timestamps=true&sinceSeconds=${sinceSeconds}`;
+  // When a specific time window is selected, sinceSeconds already limits the volume so
+  // tailLines is omitted
+  // tailLines is only applied for the "all" case to avoid streaming the
+  // entire pod lifetime on initial load.
+  const tailLinesParam =
+    sinceSeconds === String(MAX_TIMEFRAME_IN_SECONDS) ? '&tailLines=1000' : '';
+  const url = `/api/v1/namespaces/${namespace}/pods/${podName}/log?container=${containerName}&follow=true${tailLinesParam}&timestamps=true&sinceSeconds=${sinceSeconds}`;
   const streamData = useGetStream(url);
 
   // On an explicit timeframe change reset the length threshold so the first arriving chunk
