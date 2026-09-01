@@ -709,6 +709,9 @@ extensibility:
     summary: Summary
     upload: Upload
 feedback:
+  cloud-services-survey:
+    info: Do you rely on hyperscaler services in your work? Help us decide what Cloud Manager should support next.
+    title: What services do you need?
   feedback: Feedback
   give-feedback: Give Feedback
   intro:
@@ -720,7 +723,11 @@ feedback:
   kyma:
     info: Your opinion matters. Share your thoughts with us at any time!
     title: Kyma Dashboard Feedback
+  kyma-survey:
+    info: Talk to us to help us understand how you use Kyma and what improvements would make your life easier.
+    title: Help us make Kyma better!
   new: New
+  sign-up: Sign Up
 gardener:
   headers:
     provider: Provider
