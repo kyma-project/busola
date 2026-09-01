@@ -56,15 +56,16 @@ const ContainersLogs = ({
   const [reverseLogs, setReverseLogs] = useState(false);
   const [sinceSeconds, setSinceSeconds] = useState(String(DEFAULT_TIMEFRAME));
   const [displayData, setDisplayData] = useState<string[]>([]);
-  // The actual scrollable container lives inside ui5-dynamic-page's shadow DOM.
-  // We store it as a ref (for imperative DOM access) and track readiness via boolean
-  // state so that effects re-run when the container becomes available.
   const scrollContainerRef = useRef<HTMLElement | null>(null);
   const [scrollContainerReady, setScrollContainerReady] = useState(false);
   const selectedLogIndex = useRef(0);
   const isAtNewestEdge = useRef(true);
   const reverseLogsRef = useRef(reverseLogs);
   const displayDataLengthRef = useRef(0);
+  // Distinguish the initial mount from a real user-initiated timeframe change so we can
+  // skip the scroll-to-top logic on first render (auto-scroll to bottom is the right
+  // default there).
+  const isInitialTimeframe = useRef(true);
 
   const handleScrollContainerReady = useCallback(
     (container: HTMLElement | null) => {
@@ -107,28 +108,27 @@ const ContainersLogs = ({
     { text: 'all', key: String(MAX_TIMEFRAME_IN_SECONDS) },
   ];
 
-  // When a specific time window is selected, sinceSeconds already limits the volume so
-  // tailLines is omitted
-  // tailLines is only applied for the "all" case to avoid streaming the
-  // entire pod lifetime on initial load.
   const tailLinesParam =
     sinceSeconds === String(MAX_TIMEFRAME_IN_SECONDS) ? '&tailLines=1000' : '';
   const url = `/api/v1/namespaces/${namespace}/pods/${podName}/log?container=${containerName}&follow=true${tailLinesParam}&timestamps=true&sinceSeconds=${sinceSeconds}`;
   const streamData = useGetStream(url);
 
-  // On an explicit timeframe change reset the length threshold so the first arriving chunk
-  // is shown immediately, and re-enable auto-scroll.
+  // On an explicit timeframe change: reset the length threshold so the first arriving
+  // chunk is shown immediately, then scroll to the top so controls stay in view.
+  // On the initial mount we skip the scroll-to-top so the first load still auto-scrolls
+  // to the newest logs.
   useEffect(() => {
     displayDataLengthRef.current = 0;
-    isAtNewestEdge.current = true;
+    if (isInitialTimeframe.current) {
+      isInitialTimeframe.current = false;
+      return;
+    }
+    isAtNewestEdge.current = false;
+    const el = scrollContainerRef.current;
+    if (el) el.scrollTop = 0;
   }, [sinceSeconds]);
 
   // Gate displayData updates to prevent the DOM from shrinking during background reconnects.
-  //
-  // useGetStream resets data to [] every ~55 s (keep-alive reconnect). Passing that empty
-  // array to LogsPanel would clear the DOM and force the browser to clamp scrollTop to 0
-  // before any React effect can run, losing the user's scroll position irreversibly.
-  //
   // Instead, skip empty resets and only switch to new data when:
   //   - the user is tailing (isAtNewestEdge = true): show live updates immediately, or
   //   - the new stream has caught back up to at least the previous length: the DOM won't
