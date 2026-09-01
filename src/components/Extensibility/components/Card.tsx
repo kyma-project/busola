@@ -42,7 +42,6 @@ export function CardWidget({
                 structure={def}
                 schema={schema}
                 inlineRenderer={InlineWidget}
-                inlineContext={true}
                 embedResource={embedResource}
                 {...props}
               />

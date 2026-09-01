@@ -140,7 +140,6 @@ export const ExtensibilityDetailsCore = ({
                   schema={schema}
                   dataSources={dataSources}
                   originalResource={resource}
-                  inlineContext={true}
                 />
               ),
             }))
@@ -168,7 +167,6 @@ export const ExtensibilityDetailsCore = ({
               .filter((def) => def.widget !== 'ConditionList')
               .map((def, i) => ({
                 header: widgetT(def),
-                fullWidth: def.fullWidth,
                 visibility: (resource) => prepareVisibility(def, resource),
                 value: (resource) => (
                   <Widget

@@ -142,8 +142,7 @@ export function ResourceComponent({
       ).then((res) => {
         const customCols = res
           .filter(Boolean)
-          ?.filter((col) => !col?.conditionComponent)
-          ?.filter((col) => !col?.fullWidth);
+          ?.filter((col) => !col?.conditionComponent);
         setFilteredStatusColumns(customCols as CustomColumn[]);
       });
     }
