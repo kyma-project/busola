@@ -89,3 +89,7 @@ config:
       isEnabled: true
     SSO_LOGIN:
       isEnabled: false
+    TERMINAL:
+      isEnabled: false
+      config:
+        image: europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest
