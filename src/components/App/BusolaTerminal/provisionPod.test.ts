@@ -116,6 +116,25 @@ describe('provisionPod', () => {
     expect(podCall?.[0].init.body).toContain('my-registry/dev:1.2.3');
   });
 
+  it('sets PROMPT_COMMAND so the prompt never appears on the same line as partial output', async () => {
+    const fetchFn = podFetch('Running');
+    await provisionPod({
+      fetchFn: fetchFn as any,
+      podName: POD,
+      image: 'i',
+      abortController,
+    });
+    const podCall = fetchFn.mock.calls.find(([arg]: any) =>
+      arg.relativeUrl.endsWith('/pods'),
+    );
+    const body = JSON.parse(podCall?.[0].init.body);
+    const env: { name: string; value: string }[] =
+      body.spec.containers[0].env ?? [];
+    const promptCommand = env.find((e) => e.name === 'PROMPT_COMMAND');
+    expect(promptCommand).toBeDefined();
+    expect(promptCommand?.value).toContain('\\r');
+  });
+
   it('tolerates a 409 when the namespace or pod already exists', async () => {
     const conflict = new HttpError('Conflict', 409, 409);
     const fetchFn = vi.fn(({ init }: any) => {
