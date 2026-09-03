@@ -33,7 +33,7 @@ export const ignoreConsoleWarns = (patterns) => {
 ignoreConsoleErrors(['2']);
 
 // Suppress third-party warnings that are not actionable in tests
-ignoreConsoleWarns(['Lit is in dev mode']);
+ignoreConsoleWarns(['Lit is in dev mode', '[LocaleData]']);
 
 // Mock IntersectionObserver
 class IntersectionObserver {

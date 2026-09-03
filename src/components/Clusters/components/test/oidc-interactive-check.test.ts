@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
+import { act } from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
 import {
   isOidcInteractive,
@@ -198,7 +199,9 @@ describe('useNonInteractiveOidcContexts', () => {
       useNonInteractiveOidcContexts(contexts, users as any),
     );
     // Allow async operations to settle; the set should remain empty
-    await new Promise((r) => setTimeout(r, 50));
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 50));
+    });
     expect(result.current.has('ctx')).toBe(false);
   });
 });
