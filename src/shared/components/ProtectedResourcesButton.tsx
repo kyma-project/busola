@@ -93,7 +93,16 @@ export const ProtectedResourceWarning = ({
           setPopoverMessage(message);
         }}
         design="Transparent"
+        icon={withText ? undefined : 'locked'}
         accessibleName={t('common.protected-resource')}
+        style={
+          !withText
+            ? ({
+                '--sapButton_Lite_TextColor': 'var(--sapCriticalColor)',
+                '--sapButton_Lite_Hover_TextColor': 'var(--sapCriticalColor)',
+              } as never)
+            : undefined
+        }
       >
         {withText ? (
           <ObjectStatus
@@ -104,13 +113,7 @@ export const ProtectedResourceWarning = ({
           >
             {t('common.protected-resource')}
           </ObjectStatus>
-        ) : (
-          <Icon
-            design="Critical"
-            name="locked"
-            style={{ marginTop: '0.125rem' }}
-          />
-        )}
+        ) : null}
       </Button>
       {createPortal(
         <Popover
