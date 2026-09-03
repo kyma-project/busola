@@ -1,3 +1,6 @@
+import { describe, it, expect } from 'vitest';
+import { ActiveClusterState } from 'state/clusterAtom';
+import { SsoDataState } from 'state/ssoDataAtom';
 import { createAuthHeaders, createHeaders } from '../createHeaders';
 
 const cluster = {
@@ -9,7 +12,7 @@ const cluster = {
       },
     },
   },
-};
+} as unknown as ActiveClusterState;
 
 describe('createAuthHeaders', () => {
   it('builds a bearer header from a token', () => {
@@ -41,7 +44,7 @@ describe('createHeaders', () => {
   it('merges auth, SSO, cluster URL and CA data', () => {
     const headers = createHeaders({ token: 'my-token' }, cluster, {
       id_token: 'sso-token',
-    });
+    } as SsoDataState);
 
     expect(headers).toEqual({
       'X-K8s-Authorization': 'Bearer my-token',
@@ -62,7 +65,10 @@ describe('createHeaders', () => {
   });
 
   it('leaves cluster headers undefined when no cluster is set', () => {
-    const headers = createHeaders({ token: 'my-token' }, null, null);
+    const headers = createHeaders({ token: 'my-token' }, null, null) as Record<
+      string,
+      string
+    >;
 
     expect(headers['X-Cluster-Url']).toBeUndefined();
     expect(headers['X-Cluster-Certificate-Authority-Data']).toBeUndefined();
