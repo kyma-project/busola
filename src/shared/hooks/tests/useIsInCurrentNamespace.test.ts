@@ -1,6 +1,11 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
+import { K8sResource } from 'types';
 
-const state = vi.hoisted(() => ({ nodes: [], namespace: '' }));
+const state = vi.hoisted(() => ({
+  nodes: [] as Array<{ resourceType: string; namespaced: boolean }>,
+  namespace: '',
+}));
 
 vi.mock('state/navigation/allNodesAtom', () => ({
   allNodesAtomSync: 'ALL_NODES_ATOM',
@@ -9,17 +14,18 @@ vi.mock('state/activeNamespaceIdAtom', () => ({
   activeNamespaceIdAtom: 'ACTIVE_NAMESPACE_ATOM',
 }));
 vi.mock('jotai', () => ({
-  useAtomValue: (atom) =>
+  useAtomValue: (atom: unknown) =>
     atom === 'ALL_NODES_ATOM' ? state.nodes : state.namespace,
 }));
 
 // Imported after the mocks are registered.
 import { useIsInCurrentNamespace } from '../useIsInCurrentNamespace';
 
-const pod = (namespace) => ({
-  kind: 'Pod',
-  metadata: { name: 'p', namespace },
-});
+const pod = (namespace?: string) =>
+  ({
+    kind: 'Pod',
+    metadata: { name: 'p', namespace },
+  }) as K8sResource;
 
 beforeEach(() => {
   state.nodes = [{ resourceType: 'pods', namespaced: true }];
@@ -58,7 +64,7 @@ describe('useIsInCurrentNamespace', () => {
       useIsInCurrentNamespace({
         kind: 'ClusterRole',
         metadata: { name: 'admin' },
-      }),
+      } as K8sResource),
     );
 
     expect(result.current).toBe(true);

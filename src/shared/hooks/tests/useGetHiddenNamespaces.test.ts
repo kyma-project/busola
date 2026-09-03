@@ -1,7 +1,8 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useGetHiddenNamespaces } from '../useGetHiddenNamespaces';
 
-let featureValue;
+let featureValue: { isEnabled: boolean; config?: { namespaces?: unknown } };
 vi.mock('hooks/useFeature', () => ({
   useFeature: () => featureValue,
 }));
