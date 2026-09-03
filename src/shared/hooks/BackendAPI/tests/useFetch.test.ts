@@ -1,15 +1,18 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createFetchFn } from '../useFetch';
 
-const mockCreateHeaders = vi.fn(() => ({ 'X-K8s-Authorization': 'Bearer t' }));
+const mockCreateHeaders = vi.fn((..._args: unknown[]) => ({
+  'X-K8s-Authorization': 'Bearer t',
+}));
 const mockThrowHttpError = vi.fn();
 const mockCheckForTokenExpiration = vi.fn();
 
 vi.mock('shared/hooks/BackendAPI/createHeaders', () => ({
-  createHeaders: (...args) => mockCreateHeaders(...args),
+  createHeaders: (...args: unknown[]) => mockCreateHeaders(...args),
 }));
 
 vi.mock('shared/hooks/BackendAPI/config', () => ({
-  throwHttpError: (...args) => mockThrowHttpError(...args),
+  throwHttpError: (...args: unknown[]) => mockThrowHttpError(...args),
 }));
 
 vi.mock('state/utils/getBackendInfo', () => ({
@@ -17,7 +20,8 @@ vi.mock('state/utils/getBackendInfo', () => ({
 }));
 
 vi.mock('state/ssoDataAtom', () => ({
-  checkForTokenExpiration: (...args) => mockCheckForTokenExpiration(...args),
+  checkForTokenExpiration: (...args: unknown[]) =>
+    mockCheckForTokenExpiration(...args),
   // only used by the useFetch React wrapper, not exercised here
   useIsSSOEnabled: () => false,
   ssoDataAtom: {},
@@ -29,26 +33,29 @@ const baseArgs = {
   cluster: {},
   ssoData: null,
   isSSOEnabled: false,
-};
+} as unknown as Parameters<typeof createFetchFn>[0];
+
+// Loosely typed stand-in for the global fetch so mock helpers stay available.
+const fetchMock = vi.fn();
 
 describe('createFetchFn', () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
     mockCreateHeaders.mockClear();
     mockThrowHttpError.mockReset();
     mockCheckForTokenExpiration.mockReset();
-    global.fetch = vi.fn();
+    fetchMock.mockReset();
+    global.fetch = fetchMock as unknown as typeof fetch;
   });
 
   it('prefixes the backend address, injects headers, and returns the response', async () => {
     const okResponse = { ok: true, json: () => Promise.resolve({}) };
-    global.fetch.mockResolvedValue(okResponse);
+    fetchMock.mockResolvedValue(okResponse);
 
     const fetchFn = createFetchFn(baseArgs);
     const response = await fetchFn({ relativeUrl: '/api/v1/pods' });
 
     expect(response).toBe(okResponse);
-    expect(global.fetch).toHaveBeenCalledWith(
+    expect(fetchMock).toHaveBeenCalledWith(
       '/backend/api/v1/pods',
       expect.objectContaining({
         headers: expect.objectContaining({
@@ -60,7 +67,7 @@ describe('createFetchFn', () => {
   });
 
   it('passes the abort signal and merges caller-supplied init', async () => {
-    global.fetch.mockResolvedValue({ ok: true });
+    fetchMock.mockResolvedValue({ ok: true });
     const abortController = new AbortController();
 
     const fetchFn = createFetchFn(baseArgs);
@@ -70,7 +77,7 @@ describe('createFetchFn', () => {
       init: { method: 'GET', headers: { Accept: 'application/json' } },
     });
 
-    const init = global.fetch.mock.calls[0][1];
+    const init = fetchMock.mock.calls[0][1];
     expect(init.method).toBe('GET');
     expect(init.signal).toBe(abortController.signal);
     expect(init.headers).toMatchObject({
@@ -81,7 +88,7 @@ describe('createFetchFn', () => {
 
   it('throws the parsed HttpError for a 403 response', async () => {
     const forbidden = { ok: false, status: 403 };
-    global.fetch.mockResolvedValue(forbidden);
+    fetchMock.mockResolvedValue(forbidden);
     const httpError = new Error(
       'You are not allowed to perform this operation',
     );
@@ -97,7 +104,7 @@ describe('createFetchFn', () => {
 
   it('throws the parsed HttpError for a 404 response', async () => {
     const notFound = { ok: false, status: 404 };
-    global.fetch.mockResolvedValue(notFound);
+    fetchMock.mockResolvedValue(notFound);
     const httpError = new Error('Definition not found');
     mockThrowHttpError.mockResolvedValue(httpError);
 
@@ -111,7 +118,7 @@ describe('createFetchFn', () => {
 
   it('propagates a network-level fetch rejection', async () => {
     const networkError = new TypeError('Failed to fetch');
-    global.fetch.mockRejectedValue(networkError);
+    fetchMock.mockRejectedValue(networkError);
 
     const fetchFn = createFetchFn(baseArgs);
 
@@ -131,6 +138,6 @@ describe('createFetchFn', () => {
     await expect(fetchFn({ relativeUrl: '/api/v1/pods' })).rejects.toThrow(
       'SSO login is in progress; request deferred.',
     );
-    expect(global.fetch).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });
