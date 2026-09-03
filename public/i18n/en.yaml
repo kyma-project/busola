@@ -8,7 +8,6 @@ cluster-overview:
     metadata: Metadata
     metrics: Metrics
     nodes: Nodes
-    pool: Pool
   statistics:
     cpu-limits: CPU limits
     cpu-limits-tooltip: The maximum amount of CPU resources your Pods can consume. Monitor these limits to understand your cluster's resource allocation and scaling capacity. Kubernetes allows the total limits across a node to exceed 100% of physical capacity (overcommitment), which is configurable.
@@ -55,11 +54,9 @@ cluster-overview:
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
-  title: Cluster Role Bindings
 cluster-roles:
   description: <0>Cluster Role</0> is a set of cluster-level resources and permissions that can be assigned to a user.
   name_singular: ClusterRole
-  title: Cluster Roles
 cluster-validation:
   scan:
     buttons:
@@ -167,8 +164,8 @@ clusters:
     kubeconfig: Kubeconfig
     kubeconfig-provide: Provide Kubeconfig
     kubeconfig-upload: Drop a .kubeconfig file or click to
+    non-interactive-oidc: Some contexts from your kubeconfig were excluded from this list because their OIDC providers do not support interactive login.
     not-an-object: kubeconfig is not an object
-    provide-context: Provide Context
     review: Review
     storage: Privacy
     token-info: If you don't know how to get your token, ask your authentication provider.
@@ -217,6 +214,7 @@ command-palette:
     oauth2clients: OAuth2 Clients
     persistentvolumeclaims: Persistent Volume Claims
     persistentvolumes: Persistent Volumes
+    poddisruptionbudgets: Pod Disruption Budgets
     replicasets: Replica Sets
     resourcequotas: Resource Quotas
     rolebindings: Role Bindings
@@ -271,7 +269,6 @@ common:
     retry: Retry
     revert: Revert
     save: Save
-    select-all: Select All
     submit: Submit
     update: Update
     upload: Upload
@@ -305,9 +302,12 @@ common:
     information: You've switched off removal confirmations for all resources. You can switch them back on in Settings.
   errors:
     couldnt-fetch-resources: Couldn't fetch resources.
-    delete: Deletion of resource failed
     error: Error
     generic: Invalid field data
+    idp-rejected-login: 'The identity provider rejected the login: {{error}}.'
+    login-error: 'The login attempt failed: {{error}}.'
+    login-failed: Login failed
+    login-loop-stopped: Login was stopped after several attempts failed in a row. Check the identity provider configuration and try again.
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions
     no-permissions-message: Contact your administrator to grant you access.
@@ -333,12 +333,9 @@ common:
     name: Name
     namespace: Namespace
     namespaces: Namespaces
-    node-details: Node Details
-    nodeInfo: Node Info
     owner: Controlled By
     pods: Pods
     policies: Policies
-    region: Region
     resource: Resource
     resource-details: Resource Details
     resource-type: Resource Type
@@ -352,8 +349,6 @@ common:
   labels:
     category: Category
     data: Data
-    hostname: Hostname
-    issuer: Issuer
     last-transition: Last Transition Time
     message-type: Message Type
     name: Name
@@ -365,7 +360,6 @@ common:
     resource: Resource
     resource-name: '{{resource}} $t(common.labels.name)'
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
-    secret: Secret
     type: Type
     version: 'Kyma Dashboard version:'
   messages:
@@ -442,7 +436,6 @@ common:
     sort: Sort
     unknown-date: Unknown date
   value-units:
-    days: days
     days-ago: days ago
     days-old: days old
     hours-ago: hours ago
@@ -512,7 +505,6 @@ config-maps:
     migrate: Migrate
   description: <0>Config Map</0> is an object that allows for storing non-sensitive data in key-value pairs.
   name_singular: ConfigMap
-  title: Config Maps
 configuration:
   title: Configuration
 cron-jobs:
@@ -644,7 +636,6 @@ deployments:
     replicas: Replicas
     unavailable-replicas: Unavailable Replicas
     updated-replicas: Updated Replicas
-  title: Deployments
 discovery-and-network:
   title: Discovery and Network
 err-boundary:
@@ -718,6 +709,9 @@ extensibility:
     summary: Summary
     upload: Upload
 feedback:
+  cloud-services-survey:
+    info: Do you rely on hyperscaler services in your work? Help us decide what Cloud Manager should support next.
+    title: What services do you need?
   feedback: Feedback
   give-feedback: Give Feedback
   intro:
@@ -729,7 +723,11 @@ feedback:
   kyma:
     info: Your opinion matters. Share your thoughts with us at any time!
     title: Kyma Dashboard Feedback
+  kyma-survey:
+    info: Talk to us to help us understand how you use Kyma and what improvements would make your life easier.
+    title: Help us make Kyma better!
   new: New
+  sign-up: Sign Up
 gardener:
   headers:
     provider: Provider
@@ -752,9 +750,7 @@ helm-releases:
     first-deployed: First Deployed
     last-deployed: Last Deployed
     other-release-versions: Other Release Versions
-    release: 'Release '
     release-manifest: Release Manifest
-    release-version: Version v{{version}}
     revision: Revision
   messages:
     cannot-decode: Cannot decode the given Helm Release
@@ -788,7 +784,6 @@ ingresses:
     service-name: Service name
     tls: TLS
   name_singular: Ingress
-  title: Ingresses
 integration:
   title: Integration
 istio:
@@ -800,9 +795,6 @@ jobs:
   conditions:
     last-probe: Last Probe
     last-transition: Last Transition
-    status: Status
-    title: Conditions
-    type: Type
   create-modal:
     at-least-one-container-required: CronJob must have at least one container.
     container: Container
@@ -837,7 +829,6 @@ jobs:
   ready: Ready
   start-time: Start Time
   succeeded: Succeeded
-  title: Jobs
   tooltips:
     complete: Job completed
     not-complete: Job in progress
@@ -855,6 +846,7 @@ kyma-cli:
     description: Kyma CLI helps you move faster - from first setup to deploying and managing apps.
     title: Try Kyma CLI
 kyma-companion:
+  ask-joule: Ask Joule
   banner:
     buttons:
       documentation: Documentation
@@ -889,15 +881,8 @@ kyma-companion:
   introduction-no-suggestions: Hi, I am your Kyma assistant! You can ask me any question, and I will try to help you to the best of my abilities. While I don't have any initial suggestions for this resource, feel free to ask me anything you'd like!
   name: Joule
   opener:
-    error-message: Couldn't fetch suggestions. Please try again.
-    input-placeholder: Ask about this resource
     preparing-final-answer: Preparing the final answer
-    suggestions: Suggestions
-    use-ai: AI Companion
   placeholder: Message Joule...
-  tabs:
-    chat: Chat
-    page-insights: Page Insights
   time:
     today: Today
     yesterday: Yesterday
@@ -939,12 +924,10 @@ kyma-modules:
   maintenance-tooltip: The module is currently being updated. This may take a few moments.
   managed: Managed
   messages:
-    failure: 'Failed to install the {{resourceType}}: {{error}}'
     module-added: Module added
     module-uninstall: Module set for deletion
     modules-update-failed: Modules update failed
     modules-updated: Modules updated
-    success: '{{resourceType}} installed'
     updated: Modules updated
   modify-modules: Modify Modules
   module-state: Module State
@@ -957,13 +940,11 @@ kyma-modules:
   outdated: Outdated
   predefined-channel: Predefined
   release-channel: Release channel
-  release-channel-description: According to the <0>Kyma modules` release cycle</0>, we first release a new module’s major or minor version in the fast channel. After approximately two weeks, we promote the release to the regular channel.
   title: Modules
   unmanaged-modules-info: One of the modules is not managed and may not work properly. We cannot guarantee any service level agreement (SLA) or provide updates and maintenance for the module.
   unmanaged-modules-save-warning: Before proceeding, be aware that disabling module management may impact the stability and data integrity of your cluster. Once the management is disabled, reverting back may not be possible. Are you sure you want to continue?
   unmanaged-modules-warning: Disabling this option can lead to potential instability and loss of data within your cluster. Proceed with caution. Once disabled, it may not be possible to revert back.
   update: Update
-  upgrade-available: Upgrade available
   version: Version
 legal:
   copyright: Copyright
@@ -1006,7 +987,6 @@ modules:
     messages:
       delete-failure: 'Failed to delete the {{module}}: {{error}}'
       delete-template-failure: 'Failed to delete templates: {{error}}'
-      example-format: 'Example format: http://github.com/project/repo/file.yaml'
       install-failure: 'Failed to install the {{resourceType}}: {{error}}'
       module-added: Community Module added
       module-uninstall: Community Module set for deletion
@@ -1025,7 +1005,6 @@ modules:
     no-modules-description: Customize your cluster by adding the modules you need.
     no-modules-installed: No community modules installed
     origin: Origin
-    release-channel: Release channel
     sla-warning: Community modules are contributed by the Kyma community and are not automatically updated or maintained. Additionally, they are not covered by any service level agreement (SLA). Use them at your own risk. <0>Learn more</0>
     source-yaml:
       add-source-yaml: Add Source YAML
@@ -1072,7 +1051,6 @@ namespaces:
       error: Error while loading memory consumption data
       limits: Memory Limits
       requests: Memory Requests
-      title: Resource Consumption
   title: Namespaces
 navigation:
   about: About
@@ -1092,10 +1070,6 @@ navigation:
   upload-yaml:
     title: Upload YAML
 network-policies:
-  accessible-name:
-    ip-block: IP Block panel
-    namespace-selector: Namespace Selector panel
-    pod-selector: Pod Selector panel
   description: <0>Network Policy</0> allows you to control how a Pod communicates with different network entities.
   headers:
     cidr: CIDR
@@ -1118,7 +1092,6 @@ network-policies:
     values: Values
   name_singular: NetworkPolicy
   present-but-empty: Present but empty selector selects all pods / namespaces.
-  title: Network Policies
 no-permissions:
   enter-namespace-name: 'If you expect to have access to a Namespace, please enter its name here:'
   enter-namespace-name-placeholder: Enter Namespace name
@@ -1156,10 +1129,7 @@ persistent-volume-claims:
     access-modes: Access Modes
     capacity: Capacity
     resources:
-      limits: Limits
-      requests: Requests
       title: Resources
-    selector: Selector
     storage: Storage
     storage-class-name: Storage Class Name
     volume-mode: Volume Mode
@@ -1167,11 +1137,23 @@ persistent-volume-claims:
   message:
     empty-selector: Matches all PersistentVolumes
   name_singular: PersistentVolumeClaim
-  title: Persistent Volume Claims
   tooltips:
     bound: Binding between PersistentVolume and PersistentVolumeClaim established
     lost: Lost binding between PersistentVolume and PersistentVolumeClaim
     pending: Checking if binding between PersistentVolume and PersistentVolumeClaim is established.
+pod-disruption-budgets:
+  description: <0>Pod Disruption Budget (PDB)</0> is an object that defines the minimum number or percentage of Pods that must be available during voluntary disruptions.
+  headers:
+    current-healthy: Current Healthy
+    desired-healthy: Desired Healthy
+    disruptions-allowed: Disruptions Allowed
+    expected-pods: Expected Pods
+    max-unavailable: Maximum Unavailable
+    min-available: Minimum Available
+    observed-generation: Observed Generation
+    selector: Selector
+  name_singular: PodDisruptionBudget
+  title: Pod Disruption Budgets
 pods:
   accessible-name:
     logs: Logs panel
@@ -1204,7 +1186,6 @@ pods:
     failed-to-download: Failed to download the logs
     no-logs-available: No logs available for the '{{containerName}}' container
   name_singular: Pod
-  node: Node
   restarts: Restarts
   status:
     host-ip: Host IP
@@ -1346,7 +1327,6 @@ role-bindings:
   name_singular: RoleBinding
   placeholders:
     api-group: API Group
-  title: Role Bindings
 roles:
   buttons:
     load-resources: Load resources
@@ -1367,7 +1347,6 @@ roles:
   templates:
     all-permissions: All permissions
     view-only: View only
-  title: Roles
   tooltips:
     load: Load resources
 schema:
@@ -1436,7 +1415,6 @@ secrets:
     type: Type of Secret
   secret-empty: Empty Secret
   secret-not-found: Secret not found
-  title: Secrets
   type: Type
 selector:
   message:
@@ -1495,8 +1473,6 @@ settings:
         title: High-Contrast White
     title: Appearance
   general:
-    accessible-name:
-      validateResources: Validate Resources panel
     description: Cluster interaction, resource validation
     disableResourceProtection: Allow for modification of protected resources
     dontConfirmDelete: Delete without confirmation
@@ -1508,9 +1484,7 @@ settings:
     interaction:
       title: Cluster Interaction
     resourcesValidation:
-      customize: Customize
       no-policies-found: No policies found
-      reset: Reset
       select-policy: Select {{name}} validation policy
       title: Resource Validation
       validateResources: Validate Resources

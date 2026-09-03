@@ -116,9 +116,6 @@ export function ResourceComponent({
   const [filteredStatusColumns, setFilteredStatusColumns] = useState<
     CustomColumn[]
   >([]);
-  const [filteredStatusColumnsLong, setFilteredStatusColumnsLong] = useState<
-    CustomColumn[]
-  >([]);
   const [filteredConditionsComponents, setFilteredConditionsComponents] =
     useState<CustomColumn[]>([]);
   const [filteredDetailsCardColumns, setFilteredDetailsCardColumns] = useState<
@@ -148,12 +145,6 @@ export function ResourceComponent({
           ?.filter((col) => !col?.conditionComponent)
           ?.filter((col) => !col?.fullWidth);
         setFilteredStatusColumns(customCols as CustomColumn[]);
-
-        const customColsLong = res
-          .filter(Boolean)
-          ?.filter((col) => !col?.conditionComponent)
-          ?.filter((col) => col?.fullWidth && col?.fullWidth === true);
-        setFilteredStatusColumnsLong(customColsLong as CustomColumn[]);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -277,7 +268,6 @@ export function ResourceComponent({
                       customStatus={customStatus}
                       customStatusColumns={customStatusColumns}
                       filteredStatusColumns={filteredStatusColumns}
-                      filteredStatusColumnsLong={filteredStatusColumnsLong}
                       statusConditions={statusConditions}
                       customConditionsComponents={customConditionsComponents}
                       filteredConditionsComponents={

@@ -77,6 +77,7 @@ type GenericListProps = {
   serverDataLoading?: boolean;
   pagination?: PaginationType;
   sortBy?: SortByObject | ((a: any) => SortByObject);
+  initialSort?: Sort;
   notFoundMessage?: string;
   searchSettings?: SearchSettingsType;
   emptyListProps?: EmptyListProps;
@@ -128,6 +129,7 @@ export const GenericList = ({
   serverDataLoading = false,
   pagination,
   sortBy,
+  initialSort,
   notFoundMessage = 'components.generic-list.messages.not-found',
   searchSettings = defaultSearch,
   emptyListProps,
@@ -157,10 +159,12 @@ export const GenericList = ({
   const [entrySelectedNamespace, setEntrySelectedNamespace] = useState('');
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
-  const [sort, setSort] = useState<Sort>({
+  const resolvedDefaultSort: Sort = initialSort ?? {
     name: sortBy && Object.keys(sortBy)[0],
     order: 'ASC',
-  });
+  };
+
+  const [sort, setSort] = useState<Sort>(resolvedDefaultSort);
 
   useEffect(() => {
     setEntrySelected(customSelectedEntry || '');
@@ -308,10 +312,7 @@ export const GenericList = ({
           sort={sort}
           setSort={setSort}
           disabled={!entries.length}
-          defaultSort={{
-            name: sortBy && Object.keys(sortBy)[0],
-            order: 'ASC',
-          }}
+          defaultSort={resolvedDefaultSort}
         />
       )}
     </>
