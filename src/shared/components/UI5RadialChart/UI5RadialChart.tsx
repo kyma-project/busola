@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import { RadialChart } from '@ui5/webcomponents-react-charts';
 import { Card, Text, Title } from '@ui5/webcomponents-react';
+import { renderFinished } from '@ui5/webcomponents-base/dist/Render.js';
 
 import './UI5RadialChart.scss';
 import { HintButton } from '../HintButton/HintButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface UI5RadialChartProps {
   cardClassName?: string;
@@ -42,6 +43,19 @@ export const UI5RadialChart = ({
 
   const [showTitleDescription, setShowTitleDescription] = useState(false);
 
+  // Defer the chart until UI5's render queue has flushed, so its `Card` slot is
+  // laid out and Recharts measures a sized container instead of warning on 0×0.
+  const [isChartReady, setIsChartReady] = useState(false);
+  useEffect(() => {
+    let isMounted = true;
+    renderFinished().then(() => {
+      if (isMounted) setIsChartReady(true);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <Card
       className={cardClassnames}
@@ -69,26 +83,28 @@ export const UI5RadialChart = ({
         aria-label={`${accessibleName}, radial chart, ${text}${additionalInfo ? `, ${additionalInfo}` : ''}`}
         role="img"
       >
-        <RadialChart
-          displayValue={text}
-          displayValueStyle={{
-            fontSize: textSize,
-            fill: color,
-          }}
-          value={value}
-          maxValue={max}
-          color={color}
-          className="sap-margin-y-tiny"
-          style={{
-            height: size + 'px',
-            width: size + 'px',
-          }}
-          chartConfig={{
-            innerRadius: '98%',
-            outerRadius: '98%',
-            barSize: 12,
-          }}
-        />
+        {isChartReady && (
+          <RadialChart
+            displayValue={text}
+            displayValueStyle={{
+              fontSize: textSize,
+              fill: color,
+            }}
+            value={value}
+            maxValue={max}
+            color={color}
+            className="sap-margin-y-tiny"
+            style={{
+              height: size + 'px',
+              width: size + 'px',
+            }}
+            chartConfig={{
+              innerRadius: '98%',
+              outerRadius: '98%',
+              barSize: 12,
+            }}
+          />
+        )}
         {additionalInfo && (
           <Text className="additional-info">{additionalInfo}</Text>
         )}
