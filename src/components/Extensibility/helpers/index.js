@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { OrderedMap } from 'immutable';
+import { OrderedMap, List } from 'immutable';
 import { last, merge } from 'lodash';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -304,4 +304,22 @@ export const getBadgeType = async (highlights, value, jsonata, t) => {
   type = TYPE_FALLBACK.get(type) || type;
 
   return type;
+};
+
+export const checkRequiredType = (
+  schemaRequired,
+  required,
+  parentSchema,
+  storeKeys,
+) => {
+  let newRequired = required;
+  if (typeof schemaRequired === 'boolean') {
+    newRequired = schemaRequired;
+  } else if (schemaRequired === undefined) {
+    const parentRequired = parentSchema?.get('required');
+    if (List.isList(parentRequired)) {
+      newRequired = parentRequired.includes(storeKeys?.last());
+    }
+  }
+  return newRequired;
 };

@@ -14,7 +14,7 @@ import {
 import { pathSegment } from 'resources/ClusterEvents';
 import { Link } from 'shared/components/Link/Link';
 import { CustomColumn } from 'shared/components/ResourcesList/types';
-import { SortByObject } from 'shared/components/GenericList/GenericList';
+import { eventInitialSort, eventSortByFn } from './eventSort';
 
 export interface EventListProps {
   resourceType: string;
@@ -176,25 +176,14 @@ export function EventList({
     },
   ];
 
-  const sortByFn = (defaultSort: any): SortByObject => {
-    const { name } = defaultSort;
-    return {
-      name,
-      type: (a: Record<string, any>, b: Record<string, any>) =>
-        a.type.localeCompare(b.type),
-      lastseen: (a: Record<string, any>, b: Record<string, any>) =>
-        new Date(b.lastTimestamp).getTime() -
-        new Date(a.lastTimestamp).getTime(),
-      count: (a: Record<string, any>, b: Record<string, any>) =>
-        (a.count || 0) - (b.count || 0),
-    };
-  };
+  const sortByFn = eventSortByFn;
 
   return (
     <ResourcesList
       listHeaderActions={MessageSelector}
       columns={customColumns}
       sortBy={sortByFn}
+      initialSort={eventInitialSort}
       description={ResourceDescription}
       showTitle={isCompact}
       title={t('events.title')}

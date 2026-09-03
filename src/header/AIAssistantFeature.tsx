@@ -29,6 +29,7 @@ export function AIAssistantFeature() {
     <>
       <ToggleButton
         accessibleName={t('kyma-companion.name')}
+        tooltip={t('kyma-companion.ask-joule')}
         icon={showCompanion.show ? 'da-2' : 'da'}
         pressed={showCompanion.show}
         slot="assistant"

@@ -140,6 +140,7 @@ export function Header() {
           id="openGetHelpMenu"
           icon="sys-help"
           text={t('navigation.menu.get-help')}
+          title={t('navigation.menu.get-help')}
         />
       </ShellBar>
       <HeaderMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />

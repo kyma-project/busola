@@ -4,6 +4,7 @@ import {
   Title,
   RadioButton,
   MessageBox,
+  MessageStrip,
   Button,
   Text,
   Label,
@@ -16,6 +17,8 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { getUserDetail } from './helpers';
 import { ResourceFormWrapperProps } from 'shared/ResourceForm/components/Wrapper';
 import { ListItemClickEventDetail } from '@ui5/webcomponents/dist/List';
+import { useNonInteractiveOidcContexts } from '../oidc-interactive-check';
+import { KubeconfigContext, KubeconfigUser, NestedPartial } from 'types';
 
 import './ContextChooser.scss';
 import { KubeConfigMultipleState } from 'state/multipleContextsAtom';
@@ -33,6 +36,10 @@ export function ContextChooser({
   ...props
 }: ContextChooserProps) {
   const { t } = useTranslation();
+  const nonInteractive = useNonInteractiveOidcContexts(
+    resource?.contexts,
+    resource?.users,
+  );
 
   if (!Array.isArray(resource?.contexts)) {
     return '';
@@ -42,8 +49,19 @@ export function ContextChooser({
     <div className="add-cluster__content-container">
       <ResourceForm.Wrapper resource={resource} {...props}>
         <Title className="sap-margin-bottom-small" level="H5">
-          {t('clusters.wizard.provide-context')}
+          {t('clusters.messages.choose-cluster')}
         </Title>
+        {resource?.contexts?.find((context) =>
+          nonInteractive.has(context.name),
+        ) && (
+          <MessageStrip
+            hideCloseButton
+            design="Critical"
+            className="sap-margin-bottom-small"
+          >
+            {t('clusters.wizard.non-interactive-oidc')}
+          </MessageStrip>
+        )}
         <ResourceForm.FormField
           required
           value={chosenContext}
@@ -66,8 +84,8 @@ export function ContextChooser({
 }
 
 type ContextButtonsProps = {
-  users?: Array<{ name: string; user: { exec: { args?: string[] } } }>;
-  contexts: { name: string }[];
+  users?: KubeconfigUser[];
+  contexts: KubeconfigContext[];
   chosenContext: string;
   setValue: (context: string) => void;
   setChosenContext?: (context: string) => void;
@@ -80,6 +98,8 @@ export function ContextButtons({
   setValue,
   setChosenContext,
 }: ContextButtonsProps) {
+  const nonInteractive = useNonInteractiveOidcContexts(contexts, users);
+
   return (
     <List
       onItemClick={(
@@ -87,11 +107,14 @@ export function ContextButtons({
       ) => {
         const contextElement = e?.detail?.item?.children?.[0]
           ?.children?.[0] as HTMLInputElement;
-        setValue(contextElement?.value);
-        if (setChosenContext) setChosenContext(contextElement?.value);
+        const contextName = contextElement?.value;
+        if (!contextName || nonInteractive.has(contextName)) return;
+        setValue(contextName);
+        if (setChosenContext) setChosenContext(contextName);
       }}
     >
       {contexts?.map((context) => {
+        if (nonInteractive.has(context.name)) return null;
         return (
           <ListItemCustom key={context.name} style={{}}>
             <div>
@@ -130,6 +153,10 @@ export function ContextChooserMessage({
 }: ContextChooserMessageProps) {
   const { t } = useTranslation();
   const [chosenContext, setChosenContext] = useState('');
+  const nonInteractive = useNonInteractiveOidcContexts(
+    contextState?.contexts,
+    contextState?.users,
+  );
 
   if (!Array.isArray(contextState?.contexts)) {
     return null;
@@ -154,34 +181,52 @@ export function ContextChooserMessage({
         </Button>,
       ]}
     >
+      {contextState?.contexts?.find((context) =>
+        nonInteractive.has(context.name),
+      ) && (
+        <MessageStrip
+          hideCloseButton
+          design="Critical"
+          className="sap-margin-small"
+        >
+          {t('clusters.wizard.non-interactive-oidc')}
+        </MessageStrip>
+      )}
       <List
         onItemClick={(e) => {
           const contextElement = e?.detail?.item?.children?.[0]
             ?.children?.[0] as HTMLInputElement;
-          setChosenContext(contextElement?.value);
+          const contextName = contextElement?.value;
+          if (!contextName || nonInteractive.has(contextName)) return;
+          setChosenContext(contextName);
         }}
       >
-        {contextState?.contexts?.map((context) => (
-          <ListItemCustom key={context.name} style={{}}>
-            <div>
-              <RadioButton
-                id={'context-chooser' + context.name}
-                key={context.name}
-                name={context.name}
-                value={context.name}
-                checked={chosenContext === context.name}
-                text={context.name}
-                onChange={() => setChosenContext(context.name)}
-              />
-              {contextState?.users && (
-                <AuthContextData
-                  contextName={context?.name}
-                  users={contextState?.users as any}
+        {contextState?.contexts?.map((context) => {
+          if (nonInteractive.has(context.name)) return null;
+          return (
+            <ListItemCustom key={context.name}>
+              <div>
+                <RadioButton
+                  id={'context-chooser' + context.name}
+                  key={context.name}
+                  name={context.name}
+                  value={context.name}
+                  checked={chosenContext === context.name}
+                  text={context.name}
+                  onChange={() => {
+                    setChosenContext(context.name);
+                  }}
                 />
-              )}
-            </div>
-          </ListItemCustom>
-        ))}
+                {contextState?.users && (
+                  <AuthContextData
+                    contextName={context?.name}
+                    users={contextState?.users as any}
+                  />
+                )}
+              </div>
+            </ListItemCustom>
+          );
+        })}
       </List>
     </MessageBox>
   );
@@ -189,7 +234,7 @@ export function ContextChooserMessage({
 
 type AuthContextDataProps = {
   contextName: string;
-  users?: Array<{ name: string; user: { exec: { args?: string[] } } }>;
+  users?: Array<NestedPartial<KubeconfigUser>>;
 };
 
 function AuthContextData({ contextName, users }: AuthContextDataProps) {
