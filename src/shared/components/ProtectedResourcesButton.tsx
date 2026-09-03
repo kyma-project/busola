@@ -7,6 +7,7 @@ import {
 } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import { useId, useState } from 'react';
+import type React from 'react';
 import { createPortal } from 'react-dom';
 import { configFeaturesNames } from 'state/types';
 import jp from 'jsonpath';
@@ -93,7 +94,16 @@ export const ProtectedResourceWarning = ({
           setPopoverMessage(message);
         }}
         design="Transparent"
+        icon={withText ? undefined : 'locked'}
         accessibleName={t('common.protected-resource')}
+        style={
+          !withText
+            ? ({
+                '--sapButton_Lite_TextColor': 'var(--sapCriticalColor)',
+                '--sapButton_Lite_Hover_TextColor': 'var(--sapCriticalColor)',
+              } as React.CSSProperties)
+            : undefined
+        }
       >
         {withText ? (
           <ObjectStatus
@@ -104,13 +114,7 @@ export const ProtectedResourceWarning = ({
           >
             {t('common.protected-resource')}
           </ObjectStatus>
-        ) : (
-          <Icon
-            design="Critical"
-            name="locked"
-            style={{ marginTop: '0.125rem' }}
-          />
-        )}
+        ) : null}
       </Button>
       {createPortal(
         <Popover
