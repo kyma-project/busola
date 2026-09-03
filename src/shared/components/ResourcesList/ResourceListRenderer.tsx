@@ -68,6 +68,7 @@ export function ResourceListRenderer({
     name: nameLocaleSort,
     time: timeSort,
   },
+  initialSort,
   searchSettings,
   isCompact,
   parentCrdName,
@@ -464,6 +465,7 @@ export function ResourceListRenderer({
           extraHeaderContent={extraHeaderContent}
           testid={testid}
           sortBy={sortBy}
+          initialSort={initialSort}
           searchSettings={{
             ...searchSettings,
             textSearchProperties: textSearchProperties(),
