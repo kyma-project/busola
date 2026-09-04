@@ -34,6 +34,7 @@ export function isPrivateIp(ip) {
   }
   if (net.isIPv6(ip)) {
     const lowerIp = ip.toLowerCase();
+    if (lowerIp.startsWith('::ffff:')) return isPrivateIp(lowerIp.slice(7)); // IPv4-mapped IPv6
     if (lowerIp.startsWith('fc') || lowerIp.startsWith('fd')) return true; // Unique local
     if (lowerIp.startsWith('fe80:')) return true; // Link-local
     if (lowerIp === '::1') return true; // Localhost

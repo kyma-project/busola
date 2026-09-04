@@ -10,6 +10,7 @@ import {
   requireCredential,
 } from '../utils/rate-limit-key.js';
 import { buildK8sRequestPath } from './path-utils.js';
+import { resolveOrBlockPrivateIpAddress } from '../utils/network-utils.js';
 
 const https = require('https');
 const http = require('http');
@@ -102,6 +103,7 @@ export async function handleK8sRequests(req, res) {
     headers,
     method: req.method,
     port: targetApiServer.port || defaultPort,
+    lookup: resolveOrBlockPrivateIpAddress,
     ...(isHttps && { ca, cert, key, agent }),
   };
   workaroundForNodeMetrics(req);
