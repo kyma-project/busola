@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import dns from 'dns/promises';
 import {
   PrivateIPUsedError,
+  isPrivateIp,
   resolveOrBlockPrivateIpAddress,
 } from './network-utils';
 import { request } from 'node:http';
@@ -111,5 +112,40 @@ describe('DNS Proxy Cache', () => {
     });
 
     expect(err).toBeInstanceOf(PrivateIPUsedError);
+  });
+});
+
+describe('isPrivateIp', () => {
+  it('blocks IPv4-mapped IPv6 private addresses', () => {
+    expect(isPrivateIp('::ffff:10.0.0.1')).toBe(true);
+    expect(isPrivateIp('::ffff:127.0.0.1')).toBe(true);
+    expect(isPrivateIp('::ffff:192.168.1.1')).toBe(true);
+    expect(isPrivateIp('::ffff:172.16.0.1')).toBe(true);
+  });
+
+  it('allows IPv4-mapped IPv6 public addresses', () => {
+    expect(isPrivateIp('::ffff:20.11.11.11')).toBe(false);
+  });
+});
+
+describe('resolveOrBlockPrivateIpAddress with IPv4-mapped IPv6', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('calls callback with PrivateIPUsedError when DNS resolves to IPv4-mapped private address', async () => {
+    const ipv4MappedPrivate = [{ address: '::ffff:10.0.0.1', family: 6 }];
+    vi.spyOn(dns, 'lookup').mockResolvedValueOnce(ipv4MappedPrivate);
+
+    let receivedError;
+    await resolveOrBlockPrivateIpAddress(
+      'attacker-controlled.example.com',
+      {},
+      (err) => {
+        receivedError = err;
+      },
+    );
+
+    expect(receivedError).toBeInstanceOf(PrivateIPUsedError);
   });
 });
