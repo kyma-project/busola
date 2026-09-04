@@ -80,6 +80,16 @@ describe('useDelete', () => {
     });
   });
 
+  it('calls options.refetch after a successful request', async () => {
+    mockFetch.mockResolvedValue({ json: () => Promise.resolve({}) });
+    const refetch = vi.fn();
+
+    const { result } = renderHook(() => useDelete({ refetch }));
+    await result.current('/api/v1/namespaces/default/pods/foo');
+
+    expect(refetch).toHaveBeenCalledTimes(1);
+  });
+
   it('propagates a 404 error from the fetch layer', async () => {
     const error = new Error('Definition not found');
     mockFetch.mockRejectedValue(error);
