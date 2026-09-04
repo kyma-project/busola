@@ -1,7 +1,13 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import dns from 'dns/promises';
+import https from 'https';
 import { handleK8sRequests } from './handler.js';
 import { PrivateIPUsedError } from '../utils/network-utils.js';
+import config from '../src/config/config.js';
+
+vi.mock('../src/config/config.js', () => ({
+  default: { features: { ALLOW_PRIVATE_IPS: { isEnabled: false } } },
+}));
 
 const makeReq = (overrides = {}) => ({
   headers: {
@@ -28,7 +34,29 @@ const makeRes = () => {
   return res;
 };
 
+const mockAbortingRequest = () =>
+  vi.spyOn(https, 'request').mockImplementation(() => {
+    const k8sRequest = {
+      on: (event, handler) => {
+        // Settle the handler's internal promise so the awaited call returns.
+        if (event === 'error') {
+          setImmediate(() => handler(new Error('mock-abort')));
+        }
+        return k8sRequest;
+      },
+      end: vi.fn(),
+      destroy: vi.fn(),
+    };
+    return k8sRequest;
+  });
+
 describe('handleK8sRequests', () => {
+  beforeEach(() => {
+    // Default to the secure posture; individual tests opt in to allowing
+    // private IPs by mutating the mocked config.
+    config.features.ALLOW_PRIVATE_IPS.isEnabled = false;
+  });
+
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -48,5 +76,32 @@ describe('handleK8sRequests', () => {
       expect.objectContaining({ err: expect.any(PrivateIPUsedError) }),
       expect.any(String),
     );
+  });
+
+  it('does not attach the private-IP lookup guard when ALLOW_PRIVATE_IPS is enabled', async () => {
+    config.features.ALLOW_PRIVATE_IPS.isEnabled = true;
+    const requestSpy = mockAbortingRequest();
+
+    const req = makeReq();
+    const res = makeRes();
+
+    await handleK8sRequests(req, res);
+
+    expect(requestSpy).toHaveBeenCalledTimes(1);
+    const options = requestSpy.mock.calls[0][0];
+    expect(options.lookup).toBeUndefined();
+  });
+
+  it('attaches the private-IP lookup guard when ALLOW_PRIVATE_IPS is disabled', async () => {
+    const requestSpy = mockAbortingRequest();
+
+    const req = makeReq();
+    const res = makeRes();
+
+    await handleK8sRequests(req, res);
+
+    expect(requestSpy).toHaveBeenCalledTimes(1);
+    const options = requestSpy.mock.calls[0][0];
+    expect(typeof options.lookup).toBe('function');
   });
 });

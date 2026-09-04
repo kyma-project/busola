@@ -11,6 +11,7 @@ import {
 } from '../utils/rate-limit-key.js';
 import { buildK8sRequestPath } from './path-utils.js';
 import { resolveOrBlockPrivateIpAddress } from '../utils/network-utils.js';
+import config from '../src/config/config.js';
 
 const https = require('https');
 const http = require('http');
@@ -93,6 +94,12 @@ export async function handleK8sRequests(req, res) {
 
   const { targetApiServer, ca, cert, key, authorization } = headersData;
 
+  // When ALLOW_PRIVATE_IPS is disabled (default), block requests whose
+  // hostname DNS-resolves to a private IP (SSRF / DNS-rebinding protection).
+  // This mirrors localIpFilter, which honors the same flag for literal IPs.
+  const allowPrivateIps =
+    config.features?.ALLOW_PRIVATE_IPS?.isEnabled ?? false;
+
   // Forward only the headers the Kubernetes API server needs.
   const K8S_FORWARDED_HEADERS = new Set([
     'accept',
@@ -121,7 +128,7 @@ export async function handleK8sRequests(req, res) {
     headers,
     method: req.method,
     port: targetApiServer.port || defaultPort,
-    lookup: resolveOrBlockPrivateIpAddress,
+    ...(allowPrivateIps ? {} : { lookup: resolveOrBlockPrivateIpAddress }),
     ...(isHttps && { ca, cert, key, agent }),
   };
   workaroundForNodeMetrics(req);
