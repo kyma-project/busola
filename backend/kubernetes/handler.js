@@ -32,7 +32,7 @@ export const k8sRateLimiter = rateLimit({
 });
 
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
-const certs = fs.readFileSync('certs.pem', 'utf8');
+const certs = fs.readFileSync(import.meta.dirname + '/../certs.pem', 'utf8');
 
 const isHeaderDefined = (headerValue) => {
   return headerValue !== undefined && headerValue !== 'undefined';
