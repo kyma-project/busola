@@ -35,9 +35,11 @@ export function BusolaTerminal({
 
   useEffect(() => {
     if (cluster?.name !== openedOnClusterRef.current) {
+      openedOnClusterRef.current = cluster?.name;
+      disconnect(podNameRef.current);
       setShowTerminal((prev) => ({ ...prev, isOpen: false }));
     }
-  }, [cluster?.name, setShowTerminal]);
+  }, [cluster?.name, setShowTerminal, disconnect]);
 
   podNameRef.current = sessionState.podName;
 

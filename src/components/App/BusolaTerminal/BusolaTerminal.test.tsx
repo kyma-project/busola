@@ -96,6 +96,51 @@ describe('BusolaTerminal', () => {
     expect(store.get(showTerminalAtom).isOpen).toBe(true);
   });
 
+  it('closes when switching back to the original cluster after reopening on a different cluster', async () => {
+    const store = createStore();
+    store.set(clusterAtom, makeCluster('cluster-a'));
+    store.set(showTerminalAtom, {
+      isDocked: true,
+      isFullscreen: false,
+      isOpen: true,
+      dockedHeight: 0,
+    });
+
+    const { unmount } = render(
+      <Provider store={store}>
+        <BusolaTerminal />
+      </Provider>,
+    );
+
+    // Switch to cluster-b — terminal closes
+    await act(async () => {
+      store.set(clusterAtom, makeCluster('cluster-b'));
+    });
+    expect(store.get(showTerminalAtom).isOpen).toBe(false);
+
+    // Simulate terminal reopening on cluster-b: unmount the old instance and
+    // mount a fresh one (openedOnClusterRef initializes to "cluster-b")
+    unmount();
+    store.set(showTerminalAtom, {
+      isDocked: true,
+      isFullscreen: false,
+      isOpen: true,
+      dockedHeight: 0,
+    });
+    render(
+      <Provider store={store}>
+        <BusolaTerminal />
+      </Provider>,
+    );
+
+    // Switch back to cluster-a — terminal should close again
+    await act(async () => {
+      store.set(clusterAtom, makeCluster('cluster-a'));
+    });
+
+    expect(store.get(showTerminalAtom).isOpen).toBe(false);
+  });
+
   it('closes when the cluster is cleared (e.g. user logs out)', async () => {
     const store = createStore();
     store.set(clusterAtom, makeCluster('cluster-a'));
