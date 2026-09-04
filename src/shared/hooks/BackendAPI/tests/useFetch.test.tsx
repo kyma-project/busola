@@ -23,11 +23,12 @@ const clusterFixture = {
 type AtomPairs = [any, unknown][];
 
 function makeWrapper(atoms: AtomPairs) {
-  return ({ children }: { children: ReactNode }) => (
+  const Wrapper = ({ children }: { children: ReactNode }) => (
     <Provider>
       <JotaiHydrator initialValues={atoms}>{children}</JotaiHydrator>
     </Provider>
   );
+  return Wrapper;
 }
 
 // Renders useFetch with hydrated atoms and returns the fetch function it produces.
