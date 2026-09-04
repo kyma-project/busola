@@ -5,6 +5,7 @@ import { FitAddon } from '@xterm/addon-fit';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { showTerminalAtom } from 'state/showTerminalAtom';
 import { terminalSessionAtom } from 'state/terminalSessionAtom';
+import { clusterAtom } from 'state/clusterAtom';
 import { useAtom, useAtomValue } from 'jotai';
 import { themeAtom } from 'state/settings/themeAtom';
 import { getXtermTheme } from './terminalThemes';
@@ -29,6 +30,16 @@ export function BusolaTerminal({
   const podNameRef = useRef<string | null>(null);
   const theme = useAtomValue(themeAtom);
   const { connect, disconnect } = useTerminalSession();
+  const cluster = useAtomValue(clusterAtom);
+  const openedOnClusterRef = useRef(cluster?.name);
+
+  useEffect(() => {
+    if (cluster?.name !== openedOnClusterRef.current) {
+      openedOnClusterRef.current = cluster?.name;
+      disconnect(podNameRef.current);
+      setShowTerminal((prev) => ({ ...prev, isOpen: false }));
+    }
+  }, [cluster?.name, setShowTerminal, disconnect]);
 
   podNameRef.current = sessionState.podName;
 
