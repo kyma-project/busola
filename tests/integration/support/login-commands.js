@@ -109,7 +109,8 @@ Cypress.Commands.add('loginAndSelectCluster', function (params) {
     }
 
     cy.visit(`${config.clusterAddress}/clusters`)
-      .get('ui5-button:visible')
+      // the first cold boot under load can take longer than the default 10s
+      .get('ui5-button:visible', { timeout: 20000 })
       .contains('Connect')
       .click();
 
