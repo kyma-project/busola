@@ -146,4 +146,21 @@ describe('useFetch', () => {
     );
     expect(fetchMock).not.toHaveBeenCalled();
   });
+
+  it('performs the request when SSO is enabled and the user is authenticated', async () => {
+    const okResponse = { ok: true, json: () => Promise.resolve({}) };
+    fetchMock.mockResolvedValue(okResponse);
+
+    const fetchFn = renderFetchFn([
+      [authDataAtom, { token: 'my-token' }],
+      [clusterAtom, clusterFixture],
+      [ssoDataAtom, {}],
+      [configurationAtom, { features: { SSO_LOGIN: { isEnabled: true } } }],
+    ]);
+
+    const response = await fetchFn({ relativeUrl: '/api/v1/pods' });
+
+    expect(response).toBe(okResponse);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
 });
