@@ -21,8 +21,8 @@ const useGetHook = (processDataFn) =>
   function (
     path,
     {
-      pollingInterval,
-      onDataReceived,
+      pollingInterval = 0,
+      onDataReceived = undefined,
       skip = false,
       errorTolerancy = undefined,
       compareEntireResource = false,

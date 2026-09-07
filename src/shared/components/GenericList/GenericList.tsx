@@ -33,8 +33,8 @@ import './GenericList.scss';
 import { asyncSort } from 'components/Extensibility/helpers/sortBy';
 import { useDebounce } from 'hooks/useDebounce';
 import { K8sResource } from 'types';
-import { TableRowClickEventDetail } from '@ui5/webcomponents/dist/Table';
-import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
+import { TableRowClickEventDetail } from '@ui5/webcomponents/dist/Table.js';
+import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout.js';
 
 type AsyncSortFunction = {
   asyncFn: (a: any, b: any) => Promise<any>;

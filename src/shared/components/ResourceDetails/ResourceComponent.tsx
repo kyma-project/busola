@@ -100,7 +100,6 @@ export function ResourceComponent({
     handleResourceDelete,
     performDelete,
     performCancel,
-    /*@ts-expect-error Type mismatch between js and ts*/
   } = useDeleteResource({
     resourceTitle,
     resourceType,

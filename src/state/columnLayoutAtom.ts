@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
+import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout.js';
 
 export type ColumnState = {
   resourceName: null | string;

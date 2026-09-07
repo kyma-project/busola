@@ -21,7 +21,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 
-import { FlexBoxDirection } from '@ui5/webcomponents-react/dist/enums/FlexBoxDirection';
+import { FlexBoxDirection } from '@ui5/webcomponents-react/enums/FlexBoxDirection';
 import { namespacesAtom } from 'state/namespacesAtom';
 import { useAtomValue } from 'jotai';
 import { HintButton } from 'shared/components/HintButton/HintButton';
@@ -38,8 +38,8 @@ import {
   OPERATION_STATE_SOME_FAILED,
   OPERATION_STATE_SUCCEEDED,
 } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { ButtonClickEventDetail } from '@ui5/webcomponents/dist/Button';
-import { PopupBeforeCloseEventDetail } from '@ui5/webcomponents/dist/Popup';
+import { ButtonClickEventDetail } from '@ui5/webcomponents/dist/Button.js';
+import { PopupBeforeCloseEventDetail } from '@ui5/webcomponents/dist/Popup.js';
 
 const DEFAULT_SOURCE_URL =
   'https://kyma-project.github.io/community-modules/all-modules.yaml';

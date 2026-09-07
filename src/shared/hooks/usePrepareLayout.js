@@ -87,10 +87,10 @@ export function usePrepareLayoutColumns({
   apiGroup,
   apiVersion,
   resourceName,
-  isCustomResource,
-  crName,
+  isCustomResource = /** @type {boolean | undefined} */ (undefined),
+  crName = /** @type {string | undefined} */ (undefined),
   resource,
-  isModule,
+  isModule = /** @type {boolean | undefined} */ (undefined),
   rawResourceTypeName,
 }) {
   const setLayoutColumn = useSetAtom(columnLayoutAtom);

@@ -81,11 +81,11 @@ const ContainersLogs = ({
     scrollToSelectedLog(selectedLogIndex);
   }, [searchQuery]);
 
-  const changeSelectedLog = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === 'ArrowDown') {
+  const changeSelectedLog = (key: string) => {
+    if (key === 'Enter' || key === 'ArrowDown') {
       selectedLogIndex.current = selectedLogIndex.current + 1;
       scrollToSelectedLog(selectedLogIndex);
-    } else if (e.key === 'ArrowUp') {
+    } else if (key === 'ArrowUp') {
       selectedLogIndex.current = selectedLogIndex.current - 1;
       scrollToSelectedLog(selectedLogIndex);
     }

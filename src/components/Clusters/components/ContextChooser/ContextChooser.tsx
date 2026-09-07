@@ -16,7 +16,7 @@ import {
 import { ResourceForm } from 'shared/ResourceForm';
 import { getUserDetail } from './helpers';
 import { ResourceFormWrapperProps } from 'shared/ResourceForm/components/Wrapper';
-import { ListItemClickEventDetail } from '@ui5/webcomponents/dist/List';
+import { ListItemClickEventDetail } from '@ui5/webcomponents/dist/List.js';
 import { useNonInteractiveOidcContexts } from '../oidc-interactive-check';
 import { KubeconfigContext, KubeconfigUser, NestedPartial } from 'types';
 

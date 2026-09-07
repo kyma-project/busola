@@ -9,6 +9,7 @@ import CRCreate, { CRD } from 'resources/CustomResourceDefinitions/CRCreate';
 import { useUrl } from 'hooks/useUrl';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { LayoutColumnName } from 'types';
+import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout.js';
 
 export type Version = {
   name?: string;
@@ -130,7 +131,7 @@ export function CustomResources({
     namespace,
     enableColumnLayout: enableColumnLayout,
     layoutCloseCreateUrl: layoutCloseCreateUrl,
-    columnLayout: 'ThreeColumnsEndExpanded',
+    columnLayout: 'ThreeColumnsEndExpanded' as FCLLayout,
     customColumnLayout,
     layoutNumber: 'midColumn' as LayoutColumnName,
     parentCrdName: crd.metadata.name,

@@ -16,6 +16,7 @@ import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useNavigate } from 'react-router';
 import { Crd, LayoutColumnName } from 'types';
+import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout.js';
 
 type BusolaExtensionCreateProps = {
   formElementRef: RefObject<HTMLFormElement | null>;
@@ -65,7 +66,7 @@ export default function BusolaExtensionCreate({
             });
 
             setLayoutColumn({
-              layout: nextLayout,
+              layout: nextLayout as FCLLayout,
               showCreate: null,
               startColumn: {
                 resourceName: null,

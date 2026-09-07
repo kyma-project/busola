@@ -3,7 +3,7 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { k8sNamePattern } from 'shared/components/K8sNameInput/K8sNameInput';
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
-import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
+import ValueState from '@ui5/webcomponents-base/dist/types/ValueState.js';
 
 interface K8sResourceSelectBaseProps {
   onSelect: (value: string, resource: any) => void;
@@ -26,7 +26,6 @@ export function K8sResourceSelectWithUseGetList({
   ...props
 }: K8sResourceSelectWithUseGetListProps) {
   const { data, error, ...listCall } = useGetList(filter)(url, {
-    //@ts-expect-error Type mismatch between js and ts
     pollingInterval: 7000,
   });
 
