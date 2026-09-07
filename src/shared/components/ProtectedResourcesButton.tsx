@@ -6,8 +6,7 @@ import {
   Text,
 } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
-import { useId, useState } from 'react';
-import type React from 'react';
+import { type CSSProperties, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { configFeaturesNames } from 'state/types';
 import jp from 'jsonpath';
@@ -101,7 +100,7 @@ export const ProtectedResourceWarning = ({
             ? ({
                 '--sapButton_Lite_TextColor': 'var(--sapCriticalColor)',
                 '--sapButton_Lite_Hover_TextColor': 'var(--sapCriticalColor)',
-              } as React.CSSProperties)
+              } as CSSProperties)
             : undefined
         }
       >
