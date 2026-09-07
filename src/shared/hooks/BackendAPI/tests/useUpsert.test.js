@@ -67,7 +67,7 @@ describe('useUpsert', () => {
     expect(onError).not.toHaveBeenCalled();
   });
 
-  it('invokes onError when the write fails', async () => {
+  it('invokes onError when creating a new resource fails', async () => {
     const resource = { metadata: { name: 'new-one' }, spec: {} };
     mockFetch.mockRejectedValue(new Error('not found'));
     const writeError = new Error(
@@ -80,6 +80,26 @@ describe('useUpsert', () => {
     const { result } = renderHook(() => useUpsert());
     await result.current({ url, resource, onSuccess, onError });
 
+    expect(onError).toHaveBeenCalledWith(writeError);
+    expect(onSuccess).not.toHaveBeenCalled();
+  });
+
+  it('invokes onError when patching an existing resource fails', async () => {
+    const existing = { metadata: { name: 'foo' }, spec: { replicas: 1 } };
+    const resource = { metadata: { name: 'foo' }, spec: { replicas: 3 } };
+    mockFetch.mockResolvedValue(existing);
+    const writeError = new Error(
+      'You are not allowed to perform this operation',
+    );
+    mockPatch.mockRejectedValue(writeError);
+    const onSuccess = vi.fn();
+    const onError = vi.fn();
+
+    const { result } = renderHook(() => useUpsert());
+    await result.current({ url, resource, onSuccess, onError });
+
+    expect(mockPatch).toHaveBeenCalled();
+    expect(mockPost).not.toHaveBeenCalled();
     expect(onError).toHaveBeenCalledWith(writeError);
     expect(onSuccess).not.toHaveBeenCalled();
   });
