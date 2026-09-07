@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { RadialChart } from '@ui5/webcomponents-react-charts';
 import { Card, Text, Title } from '@ui5/webcomponents-react';
-import { renderFinished } from '@ui5/webcomponents-base/dist/Render.js';
+import { renderFinished } from '@ui5/webcomponents-base';
 
 import './UI5RadialChart.scss';
 import { HintButton } from '../HintButton/HintButton';
