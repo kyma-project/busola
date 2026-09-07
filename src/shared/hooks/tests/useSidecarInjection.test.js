@@ -17,7 +17,7 @@ function setup(overrides = {}) {
     ...overrides,
   };
   const utils = renderHook((p) => useSidecar(p), { initialProps: props });
-  return { setRes, ...utils };
+  return { setRes, props, ...utils };
 }
 
 describe('useSidecar', () => {
@@ -81,5 +81,27 @@ describe('useSidecar', () => {
 
     expect(res.metadata.labels[label]).toBeUndefined();
     expect(setRes).not.toHaveBeenCalled();
+  });
+
+  it('turns the toggle off when the label is deleted from the YAML externally', () => {
+    const { result, rerender, props } = setup({
+      initialRes: { metadata: { labels: { [label]: 'enabled' } } },
+      res: { metadata: { labels: { [label]: 'enabled' } } },
+    });
+
+    expect(result.current.isSidecarEnabled).toBe(true);
+
+    // form is marked as changed; while the label is still present the toggle stays on
+    act(() => {
+      result.current.setIsChanged(true);
+    });
+    expect(result.current.isSidecarEnabled).toBe(true);
+
+    // label removed directly in the YAML -> the reactive effect flips the toggle off
+    act(() => {
+      rerender({ ...props, res: { metadata: { labels: {} } } });
+    });
+
+    expect(result.current.isSidecarEnabled).toBe(false);
   });
 });
