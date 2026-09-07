@@ -156,4 +156,150 @@ describe('provisionPod', () => {
       }),
     ).rejects.toThrow(/Failed/);
   });
+
+  it('waits for a Terminating pod to be deleted before provisioning a fresh one', async () => {
+    let getCallCount = 0;
+    const fetchFn = vi.fn(({ relativeUrl, init }: any) => {
+      const method = init?.method ?? 'GET';
+      if (method === 'POST') return Promise.resolve(jsonResponse({}));
+      if (relativeUrl.includes(`/pods/${POD}`)) {
+        getCallCount++;
+        if (getCallCount === 1) {
+          // First check: pod exists but is Terminating
+          return Promise.resolve(
+            jsonResponse({
+              metadata: { deletionTimestamp: '2026-09-02T10:00:00Z' },
+              status: { phase: 'Running' },
+            }),
+          );
+        }
+        if (getCallCount === 2) {
+          // Second check: pod is fully gone
+          return Promise.reject(new HttpError('Not Found', 404, 404));
+        }
+        // Third check (pollPodReady): new pod is Running, no deletionTimestamp
+        return Promise.resolve(jsonResponse({ status: { phase: 'Running' } }));
+      }
+      return Promise.resolve(jsonResponse({}));
+    });
+
+    await expect(
+      provisionPod({
+        fetchFn: fetchFn as any,
+        podName: POD,
+        image: 'i',
+        abortController,
+      }),
+    ).resolves.toBeUndefined();
+
+    expect(getCallCount).toBeGreaterThanOrEqual(3);
+  });
+
+  it('does not wait when no Terminating pod is present', async () => {
+    let getCallCount = 0;
+    const fetchFn = vi.fn(({ relativeUrl, init }: any) => {
+      const method = init?.method ?? 'GET';
+      if (method === 'POST') return Promise.resolve(jsonResponse({}));
+      if (relativeUrl.includes(`/pods/${POD}`)) {
+        getCallCount++;
+        return Promise.resolve(jsonResponse({ status: { phase: 'Running' } }));
+      }
+      return Promise.resolve(jsonResponse({}));
+    });
+
+    await provisionPod({
+      fetchFn: fetchFn as any,
+      podName: POD,
+      image: 'i',
+      abortController,
+    });
+
+    // One pre-check GET + one pollPodReady GET — no deletion-wait loop
+    expect(getCallCount).toBe(2);
+  });
+
+  it('does not wait when no pod exists yet', async () => {
+    let getCallCount = 0;
+    const fetchFn = vi.fn(({ relativeUrl, init }: any) => {
+      const method = init?.method ?? 'GET';
+      if (method === 'POST') return Promise.resolve(jsonResponse({}));
+      if (relativeUrl.includes(`/pods/${POD}`)) {
+        getCallCount++;
+        if (getCallCount === 1) {
+          // Pre-check: pod doesn't exist yet
+          return Promise.reject(new HttpError('Not Found', 404, 404));
+        }
+        // pollPodReady: new pod is Running
+        return Promise.resolve(jsonResponse({ status: { phase: 'Running' } }));
+      }
+      return Promise.resolve(jsonResponse({}));
+    });
+
+    await provisionPod({
+      fetchFn: fetchFn as any,
+      podName: POD,
+      image: 'i',
+      abortController,
+    });
+
+    expect(getCallCount).toBe(2);
+  });
+
+  it('throws when the deadline expires while waiting for a Terminating pod', async () => {
+    vi.useFakeTimers();
+    const fetchFn = vi.fn(({ relativeUrl, init }: any) => {
+      const method = init?.method ?? 'GET';
+      if (method === 'POST') return Promise.resolve(jsonResponse({}));
+      if (relativeUrl.includes(`/pods/${POD}`))
+        return Promise.resolve(
+          jsonResponse({
+            metadata: { deletionTimestamp: '2026-09-02T10:00:00Z' },
+          }),
+        );
+      return Promise.resolve(jsonResponse({}));
+    });
+
+    const provision = provisionPod({
+      fetchFn: fetchFn as any,
+      podName: POD,
+      image: 'i',
+      abortController,
+    });
+    const assertion = expect(provision).rejects.toThrow(
+      'Timed out waiting for terminal pod to finish terminating.',
+    );
+    await vi.advanceTimersByTimeAsync(120_001);
+    await assertion;
+    vi.useRealTimers();
+  });
+
+  it('throws AbortError when aborted while waiting for a Terminating pod', async () => {
+    const aborted = new AbortController();
+    let initialCheckDone = false;
+    const fetchFn = vi.fn(({ relativeUrl, init }: any) => {
+      const method = init?.method ?? 'GET';
+      if (method === 'POST') return Promise.resolve(jsonResponse({}));
+      if (relativeUrl.includes(`/pods/${POD}`)) {
+        if (!initialCheckDone) {
+          initialCheckDone = true;
+          aborted.abort();
+        }
+        return Promise.resolve(
+          jsonResponse({
+            metadata: { deletionTimestamp: '2026-09-02T10:00:00Z' },
+          }),
+        );
+      }
+      return Promise.resolve(jsonResponse({}));
+    });
+
+    await expect(
+      provisionPod({
+        fetchFn: fetchFn as any,
+        podName: POD,
+        image: 'i',
+        abortController: aborted,
+      }),
+    ).rejects.toMatchObject({ name: 'AbortError' });
+  });
 });
