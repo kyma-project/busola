@@ -21,7 +21,7 @@ import { LogsPanel } from 'resources/Pods/LogsPanel';
 const HOUR_IN_SECONDS = 3600;
 const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
-const THRESHOLD = 50;
+const SCROLL_EDGE_THRESHOLD = 50;
 
 interface ContainersLogsProps {
   namespace: string;
@@ -42,6 +42,11 @@ const scrollToSelectedLog = (selectedLogIndex: { current: number }) => {
   }
 };
 
+// 'tail'        — keep the viewport at the newest-logs edge as content arrives
+// 'snap-to-top' — scroll to scrollTop=0 once, then transition to 'free'
+// 'free'        — user has scrolled away; leave the viewport alone
+type LogScrollBehavior = 'tail' | 'snap-to-top' | 'free';
+
 const ContainersLogs = ({
   namespace,
   containerName,
@@ -56,49 +61,34 @@ const ContainersLogs = ({
   const [reverseLogs, setReverseLogs] = useState(false);
   const [sinceSeconds, setSinceSeconds] = useState(String(DEFAULT_TIMEFRAME));
   const [displayData, setDisplayData] = useState<string[]>([]);
-  const scrollContainerRef = useRef<HTMLElement | null>(null);
-  const [scrollContainerReady, setScrollContainerReady] = useState(false);
+  const [scrollBehavior, setScrollBehavior] =
+    useState<LogScrollBehavior>('tail');
+
+  const logsPanelBodyRef = useRef<HTMLDivElement>(null);
   const selectedLogIndex = useRef(0);
-  const isAtNewestEdge = useRef(true);
-  const reverseLogsRef = useRef(reverseLogs);
-  const displayDataLengthRef = useRef(0);
-  // Distinguish the initial mount from a real user-initiated timeframe change so we can
-  // skip the scroll-to-top logic on first render (auto-scroll to bottom is the right
-  // default there).
-  const isInitialTimeframe = useRef(true);
 
-  const handleScrollContainerReady = useCallback(
-    (container: HTMLElement | null) => {
-      scrollContainerRef.current = container;
-      setScrollContainerReady(!!container);
-    },
-    [],
-  );
+  // --- Scroll inputs: three callers, each just sets scrollBehavior ---
 
-  // Track whether the user is at the newest-logs edge (bottom in normal, top in reversed).
+  // User scrolled: determine whether they are at the newest-logs edge or have moved away.
+  // Functional update prevents scroll events from overriding an active 'snap-to-top'.
   const handleScroll = useCallback(() => {
-    const el = scrollContainerRef.current;
+    const el = logsPanelBodyRef.current;
     if (!el) return;
-    isAtNewestEdge.current = reverseLogs
-      ? el.scrollTop <= THRESHOLD
-      : el.scrollTop + el.clientHeight >= el.scrollHeight - THRESHOLD;
+    const atEdge = reverseLogs
+      ? el.scrollTop <= SCROLL_EDGE_THRESHOLD
+      : el.scrollTop + el.clientHeight >=
+        el.scrollHeight - SCROLL_EDGE_THRESHOLD;
+    setScrollBehavior((prev) =>
+      prev === 'snap-to-top' ? prev : atEdge ? 'tail' : 'free',
+    );
   }, [reverseLogs]);
 
-  // Attach the scroll listener to the real scroll container whenever it changes.
   useEffect(() => {
-    const el = scrollContainerRef.current;
+    const el = logsPanelBodyRef.current;
     if (!el) return;
     el.addEventListener('scroll', handleScroll);
     return () => el.removeEventListener('scroll', handleScroll);
-  }, [scrollContainerReady, handleScroll]);
-
-  // When reverseLogs toggles: update the ref, re-enable auto-scroll, snap to new edge.
-  useEffect(() => {
-    reverseLogsRef.current = reverseLogs;
-    isAtNewestEdge.current = true;
-    const el = scrollContainerRef.current;
-    if (el) el.scrollTop = reverseLogs ? 0 : el.scrollHeight;
-  }, [reverseLogs, scrollContainerReady]);
+  }, [handleScroll]);
 
   const logTimeframeOptions = [
     { text: '1 hour', key: String(HOUR_IN_SECONDS) },
@@ -113,47 +103,34 @@ const ContainersLogs = ({
   const url = `/api/v1/namespaces/${namespace}/pods/${podName}/log?container=${containerName}&follow=true${tailLinesParam}&timestamps=true&sinceSeconds=${sinceSeconds}`;
   const streamData = useGetStream(url);
 
-  // On an explicit timeframe change: reset the length threshold so the first arriving
-  // chunk is shown immediately, then scroll to the top so controls stay in view.
-  // On the initial mount we skip the scroll-to-top so the first load still auto-scrolls
-  // to the newest logs.
-  useEffect(() => {
-    displayDataLengthRef.current = 0;
-    if (isInitialTimeframe.current) {
-      isInitialTimeframe.current = false;
-      return;
-    }
-    isAtNewestEdge.current = false;
-    const el = scrollContainerRef.current;
-    if (el) el.scrollTop = 0;
-  }, [sinceSeconds]);
-
   // Gate displayData updates to prevent the DOM from shrinking during background reconnects.
   // Instead, skip empty resets and only switch to new data when:
-  //   - the user is tailing (isAtNewestEdge = true): show live updates immediately, or
+  //   - scrollBehavior is 'tail': show live updates immediately, or
   //   - the new stream has caught back up to at least the previous length: the DOM won't
-  //     shrink, so the user's approximate scroll position is preserved.
+  //     shrink, preserving the user's approximate scroll position.
   useEffect(() => {
     const newLength = streamData.data.length;
     if (newLength === 0) return;
-    if (!isAtNewestEdge.current && newLength < displayDataLengthRef.current)
-      return;
+    if (scrollBehavior !== 'tail' && newLength < displayData.length) return;
 
-    displayDataLengthRef.current = newLength;
     const snapshot = streamData.data;
     const timeoutId = setTimeout(() => {
       setDisplayData(snapshot);
     }, 0);
     return () => clearTimeout(timeoutId);
-  }, [streamData.data]);
+  }, [streamData.data, scrollBehavior, displayData.length]);
 
-  // Auto-scroll to the newest-logs edge on each displayData update, but only if the user
-  // was already at that edge (i.e. tailing). If they scrolled away, leave them alone.
   useEffect(() => {
-    const el = scrollContainerRef.current;
-    if (!el || !isAtNewestEdge.current) return;
-    el.scrollTop = reverseLogsRef.current ? 0 : el.scrollHeight;
-  }, [displayData, scrollContainerReady]);
+    const el = logsPanelBodyRef.current;
+    if (!el) return;
+    if (scrollBehavior === 'tail') {
+      el.scrollTop = reverseLogs ? 0 : el.scrollHeight;
+    } else if (scrollBehavior === 'snap-to-top') {
+      el.scrollTop = 0;
+      const id = setTimeout(() => setScrollBehavior('free'), 0);
+      return () => clearTimeout(id);
+    }
+  }, [displayData, scrollBehavior, reverseLogs]);
 
   useEffect(() => {
     selectedLogIndex.current = 0;
@@ -176,10 +153,13 @@ const ContainersLogs = ({
 
   const onReverseChange = () => {
     setReverseLogs((prev) => !prev);
+    setScrollBehavior('tail');
   };
 
   const onLogTimeframeChange = (timeValue: string) => {
+    setDisplayData([]);
     setSinceSeconds(timeValue);
+    setScrollBehavior('snap-to-top');
   };
 
   const saveToFile = (podName: string, containerName: string) => {
@@ -209,7 +189,6 @@ const ContainersLogs = ({
   return (
     <DynamicPageComponent
       title={containerName}
-      onScrollContainerReady={handleScrollContainerReady}
       content={
         <UI5Panel
           title={t('pods.labels.logs')}
@@ -265,7 +244,7 @@ const ContainersLogs = ({
             </>
           }
         >
-          <div className="logs-panel-body">
+          <div className="logs-panel-body" ref={logsPanelBodyRef}>
             <LogsPanel
               streamData={{ data: displayData, error: streamData.error }}
               containerName={containerName}
