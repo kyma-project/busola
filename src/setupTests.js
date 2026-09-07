@@ -1,8 +1,7 @@
 /* global afterEach, global, vi */
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/vitest';
-import { cleanup } from '@testing-library/react';
-import { act } from 'react';
+import { cleanup, act } from '@testing-library/react';
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
 
 Element.prototype.scroll = () => {};
