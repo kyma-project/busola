@@ -244,4 +244,62 @@ describe('provisionPod', () => {
 
     expect(getCallCount).toBe(2);
   });
+
+  it('throws when the deadline expires while waiting for a Terminating pod', async () => {
+    vi.useFakeTimers();
+    const fetchFn = vi.fn(({ relativeUrl, init }: any) => {
+      const method = init?.method ?? 'GET';
+      if (method === 'POST') return Promise.resolve(jsonResponse({}));
+      if (relativeUrl.includes(`/pods/${POD}`))
+        return Promise.resolve(
+          jsonResponse({
+            metadata: { deletionTimestamp: '2026-09-02T10:00:00Z' },
+          }),
+        );
+      return Promise.resolve(jsonResponse({}));
+    });
+
+    const provision = provisionPod({
+      fetchFn: fetchFn as any,
+      podName: POD,
+      image: 'i',
+      abortController,
+    });
+    const assertion = expect(provision).rejects.toThrow(
+      'Timed out waiting for terminal pod to finish terminating.',
+    );
+    await vi.advanceTimersByTimeAsync(120_001);
+    await assertion;
+    vi.useRealTimers();
+  });
+
+  it('throws AbortError when aborted while waiting for a Terminating pod', async () => {
+    const aborted = new AbortController();
+    let initialCheckDone = false;
+    const fetchFn = vi.fn(({ relativeUrl, init }: any) => {
+      const method = init?.method ?? 'GET';
+      if (method === 'POST') return Promise.resolve(jsonResponse({}));
+      if (relativeUrl.includes(`/pods/${POD}`)) {
+        if (!initialCheckDone) {
+          initialCheckDone = true;
+          aborted.abort();
+        }
+        return Promise.resolve(
+          jsonResponse({
+            metadata: { deletionTimestamp: '2026-09-02T10:00:00Z' },
+          }),
+        );
+      }
+      return Promise.resolve(jsonResponse({}));
+    });
+
+    await expect(
+      provisionPod({
+        fetchFn: fetchFn as any,
+        podName: POD,
+        image: 'i',
+        abortController: aborted,
+      }),
+    ).rejects.toMatchObject({ name: 'AbortError' });
+  });
 });

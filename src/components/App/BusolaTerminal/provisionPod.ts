@@ -96,7 +96,6 @@ async function waitIfTerminating(
   while (Date.now() < deadline) {
     if (abortController.signal.aborted)
       throw new DOMException('Aborted', 'AbortError');
-    await new Promise((resolve) => setTimeout(resolve, POD_POLL_INTERVAL_MS));
     try {
       const res = await fetchFn({ relativeUrl: podUrl, abortController });
       const pod = await res.json();
@@ -105,6 +104,7 @@ async function waitIfTerminating(
       if (err instanceof HttpError && err.code === 404) return;
       throw err;
     }
+    await new Promise((resolve) => setTimeout(resolve, POD_POLL_INTERVAL_MS));
   }
   throw new Error('Timed out waiting for terminal pod to finish terminating.');
 }
