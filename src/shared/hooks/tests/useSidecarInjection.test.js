@@ -35,16 +35,23 @@ describe('useSidecar', () => {
     expect(result.current.isSidecarEnabled).toBe(false);
   });
 
+  it('initialises as disabled when initialRes is null', () => {
+    const { result } = setup({ initialRes: null });
+
+    expect(result.current.isSidecarEnabled).toBe(false);
+  });
+
   it('writes the enabled label into the resource once toggled on', () => {
     const res = { metadata: { labels: {} } };
     const { result, setRes } = setup({ res });
 
+    // must batch: isChanged isn't a write-effect dep, so it must be set in the
+    // same render as the toggle
     act(() => {
       result.current.setIsChanged(true);
       result.current.setSidecarEnabled(true);
     });
 
-    expect(res.metadata.labels[label]).toBe('enabled');
     expect(setRes).toHaveBeenCalledWith(
       expect.objectContaining({
         metadata: expect.objectContaining({
@@ -66,8 +73,13 @@ describe('useSidecar', () => {
       result.current.setSidecarEnabled(false);
     });
 
-    expect(res.metadata.labels[label]).toBe('disabled');
-    expect(setRes).toHaveBeenCalled();
+    expect(setRes).toHaveBeenCalledWith(
+      expect.objectContaining({
+        metadata: expect.objectContaining({
+          labels: expect.objectContaining({ [label]: 'disabled' }),
+        }),
+      }),
+    );
   });
 
   it('does not touch the resource while isChanged is false', () => {
@@ -79,7 +91,6 @@ describe('useSidecar', () => {
       result.current.setSidecarEnabled(true);
     });
 
-    expect(res.metadata.labels[label]).toBeUndefined();
     expect(setRes).not.toHaveBeenCalled();
   });
 

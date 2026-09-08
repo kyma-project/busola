@@ -41,4 +41,12 @@ describe('useGetHiddenNamespaces', () => {
 
     expect(result.current).toEqual([]);
   });
+
+  it('returns an empty array when the feature is enabled but has no config', () => {
+    featureValue = { isEnabled: true };
+
+    const { result } = renderHook(() => useGetHiddenNamespaces());
+
+    expect(result.current).toEqual([]);
+  });
 });
