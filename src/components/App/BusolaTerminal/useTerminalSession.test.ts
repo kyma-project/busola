@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { renderHook } from '@testing-library/react';
-import { act } from 'react';
+import { renderHook, act } from '@testing-library/react';
 import { useTerminalSession } from './useTerminalSession';
 import { encodeBase64Url } from 'shared/utils/base64url';
 
