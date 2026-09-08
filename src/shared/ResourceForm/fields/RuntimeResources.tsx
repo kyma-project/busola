@@ -63,8 +63,8 @@ function CpuInput({
     >
       <Label required>{label} (m)</Label>
       <Inputs.Number
-        min="0"
-        value={value}
+        min={0}
+        value={Number(value)}
         setValue={(value: number | null) => setValue(value + 'm')}
         className="full-width"
         required

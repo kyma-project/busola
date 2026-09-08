@@ -18,7 +18,7 @@ import { ModuleStatus, resolveType } from './ModuleStatus';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { toSentenceCase } from 'shared/utils/helpers';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
-import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
+import ValueState from '@ui5/webcomponents-base/dist/types/ValueState.js';
 import { TFunction } from 'i18next';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 import { usePopulateWithNamespace } from 'hooks/usePopulateWithNamespace';
@@ -46,7 +46,7 @@ type ModulesListRowsProps = {
   kymaResource?: KymaResourceType;
   moduleTemplates: ModuleTemplateListType;
   protectedResource?: boolean;
-  hasDetailsLink: (resource: RowResourceType) => boolean;
+  hasDetailsLink: (resource: any) => boolean;
   newestModuleTemplate?: ModuleTemplateType;
 };
 

@@ -25,7 +25,7 @@ export default function CustomResourcesByGroup() {
       resourceListProps={{
         customUrl: (crd: { metadata: { name: string } }) =>
           scopedUrl(`customresources/${crd.metadata.name}`),
-        nameSelector: (entry?: { spec: { names: { kind: string } } }) =>
+        nameSelector: (entry?: Record<string, any>) =>
           pluralize(entry?.spec?.names?.kind || ''),
         readOnly: true,
       }}

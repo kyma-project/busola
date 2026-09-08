@@ -3,6 +3,7 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 import { Title, ToolbarButton } from '@ui5/webcomponents-react';
+import PodDisruptionBudgetsList from 'resources/PodDisruptionBudgets/PodDisruptionBudgetsList';
 import LimitRangeList from 'resources/LimitRanges/LimitRangeList';
 import { EventsList } from 'shared/components/EventsList';
 import { ResourceQuotasList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotasList';
@@ -44,6 +45,20 @@ export function AllNamespacesDetails() {
     <ResourceQuotaListComponent {...resourceQuotasParams} />
   );
 
+  const podDisruptionBudgetsParams = {
+    hasDetailsView: true,
+    resourceUrl: `/apis/policy/v1/poddisruptionbudgets`,
+    resourceType: 'PodDisruptionBudgets',
+    namespace: '-all-',
+    isCompact: true,
+    showTitle: true,
+    disableCreate: true,
+  };
+
+  const PodDisruptionBudgets = (
+    <PodDisruptionBudgetsList {...podDisruptionBudgetsParams} />
+  );
+
   const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
 
   const headerActions = (
@@ -80,6 +95,7 @@ export function AllNamespacesDetails() {
           </div>
           {LimitRangesList}
           {ResourceQuotasList}
+          {PodDisruptionBudgets}
           {Events}
         </section>
       }

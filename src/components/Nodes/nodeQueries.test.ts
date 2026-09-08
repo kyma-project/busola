@@ -1,3 +1,4 @@
+import { describe, expect, vi } from 'vitest';
 import { calcNodeResources } from './nodeQueries';
 
 vi.mock('shared/components/UI5RadialChart/UI5RadialChart', () => {

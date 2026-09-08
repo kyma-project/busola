@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { renderHook } from '@testing-library/react';
-import { act } from 'react';
+import { renderHook, act } from '@testing-library/react';
 import { useTerminalSession } from './useTerminalSession';
 import { encodeBase64Url } from 'shared/utils/base64url';
 
@@ -47,7 +46,14 @@ const jsonResponse = (data: any) => ({ json: () => Promise.resolve(data) });
 function makeTerm() {
   return {
     write: vi.fn(),
+    cols: 80,
+    rows: 24,
     onData: vi.fn((_handler: (data: string) => void) => ({ dispose: vi.fn() })),
+    onResize: vi.fn(
+      (_handler: (size: { cols: number; rows: number }) => void) => ({
+        dispose: vi.fn(),
+      }),
+    ),
   };
 }
 
