@@ -43,6 +43,15 @@ function buildPodManifest(podName: string, image: string) {
           command: ['/bin/bash'],
           stdin: true,
           tty: true,
+          // Prints COLUMNS spaces + \r before each prompt: if the cursor is
+          // mid-line (e.g. curl output without a trailing newline) the spaces
+          // wrap to the next line so the prompt never shares a line with output.
+          env: [
+            {
+              name: 'PROMPT_COMMAND',
+              value: 'printf "%*s\\r" "${COLUMNS:-80}" ""',
+            },
+          ],
         },
       ],
       restartPolicy: 'Never',

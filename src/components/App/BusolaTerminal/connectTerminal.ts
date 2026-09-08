@@ -9,6 +9,7 @@ import { TFunction } from 'i18next';
 const STDIN_CHANNEL = 0;
 const STDOUT_CHANNEL = 1;
 const STDERR_CHANNEL = 2;
+const RESIZE_CHANNEL = 4;
 
 const ANSI_RESET = '\x1b[0m';
 export const COLOR_SUCCESS = '\x1b[32m';
@@ -20,6 +21,16 @@ export const LINE_BREAK = '\r\n';
 
 export function terminalMessage(color: string, text: string) {
   return `${LINE_BREAK}${color}${text}${ANSI_RESET}${LINE_BREAK}`;
+}
+
+export function sendResize(ws: WebSocket, cols: number, rows: number): void {
+  if (ws.readyState !== WebSocket.OPEN) return;
+  const message = JSON.stringify({ Width: cols, Height: rows });
+  const bytes = new TextEncoder().encode(message);
+  const frame = new Uint8Array(bytes.length + 1);
+  frame[0] = RESIZE_CHANNEL;
+  frame.set(bytes, 1);
+  ws.send(frame);
 }
 
 function buildProtocols(authHeaders: Headers): string[] {
@@ -76,6 +87,7 @@ export async function connectTerminal({
 
   ws.onopen = () => {
     if (signal.aborted) return;
+    sendResize(ws, term.cols, term.rows);
     setSession((prev) => ({ ...prev, status: 'connected' }));
     term.write(
       terminalMessage(COLOR_SUCCESS, t('terminal.messages.connected')),
@@ -118,7 +130,7 @@ export async function connectTerminal({
     }));
   };
 
-  const disposable = term.onData((input) => {
+  const dataDisposable = term.onData((input) => {
     if (ws.readyState !== WebSocket.OPEN) return;
     const bytes = new TextEncoder().encode(input);
     const frame = new Uint8Array(bytes.length + 1);
@@ -127,5 +139,17 @@ export async function connectTerminal({
     ws.send(frame);
   });
 
-  return { ws, disposable };
+  const resizeDisposable = term.onResize(({ cols, rows }) => {
+    sendResize(ws, cols, rows);
+  });
+
+  return {
+    ws,
+    disposable: {
+      dispose: () => {
+        dataDisposable.dispose();
+        resizeDisposable.dispose();
+      },
+    },
+  };
 }
