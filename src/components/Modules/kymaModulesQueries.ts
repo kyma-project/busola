@@ -48,7 +48,6 @@ export function useKymaQuery() {
     loading: loadingKyma,
     error: errorKyma,
   } = useGet(kymaResourceUrl, {
-    //@ts-expect-error - mismatch between JS and TS
     pollingInterval: 3000,
     skip: !!(!resourceName || errorKymaResources),
   });
@@ -65,7 +64,6 @@ export function useModuleTemplatesQuery({ skip = false }) {
   const modulesResourceUrl = `/apis/operator.kyma-project.io/v1beta2/moduletemplates`;
 
   const { data, loading } = useGet(modulesResourceUrl, {
-    //@ts-expect-error - mismatch between JS and TS
     pollingInterval: 3000,
     skip: skip,
   }) as {
@@ -94,7 +92,6 @@ export function useModulesReleaseQuery({ skip = false }) {
   const modulesReleaseMetaResourceUrl = `/apis/operator.kyma-project.io/v1beta2/modulereleasemetas`;
 
   const { data, loading } = useGet(modulesReleaseMetaResourceUrl, {
-    //@ts-expect-error - mismatch between JS and TS
     pollingInterval: 3000,
     skip: skip,
   }) as { data: ModuleReleaseMetaListType | null; loading: boolean };

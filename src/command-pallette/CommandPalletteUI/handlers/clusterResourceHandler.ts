@@ -39,7 +39,7 @@ function getAutocompleteEntries({
 function getSuggestion({
   tokens,
   resourceCache,
-}: CommandPaletteContext): string {
+}: CommandPaletteContext): string | undefined {
   const [type, , name] = tokens;
   const suggestedType = makeSuggestion(
     type,
@@ -145,7 +145,8 @@ function sendNamespaceSwitchMessage(
     );
   if (!matchedRoute) return;
 
-  const resourceType = matchedRoute.params.resourceType || '';
+  const resourceType =
+    (matchedRoute.params as { resourceType?: string }).resourceType || '';
 
   navigate(
     `/cluster/${encodeURIComponent(

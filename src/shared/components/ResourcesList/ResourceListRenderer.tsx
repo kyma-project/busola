@@ -30,7 +30,7 @@ import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
 import DeleteResourceModal from '../DeleteResourceModal/DeleteResourceModal';
 import { ResourceListRendererProps } from './types';
 import { K8sResource } from 'types';
-import { LinkClickEventDetail } from '@ui5/webcomponents/dist/Link';
+import { LinkClickEventDetail } from '@ui5/webcomponents/dist/Link.js';
 
 export function ResourceListRenderer({
   resourceUrl,

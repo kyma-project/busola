@@ -12,7 +12,7 @@ import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtens
 
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useGetCRbyPath } from './useGetCRbyPath';
-import { Widget } from './components/Widget';
+import { Widget, Structure } from './components/Widget';
 import ExtensibilityCreate from './ExtensibilityCreate';
 import {
   TranslationBundleContext,
@@ -153,7 +153,7 @@ export const ExtensibilityDetailsCore = ({
                 <Widget
                   key={i}
                   value={resource}
-                  structure={body}
+                  structure={body as unknown as Structure}
                   schema={schema}
                   dataSources={dataSources}
                   originalResource={resource}
@@ -223,7 +223,7 @@ export const ExtensibilityDetailsCore = ({
                 <Widget
                   key={i}
                   value={resource}
-                  structure={health}
+                  structure={health as unknown as Structure}
                   schema={schema}
                   dataSources={dataSources}
                   general={general}
