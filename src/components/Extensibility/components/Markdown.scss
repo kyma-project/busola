@@ -1,0 +1,130 @@
+.extensibility-markdown {
+  color: var(--sapTextColor);
+  font-family: var(--sapFontFamily);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+
+  > *:first-child {
+    margin-top: 0;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--sapTextColor);
+    font-weight: 700;
+    margin: 0.8em 0 0.4em;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  h3 {
+    font-size: 1.15rem;
+  }
+
+  h4 {
+    font-size: 1rem;
+  }
+
+  h5 {
+    font-size: 0.9rem;
+  }
+
+  h6 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  p {
+    margin: 0.5em 0;
+  }
+
+  a {
+    color: var(--sapLinkColor);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.5em;
+    margin: 0.5em 0;
+  }
+
+  li {
+    margin: 0.15em 0;
+  }
+
+  code {
+    font-family: var(--sapCodeFontFamily, monospace);
+    background: var(--sapList_Background, rgba(128, 128, 128, 0.15));
+    padding: 0.1em 0.3em;
+    border-radius: 0.25em;
+    font-size: 0.9em;
+  }
+
+  pre {
+    background: var(--sapList_Background, rgba(128, 128, 128, 0.15));
+    padding: 0.75em 1em;
+    border-radius: 0.375rem;
+    overflow: auto;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    font-size: 1em;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--sapList_BorderColor, #ccc);
+    padding-left: 1em;
+    margin: 0.5em 0;
+    color: var(--sapContent_LabelColor);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.5em 0;
+  }
+
+  th,
+  td {
+    border: 1px solid var(--sapList_BorderColor, #ccc);
+    padding: 0.5em 0.75em;
+    text-align: left;
+  }
+
+  th {
+    background: var(--sapList_HeaderBackground, rgba(128, 128, 128, 0.1));
+    font-weight: 600;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--sapList_BorderColor, #ccc);
+    margin: 1em 0;
+  }
+}
