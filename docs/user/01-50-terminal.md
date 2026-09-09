@@ -19,13 +19,16 @@ Kyma dashboard creates the `busola-terminal` namespace in your cluster (if it do
 
 ## Available Commands
 
-The terminal provides a full interactive Bash shell (`/bin/bash`) inside the `busola-dev-toolbox` container. The following are available by default:
+The terminal provides a full interactive Bash shell inside the `busola-dev-toolbox` container. The following tools are currently available:
 
-- Standard Linux commands (`ls`, `cat`, `grep`, `curl`, `wget`, and more)
-- Additional tools bundled in the [`busola-dev-toolbox` image](https://github.com/kyma-project/busola/blob/main/Dockerfile.dev-toolbox)
+- `curl`
+- `wget`
+- `bash`
+- `jq`
+- `yq`
 
 > [!NOTE]
-> `kubectl` is not available in the terminal. The terminal Pod runs without a Kubernetes ServiceAccount, which means it has no access to the Kubernetes API. For cluster operations, use the Kyma dashboard UI or a local `kubectl` installation.
+> `kubectl` is not yet available. The terminal Pod runs without a Kubernetes ServiceAccount, which means it has no access to the Kubernetes API. The toolset is actively being expanded — future versions will include `kubectl` and `kyma` CLI.
 
 ## Limitations
 
