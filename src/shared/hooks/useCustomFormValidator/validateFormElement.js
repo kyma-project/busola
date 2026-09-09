@@ -36,7 +36,7 @@ export function validateFormElement(element, isRequired) {
           required,
         );
         // GenericList
-        if (child.querySelector('.actions').innerText === 'Add') {
+        if (child.querySelector('.actions')?.innerText === 'Add') {
           isPartiallyFilled = isPartiallyFilled || filled;
           isComplete = isComplete && complete;
           isValid = isValid && valid && complete;
@@ -77,10 +77,11 @@ export function validateFormElement(element, isRequired) {
       default:
         continue;
     }
-    const { valid, filled } = validationFunction(...args);
+    const { valid, filled, required } = validationFunction(...args);
     isValid = isValid && valid;
     isPartiallyFilled = isPartiallyFilled || filled;
     isComplete = isComplete && filled;
+    isRequired = isRequired && required;
   }
 
   return {

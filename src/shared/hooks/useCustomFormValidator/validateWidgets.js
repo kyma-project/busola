@@ -13,8 +13,7 @@ export function validateFormField(formField) {
     (required && (value === '' || value === 'NaN')) ||
     (pattern && !value.match(pattern))
   );
-
-  return { valid: isValid, filled: value !== '' && value !== 'NaN' };
+  return { valid: isValid, filled: value !== '' && value !== 'NaN', required };
 }
 
 export function validateMultiCheckboxes(formField, isRequired) {

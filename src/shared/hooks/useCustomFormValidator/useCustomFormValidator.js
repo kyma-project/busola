@@ -7,9 +7,10 @@ export function useCustomFormValidator() {
   const [customValid, setCustomValid] = useState(true);
 
   const revalidate = (cv = customValid) => {
-    const formContainer =
-      formElementRef.current?.querySelector('div.resource-form');
-
+    // Has to adjusted after every Resource Form structure change
+    const formContainer = formElementRef.current?.querySelector(
+      '.resource-form ui5-form-item',
+    ).children[0];
     if (formContainer) {
       setValid(cv && validateFormElement(formContainer, true).valid);
     }
