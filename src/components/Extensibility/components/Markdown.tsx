@@ -24,7 +24,7 @@ export function Markdown({ value, structure }: MarkdownProps) {
 
   return (
     <div
-      className="extensibility-markdown"
+      className="extensibility-markdown sap-margin-small"
       data-testid="extensibility-markdown"
     >
       <ReactMarkdown>{text}</ReactMarkdown>
