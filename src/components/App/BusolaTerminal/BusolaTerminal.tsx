@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { showTerminalAtom } from 'state/showTerminalAtom';
 import { terminalSessionAtom } from 'state/terminalSessionAtom';
+import { clusterAtom } from 'state/clusterAtom';
 import { useAtom, useAtomValue } from 'jotai';
 import { themeAtom } from 'state/settings/themeAtom';
 import { getXtermTheme } from './terminalThemes';
@@ -23,12 +25,24 @@ export function BusolaTerminal({
   const termDOM = useRef<HTMLDivElement>(null);
   const termRef = useRef<Terminal | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
+  const location = useLocation();
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
   const sessionState = useAtomValue(terminalSessionAtom);
   // Ref so the cleanup effect reads the current podName, not the mount-time value.
   const podNameRef = useRef<string | null>(null);
   const theme = useAtomValue(themeAtom);
   const { connect, disconnect } = useTerminalSession();
+  const cluster = useAtomValue(clusterAtom);
+  const openedOnClusterRef = useRef(cluster?.name);
+  const isOnClustersPage = location.pathname === '/clusters';
+
+  useEffect(() => {
+    if (cluster?.name !== openedOnClusterRef.current || isOnClustersPage) {
+      openedOnClusterRef.current = cluster?.name;
+      disconnect(podNameRef.current);
+      setShowTerminal((prev) => ({ ...prev, isOpen: false }));
+    }
+  }, [cluster?.name, setShowTerminal, disconnect, isOnClustersPage]);
 
   podNameRef.current = sessionState.podName;
 
