@@ -1,9 +1,11 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, act } from '@testing-library/react';
 import { createStore, Provider } from 'jotai';
 import { BusolaTerminal } from './BusolaTerminal';
 import { clusterAtom } from 'state/clusterAtom';
 import { showTerminalAtom } from 'state/showTerminalAtom';
+
+const mockLocation = vi.hoisted(() => ({ pathname: '/namespace/default' }));
 
 vi.mock('@xterm/xterm', () => ({
   Terminal: vi.fn().mockImplementation(() => ({
@@ -22,6 +24,11 @@ vi.mock('@xterm/addon-fit', () => ({
 vi.mock('./useTerminalSession', () => ({
   useTerminalSession: () => ({ connect: vi.fn(), disconnect: vi.fn() }),
 }));
+
+vi.mock('react-router', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-router')>();
+  return { ...actual, useLocation: () => mockLocation };
+});
 
 vi.mock('@ui5/webcomponents-react', () => ({
   Button: () => null,
@@ -50,6 +57,10 @@ const makeCluster = (name: string) =>
   }) as any;
 
 describe('BusolaTerminal', () => {
+  beforeEach(() => {
+    mockLocation.pathname = '/namespace/default';
+  });
+
   it('closes when the active cluster changes', async () => {
     const store = createStore();
     store.set(clusterAtom, makeCluster('cluster-a'));
