@@ -95,6 +95,36 @@ describe('DNS Proxy Cache', () => {
     expect(callbackCalled).toBe(true);
   });
 
+  it('does not cache DNS failures, so a valid cluster is unblocked on the next request', async () => {
+    const consoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const addressToCheck = 'transient-dns-failure-addr';
+    const mockedLookup = vi.spyOn(dns, 'lookup');
+    // First lookup fails (transient DNS outage) -> request is blocked...
+    mockedLookup.mockRejectedValueOnce(new Error('Transient DNS error'));
+    // ...second lookup succeeds with a public IP -> request must be allowed.
+    mockedLookup.mockResolvedValueOnce(internetIPAddress);
+
+    let firstErr;
+    await resolveOrBlockPrivateIpAddress(addressToCheck, {}, (err) => {
+      firstErr = err;
+    });
+    expect(firstErr).toBeInstanceOf(PrivateIPUsedError);
+
+    let secondErr;
+    let secondIp;
+    await resolveOrBlockPrivateIpAddress(addressToCheck, {}, (err, ip) => {
+      secondErr = err;
+      secondIp = ip;
+    });
+
+    // The failure was not cached, so the second request retried DNS and passed.
+    expect(secondErr).toBeNull();
+    expect(secondIp).toBe(internetIPAddress[0].address);
+    expect(mockedLookup).toHaveBeenCalledTimes(2);
+
+    consoleWarn.mockRestore();
+  });
+
   it('The custom DNS lookup logic returns error on real request', async () => {
     vi.spyOn(dns, 'lookup').mockResolvedValueOnce(localIpAddress);
     const opts = {
