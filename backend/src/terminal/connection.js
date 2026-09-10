@@ -81,6 +81,7 @@ class ExponentialBackoff {
 export class WebSocketConnection {
   #backoff;
   #reconnectTimeout = null;
+  #pendingMessages = [];
 
   constructor(remoteURL, frontWS, authHeaders, logger, backoffConfig) {
     this.remoteURL = remoteURL;
@@ -124,6 +125,11 @@ export class WebSocketConnection {
       opts,
     );
     this.k8sWS.addEventListener('open', () => {
+      for (const msg of this.#pendingMessages) {
+        this.k8sWS.send(msg);
+      }
+      this.#pendingMessages = [];
+
       if (this.#backoff.hasLaunched()) {
         this.#sendMsg(
           this.frontWS,
@@ -182,7 +188,11 @@ export class WebSocketConnection {
     });
 
     this.frontWS.addEventListener('message', (event) => {
-      this.#sendMsg(this.k8sWS, event.data, 'K8s WebSocket');
+      if (this.k8sWS?.readyState !== WebSocket.OPEN) {
+        this.#pendingMessages.push(event.data);
+      } else {
+        this.#sendMsg(this.k8sWS, event.data, 'K8s WebSocket');
+      }
     });
 
     this.frontWS.addEventListener('close', () => {

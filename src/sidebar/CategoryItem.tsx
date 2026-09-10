@@ -18,7 +18,7 @@ import {
   DataSourcesContextProvider,
 } from 'components/Extensibility/contexts/DataSources';
 import { cloneDeep } from 'lodash';
-import { SideNavigationItemClickEventDetail } from '@ui5/webcomponents-fiori/dist/SideNavigationItemBase';
+import { SideNavigationItemClickEventDetail } from '@ui5/webcomponents-fiori/dist/SideNavigationItemBase.js';
 import { useLocation } from 'react-router';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { clusterAtom } from 'state/clusterAtom';

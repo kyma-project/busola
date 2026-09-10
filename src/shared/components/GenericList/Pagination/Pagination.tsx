@@ -14,7 +14,7 @@ import { Select, Option } from '@ui5/webcomponents-react';
 import { AVAILABLE_PAGE_SIZES } from 'state/settings/pageSizeAtom';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 import './Pagination.scss';
-import { SelectChangeEventDetail } from '@ui5/webcomponents/dist/Select';
+import { SelectChangeEventDetail } from '@ui5/webcomponents/dist/Select.js';
 
 const makePartitions = (currentPage: number, pagesCount: number) => {
   const radius = 2;

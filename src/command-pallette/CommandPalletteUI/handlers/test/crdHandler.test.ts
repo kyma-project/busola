@@ -290,7 +290,7 @@ describe('fetchCRDs', () => {
       }),
     });
 
-    await crdHandler.fetchResources(ctx);
+    await crdHandler.fetchResources!(ctx);
 
     expect(ctx.fetch).toHaveResolved();
     expect(cache).toHaveLength(1);
@@ -313,7 +313,7 @@ describe('fetchCRDs', () => {
       }),
     });
 
-    await crdHandler.fetchResources(ctx);
+    await crdHandler.fetchResources!(ctx);
   });
 
   it('Fetch CRDs fails and cache not updated', async () => {
@@ -338,7 +338,7 @@ describe('fetchCRDs', () => {
       }),
     });
 
-    await crdHandler.fetchResources(ctx);
+    await crdHandler.fetchResources!(ctx);
 
     await expect(ctx.fetch).rejects.toThrow();
     expect(cache).toHaveLength(0);
