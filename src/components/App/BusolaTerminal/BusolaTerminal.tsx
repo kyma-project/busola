@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
@@ -24,6 +25,7 @@ export function BusolaTerminal({
   const termDOM = useRef<HTMLDivElement>(null);
   const termRef = useRef<Terminal | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
+  const location = useLocation();
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
   const sessionState = useAtomValue(terminalSessionAtom);
   // Ref so the cleanup effect reads the current podName, not the mount-time value.
@@ -32,14 +34,15 @@ export function BusolaTerminal({
   const { connect, disconnect } = useTerminalSession();
   const cluster = useAtomValue(clusterAtom);
   const openedOnClusterRef = useRef(cluster?.name);
+  const isOnClustersPage = location.pathname === '/clusters';
 
   useEffect(() => {
-    if (cluster?.name !== openedOnClusterRef.current) {
+    if (cluster?.name !== openedOnClusterRef.current || isOnClustersPage) {
       openedOnClusterRef.current = cluster?.name;
       disconnect(podNameRef.current);
       setShowTerminal((prev) => ({ ...prev, isOpen: false }));
     }
-  }, [cluster?.name, setShowTerminal, disconnect]);
+  }, [cluster?.name, setShowTerminal, disconnect, isOnClustersPage]);
 
   podNameRef.current = sessionState.podName;
 
