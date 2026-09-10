@@ -17,7 +17,7 @@ export function validateFormElement(element, isRequired) {
 
   for (const child of element?.children || []) {
     if (isRequired && !isValid) break;
-
+    isRequired = false;
     let validationFunction, args;
     switch (true) {
       // Validates the CollapsibleSection (GenericList/ResourceForm) by recursively calling this function
@@ -31,21 +31,25 @@ export function validateFormElement(element, isRequired) {
         const contentParent =
           contentWrapper?.parentNode === content ? contentWrapper : content;
 
-        const { valid, filled, complete } = validateFormElement(
-          contentParent,
-          required,
-        );
+        const {
+          valid,
+          filled,
+          complete,
+          required: innerRequired,
+        } = validateFormElement(contentParent, required);
         // GenericList
         if (child.querySelector('.actions')?.innerText === 'Add') {
           isPartiallyFilled = isPartiallyFilled || filled;
           isComplete = isComplete && complete;
           isValid = isValid && valid && complete;
+          isRequired = innerRequired || isRequired;
         }
         // ResourceForm
         else {
           isPartiallyFilled = isPartiallyFilled || filled;
           isComplete = isComplete && (complete || (valid && filled));
           isValid = isValid && valid;
+          isRequired = innerRequired || isRequired;
         }
         continue;
       }
@@ -81,12 +85,13 @@ export function validateFormElement(element, isRequired) {
     isValid = isValid && valid;
     isPartiallyFilled = isPartiallyFilled || filled;
     isComplete = isComplete && filled;
-    isRequired = isRequired && required;
+    isRequired = required || isRequired; // once a child is required, the parent becomes required as well
   }
 
   return {
     valid: isValid || (!isRequired && !isPartiallyFilled),
     filled: isPartiallyFilled || isComplete,
     complete: isComplete,
+    required: isRequired,
   };
 }

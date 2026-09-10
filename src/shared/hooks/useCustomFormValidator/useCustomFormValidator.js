@@ -10,9 +10,11 @@ export function useCustomFormValidator() {
     // Has to adjusted after every Resource Form structure change
     const formContainer = formElementRef.current?.querySelector(
       '.resource-form ui5-form-item',
-    ).children[0];
+    )?.children[0];
     if (formContainer) {
       setValid(cv && validateFormElement(formContainer, true).valid);
+    } else {
+      setValid(cv);
     }
   };
 

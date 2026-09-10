@@ -230,8 +230,8 @@ export const ResourceForm: ResourceFormType = (({
     if (setCustomValid) {
       if (mode === ModeSelector.MODE_YAML) {
         setCustomValid(true);
-        setCustomValid(validationRef.current);
       }
+      setCustomValid(validationRef.current);
     }
     validationRef.current = true;
   }, [setCustomValid, resource, children, mode]);
