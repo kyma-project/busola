@@ -1,4 +1,4 @@
-/* global Buffer, require */
+/* global Buffer */
 import rateLimit from 'express-rate-limit';
 import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution';
 import { filters } from '../request-filters';
@@ -13,11 +13,11 @@ import { buildK8sRequestPath } from './path-utils.js';
 import { resolveOrBlockPrivateIpAddress } from '../utils/network-utils.js';
 import config from '../src/config/config.js';
 
-const https = require('https');
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
-const escape = require('lodash.escape');
+import https from 'https';
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import escape from 'lodash.escape';
 
 export const requireK8sCredential = requireCredential(
   getK8sCredentialFromHeaders,
