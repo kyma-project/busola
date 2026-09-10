@@ -24,10 +24,6 @@ module.exports = defineConfig({
   experimentalInteractiveRunEvents: true,
   experimentalMemoryManagement: true,
   numTestsKeptInMemory: 0,
-  retries: {
-    runMode: 2,
-    openMode: 0,
-  },
   e2e: {
     includeShadowDom: true,
     testIsolation: false,
