@@ -13,6 +13,7 @@ export function validateFormField(formField) {
     (required && (value === '' || value === 'NaN')) ||
     (pattern && !value.match(pattern))
   );
+  console.log('vlaue:' + value, 'isReq:' + required, 'isValid:' + isValid);
   return { valid: isValid, filled: value !== '' && value !== 'NaN', required };
 }
 
