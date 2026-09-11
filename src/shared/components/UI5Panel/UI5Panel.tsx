@@ -69,6 +69,7 @@ export const UI5Panel = ({
         className={`${className} bsl-panel-header card-shadow ${
           shouldHaveMargin ? 'sap-margin-small' : ''
         }`}
+        style={{ overflow: 'visible' }}
         stickyHeader={stickyHeader}
         accessibleName={accessibleName}
         header={
