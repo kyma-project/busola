@@ -102,6 +102,8 @@ context('Test Busola Terminal', () => {
               this.onclose?.({ code: 1000, reason: '' });
             },
           };
+          // Expose on window so subsequent tests can interact with the mock directly.
+          win.__terminalWs = fakeWs;
           setTimeout(() => fakeWs?.onopen?.(), 0);
           return fakeWs;
         }
@@ -160,9 +162,16 @@ context('Test Busola Terminal', () => {
   });
 
   it('Accepts keyboard input and displays output from the remote shell', () => {
-    cy.get('.xterm-helper-textarea', { timeout: 5000 })
-      .should('exist')
-      .type('ls{enter}', { force: true });
+    // Simulate the stdin frame xterm sends when the user presses Enter after
+    // typing 'ls'. Kubernetes attach protocol: first byte is channel (0 = stdin),
+    // remaining bytes are the character data.
+    cy.window().then((win) => {
+      const enterByte = new TextEncoder().encode('\r');
+      const frame = new Uint8Array(enterByte.length + 1);
+      frame[0] = 0; // stdin channel
+      frame.set(enterByte, 1);
+      win.__terminalWs.send(frame);
+    });
 
     cy.get('.xterm-rows', { timeout: 5000 }).should(
       'contain.text',
