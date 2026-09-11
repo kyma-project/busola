@@ -43,13 +43,13 @@ export function validateFormElement(element, isRequired) {
         );
         // GenericList
         if (child.querySelector('.actions')?.innerText === 'Add') {
-          isPartiallyFilled = isPartiallyFilled || filled;
+          isPartiallyFilled = isPartiallyFilled || filled || !valid;
           isComplete = isComplete && complete;
           isValid = isValid && valid;
         }
         // ResourceForm
         else {
-          isPartiallyFilled = isPartiallyFilled || filled;
+          isPartiallyFilled = isPartiallyFilled || filled || !valid;
           isComplete = isComplete && (complete || (valid && filled));
           isValid = isValid && valid;
         }
