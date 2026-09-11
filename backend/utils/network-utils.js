@@ -34,6 +34,7 @@ export function isPrivateIp(ip) {
   }
   if (net.isIPv6(ip)) {
     const lowerIp = ip.toLowerCase();
+    if (lowerIp.startsWith('::ffff:')) return isPrivateIp(lowerIp.slice(7)); // IPv4-mapped IPv6
     if (lowerIp.startsWith('fc') || lowerIp.startsWith('fd')) return true; // Unique local
     if (lowerIp.startsWith('fe80:')) return true; // Link-local
     if (lowerIp === '::1') return true; // Localhost
@@ -76,9 +77,11 @@ async function isPrivateAddressCached(hostname) {
       }
     }
   } catch (err) {
-    // Fail closed (secure) if DNS fails
+    // Fail closed (secure) if DNS fails, but do not cache the failure:
+    // a transient DNS outage would otherwise keep a valid cluster blocked
+    // for the full cache TTL. Leaving it uncached lets the next request retry.
     console.warn(`DNS lookup failed for ${hostname}:`, err.message);
-    isPrivate = true;
+    return { isPrivate: true, ipAddress: '', familyAddress: 0 };
   }
 
   if (dnsCache.size >= MAX_CACHE_SIZE) {

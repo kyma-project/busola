@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import dns from 'dns/promises';
 import {
   PrivateIPUsedError,
+  isPrivateIp,
   resolveOrBlockPrivateIpAddress,
 } from './network-utils';
 import { request } from 'node:http';
@@ -94,6 +95,36 @@ describe('DNS Proxy Cache', () => {
     expect(callbackCalled).toBe(true);
   });
 
+  it('does not cache DNS failures, so a valid cluster is unblocked on the next request', async () => {
+    const consoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const addressToCheck = 'transient-dns-failure-addr';
+    const mockedLookup = vi.spyOn(dns, 'lookup');
+    // First lookup fails (transient DNS outage) -> request is blocked...
+    mockedLookup.mockRejectedValueOnce(new Error('Transient DNS error'));
+    // ...second lookup succeeds with a public IP -> request must be allowed.
+    mockedLookup.mockResolvedValueOnce(internetIPAddress);
+
+    let firstErr;
+    await resolveOrBlockPrivateIpAddress(addressToCheck, {}, (err) => {
+      firstErr = err;
+    });
+    expect(firstErr).toBeInstanceOf(PrivateIPUsedError);
+
+    let secondErr;
+    let secondIp;
+    await resolveOrBlockPrivateIpAddress(addressToCheck, {}, (err, ip) => {
+      secondErr = err;
+      secondIp = ip;
+    });
+
+    // The failure was not cached, so the second request retried DNS and passed.
+    expect(secondErr).toBeNull();
+    expect(secondIp).toBe(internetIPAddress[0].address);
+    expect(mockedLookup).toHaveBeenCalledTimes(2);
+
+    consoleWarn.mockRestore();
+  });
+
   it('The custom DNS lookup logic returns error on real request', async () => {
     vi.spyOn(dns, 'lookup').mockResolvedValueOnce(localIpAddress);
     const opts = {
@@ -111,5 +142,40 @@ describe('DNS Proxy Cache', () => {
     });
 
     expect(err).toBeInstanceOf(PrivateIPUsedError);
+  });
+});
+
+describe('isPrivateIp', () => {
+  it('blocks IPv4-mapped IPv6 private addresses', () => {
+    expect(isPrivateIp('::ffff:10.0.0.1')).toBe(true);
+    expect(isPrivateIp('::ffff:127.0.0.1')).toBe(true);
+    expect(isPrivateIp('::ffff:192.168.1.1')).toBe(true);
+    expect(isPrivateIp('::ffff:172.16.0.1')).toBe(true);
+  });
+
+  it('allows IPv4-mapped IPv6 public addresses', () => {
+    expect(isPrivateIp('::ffff:20.11.11.11')).toBe(false);
+  });
+});
+
+describe('resolveOrBlockPrivateIpAddress with IPv4-mapped IPv6', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('calls callback with PrivateIPUsedError when DNS resolves to IPv4-mapped private address', async () => {
+    const ipv4MappedPrivate = [{ address: '::ffff:10.0.0.1', family: 6 }];
+    vi.spyOn(dns, 'lookup').mockResolvedValueOnce(ipv4MappedPrivate);
+
+    let receivedError;
+    await resolveOrBlockPrivateIpAddress(
+      'attacker-controlled.example.com',
+      {},
+      (err) => {
+        receivedError = err;
+      },
+    );
+
+    expect(receivedError).toBeInstanceOf(PrivateIPUsedError);
   });
 });

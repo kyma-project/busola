@@ -25,7 +25,7 @@ const config = require('./config.js');
 const gzipEnabled = config.features?.GZIP?.isEnabled;
 ```
 
-Backend-only flags (cannot be overridden via the cluster ConfigMap): `GZIP` (response compression), `ALLOW_PRIVATE_IPS` (disables SSRF protection for private IPs — only for trusted dev environments), `KYMA_COMPANION` (configures the Kyma Companion API location).
+Backend-only flags (cannot be overridden via the cluster ConfigMap): `GZIP` (response compression), `ALLOW_PRIVATE_IPS` (disables SSRF protection for private IPs — only for trusted dev environments; also enableable via the `ALLOW_PRIVATE_IPS=true` backend env var for self-hosted in-cluster deployments), `KYMA_COMPANION` (configures the Kyma Companion API location).
 
 There is also a separate `public/defaultConfig.yaml` that configures frontend storage defaults (e.g. `sessionStorage` vs `localStorage`). This is distinct from the backend config and is patched by the Dockerfile via `yq`.
 
