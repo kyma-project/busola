@@ -79,8 +79,7 @@ async function concernsNodes(context: CommandPaletteContext) {
     const { items: nodes } = await response.json();
     updateResourceCache('nodes', nodes);
   } catch (_e) {
-    // the metrics API is unavailable while metrics-server is not ready yet; fall
-    // back to the core API so nodes can still be listed and navigated to
+    // metrics API may be unavailable (metrics-server not ready); fall back to the core API
     try {
       const response = await fetch('/api/v1/nodes');
       const { items: nodes } = await response.json();

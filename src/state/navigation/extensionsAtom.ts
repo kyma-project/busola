@@ -405,6 +405,31 @@ const pushExtToEventTypes = (extensions: any) => {
   });
 };
 
+// Extension nav is hidden until the resource shows up in the cluster's OpenAPI (see
+// shouldNodeBeVisible -> doesNodeResourceExist). But the apiserver regenerates /openapi/v2
+// asynchronously after a CRD is created and openapiAtom only fetches it once, at login, so a
+// freshly installed extension's resource can be missing from OpenAPI for the whole session and its
+// category never appears. The CRD list has no such lag, so treat an installed CRD as proof that its
+// resource exists: build the same path ids doesNodeResourceExist looks up and merge them into the
+// existence check.
+const getCrdResourcePathIds = (crds: unknown): string[] => {
+  const items =
+    (crds as { items?: CustomResourceDefinition[] } | null)?.items ?? [];
+
+  return items.flatMap((crd) => {
+    const group = crd?.spec?.group;
+    const kind = crd?.spec?.names?.kind;
+    if (!group || !kind) return [];
+
+    const resourceNamePlural = pluralize(pluralize(kind).toLowerCase());
+    return (crd?.spec?.versions ?? [])
+      .filter((version) => version?.served)
+      .map((version) =>
+        `/apis/${group}/${version.name}/${resourceNamePlural}`.toLowerCase(),
+      );
+  });
+};
+
 export const useGetExtensions = () => {
   const cluster = useAtomValue(clusterAtom);
   const auth = useAtomValue(authDataAtom);
@@ -511,10 +536,8 @@ export const useGetExtensions = () => {
         permissionSet,
       );
 
-      // deps may have changed while we were fetching (e.g. the openapi list
-      // arrived and re-fired the effect). If a newer run has started, drop this
-      // result so a stale one - filtered against an empty openapi list - can't
-      // overwrite the good extensions and make nav categories disappear.
+      // a newer run may have started while fetching; drop this stale result so it
+      // can't overwrite good extensions and drop nav categories
       if (cancelled) return;
 
       if (!wizardConfigs || !isExtensibilityWizardEnabled) {
@@ -529,9 +552,13 @@ export const useGetExtensions = () => {
         setExtensions([]);
         setAllExtensions([]);
       } else {
+        const crdResourcePathIds = getCrdResourcePathIds(crds);
         const configSet = {
           configFeatures: features!,
-          openapiPathIdList,
+          // an installed CRD proves its resource exists even before OpenAPI catches up
+          openapiPathIdList: crdResourcePathIds.length
+            ? [...openapiPathIdList, ...crdResourcePathIds]
+            : openapiPathIdList,
           permissionSet,
         };
 
@@ -596,6 +623,7 @@ export const useGetExtensions = () => {
     permissionSet,
     namespace,
     openapiPathIdList,
+    crds,
     features,
     refreshExtenshions,
   ]);

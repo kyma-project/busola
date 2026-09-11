@@ -68,21 +68,20 @@ Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, ($elements) =>
 Cypress.Commands.add('goToNamespaceDetails', (namespace) => {
   const name = namespace ?? Cypress.env('NAMESPACE_NAME');
 
-  // the sidebar keeps re-rendering while its nodes stream in, and clicking the item
-  // during that window detaches it mid-click; there is no assertable "streaming done"
-  // signal, so let it settle first, same as navigateTo does
-  cy.wait(1500);
   cy.getLeftNav()
     .find('ui5-side-navigation-item')
     .contains('Namespaces')
     .should('be.visible')
     .click();
 
-  // confirm we actually left the overview for the namespaces list before clicking a
-  // row, otherwise clickListLink can match a stale link still shown on the overview
+  // confirm we left the overview before clicking a row, else clickListLink hits a stale link
   cy.location('pathname').should('match', /\/namespaces$/);
 
   cy.clickListLink(name);
+
+  // wait for the namespace detail route to commit; a following navigateTo otherwise
+  // runs against the cluster-scope sidebar where sub-items like Roles don't exist yet
+  cy.location('pathname').should('match', new RegExp(`/namespaces/${name}$`));
 
   return cy.end();
 });
@@ -173,9 +172,7 @@ Cypress.Commands.add(
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    // the success toast auto-dismisses after 3s, so asserting visibility races the
-    // fade; its text stays in the DOM, so assert existence and let the detail column
-    // closing below confirm the deletion itself
+    // the toast auto-dismisses after 3s, racing a visibility assert; its text stays in the DOM
     cy.contains(/set for deletion/, { timeout: 30000 }).should('exist');
 
     cy.getMidColumn().should('not.be.visible');
@@ -197,8 +194,7 @@ Cypress.Commands.add(
       customHeaderText = null,
     } = options;
 
-    // clearing the search re-renders the list, which can detach the input, so
-    // re-query it before typing instead of reusing the subject from .clear()
+    // clearing re-renders the list and can detach the input; re-query before typing
     const searchInput = () =>
       parentSelector
         ? cy
@@ -360,13 +356,30 @@ Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
 });
 
 Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
-  // the list can still be re-rendering (e.g. right after a create refetches it),
-  // which detaches the input mid-chain; re-query between clear and type instead
-  // of carrying a stale subject across the re-render
+  // The list can keep re-rendering while we type — after a create refetch, or during the
+  // extension-load storm right after navigating. UI5 re-templates the Input and swaps the inner
+  // <input> node, so a clear()/type() started against the old node dies with "the page updated
+  // while this command was executing". Re-query and retry until the value actually sticks.
   const searchInput = () =>
     cy.get('ui5-input[id^=search-]:visible').find('input');
-  searchInput().should('be.visible').should('not.be.disabled').clear({ force });
-  searchInput().type(searchPhrase, { force });
+
+  const typeUntilSet = (attemptsLeft) => {
+    // re-query between clear and type: the inner node can be swapped out under us mid-command
+    searchInput()
+      .should('be.visible')
+      .should('not.be.disabled')
+      .clear({ force });
+    searchInput().type(searchPhrase, { force });
+
+    searchInput().then(($input) => {
+      if ($input.val() !== searchPhrase && attemptsLeft > 0) {
+        typeUntilSet(attemptsLeft - 1);
+      }
+    });
+  };
+
+  typeUntilSet(3);
+  searchInput().should('have.value', searchPhrase);
 });
 
 Cypress.Commands.add('openSettingsMenu', () => {

@@ -30,11 +30,8 @@ context('Test Custom Resources', () => {
 
     cy.saveChanges('Create');
 
-    // creating the CRD redirects to its detail view, and that navigation is still in
-    // flight when saveChanges returns - the footer unmounts as the form closes, a beat
-    // before the route commits. wait for the redirect to land here, otherwise the first
-    // test's "Custom Resources" click fires while it is pending and the redirect then
-    // commits on top of it, leaving us on the CRD detail instead of the list.
+    // the create redirect is still in flight when saveChanges returns; wait for it to land
+    // so the next test's nav click isn't overwritten by the pending redirect
     cy.url().should(
       'include',
       'customresourcedefinitions/tcluster.cypress.example.com',

@@ -92,9 +92,7 @@ context('Test reduced permissions', () => {
 
     cy.openCreate();
 
-    // fill the name while the form is still quiet. picking the subject kind
-    // kicks off async loading that keeps re-rendering the form and flickers the
-    // inputs disabled, and typing the name into that window is what used to flake
+    // fill the name while the form is quiet; picking the subject kind re-renders and flickers inputs disabled
     cy.get('ui5-input[accessible-name="ClusterRoleBinding name"]:visible')
       .find('input')
       .should('not.be.disabled')

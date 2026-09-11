@@ -154,8 +154,7 @@ describe('getConfigMaps', () => {
   });
 
   it('returns empty array and warns when the permission check fails', async () => {
-    // the permission review happens during a cluster switch, where an in-flight
-    // request can be aborted; it must degrade like a failed listing, not throw
+    // an aborted permission check during a cluster switch must degrade like a failed listing
     const fetchFn = makeFetchFn({ items: [] });
     mockGetPermissionResourceRules.mockRejectedValue(
       new Error('Failed to fetch'),

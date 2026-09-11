@@ -82,9 +82,16 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('Group').click();
 
+    // Group name reads briefly disabled while UI5 settles the remounted inputs;
+    // API Group showing its value means that settle is done
+    cy.get('[accessible-name="API Group"]')
+      .find('input')
+      .should('have.value', 'rbac.authorization.k8s.io');
+
     cy.get('[accessible-name="Group name"]')
       .find('input')
       .should('not.be.disabled')
+      .click()
       .type('test-group')
       .blur({ force: true });
 

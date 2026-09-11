@@ -1,9 +1,7 @@
 Cypress.Commands.add('openCreate', () => {
   cy.get('ui5-panel').contains('ui5-button', 'Create').click();
   cy.get('[data-testid="create-form-footer-bar"]').should('be.visible');
-  // the footer mounts together with the form shell, but the fields inside render
-  // only once the resource template/schema has loaded - extension forms fetch it
-  // async, so wait for the body to actually have content before callers touch it
+  // fields render only after the schema loads (async for extension forms); wait for body content
   cy.get('.create-form')
     .find(
       'ui5-input, ui5-combobox, ui5-select, ui5-multi-input, ui5-textarea, ui5-switch, ui5-checkbox, div.monaco-editor',
@@ -23,8 +21,7 @@ Cypress.Commands.add('saveChanges', (action = 'Create') => {
       'not.exist',
     );
   }
-  // an edit keeps the form mounted and a no-op edit sends no request at all, so
-  // there is no reliable signal here; callers assert the edited value themselves
+  // an edit keeps the form mounted and a no-op sends no request, so there is no signal to wait on
 });
 
 Cypress.Commands.add('checkUnsavedDialog', () => {

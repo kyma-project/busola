@@ -98,8 +98,7 @@ context('Test Deployments', () => {
 
     cy.clickGenericListLink(DEPLOYMENT_NAME);
 
-    // this edit only touches labels, so wait for the detail view to load instead of
-    // for the pod to become ready — the latter depends on image-pull time and flaked
+    // this edit only touches labels; wait for the detail view, not pod readiness (image-pull flake)
     cy.getMidColumn()
       .contains('ui5-title', DEPLOYMENT_NAME)
       .should('be.visible');

@@ -6,12 +6,13 @@ Cypress.Commands.add('navigateTo', (leftNav, resource) => {
     const subItemSelector = `ui5-side-navigation-sub-item[text="${resource}"]`;
     cy.getLeftNav().get(subItemSelector).should('be.visible').click();
 
-    // clicking the sub-item only fires the route change, it does not wait for it.
-    // without this gate navigateTo returns while the previous view (e.g. the namespace
-    // overview) is still mounted, and a following openCreate then grabs that page's
-    // Create button (the overview's Limit Ranges panel) instead of the one we navigated
-    // to. the sub-item flips to selected once the router has committed the destination
-    // route, so wait for that before handing back.
+    // the click only fires the route change; wait for selected so a following openCreate
+    // doesn't grab the previous view's Create button
     cy.getLeftNav().get(subItemSelector).should('have.prop', 'selected', true);
+  } else {
+    // a top-level item without sub-items (e.g. Namespaces) is itself the destination; the click
+    // only starts the route change, so wait for it to commit before the caller touches the list.
+    // Otherwise the list is still mounting and a following typeInSearch races its re-render.
+    cy.getLeftNav().get(categorySelector).should('have.prop', 'selected', true);
   }
 });
