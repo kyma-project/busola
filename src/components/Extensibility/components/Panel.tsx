@@ -57,7 +57,6 @@ export function Panel({
                   key={idx}
                   structure={def}
                   schema={schema}
-                  inlineContext={true}
                   singleRootResource={singleRootResource}
                   embedResource={embedResource}
                   {...props}
@@ -86,7 +85,6 @@ export function Panel({
               structure={def}
               schema={schema}
               inlineRenderer={InlineWidget}
-              inlineContext={true}
               singleRootResource={singleRootResource}
               embedResource={embedResource}
               {...props}

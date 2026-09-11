@@ -31,7 +31,7 @@ export function ResourceStatusCard({
         }
         className="resource-status-card"
       >
-        {customColumns && customColumns}
+        {customColumns}
         {conditions && (
           <>
             <div

@@ -42,7 +42,6 @@ export function Section({
             structure={def}
             schema={schema}
             inlineRenderer={InlineWidget}
-            inlineContext={false}
             singleRootResource={singleRootResource}
             embedResource={embedResource}
             {...props}

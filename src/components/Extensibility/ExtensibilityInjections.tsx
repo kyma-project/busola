@@ -104,7 +104,6 @@ export function ExtensibilityInjectionCore({
       general={general}
       originalResource={filteredItems}
       embedResource={root}
-      inlineContext={true}
       context={injection.target}
     />
   );

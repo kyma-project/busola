@@ -9,8 +9,10 @@
   }
 }
 
-ui5-form::part(column) {
-  padding: 0;
+.resource-status-card__custom-columns {
+  &::part(column) {
+    padding: 0;
+  }
 }
 
 .text-with-padding {
