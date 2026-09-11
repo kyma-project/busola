@@ -36,7 +36,15 @@ Cypress.Commands.add('handleExceptions', () => {
       ) ||
       // Exceptions due to reported issues to monaco editor.
       err.message.includes('items is not iterable') ||
-      err.message.includes('Canceled')
+      err.message.includes('Canceled') ||
+      // A cluster switch or view teardown cancels in-flight background fetches,
+      // which surface as an unhandled rejection with a browser-specific transport
+      // message. The app already ignores these (see handleFetchRejections), but
+      // Cypress fails on any unhandled rejection regardless, so we drop the same
+      // benign class here too. Real HTTP errors are HttpError, not a bare fetch.
+      err.message.includes('Failed to fetch') ||
+      err.message.includes('NetworkError when attempting to fetch resource') ||
+      err.message.includes('Load failed')
     )
       return false;
   });

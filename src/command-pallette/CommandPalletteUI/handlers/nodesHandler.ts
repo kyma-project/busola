@@ -78,8 +78,16 @@ async function concernsNodes(context: CommandPaletteContext) {
     const response = await fetch('/apis/metrics.k8s.io/v1beta1/nodes');
     const { items: nodes } = await response.json();
     updateResourceCache('nodes', nodes);
-  } catch (e) {
-    console.warn('Failed to fetch nodes:', e);
+  } catch (_e) {
+    // the metrics API is unavailable while metrics-server is not ready yet; fall
+    // back to the core API so nodes can still be listed and navigated to
+    try {
+      const response = await fetch('/api/v1/nodes');
+      const { items: nodes } = await response.json();
+      updateResourceCache('nodes', nodes);
+    } catch (fallbackError) {
+      console.warn('Failed to fetch nodes:', fallbackError);
+    }
   }
 }
 

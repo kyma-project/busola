@@ -20,7 +20,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.get('[accessible-name="ClusterRoleBinding name"]')
       .find('input')
-      .wait(1000)
+      .should('not.be.disabled')
       .click()
       .type(CRB_NAME);
 
@@ -28,7 +28,7 @@ context('Test Cluster Role Bindings', () => {
       'ui5-combobox[placeholder="Start typing to select ClusterRole from the list"]',
     )
       .find('input')
-      .wait(1000)
+      .should('not.be.disabled')
       .click()
       .type('admin');
 
@@ -36,7 +36,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.get('[accessible-name="User name"]')
       .find('input')
-      .wait(1000)
+      .should('not.be.disabled')
       .type(USER_NAME)
       .blur({ force: true });
 
@@ -82,10 +82,9 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('Group').click();
 
-    cy.wait(500);
-
     cy.get('[accessible-name="Group name"]')
       .find('input')
+      .should('not.be.disabled')
       .type('test-group')
       .blur({ force: true });
 

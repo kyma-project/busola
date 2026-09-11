@@ -98,14 +98,11 @@ context('Test Deployments', () => {
 
     cy.clickGenericListLink(DEPLOYMENT_NAME);
 
+    // this edit only touches labels, so wait for the detail view to load instead of
+    // for the pod to become ready — the latter depends on image-pull time and flaked
     cy.getMidColumn()
-      .get('[data-testid="has-tooltip"]')
-      .contains('span', '1 / 1', {
-        timeout: 60 * 1000,
-      });
-    cy.wait(1000);
-
-    cy.wait(1000);
+      .contains('ui5-title', DEPLOYMENT_NAME)
+      .should('be.visible');
 
     cy.getMidColumn().inspectTab('Edit');
 

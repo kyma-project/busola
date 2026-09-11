@@ -103,11 +103,11 @@ export function CategoryItem({
     return clonedDataSources;
   };
 
-  const children = category.items?.map((nn, index) => {
+  const children = category.items?.map((nn) => {
     const isNodeSelected = checkIsSelected(nn);
 
     return (
-      <React.Fragment key={`${nn.pathSegment}-${index}`}>
+      <React.Fragment key={nn.pathSegment}>
         {nn.dataSources ? (
           <DataSourcesContextProvider
             dataSources={handleEmptyNamespace(nn.dataSources)}
@@ -136,7 +136,7 @@ export function CategoryItem({
   return (
     <SideNavigationItem
       unselectable
-      key={isExpanded + category.key}
+      key={category.key}
       expanded={isExpanded}
       selected={false}
       icon={category.icon}

@@ -52,8 +52,6 @@ Cypress.Commands.add('clickGenericListLink', (resourceName) => {
     .find('ui5-table-cell')
     .contains('ui5-text', resourceName)
     .click();
-
-  cy.wait(500);
 });
 
 Cypress.Commands.add('clickListLink', (resourceName) => {
@@ -68,13 +66,23 @@ Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, ($elements) =>
 );
 
 Cypress.Commands.add('goToNamespaceDetails', (namespace) => {
-  // Go to the details of namespace
+  const name = namespace ?? Cypress.env('NAMESPACE_NAME');
+
+  // the sidebar keeps re-rendering while its nodes stream in, and clicking the item
+  // during that window detaches it mid-click; there is no assertable "streaming done"
+  // signal, so let it settle first, same as navigateTo does
+  cy.wait(1500);
   cy.getLeftNav()
     .find('ui5-side-navigation-item')
     .contains('Namespaces')
+    .should('be.visible')
     .click();
 
-  cy.clickListLink(namespace ?? Cypress.env('NAMESPACE_NAME'));
+  // confirm we actually left the overview for the namespaces list before clicking a
+  // row, otherwise clickListLink can match a stale link still shown on the overview
+  cy.location('pathname').should('match', /\/namespaces$/);
+
+  cy.clickListLink(name);
 
   return cy.end();
 });
@@ -151,8 +159,6 @@ Cypress.Commands.add(
     const headerText = customHeaderText || `Delete ${resourceType}`;
 
     if (columnLayout) {
-      cy.wait(1000); //wait for button
-
       cy.getMidColumn()
         .contains('ui5-button', 'Delete')
         .should('be.visible')
@@ -167,7 +173,10 @@ Cypress.Commands.add(
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains(/set for deletion/, { timeout: 30000 }).should('be.visible');
+    // the success toast auto-dismisses after 3s, so asserting visibility races the
+    // fade; its text stays in the DOM, so assert existence and let the detail column
+    // closing below confirm the deletion itself
+    cy.contains(/set for deletion/, { timeout: 30000 }).should('exist');
 
     cy.getMidColumn().should('not.be.visible');
   },
@@ -188,29 +197,25 @@ Cypress.Commands.add(
       customHeaderText = null,
     } = options;
 
-    cy.wait(2000);
-    if (parentSelector) {
-      cy.get(parentSelector)
-        .find('ui5-input[id^=search-]:visible')
-        .find('input')
-        .should('not.have.attr', 'disabled', { timeout: 5000 })
-        .clear({ force: true })
-        .type(resourceName, { force: true });
-    } else {
-      cy.get('ui5-input[id^=search-]:visible')
-        .find('input')
-        .should('not.have.attr', 'disabled', { timeout: 5000 })
-        .clear({ force: true })
-        .type(resourceName, { force: true });
-    }
+    // clearing the search re-renders the list, which can detach the input, so
+    // re-query it before typing instead of reusing the subject from .clear()
+    const searchInput = () =>
+      parentSelector
+        ? cy
+            .get(parentSelector)
+            .find('ui5-input[id^=search-]:visible')
+            .find('input')
+        : cy.get('ui5-input[id^=search-]:visible').find('input');
 
-    cy.wait(2000);
+    searchInput()
+      .should('not.have.attr', 'disabled', { timeout: 5000 })
+      .clear({ force: true });
+    searchInput().type(resourceName, { force: true });
 
     if (selectSearchResult) {
       cy.get('ui5-suggestion-item')
         .contains('li', resourceName)
         .click({ force: true });
-      cy.wait(1000);
     }
 
     if (searchInPlainTableText) {
@@ -249,7 +254,7 @@ Cypress.Commands.add(
 
       if (deletedVisible) {
         cy.contains('ui5-toast', /set for deletion/, { timeout: 30000 }).should(
-          'be.visible',
+          'exist',
         );
       }
 
@@ -263,13 +268,9 @@ Cypress.Commands.add(
         cy.get(parentSelector)
           .find('ui5-input[id^=search-]:visible')
           .find('input')
-          .wait(1000)
           .clear();
       } else {
-        cy.get('ui5-input[id^=search-]:visible')
-          .find('input')
-          .wait(1000)
-          .clear();
+        cy.get('ui5-input[id^=search-]:visible').find('input').clear();
       }
     }
   },
@@ -346,7 +347,6 @@ Cypress.Commands.add(
         .find('ui5-button[accessible-name="close-column"]')
         .click();
 
-    cy.wait(1000);
     if (checkIfNotExist) cy.getMidColumn().should('not.exist');
     else cy.getMidColumn().should('not.be.visible');
   },
@@ -360,13 +360,13 @@ Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
 });
 
 Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
-  cy.wait(500);
-  cy.get('ui5-input[id^=search-]:visible')
-    .find('input')
-    .should('be.visible')
-    .should('not.be.disabled')
-    .clear({ force })
-    .type(searchPhrase, { force });
+  // the list can still be re-rendering (e.g. right after a create refetches it),
+  // which detaches the input mid-chain; re-query between clear and type instead
+  // of carrying a stale subject across the re-render
+  const searchInput = () =>
+    cy.get('ui5-input[id^=search-]:visible').find('input');
+  searchInput().should('be.visible').should('not.be.disabled').clear({ force });
+  searchInput().type(searchPhrase, { force });
 });
 
 Cypress.Commands.add('openSettingsMenu', () => {

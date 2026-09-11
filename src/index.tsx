@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import i18nextBackend from 'i18next-http-backend';
 import { savePreviousPath } from 'state/useAfterInitHook';
 import { initIntendedPathFromUrl } from 'state/intendedPathAtom';
+import { installFetchRejectionHandler } from 'shared/hooks/BackendAPI/handleFetchRejections';
 
 import App from './components/App/App';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -66,6 +67,8 @@ i18next
 savePreviousPath();
 
 initIntendedPathFromUrl();
+
+installFetchRejectionHandler();
 
 const container = document.getElementById('root');
 const root = createRoot(container!);

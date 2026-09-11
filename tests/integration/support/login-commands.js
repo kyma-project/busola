@@ -139,7 +139,10 @@ Cypress.Commands.add('loginAndSelectCluster', function (params) {
 
     cy.url().should('match', expectedLocation);
 
-    if (expectedLocation == /overview$/) {
+    // two RegExp objects are never == equal, so this used to never fire and login
+    // returned while the overview was still loading; compare by source instead and
+    // wait for the overview title so the page (and its streamed sidebar) is ready
+    if (expectedLocation.source === /overview$/.source) {
       cy.contains('ui5-title', 'Cluster Overview').should('be.visible');
     }
 

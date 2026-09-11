@@ -102,7 +102,7 @@ export function SingleSubjectForm({
         <ResourceForm.FormField
           required
           label={t('role-bindings.create-modal.user-name')}
-          value={subject.name || []}
+          value={subject.name || ''}
           setValue={setName}
           input={Inputs.Text}
           accessible-name={t('role-bindings.create-modal.user-name')}
@@ -113,7 +113,7 @@ export function SingleSubjectForm({
         <ResourceForm.FormField
           required
           label={t('role-bindings.create-modal.group-name')}
-          value={subject.name || []}
+          value={subject.name || ''}
           setValue={setName}
           input={Inputs.Text}
           accessible-name={t('role-bindings.create-modal.group-name')}
@@ -125,7 +125,7 @@ export function SingleSubjectForm({
           required
           disabled
           label={t('role-bindings.create-modal.api-group')}
-          value={subject.apiGroup || []}
+          value={subject.apiGroup || ''}
           input={Inputs.Text}
           placeholder={t('role-bindings.placeholders.api-group')}
         />

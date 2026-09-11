@@ -1,9 +1,12 @@
 export function chooseComboboxOption(selector, optionText, force = false) {
+  // the combobox stays disabled until its options finish loading, so wait for
+  // that instead of a fixed delay. typing while the options are still coming in
+  // makes UI5 filter over half-built items and throw on an undefined item text
   cy.get(`ui5-combobox${selector}`)
     .find('input')
+    .should('not.be.disabled')
     .filterWithNoValue()
     .click()
-    .wait(500)
     .type(optionText)
     .wait(500);
 

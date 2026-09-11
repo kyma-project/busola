@@ -153,6 +153,32 @@ describe('getConfigMaps', () => {
     warnSpy.mockRestore();
   });
 
+  it('returns empty array and warns when the permission check fails', async () => {
+    // the permission review happens during a cluster switch, where an in-flight
+    // request can be aborted; it must degrade like a failed listing, not throw
+    const fetchFn = makeFetchFn({ items: [] });
+    mockGetPermissionResourceRules.mockRejectedValue(
+      new Error('Failed to fetch'),
+    );
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const result = await getConfigMaps(
+      fetchFn,
+      'kube-public',
+      'default',
+      NAMESPACE_PERMISSION_SET,
+      'app=x',
+    );
+
+    expect(result).toEqual([]);
+    expect(fetchFn).not.toHaveBeenCalled();
+    expect(warnSpy).toHaveBeenCalledWith(
+      'Cannot load cluster params from the target cluster: ',
+      expect.any(Error),
+    );
+    warnSpy.mockRestore();
+  });
+
   it('returns empty array when response has no items field', async () => {
     const fetchFn = makeFetchFn(undefined);
     mockPermissions({ namespaceAccess: true, clusterAccess: true });

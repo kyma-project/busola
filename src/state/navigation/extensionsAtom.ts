@@ -476,6 +476,7 @@ export const useGetExtensions = () => {
   }, [crds]);
 
   useEffect(() => {
+    let cancelled = false;
     const manageExtensions = async () => {
       if (!cluster) {
         setExtensions([]);
@@ -509,6 +510,12 @@ export const useGetExtensions = () => {
         namespace,
         permissionSet,
       );
+
+      // deps may have changed while we were fetching (e.g. the openapi list
+      // arrived and re-fired the effect). If a newer run has started, drop this
+      // result so a stale one - filtered against an empty openapi list - can't
+      // overwrite the good extensions and make nav categories disappear.
+      if (cancelled) return;
 
       if (!wizardConfigs || !isExtensibilityWizardEnabled) {
         setWizard([]);
@@ -579,6 +586,9 @@ export const useGetExtensions = () => {
       }
     };
     void manageExtensions();
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     cluster,

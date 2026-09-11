@@ -92,18 +92,21 @@ context('Test reduced permissions', () => {
 
     cy.openCreate();
 
-    // subject type - select it first so the list starts loading
+    // fill the name while the form is still quiet. picking the subject kind
+    // kicks off async loading that keeps re-rendering the form and flickers the
+    // inputs disabled, and typing the name into that window is what used to flake
+    cy.get('ui5-input[accessible-name="ClusterRoleBinding name"]:visible')
+      .find('input')
+      .should('not.be.disabled')
+      .type(CRB_NAME);
+
+    // subject type
     cy.get('[data-testid="role-binding-kind"]').click();
 
     cy.get('ui5-option:visible')
       .contains('ServiceAccount')
       .find('li')
       .click({ force: true });
-
-    // name
-    cy.get('ui5-input[accessible-name="ClusterRoleBinding name"]:visible')
-      .find('input')
-      .type(CRB_NAME);
 
     // role
     chooseComboboxOption(
@@ -223,6 +226,7 @@ context('Test reduced permissions', () => {
 
     // remove cluster
     cy.changeCluster('Clusters');
+    cy.get('ui5-table-row', { timeout: 20000 }).should('exist');
 
     cy.deleteFromGenericList('Cluster', SA_NAME, {
       confirmationEnabled: true,
