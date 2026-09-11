@@ -359,27 +359,13 @@ Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
   // The list can keep re-rendering while we type — after a create refetch, or during the
   // extension-load storm right after navigating. UI5 re-templates the Input and swaps the inner
   // <input> node, so a clear()/type() started against the old node dies with "the page updated
-  // while this command was executing". Re-query and retry until the value actually sticks.
+  // while this command was executing". Re-query between clear and type so each command grabs the
+  // current node instead of a detached one.
   const searchInput = () =>
     cy.get('ui5-input[id^=search-]:visible').find('input');
 
-  const typeUntilSet = (attemptsLeft) => {
-    // re-query between clear and type: the inner node can be swapped out under us mid-command
-    searchInput()
-      .should('be.visible')
-      .should('not.be.disabled')
-      .clear({ force });
-    searchInput().type(searchPhrase, { force });
-
-    searchInput().then(($input) => {
-      if ($input.val() !== searchPhrase && attemptsLeft > 0) {
-        typeUntilSet(attemptsLeft - 1);
-      }
-    });
-  };
-
-  typeUntilSet(3);
-  searchInput().should('have.value', searchPhrase);
+  searchInput().should('be.visible').should('not.be.disabled').clear({ force });
+  searchInput().type(searchPhrase, { force });
 });
 
 Cypress.Commands.add('openSettingsMenu', () => {

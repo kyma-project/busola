@@ -1,5 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { act, render, screen, fireEvent } from '@testing-library/react';
+import { renderFinished } from '@ui5/webcomponents-base';
 
 const { ModuleTemplatesCtx, CommunityModuleCtx } = vi.hoisted(() => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -130,6 +131,15 @@ describe('UpdateAllModulesButton', () => {
     uploadResourcesMock.mockReset();
     fetchResourcesToApplyMock.mockReset().mockResolvedValue(undefined);
     getUpdateTemplateMock.mockReset();
+  });
+
+  // Drain the UI5 Dialog's deferred renders before teardown, else they fire
+  // after `window` is gone. Twice: the first triggers a reschedule the second flushes.
+  afterEach(async () => {
+    await act(async () => {
+      await renderFinished();
+      await renderFinished();
+    });
   });
 
   it('renders nothing when there are no updatable modules', () => {
