@@ -22,6 +22,7 @@ You can distinguish the following widget types:
   - [`Columns`](#columns)
   - [`EventList`](#eventlist)
   - [`FeatureCard`](#featuredcard)
+  - [`Markdown`](#markdown)
   - [`Panel`](#panel)
   - [`Plain`](#plain)
   - [`Section`](#section)
@@ -557,6 +558,28 @@ injections: |-
 ```
 
 <img src="./assets/display-widgets/FeaturedCard.png" alt="Example of a FeaturedCard widget">
+
+### `Markdown`
+
+The `Markdown` widget renders a string value as formatted Markdown. It is useful for displaying human-readable, richly formatted text stored as a plain string (for example, a `ConfigMap` **data** entry), instead of showing it in a read-only code editor.
+
+The Markdown source is sanitized: any embedded raw HTML is rendered as escaped text and is never executed.
+
+These are the available `Markdown` widget parameters:
+
+| Parameter       | Required | Type   | Description                                                                                                                                                                                                       |
+| --------------- | -------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **placeholder** | No       | string | Changes the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used. |
+
+See the following example:
+
+```yaml
+- widget: Panel
+  name: Notes
+  children:
+    - source: spec.description
+      widget: Markdown
+```
 
 ### `Panel`
 
