@@ -50,6 +50,10 @@
 
       .content {
         padding-left: var(--left-spacing);
+
+        &:hover {
+          background-color: var(--sapList_Hover_Background);
+        }
       }
     }
   }
@@ -63,6 +67,10 @@
       font-size: var(--sapFontSize);
       padding: 0 0.225rem;
       gap: 2.5px;
+    }
+
+    &::part(header):hover {
+      background-color: var(--sapList_Hover_Background);
     }
 
     &::part(content) {
