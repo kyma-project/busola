@@ -32,15 +32,19 @@ context('Test Busola Terminal', () => {
   });
 
   it('Opens the terminal and provisions a pod with the correct manifest', () => {
-    // Mock namespace creation — eliminates dependency on whether the namespace
-    // already exists in the test cluster.
-    cy.intercept('POST', '/backend/api/v1/namespaces', {
-      statusCode: 200,
-      body: {
-        apiVersion: 'v1',
-        kind: 'Namespace',
-        metadata: { name: 'busola-terminal' },
-      },
+    // Scoped to busola-terminal so unrelated namespace POSTs pass through to the
+    // real cluster unaffected.
+    cy.intercept('POST', '/backend/api/v1/namespaces', (req) => {
+      if (req.body?.metadata?.name === 'busola-terminal') {
+        req.reply({
+          statusCode: 200,
+          body: {
+            apiVersion: 'v1',
+            kind: 'Namespace',
+            metadata: { name: 'busola-terminal' },
+          },
+        });
+      }
     }).as('createNamespace');
 
     // Mock pod creation — passes the real pod manifest straight back so the app
@@ -64,6 +68,52 @@ context('Test Busola Terminal', () => {
       },
     }).as('pollPod');
 
+    // Stub the Kubernetes attach WebSocket so the terminal reaches "connected"
+    // state without a real pod. Echoes ls output when Enter (0x0D) is received
+    // on stdin (Kubernetes attach channel 0).
+    cy.window().then((win) => {
+      const OriginalWebSocket = win.WebSocket;
+      const { CONNECTING, OPEN, CLOSING, CLOSED } = OriginalWebSocket;
+      let fakeWs;
+      const stub = cy.stub(win, 'WebSocket').callsFake((url, protocols) => {
+        if (url.includes('/ws/api/v1/namespaces/busola-terminal/pods/')) {
+          fakeWs = {
+            binaryType: 'arraybuffer',
+            readyState: OPEN,
+            onopen: null,
+            onmessage: null,
+            onclose: null,
+            onerror: null,
+            send(data) {
+              if (!(data instanceof Uint8Array) || data[0] !== 0) return;
+              if (new TextDecoder().decode(data.slice(1)) === '\r') {
+                const out = new TextEncoder().encode('bin  etc  usr\r\n');
+                const frame = new Uint8Array(out.length + 1);
+                frame[0] = 1; // stdout channel
+                frame.set(out, 1);
+                setTimeout(
+                  () => fakeWs?.onmessage?.({ data: frame.buffer }),
+                  50,
+                );
+              }
+            },
+            close() {
+              this.readyState = CLOSED;
+              this.onclose?.({ code: 1000, reason: '' });
+            },
+          };
+          setTimeout(() => fakeWs?.onopen?.(), 0);
+          return fakeWs;
+        }
+        return new OriginalWebSocket(url, protocols);
+      });
+      // Preserve static constants so app checks like `ws.readyState === WebSocket.OPEN` work.
+      stub.CONNECTING = CONNECTING;
+      stub.OPEN = OPEN;
+      stub.CLOSING = CLOSING;
+      stub.CLOSED = CLOSED;
+    });
+
     cy.get('ui5-shellbar')
       .find('ui5-button[icon="command-line-interfaces"]')
       .click();
@@ -86,7 +136,7 @@ context('Test Busola Terminal', () => {
         expect(pod.apiVersion).to.eq('v1');
         expect(pod.kind).to.eq('Pod');
         expect(pod.metadata.namespace).to.eq('busola-terminal');
-        // Pod name is a deterministic hash of cluster server + credential
+        // Pod name is a SHA-256 hash of cluster server + credential, first 16 hex chars.
         expect(pod.metadata.name).to.match(/^busola-terminal-[a-f0-9]{16}$/);
         expect(pod.metadata.labels).to.deep.include({ run: 'busola-terminal' });
 
@@ -105,13 +155,18 @@ context('Test Busola Terminal', () => {
     // Running-phase poll in provisionPod)
     cy.wait('@pollPod');
 
-    // Status changes away from "Connecting…" once provisioning completes.
-    // The WebSocket attach that follows will fail in environments without a real
-    // Running pod, in which case the status shows an error message instead —
-    // either way "Connecting" is no longer present.
-    cy.get('.terminal-card__status', { timeout: 5000 }).should(
-      'not.contain.text',
-      'Connecting',
+    // Once the WebSocket connects, the "Connecting…" label is gone.
+    cy.get('.terminal-card').should('not.contain.text', 'Connecting');
+  });
+
+  it('Accepts keyboard input and displays output from the remote shell', () => {
+    cy.get('.xterm-helper-textarea', { timeout: 5000 })
+      .should('exist')
+      .type('ls{enter}', { force: true });
+
+    cy.get('.xterm-rows', { timeout: 5000 }).should(
+      'contain.text',
+      'bin  etc  usr',
     );
   });
 
