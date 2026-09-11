@@ -59,7 +59,7 @@ context('Test Pod Disruption Budgets', () => {
   });
 
   it('Checks the list view', () => {
-    cy.getLeftNav().contains('Pod Disruption Budgets').click();
+    cy.navigateTo('Workloads', 'Pod Disruption Budgets');
 
     cy.clickGenericListLink(PDB_NAME);
 

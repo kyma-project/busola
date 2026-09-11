@@ -137,7 +137,7 @@ context('Test reduced permissions', () => {
 
     cy.goToNamespaceDetails();
 
-    cy.getLeftNav().contains('Service Accounts').click();
+    cy.navigateTo('Configuration', 'Service Accounts');
 
     cy.clickGenericListLink(SA_NAME);
 
@@ -209,7 +209,7 @@ context('Test reduced permissions', () => {
     cy.loginAndSelectCluster({ disableClear: true });
 
     // delete binding
-    cy.getLeftNav().contains('Cluster Role Bindings').click();
+    cy.navigateTo('Configuration', 'Cluster Role Bindings');
     cy.get('ui5-table-row', { timeout: 20000 }).should('exist');
 
     cy.deleteFromGenericList('Cluster Role Binding', CRB_NAME, {
@@ -217,7 +217,7 @@ context('Test reduced permissions', () => {
     });
 
     // delete role
-    cy.getLeftNav().contains('Cluster Roles').click();
+    cy.navigateTo('Configuration', 'Cluster Roles');
     cy.get('ui5-table-row', { timeout: 20000 }).should('exist');
 
     cy.deleteFromGenericList('Cluster Role', CR_NAME, {

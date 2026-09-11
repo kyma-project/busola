@@ -27,7 +27,13 @@ export const clusterAndNsNodesAtom = atom<Promise<NavNode[]>>(async (get) => {
     !isEmpty(permissionSet);
 
   if (!areDependenciesInitialized) {
-    return [];
+    // right after login the openapi paths, permissions and resource list stream in one
+    // by one, so this flips false a few times before everything has loaded. that is
+    // "not ready yet", not "there are no nodes" - resolving [] here makes the whole
+    // sidebar collapse to nothing and rebuild on every partial load, which detaches nav
+    // items mid-click. stay pending instead so the unwrap() fallbacks in the consuming
+    // atoms keep showing the last good nav; jotai reruns this as soon as a dep changes.
+    return new Promise<NavNode[]>(() => {});
   }
 
   const configSet = {

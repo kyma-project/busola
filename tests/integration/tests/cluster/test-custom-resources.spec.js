@@ -29,10 +29,20 @@ context('Test Custom Resources', () => {
     cy.checkUnsavedDialog();
 
     cy.saveChanges('Create');
+
+    // creating the CRD redirects to its detail view, and that navigation is still in
+    // flight when saveChanges returns - the footer unmounts as the form closes, a beat
+    // before the route commits. wait for the redirect to land here, otherwise the first
+    // test's "Custom Resources" click fires while it is pending and the redirect then
+    // commits on top of it, leaving us on the CRD detail instead of the list.
+    cy.url().should(
+      'include',
+      'customresourcedefinitions/tcluster.cypress.example.com',
+    );
   });
 
   it('Check CR groups list with slash shortcut', () => {
-    cy.getLeftNav().contains('Custom Resources').click();
+    cy.navigateTo('Configuration', 'Custom Resources');
 
     cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
@@ -58,7 +68,7 @@ context('Test Custom Resources', () => {
   });
 
   it('Create Tcluster', () => {
-    cy.getLeftNav().contains('Custom Resources').click();
+    cy.navigateTo('Configuration', 'Custom Resources');
 
     cy.wait(500).typeInSearch('cypress');
 
@@ -80,7 +90,7 @@ context('Test Custom Resources', () => {
     cy.reload();
     cy.wait(2000);
 
-    cy.getLeftNav().contains('Custom Resources').click();
+    cy.navigateTo('Configuration', 'Custom Resources');
 
     cy.getStartColumn()
       .find('ui5-input[id^=search-]:visible')

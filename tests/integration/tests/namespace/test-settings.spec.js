@@ -36,7 +36,7 @@ context('Test app settings and preferences', () => {
 
     cy.contains('ui5-title', NAME).should('be.visible');
 
-    cy.getLeftNav().contains('Config Maps').click();
+    cy.navigateTo('Configuration', 'Config Maps');
 
     cy.contains('ui5-table-row', NAME)
       .find('ui5-button[data-testid="delete"]')

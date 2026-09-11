@@ -188,7 +188,7 @@ context('Test Jobs', () => {
   });
 
   it('Inspect list', () => {
-    cy.getLeftNav().contains(/^Jobs/).click();
+    cy.navigateTo('Workloads', 'Jobs');
 
     cy.contains('ui5-text', JOB_NAME).should('be.visible');
   });

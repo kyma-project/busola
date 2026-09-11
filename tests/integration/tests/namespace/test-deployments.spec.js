@@ -94,7 +94,7 @@ context('Test Deployments', () => {
   });
 
   it('Edit a deployment', () => {
-    cy.getLeftNav().contains('Deployments').click();
+    cy.navigateTo('Workloads', 'Deployments');
 
     cy.clickGenericListLink(DEPLOYMENT_NAME);
 

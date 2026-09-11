@@ -47,7 +47,7 @@ context('Test Resource Quotas', () => {
   });
 
   it('Checks the list view', () => {
-    cy.getLeftNav().contains('Resource Quotas').click();
+    cy.navigateTo('Discovery and Network', 'Resource Quotas');
 
     cy.clickGenericListLink(QUOTA_NAME);
 
