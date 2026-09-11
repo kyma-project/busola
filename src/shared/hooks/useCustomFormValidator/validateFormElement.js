@@ -14,14 +14,20 @@ export function validateFormElement(element, isRequired) {
     (!isRequired && element?.children.length === 0);
   let isPartiallyFilled = false; // tracks if at least one child has been filled out (important for the validation of non-required FormGroups)
   let isComplete = true; // tracks if all children have been filled out (important for the validation of non-required GenericLists)
-
+  console.log(element.children);
+  console.log(isRequired, isValid);
   for (const child of element?.children || []) {
+    console.log(child);
+    console.log(isRequired, isValid);
     if (isRequired && !isValid) break;
+
+    isRequired = false;
 
     let validationFunction, args;
     switch (true) {
       // Validates the CollapsibleSection (GenericList/ResourceForm) by recursively calling this function
       case child.classList.contains('resource-form__collapsible-section'): {
+        console.log('here??');
         // Finds the children's container and checks if it is required
         const required = child.classList.contains('required');
         const content = child.querySelector('div.content');
@@ -36,17 +42,19 @@ export function validateFormElement(element, isRequired) {
           required,
         );
         // GenericList
-        if (child.querySelector('.actions').innerText === 'Add') {
-          isPartiallyFilled = isPartiallyFilled || filled;
+        if (child.querySelector('.actions')?.innerText === 'Add') {
+          isPartiallyFilled = isPartiallyFilled || filled || !valid;
           isComplete = isComplete && complete;
-          isValid = isValid && valid && complete;
+          isValid = isValid && valid;
         }
         // ResourceForm
         else {
-          isPartiallyFilled = isPartiallyFilled || filled;
+          isPartiallyFilled = isPartiallyFilled || filled || !valid;
           isComplete = isComplete && (complete || (valid && filled));
           isValid = isValid && valid;
         }
+        console.log(isRequired, isValid);
+
         continue;
       }
       // Validates the KeyValuePair
@@ -77,12 +85,18 @@ export function validateFormElement(element, isRequired) {
       default:
         continue;
     }
-    const { valid, filled } = validationFunction(...args);
+    const { valid, filled, required } = validationFunction(...args);
     isValid = isValid && valid;
     isPartiallyFilled = isPartiallyFilled || filled;
     isComplete = isComplete && filled;
-  }
+    console.log('isRequired before: ' + isRequired, 'reqiured: ' + required);
+    isRequired = required || isRequired;
 
+    console.log(element);
+    console.log('child classlist:' + child.classList);
+    console.log('isValid:' + isValid, 'isRequired:' + isRequired);
+  }
+  console.log(isValid);
   return {
     valid: isValid || (!isRequired && !isPartiallyFilled),
     filled: isPartiallyFilled || isComplete,
