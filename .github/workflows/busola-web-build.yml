@@ -82,13 +82,23 @@ jobs:
     # open PR only if the image tag starts with 'v20' ensuring only commit tags sent to dev
     if: startsWith(needs.extract-image-tag.outputs.image_tag, 'v20')
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.BUSOLA_DEPLOY_APP_ID }}
+          private-key: ${{ secrets.BUSOLA_DEPLOY_APP_PRIVATE_KEY }}
+          owner: kyma
+          repositories: busola-deploy
+          github-api-url: https://github.tools.sap/api/v3
+
       - name: Checkout busola-deploy repo
         uses: actions/checkout@v4
         with:
           repository: kyma/busola-deploy
           github-server-url: 'https://github.tools.sap'
           ref: dev
-          token: ${{ secrets.BUSOLA_DEPLOY_PAT }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Update busola_web_image version in dev/main.tf
         shell: bash
@@ -98,7 +108,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.BUSOLA_DEPLOY_PAT }}
+          token: ${{ steps.app-token.outputs.token }}
           commit-message: 'chore: pr deploy busola-web image to ${{ needs.extract-image-tag.outputs.image_tag }}'
           branch: pr-deploy-busola-web-image-${{ needs.extract-image-tag.outputs.image_tag }}
           title: 'chore: pr deploy busola-web image to ${{ needs.extract-image-tag.outputs.image_tag }}'
