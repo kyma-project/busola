@@ -405,13 +405,9 @@ const pushExtToEventTypes = (extensions: any) => {
   });
 };
 
-// Extension nav is hidden until the resource shows up in the cluster's OpenAPI (see
-// shouldNodeBeVisible -> doesNodeResourceExist). But the apiserver regenerates /openapi/v2
-// asynchronously after a CRD is created and openapiAtom only fetches it once, at login, so a
-// freshly installed extension's resource can be missing from OpenAPI for the whole session and its
-// category never appears. The CRD list has no such lag, so treat an installed CRD as proof that its
-// resource exists: build the same path ids doesNodeResourceExist looks up and merge them into the
-// existence check.
+// openapiAtom fetches once at login, so a freshly installed extension's resource may be absent
+// from OpenAPI all session and its nav category never appears. CRDs have no such lag, so treat
+// an installed CRD as proof that its resource exists and merge it into the existence check.
 const getCrdResourcePathIds = (crds: unknown): string[] => {
   const items =
     (crds as { items?: CustomResourceDefinition[] } | null)?.items ?? [];

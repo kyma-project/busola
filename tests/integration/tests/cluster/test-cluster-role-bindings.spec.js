@@ -24,6 +24,15 @@ context('Test Cluster Role Bindings', () => {
       .click()
       .type(CRB_NAME);
 
+    // fill the subject before picking the role: selecting a ClusterRole closes the combobox
+    // popover, which re-templates the subject inputs and briefly disables the user name field.
+    // Setting the name first means we never type into it during that re-render.
+    cy.get('[accessible-name="User name"]')
+      .find('input')
+      .should('not.be.disabled')
+      .type(USER_NAME)
+      .blur({ force: true });
+
     cy.get(
       'ui5-combobox[placeholder="Start typing to select ClusterRole from the list"]',
     )
@@ -33,12 +42,6 @@ context('Test Cluster Role Bindings', () => {
       .type('admin');
 
     cy.get('ui5-cb-item:visible').contains('cluster-admin').click();
-
-    cy.get('[accessible-name="User name"]')
-      .find('input')
-      .should('not.be.disabled')
-      .type(USER_NAME)
-      .blur({ force: true });
 
     cy.saveChanges('Create');
   });

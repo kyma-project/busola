@@ -1,10 +1,8 @@
 export function chooseComboboxOption(selector, optionText, force = false) {
   const combobox = () => cy.get(`ui5-combobox${selector}`);
 
-  // the field enables before its options are ready — the API-group list, for one, comes from async
-  // cluster discovery. Typing before they load filters an empty list, and UI5 won't re-run the filter
-  // once the options arrive, so the item would never show. The options sit in the DOM as (hidden)
-  // items as soon as they load, so wait for them to exist before typing instead of guessing with a sleep.
+  // wait for options to exist before typing; early typing filters an empty list and
+  // UI5 won't re-run the filter once options arrive, so the item would never show
   combobox().find('ui5-cb-item').should('have.length.greaterThan', 0);
 
   combobox()

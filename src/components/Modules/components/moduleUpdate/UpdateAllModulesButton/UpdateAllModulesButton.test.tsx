@@ -133,8 +133,7 @@ describe('UpdateAllModulesButton', () => {
     getUpdateTemplateMock.mockReset();
   });
 
-  // Drain the UI5 Dialog's deferred renders before teardown, else they fire
-  // after `window` is gone. Twice: the first triggers a reschedule the second flushes.
+  // flush deferred UI5 Dialog renders before teardown (twice: first reschedules, second flushes)
   afterEach(async () => {
     await act(async () => {
       await renderFinished();
