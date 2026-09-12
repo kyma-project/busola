@@ -1,12 +1,18 @@
 export function chooseComboboxOption(selector, optionText, force = false) {
-  // the combobox stays disabled until options load; typing early makes UI5 throw on a half-built item
-  cy.get(`ui5-combobox${selector}`)
+  const combobox = () => cy.get(`ui5-combobox${selector}`);
+
+  // the field enables before its options are ready — the API-group list, for one, comes from async
+  // cluster discovery. Typing before they load filters an empty list, and UI5 won't re-run the filter
+  // once the options arrive, so the item would never show. The options sit in the DOM as (hidden)
+  // items as soon as they load, so wait for them to exist before typing instead of guessing with a sleep.
+  combobox().find('ui5-cb-item').should('have.length.greaterThan', 0);
+
+  combobox()
     .find('input')
     .should('not.be.disabled')
     .filterWithNoValue()
     .click()
-    .type(optionText)
-    .wait(500);
+    .type(optionText);
 
   cy.get('ui5-cb-item:visible').contains(optionText).click({ force: force });
 
