@@ -51,7 +51,7 @@ context('Test Replica Sets', () => {
   });
 
   it('Checks the list view', () => {
-    cy.getLeftNav().contains('Replica Sets').click();
+    cy.navigateTo('Workloads', 'Replica Sets');
 
     cy.clickGenericListLink(REPLICA_SET_NAME);
 

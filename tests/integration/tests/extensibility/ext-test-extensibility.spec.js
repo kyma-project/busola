@@ -88,14 +88,11 @@ context('Test Extensibility Create/Update', () => {
   });
 
   it('Check if Extensions is created', () => {
-    cy.get('ui5-input[id^=search-]:visible')
-      .find('input')
-      .wait(1000)
-      .clear()
-      .type(EXTENSION_NAME)
-      .get('ui5-suggestion-item')
-      .contains('li', EXTENSION_NAME)
-      .click();
+    // creating an extension reloads the nav subsystem and keeps re-rendering the list;
+    // no assertable signal, so let it settle before searching
+    cy.wait(2000);
+    cy.typeInSearch(EXTENSION_NAME);
+    cy.get('ui5-suggestion-item').contains('li', EXTENSION_NAME).click();
 
     cy.get('ui5-table-row').contains(EXTENSION_NAME).should('be.visible');
   });
@@ -114,14 +111,10 @@ context('Test Extensibility Create/Update', () => {
   it('Edit extension', () => {
     cy.navigateTo('Configuration', 'Extensions');
 
-    cy.get('ui5-input[id^=search-]:visible')
-      .find('input')
-      .wait(1000)
-      .clear()
-      .type(EXTENSION_NAME)
-      .get('ui5-suggestion-item')
-      .contains('li', EXTENSION_NAME)
-      .click();
+    // same extension-reload settle as above before touching the search input
+    cy.wait(2000);
+    cy.typeInSearch(EXTENSION_NAME);
+    cy.get('ui5-suggestion-item').contains('li', EXTENSION_NAME).click();
 
     cy.clickGenericListLink(EXTENSION_NAME);
 

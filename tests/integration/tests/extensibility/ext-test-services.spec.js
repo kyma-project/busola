@@ -52,8 +52,7 @@ context('Test Services', () => {
   it('Displays the EXT Services list view', () => {
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav().contains('Namespaces').click();
-    cy.wait(1000);
+    cy.navigateTo('Namespaces');
     cy.typeInSearch('services');
 
     cy.clickListLink('services');

@@ -42,25 +42,26 @@ export async function getConfigMaps(
   );
 
   const postFn = createPostFn(fetchFn);
-  const clusterPermissionSet = await getPermissionResourceRules(
-    postFn,
-    '',
-    true,
-  );
-  const clusterAccess = doesUserHavePermission(
-    ['list'],
-    { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
-    clusterPermissionSet,
-  );
-
-  // user has no access to clusterwide namespace listing, fall back to namespaced listing
-  const url = clusterAccess
-    ? clusterCMUrl
-    : namespaceAccess
-      ? namespacedCMUrl
-      : '';
 
   try {
+    const clusterPermissionSet = await getPermissionResourceRules(
+      postFn,
+      '',
+      true,
+    );
+    const clusterAccess = doesUserHavePermission(
+      ['list'],
+      { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
+      clusterPermissionSet,
+    );
+
+    // user has no access to clusterwide namespace listing, fall back to namespaced listing
+    const url = clusterAccess
+      ? clusterCMUrl
+      : namespaceAccess
+        ? namespacedCMUrl
+        : '';
+
     const response = await fetchFn({ relativeUrl: url });
     const configMapResponse: ConfigMapListResponse = await response.json();
     return configMapResponse?.items ?? [];

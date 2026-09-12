@@ -20,25 +20,28 @@ context('Test Cluster Role Bindings', () => {
 
     cy.get('[accessible-name="ClusterRoleBinding name"]')
       .find('input')
-      .wait(1000)
+      .should('not.be.disabled')
       .click()
       .type(CRB_NAME);
+
+    // fill the subject before picking the role: selecting a ClusterRole closes the combobox
+    // popover, which re-templates the subject inputs and briefly disables the user name field.
+    // Setting the name first means we never type into it during that re-render.
+    cy.get('[accessible-name="User name"]')
+      .find('input')
+      .should('not.be.disabled')
+      .type(USER_NAME)
+      .blur({ force: true });
 
     cy.get(
       'ui5-combobox[placeholder="Start typing to select ClusterRole from the list"]',
     )
       .find('input')
-      .wait(1000)
+      .should('not.be.disabled')
       .click()
       .type('admin');
 
     cy.get('ui5-cb-item:visible').contains('cluster-admin').click();
-
-    cy.get('[accessible-name="User name"]')
-      .find('input')
-      .wait(1000)
-      .type(USER_NAME)
-      .blur({ force: true });
 
     cy.saveChanges('Create');
   });
@@ -82,10 +85,16 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('Group').click();
 
-    cy.wait(500);
+    // Group name reads briefly disabled while UI5 settles the remounted inputs;
+    // API Group showing its value means that settle is done
+    cy.get('[accessible-name="API Group"]')
+      .find('input')
+      .should('have.value', 'rbac.authorization.k8s.io');
 
     cy.get('[accessible-name="Group name"]')
       .find('input')
+      .should('not.be.disabled')
+      .click()
       .type('test-group')
       .blur({ force: true });
 

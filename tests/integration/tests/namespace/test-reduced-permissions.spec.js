@@ -92,18 +92,19 @@ context('Test reduced permissions', () => {
 
     cy.openCreate();
 
-    // subject type - select it first so the list starts loading
+    // fill the name while the form is quiet; picking the subject kind re-renders and flickers inputs disabled
+    cy.get('ui5-input[accessible-name="ClusterRoleBinding name"]:visible')
+      .find('input')
+      .should('not.be.disabled')
+      .type(CRB_NAME);
+
+    // subject type
     cy.get('[data-testid="role-binding-kind"]').click();
 
     cy.get('ui5-option:visible')
       .contains('ServiceAccount')
       .find('li')
       .click({ force: true });
-
-    // name
-    cy.get('ui5-input[accessible-name="ClusterRoleBinding name"]:visible')
-      .find('input')
-      .type(CRB_NAME);
 
     // role
     chooseComboboxOption(
@@ -134,7 +135,7 @@ context('Test reduced permissions', () => {
 
     cy.goToNamespaceDetails();
 
-    cy.getLeftNav().contains('Service Accounts').click();
+    cy.navigateTo('Configuration', 'Service Accounts');
 
     cy.clickGenericListLink(SA_NAME);
 
@@ -206,7 +207,7 @@ context('Test reduced permissions', () => {
     cy.loginAndSelectCluster({ disableClear: true });
 
     // delete binding
-    cy.getLeftNav().contains('Cluster Role Bindings').click();
+    cy.navigateTo('Configuration', 'Cluster Role Bindings');
     cy.get('ui5-table-row', { timeout: 20000 }).should('exist');
 
     cy.deleteFromGenericList('Cluster Role Binding', CRB_NAME, {
@@ -214,7 +215,7 @@ context('Test reduced permissions', () => {
     });
 
     // delete role
-    cy.getLeftNav().contains('Cluster Roles').click();
+    cy.navigateTo('Configuration', 'Cluster Roles');
     cy.get('ui5-table-row', { timeout: 20000 }).should('exist');
 
     cy.deleteFromGenericList('Cluster Role', CR_NAME, {
@@ -223,6 +224,7 @@ context('Test reduced permissions', () => {
 
     // remove cluster
     cy.changeCluster('Clusters');
+    cy.get('ui5-table-row', { timeout: 20000 }).should('exist');
 
     cy.deleteFromGenericList('Cluster', SA_NAME, {
       confirmationEnabled: true,

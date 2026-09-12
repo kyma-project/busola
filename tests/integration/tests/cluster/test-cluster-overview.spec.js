@@ -61,6 +61,9 @@ context('Test Cluster Overview', () => {
 
     // remove injection
     cy.getLeftNav().contains('Back To Cluster Overview').click({ force: true });
+    // wait for the overview route to commit; Configuration is collapsed there,
+    // so navigateTo must not run until the sidebar has transitioned back to cluster-scope
+    cy.url().should('match', /overview$/);
     cy.navigateTo('Configuration', 'Extensions');
     cy.deleteFromGenericList('Extension', 'hpatest');
 

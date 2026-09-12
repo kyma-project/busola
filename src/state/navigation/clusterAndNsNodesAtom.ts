@@ -27,7 +27,9 @@ export const clusterAndNsNodesAtom = atom<Promise<NavNode[]>>(async (get) => {
     !isEmpty(permissionSet);
 
   if (!areDependenciesInitialized) {
-    return [];
+    // deps stream in after login, so this flips false several times before load - "not
+    // ready", not "no nodes". Resolving [] would rebuild the sidebar mid-load; stay pending.
+    return new Promise<NavNode[]>(() => {});
   }
 
   const configSet = {

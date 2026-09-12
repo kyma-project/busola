@@ -405,6 +405,27 @@ const pushExtToEventTypes = (extensions: any) => {
   });
 };
 
+// openapiAtom fetches once at login, so a freshly installed extension's resource may be absent
+// from OpenAPI all session and its nav category never appears. CRDs have no such lag, so treat
+// an installed CRD as proof that its resource exists and merge it into the existence check.
+const getCrdResourcePathIds = (crds: unknown): string[] => {
+  const items =
+    (crds as { items?: CustomResourceDefinition[] } | null)?.items ?? [];
+
+  return items.flatMap((crd) => {
+    const group = crd?.spec?.group;
+    const kind = crd?.spec?.names?.kind;
+    if (!group || !kind) return [];
+
+    const resourceNamePlural = pluralize(pluralize(kind).toLowerCase());
+    return (crd?.spec?.versions ?? [])
+      .filter((version) => version?.served)
+      .map((version) =>
+        `/apis/${group}/${version.name}/${resourceNamePlural}`.toLowerCase(),
+      );
+  });
+};
+
 export const useGetExtensions = () => {
   const cluster = useAtomValue(clusterAtom);
   const auth = useAtomValue(authDataAtom);
@@ -476,6 +497,7 @@ export const useGetExtensions = () => {
   }, [crds]);
 
   useEffect(() => {
+    let cancelled = false;
     const manageExtensions = async () => {
       if (!cluster) {
         setExtensions([]);
@@ -510,6 +532,10 @@ export const useGetExtensions = () => {
         permissionSet,
       );
 
+      // a newer run may have started while fetching; drop this stale result so it
+      // can't overwrite good extensions and drop nav categories
+      if (cancelled) return;
+
       if (!wizardConfigs || !isExtensibilityWizardEnabled) {
         setWizard([]);
       } else {
@@ -522,9 +548,13 @@ export const useGetExtensions = () => {
         setExtensions([]);
         setAllExtensions([]);
       } else {
+        const crdResourcePathIds = getCrdResourcePathIds(crds);
         const configSet = {
           configFeatures: features!,
-          openapiPathIdList,
+          // an installed CRD proves its resource exists even before OpenAPI catches up
+          openapiPathIdList: crdResourcePathIds.length
+            ? [...openapiPathIdList, ...crdResourcePathIds]
+            : openapiPathIdList,
           permissionSet,
         };
 
@@ -579,6 +609,9 @@ export const useGetExtensions = () => {
       }
     };
     void manageExtensions();
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     cluster,
@@ -586,6 +619,7 @@ export const useGetExtensions = () => {
     permissionSet,
     namespace,
     openapiPathIdList,
+    crds,
     features,
     refreshExtenshions,
   ]);

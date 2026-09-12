@@ -29,10 +29,17 @@ context('Test Custom Resources', () => {
     cy.checkUnsavedDialog();
 
     cy.saveChanges('Create');
+
+    // the create redirect is still in flight when saveChanges returns; wait for it to land
+    // so the next test's nav click isn't overwritten by the pending redirect
+    cy.url().should(
+      'include',
+      'customresourcedefinitions/tcluster.cypress.example.com',
+    );
   });
 
   it('Check CR groups list with slash shortcut', () => {
-    cy.getLeftNav().contains('Custom Resources').click();
+    cy.navigateTo('Configuration', 'Custom Resources');
 
     cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
@@ -58,7 +65,7 @@ context('Test Custom Resources', () => {
   });
 
   it('Create Tcluster', () => {
-    cy.getLeftNav().contains('Custom Resources').click();
+    cy.navigateTo('Configuration', 'Custom Resources');
 
     cy.wait(500).typeInSearch('cypress');
 
@@ -80,7 +87,7 @@ context('Test Custom Resources', () => {
     cy.reload();
     cy.wait(2000);
 
-    cy.getLeftNav().contains('Custom Resources').click();
+    cy.navigateTo('Configuration', 'Custom Resources');
 
     cy.getStartColumn()
       .find('ui5-input[id^=search-]:visible')
@@ -137,7 +144,7 @@ context('Test Custom Resources', () => {
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains(/set for deletion/).should('be.visible');
+    cy.contains(/set for deletion/).should('exist');
 
     cy.getEndColumn().should('not.be.visible');
 

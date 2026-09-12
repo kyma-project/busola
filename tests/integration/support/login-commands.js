@@ -139,7 +139,8 @@ Cypress.Commands.add('loginAndSelectCluster', function (params) {
 
     cy.url().should('match', expectedLocation);
 
-    if (expectedLocation == /overview$/) {
+    // two RegExp objects are never == equal, so this used to never fire; compare by source
+    if (expectedLocation.source === /overview$/.source) {
       cy.contains('ui5-title', 'Cluster Overview').should('be.visible');
     }
 

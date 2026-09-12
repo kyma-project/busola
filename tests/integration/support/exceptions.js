@@ -36,7 +36,12 @@ Cypress.Commands.add('handleExceptions', () => {
       ) ||
       // Exceptions due to reported issues to monaco editor.
       err.message.includes('items is not iterable') ||
-      err.message.includes('Canceled')
+      err.message.includes('Canceled') ||
+      // teardown-cancelled fetches surface as unhandled rejections the app ignores
+      // (handleFetchRejections), but Cypress fails on them regardless
+      err.message.includes('Failed to fetch') ||
+      err.message.includes('NetworkError when attempting to fetch resource') ||
+      err.message.includes('Load failed')
     )
       return false;
   });

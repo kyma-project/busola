@@ -58,12 +58,7 @@ context('Test extensibility variables', () => {
   it('Navigate to Test Resource Creation', () => {
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav()
-      .find('ui5-side-navigation-item')
-      .contains('Namespaces')
-      .click();
-
-    cy.wait(1000);
+    cy.navigateTo('Namespaces');
 
     cy.typeInSearch(NAMESPACE);
 

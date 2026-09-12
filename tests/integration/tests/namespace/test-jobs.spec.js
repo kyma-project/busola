@@ -120,8 +120,8 @@ context('Test Jobs', () => {
     // status
     cy.get('ui5-card[accessible-name="Status"]')
       .find('.resource-status-card__header')
-      .find('.header__status-badge')
-      .should('contain.text', 'Completed', { timeout: 75 * 1000 });
+      .find('.header__status-badge', { timeout: 75 * 1000 })
+      .should('contain.text', 'Completed');
 
     // check logs
     checkJobLogs({
@@ -188,7 +188,7 @@ context('Test Jobs', () => {
   });
 
   it('Inspect list', () => {
-    cy.getLeftNav().contains(/^Jobs/).click();
+    cy.navigateTo('Workloads', 'Jobs');
 
     cy.contains('ui5-text', JOB_NAME).should('be.visible');
   });
