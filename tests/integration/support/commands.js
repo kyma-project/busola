@@ -83,6 +83,15 @@ Cypress.Commands.add('goToNamespaceDetails', (namespace) => {
   // runs against the cluster-scope sidebar where sub-items like Roles don't exist yet
   cy.location('pathname').should('match', new RegExp(`/namespaces/${name}$`));
 
+  // the URL flips before the namespace view mounts, so also wait for that scope to be up:
+  // both the "Namespace Overview" sidebar item and the page title only exist here. Without
+  // this a following navigateTo races the sidebar transition and finds its sub-item at 0x0.
+  cy.getLeftNav()
+    .get('ui5-side-navigation-item[text="Namespace Overview"]')
+    .should('be.visible');
+
+  cy.contains('ui5-title', 'Namespace Overview').should('be.visible');
+
   return cy.end();
 });
 
