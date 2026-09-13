@@ -224,7 +224,11 @@ export function SidebarNavigation() {
       )}
       {topLevelNodes.map((node) =>
         node.items?.map((item) => (
-          <NavItem node={item} key={item.pathSegment} sidebarRef={sidebarRef} />
+          <NavItem
+            node={item}
+            key={item.pathSegment || item.externalUrl || item.label}
+            sidebarRef={sidebarRef}
+          />
         )),
       )}
       {categoryNodes.map((category) => (

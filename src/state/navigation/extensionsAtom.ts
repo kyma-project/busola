@@ -416,7 +416,7 @@ const getCrdResourcePathIds = (crds: unknown): string[] => {
     const kind = crd?.spec?.names?.kind;
     if (!group || !kind) return [];
 
-    const resourceNamePlural = pluralize(pluralize(kind).toLowerCase());
+    const resourceNamePlural = pluralize(kind).toLowerCase();
     return (crd?.spec?.versions ?? [])
       .filter((version) => version?.served)
       .map((version) =>

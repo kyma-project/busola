@@ -105,9 +105,10 @@ export function CategoryItem({
 
   const children = category.items?.map((nn) => {
     const isNodeSelected = checkIsSelected(nn);
+    const nodeKey = nn.pathSegment || nn.externalUrl || nn.label;
 
     return (
-      <React.Fragment key={nn.pathSegment}>
+      <React.Fragment key={nodeKey}>
         {nn.dataSources ? (
           <DataSourcesContextProvider
             dataSources={handleEmptyNamespace(nn.dataSources)}
