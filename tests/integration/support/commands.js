@@ -95,15 +95,13 @@ Cypress.Commands.add('goToNamespaceDetails', (namespace) => {
 });
 
 Cypress.Commands.add('goToClusterOverview', () => {
-  // the item reads "Cluster Overview" in cluster scope and "Back To Cluster
-  // Overview" inside a namespace, so match either label
+  // label differs by scope: "Cluster Overview" at cluster level, "Back To Cluster Overview" in namespace
   cy.getLeftNav()
     .find(
       'ui5-side-navigation-item[text="Cluster Overview"], ui5-side-navigation-item[text="Back To Cluster Overview"]',
     )
     .click({ force: true });
 
-  // confirm the navigation actually landed before the next step
   cy.url().should('match', /overview$/);
   cy.contains('ui5-title', 'Cluster Overview').should('be.visible');
 });

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { memo, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Input, SuggestionItem } from '@ui5/webcomponents-react';
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
@@ -10,7 +10,7 @@ import { ResourceDetailContext } from '../ResourceDetails/ResourceDetails';
 import { useAtomValue } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
-SearchInput.propTypes = {
+SearchInputComponent.propTypes = {
   searchQuery: PropTypes.string,
   entriesKind: PropTypes.string,
   filteredEntries: PropTypes.arrayOf(
@@ -30,7 +30,7 @@ SearchInput.propTypes = {
   onKeyDown: PropTypes.func,
 };
 
-export function SearchInput({
+function SearchInputComponent({
   searchQuery = /** @type {string | undefined} */ (undefined),
   entriesKind = /** @type {string | undefined} */ (undefined),
   filteredEntries = /** @type {any[] | undefined} */ (undefined),
@@ -92,13 +92,7 @@ export function SearchInput({
       );
       return Array.from(new Set(resoled.flat()));
     };
-    getSearchSuggestions().then((res) =>
-      setSuggestions((prev) =>
-        prev.length === res.length && prev.every((s, i) => s === res[i])
-          ? prev
-          : res,
-      ),
-    );
+    getSearchSuggestions().then((res) => setSuggestions(res));
   }, [filteredEntries, searchQuery, suggestionProperties]);
 
   const renderSearchList = () => {
@@ -124,3 +118,17 @@ export function SearchInput({
     </Input>
   );
 }
+
+// filteredEntries/suggestionProperties get a new reference on every list poll, re-rendering
+// the input and making UI5 re-template its inner <input> mid-type. Skip those renders;
+// suggestions refresh on the next query change anyway.
+const arePropsEqual = (prev, next) =>
+  prev.searchQuery === next.searchQuery &&
+  prev.disabled === next.disabled &&
+  prev.showSuggestion === next.showSuggestion &&
+  prev.entriesKind === next.entriesKind &&
+  prev.allowSlashShortcut === next.allowSlashShortcut &&
+  prev.handleQueryChange === next.handleQueryChange &&
+  prev.onKeyDown === next.onKeyDown;
+
+export const SearchInput = memo(SearchInputComponent, arePropsEqual);
