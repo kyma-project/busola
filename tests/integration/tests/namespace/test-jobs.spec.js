@@ -149,8 +149,6 @@ context('Test Jobs', () => {
   });
 
   it('Edit Job', { retries: 2 }, () => {
-    cy.wait(1000);
-
     cy.inspectTab('Edit');
 
     // containers section should be readonly

@@ -84,8 +84,6 @@ context('Test Pizzas', () => {
   });
 
   it('Edits a Pizza Order', () => {
-    cy.wait(1000);
-
     cy.getMidColumn().inspectTab('Edit');
 
     cy.get('.edit-form').as('form');

@@ -59,8 +59,6 @@ context('Test Replica Sets', () => {
   });
 
   it('Edits the Docker image and Replicas amount in the Replica set', () => {
-    cy.wait(1000);
-
     cy.inspectTab('Edit');
 
     cy.get('[placeholder="Enter the Docker image tag, for example, nginx"]')

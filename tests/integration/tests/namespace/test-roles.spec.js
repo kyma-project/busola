@@ -74,8 +74,6 @@ context('Test Roles', () => {
   });
 
   it('Edit the Role', () => {
-    cy.wait(1000);
-
     cy.inspectTab('Edit');
 
     cy.get(`ui5-combobox[placeholder^="Start typing to select Verbs"]:visible`)

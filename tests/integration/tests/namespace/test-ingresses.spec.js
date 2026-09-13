@@ -76,7 +76,6 @@ context('Test Ingresses', () => {
   });
 
   it('Check Ingresses list', () => {
-    cy.wait(3000); // wait for the resource to be refeched and displayed in the list
     cy.inspectList(NAME);
   });
 });

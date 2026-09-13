@@ -59,12 +59,7 @@ context('Accessibility test Pizza Orders', () => {
   it('Acc test Pizza Orders list', () => {
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav()
-      .find('ui5-side-navigation-item')
-      .contains('Namespaces')
-      .click();
-
-    cy.wait(2000);
+    cy.navigateTo('Namespaces');
 
     cy.typeInSearch('pizzas');
 

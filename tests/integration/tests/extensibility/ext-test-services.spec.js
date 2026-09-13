@@ -56,7 +56,6 @@ context('Test Services', () => {
     cy.typeInSearch('services');
 
     cy.clickListLink('services');
-    cy.wait(1000);
     cy.navigateTo('Examples', 'Custom Services');
 
     cy.contains('Type');

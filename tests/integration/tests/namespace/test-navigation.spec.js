@@ -21,7 +21,6 @@ context('Test navigation features', () => {
       cy.visit(newurl);
     });
 
-    cy.wait(2000);
     cy.contains('Incorrect path');
     cy.contains('OK').click();
     cy.contains('ui5-title', 'Cluster Overview');
