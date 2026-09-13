@@ -5,6 +5,11 @@ html,
   height: 100%;
 }
 
+:root {
+  --busola-terminal-background: var(--sapBackgroundColor);
+  --busola-terminal-text: var(--sapTextColor);
+}
+
 .recharts-radial-bar-background-sector{
   stroke: var(--sapTextColor);
   stroke-width: 1.5;
