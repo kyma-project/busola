@@ -70,9 +70,7 @@ context('Test Pizzas', () => {
 
     cy.clickListLink('pizzas');
 
-    cy.getLeftNav().contains('Lunch').click();
-
-    cy.getLeftNav().contains('Pizza Orders').click();
+    cy.navigateTo('Lunch', 'Pizza Orders');
 
     cy.contains('DELIVERY');
     cy.contains('CASH');
@@ -141,9 +139,7 @@ context('Test Pizzas', () => {
       .contains('Diavola is such a spicy pizza')
       .should('be.visible');
 
-    cy.getLeftNav()
-      .contains(/^Pizzas$/)
-      .click();
+    cy.navigateTo('Lunch', 'Pizzas');
 
     cy.get('ui5-table-row').should('have.length', 2);
 

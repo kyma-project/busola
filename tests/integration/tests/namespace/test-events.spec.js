@@ -10,7 +10,7 @@ context('Test Events', () => {
   });
 
   it('Checking list', () => {
-    cy.getLeftNav().contains('Events').click();
+    cy.navigateTo('Events');
 
     cy.get('ui5-table-row#no-data-row').should('not.exist');
 

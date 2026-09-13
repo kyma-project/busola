@@ -73,7 +73,7 @@ context('Accessibility test Extensions view', () => {
   });
 
   it('Acc test Extensions details', () => {
-    cy.getLeftNav().contains('Extensions').click();
+    cy.navigateTo('Configuration', 'Extensions');
 
     cy.typeInSearch('pizzas');
 

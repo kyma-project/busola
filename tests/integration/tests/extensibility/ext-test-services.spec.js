@@ -57,9 +57,7 @@ context('Test Services', () => {
 
     cy.clickListLink('services');
     cy.wait(1000);
-    cy.getLeftNav().contains('Examples').click();
-
-    cy.getLeftNav().contains('Custom Services').click();
+    cy.navigateTo('Examples', 'Custom Services');
 
     cy.contains('Type');
     cy.contains('LoadBalancer');

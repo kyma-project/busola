@@ -70,9 +70,7 @@ context('Accessibility test Pizza Orders', () => {
 
     cy.clickListLink('pizzas');
 
-    cy.getLeftNav().contains('Lunch').click();
-
-    cy.getLeftNav().contains('Pizza Orders').click();
+    cy.navigateTo('Lunch', 'Pizza Orders');
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
@@ -100,7 +98,7 @@ context('Accessibility test Pizza Orders', () => {
   });
 
   it('Acc test Pizza Orders details', () => {
-    cy.getLeftNav().contains('Pizza Orders').click();
+    cy.navigateTo('Lunch', 'Pizza Orders');
 
     cy.clickGenericListLink('diavola-order');
 
