@@ -104,18 +104,16 @@ context('Test OAuth2 Clients', () => {
     cy.contains('Ory Hydra Deprecation').should('be.visible');
 
     cy.contains('ui5-panel', 'OAuth2Clients').within((_$genericList) => {
-      cy.typeInSearch(AUTH2_NAME);
-
       cy.contains('ui5-link', AUTH2_NAME).should('be.visible');
 
-      cy.get('ui5-button[data-testid="delete"]').click();
+      cy.contains('ui5-table-row', AUTH2_NAME)
+        .find('ui5-button[data-testid="delete"]')
+        .click();
     });
 
     cy.get(`[header-text="Delete O Auth Client"]`)
       .find('[data-testid="delete-confirmation"]')
       .click();
-
-    cy.wait(1000);
 
     cy.contains('ui5-link', AUTH2_NAME).should('not.exist');
 
