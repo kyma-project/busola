@@ -92,7 +92,13 @@ export function SearchInput({
       );
       return Array.from(new Set(resoled.flat()));
     };
-    getSearchSuggestions().then((res) => setSuggestions(res));
+    getSearchSuggestions().then((res) =>
+      setSuggestions((prev) =>
+        prev.length === res.length && prev.every((s, i) => s === res[i])
+          ? prev
+          : res,
+      ),
+    );
   }, [filteredEntries, searchQuery, suggestionProperties]);
 
   const renderSearchList = () => {
