@@ -14,7 +14,14 @@ export function Markdown({ value, structure }: MarkdownProps) {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
   if (isNil(value) || value === '') {
-    return emptyLeafPlaceholder;
+    return (
+      <div
+        className="extensibility-markdown sap-margin-small"
+        data-testid="extensibility-markdown"
+      >
+        {emptyLeafPlaceholder}
+      </div>
+    );
   }
 
   // marked-react throws when given a non-string, so coerce defensively.
