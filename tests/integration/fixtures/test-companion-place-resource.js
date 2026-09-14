@@ -20,6 +20,14 @@ spec:
       containers:
       - name: test
         image: test:latest
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 50m
+          limits:
+            memory: 128Mi
+            cpu: 100m
+
 \`\`\`
             </div>
             <div class="link" link-type="New">
