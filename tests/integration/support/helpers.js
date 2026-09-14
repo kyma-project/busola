@@ -1,7 +1,8 @@
 export function chooseComboboxOption(selector, optionText, force = false) {
   const combobox = () => cy.get(`ui5-combobox${selector}`);
 
-  combobox().find('ui5-cb-item').should('contain', optionText);
+  // wait for the specific option to be registered before typing
+  combobox().find(`ui5-cb-item[text*="${optionText}"]`).should('exist');
 
   combobox()
     .find('input')
