@@ -6,6 +6,11 @@ export function validateFormField(formField) {
     formField.querySelector('ui5-switch');
 
   const required = input?.required;
+
+  if (input?.tagName?.toLowerCase() === 'ui5-switch') {
+    return { valid: true, filled: true, required };
+  }
+
   const pattern = input?.getAttribute('pattern');
   const value = input?.value;
 
@@ -13,7 +18,6 @@ export function validateFormField(formField) {
     (required && (value === '' || value === 'NaN')) ||
     (pattern && !value.match(pattern))
   );
-  console.log('vlaue:' + value, 'isReq:' + required, 'isValid:' + isValid);
   return { valid: isValid, filled: value !== '' && value !== 'NaN', required };
 }
 

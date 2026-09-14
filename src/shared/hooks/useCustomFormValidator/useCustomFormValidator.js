@@ -15,7 +15,7 @@ export function useCustomFormValidator() {
       setValid(cv && validateFormElement(formContainer, true).valid);
     }
   };
-  console.log(isValid);
+
   return {
     isValid,
     formElementRef,
