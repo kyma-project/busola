@@ -137,6 +137,17 @@ context('Test Pizzas', () => {
       .contains('Diavola is such a spicy pizza')
       .should('be.visible');
 
+    // The Markdown widget renders spec.recipe as formatted HTML, not raw text.
+    cy.getMidColumn().contains('Baking Instructions').scrollIntoView();
+
+    cy.getMidColumn()
+      .find('[data-testid="extensibility-markdown"] h2')
+      .should('contain.text', 'How to bake a Diavola');
+
+    cy.getMidColumn()
+      .find('[data-testid="extensibility-markdown"] li')
+      .should('have.length.at.least', 5);
+
     cy.navigateTo('Lunch', 'Pizzas');
 
     cy.get('ui5-table-row').should('have.length', 2);

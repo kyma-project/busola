@@ -1,0 +1,22 @@
+.extensibility-markdown {
+  // Global reset.css strips <ul> bullets/indent and <p> margins app-wide.
+  // Restore just those; everything else uses browser defaults + inherited SAP font.
+  ul {
+    list-style: disc;
+    padding-left: 1.5em;
+  }
+
+  p {
+    margin: 0.5em 0;
+  }
+
+  a {
+    color: var(--sapLinkColor);
+  }
+
+  th,
+  td {
+    border: 1px solid var(--sapList_BorderColor);
+    padding: 0.5rem;
+  }
+}
