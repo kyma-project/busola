@@ -30,11 +30,12 @@ context('Test Custom Resources', () => {
 
     cy.saveChanges('Create');
 
-    // the create redirect is still in flight when saveChanges returns; wait for it to land
-    // so the next test's nav click isn't overwritten by the pending redirect
     cy.url().should(
       'include',
       'customresourcedefinitions/tcluster.cypress.example.com',
+    );
+    cy.contains('ui5-title', 'tcluster.cypress.example.com').should(
+      'be.visible',
     );
   });
 
@@ -144,7 +145,7 @@ context('Test Custom Resources', () => {
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains(/set for deletion/).should('exist');
+    cy.contains(/set for deletion/).should('be.visible');
 
     cy.getEndColumn().should('not.be.visible');
 

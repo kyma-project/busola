@@ -88,7 +88,7 @@ context('Test Extensibility Create/Update', () => {
   });
 
   it('Check if Extensions is created', () => {
-    // extension creation reloads the nav subsystem; no assertable signal, so let it settle
+    // extension creation reloads the nav subsystem; nothing to assert on, so wait for it to settle
     cy.wait(2000);
     cy.typeInSearch(EXTENSION_NAME);
     cy.get('ui5-suggestion-item').contains('li', EXTENSION_NAME).click();
@@ -110,7 +110,7 @@ context('Test Extensibility Create/Update', () => {
   it('Edit extension', () => {
     cy.navigateTo('Configuration', 'Extensions');
 
-    // same extension-reload settle as above before touching the search input
+    // same nav-subsystem reload settle as above
     cy.wait(2000);
     cy.typeInSearch(EXTENSION_NAME);
     cy.get('ui5-suggestion-item').contains('li', EXTENSION_NAME).click();

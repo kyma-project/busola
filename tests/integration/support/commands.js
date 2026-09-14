@@ -74,17 +74,16 @@ Cypress.Commands.add('goToNamespaceDetails', (namespace) => {
     .should('be.visible')
     .click();
 
-  // confirm we left the overview before clicking a row, else clickListLink hits a stale link
+  // make sure we're on the namespaces list, not the overview, before clicking a row
   cy.location('pathname').should('match', /\/namespaces$/);
 
   cy.clickListLink(name);
 
-  // wait for the namespace detail route to commit; a following navigateTo otherwise
-  // runs against the cluster-scope sidebar where sub-items like Roles don't exist yet
+  // wait until the namespace detail URL is set
   cy.location('pathname').should('match', new RegExp(`/namespaces/${name}$`));
 
-  // URL flips before the namespace view mounts; wait for the sidebar scope to switch too,
-  // else a following navigateTo races the transition and misses its sub-item
+  // the sidebar still shows cluster-scope items for a moment after the URL changes;
+  // wait for the namespace sidebar to be up before returning
   cy.getLeftNav()
     .get('ui5-side-navigation-item[text="Namespace Overview"]')
     .should('be.visible');
@@ -95,7 +94,7 @@ Cypress.Commands.add('goToNamespaceDetails', (namespace) => {
 });
 
 Cypress.Commands.add('goToClusterOverview', () => {
-  // label differs by scope: "Cluster Overview" at cluster level, "Back To Cluster Overview" in namespace
+  // label differs by scope: "Cluster Overview" at cluster level, "Back To Cluster Overview" inside a namespace
   cy.getLeftNav()
     .find(
       'ui5-side-navigation-item[text="Cluster Overview"], ui5-side-navigation-item[text="Back To Cluster Overview"]',
@@ -192,8 +191,7 @@ Cypress.Commands.add(
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    // the toast auto-dismisses after 3s, racing a visibility assert; its text stays in the DOM
-    cy.contains(/set for deletion/, { timeout: 30000 }).should('exist');
+    cy.contains(/set for deletion/).should('be.visible');
 
     cy.getMidColumn().should('not.be.visible');
   },
@@ -214,7 +212,7 @@ Cypress.Commands.add(
       customHeaderText = null,
     } = options;
 
-    // clearing re-renders the list and can detach the input; re-query before typing
+    // re-query the input after clearing — clearing re-renders the list and can detach it
     const searchInput = () =>
       parentSelector
         ? cy
@@ -269,9 +267,7 @@ Cypress.Commands.add(
         .click();
 
       if (deletedVisible) {
-        cy.contains('ui5-toast', /set for deletion/, { timeout: 30000 }).should(
-          'exist',
-        );
+        cy.contains('ui5-toast', /set for deletion/).should('be.visible');
       }
 
       if (checkIfResourceIsRemoved) {
@@ -376,7 +372,7 @@ Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
 });
 
 Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
-  // UI5 re-templates the inner <input> on list re-renders; re-query between clear and type
+  // re-query the input between clear and type — the list can re-render in between and detach it
   const searchInput = () =>
     cy.get('ui5-input[id^=search-]:visible').find('input');
 

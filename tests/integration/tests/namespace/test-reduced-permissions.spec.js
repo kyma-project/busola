@@ -92,7 +92,7 @@ context('Test reduced permissions', () => {
 
     cy.openCreate();
 
-    // fill the name while the form is quiet; picking the subject kind re-renders and flickers inputs disabled
+    // type the name before picking the subject kind — that selection re-renders the form and briefly disables inputs
     cy.get('ui5-input[accessible-name="ClusterRoleBinding name"]:visible')
       .find('input')
       .should('not.be.disabled')

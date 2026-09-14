@@ -1,7 +1,7 @@
 Cypress.Commands.add('openCreate', () => {
   cy.get('ui5-panel').contains('ui5-button', 'Create').click();
   cy.get('[data-testid="create-form-footer-bar"]').should('be.visible');
-  // fields render only after the schema loads (async for extension forms); wait for body content
+  // fields render only after the schema loads
   cy.get('.create-form')
     .find(
       'ui5-input, ui5-combobox, ui5-select, ui5-multi-input, ui5-textarea, ui5-switch, ui5-checkbox, div.monaco-editor',

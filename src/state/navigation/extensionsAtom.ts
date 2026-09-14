@@ -405,8 +405,8 @@ const pushExtToEventTypes = (extensions: any) => {
   });
 };
 
-// openapiAtom fetches once at login, so a freshly-installed extension's nav category can stay
-// hidden all session. CRDs have no such lag, so treat an installed CRD as proof its resource exists.
+// OpenAPI is fetched once at login, so a newly installed extension can stay invisible all session.
+// CRDs don't have this lag, so we treat an installed CRD as proof that its resource exists.
 const getCrdResourcePathIds = (crds: unknown): string[] => {
   const items =
     (crds as { items?: CustomResourceDefinition[] } | null)?.items ?? [];
@@ -531,8 +531,8 @@ export const useGetExtensions = () => {
         permissionSet,
       );
 
-      // a newer run may have started while fetching; drop this stale result so it
-      // can't overwrite good extensions and drop nav categories
+      // the effect re-ran while we were fetching; drop this result so a stale
+      // run can't overwrite a newer one and make nav categories disappear
       if (cancelled) return;
 
       if (!wizardConfigs || !isExtensibilityWizardEnabled) {
@@ -550,7 +550,7 @@ export const useGetExtensions = () => {
         const crdResourcePathIds = getCrdResourcePathIds(crds);
         const configSet = {
           configFeatures: features!,
-          // an installed CRD proves its resource exists even before OpenAPI catches up
+          // CRDs are available immediately, so use them to fill the gap until OpenAPI catches up
           openapiPathIdList: crdResourcePathIds.length
             ? [...openapiPathIdList, ...crdResourcePathIds]
             : openapiPathIdList,

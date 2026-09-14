@@ -1,8 +1,7 @@
 export function chooseComboboxOption(selector, optionText, force = false) {
   const combobox = () => cy.get(`ui5-combobox${selector}`);
 
-  // wait for options to exist before typing; early typing filters an empty list and
-  // UI5 won't re-run the filter once options arrive, so the item would never show
+  // wait for options to exist before typing
   combobox().find('ui5-cb-item').should('have.length.greaterThan', 0);
 
   combobox()

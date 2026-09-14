@@ -24,7 +24,8 @@ context('Test Cluster Role Bindings', () => {
       .click()
       .type(CRB_NAME);
 
-    // fill subject before picking role: closing the ClusterRole combobox re-templates inputs and briefly disables user name
+    // type the name before picking the role — the combobox popover closing re-renders the
+    // subject inputs and briefly disables user name, so do it first
     cy.get('[accessible-name="User name"]')
       .find('input')
       .should('not.be.disabled')
@@ -80,8 +81,8 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('Group').click();
 
-    // Group name reads briefly disabled while UI5 settles the remounted inputs;
-    // API Group showing its value means that settle is done
+    // switching kind remounts the inputs and Group name is briefly disabled;
+    // wait for API Group to show its value — by then the inputs have settled
     cy.get('[accessible-name="API Group"]')
       .find('input')
       .should('have.value', 'rbac.authorization.k8s.io');
