@@ -87,6 +87,11 @@ data:
             sort:
               - source: type
                 default: true
+      - name: Baking Instructions
+        widget: Panel
+        children:
+          - widget: Markdown
+            source: spec.recipe
     resourceGraph:
       colorVariant: 2
       dataSources:
