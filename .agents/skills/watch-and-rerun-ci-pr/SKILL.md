@@ -135,7 +135,7 @@ The aggregate **"All Checks passed"** gate failing while other checks are still 
 
 ## Step 4: Rerun flaky failures until green (capped loop)
 
-Once you've confirmed the failures are flaky/infra, rerun **only the failed jobs** of each failed run and wait, repeating until success or an attempt cap (default 12; each cycle ~20–35 min). Encode it as one background loop:
+Once you've confirmed the failures are flaky/infra, rerun the **entire failed run — all of its tests, not just the failed jobs** — and wait, repeating until success or an attempt cap (default 12; each cycle ~20–35 min). A full rerun re-executes every test in the suite, which gives a cleaner green signal than re-running only the one job that flaked. The one exception is the **"All Checks passed"** aggregate gate — never rerun it here; it is rerun exactly once in Step 5, after every other check is green. Encode the loop like this:
 
 ```bash
 cat > /tmp/pr_greenloop.sh <<'SCRIPT'
@@ -165,15 +165,15 @@ while :; do
     echo ">>> GAVE UP after $MAX reruns — still failing, needs a human look."
     exit 3
   fi
-  echo ">>> rerun --failed attempt $attempt @ $(date -u +%H:%M:%SZ)"
-  gh run rerun "$RUN" --repo "$REPO" --failed 2>&1 | head -3
+  echo ">>> rerun (all tests) attempt $attempt @ $(date -u +%H:%M:%SZ)"
+  gh run rerun "$RUN" --repo "$REPO" 2>&1 | head -3
   sleep 30
 done
 SCRIPT
 bash /tmp/pr_greenloop.sh
 ```
 
-If several distinct runs failed flakily, drive each to green (rerun each failed run's `--failed` jobs). You can extend the loop to track multiple run ids.
+If several distinct runs failed flakily, drive each to green with a full rerun (`gh run rerun <RUN_ID>` — no `--failed`, so all its tests re-run). You can extend the loop to track multiple run ids.
 
 **If the loop exits with code 3 (cap hit):** stop rerunning. A failure surviving 12 reruns is almost certainly not flaky — re-read the latest failed log and reclassify; report to the user.
 
