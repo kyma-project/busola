@@ -5,13 +5,12 @@ export function savePendingKubeconfigId(kubeconfigId: string): void {
   localStorage.setItem(PENDING_KUBECONFIG_ID_KEY, kubeconfigId);
 }
 
-const SAFE_ID_RE = /^[\w.-]+$/;
-
 export function consumePendingKubeconfigId(): string | null {
   const value = localStorage.getItem(PENDING_KUBECONFIG_ID_KEY);
   if (!value) return null;
   localStorage.removeItem(PENDING_KUBECONFIG_ID_KEY);
-  return SAFE_ID_RE.test(value) ? value : null;
+  // Reject values that contain characters needing URL-encoding.
+  return encodeURIComponent(value) === value ? value : null;
 }
 
 export interface IntendedPath {
