@@ -1,4 +1,4 @@
-/* global Buffer */
+/* global Buffer, require */
 import rateLimit from 'express-rate-limit';
 import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution';
 import { filters } from '../request-filters';
@@ -10,14 +10,11 @@ import {
   requireCredential,
 } from '../utils/rate-limit-key.js';
 import { buildK8sRequestPath } from './path-utils.js';
-import { resolveOrBlockPrivateIpAddress } from '../utils/network-utils.js';
-import config from '../src/config/config.js';
 
-import https from 'https';
-import http from 'http';
-import fs from 'fs';
-import path from 'path';
-import escape from 'lodash.escape';
+const https = require('https');
+const http = require('http');
+const fs = require('fs');
+const escape = require('lodash.escape');
 
 export const requireK8sCredential = requireCredential(
   getK8sCredentialFromHeaders,
@@ -34,24 +31,7 @@ export const k8sRateLimiter = rateLimit({
 });
 
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
-// certs.pem sits next to the entrypoint in the production bundle (/app/certs.pem)
-// but one level up from this module in the source layout (backend/certs.pem).
-// Try both, then fall back to the working directory.
-const loadCerts = () => {
-  const candidates = [
-    path.join(import.meta.dirname, 'certs.pem'),
-    path.join(import.meta.dirname, '..', 'certs.pem'),
-    'certs.pem',
-  ];
-  for (const candidate of candidates) {
-    if (fs.existsSync(candidate)) {
-      return fs.readFileSync(candidate, 'utf8');
-    }
-  }
-  throw new Error(`certs.pem not found in any of: ${candidates.join(', ')}`);
-};
-
-const certs = loadCerts();
+const certs = fs.readFileSync('certs.pem', 'utf8');
 
 const isHeaderDefined = (headerValue) => {
   return headerValue !== undefined && headerValue !== 'undefined';
@@ -94,12 +74,6 @@ export async function handleK8sRequests(req, res) {
 
   const { targetApiServer, ca, cert, key, authorization } = headersData;
 
-  // When ALLOW_PRIVATE_IPS is disabled (default), block requests whose
-  // hostname DNS-resolves to a private IP (SSRF / DNS-rebinding protection).
-  // This mirrors localIpFilter, which honors the same flag for literal IPs.
-  const allowPrivateIps =
-    config.features?.ALLOW_PRIVATE_IPS?.isEnabled ?? false;
-
   // Forward only the headers the Kubernetes API server needs.
   const K8S_FORWARDED_HEADERS = new Set([
     'accept',
@@ -128,7 +102,6 @@ export async function handleK8sRequests(req, res) {
     headers,
     method: req.method,
     port: targetApiServer.port || defaultPort,
-    ...(allowPrivateIps ? {} : { lookup: resolveOrBlockPrivateIpAddress }),
     ...(isHttps && { ca, cert, key, agent }),
   };
   workaroundForNodeMetrics(req);
