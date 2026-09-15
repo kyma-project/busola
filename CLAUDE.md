@@ -18,5 +18,6 @@ Available skills:
 - `.agents/skills/review-code/` — Review current branch changes against a GitHub issue's requirements and acceptance criteria
 - `.agents/skills/check-unused-translations/` — Find translation keys in public/i18n/en.yaml that are not used in src/
 - `.agents/skills/analyze-pr-tests` — Analyze Cypress integration test failures on a given PR
+- `.agents/skills/watch-and-rerun-ci-pr/` — Watch a PR's CI checks and rerun flaky failures until the PR is green
 
 > **Note:** To expose these as native Claude Code slash commands (e.g. `/create-compliant-pr`), place a markdown file per skill in `.claude/commands/` (e.g. `.claude/commands/create-compliant-pr.md`).
