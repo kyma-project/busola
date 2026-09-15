@@ -52,8 +52,6 @@ Cypress.Commands.add('clickGenericListLink', (resourceName) => {
     .find('ui5-table-cell')
     .contains('ui5-text', resourceName)
     .click();
-
-  cy.wait(500);
 });
 
 Cypress.Commands.add('clickListLink', (resourceName) => {
@@ -68,15 +66,43 @@ Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, ($elements) =>
 );
 
 Cypress.Commands.add('goToNamespaceDetails', (namespace) => {
-  // Go to the details of namespace
+  const name = namespace ?? Cypress.env('NAMESPACE_NAME');
+
   cy.getLeftNav()
     .find('ui5-side-navigation-item')
     .contains('Namespaces')
+    .should('be.visible')
     .click();
 
-  cy.clickListLink(namespace ?? Cypress.env('NAMESPACE_NAME'));
+  // make sure we're on the namespaces list, not the overview, before clicking a row
+  cy.location('pathname').should('match', /\/namespaces$/);
+
+  cy.clickListLink(name);
+
+  // wait until the namespace detail URL is set
+  cy.location('pathname').should('match', new RegExp(`/namespaces/${name}$`));
+
+  // the sidebar still shows cluster-scope items for a moment after the URL changes;
+  // wait for the namespace sidebar to be up before returning
+  cy.getLeftNav()
+    .get('ui5-side-navigation-item[text="Namespace Overview"]')
+    .should('be.visible');
+
+  cy.contains('ui5-title', 'Namespace Overview').should('be.visible');
 
   return cy.end();
+});
+
+Cypress.Commands.add('goToClusterOverview', () => {
+  // label differs by scope: "Cluster Overview" at cluster level, "Back To Cluster Overview" inside a namespace
+  cy.getLeftNav()
+    .find(
+      'ui5-side-navigation-item[text="Cluster Overview"], ui5-side-navigation-item[text="Back To Cluster Overview"]',
+    )
+    .click({ force: true });
+
+  cy.url().should('match', /overview$/);
+  cy.contains('ui5-title', 'Cluster Overview').should('be.visible');
 });
 
 Cypress.Commands.add('clearInput', { prevSubject: true }, (element) => {
@@ -151,8 +177,6 @@ Cypress.Commands.add(
     const headerText = customHeaderText || `Delete ${resourceType}`;
 
     if (columnLayout) {
-      cy.wait(1000); //wait for button
-
       cy.getMidColumn()
         .contains('ui5-button', 'Delete')
         .should('be.visible')
@@ -167,7 +191,7 @@ Cypress.Commands.add(
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains(/set for deletion/, { timeout: 30000 }).should('be.visible');
+    cy.contains(/set for deletion/).should('be.visible');
 
     cy.getMidColumn().should('not.be.visible');
   },
@@ -188,29 +212,24 @@ Cypress.Commands.add(
       customHeaderText = null,
     } = options;
 
-    cy.wait(2000);
-    if (parentSelector) {
-      cy.get(parentSelector)
-        .find('ui5-input[id^=search-]:visible')
-        .find('input')
-        .should('not.have.attr', 'disabled', { timeout: 5000 })
-        .clear({ force: true })
-        .type(resourceName, { force: true });
-    } else {
-      cy.get('ui5-input[id^=search-]:visible')
-        .find('input')
-        .should('not.have.attr', 'disabled', { timeout: 5000 })
-        .clear({ force: true })
-        .type(resourceName, { force: true });
-    }
+    // re-query the input after clearing — clearing re-renders the list and can detach it
+    const searchInput = () =>
+      parentSelector
+        ? cy
+            .get(parentSelector)
+            .find('ui5-input[id^=search-]:visible')
+            .find('input')
+        : cy.get('ui5-input[id^=search-]:visible').find('input');
 
-    cy.wait(2000);
+    searchInput()
+      .should('not.have.attr', 'disabled', { timeout: 5000 })
+      .clear({ force: true });
+    searchInput().type(resourceName, { force: true });
 
     if (selectSearchResult) {
       cy.get('ui5-suggestion-item')
         .contains('li', resourceName)
         .click({ force: true });
-      cy.wait(1000);
     }
 
     if (searchInPlainTableText) {
@@ -248,9 +267,7 @@ Cypress.Commands.add(
         .click();
 
       if (deletedVisible) {
-        cy.contains('ui5-toast', /set for deletion/, { timeout: 30000 }).should(
-          'be.visible',
-        );
+        cy.contains('ui5-toast', /set for deletion/).should('be.visible');
       }
 
       if (checkIfResourceIsRemoved) {
@@ -263,13 +280,9 @@ Cypress.Commands.add(
         cy.get(parentSelector)
           .find('ui5-input[id^=search-]:visible')
           .find('input')
-          .wait(1000)
           .clear();
       } else {
-        cy.get('ui5-input[id^=search-]:visible')
-          .find('input')
-          .wait(1000)
-          .clear();
+        cy.get('ui5-input[id^=search-]:visible').find('input').clear();
       }
     }
   },
@@ -346,7 +359,6 @@ Cypress.Commands.add(
         .find('ui5-button[accessible-name="close-column"]')
         .click();
 
-    cy.wait(1000);
     if (checkIfNotExist) cy.getMidColumn().should('not.exist');
     else cy.getMidColumn().should('not.be.visible');
   },
@@ -360,13 +372,12 @@ Cypress.Commands.add('closeEndColumn', (checkIfNotExist = false) => {
 });
 
 Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
-  cy.wait(500);
-  cy.get('ui5-input[id^=search-]:visible')
-    .find('input')
-    .should('be.visible')
-    .should('not.be.disabled')
-    .clear({ force })
-    .type(searchPhrase, { force });
+  // re-query the input between clear and type — the list can re-render in between and detach it
+  const searchInput = () =>
+    cy.get('ui5-input[id^=search-]:visible').find('input');
+
+  searchInput().should('be.visible').should('not.be.disabled').clear({ force });
+  searchInput().type(searchPhrase, { force });
 });
 
 Cypress.Commands.add('openSettingsMenu', () => {

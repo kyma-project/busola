@@ -18,7 +18,7 @@ context('Accessibility test Pizza Orders', () => {
   });
 
   it('Creates the EXT pizza orders config', () => {
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
@@ -59,20 +59,13 @@ context('Accessibility test Pizza Orders', () => {
   it('Acc test Pizza Orders list', () => {
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav()
-      .find('ui5-side-navigation-item')
-      .contains('Namespaces')
-      .click();
-
-    cy.wait(2000);
+    cy.navigateTo('Namespaces');
 
     cy.typeInSearch('pizzas');
 
     cy.clickListLink('pizzas');
 
-    cy.getLeftNav().contains('Lunch').click();
-
-    cy.getLeftNav().contains('Pizza Orders').click();
+    cy.navigateTo('Lunch', 'Pizza Orders');
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
@@ -100,7 +93,7 @@ context('Accessibility test Pizza Orders', () => {
   });
 
   it('Acc test Pizza Orders details', () => {
-    cy.getLeftNav().contains('Pizza Orders').click();
+    cy.navigateTo('Lunch', 'Pizza Orders');
 
     cy.clickGenericListLink('diavola-order');
 

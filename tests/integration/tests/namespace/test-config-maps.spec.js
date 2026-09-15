@@ -41,8 +41,6 @@ context('Test Config Maps', () => {
   });
 
   it('Edit the Config Map', () => {
-    cy.wait(1000);
-
     cy.inspectTab('Edit');
 
     // hide first entry so Cypress doesn't get confuused

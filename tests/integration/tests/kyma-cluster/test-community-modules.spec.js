@@ -122,7 +122,7 @@ context('Test Community Modules views', () => {
   });
 
   it('Test number of Modules in Modules Overview card', () => {
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
 
     cy.contains('ui5-card', 'Installed Modules')
       .contains('0')

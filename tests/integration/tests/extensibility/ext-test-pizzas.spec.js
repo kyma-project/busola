@@ -20,7 +20,7 @@ context('Test Pizzas', () => {
   });
 
   it('Creates the EXT pizza config', () => {
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
@@ -64,18 +64,13 @@ context('Test Pizzas', () => {
   it('Displays the Pizza Orders list/detail views from the samples', () => {
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav()
-      .find('ui5-side-navigation-item')
-      .contains('Namespaces')
-      .click();
+    cy.navigateTo('Namespaces');
 
-    cy.wait(1500).typeInSearch('pizzas');
+    cy.typeInSearch('pizzas');
 
     cy.clickListLink('pizzas');
 
-    cy.getLeftNav().contains('Lunch').click();
-
-    cy.getLeftNav().contains('Pizza Orders').click();
+    cy.navigateTo('Lunch', 'Pizza Orders');
 
     cy.contains('DELIVERY');
     cy.contains('CASH');
@@ -89,8 +84,6 @@ context('Test Pizzas', () => {
   });
 
   it('Edits a Pizza Order', () => {
-    cy.wait(1000);
-
     cy.getMidColumn().inspectTab('Edit');
 
     cy.get('.edit-form').as('form');
@@ -155,9 +148,7 @@ context('Test Pizzas', () => {
       .find('[data-testid="extensibility-markdown"] li')
       .should('have.length.at.least', 5);
 
-    cy.getLeftNav()
-      .contains(/^Pizzas$/)
-      .click();
+    cy.navigateTo('Lunch', 'Pizzas');
 
     cy.get('ui5-table-row').should('have.length', 2);
 

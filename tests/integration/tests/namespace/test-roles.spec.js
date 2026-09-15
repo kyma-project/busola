@@ -74,8 +74,6 @@ context('Test Roles', () => {
   });
 
   it('Edit the Role', () => {
-    cy.wait(1000);
-
     cy.inspectTab('Edit');
 
     cy.get(`ui5-combobox[placeholder^="Start typing to select Verbs"]:visible`)
@@ -113,7 +111,7 @@ context('Test Roles', () => {
   });
 
   it('Clone the Role', () => {
-    cy.getLeftNav().contains('Roles').click();
+    cy.navigateTo('Configuration', 'Roles');
 
     cy.contains('ui5-table-row', ROLE_NAME)
       .find('ui5-button[data-testid="clone"]')

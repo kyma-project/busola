@@ -27,7 +27,8 @@ export const clusterAndNsNodesAtom = atom<Promise<NavNode[]>>(async (get) => {
     !isEmpty(permissionSet);
 
   if (!areDependenciesInitialized) {
-    return [];
+    // not all deps are ready yet — returning [] would collapse the sidebar mid-load
+    return new Promise<NavNode[]>(() => {});
   }
 
   const configSet = {

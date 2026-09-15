@@ -51,7 +51,7 @@ jobs:
         shell: bash
         run: |
           ./.github/scripts/provision_k3d_for_kyma.sh | tee kyma-provision.log
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         name: Setup node
         with:
           node-version: 24
