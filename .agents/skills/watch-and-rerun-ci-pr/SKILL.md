@@ -24,6 +24,10 @@ At least **one** of the following must be available and authenticated to github.
 
 Plus: the PR number (repo is always `kyma-project/busola`).
 
+## Running for several PRs at once
+
+This skill is safe to run concurrently for different PRs — e.g. one Claude window per PR. Each window is an independent session with its own background tasks, so nothing is shared between them **except temp files on disk**. To avoid collisions, every temp path is scoped by PR number: `/tmp/pr_<PR>_settle.sh`, `/tmp/pr_<PR>_greenloop.sh`. Always substitute the real PR number so parallel instances never overwrite each other's script or output. Keep each window pinned to a single PR; don't drive two PRs from one window.
+
 ## Core principle: rerun flakes, not bugs
 
 **A rerun only helps a flaky failure.** A deterministic failure — a real regression from the PR's own changes, a lint/title/description check, or a build error — will fail identically on every rerun and looping on it wastes hours. Before rerunning, classify each failure. Only rerun `flaky`/`infra` failures. Report `product-bug`/`test-bug`/lint/gate failures and stop.
@@ -82,7 +86,7 @@ This is what makes the skill work on fetched PR code: relatedness is judged from
 Runs are settled when none are `queued`/`in_progress`/`requested`/`waiting`/`pending`. Poll in the background (integration suites take ~20–35 min). Use `run_in_background: true` so the loop survives across turns and re-invokes you on exit.
 
 ```bash
-cat > /tmp/pr_settle.sh <<'SCRIPT'
+cat > /tmp/pr_<PR>_settle.sh <<'SCRIPT'
 REPO=kyma-project/busola
 SHA=<SHA>
 for i in $(seq 1 90); do
@@ -106,7 +110,7 @@ for r in sorted(latest.values(),key=lambda x:x["name"]):
   fi
 done
 SCRIPT
-bash /tmp/pr_settle.sh
+bash /tmp/pr_<PR>_settle.sh
 ```
 
 _MCP equivalent (read-only watch):_ poll `pull_request_read` method `get_check_runs` (or `get_status`) until no check is `in_progress`/`queued`.
@@ -138,7 +142,7 @@ The aggregate **"All Checks passed"** gate failing while other checks are still 
 Once you've confirmed the failures are flaky/infra, rerun the **entire failed run — all of its tests, not just the failed jobs** — and wait, repeating until success or an attempt cap (default 12; each cycle ~20–35 min). A full rerun re-executes every test in the suite, which gives a cleaner green signal than re-running only the one job that flaked. The one exception is the **"All Checks passed"** aggregate gate — never rerun it here; it is rerun exactly once in Step 5, after every other check is green. Encode the loop like this:
 
 ```bash
-cat > /tmp/pr_greenloop.sh <<'SCRIPT'
+cat > /tmp/pr_<PR>_greenloop.sh <<'SCRIPT'
 REPO=kyma-project/busola
 RUN=<FAILED_RUN_ID>       # the flaky test run to drive green
 SHA=<SHA>
@@ -170,7 +174,7 @@ while :; do
   sleep 30
 done
 SCRIPT
-bash /tmp/pr_greenloop.sh
+bash /tmp/pr_<PR>_greenloop.sh
 ```
 
 If several distinct runs failed flakily, drive each to green with a full rerun (`gh run rerun <RUN_ID>` — no `--failed`, so all its tests re-run). You can extend the loop to track multiple run ids.
