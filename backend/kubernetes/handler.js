@@ -1,4 +1,4 @@
-/* global Buffer */
+/* global Buffer, __dirname */
 import rateLimit from 'express-rate-limit';
 import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution';
 import { filters } from '../request-filters';
@@ -39,8 +39,8 @@ export const k8sRateLimiter = rateLimit({
 // Try both, then fall back to the working directory.
 const loadCerts = () => {
   const candidates = [
-    path.join(import.meta.dirname, 'certs.pem'),
-    path.join(import.meta.dirname, '..', 'certs.pem'),
+    path.join(__dirname, 'certs.pem'),
+    path.join(__dirname, '..', 'certs.pem'),
     'certs.pem',
   ];
   for (const candidate of candidates) {
