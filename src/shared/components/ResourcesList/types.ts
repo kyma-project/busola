@@ -10,7 +10,7 @@ import {
 } from '../GenericList/components/TableBody';
 import { Sort } from '../GenericList/SortModalPanel';
 import { LayoutColumnName } from 'types';
-import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
+import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout.js';
 
 export type CustomColumn = {
   header?: string;

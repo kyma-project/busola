@@ -4,9 +4,14 @@ import pluralize from 'pluralize';
 import { K8sResource } from 'types';
 import { NavNode } from 'state/types';
 
-export function makeSuggestion(phrase: string, itemList: string[]): string {
+export function makeSuggestion(
+  phrase: string,
+  itemList: string[],
+): string | undefined {
   const suggestions = didYouMean(phrase, itemList);
-  return Array.isArray(suggestions) ? suggestions[0] : suggestions;
+  return Array.isArray(suggestions)
+    ? (suggestions[0] ?? undefined)
+    : (suggestions ?? undefined);
 }
 
 export function findMatchingResourceType(

@@ -11,10 +11,17 @@ const AUTH_HEADERS = new Headers({
   'X-K8s-Authorization': 'Bearer tok123',
 });
 
-function makeTerm() {
+function makeTerm(cols = 80, rows = 24) {
   return {
     write: vi.fn(),
+    cols,
+    rows,
     onData: vi.fn((_handler: (data: string) => void) => ({ dispose: vi.fn() })),
+    onResize: vi.fn(
+      (_handler: (size: { cols: number; rows: number }) => void) => ({
+        dispose: vi.fn(),
+      }),
+    ),
   };
 }
 
@@ -112,6 +119,30 @@ describe('connectTerminal', () => {
     expect(Array.from(frame.slice(1))).toEqual(
       Array.from(new TextEncoder().encode('x')),
     );
+  });
+
+  it('sends a resize frame (channel 4) on open with current terminal dimensions', async () => {
+    const { ws, term } = await attach();
+    ws.onopen();
+
+    const resizeFrame = ws.sent.find((f: Uint8Array) => f[0] === 4);
+    expect(resizeFrame).toBeDefined();
+    const payload = JSON.parse(new TextDecoder().decode(resizeFrame.slice(1)));
+    expect(payload).toEqual({ Width: term.cols, Height: term.rows });
+  });
+
+  it('sends a resize frame (channel 4) when the terminal is resized', async () => {
+    const { ws, term } = await attach();
+    ws.onopen();
+    ws.sent.length = 0; // clear the initial resize frame
+
+    const resizeHandler = term.onResize.mock.calls[0][0];
+    resizeHandler({ cols: 120, rows: 40 });
+
+    const frame = ws.sent.find((f: Uint8Array) => f[0] === 4);
+    expect(frame).toBeDefined();
+    const payload = JSON.parse(new TextDecoder().decode(frame.slice(1)));
+    expect(payload).toEqual({ Width: 120, Height: 40 });
   });
 
   it('ignores socket callbacks once the signal is aborted', async () => {

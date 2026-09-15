@@ -75,7 +75,6 @@ const ColumnWrapper = ({
       ? searchParams.get('resourceNamespace')
       : rawNamespaceId);
 
-  // @ts-expect-error hook not yet migrated to TS
   usePrepareLayoutColumns({
     resourceType: props.resourceType,
     namespaceId: namespaceId,

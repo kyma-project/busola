@@ -53,7 +53,7 @@ config:
     EXTENSIBILITY_INJECTIONS:
       isEnabled: true
     EXTENSIBILITY_CUSTOM_COMPONENTS:
-      isEnabled: true
+      isEnabled: false
     EXTENSIBILITY_WIZARD:
       isEnabled: false
     KYMA_COMPANION:
@@ -81,9 +81,21 @@ config:
       isEnabled: true
       config:
         link: https://sapinsights.eu.qualtrics.com/jfe/form/SV_d3UPNymSgUHAb9Y?product=SAP%20BTP,%20Kyma%20Runtime&product_filter=Kyma
+    CLOUD_SERVICE_SURVEY:
+      isEnabled: true
+      config:
+        signUpLink: https://sapit-home-prod-004.launchpad.cfapps.eu10.hana.ondemand.com/site?forwardedByFLP=true#my-events?sap-ui-app-id-hint=5cc2dc3b-651c-488f-be2d-3e9b3ca02ebb&/ig=16643034
+    KYMA_SURVEY:
+      isEnabled: true
+      config:
+        signUpLink: https://sapit-home-prod-004.launchpad.cfapps.eu10.hana.ondemand.com/site?forwardedByFLP=true#my-events?sap-ui-app-id-hint=5cc2dc3b-651c-488f-be2d-3e9b3ca02ebb&/ig=12707856
     SNOW:
       isEnabled: false
     COMMUNITY_MODULES:
       isEnabled: true
     SSO_LOGIN:
       isEnabled: false
+    TERMINAL:
+      isEnabled: true
+      config:
+        image: europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest

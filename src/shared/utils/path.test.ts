@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import joinPaths from './path';
 
 describe('Check path', () => {

@@ -28,7 +28,7 @@ describe('getSuggestionForSingleResource', () => {
 
     const result = getSuggestionForSingleResource(ctx);
 
-    expect(result).toBeNull();
+    expect(result).toBeUndefined();
   });
 
   it('Type and name, resource suggested', () => {

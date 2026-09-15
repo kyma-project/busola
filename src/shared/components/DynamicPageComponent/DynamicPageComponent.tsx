@@ -153,6 +153,7 @@ type DynamicPageComponentProps = {
     setIsFormOpen: (open: IsFormOpenState) => void,
   ) => void;
   isFirstColumnWithEdit?: boolean;
+  onScrollContainerReady?: (container: HTMLElement | null) => void;
 };
 
 export const DynamicPageComponent = ({
@@ -173,6 +174,7 @@ export const DynamicPageComponent = ({
   className,
   customActionIfFormOpen,
   isFirstColumnWithEdit = false,
+  onScrollContainerReady,
 }: DynamicPageComponentProps) => {
   const navigate = useNavigate();
   const [showTitleDescription, setShowTitleDescription] = useState(false);
@@ -401,6 +403,15 @@ export const DynamicPageComponent = ({
     ) as HTMLElement | null | undefined;
     if (button) {
       button.style['display'] = 'none';
+    }
+
+    if (onScrollContainerReady && dynamicPage) {
+      void customElements.whenDefined('ui5-dynamic-page').then(() => {
+        const container = dynamicPage.shadowRoot?.querySelector(
+          '.ui5-dynamic-page-scroll-container',
+        ) as HTMLElement | null;
+        onScrollContainerReady(container);
+      });
     }
   };
 

@@ -33,3 +33,20 @@ jobs:
           npm run lint-check
           npx vitest run scripts/test/check-unused-translations.test.js
           npm run check-unused-translations
+
+  run-type-check:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Merge with latest main
+        if: inputs.trigger_env != 'release-trigger'
+        uses: ./.github/actions/merge
+      - name: type_check
+        shell: bash
+        run: |
+          set -e
+          npm ci
+          npm run typecheck

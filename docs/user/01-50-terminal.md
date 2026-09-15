@@ -25,7 +25,7 @@ The terminal provides a full interactive Bash shell (`/bin/bash`) inside the `bu
 - Additional tools bundled in the [`busola-dev-toolbox` image](https://github.com/kyma-project/busola/blob/main/Dockerfile.dev-toolbox)
 
 > [!NOTE]
-> `kubectl` is not available in the terminal. The terminal Pod runs without a Kubernetes ServiceAccount, which means it has no access to the Kubernetes API. For cluster operations, use the Kyma dashboard UI or a local `kubectl` installation.
+> `kubectl` is not yet available. The terminal Pod runs without a Kubernetes ServiceAccount, which means it has no access to the Kubernetes API. The toolset is actively being expanded — future versions will include `kubectl` and Kyma CLI.
 
 ## Limitations
 

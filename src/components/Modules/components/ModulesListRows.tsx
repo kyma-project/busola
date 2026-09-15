@@ -12,13 +12,14 @@ import {
 } from '../support';
 import { useGetManagerStatus, useGetModuleResource } from '../hooks';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { getReadableTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { useTranslation } from 'react-i18next';
 import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { ModuleStatus, resolveType } from './ModuleStatus';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { toSentenceCase } from 'shared/utils/helpers';
 import { ExternalLink } from 'shared/components/ExternalLink/ExternalLink';
-import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
+import ValueState from '@ui5/webcomponents-base/dist/types/ValueState.js';
 import { TFunction } from 'i18next';
 import { ProtectedResourceWarning } from 'shared/components/ProtectedResourcesButton';
 import { usePopulateWithNamespace } from 'hooks/usePopulateWithNamespace';
@@ -46,7 +47,7 @@ type ModulesListRowsProps = {
   kymaResource?: KymaResourceType;
   moduleTemplates: ModuleTemplateListType;
   protectedResource?: boolean;
-  hasDetailsLink: (resource: RowResourceType) => boolean;
+  hasDetailsLink: (resource: any) => boolean;
   newestModuleTemplate?: ModuleTemplateType;
 };
 
@@ -269,6 +270,10 @@ export const ModulesListRows = ({
         </StatusBadge>
       )}
     </FlexBox>,
+    // Available since
+    getReadableTimestamp(
+      currentModuleTemplate?.metadata?.creationTimestamp ?? '',
+    ),
     // Module State
     <ModuleStatus
       key={`module-state-${resource.name}`}

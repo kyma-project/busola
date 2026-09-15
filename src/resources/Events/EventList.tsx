@@ -21,7 +21,7 @@ export interface EventListProps {
   resourceUrl: string;
   defaultType?: { key: string; text: string };
   hideInvolvedObjects?: boolean;
-  filter?: (resource: any) => boolean;
+  filter?: (resource: any) => boolean | Promise<boolean>;
   isCompact?: boolean;
   isClusterView?: boolean;
   displayArrow?: boolean;

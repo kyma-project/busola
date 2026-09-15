@@ -42,9 +42,8 @@ export function usePermittedUrl(
   const skip = !permittedUrls?.[url] ? false : age < DEFAULT_TIMEOUT;
 
   const { error, loading } = useGetList()(url, {
-    skip: skip || resourceNamespace,
+    skip: !!(skip || resourceNamespace),
     pollingInterval: 0,
-    onDataReceived: () => {},
   }) as {
     loading: boolean;
     error: any;
@@ -54,7 +53,6 @@ export function usePermittedUrl(
   const { error: namespacedError } = useGetList()(namespacedUrl, {
     skip: skip || error || loading || resourceNamespace,
     pollingInterval: 0,
-    onDataReceived: () => {},
   }) as {
     loading: boolean;
     error: any;

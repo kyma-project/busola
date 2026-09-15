@@ -36,7 +36,7 @@ import {
 import { useNonInteractiveOidcContexts } from './oidc-interactive-check';
 
 import './AddClusterWizard.scss';
-import { WizardStepChangeEventDetail } from '@ui5/webcomponents-fiori/dist/Wizard';
+import { WizardStepChangeEventDetail } from '@ui5/webcomponents-fiori/dist/Wizard.js';
 
 export function AddClusterWizard({
   config = {} as ClusterConfig,

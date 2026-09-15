@@ -4,7 +4,8 @@ import {
   k8sRateLimiter,
   requireK8sCredential,
 } from './kubernetes/handler';
-import { proxyHandler } from './proxy.js';
+// Enable after: https://github.com/kyma-project/busola/issues/5299
+// import { proxyHandler } from './proxy.js';
 import { setupJWTCheck } from './jwtCheck';
 import companionRouter from './companion/companionRouter';
 import communityRouter from './modules/communityRouter';
@@ -68,7 +69,8 @@ const SLOW_REQUEST_THRESHOLD_MS = parseInt(
 );
 app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
-app.use('/proxy', proxyHandler);
+// Enable after: https://github.com/kyma-project/busola/issues/5299
+// app.use('/proxy', proxyHandler);
 
 app.get('/backend/kubeconfig', (req, res) => {
   const kubeconfigDir = path.join(

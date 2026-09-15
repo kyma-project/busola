@@ -51,10 +51,14 @@ export function useFormNavigation(blocker?: Blocker) {
 
   const cancelDiscard = useCallback(() => {
     setIsFormOpen({ formOpen: true, leavingForm: false });
+    setIsResourceEdited((prevState) => ({
+      ...prevState,
+      discardAction: undefined,
+    }));
     if (blocker && blocker?.state === 'blocked') {
       blocker.reset();
     }
-  }, [setIsFormOpen, blocker]);
+  }, [setIsFormOpen, setIsResourceEdited, blocker]);
 
   return {
     navigateSafely,

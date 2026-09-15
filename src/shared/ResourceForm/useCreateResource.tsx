@@ -16,7 +16,7 @@ import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
 import { FormEvent, useMemo } from 'react';
-import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
+import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout.js';
 import { ErrorDetails } from 'shared/ResourceForm/components/ErrorDetails';
 
 export type SkinCreateFn = () => boolean;
@@ -36,7 +36,9 @@ export type useCreateResourcesProps = {
   afterCreatedCustomMessage?: string;
 };
 
-export type CreateResourceFn = (e?: FormEvent) => void;
+export type CreateResourceFn = (
+  e?: FormEvent,
+) => Promise<boolean | null | undefined>;
 export function useCreateResource({
   singularName,
   pluralKind,

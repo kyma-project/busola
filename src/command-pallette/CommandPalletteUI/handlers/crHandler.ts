@@ -131,7 +131,9 @@ function getAutocompleteEntries({
     crdAliases.flatMap((a) => a.aliases),
   );
 
-  const crdAlias = crdAliases.find((c) => c.aliases.includes(suggestedALias));
+  const crdAlias = crdAliases.find((c) =>
+    c.aliases.includes(suggestedALias ?? ''),
+  );
 
   const resources =
     (crdAlias && resourceCache[getResourceKey(crdAlias.crd, namespace)]) || [];
@@ -164,7 +166,9 @@ function getSuggestion({
     crdAliases.flatMap((a) => a.aliases),
   );
 
-  const crdAlias = crdAliases.find((c) => c.aliases.includes(suggestedALias));
+  const crdAlias = crdAliases.find((c) =>
+    c.aliases.includes(suggestedALias ?? ''),
+  );
   if (!crdAlias) return;
 
   const suggestedType = crdAlias.crd.spec.names.plural;

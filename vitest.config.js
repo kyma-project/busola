@@ -22,6 +22,7 @@ export default mergeConfig(
           'src/**/*.test.{ts,tsx,js,jsx}',
           'src/setupTests.js',
         ],
+        ignoreSourceErrors: true,
       },
     },
   }),

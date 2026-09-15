@@ -9,6 +9,7 @@
     "start": "concurrently -c cyan,green npm:busola npm:backend",
     "busola": "npm run copy-themes; BROWSER=none GENERATE_SOURCEMAP=false vite",
     "backend": "cd backend && npm run start",
+    "typecheck": "tsc",
     "eslint-check": "eslint --quiet src/ backend/",
     "eslint-fix": "eslint --fix src/ backend/",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
@@ -119,6 +120,7 @@
     "@types/lodash": "^4.14.186",
     "@types/node": "^25.9.1",
     "@types/pluralize": "^0.0.29",
+    "@types/prop-types": "^15.7.15",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/uuid": "^9.0.0",
@@ -158,7 +160,7 @@
     "prismjs": "1.30.0",
     "react-json-tree": "^0.20.0",
     "underscore": "^1.13.8",
-    "undici": "^7.25.0"
+    "undici": "^7.29.1"
   },
   "nyc": {
     "report-dir": "coverage/component",

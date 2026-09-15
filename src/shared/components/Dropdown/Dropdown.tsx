@@ -9,8 +9,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Label } from '../../ResourceForm/components/Label';
 import { useRef } from 'react';
-import { ComboBoxSelectionChangeEventDetail } from '@ui5/webcomponents/dist/ComboBox';
-import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
+import { ComboBoxSelectionChangeEventDetail } from '@ui5/webcomponents/dist/ComboBox.js';
+import ValueState from '@ui5/webcomponents-base/dist/types/ValueState.js';
 
 type DropdownProps = {
   accessibleName?: string;

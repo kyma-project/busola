@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeAll } from 'vitest';
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import { Provider } from 'jotai';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 
@@ -15,9 +15,14 @@ const capturedProps: Record<string, any> = {};
 vi.mock('shared/components/GenericList/GenericList', () => ({
   GenericList: (props: any) => {
     Object.assign(capturedProps, props);
+    const cells = props.rowRenderer(props.entries[0]);
     return (
       <div data-testid="generic-list">
-        {props.rowRenderer(props.entries[0])}
+        {(Array.isArray(cells) ? cells : [cells]).map(
+          (cell: any, i: number) => (
+            <span key={i}>{cell}</span>
+          ),
+        )}
       </div>
     );
   },
@@ -56,8 +61,11 @@ const renderList = () => {
 };
 
 describe('ClusterNodes navigation', () => {
-  it('navigates to the node route without a layout param, from both the name link and the row link', () => {
+  it('navigates to the node route without a layout param, from both the name link and the row link', async () => {
     const { container } = renderList();
+
+    // Flush pending UI5 web-component lifecycle updates
+    await act(async () => {});
 
     const link = container.querySelector(
       '[data-testid="node-details-link-shoot--node-1"]',

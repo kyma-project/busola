@@ -1,6 +1,6 @@
-import { act, cloneElement } from 'react';
+import { cloneElement } from 'react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 vi.mock('@ui5/webcomponents-react', () => {
