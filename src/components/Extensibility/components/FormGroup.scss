@@ -1,0 +1,10 @@
+.extensibility-read-form-group {
+  position: relative;
+  width: 100%;
+
+  .extensibility-read-form-group {
+    position: absolute;
+    top: 0;
+    left: 50%;
+  }
+}
