@@ -26,7 +26,7 @@ Plus: the PR number (repo is always `kyma-project/busola`).
 
 ## Running for several PRs at once
 
-This skill is safe to run concurrently for different PRs — e.g. one Claude window per PR. Each window is an independent session with its own background tasks, so nothing is shared between them **except temp files on disk**. To avoid collisions, every temp path is scoped by PR number: `/tmp/mq_<PR>_settle.sh`, `/tmp/mq_<PR>_loop.sh`, `/tmp/mq_<PR>_settle.log`, `/tmp/mq_<PR>_loop.log`. Always substitute the real PR number so parallel instances never overwrite each other's scripts or logs. Keep each window pinned to a single PR; don't drive two PRs from one window.
+This skill is safe to run concurrently for different PRs — e.g. one Claude window per PR. All temp paths are scoped by PR number: `/tmp/mq_<PR>_watch.sh`, `/tmp/mq_<PR>.log`. Keep each session pinned to one PR.
 
 ## Core principle: re-queue flakes, not bugs
 
@@ -53,11 +53,20 @@ For deep failure analysis, the classification table in `.agents/skills/analyze-p
 
 ```bash
 gh pr view <PR> --repo kyma-project/busola \
-  --json number,title,state,isInMergeQueue,headRefOid,mergeable,reviewDecision \
-  --jq '{number,title,state,inMergeQueue:.isInMergeQueue,sha:.headRefOid,mergeable,reviewDecision}'
+  --json number,title,state,headRefOid,mergeable,reviewDecision \
+  --jq '{number,title,state,sha:.headRefOid,mergeable,reviewDecision}'
 ```
 
-The PR must be `MERGEABLE` (no conflicts) and `reviewDecision` must not be `REVIEW_REQUIRED`. If `inMergeQueue` is already `true`, skip to Step 3.
+The PR must be `MERGEABLE` (no conflicts) and `reviewDecision` must not be `REVIEW_REQUIRED`.
+
+Check if already in the merge queue (the `isInMergeQueue` JSON field is unreliable — use the refs API):
+
+```bash
+gh api "repos/kyma-project/busola/git/matching-refs/heads/gh-readonly-queue/main/pr-<PR>-" \
+  --jq '.[0].ref | ltrimstr("refs/heads/") // "not in queue"' 2>/dev/null
+```
+
+If a branch is returned, the PR is already queued — skip to Step 3.
 
 ## Step 2: Get the PR's changed files (relatedness baseline)
 
@@ -73,116 +82,74 @@ A failing spec that overlaps the PR's changed files → lean **real** (inspect b
 
 ## Step 3: Add PR to merge queue
 
-```bash
-gh pr merge <PR> --repo kyma-project/busola --squash --auto
-```
-
-This enables auto-merge (squash strategy), which adds the PR to the merge queue immediately when all requirements are met. Equivalent to clicking "Add to merge queue" in the GitHub UI.
-
-Verify:
+**IMPORTANT:** For repos with a merge queue protection rule, use **no strategy flags**. Adding `--squash`, `--merge`, `--rebase`, or `--auto` either errors or silently does nothing.
 
 ```bash
-gh pr view <PR> --repo kyma-project/busola --json isInMergeQueue --jq .isInMergeQueue
-# expect: true
+gh pr merge <PR> --repo kyma-project/busola
 ```
 
-## Step 4: Find the merge queue branch and its CI runs
+> From `gh pr merge --help`: _"When targeting a branch that requires a merge queue, no merge strategy is required. If required checks have passed, the pull request will be added to the merge queue."_
 
-GitHub creates a temporary branch named:
-
-```
-gh-readonly-queue/main/pr-<PR>-<MERGE_SHA>
-```
-
-Find it (uses the `matching-refs` endpoint — reliable even when there are many branches):
+Verify using the refs API (not `--json isInMergeQueue`, which is unreliable):
 
 ```bash
+gh api "repos/kyma-project/busola/git/matching-refs/heads/gh-readonly-queue/main/pr-<PR>-" \
+  --jq '.[0].ref | ltrimstr("refs/heads/") // "not in queue"' 2>/dev/null
+# expect: gh-readonly-queue/main/pr-<PR>-<SHA>
+```
+
+## Step 4: Inspect the first failure, then start the automated watch loop
+
+Once the PR is in the queue, CI takes ~20–35 min. For the **first failure only**, inspect the logs manually to confirm the failure is flaky before starting the automated loop:
+
+```bash
+# List runs on the MQ branch
 MQ_BRANCH=$(gh api "repos/kyma-project/busola/git/matching-refs/heads/gh-readonly-queue/main/pr-<PR>-" \
-  --jq '.[0].ref | ltrimstr("refs/heads/") // empty' 2>/dev/null)
-echo "MQ branch: $MQ_BRANCH"
-```
+  --jq '.[0].ref | ltrimstr("refs/heads/")' 2>/dev/null)
 
-If empty, the PR hasn't entered the queue yet — poll every 15 s until it appears (usually < 1 min after Step 3).
-
-Once you have the branch, list its runs:
-
-```bash
 gh run list --repo kyma-project/busola --branch "$MQ_BRANCH" --limit 30 \
   --json databaseId,name,status,conclusion \
   --jq '.[] | (.conclusion // .status) + "\t" + (.databaseId | tostring) + "\t" + .name'
-```
 
-## Step 5: Wait for CI to settle, then classify
-
-Poll until no run on the MQ branch is `queued`/`in_progress`/`requested`/`waiting`/`pending`. MQ integration suites take ~20–35 min.
-
-```bash
-cat > /tmp/mq_<PR>_settle.sh <<'SCRIPT'
-REPO=kyma-project/busola
-MQ_BRANCH="gh-readonly-queue/main/pr-<PR>-<MERGE_SHA>"
-for i in $(seq 1 90); do
-  sleep 60
-  JSON=$(gh run list --repo "$REPO" --branch "$MQ_BRANCH" --limit 30 \
-    --json databaseId,name,status,conclusion 2>/dev/null)
-  ACTIVE=$(printf '%s' "$JSON" | grep -Eo '"status":"(queued|in_progress|requested|waiting|pending)"' | wc -l | tr -d ' ')
-  echo "[poll $i @ $(date -u +%H:%M:%SZ)] active=$ACTIVE"
-  if [ "$ACTIVE" = "0" ]; then
-    echo "=== SETTLED ==="
-    printf '%s' "$JSON" | python3 -c 'import sys,json
-rows=json.load(sys.stdin)
-latest={}
-for r in rows:
-    n=r["name"]
-    if n not in latest or r["databaseId"]>latest[n]["databaseId"]:
-        latest[n]=r
-for r in sorted(latest.values(),key=lambda x:x["name"]):
-    print((r["conclusion"] or r["status"])+"\t"+str(r["databaseId"])+"\t"+r["name"])'
-    break
-  fi
-done
-SCRIPT
-bash /tmp/mq_<PR>_settle.sh > /tmp/mq_<PR>_settle.log 2>&1
-# Use run_in_background: true — the settle loop takes 20-35 min and must survive across turns.
-# Monitor output: tail -f /tmp/mq_<PR>_settle.log
-```
-
-After settling, check whether the PR was already merged (MQ branch disappears on success):
-
-```bash
-gh pr view <PR> --repo kyma-project/busola --json state,mergedAt --jq '{state,mergedAt}'
-```
-
-For each failed run, inspect the logs:
-
-```bash
-# Find the failed job in a run
+# Find failed jobs
 gh run view <RUN_ID> --repo kyma-project/busola --json jobs \
   --jq '.jobs[] | select(.conclusion=="failure") | {name,databaseId}'
 
-# Read the failure log
+# Read failure log
 gh run view --repo kyma-project/busola --job <JOB_ID> --log-failed 2>/dev/null \
   | sed 's/\x1b\[[0-9;]*m//g' \
   | grep -nE "passing|failing| [0-9]\) |AssertionError|CypressError|Timed out|detached|disabled element|Error:|exit code" \
   | head -60
 ```
 
-## Step 6: Re-queue or stop (capped loop)
+Once confirmed flaky, start the automated watch loop in Step 5.
 
-Once confirmed failures are flaky/infra, re-add to the queue and watch again. Default cap: **8 re-queues** (MQ runs are more expensive than plain reruns).
+## Step 5: Run the automated watch loop
+
+Write and launch the watch script. It polls CI, re-queues on flaky/ejected outcomes, and exits when the PR is merged or the cap is hit.
+
+**Critical implementation notes — bugs that silently break the loop:**
+
+1. **`log()` must write only to the log file, never to stdout.** The loop uses `result=$(wait_settle)` to capture the function's return value. Any `echo` or `log()` call inside `wait_settle()` that writes to stdout will corrupt `$result`, causing the `case` statement to never match and re-queuing to never happen. All diagnostic output inside `wait_settle()` must go to the file directly or use `>&2`.
+
+2. **No strategy flags on `gh pr merge`.** `--squash`, `--auto`, `--merge`, or `--rebase` silently fail or emit a warning without queuing for merge-queue repos. Use `gh pr merge "$PR" --repo "$REPO"` with no other flags.
 
 ```bash
-cat > /tmp/mq_<PR>_loop.sh <<'SCRIPT'
+cat > /tmp/mq_<PR>_watch.sh <<'SCRIPT'
+#!/bin/bash
 REPO=kyma-project/busola
 PR=<PR>
+LOG=/tmp/mq_<PR>.log
 MAX=8
 attempt=0
 
+# CRITICAL: log() writes only to file — never to stdout.
+# wait_settle() is called in a subshell: result=$(wait_settle)
+# Any stdout from log() would corrupt $result and break the case statement.
+log() { echo "[$(date -u +%H:%M:%SZ)] $*" >> "$LOG"; }
+
 is_merged() {
   gh pr view "$PR" --repo "$REPO" --json state --jq .state 2>/dev/null | grep -q "MERGED"
-}
-
-is_in_queue() {
-  gh pr view "$PR" --repo "$REPO" --json isInMergeQueue --jq .isInMergeQueue 2>/dev/null | grep -q "true"
 }
 
 get_mq_branch() {
@@ -190,23 +157,26 @@ get_mq_branch() {
     --jq '.[0].ref | ltrimstr("refs/heads/") // empty' 2>/dev/null
 }
 
-wait_settle() {  # polls until MQ branch runs settle; prints "success|failure|ejected"
-  local branch="" st
+wait_settle() {
+  # Only echo the status word to stdout. All other output goes to log file directly.
+  local branch=""
   for j in $(seq 1 10); do
     branch=$(get_mq_branch)
     [ -n "$branch" ] && break
+    log "  waiting for MQ branch (try $j)..."
     sleep 15
   done
   if [ -z "$branch" ]; then
     is_merged && echo "merged" || echo "ejected"
     return
   fi
+  log "  MQ branch: $branch"
   for i in $(seq 1 90); do
     sleep 60
     JSON=$(gh run list --repo "$REPO" --branch "$branch" --limit 30 \
       --json databaseId,name,status,conclusion 2>/dev/null)
     ACTIVE=$(printf '%s' "$JSON" | grep -Eo '"status":"(queued|in_progress|requested|waiting|pending)"' | wc -l | tr -d ' ')
-    echo "  [poll $i branch=$(basename "$branch") active=$ACTIVE @ $(date -u +%H:%M:%SZ)]" >&2
+    log "  poll $i active=$ACTIVE"
     if [ "$ACTIVE" = "0" ]; then
       FAIL=$(printf '%s' "$JSON" | grep -c '"conclusion":"failure"' || true)
       [ "$FAIL" = "0" ] && echo "success" || echo "failure"
@@ -219,47 +189,77 @@ wait_settle() {  # polls until MQ branch runs settle; prints "success|failure|ej
 requeue() {
   attempt=$((attempt+1))
   if [ "$attempt" -gt "$MAX" ]; then
-    echo ">>> GAVE UP after $MAX re-queues — still failing, needs a human look."
+    log "GAVE UP after $MAX re-queues — needs a human look."
     exit 3
   fi
-  echo ">>> re-queuing attempt $attempt @ $(date -u +%H:%M:%SZ)"
-  gh pr merge "$PR" --repo "$REPO" --squash --auto 2>&1 | head -3
-  sleep 30
+  log "re-queuing attempt $attempt..."
+  # No strategy flags — required for merge-queue repos
+  out=$(gh pr merge "$PR" --repo "$REPO" 2>&1)
+  log "  gh output: $out"
+  sleep 15
+  # Confirm the branch appeared
+  local branch
+  for j in $(seq 1 8); do
+    branch=$(get_mq_branch)
+    [ -n "$branch" ] && { log "  confirmed in queue: $branch"; return; }
+    log "  not in queue yet (try $j)..."
+    sleep 10
+  done
+  log "  WARNING: could not confirm queue entry after re-queue"
 }
+
+log "=== Watch started (PR=$PR, MAX=$MAX) ==="
 
 while :; do
   if is_merged; then
-    echo ">>> MERGED — done @ $(date -u +%H:%M:%SZ)"
+    log "MERGED — done!"
     exit 0
   fi
   result=$(wait_settle)
-  echo ">>> MQ settled: $result @ $(date -u +%H:%M:%SZ)"
+  log "MQ settled: $result"
   case "$result" in
-    merged)  echo ">>> MERGED — done"; exit 0 ;;
-    success) echo ">>> MQ green — polling for auto-merge..."; sleep 90 ;;
-    ejected) echo ">>> PR ejected (no runs found). Re-queuing..."; requeue ;;
-    failure) echo ">>> CI failed — inspect logs before re-queuing (see Step 5)."; requeue ;;
-    timeout) echo ">>> Poll timed out — retrying loop."; ;;
+    merged)  log "MERGED — done!"; exit 0 ;;
+    success) log "MQ green — waiting for auto-merge..."; sleep 90 ;;
+    ejected) log "PR ejected. Re-queuing..."; requeue ;;
+    failure) log "CI failed (flaky). Re-queuing..."; requeue ;;
+    timeout) log "Poll timed out — retrying." ;;
   esac
 done
 SCRIPT
-bash /tmp/mq_<PR>_loop.sh > /tmp/mq_<PR>_loop.log 2>&1
-# Use run_in_background: true — the loop survives across turns and re-invokes you on exit.
-# Monitor output: tail -f /tmp/mq_<PR>_loop.log
+chmod +x /tmp/mq_<PR>_watch.sh
 ```
 
-**IMPORTANT on `failure`:** The loop script re-queues automatically, but you must have already classified the failure as flaky/infra (Step 5) before running this loop. If you discover mid-loop that a failure is a real bug, **stop the script and report** — do not let it re-queue a deterministic failure.
+Launch as a detached background process:
+
+```bash
+> /tmp/mq_<PR>.log
+bash /tmp/mq_<PR>_watch.sh &
+echo "PID: $!"
+```
+
+Monitor progress:
+
+```bash
+tail -f /tmp/mq_<PR>.log
+# or spot-check:
+tail -20 /tmp/mq_<PR>.log
+pgrep -f mq_<PR>_watch.sh && echo running || echo DEAD
+```
+
+If the script dies unexpectedly, restart it — it will pick up the current queue state automatically.
+
+**IMPORTANT on `failure`:** The loop re-queues automatically, but you must have already confirmed the first failure is flaky (Step 4) before starting. If a failure mid-loop looks like a real bug (same error, overlaps PR diff), **kill the script and report** — do not let it re-queue a deterministic failure.
 
 **If the loop exits with code 3 (cap hit):** A failure surviving 8 re-queues is almost certainly not flaky. Re-read the latest failure log, reclassify, and report to the user.
 
-## Step 7: Report
+## Step 6: Report
 
 Summarize: which MQ entries passed, which were ejected and how classified (citing diff overlap), how many re-queues each took, and whether the PR was ultimately merged or stopped on a real failure. If anything was reported as a real failure, state the error and recommended fix.
 
 ## Guardrails
 
 - **Never re-queue a deterministic failure** — fix the PR or test instead.
-- **Classify before running the loop** — inspect Step 5 logs first; don't blindly start the loop script.
+- **Classify the first failure before starting the loop** — inspect Step 4 logs; don't blindly start the script.
 - **The PR must remain approved** — if reviewers request changes mid-watch, re-queuing won't work; resolve the review first.
 - **Re-check HEAD SHA if the watch runs long** — a new push invalidates the current MQ entry; restart from Step 1.
 - **If only MCP is available** — you can watch and classify but cannot re-queue (`gh pr merge` requires `gh`); report that limitation rather than looping.
