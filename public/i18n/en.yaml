@@ -839,20 +839,8 @@ joule-feedback:
 kubeconfig-id:
   error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
-kyma-cli:
-  banner:
-    buttons:
-      documentation: Get Started
-    description: Kyma CLI helps you move faster - from first setup to deploying and managing apps.
-    title: Try Kyma CLI
 kyma-companion:
   ask-joule: Ask Joule
-  banner:
-    buttons:
-      documentation: Documentation
-      try-joule: Try Out Joule
-    description: Joule in Kyma dashboard assists you with a wide range of tasks specific to Kyma and Kubernetes. You can use it, for example, to troubleshoot issues, create Functions, scale applications, or configure Ingress. As this is an experimental feature, we encourage you to explore its capabilities and share your feedback to help us improve.
-    title: Meet Joule
   disclaimer:
     back-conversation: Back to Conversation
     hint: Joule uses AI. Verify results.
