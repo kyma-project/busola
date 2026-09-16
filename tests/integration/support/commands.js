@@ -75,6 +75,7 @@ Cypress.Commands.add('goToNamespaceDetails', (namespace) => {
     .click();
 
   // make sure we're on the namespaces list, not the overview, before clicking a row
+  cy.contains('ui5-dynamic-page-title', 'Namespaces').should('be.visible');
   cy.location('pathname').should('match', /\/namespaces$/);
 
   cy.clickListLink(name);
@@ -89,8 +90,6 @@ Cypress.Commands.add('goToNamespaceDetails', (namespace) => {
     .should('be.visible');
 
   cy.contains('ui5-title', 'Namespace Overview').should('be.visible');
-
-  return cy.end();
 });
 
 Cypress.Commands.add('goToClusterOverview', () => {

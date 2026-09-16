@@ -143,7 +143,5 @@ Cypress.Commands.add('loginAndSelectCluster', function (params) {
     if (expectedLocation.source === /overview$/.source) {
       cy.contains('ui5-title', 'Cluster Overview').should('be.visible');
     }
-
-    return cy.end();
   });
 });

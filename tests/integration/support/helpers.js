@@ -12,8 +12,6 @@ export function chooseComboboxOption(selector, optionText, force = false) {
     .type(optionText);
 
   cy.get('ui5-cb-item:visible').contains(optionText).click({ force: force });
-
-  return cy.end();
 }
 
 export function useCategory(category) {
