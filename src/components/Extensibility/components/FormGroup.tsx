@@ -30,7 +30,7 @@ function FormItemWidget({
 
   return (
     <FormItem labelContent={<Label showColon>{widgetT(structure)}</Label>}>
-      <span>{displayValue}</span>
+      <div className="sap-margin-y-tiny">{displayValue}</div>
     </FormItem>
   );
 }

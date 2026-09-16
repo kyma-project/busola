@@ -1,10 +1,9 @@
-.extensibility-read-form-group {
-  position: relative;
+div:has(> .extensibility-read-form-group:first-child) {
+  display: flex;
+  justify-content: unset;
   width: 100%;
 
   .extensibility-read-form-group {
-    position: absolute;
-    top: 0;
-    left: 50%;
+    width: 50%;
   }
 }

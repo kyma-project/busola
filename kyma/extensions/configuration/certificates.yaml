@@ -86,14 +86,17 @@ data:
         widget: Card
         visibility: $exists(spec.keystores)
         children:
-          - name: JKS
-            description: Java KeyStore (JKS) is a repository of security, authorization or public key certificates.
-            widget: FormGroup
+          - widget: Columns
             visibility: $exists(spec.keystores.jks)
             children:
-              - name: spec.keystores.create
-                source: spec.keystores.jks.create
-                visibility: $exists(spec.keystores.jks.create)
+              - name: JKS
+                description: Java KeyStore (JKS) is a repository of security, authorization or public key certificates.
+                widget: FormGroup
+                visibility: $exists(spec.keystores.jks)
+                children:
+                  - name: spec.keystores.create
+                    source: spec.keystores.jks.create
+                    visibility: $exists(spec.keystores.jks.create)
               - name: spec.keystores.passwordSecretRef
                 widget: FormGroup
                 visibility: $exists(spec.keystores.jks.passwordSecretRef)
@@ -112,13 +115,16 @@ data:
                   - name: spec.keystores.key
                     source: spec.keystores.jks.passwordSecretRef.key
                     visibility: $exists(spec.keystores.jks.passwordSecretRef.key)
-          - name: PKCS12
-            widget: FormGroup
+          - widget: Columns
             visibility: $exists(spec.keystores.pkcs12)
             children:
-              - name: Create
-                source: spec.keystores.pkcs12.create
-                visibility: $exists(spec.keystores.pkcs12.create)
+              - name: PKCS12
+                widget: FormGroup
+                visibility: $exists(spec.keystores.pkcs12)
+                children:
+                  - name: Create
+                    source: spec.keystores.pkcs12.create
+                    visibility: $exists(spec.keystores.pkcs12.create)
               - name: spec.keystores.passwordSecretRef
                 widget: FormGroup
                 visibility: $exists(spec.keystores.pkcs12.passwordSecretRef)
