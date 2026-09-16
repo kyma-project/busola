@@ -60,8 +60,6 @@ context('Test Services', () => {
   });
 
   it('Edit a Service', () => {
-    cy.wait(1000);
-
     cy.inspectTab('Edit');
 
     cy.get('[placeholder="Enter Type"]:visible')

@@ -19,7 +19,7 @@ context('Test Extensibility Create/Update', () => {
   });
 
   it('Upload test resources', () => {
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
@@ -88,14 +88,10 @@ context('Test Extensibility Create/Update', () => {
   });
 
   it('Check if Extensions is created', () => {
-    cy.get('ui5-input[id^=search-]:visible')
-      .find('input')
-      .wait(1000)
-      .clear()
-      .type(EXTENSION_NAME)
-      .get('ui5-suggestion-item')
-      .contains('li', EXTENSION_NAME)
-      .click();
+    // extension creation reloads the nav subsystem; nothing to assert on, so wait for it to settle
+    cy.wait(2000);
+    cy.typeInSearch(EXTENSION_NAME);
+    cy.get('ui5-suggestion-item').contains('li', EXTENSION_NAME).click();
 
     cy.get('ui5-table-row').contains(EXTENSION_NAME).should('be.visible');
   });
@@ -114,14 +110,10 @@ context('Test Extensibility Create/Update', () => {
   it('Edit extension', () => {
     cy.navigateTo('Configuration', 'Extensions');
 
-    cy.get('ui5-input[id^=search-]:visible')
-      .find('input')
-      .wait(1000)
-      .clear()
-      .type(EXTENSION_NAME)
-      .get('ui5-suggestion-item')
-      .contains('li', EXTENSION_NAME)
-      .click();
+    // same nav-subsystem reload settle as above
+    cy.wait(2000);
+    cy.typeInSearch(EXTENSION_NAME);
+    cy.get('ui5-suggestion-item').contains('li', EXTENSION_NAME).click();
 
     cy.clickGenericListLink(EXTENSION_NAME);
 
@@ -160,6 +152,6 @@ context('Test Extensibility Create/Update', () => {
     cy.contains(UPDATED_DESCRIPTION);
     cy.contains(SECOND_DETAIL);
 
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
   });
 });

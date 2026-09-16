@@ -14,7 +14,7 @@ context('Test Community Modules update-all functionality', () => {
   });
 
   it('Install busola module at old version as precondition', () => {
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
     cy.get('ui5-card').contains('Modify Modules').click();
     cy.url().should('match', /.*\/kymamodules/);
 
@@ -213,7 +213,7 @@ context('Test Community Modules update-all functionality', () => {
 
     cy.get('ui5-table-row').contains(OLD_TEMPLATE_NAME).should('be.visible');
 
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
     cy.get('ui5-card').contains('Modify Modules').click();
   });
 
@@ -290,7 +290,7 @@ context('Test Community Modules update-all functionality', () => {
 
     cy.get('ui5-table-row').contains(OLD_TEMPLATE_NAME).should('not.exist');
 
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
     cy.get('ui5-card').contains('Modify Modules').click();
   });
 

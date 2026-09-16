@@ -30,6 +30,7 @@ concurrency:
 jobs:
   run-integration-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     if: github.event.pull_request.draft == false
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
@@ -51,8 +52,9 @@ jobs:
         run: |
           ./.github/scripts/provision_k3d_for_kyma.sh | tee kyma-provision.log
           ./.github/scripts/install-kyma.sh | tee kyma-alpha-deploy.log
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         name: Setup node
+        timeout-minutes: 5
         with:
           node-version: 24
       - name: Build Busola Docker Image
