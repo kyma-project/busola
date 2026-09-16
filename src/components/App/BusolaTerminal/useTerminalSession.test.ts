@@ -205,4 +205,36 @@ describe('useTerminalSession', () => {
 
     expect(hookFetch).not.toHaveBeenCalled();
   });
+
+  it('cancels a pending reconnect on disconnect so it cannot revive a torn-down terminal', async () => {
+    vi.useFakeTimers();
+    try {
+      setupHappyHookFetch();
+      const { result } = renderHook(() => useTerminalSession());
+
+      await act(async () => {
+        await result.current.connect(makeTerm() as any);
+      });
+
+      // an unexpected drop (non-1000 close, no reason) schedules a reconnect
+      act(() => {
+        lastWs()!.onclose?.({ code: 1006 } as any);
+      });
+      expect(wsInstances).toHaveLength(1);
+
+      await act(async () => {
+        await result.current.disconnect(POD);
+      });
+
+      // let the reconnect delay (backoff + jitter, <= ~2s) elapse
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(5000);
+      });
+
+      // reconnect was cancelled: no second socket opened on the disposed terminal
+      expect(wsInstances).toHaveLength(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });

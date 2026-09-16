@@ -176,6 +176,11 @@ export function useTerminalSession() {
       disconnectedRef.current = true;
 
       abortRef.current?.abort();
+      // a reconnect may be scheduled from a dropped connection; drop it so it
+      // can't fire connect() on the terminal we're tearing down here
+      clearTimeout(reconnectTimer.current);
+      reconnectTimer.current = undefined;
+      attemptRef.current = 0;
       onDataDisposableRef.current?.dispose();
       onDataDisposableRef.current = null;
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
