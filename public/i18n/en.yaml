@@ -28,7 +28,7 @@ cluster-overview:
     memory-requests: Memory requests
     memory-requests-tooltip: The amount of memory resources that Pods request in the cluster. It helps you understand the memory resource requirements of your applications.
     memory-usage: Memory Usage
-    memory-usage-tooltip: It shows how much memory is currently being used across all nodes in the Kubernetes cluster compared to the total available memory capacity. It helps you understand the overall cluster load and available memory resources.
+    memory-usage-tooltip: Memory currently being used across all nodes in the Kubernetes cluster compared to the total available memory capacity. It helps you understand the overall cluster load and available memory resources.
     modules-overview: Modules Overview
     nodes: Nodes
     nvidia-gpus: Nvidia GPUs
