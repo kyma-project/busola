@@ -22,7 +22,7 @@ import {
   COLOR_ERROR,
   COLOR_WARNING,
   connectTerminal,
-  terminalMessage,
+  terminalSystemMessage,
 } from './connectTerminal';
 import { TFunction } from 'i18next';
 
@@ -45,7 +45,10 @@ const reconnect = (
   const attempt = attemptRef.current;
   if (attempt >= 10) {
     term.write(
-      terminalMessage(COLOR_ERROR, t('terminal.messages.reconnect-failed')),
+      terminalSystemMessage(
+        COLOR_ERROR,
+        t('terminal.messages.reconnect-failed'),
+      ),
     );
     setSession((prev) => ({ ...prev, status: 'idle' }));
     return;
@@ -59,7 +62,7 @@ const reconnect = (
   const delay = baseDelay + jitter;
 
   term.write(
-    terminalMessage(
+    terminalSystemMessage(
       COLOR_WARNING,
       t('terminal.messages.reconnecting', { delay: Math.round(delay / 1000) }),
     ),
@@ -160,10 +163,7 @@ export function useTerminalSession() {
           errorMessage: message,
         }));
         term.write(
-          terminalMessage(
-            COLOR_ERROR,
-            t('terminal.status.error', { error: message }),
-          ),
+          terminalSystemMessage(COLOR_ERROR, t('terminal.status.error')),
         );
       }
     },
