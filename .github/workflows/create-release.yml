@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           ref: ${{ github.ref_name }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
@@ -95,7 +95,7 @@ jobs:
     steps:
       # Checkout the target busola-deploy repository on the dev branch
       - name: Checkout busola-deploy repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: kyma/busola-deploy
           github-server-url: 'https://github.tools.sap'

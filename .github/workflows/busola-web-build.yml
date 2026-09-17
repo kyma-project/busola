@@ -83,7 +83,7 @@ jobs:
     if: startsWith(needs.extract-image-tag.outputs.image_tag, 'v20')
     steps:
       - name: Checkout busola-deploy repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: kyma/busola-deploy
           github-server-url: 'https://github.tools.sap'
