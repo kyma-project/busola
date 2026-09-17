@@ -192,8 +192,11 @@ context('Test Update Community Module', () => {
       .contains('Update')
       .click();
 
-    cy.get('ui5-toast').contains('Module update started').should('be.visible');
-    cy.contains('ui5-toast', 'Community Modules updated').should('be.visible');
+    // the toast fades after ~3s but keeps its text; match the message, not visibility
+    cy.get('ui5-toast[accessible-name="notification-content"]').should(
+      'contain.text',
+      'Community Modules updated',
+    );
 
     cy.wait(3000);
 
@@ -279,8 +282,11 @@ context('Test Update Community Module', () => {
       .contains('Update')
       .click();
 
-    cy.get('ui5-toast').contains('Module update started').should('be.visible');
-    cy.contains('ui5-toast', 'Community Modules updated').should('be.visible');
+    // the toast fades after ~3s but keeps its text; match the message, not visibility
+    cy.get('ui5-toast[accessible-name="notification-content"]').should(
+      'contain.text',
+      'Community Modules updated',
+    );
 
     cy.wait(3000);
 

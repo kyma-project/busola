@@ -190,7 +190,11 @@ Cypress.Commands.add(
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains(/set for deletion/).should('be.visible');
+    // the toast fades after ~3s but keeps its text; match the message, not visibility
+    cy.get('ui5-toast[accessible-name="notification-content"]').should(
+      'contain.text',
+      'set for deletion',
+    );
 
     cy.getMidColumn().should('not.be.visible');
   },
@@ -266,7 +270,11 @@ Cypress.Commands.add(
         .click();
 
       if (deletedVisible) {
-        cy.contains('ui5-toast', /set for deletion/).should('be.visible');
+        // the toast fades after ~3s but keeps its text; match the message, not visibility
+        cy.get('ui5-toast[accessible-name="notification-content"]').should(
+          'contain.text',
+          'set for deletion',
+        );
       }
 
       if (checkIfResourceIsRemoved) {

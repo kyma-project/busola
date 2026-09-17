@@ -148,7 +148,11 @@ context('Test Kyma Modules views', () => {
 
     cy.get('ui5-button:visible').contains('Save').click();
 
-    cy.get('ui5-toast').contains('Kyma updated').should('be.visible');
+    // the toast fades after ~3s but keeps its text; match the message, not visibility
+    cy.get('ui5-toast[accessible-name="notification-content"]').should(
+      'contain.text',
+      'Kyma updated',
+    );
 
     cy.inspectTab('View');
   });
