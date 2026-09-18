@@ -190,7 +190,11 @@ context('Test Community Modules update-all functionality', () => {
       .find('ui5-button[design="Emphasized"]')
       .click();
 
-    cy.contains('Module update started').should('be.visible');
+    // the toast fades after ~3s but keeps its text; match the message, not visibility
+    cy.get('ui5-toast[accessible-name="notification-content"]').should(
+      'contain.text',
+      'Community Modules updated',
+    );
 
     cy.wait(3000);
 
@@ -260,7 +264,11 @@ context('Test Community Modules update-all functionality', () => {
       .find('ui5-button[design="Emphasized"]')
       .click();
 
-    cy.contains('Module update started').should('be.visible');
+    // the toast fades after ~3s but keeps its text; match the message, not visibility
+    cy.get('ui5-toast[accessible-name="notification-content"]').should(
+      'contain.text',
+      'Community Modules updated',
+    );
   });
 
   it('Shows new version in the list after update and verifies old ModuleTemplate was deleted', () => {
