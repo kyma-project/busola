@@ -58,6 +58,7 @@ export interface DataSourcesContextType {
   dataSources: DataSources;
   getRelatedResourceInPath: (path: string) => string | undefined;
   requestRelatedResource: (resource: Resource, dataSourceName: string) => any;
+  refetchDataSource: (dataSourceName: string) => void;
 }
 
 export const DataSourcesContext = createContext<DataSourcesContextType>(
@@ -205,6 +206,12 @@ export const DataSourcesContextProvider: FC<Props> = ({
     );
   };
 
+  // force an out-of-band refetch of a single source (e.g. right after a delete,
+  // so the list drops the row instead of waiting for the next poll tick)
+  const refetchDataSource = (dataSourceName: string) => {
+    setRefetchSource(dataSourceName);
+  };
+
   const requestRelatedResource = (resource: any, dataSourceName: string) => {
     const dataSource = dataSources[dataSourceName];
 
@@ -252,6 +259,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
     dataSources,
     getRelatedResourceInPath,
     requestRelatedResource,
+    refetchDataSource,
   };
 
   return (

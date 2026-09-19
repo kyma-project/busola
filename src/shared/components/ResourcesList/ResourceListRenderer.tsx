@@ -79,6 +79,7 @@ export function ResourceListRenderer({
   accessibleName,
   createFormRef = null,
   noRedirectAfterDelete = false,
+  afterDelete,
 }: ResourceListRendererProps) {
   useVersionWarning({
     resourceUrl,
@@ -100,6 +101,7 @@ export function ResourceListRenderer({
     layoutNumber,
     redirectBack: false,
     parentCrdName,
+    afterDelete,
   });
 
   const [activeResource, setActiveResource] = useState<Record<
