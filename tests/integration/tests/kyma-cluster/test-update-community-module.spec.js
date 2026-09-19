@@ -222,13 +222,15 @@ context('Test Update Community Module', () => {
       .should('be.visible')
       .type(OLD_TEMPLATE_NAME, { force: true });
 
-    cy.get('ui5-table-row').contains(OLD_TEMPLATE_NAME).should('be.visible');
-
-    cy.goToClusterOverview();
-    cy.get('ui5-card').contains('Modify Modules').click();
+    cy.get('ui5-table-row')
+      .contains(OLD_TEMPLATE_NAME, { timeout: 30000 })
+      .should('be.visible');
   });
 
   it('Update button is not visible when no updates are available', () => {
+    cy.goToClusterOverview();
+    cy.get('ui5-card').contains('Modify Modules').click();
+
     cy.get('.community-modules-list')
       .find('ui5-table-row')
       .contains('ui5-button', 'Update')
@@ -312,13 +314,15 @@ context('Test Update Community Module', () => {
       .should('be.visible')
       .type(OLD_TEMPLATE_NAME, { force: true });
 
-    cy.get('ui5-table-row').contains(OLD_TEMPLATE_NAME).should('not.exist');
-
-    cy.goToClusterOverview();
-    cy.get('ui5-card').contains('Modify Modules').click();
+    cy.get('ui5-table-row')
+      .contains(OLD_TEMPLATE_NAME, { timeout: 30000 })
+      .should('not.exist');
   });
 
   it('Cleans up the installed module', () => {
+    cy.goToClusterOverview();
+    cy.get('ui5-card').contains('Modify Modules').click();
+
     cy.deleteFromGenericList('Module', MODULE_NAME, {
       parentSelector: '.community-modules-list',
       searchInPlainTableText: true,

@@ -115,4 +115,5 @@ jobs:
           path: |
             tests/integration/mem-profile.log
             dmesg-oom.log
+            tests/integration/schema-fire.log
           retention-days: 30

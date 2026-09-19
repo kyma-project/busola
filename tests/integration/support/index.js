@@ -14,5 +14,6 @@ import '../continuum/cypress';
 import './check-extension';
 import './navigate-back-to';
 import './helpers';
+import './schema-fire-probe';
 
 require('cypress-plugin-tab');

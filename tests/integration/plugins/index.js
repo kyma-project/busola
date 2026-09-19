@@ -85,6 +85,13 @@ module.exports = (on, config) => {
       }
       return bestPracticeCatalogPromise;
     },
+    // diagnostic for the edit-cluster renderer crash: record how often the app
+    // re-fires the heavy 'sendingOpenapi' schema recompute. Survives a renderer
+    // crash because it lands on disk on the Node side. Remove with the probe.
+    appendSchemaFire(entry) {
+      fs.appendFileSync('schema-fire.log', JSON.stringify(entry) + '\n');
+      return null;
+    },
   });
   return config;
 };
