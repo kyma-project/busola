@@ -74,9 +74,24 @@ jobs:
         shell: bash
         run: |
           k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
-          export CYPRESS_DOMAIN=http://localhost:3001          
+          export CYPRESS_DOMAIN=http://localhost:3001
           cd tests/integration
-          npm ci && npm run "test:cluster"
+          npm ci
+          # sample renderer memory/cpu alongside the run to diagnose the crash
+          bash ../../.github/scripts/sample-chrome-mem.sh > mem-profile.log 2>&1 &
+          sampler_pid=$!
+          set +e
+          npm run "test:cluster"
+          test_exit=$?
+          set -e
+          kill "$sampler_pid" 2>/dev/null || true
+          exit $test_exit
+      - name: Capture kernel OOM log
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          sudo dmesg 2>/dev/null | grep -iE "oom|killed process|out of memory|chrome" > dmesg-oom.log || true
+          tail -n 40 tests/integration/mem-profile.log || true
       - name: Uploads artifacts
         uses: actions/upload-artifact@v7
         if: ${{ always() }}
@@ -91,4 +106,13 @@ jobs:
           name: busola-logs-${{ github.job }}
           path: |
             busola.log
+          retention-days: 30
+      - name: Upload memory profile
+        uses: actions/upload-artifact@v7
+        if: ${{ always() }}
+        with:
+          name: mem-profile-${{ github.job }}
+          path: |
+            tests/integration/mem-profile.log
+            dmesg-oom.log
           retention-days: 30
