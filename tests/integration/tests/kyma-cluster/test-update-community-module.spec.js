@@ -6,7 +6,8 @@ const NEW_VERSION = '1.0.32';
 const OLD_FIXTURE_URL =
   'https://raw.githubusercontent.com/kyma-project/busola/refs/heads/main/tests/integration/fixtures/community-modules/busola-1-0-31.yaml';
 const OLD_TEMPLATE_NAME = `${MODULE_NAME}-1-0-31`;
-const KYMA_SYSTEM_NAMESPACE = 'kyma-system';
+// Templates are installed into `default` (see prerequisite test)
+const INSTALL_NAMESPACE = 'default';
 
 context('Test Update Community Module', () => {
   before(() => {
@@ -211,7 +212,7 @@ context('Test Update Community Module', () => {
       .should('be.visible');
 
     // Verify the old ModuleTemplate still exists
-    cy.goToNamespaceDetails(KYMA_SYSTEM_NAMESPACE);
+    cy.goToNamespaceDetails(INSTALL_NAMESPACE);
     cy.navigateTo('Configuration', 'Custom Resources');
     cy.typeInSearch('ModuleTemplates', true);
     cy.clickGenericListLink('ModuleTemplates');
@@ -303,7 +304,7 @@ context('Test Update Community Module', () => {
       .should('not.exist');
 
     // Verify the old ModuleTemplate was deleted
-    cy.goToNamespaceDetails(KYMA_SYSTEM_NAMESPACE);
+    cy.goToNamespaceDetails(INSTALL_NAMESPACE);
     cy.navigateTo('Configuration', 'Custom Resources');
     cy.typeInSearch('ModuleTemplates', true);
     cy.clickGenericListLink('ModuleTemplates');
