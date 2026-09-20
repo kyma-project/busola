@@ -193,11 +193,15 @@ context('Test Update Community Module', () => {
       .contains('Update')
       .click();
 
-    // the toast fades after ~3s but keeps its text; match the message, not visibility
+    // the toast shows "started" right after the click, then swaps to "updated"
+    // once the async work finishes - give the second assertion room to wait
     cy.get('ui5-toast[accessible-name="notification-content"]').should(
       'contain.text',
-      'Community Modules updated',
+      'Module update started',
     );
+    cy.get('ui5-toast[accessible-name="notification-content"]', {
+      timeout: 30000,
+    }).should('contain.text', 'Community Modules updated');
 
     cy.wait(3000);
 
@@ -285,11 +289,15 @@ context('Test Update Community Module', () => {
       .contains('Update')
       .click();
 
-    // the toast fades after ~3s but keeps its text; match the message, not visibility
+    // the toast shows "started" right after the click, then swaps to "updated"
+    // once the async work finishes - give the second assertion room to wait
     cy.get('ui5-toast[accessible-name="notification-content"]').should(
       'contain.text',
-      'Community Modules updated',
+      'Module update started',
     );
+    cy.get('ui5-toast[accessible-name="notification-content"]', {
+      timeout: 30000,
+    }).should('contain.text', 'Community Modules updated');
 
     cy.wait(3000);
 
