@@ -112,16 +112,22 @@ function createWebComponent(
         const attribute = this.attributes[i];
 
         if (attribute.name.includes('prop_')) {
-          props[kebabToCamelCase(attribute.name.replace('prop_', ''))] = eval(
-            this.attributes[i].value,
-          );
-          this.removeAttribute(attribute.value);
+          const rawValue = this.attributes[i].value;
+          let parsedValue;
+          try {
+            parsedValue = JSON.parse(rawValue);
+          } catch {
+            parsedValue = rawValue;
+          }
+          props[kebabToCamelCase(attribute.name.replace('prop_', ''))] =
+            parsedValue;
+          this.removeAttribute(attribute.name);
         }
 
         if (attribute.name.includes('slot_')) {
           props[kebabToCamelCase(attribute.name.replace('slot_', ''))] =
             this.attributes[i].value;
-          this.removeAttribute(attribute.value);
+          this.removeAttribute(attribute.name);
         }
       }
 
