@@ -43,6 +43,13 @@ vi.mock('hooks/useFeature', () => ({
   useFeature: () => mockTerminalFeature,
 }));
 
+vi.mock('./provisionPod', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./provisionPod')>()),
+  generateTerminalPodName: vi
+    .fn()
+    .mockResolvedValue('busola-terminal-aabbccdd'),
+}));
+
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
 
