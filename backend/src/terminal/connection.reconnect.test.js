@@ -1,23 +1,16 @@
 import { WebSocketServer } from 'ws';
 import { WebSocketConnection } from './connection';
 
-// A stand-in for the intermediary that actually causes the reported bug in
-// production: the GCP load balancer in front of the Busola backend drops any
-// connection that sees zero traffic for its idle window, but keeps it alive if
-// ANY frame — including a keepalive ping — arrives. (Kubernetes' own streaming
-// idle timeout defaults to 4h, so the cluster is never the trigger.)
-//
-// This lets us reproduce the idle-drop deterministically and locally, with no
-// cluster: the connection survives only if the backend keeps it warm.
+// Stand-in for the GCP load balancer that drops idle connections but keeps them
+// alive on any frame (incl. a ping). Reproduces the idle-drop locally.
 const IDLE_MS = 300;
-const HEARTBEAT_MS = 100; // faster than IDLE_MS, so pings keep the socket warm
+const HEARTBEAT_MS = 100; // faster than IDLE_MS, so pings land first
 
 const WS_OPEN = 1;
 
 function createIdleClosingServer() {
   const wss = new WebSocketServer({
     port: 0,
-    // Accept the k8s attach subprotocol the client offers.
     handleProtocols: (protocols) => [...protocols][0] ?? false,
   });
   const state = { connectionCount: 0 };
@@ -28,7 +21,7 @@ function createIdleClosingServer() {
       clearTimeout(timer);
       timer = setTimeout(() => socket.terminate(), IDLE_MS); // abnormal 1006
     };
-    // Any inbound frame resets the idle timer — data, or a keepalive ping/pong.
+    // Any frame resets the idle timer.
     socket.on('message', armIdleTimer);
     socket.on('ping', armIdleTimer);
     socket.on('pong', armIdleTimer);
@@ -85,12 +78,11 @@ describe('WebSocketConnection survives an idle intermediary', () => {
     );
 
     connection.connect();
-    // Wait well past the idle window — several heartbeat pings must land first.
+    // Past the idle window; several pings must land first.
     await delay(IDLE_MS * 3);
 
-    // GREEN with the heartbeat / RED without it:
     expect(connection.k8sWS.readyState).toBe(WS_OPEN);
-    expect(state.connectionCount).toBe(1); // never had to reconnect
+    expect(state.connectionCount).toBe(1); // never reconnected
     const reconnectAttempted = logger.info.mock.calls.some(([msg]) =>
       String(msg).includes('reconnection in'),
     );

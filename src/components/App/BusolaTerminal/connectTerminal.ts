@@ -67,6 +67,7 @@ export async function connectTerminal({
   t,
   scheduleReconnect,
   onConnected,
+  silent = false,
 }: {
   authHeaders: Headers;
   term: Terminal;
@@ -78,6 +79,8 @@ export async function connectTerminal({
   t: TFunction;
   scheduleReconnect: (term: Terminal) => void;
   onConnected: () => void;
+  // Suppress the success banner on a proactive cycle; failures/drops still show.
+  silent?: boolean;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
   const ws = new WebSocket(
     buildAttachUrl(podName),
@@ -88,10 +91,12 @@ export async function connectTerminal({
   ws.onopen = () => {
     if (signal.aborted) return;
     sendResize(ws, term.cols, term.rows);
-    setSession((prev) => ({ ...prev, status: 'connected' }));
-    term.write(
-      terminalMessage(COLOR_SUCCESS, t('terminal.messages.connected')),
-    );
+    if (!silent) {
+      setSession((prev) => ({ ...prev, status: 'connected' }));
+      term.write(
+        terminalMessage(COLOR_SUCCESS, t('terminal.messages.connected')),
+      );
+    }
     onConnected();
   };
 

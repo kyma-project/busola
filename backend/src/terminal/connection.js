@@ -10,9 +10,8 @@ const Colors = Object.freeze({
 // a lone \n in terminal raw mode only move cursor down, the \r makes it return to the beginning.
 const LINE_BREAK = '\n\r';
 
-// Ping both hops periodically so an idle terminal is not dropped by the k8s API
-// server's idle timeout or an intermediary load balancer (~60s), which otherwise
-// triggers a self-healing but alarming reconnection loop in the browser.
+// Without this, a proxy idle timeout (~60s) drops idle connections and the
+// browser reconnects in a loop.
 const HEARTBEAT_INTERVAL_MS = 30_000;
 
 function terminalMessage(text, color) {
@@ -115,8 +114,6 @@ export class WebSocketConnection {
 
   #startHeartbeat() {
     this.#heartbeatInterval = setInterval(() => {
-      // A ping frame is enough traffic to reset idle timers on both hops; the
-      // browser and the k8s API server answer with a pong automatically.
       if (this.frontWS.readyState === WebSocket.OPEN) {
         this.frontWS.ping();
       }

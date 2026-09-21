@@ -1,8 +1,7 @@
 import { WebSocketConnection } from './connection';
 import { WebSocket } from 'ws';
 
-// Mock the `ws` module so no real sockets are opened. Each `new WebSocket()`
-// (the upstream k8s socket) yields a stub with the methods the proxy touches.
+// Stub the `ws` module; each `new WebSocket()` is the upstream k8s socket.
 vi.mock('ws', () => {
   const WebSocket = vi.fn().mockImplementation(function () {
     this.readyState = 1; // OPEN
@@ -104,7 +103,6 @@ describe('WebSocketConnection heartbeat', () => {
 
     connection.connect();
 
-    // Simulate the browser disconnecting.
     frontWS.listeners['close']();
     frontWS.ping.mockClear();
 
