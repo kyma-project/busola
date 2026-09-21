@@ -14,7 +14,7 @@ cluster-overview:
     cpu-requests: CPU requests
     cpu-requests-tooltip: The amount of CPU resources that Pods request in the cluster. It helps you understand the CPU resource requirements of your applications.
     cpu-usage: CPU Usage
-    cpu-usage-tooltip: This CPU usage diagram shows how much processing power is currently being used across all nodes in the Kubernetes cluster compared to the total available CPU capacity. It helps you understand overall cluster load and available compute resources.
+    cpu-usage-tooltip: Processing power currently being used across all nodes in the Kubernetes cluster compared to the total available CPU capacity. It helps you understand overall cluster load and available compute resources.
     daemonsets-overview: Daemon Sets Overview
     deployments-overview: Deployments Overview
     failing-deployments: Failing Deployments
