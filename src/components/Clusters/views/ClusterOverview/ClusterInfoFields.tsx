@@ -32,16 +32,20 @@ export const ClusterInfoFields = ({
     <>
       <GardenerProvider provider={clusterInfo?.provider} />
       {!!clusterInfo?.region && (
-        <FormItem>
-          labelContent=
-          {<Label showColon>{t('clusters.overview.region')}</Label>}
+        <FormItem
+          labelContent={
+            <Label showColon>{t('clusters.overview.region')}</Label>
+          }
+        >
           <Text>{clusterInfo?.region}</Text>
         </FormItem>
       )}
       {!!clusterInfo?.seedRegion && (
-        <FormItem>
-          labelContent=
-          {<Label showColon>{t('clusters.overview.seedRegion')}</Label>}
+        <FormItem
+          labelContent={
+            <Label showColon>{t('clusters.overview.seed-region')}</Label>
+          }
+        >
           <Text>{clusterInfo?.seedRegion}</Text>
         </FormItem>
       )}

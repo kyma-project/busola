@@ -124,7 +124,7 @@ clusters:
     kyma-version: Kyma Version
     nat-gateway-ips: NAT Gateway IP Addresses
     region: Worker Node Region
-    seedRegion: Kubernetes Control Plane Region
+    seed-region: Kubernetes Control Plane Region
     subaccount-id: Subaccount ID
     title-all-clusters: Clusters
     title-current-cluster: Cluster Overview
