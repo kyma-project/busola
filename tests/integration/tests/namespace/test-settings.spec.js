@@ -36,7 +36,7 @@ context('Test app settings and preferences', () => {
 
     cy.contains('ui5-title', NAME).should('be.visible');
 
-    cy.getLeftNav().contains('Config Maps').click();
+    cy.navigateTo('Configuration', 'Config Maps');
 
     cy.contains('ui5-table-row', NAME)
       .find('ui5-button[data-testid="delete"]')
@@ -103,12 +103,9 @@ context('Test app settings and preferences', () => {
       .should('be.visible')
       .click();
 
-    cy.getLeftNav().contains('Back To Cluster Overview').click();
+    cy.goToClusterOverview();
 
-    cy.getLeftNav()
-      .find('ui5-side-navigation-item')
-      .contains('Namespaces')
-      .click();
+    cy.navigateTo('Namespaces');
 
     cy.get('ui5-table-row')
       .contains(/^kube-system/)

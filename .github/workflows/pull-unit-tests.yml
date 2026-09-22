@@ -38,7 +38,7 @@ jobs:
       - name: Merge with latest main
         if: inputs.trigger_env != 'release-trigger'
         uses: ./.github/actions/merge
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
       - name: setup_busola

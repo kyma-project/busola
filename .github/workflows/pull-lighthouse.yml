@@ -44,7 +44,7 @@ jobs:
             --port 80:80@loadbalancer
             --port 443:443@loadbalancer
             --wait
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         name: Setup node
         with:
           node-version: 24

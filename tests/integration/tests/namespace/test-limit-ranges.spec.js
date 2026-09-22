@@ -44,7 +44,7 @@ context('Test Limit Ranges', () => {
   });
 
   it('Checks the list view', () => {
-    cy.getLeftNav().contains('Limit Ranges').click();
+    cy.navigateTo('Discovery and Network', 'Limit Ranges');
 
     cy.clickGenericListLink(LIMIT_NAME);
 

@@ -103,7 +103,6 @@ context('Test Stateful Sets', () => {
   });
 
   it('Inspect list', () => {
-    cy.wait(3000); // wait for the resource to be refeched and displayed in the list
     cy.inspectList(SS_NAME);
   });
 });

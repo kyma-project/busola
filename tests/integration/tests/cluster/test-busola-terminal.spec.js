@@ -32,6 +32,9 @@ context('Test Busola Terminal', () => {
   });
 
   it('Opens the terminal and provisions a pod with the correct manifest', () => {
+    // pod stays Pending until we flip this, so "Connecting…" is guaranteed to show
+    let podReady = false;
+
     // Scoped to busola-terminal so unrelated namespace POSTs pass through to the
     // real cluster unaffected.
     cy.intercept('POST', '/backend/api/v1/namespaces', (req) => {
@@ -57,16 +60,20 @@ context('Test Busola Terminal', () => {
       },
     ).as('createPod');
 
-    // Mock pod readiness polling — returns Running on every call so provisionPod
-    // resolves in < 1 s instead of waiting for a real image pull (up to 120 s on
-    // cold k3d clusters, which is the root cause of the original CI failure).
-    cy.intercept('GET', '/backend/api/v1/namespaces/busola-terminal/pods/*', {
-      statusCode: 200,
-      body: {
-        metadata: { deletionTimestamp: null },
-        status: { phase: 'Running' },
+    // returns Pending until podReady flips, avoids waiting for a real image pull (up to 120s)
+    cy.intercept(
+      'GET',
+      '/backend/api/v1/namespaces/busola-terminal/pods/*',
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: {
+            metadata: { deletionTimestamp: null },
+            status: { phase: podReady ? 'Running' : 'Pending' },
+          },
+        });
       },
-    }).as('pollPod');
+    );
 
     // Stub the Kubernetes attach WebSocket so the terminal reaches "connected"
     // state without a real pod. Echoes ls output when Enter (0x0D) is received
@@ -122,12 +129,6 @@ context('Test Busola Terminal', () => {
 
     cy.get('.terminal-card').should('be.visible');
 
-    // Provisioning status ("Connecting…") appears immediately while the pod is
-    // being created.
-    cy.get('.terminal-card__status', { timeout: 10000 })
-      .should('be.visible')
-      .and('contain.text', 'Connecting');
-
     // busola-terminal namespace is requested
     cy.wait('@createNamespace');
 
@@ -153,12 +154,20 @@ context('Test Busola Terminal', () => {
         expect(pod.spec.restartPolicy).to.eq('Never');
       });
 
-    // Pod readiness is polled (covers both the waitIfTerminating check and the
-    // Running-phase poll in provisionPod)
-    cy.wait('@pollPod');
+    // pod is Pending, so "Connecting…" is showing now
+    cy.get('.terminal-card__status').should('contain.text', 'Connecting');
 
-    // Once the WebSocket connects, the "Connecting…" label is gone.
-    cy.get('.terminal-card').should('not.contain.text', 'Connecting');
+    // flip to Running, the next poll resolves and the WebSocket connects
+    cy.then(() => {
+      podReady = true;
+    });
+
+    // wait for the connected banner, then check the status is gone
+    cy.get('.xterm-rows', { timeout: 10000 }).should(
+      'contain.text',
+      'Connected to terminal',
+    );
+    cy.get('.terminal-card__status').should('not.exist');
   });
 
   it('Accepts keyboard input and displays output from the remote shell', () => {

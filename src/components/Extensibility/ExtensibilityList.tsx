@@ -116,7 +116,6 @@ export const ExtensibilityListCore = ({
             schema={schema}
             dataSources={dataSources}
             originalResource={resource}
-            inlineContext={true}
           />
         ),
       }))

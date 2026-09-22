@@ -29,6 +29,7 @@ concurrency:
 jobs:
   run-namespace-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     if: github.event.pull_request.draft == false
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
@@ -50,7 +51,7 @@ jobs:
             --port 80:80@loadbalancer
             --port 443:443@loadbalancer
             --wait
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         name: Setup node
         with:
           node-version: 24

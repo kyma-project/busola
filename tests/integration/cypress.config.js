@@ -23,6 +23,7 @@ module.exports = defineConfig({
     : 'cypress/videos',
   experimentalInteractiveRunEvents: true,
   numTestsKeptInMemory: 0,
+  experimentalMemoryManagement: true,
   e2e: {
     includeShadowDom: true,
     testIsolation: false,

@@ -19,8 +19,13 @@ export const COLOR_ERROR = '\x1b[31m';
 // \r returns the cursor to column 0 — xterm is in raw mode, so a lone \n staircases.
 export const LINE_BREAK = '\r\n';
 
-export function terminalMessage(color: string, text: string) {
-  return `${LINE_BREAK}${color}${text}${ANSI_RESET}${LINE_BREAK}`;
+export function terminalSystemMessage(color: string, text: string) {
+  const currentDate = new Date(Date.now());
+  const hours = currentDate.getHours().toString().padStart(2, '0');
+  const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+  const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+  const dateNowFmt = `[${hours}:${minutes}:${seconds}]`;
+  return `${LINE_BREAK}${color}${dateNowFmt} ${text}${ANSI_RESET}${LINE_BREAK}`;
 }
 
 export function sendResize(ws: WebSocket, cols: number, rows: number): void {
@@ -94,7 +99,7 @@ export async function connectTerminal({
     if (!silent) {
       setSession((prev) => ({ ...prev, status: 'connected' }));
       term.write(
-        terminalMessage(COLOR_SUCCESS, t('terminal.messages.connected')),
+        terminalSystemMessage(COLOR_SUCCESS, t('terminal.messages.connected')),
       );
     }
     onConnected();
@@ -113,16 +118,21 @@ export async function connectTerminal({
       event.code !== 1000 && event.code !== 1005 && !event.reason;
     if (isUnexpectedDrop) {
       term.write(
-        terminalMessage(COLOR_WARNING, t('terminal.messages.connection-lost')),
+        terminalSystemMessage(
+          COLOR_WARNING,
+          t('terminal.messages.connection-lost'),
+        ),
       );
       setSession((prev) => ({ ...prev, status: 'reconnecting' }));
       scheduleReconnect(term);
     } else {
       setSession((prev) => ({ ...prev, status: 'idle' }));
       if (event.reason) {
-        term.write(terminalMessage(COLOR_ERROR, event.reason));
+        term.write(terminalSystemMessage(COLOR_ERROR, event.reason));
       }
-      term.write(terminalMessage(COLOR_WARNING, t('terminal.messages.closed')));
+      term.write(
+        terminalSystemMessage(COLOR_WARNING, t('terminal.messages.closed')),
+      );
     }
   };
 

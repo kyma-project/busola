@@ -1,15 +1,17 @@
 export function chooseComboboxOption(selector, optionText, force = false) {
-  cy.get(`ui5-combobox${selector}`)
+  const combobox = () => cy.get(`ui5-combobox${selector}`);
+
+  // wait for the specific option to be registered before typing
+  combobox().find(`ui5-cb-item[text*="${optionText}"]`).should('exist');
+
+  combobox()
     .find('input')
+    .should('not.be.disabled')
     .filterWithNoValue()
     .click()
-    .wait(500)
-    .type(optionText)
-    .wait(500);
+    .type(optionText);
 
   cy.get('ui5-cb-item:visible').contains(optionText).click({ force: force });
-
-  return cy.end();
 }
 
 export function useCategory(category) {
