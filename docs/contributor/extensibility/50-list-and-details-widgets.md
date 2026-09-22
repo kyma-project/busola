@@ -22,6 +22,7 @@ You can distinguish the following widget types:
   - [`Columns`](#columns)
   - [`EventList`](#eventlist)
   - [`FeatureCard`](#featuredcard)
+  - [`FormGroup`](#formgroup)
   - [`Markdown`](#markdown)
   - [`Panel`](#panel)
   - [`Plain`](#plain)
@@ -558,6 +559,37 @@ injections: |-
 ```
 
 <img src="./assets/display-widgets/FeaturedCard.png" alt="Example of a FeaturedCard widget">
+
+### `FormGroup`
+
+The `FormGroup` widget renders an object's fields using the SAP UI5 Form layout, displaying each child as a labeled form item (label above, value below). It is designed for structured objects — such as keystore configurations — where the label–value pair layout improves readability compared to a plain panel.
+
+These are the available `FormGroup` widget parameters:
+
+| Parameter    | Required | Type      | Description                                               |
+| ------------ | -------- | --------- | --------------------------------------------------------- |
+| **name**     | **Yes**  | string    | The group heading. Supports translation keys.             |
+| **children** | No       | []objects | Widgets to render as labeled form items inside the group. |
+
+See the following example:
+
+```yaml
+- widget: Columns
+  inline: false
+  visibility: $exists(spec.keystores.jks)
+  children:
+    - name: JKS
+      widget: FormGroup
+      children:
+        - name: spec.keystores.create
+          source: spec.keystores.jks.create
+        - name: spec.keystores.passwordSecretRef
+          widget: FormGroup
+          visibility: $exists(spec.keystores.jks.passwordSecretRef)
+          children:
+            - name: Password Secret Ref
+              source: spec.keystores.jks.passwordSecretRef.name
+```
 
 ### `Markdown`
 
