@@ -87,12 +87,11 @@ data:
         visibility: $exists(spec.keystores)
         children:
           - widget: Columns
+            inline: false
             visibility: $exists(spec.keystores.jks)
             children:
               - name: JKS
-                description: Java KeyStore (JKS) is a repository of security, authorization or public key certificates.
                 widget: FormGroup
-                visibility: $exists(spec.keystores.jks)
                 children:
                   - name: spec.keystores.create
                     source: spec.keystores.jks.create
@@ -116,11 +115,11 @@ data:
                     source: spec.keystores.jks.passwordSecretRef.key
                     visibility: $exists(spec.keystores.jks.passwordSecretRef.key)
           - widget: Columns
+            inline: false
             visibility: $exists(spec.keystores.pkcs12)
             children:
               - name: PKCS12
                 widget: FormGroup
-                visibility: $exists(spec.keystores.pkcs12)
                 children:
                   - name: Create
                     source: spec.keystores.pkcs12.create
