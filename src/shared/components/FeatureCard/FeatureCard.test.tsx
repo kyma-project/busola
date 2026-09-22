@@ -1,16 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    i18n: { changeLanguage: () => new Promise(() => {}) },
-  }),
-}));
-
-vi.mock('jotai', () => ({
-  useAtomValue: () => 'sap_horizon',
-}));
 
 import { FeatureCardBanner } from './FeatureCard';
 
@@ -47,17 +36,19 @@ describe('FeatureCardBanner', () => {
   });
 
   it('stays hidden on the next mount after being dismissed', () => {
-    localStorage.setItem('hideBannertest-banner', 'true');
+    const id = 'test-banner';
+    localStorage.setItem(`hideBanner${id}`, 'true');
 
-    renderBanner();
+    renderBanner(id);
 
     expect(screen.queryByText('Banner title')).not.toBeInTheDocument();
   });
 
   it('keeps the dismissed state per banner id', () => {
-    localStorage.setItem('hideBannerother-banner', 'true');
+    const id = 'test-banner';
+    localStorage.setItem(`hideBannerother-banner`, 'true');
 
-    renderBanner();
+    renderBanner(id);
 
     expect(screen.getByText('Banner title')).toBeInTheDocument();
   });
