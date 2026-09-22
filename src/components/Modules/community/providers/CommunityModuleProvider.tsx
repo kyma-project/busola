@@ -50,13 +50,9 @@ export function CommunityModuleContextProvider({
     moduleTemplatesLoading,
   );
 
-  const installedCommunityModules = useMemo(
-    () =>
-      simplifyInstalledModules(
-        installedCommunityModuleTemplates,
-        installedVersions,
-      ),
-    [installedCommunityModuleTemplates, installedVersions],
+  const installedCommunityModules = simplifyInstalledModules(
+    installedCommunityModuleTemplates,
+    installedVersions,
   );
 
   const contextValue = useMemo(

@@ -60,19 +60,14 @@ export function ModuleTemplatesContextProvider({
   const { resources: additionalSourceTemplates } =
     useGetAllSourceYAMLModuleTemplates(installedSourceURLs);
 
-  const checkedModuleTemplates = useMemo((): ModuleTemplateType[] => {
-    if (!moduleTemplatesLoading && !communityModuleTemplatesLoading)
-      return [
-        ...(externalCommunityModuleTemplates?.flatMap(
-          (res: any) => res.value,
-        ) ?? []),
-      ] as any;
-    return [];
-  }, [
-    externalCommunityModuleTemplates,
-    moduleTemplatesLoading,
-    communityModuleTemplatesLoading,
-  ]);
+  let checkedModuleTemplates: ModuleTemplateType[];
+
+  if (!moduleTemplatesLoading && !communityModuleTemplatesLoading)
+    checkedModuleTemplates = [
+      ...(externalCommunityModuleTemplates?.flatMap((res: any) => res.value) ??
+        []),
+    ] as any;
+  else checkedModuleTemplates = [];
 
   const preloadedCommunityTemplates: ModuleTemplateType[] = useMemo(
     () =>

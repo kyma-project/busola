@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import pluralize from 'pluralize';
 import { useGet, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
@@ -208,40 +208,38 @@ export const useGetInstalledNotInstalledModules = (
     COMMUNITY_MODULES_POLLING_INTERVAL,
   );
 
-  return useMemo(() => {
-    if (moduleTemplatesLoading) {
-      return {
-        installed: { items: [] },
-        notInstalled: { items: [] },
-        installedVersions: new Map(),
-        loading: true,
-        error: null,
-      };
-    }
-    if (!moduleTemplates) {
-      return {
-        installed: { items: [] },
-        notInstalled: { items: [] },
-        installedVersions: new Map(),
-        loading: false,
-        error: null,
-      };
-    }
-
-    const { items: installedItems, installedVersions } = getInstalledModules(
-      moduleTemplates,
-      managers,
-    );
-    const notInstalled = getNotInstalledModules(moduleTemplates, managers);
-
+  if (moduleTemplatesLoading) {
     return {
-      installed: { items: installedItems },
-      notInstalled,
-      installedVersions,
-      loading,
-      error,
+      installed: { items: [] },
+      notInstalled: { items: [] },
+      installedVersions: new Map(),
+      loading: true,
+      error: null,
     };
-  }, [moduleTemplates, managers, moduleTemplatesLoading, loading, error]);
+  }
+  if (!moduleTemplates) {
+    return {
+      installed: { items: [] },
+      notInstalled: { items: [] },
+      installedVersions: new Map(),
+      loading: false,
+      error: null,
+    };
+  }
+
+  const { items: installedItems, installedVersions } = getInstalledModules(
+    moduleTemplates,
+    managers,
+  );
+  const notInstalled = getNotInstalledModules(moduleTemplates, managers);
+
+  return {
+    installed: { items: installedItems },
+    notInstalled,
+    installedVersions,
+    loading,
+    error,
+  };
 };
 
 export function useGetManagerStatus(manager?: ModuleManagerType) {
