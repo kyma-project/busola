@@ -73,4 +73,48 @@ describe('useGet', () => {
       ),
     );
   });
+
+  it('keeps delivering fresh data across many poll ticks', async () => {
+    // Regression: requestData now deletes each request's key on settle.
+    // Verify that pruning does not break the newerRequests staleness check
+    // for the normal single-in-flight case — every changed poll response
+    // must still reach setData.
+    const setGetResultMock = vi.fn();
+
+    let version = 0;
+    mockUseFetch.mockImplementation(() => {
+      version++;
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve({ metadata: { resourceVersion: `${version}` } }),
+      });
+    });
+
+    render(<Testbed setGetResult={setGetResultMock} />, {
+      initialAtoms: [
+        [authDataAtom, { token: 'test-token' }],
+        [clusterAtom, {}],
+      ],
+    });
+
+    // Successive ticks with changing resourceVersion must all be delivered.
+    await waitFor(() =>
+      expect(setGetResultMock).toHaveBeenCalledWith(
+        false,
+        null,
+        expect.objectContaining({
+          metadata: expect.objectContaining({ resourceVersion: '1' }),
+        }),
+      ),
+    );
+    await waitFor(() =>
+      expect(setGetResultMock).toHaveBeenCalledWith(
+        false,
+        null,
+        expect.objectContaining({
+          metadata: expect.objectContaining({ resourceVersion: '3' }),
+        }),
+      ),
+    );
+  });
 });
