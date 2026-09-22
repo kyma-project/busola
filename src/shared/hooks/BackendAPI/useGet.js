@@ -115,9 +115,7 @@ const useGetHook = (processDataFn) =>
           // and showing the error to the user will not be necessary.
           setTimeout((_) => processError(e), 100);
         } finally {
-          // Bound requestData: a request removes only its own entry once it
-          // settles, so concurrently in-flight requests still detect it as
-          // stale via the newerRequests check above.
+          // drop our own entry so requestData stays bounded; in-flight requests keep theirs for the staleness check
           delete requestData.current[currentRequestId];
         }
 

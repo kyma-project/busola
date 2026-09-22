@@ -75,10 +75,7 @@ describe('useGet', () => {
   });
 
   it('keeps delivering fresh data across many poll ticks', async () => {
-    // Regression: requestData now deletes each request's key on settle.
-    // Verify that pruning does not break the newerRequests staleness check
-    // for the normal single-in-flight case — every changed poll response
-    // must still reach setData.
+    // pruning settled entries must not break the staleness check, so every changed response should still reach setData
     const setGetResultMock = vi.fn();
 
     let version = 0;
@@ -97,7 +94,6 @@ describe('useGet', () => {
       ],
     });
 
-    // Successive ticks with changing resourceVersion must all be delivered.
     await waitFor(() =>
       expect(setGetResultMock).toHaveBeenCalledWith(
         false,

@@ -93,8 +93,7 @@ export const useResourceSchemas = () => {
       return;
     }
 
-    // authData briefly goes null on a token refresh while the cluster stays put.
-    // Bail so the gate stays closed and we don't re-resolve the whole OpenAPI.
+    // authData is briefly null during a token refresh, skip so we don't re-resolve the whole OpenAPI
     if (!authData) return;
 
     // authData updates a few times during cluster load. The below line cancels repeated requests after the first fetch
