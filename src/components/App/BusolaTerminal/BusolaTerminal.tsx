@@ -128,7 +128,7 @@ export function BusolaTerminal({
       statusLabel = t('terminal.status.provisioning');
       break;
     case 'error':
-      console.warn('Termina state is in error:', sessionState.errorMessage);
+      console.warn('Terminal state is in error:', sessionState.errorMessage);
       statusLabel = t('terminal.status.error');
       break;
     case 'reconnecting':
