@@ -52,6 +52,17 @@ context('Test Update Community Module', () => {
 
     cy.get('ui5-title').contains(MODULE_NAME).click();
 
+    cy.get(`[data-testid="module-settings-panel-${MODULE_NAME}"]`)
+      .contains('Advanced')
+      .click();
+
+    cy.get(`[data-testid="module-settings-panel-${MODULE_NAME}"]`)
+      .find('ui5-select')
+      .should('be.visible')
+      .click();
+
+    cy.get('ui5-option:visible').contains(OLD_VERSION).click();
+
     cy.wait(2000);
 
     cy.get('[data-testid="create-form-footer-bar"]')
