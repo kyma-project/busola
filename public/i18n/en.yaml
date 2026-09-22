@@ -712,7 +712,6 @@ feedback:
   cloud-services-survey:
     info: Do you rely on hyperscaler services in your work? Help us decide what Cloud Manager should support next.
     title: What services do you need?
-  feedback: Feedback
   give-feedback: Give Feedback
   intro:
     info: Tell us what's on your mind.
