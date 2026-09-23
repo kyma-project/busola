@@ -10,6 +10,10 @@ const Colors = Object.freeze({
 // a lone \n in terminal raw mode only move cursor down, the \r makes it return to the beginning.
 const LINE_BREAK = '\n\r';
 
+// Without this, a proxy idle timeout (~60s) drops idle connections and the
+// browser reconnects in a loop.
+export const HEARTBEAT_INTERVAL_MS = 30_000;
+
 function terminalMessage(text, color) {
   const colorReset = '\x1b[0m';
   return `${LINE_BREAK}${color}${text}${colorReset}${LINE_BREAK}`;
@@ -81,20 +85,49 @@ class ExponentialBackoff {
 export class WebSocketConnection {
   #backoff;
   #reconnectTimeout = null;
+  #heartbeatInterval = null;
+  #heartbeatIntervalMs;
   #pendingMessages = [];
 
-  constructor(remoteURL, frontWS, authHeaders, logger, backoffConfig) {
+  constructor(
+    remoteURL,
+    frontWS,
+    authHeaders,
+    logger,
+    backoffConfig,
+    heartbeatIntervalMs = HEARTBEAT_INTERVAL_MS,
+  ) {
     this.remoteURL = remoteURL;
     this.frontWS = frontWS;
     this.k8sWS = null;
     this.logger = logger;
     this.authHeaders = authHeaders;
     this.#backoff = new ExponentialBackoff(backoffConfig);
+    this.#heartbeatIntervalMs = heartbeatIntervalMs;
   }
 
   connect() {
     this.#connectToK8s();
     this.#startProxyingMsgToBusola();
+    this.#startHeartbeat();
+  }
+
+  #startHeartbeat() {
+    this.#heartbeatInterval = setInterval(() => {
+      if (this.frontWS.readyState === WebSocket.OPEN) {
+        this.frontWS.ping();
+      }
+      if (this.k8sWS?.readyState === WebSocket.OPEN) {
+        this.k8sWS.ping();
+      }
+    }, this.#heartbeatIntervalMs);
+  }
+
+  #stopHeartbeat() {
+    if (this.#heartbeatInterval) {
+      clearInterval(this.#heartbeatInterval);
+      this.#heartbeatInterval = null;
+    }
   }
 
   #connectToK8s() {
@@ -197,6 +230,7 @@ export class WebSocketConnection {
 
     this.frontWS.addEventListener('close', () => {
       clearTimeout(this.#reconnectTimeout);
+      this.#stopHeartbeat();
       this.k8sWS?.close();
     });
   }

@@ -1539,7 +1539,7 @@ terminal:
     unknown-error: Unknown error.
   name: Terminal
   status:
-    error: 'Error: {{error}}'
+    error: Terminal encountered unexpected error
     provisioning: Connecting…
     reconnecting: Reconnecting...
 upload-yaml:
