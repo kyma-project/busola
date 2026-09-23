@@ -1,4 +1,4 @@
-import { WebSocketConnection } from './connection';
+import { WebSocketConnection, HEARTBEAT_INTERVAL_MS } from './connection';
 import { WebSocket } from 'ws';
 
 // Stub the `ws` module; each `new WebSocket()` is the upstream k8s socket.
@@ -16,8 +16,6 @@ vi.mock('ws', () => {
   WebSocket.OPEN = 1;
   return { WebSocket };
 });
-
-const HEARTBEAT_INTERVAL_MS = 30_000;
 
 function makeMockFrontWS() {
   const listeners = {};

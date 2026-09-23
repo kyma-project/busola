@@ -12,7 +12,7 @@ const LINE_BREAK = '\n\r';
 
 // Without this, a proxy idle timeout (~60s) drops idle connections and the
 // browser reconnects in a loop.
-const HEARTBEAT_INTERVAL_MS = 30_000;
+export const HEARTBEAT_INTERVAL_MS = 30_000;
 
 function terminalMessage(text, color) {
   const colorReset = '\x1b[0m';
