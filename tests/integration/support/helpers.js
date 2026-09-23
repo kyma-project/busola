@@ -4,10 +4,9 @@ export function chooseComboboxOption(selector, optionText, force = false) {
   // wait for the specific option to be registered before typing
   combobox().find(`ui5-cb-item[text*="${optionText}"]`).should('exist');
 
-  combobox()
+  cy.get(`ui5-combobox[value=""]${selector}`)
     .find('input')
     .should('not.be.disabled')
-    .filterWithNoValue()
     .click()
     .type(optionText);
 

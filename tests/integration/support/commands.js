@@ -61,10 +61,6 @@ Cypress.Commands.add('clickListLink', (resourceName) => {
     .click();
 });
 
-Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, ($elements) =>
-  $elements.filter((_, e) => !e.value),
-);
-
 Cypress.Commands.add('goToNamespaceDetails', (namespace) => {
   const name = namespace ?? Cypress.env('NAMESPACE_NAME');
 

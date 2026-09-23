@@ -4,8 +4,6 @@ context('Test Community Modules views', () => {
   });
 
   it('Test Community Modules Overview card', () => {
-    cy.wait(2000);
-
     cy.get('ui5-card').contains('Modules Overview').should('be.visible');
 
     cy.contains('ui5-card', 'Community Modules')
@@ -15,10 +13,12 @@ context('Test Community Modules views', () => {
     cy.get('ui5-card').contains('Modify Modules').click();
 
     cy.url().should('match', /.*\/kymamodules/);
+    cy.get('ui5-dynamic-page.kyma-modules')
+      .find('ui5-dynamic-page-title')
+      .should('be.visible');
   });
 
   it('Check if edit is empty', () => {
-    cy.wait(2000);
     cy.inspectTab('Edit');
 
     cy.contains('No community modules installed').should('be.visible');
@@ -37,8 +37,6 @@ context('Test Community Modules views', () => {
     cy.get('ui5-panel[data-testid="community-modules-list"]')
       .contains('ui5-button', 'Add')
       .click();
-
-    cy.wait(1000);
 
     cy.get('ui5-title').contains('Add Community Modules').should('be.visible');
 
@@ -61,8 +59,6 @@ context('Test Community Modules views', () => {
     cy.get('ui5-panel[data-testid="community-modules-list"]')
       .contains('ui5-button', 'Add')
       .click();
-
-    cy.wait(2000);
   });
 
   it('Test adding source YAML', () => {
@@ -136,12 +132,10 @@ context('Test Community Modules views', () => {
   });
 
   it('Test Community Modules list', () => {
-    cy.wait(1000);
-
     cy.get('.community-modules-list')
       .find('ui5-input[id^=search-]:visible')
       .find('input')
-      .wait(1000)
+      .should('not.be.disabled')
       .type('busola');
 
     cy.get('.community-modules-list')
@@ -231,13 +225,9 @@ context('Test Community Modules views', () => {
   it('Test changing Community Module version', () => {
     cy.inspectTab('Edit');
 
-    cy.wait(1000);
-
     cy.contains('ui5-label', 'busola').should('be.visible');
 
     cy.contains('ui5-label', 'busola').parent().find('ui5-select').click();
-
-    cy.wait(500);
 
     cy.get('ui5-option:visible').contains('1.0.32').click();
 

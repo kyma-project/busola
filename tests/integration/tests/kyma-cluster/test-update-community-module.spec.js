@@ -14,14 +14,15 @@ context('Test Update Community Module', () => {
     cy.loginAndSelectCluster();
     cy.get('ui5-card').contains('Modify Modules').click();
     cy.url().should('match', /.*\/kymamodules/);
+    cy.get('ui5-dynamic-page.kyma-modules')
+      .find('ui5-dynamic-page-title')
+      .should('be.visible');
   });
 
   it(`Install community module ${MODULE_NAME} ${OLD_VERSION} as prerequisite`, () => {
     cy.get('ui5-panel[data-testid="community-modules-list"]')
       .contains('ui5-button', 'Add')
       .click();
-
-    cy.wait(1000);
 
     cy.get('ui5-title').contains('Add Community Modules').should('be.visible');
 
@@ -33,10 +34,9 @@ context('Test Update Community Module', () => {
       .clear()
       .type(OLD_FIXTURE_URL);
 
-    cy.wait(1000);
-
     cy.get(`[header-text="Add Source YAML"]:visible`)
       .find('[data-testid="add-to-namespace-select"]')
+      .should('be.visible')
       .click();
 
     cy.get('ui5-option-custom:visible').contains('default').click();
@@ -46,9 +46,9 @@ context('Test Update Community Module', () => {
       .contains('Add')
       .click();
 
-    cy.wait(5000);
-
-    cy.get('ui5-card').contains(MODULE_NAME).should('be.visible');
+    cy.get('ui5-card', { timeout: 15000 })
+      .contains(MODULE_NAME)
+      .should('be.visible');
 
     cy.get('ui5-title').contains(MODULE_NAME).click();
 
@@ -68,18 +68,15 @@ context('Test Update Community Module', () => {
     cy.get('[data-testid="create-form-footer-bar"]')
       .contains('ui5-button:visible', 'Add')
       .click();
-
-    cy.wait(2000);
   });
 
   it('Shows the Update button for an outdated community module', () => {
     cy.inspectTab('View');
 
-    cy.wait(1000);
-
     cy.get('.community-modules-list')
       .find('ui5-input[id^=search-]:visible')
       .find('input')
+      .should('not.be.disabled')
       .type(MODULE_NAME);
 
     cy.get('.community-modules-list')
@@ -103,8 +100,6 @@ context('Test Update Community Module', () => {
       .find('ui5-table-row')
       .contains('ui5-button', 'Update')
       .click();
-
-    cy.wait(1000);
 
     cy.get('.update-module-dialog').should('be.visible');
 
@@ -214,9 +209,7 @@ context('Test Update Community Module', () => {
       timeout: 30000,
     }).should('contain.text', 'Community Modules updated');
 
-    cy.wait(3000);
-
-    cy.get('.community-modules-list')
+    cy.get('.community-modules-list', { timeout: 15000 })
       .find('ui5-table-row')
       .contains(MODULE_NAME)
       .should('be.visible');
@@ -256,34 +249,39 @@ context('Test Update Community Module', () => {
   it(`Reinstall old version to prepare for delete-old-templates test`, () => {
     cy.inspectTab('Edit');
 
-    cy.wait(1000);
-
     cy.contains('ui5-label', MODULE_NAME).should('be.visible');
+
+    // wait for the download, otherwise the panel re-renders and moves the Save button as we click it
+    cy.intercept('POST', '**/modules/community-resource').as(
+      'resourcesToApply',
+    );
+    // the save patches the module's Deployment; wait for it before switching tabs, or the reflow detaches the View tab mid-click
+    cy.intercept('PATCH', `**/deployments/${MODULE_NAME}`).as('applyModule');
 
     cy.contains('ui5-label', MODULE_NAME).parent().find('ui5-select').click();
 
-    cy.wait(500);
-
     cy.get('ui5-option:visible').contains(OLD_VERSION).click();
 
-    cy.wait(1000);
+    cy.wait('@resourcesToApply', { timeout: 30000 });
 
     cy.get('ui5-panel[data-testid="community-modules-edit"]')
       .find('ui5-button')
       .contains('Save')
       .click();
 
-    cy.contains('Community Modules updated').should('be.visible');
+    cy.wait('@applyModule', { timeout: 30000 });
 
     cy.inspectTab('View');
 
-    cy.wait(3000);
+    // the toast is gone after ~3s, so check the version in the list instead
+    cy.get('.community-modules-list', { timeout: 30000 })
+      .find('ui5-table-row')
+      .contains(OLD_VERSION)
+      .should('be.visible');
   });
 
   it('Updates the community module and deletes all old ModuleTemplates when checkbox is checked', () => {
-    cy.wait(1000);
-
-    cy.get('.community-modules-list')
+    cy.get('.community-modules-list', { timeout: 15000 })
       .find('ui5-table-row')
       .contains('ui5-button', 'Update')
       .click();
@@ -310,9 +308,7 @@ context('Test Update Community Module', () => {
       timeout: 30000,
     }).should('contain.text', 'Community Modules updated');
 
-    cy.wait(3000);
-
-    cy.get('.community-modules-list')
+    cy.get('.community-modules-list', { timeout: 15000 })
       .find('ui5-table-row')
       .contains(NEW_VERSION)
       .should('be.visible');

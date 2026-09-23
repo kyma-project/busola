@@ -30,9 +30,10 @@ context('Test Services', () => {
       .clear()
       .type(SERVICE_KEY, { force: true });
 
-    cy.get('[placeholder="Enter value"]:visible', { log: false })
+    cy.get('ui5-input[placeholder="Enter value"][value=""]:visible', {
+      log: false,
+    })
       .find('input')
-      .filterWithNoValue()
       .first()
       .type(SERVICE_VALUE, { force: true });
 
