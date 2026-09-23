@@ -221,6 +221,9 @@ function extractHeadersData(req) {
     } catch (e) {
       throw new Error(`Invalid cluster URL provided: ${e.message}`);
     }
+    if (targetApiServer.pathname !== '/') {
+      throw new Error('Cluster URL must not contain a path component.');
+    }
   } else {
     throw new Error('Missing required cluster URL.');
   }

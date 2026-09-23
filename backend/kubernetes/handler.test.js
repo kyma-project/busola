@@ -104,4 +104,18 @@ describe('handleK8sRequests', () => {
     const options = requestSpy.mock.calls[0][0];
     expect(typeof options.lookup).toBe('function');
   });
+
+  it('rejects x-cluster-url with a non-root pathname with 400', async () => {
+    const req = makeReq({
+      headers: {
+        'x-cluster-url': 'https://attacker-controlled.example.com/blocked/',
+        'x-k8s-authorization': 'Bearer test-token',
+      },
+    });
+    const res = makeRes();
+
+    await handleK8sRequests(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
 });
