@@ -9,6 +9,7 @@ import AiIllustrationHClight from './assets/AI/AiIllustrationHClight.svg';
 import AiIllustrationHCdark from './assets/AI/AiIllustrationHCdark.svg';
 import DiscoveryIllustration from './assets/Discovery/Team.png';
 import KymaCLIIllustration from './assets/KymaCLI/KymaCLIIllustration.svg';
+import TerminalIllustration from './assets/Terminal/Terminal.svg';
 import { useAtomValue } from 'jotai';
 import {
   BackgroundStyle,
@@ -32,6 +33,8 @@ const getIllustration = (
       return DiscoveryIllustration;
     case 'KymaCLI':
       return KymaCLIIllustration;
+    case 'Terminal':
+      return TerminalIllustration;
     case 'AI':
       switch (theme) {
         case 'sap_horizon_hcw':

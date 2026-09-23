@@ -19,6 +19,7 @@ import ClusterStats from './ClusterStats';
 import ClusterDetails from './ClusterDetails';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
+import { TerminalBanner } from 'components/TerminalBanner/TerminalBanner';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 import './ClusterOverview.scss';
@@ -98,6 +99,7 @@ export function ClusterOverview() {
         content={
           <>
             <BannerCarousel>
+              <TerminalBanner />
               <Suspense fallback={null}>
                 <Injections
                   destination="ClusterOverview"
