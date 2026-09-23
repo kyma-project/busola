@@ -67,9 +67,14 @@ const applyLast = (fn: any) => {
 
 const DEFAULT_T = ((key: string) => key) as TFunction;
 
-async function attach(signal = new AbortController().signal, t = DEFAULT_T) {
+async function attach(
+  signal = new AbortController().signal,
+  t = DEFAULT_T,
+  silent = false,
+) {
   const term = makeTerm();
   const sess = vi.fn();
+  const onConnected = vi.fn();
   const { ws, disposable } = await connectTerminal({
     authHeaders: AUTH_HEADERS,
     term: term as any,
@@ -78,9 +83,10 @@ async function attach(signal = new AbortController().signal, t = DEFAULT_T) {
     signal,
     t,
     scheduleReconnect: vi.fn(),
-    onConnected: vi.fn(),
+    onConnected,
+    silent,
   });
-  return { term, sess, ws: ws as any, disposable };
+  return { term, sess, ws: ws as any, disposable, onConnected };
 }
 
 describe('connectTerminal', () => {
@@ -177,5 +183,21 @@ describe('connectTerminal', () => {
     expect(term.write).toHaveBeenCalledWith(
       expect.stringContaining('translated-closed'),
     );
+  });
+
+  it('when silent, skips the connected banner but still resizes and calls onConnected', async () => {
+    const { ws, term, sess, onConnected } = await attach(
+      new AbortController().signal,
+      DEFAULT_T,
+      true,
+    );
+    ws.onopen();
+
+    // no status flip, no banner
+    expect(sess).not.toHaveBeenCalled();
+    expect(term.write).not.toHaveBeenCalled();
+    // still resizes and signals onConnected
+    expect(ws.sent.find((f: Uint8Array) => f[0] === 4)).toBeDefined();
+    expect(onConnected).toHaveBeenCalled();
   });
 });
