@@ -242,10 +242,9 @@ context('Test Community Modules update-all functionality', () => {
 
     cy.inspectTab('View');
 
-    // the toast is gone after ~3s, so check the version in the list instead
-    cy.get('.community-modules-list', { timeout: 30000 })
+    cy.get('.community-modules-list')
       .find('ui5-table-row')
-      .contains(OLD_VERSION)
+      .contains(OLD_VERSION, { timeout: 30000 })
       .should('be.visible');
   });
 
