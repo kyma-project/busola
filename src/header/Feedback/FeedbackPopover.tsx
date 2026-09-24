@@ -1,9 +1,9 @@
+import type { ShellBarDomRef } from '@ui5/webcomponents-react';
 import { FlexBox, Popover, Text, Title } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
-import { useState, useEffect, type RefObject } from 'react';
+import { type RefObject, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import type { ShellBarDomRef } from '@ui5/webcomponents-react';
 import { configFeaturesNames } from 'state/types';
 import './FeedbackPopover.scss';
 import {
@@ -18,15 +18,33 @@ import { KymaFeedbackCard } from './KymaFeedbackCard';
 import { KymaSurveyCard } from './KymaSurveyCard';
 import {
   CLOUD_SERVICE_SURVEY_VIEWED_KEY,
-  KYMA_SURVEY_VIEWED_KEY,
   isSurveyViewed,
+  KYMA_SURVEY_VIEWED_KEY,
   markSurveyViewed,
 } from './surveyHelpers';
+
+/**
+ * We need to discover if feedback feedbackOpener is in three dot menu or not.
+ * If the feedbackOpener is in three dot menu, the Shellbar will hide it after clicking on the feedbackOpener and will clean elements below the feedbackOpener
+ * If the feedbackOpener is in three dot menu we need to pin Popover to something visible after collapse of three dot menu.
+ * If it is in three dot menu, we need to pin the Popover to something which won't close after opening, for example three dot menu button.   */
+const resolveOpener = (
+  shellbarRef: RefObject<ShellBarDomRef | null>,
+): HTMLElement | undefined => {
+  const feedbackAction = document.getElementById('feedbackOpener');
+  if (feedbackAction && !feedbackAction.hasAttribute('in-overflow')) {
+    return feedbackAction;
+  }
+  const overflowButton = shellbarRef?.current?.shadowRoot?.getElementById(
+    'ui5-shellbar-overflow-button',
+  );
+  return overflowButton ?? feedbackAction ?? undefined;
+};
 
 export default function FeedbackPopover({
   shellbarRef,
 }: {
-  shellbarRef?: RefObject<ShellBarDomRef | null>;
+  shellbarRef: RefObject<ShellBarDomRef | null>;
 }) {
   const { isEnabled: isFeedbackEnabled, config: kymaFeedbackConfig } =
     useFeature(configFeaturesNames.FEEDBACK);
@@ -49,23 +67,6 @@ export default function FeedbackPopover({
   const [cloudSurveyNew, setCloudSurveyNew] = useState(false);
   const [kymaSurveyNew, setKymaSurveyNew] = useState(false);
   const showFeedback = getShowFeedbackStorageKey();
-
-  /**
-   * We need to discorver if feedback feedbackOpener is in in three dot menu or not.
-   * If the feedbackOpener is in three dot menu, the Shellbar will hide it after clicking on the feedbackOpener and will clean elements below the feedbackOpener
-   * If the feedbackOpener is in three dot menu we need to pin Popover to something visible after collapse of three dot menu.
-   * If it is in three dot menu, we need to pin the Popover to something which won't close after opening, for example three dot menu button.   */
-  const resolveOpener = () => {
-    const feedbackAction = document.getElementById('feedbackOpener');
-    if (feedbackAction && !feedbackAction.hasAttribute('in-overflow')) {
-      setOpener(feedbackAction);
-      return;
-    }
-    const overflowButton = shellbarRef?.current?.shadowRoot?.getElementById(
-      'ui5-shellbar-overflow-button',
-    );
-    setOpener(overflowButton ?? feedbackAction ?? undefined);
-  };
 
   useEffect(() => {
     const shouldShow =
@@ -112,7 +113,8 @@ export default function FeedbackPopover({
       <ShellBarAction
         id="feedbackOpener"
         onClick={() => {
-          resolveOpener();
+          const resolvedOpener = resolveOpener(shellbarRef);
+          setOpener(resolvedOpener);
           setFeedbackOpen(true);
         }}
         icon="feedback"
