@@ -1,8 +1,9 @@
 import { FlexBox, Popover, Text, Title } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import type { ShellBarDomRef } from '@ui5/webcomponents-react';
 import { configFeaturesNames } from 'state/types';
 import './FeedbackPopover.scss';
 import {
@@ -22,7 +23,11 @@ import {
   markSurveyViewed,
 } from './surveyHelpers';
 
-export default function FeedbackPopover() {
+export default function FeedbackPopover({
+  shellbarRef,
+}: {
+  shellbarRef?: RefObject<ShellBarDomRef | null>;
+}) {
   const { isEnabled: isFeedbackEnabled, config: kymaFeedbackConfig } =
     useFeature(configFeaturesNames.FEEDBACK);
   const {
@@ -40,9 +45,27 @@ export default function FeedbackPopover() {
 
   const { t } = useTranslation();
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [opener, setOpener] = useState<HTMLElement | undefined>();
   const [cloudSurveyNew, setCloudSurveyNew] = useState(false);
   const [kymaSurveyNew, setKymaSurveyNew] = useState(false);
   const showFeedback = getShowFeedbackStorageKey();
+
+  /**
+   * We need to discorver if feedback feedbackOpener is in in three dot menu or not.
+   * If the feedbackOpener is in three dot menu, the Shellbar will hide it after clicking on the feedbackOpener and will clean elements below the feedbackOpener
+   * If the feedbackOpener is in three dot menu we need to pin Popover to something visible after collapse of three dot menu.
+   * If it is in three dot menu, we need to pin the Popover to something which won't close after opening, for example three dot menu button.   */
+  const resolveOpener = () => {
+    const feedbackAction = document.getElementById('feedbackOpener');
+    if (feedbackAction && !feedbackAction.hasAttribute('in-overflow')) {
+      setOpener(feedbackAction);
+      return;
+    }
+    const overflowButton = shellbarRef?.current?.shadowRoot?.getElementById(
+      'ui5-shellbar-overflow-button',
+    );
+    setOpener(overflowButton ?? feedbackAction ?? undefined);
+  };
 
   useEffect(() => {
     const shouldShow =
@@ -88,7 +111,10 @@ export default function FeedbackPopover() {
     <>
       <ShellBarAction
         id="feedbackOpener"
-        onClick={() => setFeedbackOpen(true)}
+        onClick={() => {
+          resolveOpener();
+          setFeedbackOpen(true);
+        }}
         icon="feedback"
         text={t('feedback.give-feedback')}
         title={t('feedback.give-feedback')}
@@ -96,7 +122,7 @@ export default function FeedbackPopover() {
       />
       {createPortal(
         <Popover
-          opener="feedbackOpener"
+          opener={opener}
           open={feedbackOpen}
           onClose={() => setFeedbackOpen(false)}
           horizontalAlign="End"

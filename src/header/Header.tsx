@@ -132,7 +132,7 @@ export function Header() {
         ref={shellbarRef}
       >
         <SnowFeature />
-        <FeedbackPopover />
+        <FeedbackPopover shellbarRef={shellbarRef} />
         <AIAssistantFeature />
         <TerminalFeature />
         <ShellBarAction
