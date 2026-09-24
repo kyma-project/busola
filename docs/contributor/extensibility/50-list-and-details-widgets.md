@@ -583,12 +583,12 @@ See the following example:
       children:
         - name: spec.keystores.create
           source: spec.keystores.jks.create
-        - name: spec.keystores.passwordSecretRef
-          widget: FormGroup
-          visibility: $exists(spec.keystores.jks.passwordSecretRef)
-          children:
-            - name: Password Secret Ref
-              source: spec.keystores.jks.passwordSecretRef.name
+    - name: spec.keystores.passwordSecretRef
+      widget: FormGroup
+      visibility: $exists(spec.keystores.jks.passwordSecretRef)
+      children:
+        - name: Password Secret Ref
+          source: spec.keystores.jks.passwordSecretRef.name
 ```
 
 ### `Markdown`
