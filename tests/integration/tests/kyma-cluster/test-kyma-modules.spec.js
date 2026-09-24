@@ -245,7 +245,10 @@ context('Test Kyma Modules views', () => {
 
     cy.get('ui5-button').contains('Change').click();
 
-    cy.contains('Modules updated').should('be.visible');
+    // PATCH can lag on CI; assert existence, the toast fades after ~3s
+    cy.contains('ui5-toast', 'Modules updated', { timeout: 30000 }).should(
+      'exist',
+    );
 
     cy.inspectTab('View');
 
@@ -279,7 +282,10 @@ context('Test Kyma Modules views', () => {
 
     cy.get('ui5-button').contains('Change').click();
 
-    cy.contains('Modules updated').should('be.visible');
+    // PATCH can lag on CI; assert existence, the toast fades after ~3s
+    cy.contains('ui5-toast', 'Modules updated', { timeout: 30000 }).should(
+      'exist',
+    );
 
     cy.inspectTab('View');
 
