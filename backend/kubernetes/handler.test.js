@@ -105,10 +105,42 @@ describe('handleK8sRequests', () => {
     expect(typeof options.lookup).toBe('function');
   });
 
-  it('rejects x-cluster-url with a non-root pathname with 400', async () => {
+  it('allows x-cluster-url with a clean non-root base path', async () => {
+    config.features.ALLOW_PRIVATE_IPS.isEnabled = true;
+    const requestSpy = mockAbortingRequest();
     const req = makeReq({
       headers: {
-        'x-cluster-url': 'https://attacker-controlled.example.com/blocked/',
+        'x-cluster-url':
+          'https://tenant.prod03.apimanagement.eu10.hana.ondemand.com/monsoon3',
+        'x-k8s-authorization': 'Bearer test-token',
+      },
+    });
+    const res = makeRes();
+
+    await handleK8sRequests(req, res);
+
+    expect(requestSpy).toHaveBeenCalledTimes(1);
+    expect(res.status).not.toHaveBeenCalledWith(400);
+  });
+
+  it('rejects x-cluster-url whose base path contains double-encoded characters', async () => {
+    const req = makeReq({
+      headers: {
+        'x-cluster-url': 'https://example.com/%252e%252e',
+        'x-k8s-authorization': 'Bearer test-token',
+      },
+    });
+    const res = makeRes();
+
+    await handleK8sRequests(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  it('rejects x-cluster-url whose base path contains a null byte', async () => {
+    const req = makeReq({
+      headers: {
+        'x-cluster-url': 'https://example.com/%00/path',
         'x-k8s-authorization': 'Bearer test-token',
       },
     });

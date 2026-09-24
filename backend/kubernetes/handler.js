@@ -222,7 +222,21 @@ function extractHeadersData(req) {
       throw new Error(`Invalid cluster URL provided: ${e.message}`);
     }
     if (targetApiServer.pathname !== '/') {
-      throw new Error('Cluster URL must not contain a path component.');
+      let decodedPathname;
+      try {
+        decodedPathname = decodeURIComponent(targetApiServer.pathname);
+      } catch (e) {
+        throw new Error(
+          `Cluster URL path contains invalid encoding: ${e.message}`,
+        );
+      }
+      if (decodedPathname.includes('%')) {
+        throw new Error('Cluster URL path contains illegal % characters.');
+      }
+      // eslint-disable-next-line no-control-regex
+      if (/[\x00-\x1F\x7F]/.test(decodedPathname)) {
+        throw new Error('Cluster URL path contains invalid characters.');
+      }
     }
   } else {
     throw new Error('Missing required cluster URL.');
