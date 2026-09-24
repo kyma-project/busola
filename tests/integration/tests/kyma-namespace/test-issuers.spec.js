@@ -10,8 +10,6 @@ context('Test Issuers', () => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
 
-    cy.wait(1000);
-
     cy.navigateTo('Configuration', 'Secrets');
 
     cy.openCreate();
@@ -27,7 +25,7 @@ context('Test Issuers', () => {
   });
 
   it('Create an issuer', () => {
-    cy.getLeftNav().contains('Issuers').click();
+    cy.navigateTo('Configuration', 'Issuers');
 
     cy.openCreate();
 

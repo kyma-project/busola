@@ -172,7 +172,10 @@ export const ModulesDeleteBox = ({
       setAssociatedResourcesUrls(urls);
       setCrUrls(Array.isArray(crUrl) ? crUrl : [crUrl]);
     };
-    fetchCounts();
+    fetchCounts().catch((e) => {
+      // the dialog can unmount mid-fetch on navigation; counts just stay empty
+      console.warn('Failed to fetch module resource counts:', e);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [associatedResources]);
 

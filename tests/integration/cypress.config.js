@@ -23,6 +23,7 @@ module.exports = defineConfig({
     : 'cypress/videos',
   experimentalInteractiveRunEvents: true,
   numTestsKeptInMemory: 0,
+  experimentalMemoryManagement: true,
   e2e: {
     includeShadowDom: true,
     testIsolation: false,
@@ -41,6 +42,7 @@ module.exports = defineConfig({
       'tests/accessibility/test-acc-custom-resources.spec.js',
       'tests/cluster/test-download-a-kubeconfig.spec.js',
       'tests/cluster/test-edit-cluster.spec.js',
+      'tests/cluster/test-busola-terminal.spec.js',
       'tests/cluster/test-cluster-overview.spec.js',
       'tests/cluster/test-cluster-role-bindings.spec.js',
       'tests/cluster/test-feedback.spec.js',

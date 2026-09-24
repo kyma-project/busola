@@ -102,9 +102,15 @@ export const ClusterValidation = () => {
 
   useEffect(() => {
     if (!resources)
-      resourceLoader.loadResourceLists().then((resourceList) => {
-        setResources(resourceList);
-      });
+      resourceLoader
+        .loadResourceLists()
+        .then((resourceList) => {
+          setResources(resourceList);
+        })
+        .catch((e) => {
+          // panel can unmount mid-load on navigation; scan stays disabled until it retries
+          console.warn('Failed to load resource lists:', e);
+        });
   }, [resources, resourceLoader, setResources]);
 
   const [isConfigurationOpen, setConfigurationOpen] = useState(false);

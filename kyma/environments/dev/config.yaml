@@ -104,3 +104,6 @@ config:
       isEnabled: true
       config:
         image: europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest
+        # Cloud Run's ~900s request cap; reconnect just before it (the pod
+        # persists, so the shell survives).
+        maxSessionDurationMs: 900000

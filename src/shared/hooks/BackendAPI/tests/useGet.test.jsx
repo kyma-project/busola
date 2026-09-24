@@ -73,4 +73,44 @@ describe('useGet', () => {
       ),
     );
   });
+
+  it('keeps delivering fresh data across many poll ticks', async () => {
+    // pruning settled entries must not break the staleness check, so every changed response should still reach setData
+    const setGetResultMock = vi.fn();
+
+    let version = 0;
+    mockUseFetch.mockImplementation(() => {
+      version++;
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve({ metadata: { resourceVersion: `${version}` } }),
+      });
+    });
+
+    render(<Testbed setGetResult={setGetResultMock} />, {
+      initialAtoms: [
+        [authDataAtom, { token: 'test-token' }],
+        [clusterAtom, {}],
+      ],
+    });
+
+    await waitFor(() =>
+      expect(setGetResultMock).toHaveBeenCalledWith(
+        false,
+        null,
+        expect.objectContaining({
+          metadata: expect.objectContaining({ resourceVersion: '1' }),
+        }),
+      ),
+    );
+    await waitFor(() =>
+      expect(setGetResultMock).toHaveBeenCalledWith(
+        false,
+        null,
+        expect.objectContaining({
+          metadata: expect.objectContaining({ resourceVersion: '3' }),
+        }),
+      ),
+    );
+  });
 });

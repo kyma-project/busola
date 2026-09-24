@@ -38,6 +38,18 @@ vi.mock('shared/hooks/BackendAPI/createHeaders', () => ({
   createHeaders: () => MOCK_AUTH_HEADERS,
 }));
 
+let mockTerminalFeature: any;
+vi.mock('hooks/useFeature', () => ({
+  useFeature: () => mockTerminalFeature,
+}));
+
+vi.mock('./provisionPod', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./provisionPod')>()),
+  generateTerminalPodName: vi
+    .fn()
+    .mockResolvedValue('busola-terminal-aabbccdd'),
+}));
+
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
 
@@ -91,6 +103,8 @@ beforeEach(() => {
       cluster: { cluster: { server: 'https://cluster.example.com' } },
     },
   };
+  // Proactive reconnect off by default; individual tests opt in.
+  mockTerminalFeature = { isEnabled: true, config: {} };
   wsInstances.length = 0;
   hookFetch.mockReset();
   setSession.mockReset();
@@ -204,5 +218,224 @@ describe('useTerminalSession', () => {
     });
 
     expect(hookFetch).not.toHaveBeenCalled();
+  });
+
+  it('cancels a pending reconnect on disconnect so it cannot revive a torn-down terminal', async () => {
+    vi.useFakeTimers();
+    try {
+      setupHappyHookFetch();
+      const { result } = renderHook(() => useTerminalSession());
+
+      await act(async () => {
+        await result.current.connect(makeTerm() as any);
+      });
+
+      // an unexpected drop (1006) schedules a reconnect
+      act(() => {
+        lastWs()!.onclose?.({ code: 1006 } as any);
+      });
+      expect(wsInstances).toHaveLength(1);
+
+      await act(async () => {
+        await result.current.disconnect(POD);
+      });
+
+      // past the backoff + jitter (<= ~2s)
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(5000);
+      });
+
+      // cancelled: no second socket opened
+      expect(wsInstances).toHaveLength(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  // Proactive reconnect fires 30s (the buffer) before the cap.
+  const CAP_MS = 900_000;
+  const PROACTIVE_DELAY_MS = CAP_MS - 30_000; // 870s
+
+  it('proactively reconnects before the hard cap without the connection-lost banner', async () => {
+    vi.useFakeTimers();
+    try {
+      mockTerminalFeature = {
+        isEnabled: true,
+        config: { maxSessionDurationMs: CAP_MS },
+      };
+      setupHappyHookFetch();
+      const term = makeTerm();
+      const { result } = renderHook(() => useTerminalSession());
+
+      await act(async () => {
+        await result.current.connect(term as any);
+      });
+      // onopen arms the proactive timer
+      act(() => {
+        lastWs()!.onopen?.();
+      });
+      expect(wsInstances).toHaveLength(1);
+
+      setSession.mockClear();
+      term.write.mockClear();
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(PROACTIVE_DELAY_MS);
+      });
+
+      expect(wsInstances).toHaveLength(2);
+      // silent: no provisioning flash, no output
+      expect(setSession).not.toHaveBeenCalledWith({
+        status: 'provisioning',
+        podName: null,
+        errorMessage: null,
+      });
+      expect(term.write).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('does not proactively reconnect when maxSessionDurationMs is unset', async () => {
+    vi.useFakeTimers();
+    try {
+      mockTerminalFeature = { isEnabled: true, config: {} };
+      setupHappyHookFetch();
+      const { result } = renderHook(() => useTerminalSession());
+
+      await act(async () => {
+        await result.current.connect(makeTerm() as any);
+      });
+      act(() => {
+        lastWs()!.onopen?.();
+      });
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(3_600_000); // one hour
+      });
+
+      expect(wsInstances).toHaveLength(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('cancels the pending proactive reconnect on disconnect', async () => {
+    vi.useFakeTimers();
+    try {
+      mockTerminalFeature = {
+        isEnabled: true,
+        config: { maxSessionDurationMs: CAP_MS },
+      };
+      setupHappyHookFetch();
+      const { result } = renderHook(() => useTerminalSession());
+
+      await act(async () => {
+        await result.current.connect(makeTerm() as any);
+      });
+      act(() => {
+        lastWs()!.onopen?.();
+      });
+
+      await act(async () => {
+        await result.current.disconnect(POD);
+      });
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(CAP_MS);
+      });
+
+      expect(wsInstances).toHaveLength(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('a genuine drop still uses the reactive reconnect and cancels the proactive timer', async () => {
+    vi.useFakeTimers();
+    try {
+      mockTerminalFeature = {
+        isEnabled: true,
+        config: { maxSessionDurationMs: CAP_MS },
+      };
+      setupHappyHookFetch();
+      const term = makeTerm();
+      const { result } = renderHook(() => useTerminalSession());
+
+      await act(async () => {
+        await result.current.connect(term as any);
+      });
+      act(() => {
+        lastWs()!.onopen?.(); // arms proactive timer
+      });
+      term.write.mockClear();
+
+      // unexpected drop before the proactive timer fires
+      act(() => {
+        lastWs()!.onclose?.({ code: 1006 } as any);
+      });
+      // reactive path announces the loss (not silent)
+      expect(term.write).toHaveBeenCalled();
+
+      // past the reactive backoff → socket #2
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2_500);
+      });
+      expect(wsInstances).toHaveLength(2);
+
+      // the drop cancelled the old proactive timer and the reactive socket
+      // never opened, so nothing re-armed it
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(CAP_MS);
+      });
+      expect(wsInstances).toHaveLength(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('re-arms the proactive timer after a reactive reconnect completes', async () => {
+    vi.useFakeTimers();
+    try {
+      mockTerminalFeature = {
+        isEnabled: true,
+        config: { maxSessionDurationMs: CAP_MS },
+      };
+      setupHappyHookFetch();
+      const term = makeTerm();
+      const { result } = renderHook(() => useTerminalSession());
+
+      await act(async () => {
+        await result.current.connect(term as any);
+      });
+      act(() => {
+        lastWs()!.onopen?.();
+      });
+
+      // drop → reactive reconnect opens socket #2
+      act(() => {
+        lastWs()!.onclose?.({ code: 1006 } as any);
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2_500);
+      });
+      expect(wsInstances).toHaveLength(2);
+
+      // socket #2 opens → re-arms the proactive timer
+      act(() => {
+        lastWs()!.onopen?.();
+      });
+      term.write.mockClear();
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(PROACTIVE_DELAY_MS);
+      });
+
+      // proactive reconnect fires from the re-armed timer, silently
+      expect(wsInstances).toHaveLength(3);
+      expect(term.write).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

@@ -221,7 +221,7 @@ context('Test Update Community Module', () => {
 
     cy.get('ui5-table-row').contains(OLD_TEMPLATE_NAME).should('be.visible');
 
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
     cy.get('ui5-card').contains('Modify Modules').click();
   });
 
@@ -308,7 +308,7 @@ context('Test Update Community Module', () => {
 
     cy.get('ui5-table-row').contains(OLD_TEMPLATE_NAME).should('not.exist');
 
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
     cy.get('ui5-card').contains('Modify Modules').click();
   });
 

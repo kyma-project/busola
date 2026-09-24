@@ -103,7 +103,7 @@ context('Test Kyma Modules views', () => {
   });
 
   it('Test number of Modules in Modules Overview card', () => {
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
 
     // Uncomment after adding local KLM
     // cy.contains('ui5-card', 'Installed Modules')
@@ -247,7 +247,7 @@ context('Test Kyma Modules views', () => {
 
     cy.checkUnsavedDialog();
 
-    cy.saveChanges('Edit');
+    cy.saveChanges('Edit', { waitForToast: false });
 
     cy.contains('Change Release Channel').should('be.visible');
 
@@ -283,7 +283,7 @@ context('Test Kyma Modules views', () => {
       .find('li')
       .click({ force: true });
 
-    cy.saveChanges('Edit');
+    cy.saveChanges('Edit', { waitForToast: false });
 
     cy.contains('Change Release Channel').should('be.visible');
 

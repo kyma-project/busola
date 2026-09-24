@@ -48,7 +48,6 @@ context('Test Network Policy', () => {
   });
 
   it('Check Network Policy list', () => {
-    cy.wait(3000); // wait for the resource to be refeched and displayed in the list
     cy.inspectList(NAME);
   });
 });

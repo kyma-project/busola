@@ -7,8 +7,10 @@ export function savePendingKubeconfigId(kubeconfigId: string): void {
 
 export function consumePendingKubeconfigId(): string | null {
   const value = localStorage.getItem(PENDING_KUBECONFIG_ID_KEY);
-  if (value) localStorage.removeItem(PENDING_KUBECONFIG_ID_KEY);
-  return value;
+  if (!value) return null;
+  localStorage.removeItem(PENDING_KUBECONFIG_ID_KEY);
+  // Reject values that contain characters needing URL-encoding.
+  return encodeURIComponent(value) === value ? value : null;
 }
 
 export interface IntendedPath {

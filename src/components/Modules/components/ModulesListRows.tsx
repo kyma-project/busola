@@ -12,6 +12,7 @@ import {
 } from '../support';
 import { useGetManagerStatus, useGetModuleResource } from '../hooks';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { getReadableTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { useTranslation } from 'react-i18next';
 import { useModulesReleaseQuery } from '../kymaModulesQueries';
 import { ModuleStatus, resolveType } from './ModuleStatus';
@@ -269,6 +270,10 @@ export const ModulesListRows = ({
         </StatusBadge>
       )}
     </FlexBox>,
+    // Available since
+    getReadableTimestamp(
+      currentModuleTemplate?.metadata?.creationTimestamp ?? '',
+    ),
     // Module State
     <ModuleStatus
       key={`module-state-${resource.name}`}

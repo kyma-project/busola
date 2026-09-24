@@ -94,18 +94,13 @@ context('Test Deployments', () => {
   });
 
   it('Edit a deployment', () => {
-    cy.getLeftNav().contains('Deployments').click();
+    cy.navigateTo('Workloads', 'Deployments');
 
     cy.clickGenericListLink(DEPLOYMENT_NAME);
 
     cy.getMidColumn()
-      .get('[data-testid="has-tooltip"]')
-      .contains('span', '1 / 1', {
-        timeout: 60 * 1000,
-      });
-    cy.wait(1000);
-
-    cy.wait(1000);
+      .contains('ui5-title', DEPLOYMENT_NAME)
+      .should('be.visible');
 
     cy.getMidColumn().inspectTab('Edit');
 

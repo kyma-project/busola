@@ -31,6 +31,12 @@ spec:
                   optional: true
                   key: JWT_CHECK_BYPASS
                   name: environment
+            - name: ALLOW_PRIVATE_IPS
+              valueFrom:
+                configMapKeyRef:
+                  optional: true
+                  key: ALLOW_PRIVATE_IPS
+                  name: environment
           volumeMounts:
             - name: config
               mountPath: /app/core-ui/config
