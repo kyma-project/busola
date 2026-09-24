@@ -1,6 +1,7 @@
+import type { ShellBarDomRef } from '@ui5/webcomponents-react';
 import { FlexBox, Popover, Text, Title } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
-import { useState, useEffect } from 'react';
+import { type RefObject, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { configFeaturesNames } from 'state/types';
@@ -17,12 +18,17 @@ import { KymaFeedbackCard } from './KymaFeedbackCard';
 import { KymaSurveyCard } from './KymaSurveyCard';
 import {
   CLOUD_SERVICE_SURVEY_VIEWED_KEY,
-  KYMA_SURVEY_VIEWED_KEY,
   isSurveyViewed,
+  KYMA_SURVEY_VIEWED_KEY,
   markSurveyViewed,
 } from './surveyHelpers';
+import { resolveOpener } from 'header/helpers';
 
-export default function FeedbackPopover() {
+export default function FeedbackPopover({
+  shellbarRef,
+}: {
+  shellbarRef: RefObject<ShellBarDomRef | null>;
+}) {
   const { isEnabled: isFeedbackEnabled, config: kymaFeedbackConfig } =
     useFeature(configFeaturesNames.FEEDBACK);
   const {
@@ -40,6 +46,7 @@ export default function FeedbackPopover() {
 
   const { t } = useTranslation();
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [opener, setOpener] = useState<HTMLElement | undefined>();
   const [cloudSurveyNew, setCloudSurveyNew] = useState(false);
   const [kymaSurveyNew, setKymaSurveyNew] = useState(false);
   const showFeedback = getShowFeedbackStorageKey();
@@ -88,7 +95,11 @@ export default function FeedbackPopover() {
     <>
       <ShellBarAction
         id="feedbackOpener"
-        onClick={() => setFeedbackOpen(true)}
+        onClick={() => {
+          const resolvedOpener = resolveOpener('feedbackOpener', shellbarRef);
+          setOpener(resolvedOpener);
+          setFeedbackOpen(true);
+        }}
         icon="feedback"
         text={t('feedback.give-feedback')}
         title={t('feedback.give-feedback')}
@@ -96,7 +107,7 @@ export default function FeedbackPopover() {
       />
       {createPortal(
         <Popover
-          opener="feedbackOpener"
+          opener={opener}
           open={feedbackOpen}
           onClose={() => setFeedbackOpen(false)}
           horizontalAlign="End"
