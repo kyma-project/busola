@@ -108,16 +108,15 @@ function createWebComponent(
       };
 
       // Check for props and slots in attributes
-      for (let i = 0; i < this.attributes.length; i++) {
-        const attribute = this.attributes[i];
-
+      // Snapshot into an array first — this.attributes is a live NamedNodeMap
+      // and removeAttribute() shifts indices, causing the loop to skip items.
+      for (const attribute of Array.from(this.attributes)) {
         if (attribute.name.includes('prop_')) {
-          const rawValue = this.attributes[i].value;
           let parsedValue;
           try {
-            parsedValue = JSON.parse(rawValue);
+            parsedValue = JSON.parse(attribute.value);
           } catch {
-            parsedValue = rawValue;
+            parsedValue = attribute.value;
           }
           props[kebabToCamelCase(attribute.name.replace('prop_', ''))] =
             parsedValue;
@@ -126,7 +125,7 @@ function createWebComponent(
 
         if (attribute.name.includes('slot_')) {
           props[kebabToCamelCase(attribute.name.replace('slot_', ''))] =
-            this.attributes[i].value;
+            attribute.value;
           this.removeAttribute(attribute.name);
         }
       }
