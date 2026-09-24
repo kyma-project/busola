@@ -251,7 +251,7 @@ context('Test Update Community Module', () => {
 
     cy.contains('ui5-label', MODULE_NAME).should('be.visible');
 
-    // wait for the download, otherwise the panel re-renders and moves the Save button as we click it
+    // Save stays disabled until the picked version's resources download
     cy.intercept('POST', '**/modules/community-resource').as(
       'resourcesToApply',
     );
@@ -265,6 +265,7 @@ context('Test Update Community Module', () => {
     cy.get('ui5-panel[data-testid="community-modules-edit"]')
       .find('ui5-button')
       .contains('Save')
+      .should('not.be.disabled')
       .click();
 
     cy.inspectTab('View');
