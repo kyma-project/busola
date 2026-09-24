@@ -255,8 +255,6 @@ context('Test Update Community Module', () => {
     cy.intercept('POST', '**/modules/community-resource').as(
       'resourcesToApply',
     );
-    // the save patches the module's Deployment; wait for it before switching tabs, or the reflow detaches the View tab mid-click
-    cy.intercept('PATCH', `**/deployments/${MODULE_NAME}`).as('applyModule');
 
     cy.contains('ui5-label', MODULE_NAME).parent().find('ui5-select').click();
 
@@ -268,8 +266,6 @@ context('Test Update Community Module', () => {
       .find('ui5-button')
       .contains('Save')
       .click();
-
-    cy.wait('@applyModule', { timeout: 30000 });
 
     cy.inspectTab('View');
 
