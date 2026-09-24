@@ -22,24 +22,7 @@ import {
   KYMA_SURVEY_VIEWED_KEY,
   markSurveyViewed,
 } from './surveyHelpers';
-
-/**
- * We need to discover if feedback feedbackOpener is in three dot menu or not.
- * If the feedbackOpener is in three dot menu, the Shellbar will hide it after clicking on the feedbackOpener and will clean elements below the feedbackOpener
- * If the feedbackOpener is in three dot menu we need to pin Popover to something visible after collapse of three dot menu.
- * If it is in three dot menu, we need to pin the Popover to something which won't close after opening, for example three dot menu button.   */
-const resolveOpener = (
-  shellbarRef: RefObject<ShellBarDomRef | null>,
-): HTMLElement | undefined => {
-  const feedbackAction = document.getElementById('feedbackOpener');
-  if (feedbackAction && !feedbackAction.hasAttribute('in-overflow')) {
-    return feedbackAction;
-  }
-  const overflowButton = shellbarRef?.current?.shadowRoot?.getElementById(
-    'ui5-shellbar-overflow-button',
-  );
-  return overflowButton ?? feedbackAction ?? undefined;
-};
+import { resolveOpener } from 'header/helpers';
 
 export default function FeedbackPopover({
   shellbarRef,
@@ -113,7 +96,7 @@ export default function FeedbackPopover({
       <ShellBarAction
         id="feedbackOpener"
         onClick={() => {
-          const resolvedOpener = resolveOpener(shellbarRef);
+          const resolvedOpener = resolveOpener('feedbackOpener', shellbarRef);
           setOpener(resolvedOpener);
           setFeedbackOpen(true);
         }}

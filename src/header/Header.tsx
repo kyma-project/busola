@@ -29,7 +29,6 @@ import FeedbackPopover from './Feedback/FeedbackPopover';
 import { TerminalFeature } from './TerminalFeature';
 import { AIAssistantFeature } from './AIAssistantFeature';
 import { GetHelpMenu } from './GetHelpMenu';
-import { ShellBarAction } from './ShellBarAction';
 import './Header.scss';
 
 export function Header() {
@@ -37,7 +36,6 @@ export function Header() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isGetHelpOpen, setIsGetHelpOpen] = useState(false);
   const [shellbarWidth, setShellbarWidth] = useState(window.innerWidth);
   const isLargeScreen = shellbarWidth > SCREEN_SIZE_BREAKPOINT_M;
   const shellbarRef = useRef<ShellBarDomRef>(null);
@@ -135,19 +133,9 @@ export function Header() {
         <FeedbackPopover shellbarRef={shellbarRef} />
         <AIAssistantFeature />
         <TerminalFeature />
-        <ShellBarAction
-          onClick={() => setIsGetHelpOpen(true)}
-          id="openGetHelpMenu"
-          icon="sys-help"
-          text={t('navigation.menu.get-help')}
-          title={t('navigation.menu.get-help')}
-        />
+        <GetHelpMenu shellbarRef={shellbarRef} />
       </ShellBar>
       <HeaderMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-      <GetHelpMenu
-        isMenuOpen={isGetHelpOpen}
-        onClose={() => setIsGetHelpOpen(false)}
-      />
     </>
   );
 }
