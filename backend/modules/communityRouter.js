@@ -6,6 +6,16 @@ const router = express.Router();
 router.use(express.json());
 router.use(cors());
 
+const ALLOWED_DOMAINS = ['githubusercontent.com', 'github.com', 'github.io'];
+
+function isAllowedUrl(url) {
+  const isAllowedHost = ALLOWED_DOMAINS.some(
+    (domain) => url.hostname === domain || url.hostname.endsWith(`.${domain}`),
+  );
+  const isDefaultHttpPort = !url.port || url.port === '443';
+  return url.protocol === 'https:' && isAllowedHost && isDefaultHttpPort;
+}
+
 async function handleGetCommunityResource(req, res) {
   const { link } = JSON.parse(req.body.toString());
 
@@ -16,27 +26,31 @@ async function handleGetCommunityResource(req, res) {
 
   try {
     const url = new URL(link);
-    // Only allow HTTPS protocol and restrict to specific trusted domains.
-    const allowedDomains = ['githubusercontent.com', 'github.com', 'github.io'];
-    const isAllowedHost = allowedDomains.some(
-      (domain) =>
-        url.hostname === domain || url.hostname.endsWith(`.${domain}`),
-    );
-    const isDefaultHttpPort = !url.port || url.port === '443';
-    if (url.protocol !== 'https:' || !isAllowedHost || !isDefaultHttpPort) {
+    if (!isAllowedUrl(url)) {
       return res.status(400).json({
         message: 'Invalid or untrusted link provided.',
       });
-    } else {
-      const response = await fetch(url.href, { redirect: 'error' });
-      if (response.status === 404) {
-        return res.status(404).json({
-          message: `The resource doesn't exist`,
-        });
-      }
-      const data = await response.text();
-      res.json(jsyaml.loadAll(data));
     }
+
+    const response = await fetch(url.href);
+
+    // Validate the final URL after redirect-following against the same allowlist.
+    // This prevents a trusted GitHub URL from redirecting to an arbitrary destination
+    // (SSRF via open redirect on a trusted host).
+    const finalUrl = new URL(response.url);
+    if (!isAllowedUrl(finalUrl)) {
+      return res.status(400).json({
+        message: 'Invalid or untrusted link provided.',
+      });
+    }
+
+    if (response.status === 404) {
+      return res.status(404).json({
+        message: `The resource doesn't exist`,
+      });
+    }
+    const data = await response.text();
+    res.json(jsyaml.loadAll(data));
   } catch (error) {
     res
       .status(500)
