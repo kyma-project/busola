@@ -4,10 +4,17 @@ import {
   FormGroup as UI5FormGroup,
   FormItem,
   Label,
+  Title,
 } from '@ui5/webcomponents-react';
-import { useGetPlaceholder, useGetTranslation } from '../helpers';
+import { useState } from 'react';
+import {
+  useCreateResourceDescription,
+  useGetPlaceholder,
+  useGetTranslation,
+} from '../helpers';
 import { Widget } from './Widget';
 import './FormGroup.scss';
+import { HintButton } from 'shared/components/HintButton/HintButton';
 
 function FormItemWidget({
   children,
@@ -62,6 +69,8 @@ export function FormGroup({
   ...props
 }: FormGroupProps) {
   const { widgetT } = useGetTranslation();
+  const description = useCreateResourceDescription(structure?.description);
+  const [showDescription, setShowDescription] = useState(false);
 
   return (
     <Form
@@ -69,7 +78,20 @@ export function FormGroup({
       layout="S1 M1 L1 XL1"
       labelSpan="S12 M12 L12 XL12"
     >
-      <UI5FormGroup headerText={widgetT(structure)}>
+      <UI5FormGroup headerText={description ? undefined : widgetT(structure)}>
+        {description && (
+          <div className="ui5-form-group-heading">
+            <Title level="H3" size="H6">
+              {widgetT(structure)}
+            </Title>
+            <HintButton
+              className="sap-margin-begin-tiny"
+              setShowTitleDescription={setShowDescription}
+              showTitleDescription={showDescription}
+              description={description}
+            />
+          </div>
+        )}
         {Array.isArray(structure?.children) &&
           structure.children.map((def: any, idx: number) => (
             <Widget

@@ -566,10 +566,11 @@ The `FormGroup` widget renders an object's fields using the SAP UI5 Form layout,
 
 These are the available `FormGroup` widget parameters:
 
-| Parameter    | Required | Type      | Description                                               |
-| ------------ | -------- | --------- | --------------------------------------------------------- |
-| **name**     | **Yes**  | string    | The group heading. Supports translation keys.             |
-| **children** | No       | []objects | Widgets to render as labeled form items inside the group. |
+| Parameter       | Required | Type                                           | Description                                                                                                                |
+| --------------- | -------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **name**        | **Yes**  | string                                         | The group heading. Supports translation keys.                                                                              |
+| **children**    | No       | []objects                                      | Widgets to render as labeled form items inside the group.                                                                  |
+| **description** | No       | string or [JSONata](100-jsonata.md) expression | Additional information displayed in a tooltip when clicking the hint icon next to the group heading. It can contain links. |
 
 See the following example:
 
@@ -579,6 +580,7 @@ See the following example:
   visibility: $exists(spec.keystores.jks)
   children:
     - name: JKS
+      description: Java KeyStore (JKS) is a repository of security, authorization or public key certificates.
       widget: FormGroup
       children:
         - name: spec.keystores.create
