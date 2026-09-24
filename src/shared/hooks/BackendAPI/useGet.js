@@ -39,7 +39,6 @@ const useGetHook = (processDataFn) =>
     const fetch = useFetch();
     const abortController = useRef(new AbortController());
     const errorTolerancyCounter = useRef(0);
-    const currentRequestId = uuid();
     const requestData = useRef({});
     const previousRequestNotFinished = useRef(null);
     const intervalIdRef = useRef(null);
@@ -71,6 +70,7 @@ const useGetHook = (processDataFn) =>
           }
         }
 
+        const currentRequestId = uuid();
         try {
           previousRequestNotFinished.current = path;
           requestData.current[currentRequestId] = { start: Date.now() };
@@ -114,6 +114,9 @@ const useGetHook = (processDataFn) =>
           // Let's wait a moment, because the current request may load
           // and showing the error to the user will not be necessary.
           setTimeout((_) => processError(e), 100);
+        } finally {
+          // drop our own entry so requestData stays bounded; in-flight requests keep theirs for the staleness check
+          delete requestData.current[currentRequestId];
         }
 
         if (!isSilent && !abortController.current.signal.aborted)

@@ -130,7 +130,7 @@ context('Test Companion UI', () => {
       cy.wait(1000);
 
       cy.get('@shellbar')
-        .find('ui5-toggle-button[icon="da"]')
+        .find('ui5-shellbar-item[icon="da"]')
         .should('not.exist');
     });
   });

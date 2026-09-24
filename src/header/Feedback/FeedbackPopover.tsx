@@ -90,7 +90,7 @@ export default function FeedbackPopover() {
         id="feedbackOpener"
         onClick={() => setFeedbackOpen(true)}
         icon="feedback"
-        text={t('feedback.feedback')}
+        text={t('feedback.give-feedback')}
         title={t('feedback.give-feedback')}
         count={newCount > 0 ? String(newCount) : undefined}
       />

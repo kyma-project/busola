@@ -15,7 +15,6 @@ import {
 
 import './DynamicPageComponent.scss';
 import {
-  CSSProperties,
   ReactNode,
   RefObject,
   startTransition,
@@ -97,37 +96,6 @@ const useGetHeaderHeight = (
   }, [dynamicPageRef, tabContainerRef]);
 
   return { headerHeight, tabContainerHeight };
-};
-
-type ColumnProps = {
-  title: string;
-  children: ReactNode;
-  columnSpan?: string;
-  image?: ReactNode;
-  style?: CSSProperties;
-};
-
-const Column = ({
-  title,
-  children,
-  columnSpan,
-  image,
-  style = {},
-}: ColumnProps) => {
-  const styleComputed = { gridColumn: columnSpan, ...style };
-  return (
-    <div className="page-header__column" style={styleComputed}>
-      {image && <div className="image">{image}</div>}
-      <div className="content-container">
-        <div className="title bsl-has-color-status-4 " tabIndex={0}>
-          {title}:
-        </div>
-        <span className="content bsl-has-color-text-1" tabIndex={0}>
-          {children}
-        </span>
-      </div>
-    </div>
-  );
 };
 
 type DynamicPageComponentProps = {
@@ -523,5 +491,3 @@ export const DynamicPageComponent = ({
     </DynamicPage>
   );
 };
-
-DynamicPageComponent.Column = Column;

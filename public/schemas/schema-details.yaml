@@ -176,8 +176,6 @@ $widgets:
       properties:
         children:
           $ref: "#/$defs/children"
-        inline:
-          type: boolean
   ControlledBy:
     if:
       properties:

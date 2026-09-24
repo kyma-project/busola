@@ -8,7 +8,7 @@ import { ssoDataAtom } from 'state/ssoDataAtom';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { useFeature } from 'hooks/useFeature';
-import { configFeaturesNames } from 'state/types';
+import { configFeaturesNames, TerminalFeature } from 'state/types';
 import {
   terminalSessionAtom,
   TerminalSessionState,
@@ -22,7 +22,7 @@ import {
   COLOR_ERROR,
   COLOR_WARNING,
   connectTerminal,
-  terminalMessage,
+  terminalSystemMessage,
 } from './connectTerminal';
 import { TFunction } from 'i18next';
 
@@ -31,6 +31,8 @@ const DEFAULT_IMAGE =
 
 const RECONNECTION_MIN_DELAY_MS = 1_000;
 const RECONNECTION_MAX_DELAY_MS = 30_000;
+// Headroom before the hard cap for the re-provision + re-attach to finish.
+const PROACTIVE_RECONNECT_SAFETY_BUFFER_MS = 30_000;
 
 const reconnect = (
   attemptRef: RefObject<number>,
@@ -45,7 +47,10 @@ const reconnect = (
   const attempt = attemptRef.current;
   if (attempt >= 10) {
     term.write(
-      terminalMessage(COLOR_ERROR, t('terminal.messages.reconnect-failed')),
+      terminalSystemMessage(
+        COLOR_ERROR,
+        t('terminal.messages.reconnect-failed'),
+      ),
     );
     setSession((prev) => ({ ...prev, status: 'idle' }));
     return;
@@ -59,7 +64,7 @@ const reconnect = (
   const delay = baseDelay + jitter;
 
   term.write(
-    terminalMessage(
+    terminalSystemMessage(
       COLOR_WARNING,
       t('terminal.messages.reconnecting', { delay: Math.round(delay / 1000) }),
     ),
@@ -77,8 +82,9 @@ export function useTerminalSession() {
   const ssoData = useAtomValue(ssoDataAtom);
   const fetchFn = useFetch();
   const setSession = useSetAtom(terminalSessionAtom);
-  const { config } = useFeature(configFeaturesNames.TERMINAL);
+  const { config } = useFeature<TerminalFeature>(configFeaturesNames.TERMINAL);
   const image: string = config?.image ?? DEFAULT_IMAGE;
+  const maxSessionDurationMs: number | undefined = config?.maxSessionDurationMs;
 
   const wsRef = useRef<WebSocket | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -86,19 +92,36 @@ export function useTerminalSession() {
   // Prevents double pod DELETE — close button and unmount cleanup both call disconnect.
   const disconnectedRef = useRef(false);
   const reconnectTimer = useRef<NodeJS.Timeout>(undefined);
+  const proactiveReconnectTimer = useRef<NodeJS.Timeout>(undefined);
   const attemptRef = useRef(0);
 
   const connect = useCallback(
-    async (term: Terminal) => {
+    async (term: Terminal, silent = false) => {
       disconnectedRef.current = false;
+      // Abort first so connectTerminal's onclose guard skips the banner and
+      // reactive reconnect on a deliberate cycle.
       abortRef.current?.abort();
+      // A proactive cycle's old socket is still open; close it to avoid a
+      // leak / double-attach (a reactive drop already closed it).
+      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+      clearTimeout(proactiveReconnectTimer.current);
+      proactiveReconnectTimer.current = undefined;
       const abort = new AbortController();
       abortRef.current = abort;
 
       const clusterServer =
         cluster?.currentContext?.cluster?.cluster?.server ?? '';
 
-      setSession({ status: 'provisioning', podName: null, errorMessage: null });
+      if (!silent) {
+        setSession({
+          status: 'provisioning',
+          podName: null,
+          errorMessage: null,
+        });
+      }
 
       try {
         const headers = createHeaders(authData, cluster, ssoData);
@@ -140,12 +163,31 @@ export function useTerminalSession() {
           setSession,
           signal: abort.signal,
           t,
+          silent,
           scheduleReconnect: (term: Terminal) => {
+            // A real drop cancels the pending proactive cycle.
+            clearTimeout(proactiveReconnectTimer.current);
+            proactiveReconnectTimer.current = undefined;
             reconnect(attemptRef, term, t, setSession, reconnectTimer, connect);
           },
           onConnected: () => {
             attemptRef.current = 0;
             clearTimeout(reconnectTimer.current);
+            reconnectTimer.current = undefined;
+            clearTimeout(proactiveReconnectTimer.current);
+            proactiveReconnectTimer.current = undefined;
+            // Re-arm per connection; the cap is per-socket.
+            if (
+              maxSessionDurationMs &&
+              maxSessionDurationMs > PROACTIVE_RECONNECT_SAFETY_BUFFER_MS
+            ) {
+              const delay =
+                maxSessionDurationMs - PROACTIVE_RECONNECT_SAFETY_BUFFER_MS;
+              proactiveReconnectTimer.current = setTimeout(() => {
+                proactiveReconnectTimer.current = undefined;
+                connect(term, true);
+              }, delay);
+            }
           },
         });
         wsRef.current = ws;
@@ -160,14 +202,20 @@ export function useTerminalSession() {
           errorMessage: message,
         }));
         term.write(
-          terminalMessage(
-            COLOR_ERROR,
-            t('terminal.status.error', { error: message }),
-          ),
+          terminalSystemMessage(COLOR_ERROR, t('terminal.status.error')),
         );
       }
     },
-    [authData, cluster, ssoData, fetchFn, image, setSession, t],
+    [
+      authData,
+      cluster,
+      ssoData,
+      fetchFn,
+      image,
+      maxSessionDurationMs,
+      setSession,
+      t,
+    ],
   );
 
   const disconnect = useCallback(
@@ -176,6 +224,12 @@ export function useTerminalSession() {
       disconnectedRef.current = true;
 
       abortRef.current?.abort();
+      // Cancel scheduled reconnects so they can't revive a torn-down terminal.
+      clearTimeout(reconnectTimer.current);
+      reconnectTimer.current = undefined;
+      clearTimeout(proactiveReconnectTimer.current);
+      proactiveReconnectTimer.current = undefined;
+      attemptRef.current = 0;
       onDataDisposableRef.current?.dispose();
       onDataDisposableRef.current = null;
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {

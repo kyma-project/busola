@@ -18,18 +18,34 @@ permissions: # used by build images steps
   actions: read # This is required for using actions in the workflow
 
 jobs:
+  validate-input:
+    name: Validate release name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate semver format
+        env:
+          INPUT_NAME: ${{ github.event.inputs.name }}
+        run: |
+          if ! [[ "$INPUT_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?$ ]]; then
+            echo "::error::Invalid release name '$INPUT_NAME': must be semver (e.g. 2.1.3)"
+            exit 1
+          fi
+
   build-busola-web:
     name: Build Busola web
+    needs: validate-input
     uses: ./.github/workflows/busola-web-build.yml
     with:
       tag: ${{ github.event.inputs.name }}
   build-busola:
     name: Build Busola
+    needs: validate-input
     uses: ./.github/workflows/busola-build.yml
     with:
       tag: ${{ github.event.inputs.name }}
   build-busola-backend:
     name: Build busola backend
+    needs: validate-input
     uses: ./.github/workflows/busola-backend-build.yml
     with:
       tag: ${{ github.event.inputs.name }}
@@ -49,21 +65,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PULL_BASE_REF: ${{ github.event.inputs.name }}
-        run: ./.github/scripts/create_changelog.sh ${{ github.event.inputs.name }}
+          INPUT_NAME: ${{ github.event.inputs.name }}
+        run: ./.github/scripts/create_changelog.sh "$INPUT_NAME"
 
       - name: Create tag
         shell: bash
+        env:
+          INPUT_NAME: ${{ github.event.inputs.name }}
         run: |
-          git tag ${{ github.event.inputs.name }}
-          git push origin ${{ github.event.inputs.name }}
+          git tag "$INPUT_NAME"
+          git push origin "$INPUT_NAME"
 
       - name: Create draft release
         id: create-draft
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_NAME: ${{ github.event.inputs.name }}
         run: |
-          RELEASE_ID=$(./.github/scripts/create_draft_release.sh ${{ github.event.inputs.name }})
+          RELEASE_ID=$(./.github/scripts/create_draft_release.sh "$INPUT_NAME")
           echo $RELEASE_ID
           echo "release_id=$RELEASE_ID" >> $GITHUB_OUTPUT
 
@@ -91,7 +111,6 @@ jobs:
     name: Promote image version ${{ github.event.inputs.name }} to busola-deploy/dev
     needs: create-release
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.name != '' }}
     steps:
       # Checkout the target busola-deploy repository on the dev branch
       - name: Checkout busola-deploy repo
@@ -105,9 +124,11 @@ jobs:
       # Update the version part of the image tags in dev/main.tf
       - name: Update image versions in main.tf
         shell: bash
+        env:
+          INPUT_NAME: ${{ github.event.inputs.name }}
         run: |
-          sed -i -E 's|(busola_backend_image\s*=\s*".*:)[^"]+|\1${{ github.event.inputs.name }}|' dev/main.tf
-          sed -i -E 's|(busola_web_image\s*=\s*".*:)[^"]+|\1${{ github.event.inputs.name }}|' dev/main.tf
+          sed -i -E "s|(busola_backend_image\s*=\s*\".*:)[^\"]+|\1${INPUT_NAME}|" dev/main.tf
+          sed -i -E "s|(busola_web_image\s*=\s*\".*:)[^\"]+|\1${INPUT_NAME}|" dev/main.tf
 
       # Open a pull request to the dev branch with the updated image versions
       - name: Create Pull Request

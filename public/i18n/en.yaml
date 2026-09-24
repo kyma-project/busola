@@ -14,7 +14,7 @@ cluster-overview:
     cpu-requests: CPU requests
     cpu-requests-tooltip: The amount of CPU resources that Pods request in the cluster. It helps you understand the CPU resource requirements of your applications.
     cpu-usage: CPU Usage
-    cpu-usage-tooltip: It shows how much processing power is currently being used across all nodes in the Kubernetes cluster compared to the total available CPU capacity. It helps you understand overall cluster load and available compute resources.
+    cpu-usage-tooltip: Processing power currently being used across all nodes in the Kubernetes cluster compared to the total available CPU capacity. It helps you understand overall cluster load and available compute resources.
     daemonsets-overview: Daemon Sets Overview
     deployments-overview: Deployments Overview
     failing-deployments: Failing Deployments
@@ -28,7 +28,7 @@ cluster-overview:
     memory-requests: Memory requests
     memory-requests-tooltip: The amount of memory resources that Pods request in the cluster. It helps you understand the memory resource requirements of your applications.
     memory-usage: Memory Usage
-    memory-usage-tooltip: It shows how much memory is currently being used across all nodes in the Kubernetes cluster compared to the total available memory capacity. It helps you understand the overall cluster load and available memory resources.
+    memory-usage-tooltip: Memory currently being used across all nodes in the Kubernetes cluster compared to the total available memory capacity. It helps you understand the overall cluster load and available memory resources.
     modules-overview: Modules Overview
     nodes: Nodes
     nvidia-gpus: Nvidia GPUs
@@ -123,6 +123,8 @@ clusters:
     kubernetes-version: Kubernetes Version
     kyma-version: Kyma Version
     nat-gateway-ips: NAT Gateway IP Addresses
+    region: Worker Node Region
+    seed-region: Kubernetes Control Plane Region
     subaccount-id: Subaccount ID
     title-all-clusters: Clusters
     title-current-cluster: Cluster Overview
@@ -712,7 +714,6 @@ feedback:
   cloud-services-survey:
     info: Do you rely on hyperscaler services in your work? Help us decide what Cloud Manager should support next.
     title: What services do you need?
-  feedback: Feedback
   give-feedback: Give Feedback
   intro:
     info: Tell us what's on your mind.
@@ -1535,7 +1536,7 @@ terminal:
     unknown-error: Unknown error.
   name: Terminal
   status:
-    error: 'Error: {{error}}'
+    error: Terminal encountered unexpected error
     provisioning: Connecting…
     reconnecting: Reconnecting...
 upload-yaml:

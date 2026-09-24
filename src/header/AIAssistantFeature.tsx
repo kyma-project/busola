@@ -6,6 +6,7 @@ import { useLocation } from 'react-router';
 import { useAssistantAvailability } from 'components/KymaCompanion/hooks/useAssistantAvailability';
 import { showKymaCompanionAtom } from 'state/companion/showKymaCompanionAtom';
 import JouleChat from 'components/KymaCompanion/JouleChat';
+import { ShellBarAction } from './ShellBarAction';
 
 export function AIAssistantFeature() {
   const { t } = useTranslation();
@@ -27,12 +28,11 @@ export function AIAssistantFeature() {
 
   return (
     <>
-      <ToggleButton
-        accessibleName={t('kyma-companion.name')}
-        tooltip={t('kyma-companion.ask-joule')}
+      <ShellBarAction
+        id="ai-assistant"
         icon={showCompanion.show ? 'da-2' : 'da'}
-        pressed={showCompanion.show}
-        slot="assistant"
+        text={t('kyma-companion.ask-joule')}
+        title={t('kyma-companion.ask-joule')}
         onClick={(e) => {
           e.preventDefault();
           setShowCompanion((prevState) => ({
@@ -41,8 +41,14 @@ export function AIAssistantFeature() {
             fullScreen: false,
           }));
         }}
-      />
-      {showCompanion.useJoule && <JouleChat />}
+      >
+        <ToggleButton
+          accessibleName={t('kyma-companion.name')}
+          pressed={showCompanion.show}
+          slot="assistant"
+        />
+        {showCompanion.useJoule && <JouleChat />}
+      </ShellBarAction>
     </>
   );
 }
