@@ -101,13 +101,11 @@ Cypress.Commands.add('goToClusterOverview', () => {
 });
 
 Cypress.Commands.add('clearInput', { prevSubject: true }, (element) => {
+  const selectAll = Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a';
   return cy
     .wrap(element)
-
-    .type(
-      `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
-      { force: true },
-    );
+    .type(selectAll, { force: true })
+    .type('{backspace}', { force: true });
 });
 
 /**
