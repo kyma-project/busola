@@ -165,6 +165,21 @@ describe('CommunityModulesList', () => {
     expect(navigateMock).not.toHaveBeenCalled();
   });
 
+  it('gates community row details on a live CR instance (regression #10718)', () => {
+    renderList();
+    const hasRowDetails = genericListProps.current.hasRowDetails;
+    expect(typeof hasRowDetails).toBe('function');
+
+    // "Installed" means the operator is present, not that a CR instance exists.
+    // Without a live CR on the cluster the row must NOT expose details.
+    expect(hasRowDetails(installedModule)).toBe(false);
+
+    // Once a live CR instance is found, details become available.
+    expect(hasRowDetails({ ...installedModule, hasLiveResource: true })).toBe(
+      true,
+    );
+  });
+
   it('does not navigate or update state when hasDetailsLink is false', async () => {
     const { setOpenedModuleIndex } = renderList();
     const customRowClick = genericListProps.current.customRowClick;

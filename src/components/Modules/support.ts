@@ -194,6 +194,22 @@ export const findExtension = (resourceKind: string, extensions: any) => {
   });
 };
 
+// The detail renderer (useGetCRbyPath) resolves an extension by its
+// `general.urlPath`, falling back to pluralize(kind). Navigation must emit the
+// SAME identifier or the lookup misses and the CR pane stays empty even though
+// the resource exists (regression #10718). This returns that identifier for a
+// matched extension configmap.
+export const getExtensionUrlPath = (extension: any, kind?: string): string => {
+  const fallback = pluralize((kind || '').toLowerCase());
+  if (!extension?.data?.general) return fallback;
+  try {
+    const general = jsyaml.load(extension.data.general, { json: true }) as any;
+    return general?.urlPath || fallback;
+  } catch {
+    return fallback;
+  }
+};
+
 export const findModuleStatus = (
   kymaResource: KymaResourceType,
   moduleName: string,
@@ -313,13 +329,18 @@ export const createModulePartialPath = (
   },
   moduleCrd?: { metadata?: { name: string } },
   isNamespaced?: boolean,
+  extensionUrlPath?: string,
 ) => {
+  // Extension path segment must match useGetCRbyPath's key (urlPath), not the
+  // bare plural — see getExtensionUrlPath / regression #10718.
+  const extensionSegment =
+    extensionUrlPath ||
+    pluralize(moduleStatusResource?.kind || '').toLowerCase();
+
   // Taking info for path from extension or crd
   const pathName = `${
     hasExtension
-      ? `${pluralize(moduleStatusResource?.kind || '').toLowerCase()}/${
-          moduleStatusResource?.metadata?.name
-        }`
+      ? `${extensionSegment}/${moduleStatusResource?.metadata?.name}`
       : `${moduleCrd?.metadata?.name}/${moduleStatusResource?.metadata?.name}`
   }`;
 

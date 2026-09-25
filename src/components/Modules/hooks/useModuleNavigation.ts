@@ -12,6 +12,7 @@ import {
   findCrd,
   findExtension,
   findModuleTemplate,
+  getExtensionUrlPath,
   getResourceListPath,
   ModuleTemplateListType,
 } from 'components/Modules/support';
@@ -27,6 +28,7 @@ type ModuleEntry = {
   channel?: string;
   version?: string;
   resource?: ModuleResource;
+  hasLiveResource?: boolean;
   template?: {
     apiVersion?: string;
     metadata?: { name: string; namespace?: string };
@@ -43,6 +45,10 @@ type UseModuleNavigationOptions = {
   installedModules: { name: string }[];
   setOpenedModuleIndex: (index: number) => void;
   setSelectedEntry?: (name: string) => void;
+  // When true, a row is only clickable if its module state is positive
+  // (used to block managed modules during intermediate/installing states).
+  // Community module entries carry no state field, so they opt out.
+  checkModuleState?: boolean;
 };
 
 const checkIfStateIsPositive = (state: string) => {
@@ -68,6 +74,7 @@ export function useModuleNavigation({
   installedModules,
   setOpenedModuleIndex,
   setSelectedEntry,
+  checkModuleState = true,
 }: UseModuleNavigationOptions) {
   const navigate = useNavigate();
   const { clusterUrl, namespaceUrl } = useUrl();
@@ -88,10 +95,18 @@ export function useModuleNavigation({
       )?.spec?.data?.kind ??
       '';
 
-    return (
-      (!!findExtension(kind, extensions) || !!findCrd(kind, crds)) &&
-      checkIfStateIsPositive(resource.state)
-    );
+    const hasRenderer =
+      !!findExtension(kind, extensions) || !!findCrd(kind, crds);
+    if (!hasRenderer) return false;
+
+    // Managed modules gate details on the module's reported state (blocks
+    // intermediate/installing states). Community modules carry no state — an
+    // "installed" operator does not imply a CR instance exists — so they gate
+    // on whether a live CR instance was actually found on the cluster
+    // (regression #10718).
+    return checkModuleState
+      ? checkIfStateIsPositive(resource.state)
+      : resource.hasLiveResource === true;
   };
 
   const customColumnLayout = (resource: ModuleEntry) => {
@@ -109,6 +124,10 @@ export function useModuleNavigation({
     moduleStatus: ModuleEntry,
   ) => {
     if (!moduleStatus) return;
+
+    // Cheap early-out: a community row already known to lack a live CR must
+    // never navigate (regression #10718).
+    if (!checkModuleState && moduleStatus.hasLiveResource === false) return;
 
     let resource: ModuleResource;
 
@@ -141,9 +160,16 @@ export function useModuleNavigation({
     }
 
     const kind = resource.kind;
-    const hasExtension = !!findExtension(kind, extensions);
+    const matchedExtension = findExtension(kind, extensions);
+    const hasExtension = !!matchedExtension;
     const moduleCrd = findCrd(kind, crds);
     if (!hasExtension && !moduleCrd) return;
+
+    // Renderer resolves the extension by urlPath; nav must emit the same
+    // identifier so the CR pane opens (regression #10718).
+    const extensionUrlPath = hasExtension
+      ? getExtensionUrlPath(matchedExtension, kind)
+      : undefined;
 
     const { group, version } = extractApiGroupVersion(resource.apiVersion);
 
@@ -154,35 +180,44 @@ export function useModuleNavigation({
       return;
     }
 
-    setOpenedModuleIndex(
-      installedModules.findIndex((entry) => entry.name === moduleName),
-    );
-    setSelectedEntry?.(moduleName);
-
     if (isNamespaced && !resource.metadata.namespace) {
       resource.metadata.namespace = DEFAULT_K8S_NAMESPACE;
     }
 
     const listPath = getResourceListPath(resource);
+    let liveResource: any;
     try {
       const response = await fetch({ relativeUrl: listPath });
       const list = await response.json();
-      const liveResource = list?.items?.[0];
-      if (liveResource) {
-        resource.metadata.name =
-          liveResource.metadata?.name ?? resource.metadata.name;
-        resource.metadata.namespace =
-          liveResource.metadata?.namespace ?? resource.metadata.namespace;
-      }
+      liveResource = list?.items?.[0];
     } catch {
-      // best-effort enrichment — continue with template metadata
+      // best-effort enrichment — continue with template metadata (managed)
+      liveResource = undefined;
     }
+
+    // Authoritative gate for community modules: if the CR instance is not on
+    // the cluster, do not navigate to an empty detail pane (regression #10718).
+    // Managed modules keep their prior best-effort behaviour.
+    if (!checkModuleState && !liveResource) return;
+
+    if (liveResource) {
+      resource.metadata.name =
+        liveResource.metadata?.name ?? resource.metadata.name;
+      resource.metadata.namespace =
+        liveResource.metadata?.namespace ?? resource.metadata.namespace;
+    }
+
+    setOpenedModuleIndex(
+      installedModules.findIndex((entry) => entry.name === moduleName),
+    );
+    setSelectedEntry?.(moduleName);
 
     const partialPath = createModulePartialPath(
       hasExtension,
       resource,
       moduleCrd,
       isNamespaced,
+      extensionUrlPath,
     );
 
     const path = namespaced
@@ -193,7 +228,7 @@ export function useModuleNavigation({
       startColumn: prev.startColumn,
       midColumn: {
         resourceType: hasExtension
-          ? pluralize(kind).toLowerCase()
+          ? extensionUrlPath
           : moduleCrd?.metadata?.name,
         rawResourceTypeName: kind,
         resourceName: resource.metadata.name,
