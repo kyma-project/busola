@@ -10,6 +10,19 @@ export function chooseComboboxOption(selector, optionText, force = false) {
     .click()
     .type(optionText);
 
+  // Fast typing sometimes gets partly overwritten, leaving a wrong value in the field.
+  // If that happened, set the value directly instead.
+  // TODO: remove once https://github.com/UI5/webcomponents/issues/14097 is fixed.
+  cy.get(`ui5-combobox${selector}`)
+    .find('input')
+    .then(($input) => {
+      if (!$input.val().startsWith(optionText)) {
+        const input = $input[0];
+        input.value = optionText;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
+
   cy.get('ui5-cb-item:visible').contains(optionText).click({ force: force });
 }
 
