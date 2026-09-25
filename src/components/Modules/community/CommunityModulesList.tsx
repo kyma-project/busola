@@ -17,6 +17,10 @@ import { getUpdateTemplate } from './communityModulesHelpers';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 import { UpdateAllModulesButton } from '../components/moduleUpdate/UpdateAllModulesButton/UpdateAllModulesButton';
 import { useModuleNavigation } from 'components/Modules/hooks/useModuleNavigation';
+import {
+  COMMUNITY_MODULES_POLLING_INTERVAL,
+  useModulesLiveResources,
+} from 'components/Modules/hooks';
 import { useModuleCrdsAndExtensions } from 'components/Modules/hooks/useModuleCrdsAndExtensions';
 import { useShowAddModule } from 'components/Modules/hooks/useShowAddModule';
 
@@ -76,9 +80,22 @@ export const CommunityModulesList = ({
       installedModules,
       setOpenedModuleIndex,
       setSelectedEntry,
+      // Community module entries have no top-level `state` field; keeping the
+      // positive-state gate would make every row non-interactive.
+      checkModuleState: false,
     });
 
   const handleShowAddModule = useShowAddModule(resourceUrl, 'community');
+
+  // A community module is "installed" once its operator is present, but details
+  // may only open when a live CR instance actually exists on the cluster
+  // (regression #10718). Probe each installed module's CR and expose the result
+  // to the navigation gate below via `hasLiveResource`.
+  const liveResourceNames = useModulesLiveResources(
+    installedModules,
+    modulesLoading,
+    COMMUNITY_MODULES_POLLING_INTERVAL,
+  );
 
   const { modulesDuringUpload } = useContext(
     CommunityModulesInstallationContext,
@@ -101,7 +118,12 @@ export const CommunityModulesList = ({
   }
 
   const modulesToDisplay = useMemo(() => {
-    const uniqueInstalled = dedupeByModuleManager(installedModules);
+    const uniqueInstalled = dedupeByModuleManager(installedModules).map(
+      (module) => ({
+        ...module,
+        hasLiveResource: liveResourceNames.has(module.name),
+      }),
+    );
 
     const modulesDuringProcessing = modulesDuringUpload.filter((m) => {
       return !uniqueInstalled.find(
@@ -119,7 +141,7 @@ export const CommunityModulesList = ({
       .map((m) => createFakeModuleTemplateWithStatus(m));
 
     return [...uniqueInstalled, ...moduleTemplatesDuringUpload];
-  }, [installedModules, modulesDuringUpload]);
+  }, [installedModules, modulesDuringUpload, liveResourceNames]);
 
   const headerRenderer = () => [
     t('common.headers.name'),

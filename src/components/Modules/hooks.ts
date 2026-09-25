@@ -24,6 +24,7 @@ import {
 import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { usePopulateWithNamespace } from 'hooks/usePopulateWithNamespace';
 import { useTranslation } from 'react-i18next';
 
 export function useModuleStatus(resource: KymaResourceType) {
@@ -184,7 +185,7 @@ export const useFetchModuleData = (
   return { loading, error, data, getItem };
 };
 
-const COMMUNITY_MODULES_POLLING_INTERVAL = 5000; // 5 seconds
+export const COMMUNITY_MODULES_POLLING_INTERVAL = 5000; // 5 seconds
 
 export const useGetInstalledNotInstalledModules = (
   moduleTemplates: ModuleTemplateListType,
@@ -346,6 +347,85 @@ export const useGetModuleResource = (resource: any) => {
   }, [listPath]);
 
   return { data, loading, error };
+};
+
+// Community modules are "installed" when their operator/manager is present, but
+// that does NOT mean a CR instance of the module exists on the cluster. Details
+// can only open for a module whose live CR instance is actually there (regression
+// #10718: test-module / cloud-active-defense-operator / community-module have no
+// instance and must not expose details, while registry-proxy — a real CR in
+// Warning state — must). This probes every installed module's CR the same way
+// the Module State column does (useGetModuleResource) and returns the set of
+// module names that resolve to a live instance.
+export const useModulesLiveResources = (
+  installedModules: { name: string; resource?: any }[],
+  loading?: boolean,
+  pollingInterval?: number,
+): Set<string> => {
+  const fetch = useFetch();
+  const populateWithNamespace = usePopulateWithNamespace();
+  const [liveNames, setLiveNames] = useState<Set<string>>(new Set());
+
+  // Stable dependency: re-probe only when the set of modules (by name + CR
+  // identity) actually changes, not on every render's new array reference.
+  const modulesKey = JSON.stringify(
+    (installedModules ?? []).map((module) => ({
+      name: module?.name,
+      kind: module?.resource?.kind,
+      apiVersion: module?.resource?.apiVersion,
+      resourceName: module?.resource?.metadata?.name,
+      namespace: module?.resource?.metadata?.namespace,
+    })),
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function checkLiveResources() {
+      if (loading || !installedModules?.length) {
+        if (!cancelled) setLiveNames(new Set());
+        return;
+      }
+
+      const found = new Set<string>();
+      await Promise.all(
+        installedModules.map(async (module) => {
+          const resource = module?.resource;
+          if (!resource || !module?.name) return;
+          try {
+            const populated = await populateWithNamespace(resource);
+            // populateWithNamespace returns false when scope can't be resolved
+            // (e.g. the CRD is gone) — treat that as "no live resource".
+            if (populated === false) return;
+            const listPath = getResourceListPath(populated);
+            const response = await fetch({ relativeUrl: listPath });
+            const list = await response.json();
+            if (list?.items?.[0]) found.add(module.name);
+          } catch {
+            // Any failure ⇒ no live resource. The row simply won't expose
+            // details, which is the safe default for #10718.
+          }
+        }),
+      );
+
+      if (!cancelled) setLiveNames(found);
+    }
+
+    checkLiveResources();
+
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+    if (pollingInterval) {
+      intervalId = setInterval(checkLiveResources, pollingInterval);
+    }
+
+    return () => {
+      cancelled = true;
+      if (intervalId) clearInterval(intervalId);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modulesKey, loading, pollingInterval]);
+
+  return liveNames;
 };
 
 export function useGetAllSourceYAMLModuleTemplates(sourceURLs: string[]) {
