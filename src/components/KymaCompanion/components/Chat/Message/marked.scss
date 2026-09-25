@@ -1,26 +1,13 @@
 .markdown {
-  /* Theming */
-  .light {
-    --panel-background: #ebebeb;
-    --panel-text: #333;
-    --formatted-text: #000;
-    --link: #004bfa;
-    --border: #777;
-    --code: rgba(255, 255, 255, 0.8);
-    --table: var(--code);
-    --table-header: rgba(128, 128, 128, 0.2);
-  }
-
-  .dark {
-    --panel-background: #252525;
-    --panel-text: #ccc;
-    --formatted-text: #fff;
-    --link: #7b9ff2;
-    --border: #777;
-    --code: rgba(0, 0, 0, 0.3);
-    --table: var(--code);
-    --table-header: #000;
-  }
+  /* Theming — SAP semantic variables adapt automatically to all supported themes */
+  --panel-background: var(--sapNeutralBackground);
+  --panel-text: var(--sapTextColor);
+  --formatted-text: var(--sapTextColor);
+  --link: var(--sapLinkColor);
+  --border: var(--sapNeutralBorderColor);
+  --code: color-mix(in srgb, var(--sapBaseColor) 80%, transparent);
+  --table: var(--code);
+  --table-header: color-mix(in srgb, var(--sapNeutralColor) 20%, transparent);
 
   /* Headings */
   h1,

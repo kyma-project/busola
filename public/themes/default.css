@@ -4,3 +4,8 @@ html,
 #root {
   height: 100%;
 }
+
+:root {
+  --busola-terminal-background: #252525;
+  --busola-terminal-text: var(--sapContent_ContrastTextColor);
+}

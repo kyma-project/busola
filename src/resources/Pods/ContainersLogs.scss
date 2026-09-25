@@ -22,11 +22,11 @@
 }
 
 .logs {
-  color: white;
+  color: var(--busola-terminal-text);
   padding-left: 15px;
   font-family: 'Consolas', monospace;
   font-size: 12px;
-  background-color: #252525;
+  background-color: var(--busola-terminal-background);
 }
 
 .logs-highlighted {
