@@ -2,6 +2,8 @@
 
 // Also column layout test
 
+import { chooseComboboxOption } from '../../support/helpers';
+
 const random = Math.floor(Math.random() * 9999) + 1000;
 const CRB_NAME = `test-###-crb-${random}`;
 const USER_NAME = 'test@kyma.eu';
@@ -32,15 +34,10 @@ context('Test Cluster Role Bindings', () => {
       .type(USER_NAME)
       .blur({ force: true });
 
-    cy.get(
-      'ui5-combobox[placeholder="Start typing to select ClusterRole from the list"]',
-    )
-      .find('input')
-      .should('not.be.disabled')
-      .click()
-      .type('admin');
-
-    cy.get('ui5-cb-item:visible').contains('cluster-admin').click();
+    chooseComboboxOption(
+      '[placeholder="Start typing to select ClusterRole from the list"]',
+      'cluster-admin',
+    );
 
     cy.saveChanges('Create');
   });

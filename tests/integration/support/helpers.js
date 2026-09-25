@@ -8,14 +8,11 @@ export function chooseComboboxOption(selector, optionText, force = false) {
     .find('input')
     .should('not.be.disabled')
     .click()
-    .type(optionText);
-
-  // Fast typing sometimes gets partly overwritten, leaving a wrong value in the field.
-  // If that happened, set the value directly instead.
-  // TODO: remove once https://github.com/UI5/webcomponents/issues/14097 is fixed.
-  cy.get(`ui5-combobox${selector}`)
-    .find('input')
+    .type(optionText)
     .then(($input) => {
+      // Fast typing sometimes gets partly overwritten, leaving a wrong value in the field.
+      // If that happened, set the value directly instead.
+      // TODO: remove once https://github.com/UI5/webcomponents/issues/14097 is fixed.
       if (!$input.val().startsWith(optionText)) {
         const input = $input[0];
         input.value = optionText;
