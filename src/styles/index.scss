@@ -41,6 +41,11 @@ ui5-combobox {
   width: 100%;
 }
 
+.namespace-combobox-icon {
+  order: -1;
+  margin-inline-start: 0.25rem;
+}
+
 ui5-checkbox {
   -webkit-appearance: checkbox;
   appearance: checkbox;
@@ -121,15 +126,6 @@ ui5-tabcontainer::part(content) {
   ui5-icon {
     align-self: center;
   }
-}
-
-.combobox-with-dimension-icon {
-  @include input-icon(
-    url(data:image/svg+xml;base64,PHN2ZyBjbGFzcz0idWk1LWljb24tcm9vdCIgcGFydD0icm9vdCIgZm9jdXNhYmxlPSJmYWxzZSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQgbWVldCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgcm9sZT0icHJlc2VudGF0aW9uIiBhcmlhLWhpZGRlbj0idHJ1ZSI+PHBhdGggZD0iTTIxOCA1MTJxLTExIDAtMTguNS03LjVUMTkyIDQ4NlYyNzFxMC05IDYtMTZ0MTUtOWwyNjgtNTRoNXExMSAwIDE4LjUgNy41VDUxMiAyMTh2MjE1cTAgOS02IDE2dC0xNSA5bC0yNjggNTRoLTV6bTI1LTIyMHYxNjNsMjE4LTQzVjI0OXpNMTIyIDQxNnEtMTEgMC0xOC41LTcuNVQ5NiAzOTBWMTc1cTAtOSA2LTE2dDE1LTlsMjY4LTU0aDVxMTEgMCAxOC41IDcuNVQ0MTYgMTIycTAgMjAtMjEgMjVsLTI0OCA0OXYxOTRxMCAxMS03IDE4LjV0LTE4IDcuNXptLTk2LTk2cS0xMSAwLTE4LjUtNy41VDAgMjk0Vjc5cTAtOSA2LTE2dDE1LTlMMjg5IDBoNXExMSAwIDE4LjUgNy41VDMyMCAyNnEwIDIwLTIxIDI1TDUxIDEwMHYxOTRxMCAxMS03IDE4LjVUMjYgMzIweiI+PC9wYXRoPjwvc3ZnPg==),
-    27px,
-    10px,
-    15px
-  );
 }
 
 .has-tooltip {
