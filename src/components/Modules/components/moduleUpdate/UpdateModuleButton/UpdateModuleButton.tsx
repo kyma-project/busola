@@ -131,12 +131,25 @@ export const UpdateModuleButton = ({
       content: t('modules.community.messages.module-update-started'),
     });
 
-    await deleteOldTemplates();
+    try {
+      await deleteOldTemplates();
 
-    const templateMap = new Map<string, ModuleTemplateType>();
-    templateMap.set(moduleName, moduleTpl);
-    await fetchResourcesToApply(templateMap, setResourcesToApply, postRequest);
-    setPendingUpdate(true);
+      const templateMap = new Map<string, ModuleTemplateType>();
+      templateMap.set(moduleName, moduleTpl);
+      await fetchResourcesToApply(
+        templateMap,
+        setResourcesToApply,
+        postRequest,
+      );
+      setPendingUpdate(true);
+    } catch (e) {
+      notification.notifyError({
+        content: t('modules.community.messages.install-failure', {
+          resourceType: moduleName,
+          error: e instanceof Error ? e.message : '',
+        }),
+      });
+    }
   };
 
   return (
