@@ -25,6 +25,13 @@
   }
 }
 
+.last-row-with-border {
+  ui5-table-row:last-of-type {
+    border-radius: 0 0 var(--_ui5_panel_border_radius)
+      var(--_ui5_panel_border_radius);
+  }
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
