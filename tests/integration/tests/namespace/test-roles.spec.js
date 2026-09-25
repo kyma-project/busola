@@ -42,12 +42,12 @@ context('Test Roles', () => {
     );
 
     chooseComboboxOption(
-      '[placeholder^="Start typing to select Verbs"]:visible',
+      '[placeholder^="Start typing to select Verbs"][value=""]:visible',
       'get',
     );
 
     chooseComboboxOption(
-      '[placeholder^="Start typing to select Verbs"]:visible',
+      '[placeholder^="Start typing to select Verbs"][value=""]:visible',
       'create',
     );
 
