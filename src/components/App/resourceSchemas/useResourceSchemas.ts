@@ -85,14 +85,16 @@ export const useResourceSchemas = () => {
   ]);
 
   useEffect(() => {
-    const isOngoingClusterChange =
-      !currentCluster || !activeClusterName || !authData;
+    const isNavigatingAway = !currentCluster || !activeClusterName;
 
-    if (isOngoingClusterChange) {
+    if (isNavigatingAway) {
       setSchemasState({ areSchemasComputed: false, schemasError: null });
       setLastFetched(null);
       return;
     }
+
+    // authData is briefly null during a token refresh, skip so we don't re-resolve the whole OpenAPI
+    if (!authData) return;
 
     // authData updates a few times during cluster load. The below line cancels repeated requests after the first fetch
     if (lastFetched === activeClusterName) return;

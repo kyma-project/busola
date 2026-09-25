@@ -26,12 +26,26 @@ async function proxyHandler(req, res) {
       return res.status(403).send('Request Forbidden');
     }
 
+    const ALLOWED_REQUEST_HEADERS = new Set([
+      'accept',
+      'accept-encoding',
+      'accept-language',
+      'content-type',
+      'content-length',
+    ]);
+    const forwardedHeaders = { host: parsedUrl.host };
+    for (const [key, value] of Object.entries(req.headers)) {
+      if (ALLOWED_REQUEST_HEADERS.has(key.toLowerCase())) {
+        forwardedHeaders[key] = value;
+      }
+    }
+
     const options = {
       hostname: parsedUrl.hostname,
       port: parsedUrl.port || 443,
       path: parsedUrl.pathname + parsedUrl.search,
       method: req.method,
-      headers: { ...req.headers, host: parsedUrl.host },
+      headers: forwardedHeaders,
       timeout: 30000,
       agent: proxyAgent,
       lookup: resolveOrBlockPrivateIpAddress,
