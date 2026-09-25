@@ -8,6 +8,7 @@ import { useJsonata } from '../hooks/useJsonata';
 
 import { Button, Icon, Link, ToolbarButton } from '@ui5/webcomponents-react';
 import { isNil } from 'lodash';
+import { sanitizeUrl } from 'shared/helpers/sanitizeUrl';
 
 const makeHref = ({ linkObject, value }: { linkObject: any; value: any }) => {
   const [link, linkError] = linkObject;
@@ -20,7 +21,7 @@ const makeHref = ({ linkObject, value }: { linkObject: any; value: any }) => {
         ? value
         : `https://${value}`;
   }
-  return link || href;
+  return sanitizeUrl(link || href);
 };
 
 interface ExternalLinkProps {
