@@ -63,6 +63,11 @@ jobs:
           node-version: 24
       - name: Setup Busola
         shell: bash
+        env:
+          # Build with source maps only for the loop-probe campaign (same gate as
+          # LOOP_PROBE below) so the captured minified stacks translate back to app
+          # source. REVERT the `|| github.head_ref == 'improve-ci'` clause before merging.
+          BUSOLA_SOURCEMAP: ${{ (inputs.loop_probe || github.head_ref == 'improve-ci') && '1' || '' }}
         run: |
           .github/scripts/setup_local_busola.sh | tee busola.log
       - name: Install custom component example
@@ -117,4 +122,13 @@ jobs:
           name: busola-logs-${{ github.job }}
           path: |
             busola.log
+          retention-days: 30
+      - name: Upload source maps (loop-probe only)
+        uses: actions/upload-artifact@v7
+        if: ${{ always() }}
+        with:
+          name: busola-sourcemaps-${{ github.job }}
+          path: |
+            backend/core-ui/assets/*.js.map
+          if-no-files-found: ignore
           retention-days: 30

@@ -13,6 +13,11 @@ import { glob } from 'glob';
 export default defineConfig({
   build: {
     outDir: 'build',
+    // Emit source maps only for the edit-cluster OOM loop-probe build (env-gated),
+    // so the captured minified stacks can be translated back to app source. Normal
+    // builds leave this false and are byte-for-byte unchanged. (Vite ignores the
+    // legacy CRA `GENERATE_SOURCEMAP` env var; `build.sourcemap` is the real knob.)
+    sourcemap: process.env.BUSOLA_SOURCEMAP ? true : false,
   },
   server: {
     port: 8080,
