@@ -21,6 +21,12 @@ on:
       trigger_env:
         type: string
         required: false
+  workflow_dispatch:
+    inputs:
+      loop_probe:
+        description: 'Enable the edit-cluster OOM loop diagnostic probe (CDP profiling + in-page probe + Chrome memory sampler). Leave off for normal runs.'
+        type: boolean
+        default: false
 
 concurrency:
   group: pull-integration-cluster-k3d-${{ github.workflow_ref }}-${{ github.event.pull_request.number || github.ref }}
@@ -35,7 +41,7 @@ jobs:
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Merge with latest main
@@ -57,6 +63,11 @@ jobs:
           node-version: 24
       - name: Setup Busola
         shell: bash
+        env:
+          # Build with source maps only for the loop-probe campaign (same gate as
+          # LOOP_PROBE below) so the captured minified stacks translate back to app
+          # source. REVERT the `|| github.head_ref == 'improve-ci'` clause before merging.
+          BUSOLA_SOURCEMAP: ${{ (inputs.loop_probe || github.head_ref == 'improve-ci') && '1' || '' }}
         run: |
           .github/scripts/setup_local_busola.sh | tee busola.log
       - name: Install custom component example
@@ -72,23 +83,52 @@ jobs:
           kubectl apply -f tests/integration/fixtures/sap-loggging-config-map.yaml
       - name: Run tests
         shell: bash
+        env:
+          # Probe is on for workflow_dispatch (loop_probe=true) OR any pull_request from
+          # the improve-ci diagnostic branch (temporary campaign enablement — REVERT this
+          # `|| github.head_ref == 'improve-ci'` clause before merging). Every other PR and
+          # merge_group run leaves the probe off.
+          LOOP_PROBE: ${{ (inputs.loop_probe || github.head_ref == 'improve-ci') && '1' || '' }}
         run: |
           k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
-          export CYPRESS_DOMAIN=http://localhost:3001          
+          export CYPRESS_DOMAIN=http://localhost:3001
           cd tests/integration
-          npm ci && npm run "test:cluster"
+          npm ci
+          SAMPLER_PID=""
+          if [ -n "$LOOP_PROBE" ]; then
+            echo "loop-probe ENABLED: starting Chrome memory sampler + CYPRESS_LOOP_PROBE"
+            mkdir -p cypress/loop-probe
+            export CYPRESS_LOOP_PROBE=1
+            bash ../../.github/scripts/sample-chrome-mem.sh cypress/loop-probe/chrome-mem.csv 1 &
+            SAMPLER_PID=$!
+          fi
+          set +e
+          npm run "test:cluster"
+          rc=$?
+          set -e
+          if [ -n "$SAMPLER_PID" ]; then kill "$SAMPLER_PID" 2>/dev/null || true; fi
+          exit $rc
       - name: Uploads artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
           name: cypress-${{ github.job }}
           path: tests/integration/cypress/
-          retention-days: 90
+          retention-days: 30
       - name: Upload Busola logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
           name: busola-logs-${{ github.job }}
           path: |
             busola.log
-          retention-days: 90
+          retention-days: 30
+      - name: Upload source maps (loop-probe only)
+        uses: actions/upload-artifact@v7
+        if: ${{ always() }}
+        with:
+          name: busola-sourcemaps-${{ github.job }}
+          path: |
+            backend/core-ui/assets/*.js.map
+          if-no-files-found: ignore
+          retention-days: 30

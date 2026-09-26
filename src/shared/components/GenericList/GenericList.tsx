@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty, isEqual } from 'lodash';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAtom, useAtomValue } from 'jotai';
@@ -250,7 +250,8 @@ export const GenericList = ({
         searchQuery,
         searchSettings?.textSearchProperties,
       );
-      setFilteredEntries(filtered);
+      // keep the reference stable when unchanged so polling refreshes don't re-render the search input
+      setFilteredEntries((prev) => (isEqual(prev, filtered) ? prev : filtered));
     };
     getFilteredEntries();
     // eslint-disable-next-line react-hooks/exhaustive-deps

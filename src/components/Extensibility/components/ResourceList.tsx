@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { Suspense } from 'react';
+import { Suspense, useContext } from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
@@ -13,6 +13,7 @@ import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { extensionsAtom } from 'state/navigation/extensionsAtom';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
+import { DataSourcesContext } from '../contexts/DataSources';
 
 const ExtensibilityList = lazyWithRetries(() => import('../ExtensibilityList'));
 
@@ -63,6 +64,18 @@ export function ResourceList({
     scope: value,
     arrayItems,
   });
+
+  // the list only holds a snapshot of its data source (skipDataLoading), so a
+  // delete has to poke that source to refetch - otherwise the row lingers until
+  // the next poll tick
+  const { getRelatedResourceInPath, refetchDataSource } =
+    useContext(DataSourcesContext);
+  const dataSourceName = structure?.source
+    ? getRelatedResourceInPath(structure.source)
+    : undefined;
+  const afterDelete = dataSourceName
+    ? () => refetchDataSource(dataSourceName)
+    : undefined;
 
   const extensibilityResourceSchema = extensions?.find(
     (cR: any) => cR.general?.resource?.kind === kind,
@@ -146,6 +159,7 @@ export function ResourceList({
         }}
         {...structure}
         {...props}
+        afterDelete={afterDelete}
       />
     </Suspense>
   );

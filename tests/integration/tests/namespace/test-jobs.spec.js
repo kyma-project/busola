@@ -162,14 +162,12 @@ context('Test Jobs', () => {
     // edit labels
     cy.get('.edit-form').contains('Labels').click();
 
-    cy.get('[placeholder="Enter key"]:visible')
+    cy.get('ui5-input[placeholder="Enter key"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .type('a', { force: true });
 
-    cy.get('[placeholder="Enter value"]:visible')
+    cy.get('ui5-input[placeholder="Enter value"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .first()
       .click()
       .type('b', { force: true });

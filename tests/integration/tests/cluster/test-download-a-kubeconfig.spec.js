@@ -28,7 +28,7 @@ context('Test Download a Kubeconfig', () => {
 
         cy.get('[data-testid=downloadkubeconfig]').click({ force: true });
 
-        cy.readFile(filepath).should('exist');
+        cy.readFile(filepath, { timeout: 30000 }).should('exist');
         cy.task('removeFile', filepath);
       });
   });

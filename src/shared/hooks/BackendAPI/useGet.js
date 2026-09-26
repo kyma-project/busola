@@ -132,23 +132,30 @@ const useGetHook = (processDataFn) =>
       }
     }, []);
 
+    // Keep the freshest polling action (latest `refetch` closure + latest
+    // committed `data`) in a ref, refreshed after every commit. The interval
+    // effect below reads it through the ref, so it no longer needs `refetch` or
+    // `data` in its deps. Previously `refetch` (a new identity every render,
+    // because `useFetch()` returns a fresh fn) and `data` (changes on every
+    // poll) churned clearInterval/setInterval on every render and every poll —
+    // the runaway that OOMed the cluster overview renderer.
+    const savedPollCallback = useRef(null);
     useEffect(() => {
-      const receivedForbidden = error?.code === 403;
+      savedPollCallback.current = () => refetch(true, data)();
+    });
 
+    const receivedForbidden = error?.code === 403;
+
+    useEffect(() => {
       cleanupPolling();
       // POLLING
       if (!pollingInterval || receivedForbidden || shouldSkip) return;
-      intervalIdRef.current = setInterval(refetch(true, data), pollingInterval);
+      intervalIdRef.current = setInterval(
+        () => savedPollCallback.current?.(),
+        pollingInterval,
+      );
       return cleanupPolling;
-    }, [
-      path,
-      pollingInterval,
-      data,
-      error,
-      shouldSkip,
-      refetch,
-      cleanupPolling,
-    ]);
+    }, [path, pollingInterval, receivedForbidden, shouldSkip, cleanupPolling]);
 
     useEffect(() => {
       // INITIAL FETCH on path being set/changed
@@ -401,6 +408,7 @@ function handleSingleDataReceived(
   newData,
   oldData,
   setDataFn,
+  lastResourceVersionRef, // unused for single GET; present to match the shared processDataFn call signature
   compareEntireResource,
 ) {
   if (

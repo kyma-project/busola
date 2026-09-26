@@ -59,8 +59,8 @@ export const AddSourceYamls = () => {
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
-  const [templatesNamespace, setTemplatesNamespace] = useState<string>(
-    DEFAULT_K8S_NAMESPACE,
+  const [selectedNamespace, setSelectedNamespace] = useState<string | null>(
+    null,
   );
   const [showDescription, setShowDescription] = useState(false);
 
@@ -95,21 +95,13 @@ export const AddSourceYamls = () => {
     resourcesToApply,
     setResourcesToApply,
     setLastOperationState,
-    templatesNamespace,
+    selectedNamespace ?? DEFAULT_K8S_NAMESPACE,
   );
 
+  // Just record the choice; the effect below re-applies it on every run so a
+  // ModuleTemplates refresh can't revert it to the YAML's namespace.
   const applyNamespace = (namespace: string) => {
-    const namespacedResources = resourcesToApply.map((resource) => ({
-      ...resource,
-      value: {
-        ...resource.value,
-        metadata: { ...resource.value.metadata, namespace: namespace },
-      },
-    }));
-
-    setTemplatesNamespace(namespace);
-
-    setResourcesToApply(namespacedResources);
+    setSelectedNamespace(namespace || null);
   };
 
   useEffect(() => {
@@ -130,23 +122,34 @@ export const AddSourceYamls = () => {
   }, [lastOperationState]);
 
   useEffect(() => {
-    if (existingModuleTemplates.length > 0) {
-      setResourcesToApply(
-        fetchedResources.filter(
-          (resource: any) =>
-            !existingModuleTemplates.some(
-              (mt: any) =>
-                mt.metadata.name === resource.value.metadata.name &&
-                mt.spec.version === resource.value.spec.version,
-            ),
-        ),
-      );
+    const withSelectedNamespace = (resource: any) =>
+      selectedNamespace
+        ? {
+            ...resource,
+            value: {
+              ...resource.value,
+              metadata: {
+                ...resource.value.metadata,
+                namespace: selectedNamespace,
+              },
+            },
+          }
+        : resource;
 
-      return;
-    }
+    const templatesToApply =
+      existingModuleTemplates.length > 0
+        ? fetchedResources.filter(
+            (resource: any) =>
+              !existingModuleTemplates.some(
+                (mt: any) =>
+                  mt.metadata.name === resource.value.metadata.name &&
+                  mt.spec.version === resource.value.spec.version,
+              ),
+          )
+        : fetchedResources;
 
-    setResourcesToApply(fetchedResources);
-  }, [fetchedResources, existingModuleTemplates]);
+    setResourcesToApply(templatesToApply.map(withSelectedNamespace));
+  }, [fetchedResources, existingModuleTemplates, selectedNamespace]);
 
   const handleApplySourceYAMLs = async () => {
     if (error) {

@@ -61,10 +61,6 @@ Cypress.Commands.add('clickListLink', (resourceName) => {
     .click();
 });
 
-Cypress.Commands.add('filterWithNoValue', { prevSubject: true }, ($elements) =>
-  $elements.filter((_, e) => !e.value),
-);
-
 Cypress.Commands.add('goToNamespaceDetails', (namespace) => {
   const name = namespace ?? Cypress.env('NAMESPACE_NAME');
 
@@ -105,13 +101,11 @@ Cypress.Commands.add('goToClusterOverview', () => {
 });
 
 Cypress.Commands.add('clearInput', { prevSubject: true }, (element) => {
+  const selectAll = Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a';
   return cy
     .wrap(element)
-
-    .type(
-      `${Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'} {backspace}`,
-      { force: true },
-    );
+    .type(selectAll, { force: true })
+    .type('{backspace}', { force: true });
 });
 
 /**
@@ -190,7 +184,11 @@ Cypress.Commands.add(
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains(/set for deletion/).should('be.visible');
+    // the toast fades after ~3s but keeps its text; match the message, not visibility
+    cy.get('ui5-toast[accessible-name="notification-content"]').should(
+      'contain.text',
+      'set for deletion',
+    );
 
     cy.getMidColumn().should('not.be.visible');
   },
@@ -266,7 +264,11 @@ Cypress.Commands.add(
         .click();
 
       if (deletedVisible) {
-        cy.contains('ui5-toast', /set for deletion/).should('be.visible');
+        // the toast fades after ~3s but keeps its text; match the message, not visibility
+        cy.get('ui5-toast[accessible-name="notification-content"]').should(
+          'contain.text',
+          'set for deletion',
+        );
       }
 
       if (checkIfResourceIsRemoved) {
@@ -375,7 +377,8 @@ Cypress.Commands.add('typeInSearch', (searchPhrase, force = false) => {
   const searchInput = () =>
     cy.get('ui5-input[id^=search-]:visible').find('input');
 
-  searchInput().should('be.visible').should('not.be.disabled').clear({ force });
+  searchInput().should('be.visible').should('not.be.disabled');
+  searchInput().clear({ force });
   searchInput().type(searchPhrase, { force });
 });
 

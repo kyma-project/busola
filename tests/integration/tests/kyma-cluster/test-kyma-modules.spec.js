@@ -6,8 +6,6 @@ context('Test Kyma Modules views', () => {
   });
 
   it('Test Modules Overview card', () => {
-    cy.wait(2000);
-
     cy.get('ui5-card').contains('Modules Overview').should('be.visible');
 
     cy.contains('ui5-card', 'Installed Modules')
@@ -17,16 +15,15 @@ context('Test Kyma Modules views', () => {
     cy.get('ui5-card').contains('Modify Modules').click();
 
     cy.url().should('match', /.*\/kymamodules/);
+    cy.get('ui5-dynamic-page.kyma-modules')
+      .find('ui5-dynamic-page-title')
+      .should('be.visible');
   });
 
   it('Check if edit is empty', () => {
-    cy.wait(1000);
-
     cy.inspectTab('Edit');
 
     cy.contains('No modules installed').should('be.visible');
-
-    cy.wait(1000);
 
     cy.inspectTab('View');
   });
@@ -43,8 +40,6 @@ context('Test Kyma Modules views', () => {
       .contains('ui5-button', 'Add')
       .click();
 
-    cy.wait(1000);
-
     cy.get('ui5-title').contains('Add Modules').should('be.visible');
 
     cy.get('ui5-card').contains('Documentation').should('be.visible');
@@ -60,23 +55,22 @@ context('Test Kyma Modules views', () => {
       .should('not.be.disabled')
       .click();
 
-    cy.wait(7000);
+    cy.get('ui5-panel[data-testid="kyma-modules-list"]')
+      .find('ui5-table-row')
+      .contains('api-gateway')
+      .should('be.visible');
 
     // Check if already installed module is not visible
     cy.get('ui5-panel[data-testid="kyma-modules-list"]')
       .contains('ui5-button', 'Add')
       .click();
 
-    cy.wait(1000);
+    cy.get('ui5-card').contains('eventing').should('be.visible');
 
     cy.get('ui5-card').contains('api-gateway').should('not.exist');
 
-    cy.get('ui5-card').contains('eventing').should('be.visible');
-
     // Add second module
     cy.get('ui5-title').contains('eventing').click();
-
-    cy.wait(1000);
 
     cy.get('[data-testid="create-form-footer-bar"]')
       .contains('ui5-button:visible', 'Add')
@@ -118,12 +112,10 @@ context('Test Kyma Modules views', () => {
   });
 
   it('Test Modules list and details', () => {
-    cy.wait(1000);
-
     cy.get('.modules-list')
       .find('ui5-input[id^=search-]:visible')
       .find('input')
-      .wait(1000)
+      .should('not.be.disabled')
       .type('api-gateway');
 
     cy.get('ui5-table-row').contains('api-gateway').should('be.visible');
@@ -148,7 +140,11 @@ context('Test Kyma Modules views', () => {
 
     cy.get('ui5-button:visible').contains('Save').click();
 
-    cy.get('ui5-toast').contains('Kyma updated').should('be.visible');
+    // the toast fades after ~3s but keeps its text; match the message, not visibility
+    cy.get('ui5-toast[accessible-name="notification-content"]').should(
+      'contain.text',
+      'Kyma updated',
+    );
 
     cy.inspectTab('View');
   });
@@ -233,13 +229,9 @@ context('Test Kyma Modules views', () => {
   it('Test changing Module Channel', () => {
     cy.inspectTab('Edit');
 
-    cy.wait(1000);
-
     cy.contains('ui5-label', 'eventing').should('be.visible');
 
     cy.contains('ui5-label', 'eventing').parent().find('ui5-select').click();
-
-    cy.wait(500);
 
     cy.get('ui5-option:visible')
       .contains(/^Fast .*/)
@@ -253,7 +245,10 @@ context('Test Kyma Modules views', () => {
 
     cy.get('ui5-button').contains('Change').click();
 
-    cy.contains('Modules updated').should('be.visible');
+    // PATCH can lag on CI; assert existence, the toast fades after ~3s
+    cy.contains('ui5-toast', 'Modules updated', { timeout: 30000 }).should(
+      'exist',
+    );
 
     cy.inspectTab('View');
 
@@ -271,8 +266,6 @@ context('Test Kyma Modules views', () => {
   it('Test changing Module Channel to Predefined', () => {
     cy.inspectTab('Edit');
 
-    cy.wait(1000);
-
     cy.contains('ui5-label', 'eventing').should('be.visible');
 
     cy.contains('ui5-label', 'eventing').parent().find('ui5-select').click();
@@ -289,7 +282,10 @@ context('Test Kyma Modules views', () => {
 
     cy.get('ui5-button').contains('Change').click();
 
-    cy.contains('Modules updated').should('be.visible');
+    // PATCH can lag on CI; assert existence, the toast fades after ~3s
+    cy.contains('ui5-toast', 'Modules updated', { timeout: 30000 }).should(
+      'exist',
+    );
 
     cy.inspectTab('View');
 
@@ -301,7 +297,7 @@ context('Test Kyma Modules views', () => {
     );
   });
 
-  it('Test deleting Modules from List and Details', { retries: 3 }, () => {
+  it('Test deleting Modules from List and Details', () => {
     cy.deleteFromGenericList('Module', 'eventing', {
       searchInPlainTableText: true,
       parentSelector: '.modules-list',
