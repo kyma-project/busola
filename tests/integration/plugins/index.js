@@ -1,4 +1,46 @@
 const fs = require('fs');
+const http = require('http');
+const path = require('path');
+
+// ---------------------------------------------------------------------------
+// edit-cluster OOM loop diagnostic probe (see support/loop-probe.js).
+// All of this is inert unless CYPRESS_LOOP_PROBE=1 is set for the run.
+// Everything is written under cypress/loop-probe/ so the existing always()
+// artifact upload of tests/integration/cypress/ carries it out of CI.
+// ---------------------------------------------------------------------------
+const LOOP_PROBE_ON = !!process.env.CYPRESS_LOOP_PROBE;
+const PROBE_DIR = path.resolve(__dirname, '..', 'cypress', 'loop-probe');
+
+function appendLine(file, line) {
+  fs.appendFileSync(path.join(PROBE_DIR, file), line + '\n');
+}
+
+// A tiny HTTP sink that receives navigator.sendBeacon() snapshots from the page
+// and appends them to disk immediately — the one channel that survives both the
+// main-thread peg and a hard renderer crash.
+function startProbeSink() {
+  fs.mkdirSync(PROBE_DIR, { recursive: true });
+  const server = http.createServer((req, res) => {
+    if (req.method !== 'POST') {
+      res.writeHead(204).end();
+      return;
+    }
+    const chunks = [];
+    req.on('data', (c) => chunks.push(c));
+    req.on('end', () => {
+      try {
+        appendLine('inpage.jsonl', Buffer.concat(chunks).toString('utf8'));
+      } catch (e) {
+        /* ignore sink write errors */
+      }
+      // permissive CORS so the beacon is never blocked; response is ignored anyway
+      res.writeHead(204, { 'Access-Control-Allow-Origin': '*' }).end();
+    });
+  });
+  server.listen(0, '127.0.0.1');
+  const { port } = server.address();
+  return `http://127.0.0.1:${port}/probe`;
+}
 
 // Continuum fetches this catalog from the browser during every spec's setUp. On CI that
 // call is often slow enough to time out, so we fetch it once here and replay it per spec.
@@ -61,6 +103,12 @@ module.exports = (on, config) => {
   config.env.IS_PR = process.env.IS_PR;
   config.env.AMP_REPORT_NAME = reportName;
 
+  if (LOOP_PROBE_ON) {
+    // hand the page the sink URL so the in-page probe can beacon snapshots to disk
+    config.env.LOOP_PROBE = '1';
+    config.env.LOOP_PROBE_SINK = startProbeSink();
+  }
+
   on('task', {
     removeFile(filePath) {
       fs.unlinkSync(filePath);
@@ -84,6 +132,22 @@ module.exports = (on, config) => {
         bestPracticeCatalogPromise = fetchBestPracticeCatalog();
       }
       return bestPracticeCatalogPromise;
+    },
+    // --- loop-probe disk sinks (driven from the probe spec) ---
+    // Append a JSONL line (CDP metric samples, live-hold snapshots, marks).
+    probeAppend({ file, line }) {
+      fs.mkdirSync(PROBE_DIR, { recursive: true });
+      appendLine(file, line);
+      return null;
+    },
+    // Write a CPU/heap profile checkpoint returned by CDP Profiler/HeapProfiler.
+    probeWriteProfile({ name, data }) {
+      fs.mkdirSync(PROBE_DIR, { recursive: true });
+      fs.writeFileSync(
+        path.join(PROBE_DIR, name),
+        typeof data === 'string' ? data : JSON.stringify(data),
+      );
+      return null;
     },
   });
   return config;

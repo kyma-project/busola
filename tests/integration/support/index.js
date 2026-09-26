@@ -14,5 +14,6 @@ import '../continuum/cypress';
 import './check-extension';
 import './navigate-back-to';
 import './helpers';
+import './loop-probe'; // self-gated: no-op unless Cypress.env('LOOP_PROBE') is set
 
 require('cypress-plugin-tab');

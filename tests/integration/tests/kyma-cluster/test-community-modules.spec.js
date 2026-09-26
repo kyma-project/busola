@@ -132,11 +132,15 @@ context('Test Community Modules views', () => {
   });
 
   it('Test Community Modules list', () => {
-    cy.get('.community-modules-list')
-      .find('ui5-input[id^=search-]:visible')
-      .find('input')
-      .should('not.be.disabled')
-      .type('busola');
+    // re-query between the gate and the type — the polling list can re-render and detach the input in between
+    const searchInput = () =>
+      cy
+        .get('.community-modules-list')
+        .find('ui5-input[id^=search-]:visible')
+        .find('input');
+
+    searchInput().should('not.be.disabled');
+    searchInput().type('busola');
 
     cy.get('.community-modules-list')
       .find('ui5-table-row')
