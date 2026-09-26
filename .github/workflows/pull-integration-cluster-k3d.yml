@@ -79,9 +79,11 @@ jobs:
       - name: Run tests
         shell: bash
         env:
-          # only set when the diagnostic build is triggered via workflow_dispatch;
-          # empty (probe off) for all normal pull_request / merge_group runs
-          LOOP_PROBE: ${{ inputs.loop_probe && '1' || '' }}
+          # Probe is on for workflow_dispatch (loop_probe=true) OR any pull_request from
+          # the improve-ci diagnostic branch (temporary campaign enablement — REVERT this
+          # `|| github.head_ref == 'improve-ci'` clause before merging). Every other PR and
+          # merge_group run leaves the probe off.
+          LOOP_PROBE: ${{ (inputs.loop_probe || github.head_ref == 'improve-ci') && '1' || '' }}
         run: |
           k3d kubeconfig get k3dCluster > tests/integration/fixtures/kubeconfig.yaml
           export CYPRESS_DOMAIN=http://localhost:3001
