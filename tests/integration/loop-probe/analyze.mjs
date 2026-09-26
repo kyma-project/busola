@@ -44,23 +44,54 @@ if (mem) {
     .split('\n')
     .slice(1)
     .filter(Boolean)
-    .map((l) => l.split(','));
-  const renderers = rows.filter((r) => r[3] === 'renderer');
-  let peak = { rss: 0 };
-  let peggedSamples = 0;
-  for (const r of renderers) {
-    const rss = Number(r[5]);
-    const cpu = Number(r[6]);
-    if (rss > peak.rss) peak = { rss, cpu, ts: Number(r[1]) };
-    if (cpu > 100) peggedSamples++;
+    .map((l) => l.split(','))
+    .map((r) => ({
+      ts: Number(r[1]),
+      pid: r[2],
+      ptype: r[3],
+      vsz: Number(r[4]),
+      rss: Number(r[5]),
+      cpu: Number(r[6]),
+    }));
+
+  // Per-pid accounting so we can find the hottest process even if the ps-based
+  // --type=renderer label is missing (the RSS ratchet is the ground truth, not
+  // the label). GPU/browser processes stay flat, so max-peak-RSS picks the AUT
+  // renderer regardless of how it was tagged.
+  const byPid = new Map();
+  for (const r of rows) {
+    let a = byPid.get(r.pid);
+    if (!a) {
+      a = { pid: r.pid, ptype: r.ptype, peakRss: 0, pegged: 0, samples: 0 };
+      byPid.set(r.pid, a);
+    }
+    a.samples++;
+    if (r.rss > a.peakRss) {
+      a.peakRss = r.rss;
+      a.peakCpu = r.cpu;
+      a.peakTs = r.ts;
+    }
+    if (r.cpu > 100) a.pegged++;
   }
+  const procs = [...byPid.values()];
+  const labeledRenderers = procs.filter((p) => p.ptype === 'renderer');
+  // hottest process overall (fallback when labeling failed)
+  const hot = procs.sort((a, b) => b.peakRss - a.peakRss)[0] || { peakRss: 0, pegged: 0 };
+  // prefer a labeled renderer if one actually exists, else the hottest process
+  const subject =
+    labeledRenderers.sort((a, b) => b.peakRss - a.peakRss)[0] || hot;
+
   console.log('== OS memory sampler ==');
-  console.log(`  renderer samples: ${renderers.length}`);
-  console.log(`  peak renderer RSS: ${peak.rss} MB (cpu ${peak.cpu} at that sample)`);
-  console.log(`  samples with cpu>100% (pegged core): ${peggedSamples}`);
+  console.log(`  chrome processes seen: ${procs.length} (labeled renderer: ${labeledRenderers.length})`);
+  console.log(
+    `  hottest process: pid ${subject.pid} type=${subject.ptype} ` +
+      `peak RSS ${subject.peakRss} MB (cpu ${subject.peakCpu} at peak), ` +
+      `pegged(cpu>100%) samples: ${subject.pegged}`,
+  );
+  const runaway = subject.peakRss > 2000 && subject.pegged > 5;
   console.log(
     `  => signature: ${
-      peak.rss > 2000 && peggedSamples > 5
+      runaway
         ? 'RUNAWAY LOOP (climbing RSS + pegged CPU)'
         : 'inconclusive / did not reproduce'
     }\n`,

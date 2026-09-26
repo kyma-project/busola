@@ -37,9 +37,16 @@ function startProbeSink() {
       res.writeHead(204, { 'Access-Control-Allow-Origin': '*' }).end();
     });
   });
-  server.listen(0, '127.0.0.1');
-  const { port } = server.address();
-  return `http://127.0.0.1:${port}/probe`;
+  // listen() is async — the ephemeral port isn't assigned until the 'listening'
+  // event fires, so resolve the sink URL from inside the callback (reading
+  // server.address() synchronously after listen() returns null and throws).
+  return new Promise((resolve, reject) => {
+    server.once('error', reject);
+    server.listen(0, '127.0.0.1', () => {
+      const { port } = server.address();
+      resolve(`http://127.0.0.1:${port}/probe`);
+    });
+  });
 }
 
 // Continuum fetches this catalog from the browser during every spec's setUp. On CI that
@@ -72,7 +79,7 @@ async function fetchBestPracticeCatalog() {
   }
 }
 
-module.exports = (on, config) => {
+module.exports = async (on, config) => {
   let namespaceName = process.env.NAMESPACE_NAME || null;
   // generate random namespace name if it wasn't provided as env
   const random = Math.floor(Math.random() * 9999) + 1000;
@@ -106,7 +113,7 @@ module.exports = (on, config) => {
   if (LOOP_PROBE_ON) {
     // hand the page the sink URL so the in-page probe can beacon snapshots to disk
     config.env.LOOP_PROBE = '1';
-    config.env.LOOP_PROBE_SINK = startProbeSink();
+    config.env.LOOP_PROBE_SINK = await startProbeSink();
   }
 
   on('task', {
