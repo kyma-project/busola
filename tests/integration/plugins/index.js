@@ -1,6 +1,7 @@
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
+const { captureHeapSnapshot } = require('./heap-snapshot');
 
 // ---------------------------------------------------------------------------
 // edit-cluster OOM loop diagnostic probe (see support/loop-probe.js).
@@ -10,6 +11,9 @@ const path = require('path');
 // ---------------------------------------------------------------------------
 const LOOP_PROBE_ON = !!process.env.CYPRESS_LOOP_PROBE;
 const PROBE_DIR = path.resolve(__dirname, '..', 'cypress', 'loop-probe');
+// Chrome's per-run profile dir, captured in before:browser:launch; the heap-snapshot
+// task reads DevToolsActivePort from it to find the CDP endpoint.
+let probeChromeUserDataDir = null;
 
 function appendLine(file, line) {
   fs.appendFileSync(path.join(PROBE_DIR, file), line + '\n');
@@ -114,6 +118,17 @@ module.exports = async (on, config) => {
     // hand the page the sink URL so the in-page probe can beacon snapshots to disk
     config.env.LOOP_PROBE = '1';
     config.env.LOOP_PROBE_SINK = await startProbeSink();
+
+    // Capture Chrome's per-run profile dir so the heap-snapshot task can read
+    // DevToolsActivePort from it (see plugins/heap-snapshot.js). Chrome+Cypress
+    // always set --user-data-dir and enable remote debugging.
+    on('before:browser:launch', (browser, launchOptions) => {
+      const arg = (launchOptions.args || []).find((a) =>
+        a.startsWith('--user-data-dir='),
+      );
+      if (arg) probeChromeUserDataDir = arg.split('=')[1];
+      return launchOptions;
+    });
   }
 
   on('task', {
@@ -155,6 +170,36 @@ module.exports = async (on, config) => {
         typeof data === 'string' ? data : JSON.stringify(data),
       );
       return null;
+    },
+    // Capture a full heap snapshot over an independent CDP WebSocket (see
+    // plugins/heap-snapshot.js) — this is the one artifact that reveals RETAINER
+    // chains for the detached DOM, which the sampling .heapprofile cannot. Written
+    // gzipped to cypress/loop-probe/<name>.gz. Never throws; returns an {ok,...}
+    // result the spec logs. Call it with an extended per-command timeout, e.g.
+    // cy.task('probeHeapSnapshot', { name }, { timeout: 180000 }).
+    async probeHeapSnapshot({ name }) {
+      const snapName = name || `heap-${Date.now()}.heapsnapshot`;
+      let result;
+      try {
+        result = await captureHeapSnapshot({
+          userDataDir: probeChromeUserDataDir,
+          name: snapName,
+          outDir: PROBE_DIR,
+          timeoutMs: 170000,
+        });
+      } catch (e) {
+        result = { ok: false, reason: String(e) };
+      }
+      try {
+        fs.mkdirSync(PROBE_DIR, { recursive: true });
+        appendLine(
+          'heapsnapshot-log.jsonl',
+          JSON.stringify({ ts: Date.now(), name: snapName, ...result }),
+        );
+      } catch {
+        /* ignore log write errors */
+      }
+      return result;
     },
   });
   return config;

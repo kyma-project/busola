@@ -100,6 +100,29 @@ const snapshotInPage = (tag) =>
     }
   });
 
+// Pull a full heap snapshot over the Node-side CDP WebSocket (plugins/heap-snapshot.js).
+// This is the artifact that names the RETAINER holding the detached DOM (the sampling
+// .heapprofile only shows allocation sites). taskTimeout is 10s globally, so override
+// it — a snapshot of the AUT heap takes tens of seconds. Best-effort: the task never
+// throws, and we log the {ok,...} outcome to live-hold.jsonl for correlation.
+const heapSnapshot = (tag) =>
+  cy
+    .task(
+      'probeHeapSnapshot',
+      { name: `heap-${tag}.heapsnapshot` },
+      { timeout: 180000 },
+    )
+    .then((res) =>
+      cy.task('probeAppend', {
+        file: 'live-hold.jsonl',
+        line: JSON.stringify({
+          tag: `heapsnapshot-${tag}`,
+          ts: Date.now(),
+          res,
+        }),
+      }),
+    );
+
 // One rename cycle mirroring tests/cluster/test-edit-cluster.spec.js.
 const editCycle = (i) => {
   cy.visit(`${config.clusterAddress}/clusters`);
@@ -223,6 +246,11 @@ const editCycle = (i) => {
   });
 
   it('holds and observes while the loop ratchets', () => {
+    // Right after the amplifier: detached UI5 subtrees from the repeated navigation
+    // are abundant but the renderer is still alive — the ideal moment to snapshot
+    // the retainer chain. (Runs even if the amplifier test flaked on navigation.)
+    heapSnapshot('holdstart');
+
     const holdStep = (n) => {
       if (n <= 0) return;
       cy.wait(HOLD_INTERVAL_MS);
@@ -233,6 +261,10 @@ const editCycle = (i) => {
           dumpCpuCheckpoint();
           dumpHeapCheckpoint(false);
         }
+        // a second retainer snapshot mid-hold, once more DOM has ratcheted
+        if (HOLD_SAMPLES - n === 40) {
+          heapSnapshot('hold-mid');
+        }
         if (usedMB && usedMB >= HEAP_ABORT_MB) {
           cy.task('probeAppend', {
             file: 'live-hold.jsonl',
@@ -240,6 +272,7 @@ const editCycle = (i) => {
           });
           dumpCpuCheckpoint();
           dumpHeapCheckpoint(false);
+          heapSnapshot('heap-abort');
           return; // stop holding; we've captured the ratchet near the cap
         }
         holdStep(n - 1);
