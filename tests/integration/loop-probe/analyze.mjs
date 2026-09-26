@@ -141,6 +141,40 @@ if (snaps.length) {
   console.log('');
 }
 
+// ---- DOM-growth attribution: which window ballooned, and where -----------------
+// Counters reset per window, so group by windowId and pick the window whose DOM
+// grew largest — that is the crash window. Its top container + tag name the leak.
+if (snaps.length) {
+  const byWin = new Map();
+  for (const s of snaps) {
+    const id = s.windowId || 'unknown';
+    const total = s.domGrowth?.total || 0;
+    const cur = byWin.get(id);
+    if (!cur || total > cur.peakTotal) {
+      byWin.set(id, { id, peakTotal: total, url: s.url, snap: s });
+    }
+  }
+  const wins = [...byWin.values()].sort((a, b) => b.peakTotal - a.peakTotal);
+  if (wins.length && wins[0].peakTotal) {
+    console.log('== DOM-growth attribution (per-window peak node count) ==');
+    for (const w of wins.slice(0, 6)) {
+      console.log(`  window ${w.id}: peak ${w.peakTotal} nodes  ${w.url}`);
+    }
+    const top = wins[0].snap.domGrowth;
+    console.log(`\n  >> crash-suspect window ${wins[0].id} (${wins[0].peakTotal} nodes) <<`);
+    if (top?.topTags?.length) {
+      console.log('  proliferating tags:');
+      for (const { k, v } of top.topTags.slice(0, 12)) console.log(`    ${String(v).padStart(6)}  ${k}`);
+    }
+    if (top?.topContainers?.length) {
+      console.log('  largest containers (childElementCount  selector):');
+      for (const c of top.topContainers)
+        console.log(`    ${String(c.childElementCount).padStart(6)}  ${c.sel}`);
+    }
+    console.log('');
+  }
+}
+
 // ---- profile files present? ---------------------------------------------------
 const profiles = fs
   .readdirSync(dir)

@@ -26,6 +26,7 @@ const DESC = 'loop-probe amplifier description';
 const TEMP_NAME = 'loop-probe-tmp';
 const AMPLIFIER_ITERATIONS = Number(Cypress.env('LOOP_PROBE_ITERATIONS')) || 25;
 const HOLD_SAMPLES = Number(Cypress.env('LOOP_PROBE_HOLD_SAMPLES')) || 180; // ~6 min @2s
+const IDLE_SAMPLES = Number(Cypress.env('LOOP_PROBE_IDLE_SAMPLES')) || 60; // ~2 min @2s
 const HOLD_INTERVAL_MS = 2000;
 const HEAP_ABORT_MB = 3400; // near Chrome's ~3.8GB per-renderer cap
 const CHECKPOINT_EVERY = 5; // dump a CPU/heap profile chunk every N amplifier iterations
@@ -166,6 +167,47 @@ const editCycle = (i) => {
     );
     cy.then(() => cdpSafe('Performance.enable'));
     sampleMetrics('armed');
+  });
+
+  it('idle-holds on a freshly opened edit-cluster (single-page fidelity)', () => {
+    // Open the edit-cluster form ONCE and then sit idle — no navigation, no typing.
+    // This reproduces the ORIGINAL signature (page loads, left alone, RSS ratchets)
+    // on a single window, and captures DOM attribution + a Cypress-uncontaminated
+    // CPU profile before the amplifier introduces any command/actionability churn.
+    cy.visit(`${config.clusterAddress}/clusters`);
+    cy.get('ui5-button[data-testid="edit"]', { timeout: 20000 }).click();
+    cy.get('ui5-input[data-testid="cluster-name"]', { timeout: 20000 })
+      .find('input')
+      .should('be.visible');
+    // fresh CPU profile so this idle window's loop is isolated from arm/amplifier
+    dumpCpuCheckpoint();
+
+    const idleStep = (n) => {
+      if (n <= 0) return;
+      cy.wait(HOLD_INTERVAL_MS);
+      snapshotInPage(`idle-${IDLE_SAMPLES - n}`);
+      sampleMetrics(`idle-${IDLE_SAMPLES - n}`).then((usedMB) => {
+        if (n % 15 === 0) {
+          dumpCpuCheckpoint();
+          dumpHeapCheckpoint(false);
+        }
+        if (usedMB && usedMB >= HEAP_ABORT_MB) {
+          cy.task('probeAppend', {
+            file: 'live-hold.jsonl',
+            line: JSON.stringify({
+              tag: 'idle-heap-abort',
+              usedMB,
+              ts: Date.now(),
+            }),
+          });
+          dumpCpuCheckpoint();
+          dumpHeapCheckpoint(false);
+          return;
+        }
+        idleStep(n - 1);
+      });
+    };
+    cy.then(() => idleStep(IDLE_SAMPLES));
   });
 
   it('amplifies the edit-cluster rename flow', () => {

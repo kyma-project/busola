@@ -37,6 +37,10 @@ function install(win) {
 
   const state = {
     startedAt: Date.now(),
+    // unique per AUT window — the probe's counters reset on every page load, so
+    // every beacon/snapshot is stamped with this so the analyzer can group by
+    // window and isolate the one that actually crashed.
+    windowId: Math.random().toString(36).slice(2, 10),
     // React commit accounting
     commits: 0,
     lastCommitTs: Date.now(),
@@ -79,14 +83,16 @@ function install(win) {
     obj[key]++;
   };
 
-  // Grab a compact call-site signature (skip our own patch frame).
+  // Grab a compact call-site signature (skip our own patch frame). We keep a deep
+  // slice: for observers created inside UI5's connectedCallback the nearest frames
+  // are all UI5-internal, so the app-side caller only appears further up the stack.
   const callsite = (category) => {
     let frames = '';
     try {
       const stack = new Error().stack || '';
       frames = stack
         .split('\n')
-        .slice(3, 8) // skip Error + our wrapper frames
+        .slice(3, 22) // skip Error + our wrapper frames; keep deep enough for app frames
         .map((l) => l.trim())
         .join(' <- ');
     } catch (e) {
@@ -119,6 +125,7 @@ function install(win) {
         kind: 'snapshot',
         reason,
         ts: now,
+        windowId: state.windowId,
         sinceStartMs: now - state.startedAt,
         url: win.location?.href,
         // edit-modal / edit-form markers so we can prove the edit-cluster tie
@@ -136,6 +143,7 @@ function install(win) {
         topComponents: topN(state.componentHist, 20),
         console: topN(state.consoleHist, 20),
         perfMemory: readMem(),
+        domGrowth: domGrowth(),
       };
       const body = JSON.stringify(payload);
       // sendBeacon dispatches off the main thread and survives navigation/crash better
@@ -169,6 +177,57 @@ function install(win) {
         usedMB: Math.round(m.usedJSHeapSize / 1048576),
         totalMB: Math.round(m.totalJSHeapSize / 1048576),
         limitMB: Math.round(m.jsHeapSizeLimit / 1048576),
+      };
+    } catch (e) {
+      return null;
+    }
+  };
+
+  // A compact, reasonably-stable CSS-ish path (up to 4 ancestors) so a growing
+  // container can be mapped back to the component that renders it.
+  const selectorFor = (el) => {
+    const part = (e) => {
+      let s = e.tagName ? e.tagName.toLowerCase() : '?';
+      if (e.id) s += '#' + e.id;
+      else if (e.classList && e.classList.length)
+        s += '.' + Array.prototype.slice.call(e.classList, 0, 2).join('.');
+      return s;
+    };
+    const chain = [];
+    let e = el;
+    let depth = 0;
+    while (e && e.nodeType === 1 && depth < 4) {
+      chain.unshift(part(e));
+      e = e.parentElement;
+      depth++;
+    }
+    return chain.join('>');
+  };
+
+  // Structural attribution of the DOM ratchet — minification-proof, unlike JS
+  // stacks: names WHICH container's child count balloons and WHICH tag proliferates.
+  const domGrowth = () => {
+    try {
+      const doc = win.document;
+      if (!doc) return null;
+      const all = doc.getElementsByTagName('*');
+      const N = all.length;
+      const tagHist = Object.create(null);
+      const containers = [];
+      for (let i = 0; i < N; i++) {
+        const el = all[i];
+        const t = el.tagName;
+        tagHist[t] = (tagHist[t] || 0) + 1;
+        const c = el.childElementCount;
+        if (c > 30) containers.push([el, c]);
+      }
+      containers.sort((a, b) => b[1] - a[1]);
+      return {
+        total: N,
+        topTags: topN(tagHist, 20),
+        topContainers: containers
+          .slice(0, 15)
+          .map(([el, c]) => ({ sel: selectorFor(el), childElementCount: c })),
       };
     } catch (e) {
       return null;
@@ -431,6 +490,7 @@ function install(win) {
   // expose a spec-callable snapshot for the live-hold poll
   win.__loopProbe.snapshot = () => ({
     ts: Date.now(),
+    windowId: state.windowId,
     sinceStartMs: Date.now() - state.startedAt,
     url: win.location?.href,
     commits: state.commits,
@@ -443,6 +503,7 @@ function install(win) {
     topComponents: topN(state.componentHist, 20),
     console: topN(state.consoleHist, 20),
     perfMemory: readMem(),
+    domGrowth: domGrowth(),
   });
   win.__loopProbe.flush = flush;
 }
