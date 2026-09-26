@@ -30,6 +30,10 @@ const IDLE_SAMPLES = Number(Cypress.env('LOOP_PROBE_IDLE_SAMPLES')) || 60; // ~2
 const HOLD_INTERVAL_MS = 2000;
 const HEAP_ABORT_MB = 3400; // near Chrome's ~3.8GB per-renderer cap
 const CHECKPOINT_EVERY = 5; // dump a CPU/heap profile chunk every N amplifier iterations
+// Amplifier iterations at which to pull a full heap snapshot. 1 and 2 are insurance
+// (the renderer has crashed as early as ~iteration 3); 5 and 10 are richer captures if
+// it survives longer. A snapshot even at amp-1 already shows the detached-DOM retainer.
+const AMP_SNAPSHOT_AT = [1, 2, 5, 10];
 
 // Thin wrapper around Cypress's CDP channel. Resolves with the CDP result object.
 const cdp = (command, params = {}) =>
@@ -238,6 +242,17 @@ const editCycle = (i) => {
       editCycle(i);
       sampleMetrics(`amp-${i}`);
       snapshotInPage(`amp-${i}`);
+      // Capture full heap snapshots EARLY, from inside the amplifier itself. The renderer
+      // crashes mid-amplifier — observed as early as ~iteration 3 (the detached-DOM ratchet
+      // OOMs native memory; Performance.getMetrics `Nodes` only counts ATTACHED nodes so it
+      // looks deceptively low right up to the crash). A snapshot deferred to a later test
+      // (the hold phase) is therefore unreliable — that test may never run. Cypress enqueues
+      // every command up front and runs them serially, so a capture enqueued at a low
+      // iteration executes before the crash-inducing later cycles: the early ones always
+      // land, the later ones are richer if the renderer survives that far.
+      if (AMP_SNAPSHOT_AT.includes(i)) {
+        heapSnapshot(`amp-${i}`);
+      }
       if (i > 0 && i % CHECKPOINT_EVERY === 0) {
         dumpCpuCheckpoint();
         dumpHeapCheckpoint(false);
@@ -246,9 +261,9 @@ const editCycle = (i) => {
   });
 
   it('holds and observes while the loop ratchets', () => {
-    // Right after the amplifier: detached UI5 subtrees from the repeated navigation
-    // are abundant but the renderer is still alive — the ideal moment to snapshot
-    // the retainer chain. (Runs even if the amplifier test flaked on navigation.)
+    // Bonus retainer snapshots if the amplifier survived all iterations without crashing.
+    // The authoritative captures are the in-amplifier ones above (this test often never
+    // runs — the renderer usually crashes during the amplifier).
     heapSnapshot('holdstart');
 
     const holdStep = (n) => {
