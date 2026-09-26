@@ -9,10 +9,11 @@
 // means no extra npm dependency.
 //
 // PORT DISCOVERY without fighting Cypress: Cypress owns its own CDP connection to the
-// Chrome it launches, but Chrome allows multiple CDP clients per target. Chrome writes
-// the active DevTools port to `<user-data-dir>/DevToolsActivePort` whenever remote
-// debugging is enabled (it always is for Cypress+Chrome), so we read the port from
-// there rather than trying to override Cypress's launch flags.
+// Chrome it launches, but Chrome allows multiple CDP clients per target. Cypress passes
+// `--remote-debugging-port=<port>` right in the Chrome launch args (verified empirically
+// on Cypress 15 — it uses a TCP port, not `--remote-debugging-pipe`, and does NOT pass
+// `--user-data-dir`). So `before:browser:launch` reads the port straight from the args
+// and hands it here. `<user-data-dir>/DevToolsActivePort` is kept only as a fallback.
 //
 // The result is gzipped (.heapsnapshot.gz) because a snapshot of ~500MB JS heap +
 // ~200k DOM wrappers is large but compresses ~10x. Gunzip before loading into Chrome
@@ -58,14 +59,17 @@ async function pickPageTarget(port) {
 
 // Capture one heap snapshot to <outDir>/<name>.gz. Never throws — resolves with an
 // {ok, ...} result object the caller logs, so a capture failure never fails the run.
+// `port` (from Cypress's --remote-debugging-port arg) is preferred; `userDataDir` is a
+// fallback that reads the DevToolsActivePort file.
 async function captureHeapSnapshot({
+  port: portArg,
   userDataDir,
   name,
   outDir,
   timeoutMs = 180000,
 }) {
-  const port = readDevToolsPort(userDataDir);
-  if (!port) return { ok: false, reason: 'no DevToolsActivePort', userDataDir };
+  const port = portArg || readDevToolsPort(userDataDir);
+  if (!port) return { ok: false, reason: 'no CDP port', portArg, userDataDir };
 
   let targetInfo;
   try {

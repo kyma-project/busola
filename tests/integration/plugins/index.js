@@ -11,9 +11,10 @@ const { captureHeapSnapshot } = require('./heap-snapshot');
 // ---------------------------------------------------------------------------
 const LOOP_PROBE_ON = !!process.env.CYPRESS_LOOP_PROBE;
 const PROBE_DIR = path.resolve(__dirname, '..', 'cypress', 'loop-probe');
-// Chrome's per-run profile dir, captured in before:browser:launch; the heap-snapshot
-// task reads DevToolsActivePort from it to find the CDP endpoint.
-let probeChromeUserDataDir = null;
+// Chrome's CDP debugging port, captured in before:browser:launch from the
+// --remote-debugging-port launch arg; the heap-snapshot task connects to it to pull a
+// full snapshot over an independent WebSocket (see plugins/heap-snapshot.js).
+let probeChromeDebugPort = null;
 
 function appendLine(file, line) {
   fs.appendFileSync(path.join(PROBE_DIR, file), line + '\n');
@@ -119,14 +120,14 @@ module.exports = async (on, config) => {
     config.env.LOOP_PROBE = '1';
     config.env.LOOP_PROBE_SINK = await startProbeSink();
 
-    // Capture Chrome's per-run profile dir so the heap-snapshot task can read
-    // DevToolsActivePort from it (see plugins/heap-snapshot.js). Chrome+Cypress
-    // always set --user-data-dir and enable remote debugging.
+    // Capture Chrome's CDP debugging port so the heap-snapshot task can connect to it
+    // (see plugins/heap-snapshot.js). Cypress+Chrome always pass --remote-debugging-port
+    // with a real TCP port (verified on Cypress 15); it does NOT pass --user-data-dir.
     on('before:browser:launch', (browser, launchOptions) => {
       const arg = (launchOptions.args || []).find((a) =>
-        a.startsWith('--user-data-dir='),
+        a.startsWith('--remote-debugging-port='),
       );
-      if (arg) probeChromeUserDataDir = arg.split('=')[1];
+      if (arg) probeChromeDebugPort = Number(arg.split('=')[1]);
       return launchOptions;
     });
   }
@@ -182,7 +183,7 @@ module.exports = async (on, config) => {
       let result;
       try {
         result = await captureHeapSnapshot({
-          userDataDir: probeChromeUserDataDir,
+          port: probeChromeDebugPort,
           name: snapName,
           outDir: PROBE_DIR,
           timeoutMs: 170000,
