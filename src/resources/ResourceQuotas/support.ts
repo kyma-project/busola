@@ -142,12 +142,12 @@ export const mapUsagesToChartsData = (podsMetrics?: UsageMetrics[]) => {
     {
       headerTitle: 'cluster-overview.statistics.memory-usage',
       tooltipInfo: 'cluster-overview.statistics.memory-usage-tooltip',
-      value: bytesToHumanReadable(memory.usage).value,
-      max: bytesToHumanReadable(memory.capacity).value,
+      value: bytesToHumanReadable(memory.usage, { unit: 'Gi' }).value,
+      max: bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).value,
       color: 'var(--sapChart_OrderedColor_6)',
-      additionalInfo: `${bytesToHumanReadable(memory.usage).string} / ${
-        bytesToHumanReadable(memory.capacity).string
-      }`,
+      additionalInfo: `${
+        bytesToHumanReadable(memory.usage, { unit: 'Gi' }).string
+      } / ${bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).string}`,
     },
   ];
 };
