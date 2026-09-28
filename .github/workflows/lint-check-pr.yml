@@ -18,12 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Merge with latest main
         if: inputs.trigger_env != 'release-trigger'
         uses: ./.github/actions/merge
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
       - name: lint_check
         shell: bash
         run: |
@@ -38,12 +41,15 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Merge with latest main
         if: inputs.trigger_env != 'release-trigger'
         uses: ./.github/actions/merge
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
       - name: type_check
         shell: bash
         run: |
