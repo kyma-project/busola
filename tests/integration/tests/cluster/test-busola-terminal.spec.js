@@ -17,6 +17,29 @@ const config__withTerminal = {
   },
 };
 
+context('Test Terminal Banner', () => {
+  Cypress.skipAfterFail();
+
+  before(() => {
+    cy.intercept(configRequest, config__withTerminal);
+    cy.loginAndSelectCluster();
+  });
+
+  it('Terminal banner is rendered on the cluster overview page', () => {
+    cy.goToClusterOverview();
+
+    cy.get('ui5-card[accessible-name="Try the terminal"]').should('be.visible');
+  });
+
+  it('"Open Terminal" button opens the terminal panel', () => {
+    cy.goToClusterOverview();
+
+    cy.contains('ui5-button', 'Open Terminal').click();
+
+    cy.get('.terminal-card').should('be.visible');
+  });
+});
+
 context('Test Busola Terminal', () => {
   Cypress.skipAfterFail();
 
