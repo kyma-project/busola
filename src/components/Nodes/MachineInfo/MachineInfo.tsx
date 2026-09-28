@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { bytesToHumanReadable, getBytes } from 'shared/helpers/resources';
 import './MachineInfo.scss';
 import { FormItem, Label, Text } from '@ui5/webcomponents-react';
 
@@ -37,7 +38,7 @@ export function MachineInfo({
   gpus,
 }: MachineInfoProps) {
   const formattedMemory = capacity?.memory
-    ? Math.round((parseInt(capacity.memory) / 1024 / 1024) * 10) / 10
+    ? bytesToHumanReadable(getBytes(capacity.memory), { unit: 'Gi' }).value
     : 0;
   const { t } = useTranslation();
 

@@ -46,7 +46,7 @@ export function NodeResources({ metrics, resources }: NodeResourcesProps) {
         max={memory.capacity}
         valueType="bytes"
         titleText={t('cluster-overview.statistics.memory-usage')}
-        unit="Mi"
+        unit="Gi"
         accessibleName={t('cluster-overview.statistics.memory-usage')}
       />
       <ResourceRadialChart
