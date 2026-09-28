@@ -1526,7 +1526,7 @@ storage-classes:
   title: Storage Classes
 terminal:
   banner:
-    description: It's a browser-based shell inside Kyma Dashboard that's connected directly to your cluster, making it easier to troubleshoot, test, and explore without setting it up locally.
+    description: It's a browser-based shell inside Kyma dashboard that's connected directly to your cluster, making it easier to troubleshoot, test, and explore without setting it up locally.
     open: Open Terminal
     title: Try the terminal
   messages:
