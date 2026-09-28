@@ -26,25 +26,21 @@ context('Test Deployments', () => {
 
     cy.get('[aria-label="Labels, collapsed"]').click();
 
-    cy.get('[placeholder="Enter key"]:visible')
+    cy.get('ui5-input[placeholder="Enter key"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .type('app');
 
-    cy.get('[placeholder="Enter value"]:visible')
+    cy.get('ui5-input[placeholder="Enter value"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .first()
       .type(DEPLOYMENT_NAME);
 
-    cy.get('[placeholder="Enter key"]:visible')
+    cy.get('ui5-input[placeholder="Enter key"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .type('example');
 
-    cy.get('[placeholder="Enter value"]:visible')
+    cy.get('ui5-input[placeholder="Enter value"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .first()
       .type(DEPLOYMENT_NAME);
 
@@ -106,14 +102,12 @@ context('Test Deployments', () => {
 
     cy.get('[aria-label="Labels, collapsed"]').click();
 
-    cy.get('[placeholder="Enter key"]:visible')
+    cy.get('ui5-input[placeholder="Enter key"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .type('label-key');
 
-    cy.get('[placeholder="Enter value"]:visible')
+    cy.get('ui5-input[placeholder="Enter value"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .first()
       .type('label-value');
 
