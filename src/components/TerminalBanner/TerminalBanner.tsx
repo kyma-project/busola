@@ -7,7 +7,7 @@ import { showTerminalAtom } from 'state/showTerminalAtom';
 import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
 
 const TERMINAL_DOCS_URL =
-  'https://github.com/kyma-project/busola/blob/main/docs/user/01-50-terminal.md';
+  'https://kyma-project.io/external-content/busola/docs/user/01-50-terminal.html';
 
 export function TerminalBanner() {
   const { t } = useTranslation();
