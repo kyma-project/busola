@@ -71,6 +71,7 @@ export type ResourcesListProps = {
   error?: any;
   skipDataLoading?: boolean;
   noRedirectAfterDelete?: boolean;
+  afterDelete?: () => void;
 };
 
 export type ResourceListRendererProps = Omit<ResourcesListProps, 'filter'> & {

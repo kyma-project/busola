@@ -19,3 +19,22 @@ export default async function retry(
   }
   return finished;
 }
+
+export async function retryOnError<T>(
+  fn: () => Promise<T>,
+  maxAttempts = 3,
+  retryDelay = 500,
+): Promise<T> {
+  let lastError: unknown;
+  for (let i = 0; i < maxAttempts; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      lastError = e;
+      if (i < maxAttempts - 1) {
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      }
+    }
+  }
+  throw lastError;
+}
