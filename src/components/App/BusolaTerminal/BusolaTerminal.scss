@@ -28,7 +28,8 @@
       background-color: var(--sapField_Background);
       border-radius: var(--sapField_BorderCornerRadius);
       box-shadow: var(--sapField_Shadow);
-      margin: 0.5rem 1rem 1rem;
+      margin: var(--sapContent_Space_Tiny) var(--sapContent_Space_S)
+        var(--sapContent_Space_S);
 
       &:hover {
         background: var(--sapField_Hover_BackgroundStyle);
@@ -103,7 +104,7 @@
     justify-content: space-between;
     align-items: center;
     min-height: 60px;
-    padding: 0 1rem;
+    padding: 0 var(--sapContent_Space_S);
     box-shadow: var(--_ui5_popup_header_shadow);
     border-bottom: var(--_ui5_popup_header_border);
   }
