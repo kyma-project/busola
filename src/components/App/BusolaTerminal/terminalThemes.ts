@@ -2,10 +2,10 @@ import { ITheme } from '@xterm/xterm';
 import { Theme, isSystemThemeDark } from 'state/settings/themeAtom';
 
 const LIGHT_XTERM_THEME: ITheme = {
-  background: '#f5f6f7',
+  background: '#fff',
   foreground: '#131e29',
   cursor: '#0064d9',
-  cursorAccent: '#f5f6f7',
+  cursorAccent: '#fff',
   selectionBackground: '#0064d980',
 };
 

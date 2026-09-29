@@ -14,9 +14,43 @@
       height: calc(100% - 4rem);
     }
 
+    // Styled to visually match a Fiori TextArea (including hover/focus states) using the same
+    // design tokens the ui5-textarea component uses internally. A real TextArea cannot be used
+    // here because xterm.js requires a plain DOM element to render its canvas into.
     .terminal-content {
       flex: 1;
-      padding: 1rem;
+      position: relative;
+      box-sizing: border-box;
+      padding: 0.1rem 0.625rem;
+      border: var(--sapField_BorderWidth) var(--sapField_BorderStyle)
+        var(--sapField_BorderColor);
+      background: var(--sapField_BackgroundStyle);
+      background-color: var(--sapField_Background);
+      border-radius: var(--sapField_BorderCornerRadius);
+      box-shadow: var(--sapField_Shadow);
+      margin: 0.5rem 1rem 1rem;
+
+      &:hover {
+        background: var(--sapField_Hover_BackgroundStyle);
+        background-color: var(--sapField_Hover_Background);
+        box-shadow: var(--sapField_Hover_Shadow);
+      }
+
+      &:focus-within {
+        background-color: var(--sapField_Focus_Background);
+        background-image: none;
+        box-shadow: none;
+
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          border: var(--sapContent_FocusWidth) var(--sapContent_FocusStyle)
+            var(--sapField_Active_BorderColor);
+          border-radius: var(--sapField_BorderCornerRadius);
+        }
+      }
 
       .xterm {
         height: 100%;
