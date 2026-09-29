@@ -98,9 +98,9 @@ config:
     SSO_LOGIN:
       isEnabled: false
     TERMINAL:
-      isEnabled: false
+      isEnabled: true
       config:
-        image: europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest
+        image: europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:v20260717-3c81dd12
         # Cloud Run's ~900s request cap; reconnect just before it (the pod
         # persists, so the shell survives).
         maxSessionDurationMs: 900000
