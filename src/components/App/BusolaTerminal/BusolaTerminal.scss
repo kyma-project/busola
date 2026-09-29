@@ -16,39 +16,7 @@
 
     .terminal-content {
       flex: 1;
-      position: relative;
-      box-sizing: border-box;
-      padding: 0.1rem 0.625rem;
-      border: var(--sapField_BorderWidth) var(--sapField_BorderStyle)
-        var(--sapField_BorderColor);
-      background: var(--sapField_BackgroundStyle);
-      background-color: var(--sapField_Background);
-      border-radius: var(--sapField_BorderCornerRadius);
-      box-shadow: var(--sapField_Shadow);
-      margin: var(--sapContent_Space_Tiny) var(--sapContent_Space_S)
-        var(--sapContent_Space_S);
-
-      &:hover {
-        background: var(--sapField_Hover_BackgroundStyle);
-        background-color: var(--sapField_Hover_Background);
-        box-shadow: var(--sapField_Hover_Shadow);
-      }
-
-      &:focus-within {
-        background-color: var(--sapField_Focus_Background);
-        background-image: none;
-        box-shadow: none;
-
-        &::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          border: var(--sapContent_FocusWidth) var(--sapContent_FocusStyle)
-            var(--sapField_Active_BorderColor);
-          border-radius: var(--sapField_BorderCornerRadius);
-        }
-      }
+      padding: 1rem;
 
       .xterm {
         height: 100%;
@@ -101,7 +69,7 @@
     justify-content: space-between;
     align-items: center;
     min-height: 60px;
-    padding: 0 var(--sapContent_Space_S);
+    padding: 0 1rem;
     box-shadow: var(--_ui5_popup_header_shadow);
     border-bottom: var(--_ui5_popup_header_border);
   }
