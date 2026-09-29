@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, act } from '@testing-library/react';
 import { createStore, Provider } from 'jotai';
+import { Terminal } from '@xterm/xterm';
 import { BusolaTerminal } from './BusolaTerminal';
 import { clusterAtom } from 'state/clusterAtom';
 import { showTerminalAtom } from 'state/showTerminalAtom';
@@ -8,17 +9,21 @@ import { showTerminalAtom } from 'state/showTerminalAtom';
 const mockLocation = vi.hoisted(() => ({ pathname: '/namespace/default' }));
 
 vi.mock('@xterm/xterm', () => ({
-  Terminal: vi.fn().mockImplementation(() => ({
-    loadAddon: vi.fn(),
-    open: vi.fn(),
-    options: {},
-    dispose: vi.fn(),
-    onData: vi.fn(() => ({ dispose: vi.fn() })),
-  })),
+  Terminal: vi.fn(function () {
+    return {
+      loadAddon: vi.fn(),
+      open: vi.fn(),
+      options: {},
+      dispose: vi.fn(),
+      onData: vi.fn(() => ({ dispose: vi.fn() })),
+    };
+  }),
 }));
 
 vi.mock('@xterm/addon-fit', () => ({
-  FitAddon: vi.fn().mockImplementation(() => ({ fit: vi.fn() })),
+  FitAddon: vi.fn(function () {
+    return { fit: vi.fn() };
+  }),
 }));
 
 vi.mock('./useTerminalSession', () => ({
@@ -32,8 +37,23 @@ vi.mock('react-router', async (importOriginal) => {
 
 vi.mock('@ui5/webcomponents-react', () => ({
   Button: () => null,
-  Card: () => null,
+  Card: ({ children }: { children?: unknown }) => children as never,
   Title: () => null,
+}));
+
+const themeLoadedListeners = vi.hoisted(() => [] as Array<() => void>);
+vi.mock('@ui5/webcomponents-base', () => ({
+  attachThemeLoaded: vi.fn((cb: () => void) => themeLoadedListeners.push(cb)),
+  detachThemeLoaded: vi.fn((cb: () => void) => {
+    const index = themeLoadedListeners.indexOf(cb);
+    if (index >= 0) themeLoadedListeners.splice(index, 1);
+  }),
+}));
+
+const xtermTheme = vi.hoisted(() => ({ current: { background: '#initial' } }));
+vi.mock('./terminalThemes', () => ({
+  getXtermTheme: vi.fn(() => xtermTheme.current),
+  TERMINAL_MIN_HEIGHT: 100,
 }));
 
 window.matchMedia = vi.fn().mockReturnValue({
@@ -59,6 +79,37 @@ const makeCluster = (name: string) =>
 describe('BusolaTerminal', () => {
   beforeEach(() => {
     mockLocation.pathname = '/namespace/default';
+    themeLoadedListeners.length = 0;
+    xtermTheme.current = { background: '#initial' };
+  });
+
+  it('re-applies the terminal colors when the UI5 theme changes', async () => {
+    const store = createStore();
+    store.set(clusterAtom, makeCluster('cluster-a'));
+    store.set(showTerminalAtom, {
+      isDocked: true,
+      isFullscreen: false,
+      isOpen: true,
+      dockedHeight: 0,
+    });
+
+    render(
+      <Provider store={store}>
+        <BusolaTerminal />
+      </Provider>,
+    );
+
+    const term = (
+      Terminal as unknown as ReturnType<typeof vi.fn>
+    ).mock.results.at(-1)!.value;
+
+    // Simulate UI5 finishing the async application of a new theme's variables.
+    xtermTheme.current = { background: '#changed' };
+    await act(async () => {
+      themeLoadedListeners.forEach((listener) => listener());
+    });
+
+    expect(term.options.theme).toEqual({ background: '#changed' });
   });
 
   it('closes when the active cluster changes', async () => {
