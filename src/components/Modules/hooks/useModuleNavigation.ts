@@ -27,6 +27,8 @@ type ModuleEntry = {
   name: string;
   channel?: string;
   version?: string;
+  namespace?: string;
+  state?: string;
   resource?: ModuleResource;
   hasLiveResource?: boolean;
   template?: {
@@ -34,7 +36,6 @@ type ModuleEntry = {
     metadata?: { name: string; namespace?: string };
     kind?: string;
   };
-  [key: string]: any;
 };
 
 type UseModuleNavigationOptions = {
@@ -51,7 +52,7 @@ type UseModuleNavigationOptions = {
   checkModuleState?: boolean;
 };
 
-const checkIfStateIsPositive = (state: string) => {
+const checkIfStateIsPositive = (state?: string) => {
   const positiveStates = [
     'Available',
     'Ready',
@@ -63,7 +64,7 @@ const checkIfStateIsPositive = (state: string) => {
     'Ok',
     'Finished',
   ];
-  return positiveStates.includes(state);
+  return positiveStates.includes(state ?? '');
 };
 
 export function useModuleNavigation({
@@ -115,6 +116,40 @@ export function useModuleNavigation({
     };
   };
 
+  // Resolve which CR the row should open: the module's own resource when
+  // present, otherwise the connected template's CR. Null means "nothing to open".
+  const resolveTargetResource = (
+    moduleName: string,
+    moduleStatus: ModuleEntry,
+  ): ModuleResource | null => {
+    if (moduleStatus.resource) {
+      return {
+        kind: moduleStatus.resource.kind,
+        apiVersion: moduleStatus.resource.apiVersion,
+        metadata: { ...moduleStatus.resource.metadata },
+      };
+    }
+
+    const moduleCr = findModuleTemplate(
+      moduleTemplates,
+      moduleName,
+      moduleStatus.channel ?? '',
+      moduleStatus.version ?? '',
+      moduleStatus.template,
+      moduleStatus?.namespace,
+    )?.spec?.data;
+    if (!moduleCr) return null;
+
+    return {
+      kind: moduleCr.kind,
+      apiVersion: moduleCr.apiVersion,
+      metadata: {
+        name: moduleCr.metadata?.name ?? '',
+        namespace: moduleCr.metadata?.namespace ?? '',
+      },
+    };
+  };
+
   const handleClickResource = async (
     moduleName: string,
     moduleStatus: ModuleEntry,
@@ -124,35 +159,8 @@ export function useModuleNavigation({
     // Cheap early-out: a community row known to lack a live CR never navigates.
     if (!checkModuleState && moduleStatus.hasLiveResource === false) return;
 
-    let resource: ModuleResource;
-
-    if (moduleStatus.resource) {
-      resource = {
-        kind: moduleStatus.resource.kind,
-        apiVersion: moduleStatus.resource.apiVersion,
-        metadata: { ...moduleStatus.resource.metadata },
-      };
-    } else {
-      const connectedModule = findModuleTemplate(
-        moduleTemplates,
-        moduleName,
-        moduleStatus.channel ?? '',
-        moduleStatus.version ?? '',
-        moduleStatus.template,
-        moduleStatus?.namespace,
-      );
-      const moduleCr = connectedModule?.spec?.data;
-      if (!moduleCr) return;
-
-      resource = {
-        kind: moduleCr.kind,
-        apiVersion: moduleCr.apiVersion,
-        metadata: {
-          name: moduleCr.metadata?.name ?? '',
-          namespace: moduleCr.metadata?.namespace ?? '',
-        },
-      };
-    }
+    const resource = resolveTargetResource(moduleName, moduleStatus);
+    if (!resource) return;
 
     const kind = resource.kind;
     const matchedExtension = findExtension(kind, extensions);

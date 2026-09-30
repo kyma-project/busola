@@ -104,7 +104,9 @@ export const CommunityModulesList = ({
 
       const key = `${module?.name}::${module?.version}::${managerName}::${managerNamespace}`;
 
-      return seen.has(key) ? false : seen.add(key);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
     });
   }
 
@@ -234,6 +236,10 @@ export const CommunityModulesList = ({
             resource,
             moduleTemplates,
             hasDetailsLink,
+            // The list-level probe already holds each row's live CR; feed it so
+            // the State/Namespace columns reflect the real instance rather than
+            // the module template's default identity.
+            liveResource: liveResources.get(resource.name),
             newestModuleTemplate: getUpdateTemplate(
               resource.name,
               preloadedCommunityTemplates,

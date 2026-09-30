@@ -97,6 +97,16 @@ export const ModulesListRows = ({
     if (isPendingDeletion && moduleStatus) {
       moduleStatus = { ...moduleStatus, state: ModuleTemplateStatus.Deleting };
     }
+  } else {
+    moduleStatus = {
+      name: resource.name,
+      resource: liveResource ?? null,
+      version: resource.version,
+      channel: resource.channel,
+      state: liveResource?.status?.state,
+      message: liveResource?.status?.message,
+      maintenance: false,
+    };
   }
   const currentModuleTemplate = findModuleTemplate(
     moduleTemplates,
@@ -122,18 +132,6 @@ export const ModulesListRows = ({
     };
     checkIfNamespaceIsMissing();
   }, [currentModuleTemplate]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  if (!kymaResource) {
-    moduleStatus = {
-      name: resource.name,
-      resource: liveResource ?? null,
-      version: resource.version,
-      channel: resource.channel,
-      state: liveResource?.status?.state,
-      message: liveResource?.status?.message,
-      maintenance: false,
-    };
-  }
 
   const showDetailsLink = hasDetailsLink(resource);
   const moduleIndex =

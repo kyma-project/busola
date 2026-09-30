@@ -1,9 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 
 // Capture props the GenericList is rendered with so we can assert behavior
 // without standing up the entire UI5 + router + jotai stack.
 const genericListProps: { current: any } = { current: null };
+
+// Capture the props the row renderer hands to ModulesListRows so we can assert
+// the live CR is wired through (guards against the dead-prop regression).
+const modulesListRowsProps: { current: any } = { current: null };
 
 vi.mock('shared/components/GenericList/GenericList', () => ({
   GenericList: (props: any) => {
@@ -45,7 +49,10 @@ vi.mock('shared/hooks/BackendAPI/useFetch', () => ({
 }));
 
 vi.mock('components/Modules/components/ModulesListRows', () => ({
-  ModulesListRows: () => ['name-cell'],
+  ModulesListRows: (props: any) => {
+    modulesListRowsProps.current = props;
+    return ['name-cell'];
+  },
 }));
 
 vi.mock('components/Modules/support', async () => {
@@ -122,6 +129,7 @@ const renderList = (setOpenedModuleIndex = vi.fn()) => {
 describe('CommunityModulesList', () => {
   beforeEach(() => {
     genericListProps.current = null;
+    modulesListRowsProps.current = null;
     navigateMock.mockReset();
     fetchMock.mockClear();
   });
@@ -178,6 +186,21 @@ describe('CommunityModulesList', () => {
     expect(hasRowDetails({ ...installedModule, hasLiveResource: true })).toBe(
       true,
     );
+  });
+
+  it('forwards the probed live CR to ModulesListRows via the liveResource prop', async () => {
+    renderList();
+
+    // The list-level probe resolves the live CR asynchronously; once it lands,
+    // the row renderer must hand that exact instance to ModulesListRows so the
+    // State/Namespace columns reflect the real CR (guards against the dead-prop
+    // regression where liveResource was accepted but never passed).
+    await waitFor(() => {
+      genericListProps.current.rowRenderer(installedModule);
+      expect(modulesListRowsProps.current?.liveResource).toEqual({
+        metadata: { name: 'foo-instance', namespace: 'foo-ns' },
+      });
+    });
   });
 
   it('does not navigate or update state when hasDetailsLink is false', async () => {
