@@ -1,5 +1,9 @@
-import { describe, it, expect } from 'vitest';
-import { createModulePartialPath, getExtensionUrlPath } from './support';
+import { describe, it, expect, vi } from 'vitest';
+import {
+  createModulePartialPath,
+  fetchLiveResource,
+  getExtensionUrlPath,
+} from './support';
 
 describe('getExtensionUrlPath', () => {
   it('returns the extension general.urlPath when it is defined', () => {
@@ -72,5 +76,41 @@ describe('createModulePartialPath', () => {
     );
 
     expect(path).toBe('kymamodules/foos.foo.example.com/foo-instance');
+  });
+});
+
+describe('fetchLiveResource', () => {
+  const resource = {
+    kind: 'Foo',
+    apiVersion: 'foo.example.com/v1',
+    metadata: { name: 'foo-instance', namespace: 'foo-ns' },
+  };
+
+  it('returns the first live CR instance when one exists', async () => {
+    const cr = { metadata: { name: 'foo-instance' } };
+    const fetch = vi.fn(async () => ({ json: async () => ({ items: [cr] }) }));
+
+    expect(await fetchLiveResource(fetch as any, resource)).toBe(cr);
+  });
+
+  it('returns null when the cluster reports no instances', async () => {
+    const fetch = vi.fn(async () => ({ json: async () => ({ items: [] }) }));
+
+    expect(await fetchLiveResource(fetch as any, resource)).toBeNull();
+  });
+
+  it('returns null when the resource is missing', async () => {
+    const fetch = vi.fn();
+
+    expect(await fetchLiveResource(fetch as any, null)).toBeNull();
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('swallows fetch failures and returns null', async () => {
+    const fetch = vi.fn(async () => {
+      throw new Error('network');
+    });
+
+    expect(await fetchLiveResource(fetch as any, resource)).toBeNull();
   });
 });

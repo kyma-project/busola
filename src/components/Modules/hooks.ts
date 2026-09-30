@@ -8,6 +8,7 @@ import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import {
   ConditionType,
   DEFAULT_K8S_NAMESPACE,
+  fetchLiveResource,
   getResourceListPath,
   getResourcePath,
   KymaResourceType,
@@ -318,56 +319,23 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
   return { data, error };
 }
 
-export const useGetModuleResource = (resource: any) => {
-  const fetch = useFetch();
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  const listPath = getResourceListPath(resource);
-
-  useEffect(() => {
-    async function fetchResource() {
-      if (!resource) return;
-      try {
-        const response = await fetch({ relativeUrl: listPath });
-        const list = await response.json();
-        const moduleResource = list?.items?.[0] ?? null;
-        setData(moduleResource);
-      } catch (e) {
-        if (e instanceof Error) {
-          setError(e);
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchResource();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listPath]);
-
-  return { data, loading, error };
-};
-
-// Community modules are "installed" when their operator/manager is present, but
-// that does NOT mean a CR instance of the module exists on the cluster. Details
-// can only open for a module whose live CR instance is actually there (regression
-// #10718: test-module / cloud-active-defense-operator / community-module have no
-// instance and must not expose details, while registry-proxy — a real CR in
-// Warning state — must). This probes every installed module's CR the same way
-// the Module State column does (useGetModuleResource) and returns the set of
-// module names that resolve to a live instance.
+// Community modules are "installed" once their operator/manager is present, but
+// that does NOT imply a CR instance exists on the cluster — details may only
+// open for a module whose live CR is actually there (#10718). Probes every
+// installed module's CR and returns a map of module name → live CR.
 export const useModulesLiveResources = (
   installedModules: { name: string; resource?: any }[],
   loading?: boolean,
   pollingInterval?: number,
-): Set<string> => {
+): Map<string, any> => {
   const fetch = useFetch();
   const populateWithNamespace = usePopulateWithNamespace();
-  const [liveNames, setLiveNames] = useState<Set<string>>(new Set());
+  const [liveResources, setLiveResources] = useState<Map<string, any>>(
+    new Map(),
+  );
 
-  // Stable dependency: re-probe only when the set of modules (by name + CR
-  // identity) actually changes, not on every render's new array reference.
+  // Stable dependency: re-probe only when the modules (by name + CR identity)
+  // actually change, not on every render's new array reference.
   const modulesKey = JSON.stringify(
     (installedModules ?? []).map((module) => ({
       name: module?.name,
@@ -383,32 +351,24 @@ export const useModulesLiveResources = (
 
     async function checkLiveResources() {
       if (loading || !installedModules?.length) {
-        if (!cancelled) setLiveNames(new Set());
+        if (!cancelled) setLiveResources(new Map());
         return;
       }
 
-      const found = new Set<string>();
+      const found = new Map<string, any>();
       await Promise.all(
         installedModules.map(async (module) => {
-          const resource = module?.resource;
-          if (!resource || !module?.name) return;
-          try {
-            const populated = await populateWithNamespace(resource);
-            // populateWithNamespace returns false when scope can't be resolved
-            // (e.g. the CRD is gone) — treat that as "no live resource".
-            if (populated === false) return;
-            const listPath = getResourceListPath(populated);
-            const response = await fetch({ relativeUrl: listPath });
-            const list = await response.json();
-            if (list?.items?.[0]) found.add(module.name);
-          } catch {
-            // Any failure ⇒ no live resource. The row simply won't expose
-            // details, which is the safe default for #10718.
-          }
+          if (!module?.resource || !module?.name) return;
+          // populateWithNamespace returns false when scope can't be resolved
+          // (e.g. the CRD is gone) — treat that as "no live resource".
+          const populated = await populateWithNamespace(module.resource);
+          if (populated === false) return;
+          const liveResource = await fetchLiveResource(fetch, populated);
+          if (liveResource) found.set(module.name, liveResource);
         }),
       );
 
-      if (!cancelled) setLiveNames(found);
+      if (!cancelled) setLiveResources(found);
     }
 
     checkLiveResources();
@@ -425,7 +385,7 @@ export const useModulesLiveResources = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modulesKey, loading, pollingInterval]);
 
-  return liveNames;
+  return liveResources;
 };
 
 export function useGetAllSourceYAMLModuleTemplates(sourceURLs: string[]) {

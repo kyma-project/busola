@@ -9,11 +9,11 @@ import { columnLayoutAtom, ColumnState } from 'state/columnLayoutAtom';
 import {
   createModulePartialPath,
   DEFAULT_K8S_NAMESPACE,
+  fetchLiveResource,
   findCrd,
   findExtension,
   findModuleTemplate,
   getExtensionUrlPath,
-  getResourceListPath,
   ModuleTemplateListType,
 } from 'components/Modules/support';
 
@@ -99,11 +99,8 @@ export function useModuleNavigation({
       !!findExtension(kind, extensions) || !!findCrd(kind, crds);
     if (!hasRenderer) return false;
 
-    // Managed modules gate details on the module's reported state (blocks
-    // intermediate/installing states). Community modules carry no state — an
-    // "installed" operator does not imply a CR instance exists — so they gate
-    // on whether a live CR instance was actually found on the cluster
-    // (regression #10718).
+    // Managed modules gate on reported state; community modules gate on a live
+    // CR instance actually existing (#10718).
     return checkModuleState
       ? checkIfStateIsPositive(resource.state)
       : resource.hasLiveResource === true;
@@ -125,8 +122,7 @@ export function useModuleNavigation({
   ) => {
     if (!moduleStatus) return;
 
-    // Cheap early-out: a community row already known to lack a live CR must
-    // never navigate (regression #10718).
+    // Cheap early-out: a community row known to lack a live CR never navigates.
     if (!checkModuleState && moduleStatus.hasLiveResource === false) return;
 
     let resource: ModuleResource;
@@ -165,8 +161,7 @@ export function useModuleNavigation({
     const moduleCrd = findCrd(kind, crds);
     if (!hasExtension && !moduleCrd) return;
 
-    // Renderer resolves the extension by urlPath; nav must emit the same
-    // identifier so the CR pane opens (regression #10718).
+    // Nav must emit the renderer's urlPath so the CR pane opens (#10718).
     const extensionUrlPath = hasExtension
       ? getExtensionUrlPath(matchedExtension, kind)
       : undefined;
@@ -184,20 +179,11 @@ export function useModuleNavigation({
       resource.metadata.namespace = DEFAULT_K8S_NAMESPACE;
     }
 
-    const listPath = getResourceListPath(resource);
-    let liveResource: any;
-    try {
-      const response = await fetch({ relativeUrl: listPath });
-      const list = await response.json();
-      liveResource = list?.items?.[0];
-    } catch {
-      // best-effort enrichment — continue with template metadata (managed)
-      liveResource = undefined;
-    }
+    const liveResource = await fetchLiveResource(fetch, resource);
 
-    // Authoritative gate for community modules: if the CR instance is not on
-    // the cluster, do not navigate to an empty detail pane (regression #10718).
-    // Managed modules keep their prior best-effort behaviour.
+    // Authoritative gate for community modules: don't navigate to an empty
+    // detail pane when the CR instance is not on the cluster (#10718). Managed
+    // modules keep their prior best-effort behaviour.
     if (!checkModuleState && !liveResource) return;
 
     if (liveResource) {

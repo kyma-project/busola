@@ -172,6 +172,23 @@ export const getResourceListPath = (resource: any) => {
   return `${basePath}?fieldSelector=metadata.name=${encodeURIComponent(resourceName)}`;
 };
 
+// Probe the cluster for a single CR instance; returns the live resource or null.
+export const fetchLiveResource = async (
+  fetch: (opts: { relativeUrl: string }) => Promise<Response>,
+  resource: any,
+): Promise<any> => {
+  if (!resource) return null;
+  try {
+    const response = await fetch({
+      relativeUrl: getResourceListPath(resource),
+    });
+    const list = await response.json();
+    return list?.items?.[0] ?? null;
+  } catch {
+    return null;
+  }
+};
+
 export const findChannel = (
   module: { name: string; channels: { version: string; channel: string }[] },
   channel: string,
@@ -194,11 +211,9 @@ export const findExtension = (resourceKind: string, extensions: any) => {
   });
 };
 
-// The detail renderer (useGetCRbyPath) resolves an extension by its
-// `general.urlPath`, falling back to pluralize(kind). Navigation must emit the
-// SAME identifier or the lookup misses and the CR pane stays empty even though
-// the resource exists (regression #10718). This returns that identifier for a
-// matched extension configmap.
+// Returns the identifier the detail renderer (useGetCRbyPath) resolves an
+// extension by — its `general.urlPath`, falling back to pluralize(kind).
+// Navigation must emit the SAME identifier or the CR pane stays empty (#10718).
 export const getExtensionUrlPath = (extension: any, kind?: string): string => {
   const fallback = pluralize((kind || '').toLowerCase());
   if (!extension?.data?.general) return fallback;
@@ -331,8 +346,8 @@ export const createModulePartialPath = (
   isNamespaced?: boolean,
   extensionUrlPath?: string,
 ) => {
-  // Extension path segment must match useGetCRbyPath's key (urlPath), not the
-  // bare plural — see getExtensionUrlPath / regression #10718.
+  // Extension segment must match useGetCRbyPath's key (urlPath), not the bare
+  // plural (#10718).
   const extensionSegment =
     extensionUrlPath ||
     pluralize(moduleStatusResource?.kind || '').toLowerCase();

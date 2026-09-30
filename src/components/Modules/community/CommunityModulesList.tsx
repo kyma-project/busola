@@ -87,21 +87,12 @@ export const CommunityModulesList = ({
 
   const handleShowAddModule = useShowAddModule(resourceUrl, 'community');
 
-  // A community module is "installed" once its operator is present, but details
-  // may only open when a live CR instance actually exists on the cluster
-  // (regression #10718). Probe each installed module's CR and expose the result
-  // to the navigation gate below via `hasLiveResource`.
-  const liveResourceNames = useModulesLiveResources(
-    installedModules,
-    modulesLoading,
-    COMMUNITY_MODULES_POLLING_INTERVAL,
-  );
-
   const { modulesDuringUpload } = useContext(
     CommunityModulesInstallationContext,
   );
 
-  // When multiple instances of the same module templates exist in different namespaces, we want to display only one instance of the module
+  // When multiple instances of the same module template exist across
+  // namespaces, display only one.
   function dedupeByModuleManager(modules: any[]) {
     const seen = new Set<string>();
 
@@ -117,31 +108,43 @@ export const CommunityModulesList = ({
     });
   }
 
+  const uniqueInstalled = useMemo(
+    () => dedupeByModuleManager(installedModules),
+    [installedModules],
+  );
+
+  // A community module is "installed" once its operator is present, but details
+  // may only open when a live CR instance actually exists (#10718). The probed
+  // map feeds both the details gate (hasLiveResource) and each row's live status.
+  const liveResources = useModulesLiveResources(
+    uniqueInstalled,
+    modulesLoading,
+    COMMUNITY_MODULES_POLLING_INTERVAL,
+  );
+
   const modulesToDisplay = useMemo(() => {
-    const uniqueInstalled = dedupeByModuleManager(installedModules).map(
-      (module) => ({
-        ...module,
-        hasLiveResource: liveResourceNames.has(module.name),
-      }),
-    );
+    const installed = uniqueInstalled.map((module) => ({
+      ...module,
+      hasLiveResource: liveResources.has(module.name),
+    }));
 
     const modulesDuringProcessing = modulesDuringUpload.filter((m) => {
-      return !uniqueInstalled.find(
-        (installed) =>
-          installed.moduleTemplateName === m.moduleTpl.metadata.name,
+      return !installed.find(
+        (installedModule) =>
+          installedModule.moduleTemplateName === m.moduleTpl.metadata.name,
       );
     });
 
     if (modulesDuringProcessing.length === 0) {
-      return uniqueInstalled;
+      return installed;
     }
 
     const moduleTemplatesDuringUpload = modulesDuringProcessing
       .filter((m) => m.state !== State.Finished)
       .map((m) => createFakeModuleTemplateWithStatus(m));
 
-    return [...uniqueInstalled, ...moduleTemplatesDuringUpload];
-  }, [installedModules, modulesDuringUpload, liveResourceNames]);
+    return [...installed, ...moduleTemplatesDuringUpload];
+  }, [uniqueInstalled, modulesDuringUpload, liveResources]);
 
   const headerRenderer = () => [
     t('common.headers.name'),

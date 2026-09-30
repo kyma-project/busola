@@ -57,6 +57,11 @@ describe('useModulesLiveResources', () => {
       expect(result.current.has('registry-proxy')).toBe(true),
     );
     expect(result.current.has('test-module')).toBe(false);
+    // The map now carries the live CR itself, not just its presence — the row's
+    // State column reads it directly.
+    expect(result.current.get('registry-proxy')).toEqual({
+      metadata: { name: 'registry-proxy' },
+    });
   });
 
   it('treats a fetch failure as "no live resource"', async () => {
