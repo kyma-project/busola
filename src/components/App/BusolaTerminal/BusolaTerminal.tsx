@@ -67,7 +67,7 @@ export function BusolaTerminal({
           ?.querySelector<HTMLElement>('.terminal-card__header')?.offsetHeight;
         const cellHeight = xtermRow?.offsetHeight ?? 20;
         const headerHeight = cardHeader ?? 60;
-        const contentPadding = 40; // 1rem top + bottom from padding + rounded up for a better experience.
+        const contentPadding = 40; // margin (0.5rem+1rem) + padding (2×0.5rem)
         onMinHeightComputed(
           Math.ceil(headerHeight + contentPadding + cellHeight),
         );
