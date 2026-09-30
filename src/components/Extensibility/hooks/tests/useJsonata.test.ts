@@ -46,6 +46,7 @@ const defaultDataSourcesContext: DataSourcesContextType = {
   dataSources: {},
   getRelatedResourceInPath: vi.fn(),
   requestRelatedResource: vi.fn(),
+  refetchDataSource: vi.fn(),
 };
 
 function wrapper(
