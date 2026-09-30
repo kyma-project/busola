@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { FlexBox } from '@ui5/webcomponents-react';
+import { FormItem, FlexBox } from '@ui5/webcomponents-react';
 import { Label } from './Label';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 
@@ -40,36 +40,36 @@ export function FormField({
   const [openPopover, setOpenPopover] = useState(false);
 
   return (
-    <FlexBox
+    <FormItem
       className={classnames('form-field', className)}
-      justifyContent="Center"
-      direction="Column"
       style={style}
-    >
-      {!isListItem && label && (
-        <FlexBox
-          key={'labels-flexbox'}
-          wrap="Wrap"
-          alignItems="Center"
-          className="bsl-col-md--12"
-        >
-          <Label
-            forElement={label.replace(' ', '-').toLowerCase()}
-            required={required && !disabled}
+      labelContent={
+        !isListItem && label ? (
+          <FlexBox
+            key={'labels-flexbox'}
+            wrap="Wrap"
+            alignItems="Center"
+            className="bsl-col-md--12"
           >
-            {label}
-          </Label>
-          {tooltipContent && (
-            <HintButton
-              setShowTitleDescription={setOpenPopover}
-              showTitleDescription={openPopover}
-              description={tooltipContent}
-              className="sap-margin-begin-tiny"
-              ariaTitle={!isListItem ? label : ''}
-            />
-          )}
-        </FlexBox>
-      )}
+            <Label
+              forElement={label.replace(' ', '-').toLowerCase()}
+              required={required && !disabled}
+            >
+              {label}
+            </Label>
+            {tooltipContent && (
+              <HintButton
+                setShowTitleDescription={setOpenPopover}
+                showTitleDescription={openPopover}
+                description={tooltipContent}
+                className="sap-margin-begin-tiny"
+                ariaTitle={!isListItem ? label : ''}
+              />
+            )}
+          </FlexBox>
+        ) : undefined
+      }
+    >
       <FlexBox
         key={'messagestrip-flexbox'}
         wrap="Wrap"
@@ -96,6 +96,6 @@ export function FormField({
           </Label>
         )}
       </FlexBox>
-    </FlexBox>
+    </FormItem>
   );
 }
