@@ -1,7 +1,10 @@
 /// <reference types="cypress" />
 import jsyaml from 'js-yaml';
 
-import { chooseComboboxOption } from '../../support/helpers';
+import {
+  chooseComboboxOption,
+  chooseSelectOption,
+} from '../../support/helpers';
 
 const id = Math.random().toString().substr(2, 8);
 
@@ -60,12 +63,12 @@ context('Test reduced permissions', () => {
 
     // verbs
     chooseComboboxOption(
-      '[placeholder^="Start typing to select Verbs"]:visible',
+      '[placeholder^="Start typing to select Verbs"][value=""]:visible',
       'get',
     );
 
     chooseComboboxOption(
-      '[placeholder^="Start typing to select Verbs"]:visible',
+      '[placeholder^="Start typing to select Verbs"][value=""]:visible',
       'list',
     );
 
@@ -101,10 +104,7 @@ context('Test reduced permissions', () => {
     // subject type
     cy.get('[data-testid="role-binding-kind"]').click();
 
-    cy.get('ui5-option:visible')
-      .contains('ServiceAccount')
-      .find('li')
-      .click({ force: true });
+    chooseSelectOption('ServiceAccount');
 
     // role
     chooseComboboxOption(

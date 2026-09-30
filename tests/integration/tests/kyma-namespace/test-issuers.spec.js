@@ -57,14 +57,7 @@ context('Test Issuers', () => {
   it('Edit an issuer', () => {
     cy.inspectTab('Edit');
 
-    cy.get('[placeholder="Select Issuer type"]')
-      .filter(':visible')
-      .find('input')
-      .click()
-      .clear()
-      .type('ACME');
-
-    cy.get('ui5-cb-item:visible').contains('ACME').click({ force: true });
+    chooseComboboxOption('[placeholder="Select Issuer type"]', 'ACME', true);
 
     cy.get('[placeholder="ACME Server URL"]:visible')
       .find('input')
