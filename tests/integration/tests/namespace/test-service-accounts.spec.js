@@ -53,14 +53,12 @@ context('Test Service Accounts', () => {
 
     cy.get('.edit-form').contains('Labels').click();
 
-    cy.get('[placeholder="Enter key"]:visible')
+    cy.get('ui5-input[placeholder="Enter key"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .type('test.key');
 
-    cy.get('[placeholder="Enter value"]:visible')
+    cy.get('ui5-input[placeholder="Enter value"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .first()
       .type('test-value');
 
