@@ -114,8 +114,8 @@ export const CommunityModulesList = ({
   );
 
   // A community module is "installed" once its operator is present, but details
-  // may only open when a live CR instance actually exists (#10718). The probed
-  // map feeds both the details gate (hasLiveResource) and each row's live status.
+  // may only open when a live CR instance actually exists. The probed map feeds
+  // both the details gate (hasLiveResource) and each row's live status.
   const liveResources = useModulesLiveResources(
     uniqueInstalled,
     modulesLoading,

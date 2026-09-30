@@ -99,8 +99,7 @@ export function useModuleNavigation({
       !!findExtension(kind, extensions) || !!findCrd(kind, crds);
     if (!hasRenderer) return false;
 
-    // Managed modules gate on reported state; community modules gate on a live
-    // CR instance actually existing (#10718).
+    // Managed modules gate on reported state; community modules on a live CR instance.
     return checkModuleState
       ? checkIfStateIsPositive(resource.state)
       : resource.hasLiveResource === true;
@@ -161,7 +160,7 @@ export function useModuleNavigation({
     const moduleCrd = findCrd(kind, crds);
     if (!hasExtension && !moduleCrd) return;
 
-    // Nav must emit the renderer's urlPath so the CR pane opens (#10718).
+    // Nav must emit the renderer's urlPath so the CR pane opens.
     const extensionUrlPath = hasExtension
       ? getExtensionUrlPath(matchedExtension, kind)
       : undefined;
@@ -181,9 +180,8 @@ export function useModuleNavigation({
 
     const liveResource = await fetchLiveResource(fetch, resource);
 
-    // Authoritative gate for community modules: don't navigate to an empty
-    // detail pane when the CR instance is not on the cluster (#10718). Managed
-    // modules keep their prior best-effort behaviour.
+    // Authoritative gate: don't open an empty detail pane when a community
+    // module has no CR instance. Managed modules keep best-effort behaviour.
     if (!checkModuleState && !liveResource) return;
 
     if (liveResource) {

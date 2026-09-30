@@ -213,7 +213,7 @@ export const findExtension = (resourceKind: string, extensions: any) => {
 
 // Returns the identifier the detail renderer (useGetCRbyPath) resolves an
 // extension by — its `general.urlPath`, falling back to pluralize(kind).
-// Navigation must emit the SAME identifier or the CR pane stays empty (#10718).
+// Navigation must emit the SAME identifier or the CR pane stays empty.
 export const getExtensionUrlPath = (extension: any, kind?: string): string => {
   const fallback = pluralize((kind || '').toLowerCase());
   if (!extension?.data?.general) return fallback;
@@ -346,8 +346,7 @@ export const createModulePartialPath = (
   isNamespaced?: boolean,
   extensionUrlPath?: string,
 ) => {
-  // Extension segment must match useGetCRbyPath's key (urlPath), not the bare
-  // plural (#10718).
+  // Extension segment must match useGetCRbyPath's key (urlPath), not the bare plural.
   const extensionSegment =
     extensionUrlPath ||
     pluralize(moduleStatusResource?.kind || '').toLowerCase();

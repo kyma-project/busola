@@ -19,8 +19,8 @@ describe('useModulesLiveResources', () => {
   });
 
   it('includes only modules whose live CR instance exists on the cluster', async () => {
-    // Mirrors the #10718 cluster state: registry-proxy has a live CR, the
-    // others (installed operator, but no CR instance) do not.
+    // registry-proxy has a live CR; the others (installed operator, but no CR
+    // instance) do not.
     fetchMock.mockImplementation(
       async ({ relativeUrl }: { relativeUrl: string }) => ({
         json: async () =>

@@ -77,7 +77,7 @@ const renderNavHook = (
   return { result, store };
 };
 
-describe('useModuleNavigation — extension urlPath resolution (regression #10718)', () => {
+describe('useModuleNavigation — extension urlPath resolution', () => {
   beforeEach(() => {
     navigateMock.mockReset();
     fetchMock.mockClear();
@@ -105,7 +105,7 @@ describe('useModuleNavigation — extension urlPath resolution (regression #1071
   });
 });
 
-describe('useModuleNavigation — community live-CR gate (issue #10718)', () => {
+describe('useModuleNavigation — community live-CR gate', () => {
   beforeEach(() => {
     navigateMock.mockReset();
     fetchMock.mockClear();

@@ -8,8 +8,8 @@ import {
 describe('getExtensionUrlPath', () => {
   it('returns the extension general.urlPath when it is defined', () => {
     // A community extension whose urlPath deliberately differs from
-    // pluralize(kind) — this is the case that breaks detail navigation
-    // (regression #10718): the renderer keys on urlPath, not the bare plural.
+    // pluralize(kind) — this is the case that breaks detail navigation: the
+    // renderer keys on urlPath, not the bare plural.
     const extension = {
       data: {
         general: JSON.stringify({

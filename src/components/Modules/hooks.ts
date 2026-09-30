@@ -319,10 +319,8 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
   return { data, error };
 }
 
-// Community modules are "installed" once their operator/manager is present, but
-// that does NOT imply a CR instance exists on the cluster — details may only
-// open for a module whose live CR is actually there (#10718). Probes every
-// installed module's CR and returns a map of module name → live CR.
+// A community module is "installed" once its operator is present, which does not
+// imply a CR instance exists on the cluster — probe each and map name → live CR.
 export const useModulesLiveResources = (
   installedModules: { name: string; resource?: any }[],
   loading?: boolean,

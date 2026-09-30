@@ -165,7 +165,7 @@ describe('CommunityModulesList', () => {
     expect(navigateMock).not.toHaveBeenCalled();
   });
 
-  it('gates community row details on a live CR instance (regression #10718)', () => {
+  it('gates community row details on a live CR instance', () => {
     renderList();
     const hasRowDetails = genericListProps.current.hasRowDetails;
     expect(typeof hasRowDetails).toBe('function');
