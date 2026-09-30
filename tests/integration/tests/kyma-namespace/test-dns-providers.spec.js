@@ -72,20 +72,21 @@ context('Test DNS Providers', () => {
       .filter(':visible', { log: false })
       .click();
 
-    cy.get('[placeholder="Enter key"]:visible', { log: false })
+    cy.get('ui5-input[placeholder="Enter key"][value=""]:visible', {
+      log: false,
+    })
       .find('input')
-      .filterWithNoValue()
       .type('is-edited', { force: true });
 
-    cy.get('[placeholder="Enter value"]:visible', { log: false })
+    cy.get('ui5-input[placeholder="Enter value"][value=""]:visible', {
+      log: false,
+    })
       .find('input')
-      .filterWithNoValue()
       .first()
       .type('yes', { force: true });
 
-    cy.get('[placeholder="Domain that is allowed"]')
+    cy.get('ui5-input[placeholder="Domain that is allowed"][value=""]')
       .find('input')
-      .filterWithNoValue()
       .type(PROVIDER_INCLUDED_DOMAIN_2);
 
     // edit excluded domains
@@ -94,9 +95,8 @@ context('Test DNS Providers', () => {
       .filter(':visible', { log: false })
       .click();
 
-    cy.get('[placeholder="Domain that is forbidden"]')
+    cy.get('ui5-input[placeholder="Domain that is forbidden"][value=""]')
       .find('input')
-      .filterWithNoValue()
       .type(PROVIDER_EXCLUDED_DOMAIN);
 
     // hit update

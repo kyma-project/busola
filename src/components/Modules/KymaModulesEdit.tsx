@@ -131,7 +131,7 @@ export default function KymaModulesEdit({
 }: ResourceFormProps & { resourceUrl: string }) {
   const { t } = useTranslation();
   const [kymaResource, setKymaResource] = useState(cloneDeep(resource));
-  const [initialResource] = useState(resource);
+  const [initialResource, setInitialResource] = useState(resource);
   const [initialUnchangedResource] = useState(cloneDeep(resource));
   const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
   const setIsFormOpen = useSetAtom(isFormOpenAtom);
@@ -341,6 +341,8 @@ export default function KymaModulesEdit({
       content: t('kyma-modules.messages.updated'),
     });
 
+    // without this the post-save refetch re-opens a stale-baseline form that still reads dirty, blocking tab nav
+    setInitialResource(cloneDeep(kymaResource));
     setIsResourceEdited({
       isEdited: false,
     });

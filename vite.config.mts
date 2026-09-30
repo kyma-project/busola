@@ -29,10 +29,10 @@ export default defineConfig({
         changeOrigin: true,
         ws: true,
         configure: (proxy) => {
-          proxy.on('error', (err, req, res) => {
+          proxy.on('error', (err: NodeJS.ErrnoException, req, res) => {
             if (
               ['ECONNREFUSED', 'ECONNRESET', 'ETIMEDOUT', 'ENOTFOUND'].includes(
-                err.code,
+                err.code ?? '',
               )
             ) {
               res.statusCode = 503;

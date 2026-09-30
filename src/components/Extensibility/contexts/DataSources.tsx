@@ -1,5 +1,13 @@
 import pluralize from 'pluralize';
-import { createContext, FC, JSX, useEffect, useRef, useState } from 'react';
+import {
+  createContext,
+  FC,
+  JSX,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useAtomValue } from 'jotai';
 
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
@@ -58,6 +66,7 @@ export interface DataSourcesContextType {
   dataSources: DataSources;
   getRelatedResourceInPath: (path: string) => string | undefined;
   requestRelatedResource: (resource: Resource, dataSourceName: string) => any;
+  refetchDataSource: (dataSourceName: string) => void;
 }
 
 export const DataSourcesContext = createContext<DataSourcesContextType>(
@@ -199,11 +208,20 @@ export const DataSourcesContextProvider: FC<Props> = ({
     }
   };
 
-  const getRelatedResourceInPath = (path: string) => {
-    return Object.keys(dataSources).find((dataSourceName) =>
-      path.startsWith('$' + dataSourceName),
-    );
-  };
+  const getRelatedResourceInPath = useCallback(
+    (path: string) =>
+      Object.keys(dataSources).find((dataSourceName) =>
+        path.startsWith('$' + dataSourceName),
+      ),
+    [dataSources],
+  );
+
+  // force an out-of-band refetch of a single source (e.g. right after a delete,
+  // so the list drops the row instead of waiting for the next poll tick)
+  const refetchDataSource = useCallback(
+    (dataSourceName: string) => setRefetchSource(dataSourceName),
+    [],
+  );
 
   const requestRelatedResource = (resource: any, dataSourceName: string) => {
     const dataSource = dataSources[dataSourceName];
@@ -252,6 +270,7 @@ export const DataSourcesContextProvider: FC<Props> = ({
     dataSources,
     getRelatedResourceInPath,
     requestRelatedResource,
+    refetchDataSource,
   };
 
   return (

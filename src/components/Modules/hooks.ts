@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
+import { isEqual } from 'lodash';
 import pluralize from 'pluralize';
 import { useGet, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
@@ -152,7 +153,7 @@ export const useFetchModuleData = (
 
       // Don't clear data during polling if all fetches fail
       if (Object.keys(cache).length > 0 || !isPolling) {
-        setData(cache);
+        setData((prev) => (isEqual(prev, cache) ? prev : cache));
       }
       if (errors.length) setError(errors.join('\n'));
       setLoading(false);

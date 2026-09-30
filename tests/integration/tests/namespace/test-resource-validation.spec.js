@@ -21,7 +21,7 @@ context('Test resource validation', () => {
       cy.pasteToMonaco(podConfig);
     });
 
-    cy.contains('nginx:latest').should('be.visible');
+    cy.get('div.monaco-editor').contains('nginx:latest').should('be.visible');
 
     cy.get('[data-testid="yaml-upload-modal__validation-result"]').get(
       'ui5-icon[name="alert"]',
@@ -64,7 +64,7 @@ context('Test resource validation', () => {
       cy.pasteToMonaco(podConfig);
     });
 
-    cy.contains('nginx:latest').should('be.visible');
+    cy.get('div.monaco-editor').contains('nginx:latest').should('be.visible');
 
     cy.contains('warnings').should('not.exist');
 
@@ -111,7 +111,7 @@ context('Test resource validation', () => {
       cy.pasteToMonaco(podConfig);
     });
 
-    cy.contains('nginx:latest').should('be.visible');
+    cy.get('div.monaco-editor').contains('nginx:latest').should('be.visible');
 
     cy.get('[data-testid="yaml-upload-modal__validation-result"]').get(
       'ui5-icon[name="alert"]',
@@ -176,7 +176,7 @@ context('Test resource validation', () => {
       cy.pasteToMonaco(podConfig);
     });
 
-    cy.contains('nginx:latest').should('be.visible');
+    cy.get('div.monaco-editor').contains('nginx:latest').should('be.visible');
 
     cy.get('[data-testid="yaml-upload-modal__validation-result"]')
       .get('ui5-icon[name="alert"]')

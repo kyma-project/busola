@@ -4,14 +4,31 @@ export function chooseComboboxOption(selector, optionText, force = false) {
   // wait for the specific option to be registered before typing
   combobox().find(`ui5-cb-item[text*="${optionText}"]`).should('exist');
 
-  combobox()
+  cy.get(`ui5-combobox${selector}`)
     .find('input')
     .should('not.be.disabled')
-    .filterWithNoValue()
     .click()
-    .type(optionText);
+    .clear()
+    .type(optionText)
+    .then(($input) => {
+      // Fast typing sometimes gets partly overwritten, leaving a wrong value in the field.
+      // If that happened, set the value directly instead.
+      // TODO: remove once https://github.com/UI5/webcomponents/issues/14097 is fixed.
+      if (!$input.val().startsWith(optionText)) {
+        const input = $input[0];
+        input.value = optionText;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
 
   cy.get('ui5-cb-item:visible').contains(optionText).click({ force: force });
+}
+
+export function chooseSelectOption(optionText, force = true) {
+  // clicking the ui5-option host often misses; the inner <li> is the real target
+  cy.get('ui5-option:visible').contains(optionText).find('li').click({ force });
+
+  cy.get('ui5-option:visible').should('not.exist');
 }
 
 export function useCategory(category) {

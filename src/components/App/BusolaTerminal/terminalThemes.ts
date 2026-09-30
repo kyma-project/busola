@@ -1,51 +1,30 @@
 import { ITheme } from '@xterm/xterm';
-import { Theme, isSystemThemeDark } from 'state/settings/themeAtom';
 
-const LIGHT_XTERM_THEME: ITheme = {
-  background: '#fff',
-  foreground: '#131e29',
-  cursor: '#0064d9',
-  cursorAccent: '#fff',
-  selectionBackground: '#0064d980',
-};
+function getSapToken(name: string): string {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+}
 
-const DARK_XTERM_THEME: ITheme = {
-  background: '#12171c',
-  foreground: '#f5f6f7',
-  cursor: '#4db1ff',
-  cursorAccent: '#12171c',
-  selectionBackground: '#4db1ff80',
-};
-
-const HCB_XTERM_THEME: ITheme = {
-  background: '#000000',
-  foreground: '#ffffff',
-  cursor: '#ffffff',
-  cursorAccent: '#000000',
-  selectionBackground: '#ffffff40',
-};
-
-const HCW_XTERM_THEME: ITheme = {
-  background: '#ffffff',
-  foreground: '#000000',
-  cursor: '#000000',
-  cursorAccent: '#ffffff',
-  selectionBackground: '#00000040',
-};
-
-export function getXtermTheme(theme: Theme): ITheme {
-  switch (theme) {
-    case 'sap_horizon_dark':
-      return DARK_XTERM_THEME;
-    case 'sap_horizon_hcb':
-      return HCB_XTERM_THEME;
-    case 'sap_horizon_hcw':
-      return HCW_XTERM_THEME;
-    case 'light_dark':
-      return isSystemThemeDark() ? DARK_XTERM_THEME : LIGHT_XTERM_THEME;
-    default:
-      return LIGHT_XTERM_THEME;
-  }
+export function getXtermTheme(): ITheme {
+  // All colors are resolved from the active SAP design tokens at call time.
+  // This covers all themes (light, dark, high-contrast) without hardcoded hex values.
+  const background = getSapToken('--sapField_Background');
+  return {
+    background,
+    foreground: getSapToken('--sapTextColor'),
+    cursor: getSapToken('--sapField_Active_BorderColor'),
+    cursorAccent: background,
+    selectionBackground: `${getSapToken('--sapSelectedColor')}80`,
+    red: getSapToken('--sapNegativeTextColor'),
+    green: getSapToken('--sapPositiveTextColor'),
+    yellow: getSapToken('--sapCriticalTextColor'),
+    blue: getSapToken('--sapInformativeTextColor'),
+    brightRed: getSapToken('--sapNegativeElementColor'),
+    brightGreen: getSapToken('--sapPositiveElementColor'),
+    brightYellow: getSapToken('--sapCriticalElementColor'),
+    brightBlue: getSapToken('--sapInformativeElementColor'),
+  };
 }
 
 export const TERMINAL_MIN_HEIGHT = 100;

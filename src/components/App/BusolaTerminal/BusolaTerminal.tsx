@@ -8,7 +8,7 @@ import { showTerminalAtom } from 'state/showTerminalAtom';
 import { terminalSessionAtom } from 'state/terminalSessionAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { useAtom, useAtomValue } from 'jotai';
-import { themeAtom } from 'state/settings/themeAtom';
+import { attachThemeLoaded, detachThemeLoaded } from '@ui5/webcomponents-base';
 import { getXtermTheme } from './terminalThemes';
 import { useTerminalSession } from './useTerminalSession';
 import './BusolaTerminal.scss';
@@ -30,7 +30,6 @@ export function BusolaTerminal({
   const sessionState = useAtomValue(terminalSessionAtom);
   // Ref so the cleanup effect reads the current podName, not the mount-time value.
   const podNameRef = useRef<string | null>(null);
-  const theme = useAtomValue(themeAtom);
   const { connect, disconnect } = useTerminalSession();
   const cluster = useAtomValue(clusterAtom);
   const openedOnClusterRef = useRef(cluster?.name);
@@ -48,7 +47,7 @@ export function BusolaTerminal({
 
   useEffect(() => {
     if (!termDOM?.current) return;
-    const term = new Terminal({ theme: getXtermTheme(theme) });
+    const term = new Terminal({ theme: getXtermTheme() });
     const fitAddon = new FitAddon();
     termRef.current = term;
     fitAddonRef.current = fitAddon;
@@ -87,20 +86,18 @@ export function BusolaTerminal({
   }, []);
 
   useEffect(() => {
-    const applyTheme = () => {
+    const applyTerminalTheme = () => {
       if (termRef.current) {
-        termRef.current.options.theme = getXtermTheme(theme);
+        termRef.current.options.theme = getXtermTheme();
       }
     };
 
-    applyTheme();
-
-    if (theme === 'light_dark') {
-      const mq = window.matchMedia('(prefers-color-scheme: dark)');
-      mq.addEventListener('change', applyTheme);
-      return () => mq.removeEventListener('change', applyTheme);
-    }
-  }, [theme]);
+    // UI5 applies the theme's CSS variables to :root asynchronously, so the
+    // resolved colors are only available after this event fires. Re-read them
+    // here to keep the terminal in sync on every theme change.
+    attachThemeLoaded(applyTerminalTheme);
+    return () => detachThemeLoaded(applyTerminalTheme);
+  }, []);
 
   const handleClose = () => {
     disconnect(podNameRef.current);

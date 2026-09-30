@@ -1,4 +1,4 @@
-import { render, waitFor } from 'testing/reactTestingUtils';
+import { render, act, waitFor } from 'testing/reactTestingUtils';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
@@ -112,5 +112,93 @@ describe('useGet', () => {
         }),
       ),
     );
+  });
+
+  it('creates the polling interval only once across many poll ticks', async () => {
+    // Regression: the polling effect once depended on `data`/`refetch`, so each
+    // poll's new resourceVersion re-armed the interval. It must be created once.
+    vi.useFakeTimers();
+    // Spy after useFakeTimers (wraps the fake timer) and before render (so the
+    // mount-time setInterval is counted).
+    const setIntervalSpy = vi.spyOn(global, 'setInterval');
+    const clearIntervalSpy = vi.spyOn(global, 'clearInterval');
+    const setGetResultMock = vi.fn();
+
+    let version = 0;
+    mockUseFetch.mockImplementation(() => {
+      version++;
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve({ metadata: { resourceVersion: `${version}` } }),
+      });
+    });
+
+    render(<Testbed setGetResult={setGetResultMock} />, {
+      initialAtoms: [
+        [authDataAtom, { token: 'test-token' }],
+        [clusterAtom, {}],
+      ],
+    });
+
+    // Drain the initial fetch (0-delay deferrals) without firing the interval.
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    // 5 poll ticks, each returning a fresh resourceVersion.
+    for (let i = 0; i < 5; i++) {
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+    }
+
+    expect(setIntervalSpy).toHaveBeenCalledTimes(1);
+    expect(clearIntervalSpy).not.toHaveBeenCalled();
+  });
+
+  it('does not deliver new data on same resourceVersion when compareEntireResource is false', async () => {
+    // Regression: a positional-arg mismatch forced `compareEntireResource` truthy,
+    // so an unchanged resourceVersion still re-delivered. It must not now.
+    vi.useFakeTimers();
+    const setGetResultMock = vi.fn();
+
+    let body = 0;
+    mockUseFetch.mockImplementation(() => {
+      body++;
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            metadata: { resourceVersion: 'v-fixed' },
+            body,
+          }),
+      });
+    });
+
+    render(<Testbed setGetResult={setGetResultMock} />, {
+      initialAtoms: [
+        [authDataAtom, { token: 'test-token' }],
+        [clusterAtom, {}],
+      ],
+    });
+
+    // Drain the initial load (delivers body:1).
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0);
+    });
+
+    // 4 poll ticks with the same resourceVersion.
+    for (let i = 0; i < 4; i++) {
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+    }
+
+    const deliveredBodies = setGetResultMock.mock.calls
+      .map(([, , data]) => data?.body)
+      .filter((b) => b !== undefined);
+
+    // Same resourceVersion → only the initial body reaches state (pre-fix: 2, 3, 4…).
+    expect(deliveredBodies.length).toBeGreaterThan(0);
+    expect(deliveredBodies.every((b) => b === 1)).toBe(true);
   });
 });

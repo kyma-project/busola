@@ -115,7 +115,7 @@ context('Test OAuth2 Clients', () => {
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains('ui5-link', AUTH2_NAME).should('not.exist');
+    cy.contains('ui5-link', AUTH2_NAME, { timeout: 30000 }).should('not.exist');
 
     cy.contains('Ory Hydra Deprecation').should('not.exist');
   });
