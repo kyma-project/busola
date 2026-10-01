@@ -1,6 +1,5 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { sanitizeUrl } from 'shared/helpers/sanitizeUrl';
 
 interface ExternalLinkButtonProps {
   structure: any;
@@ -18,7 +17,7 @@ export function ExternalLinkButton({ structure }: ExternalLinkButtonProps) {
       design={structure?.emphasized ? 'Emphasized' : 'Default'}
       onClick={() => {
         const newWindow = window.open(
-          sanitizeUrl(structure?.link),
+          structure?.link,
           '_blank',
           'noopener, noreferrer',
         );

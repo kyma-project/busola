@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, FlexBox, Icon, Link } from '@ui5/webcomponents-react';
-import { sanitizeUrl } from 'shared/helpers/sanitizeUrl';
 
 type LinkProps = {
   url: string;
@@ -33,7 +32,6 @@ export const ExternalLink = ({
   linkClassName,
 }: LinkProps) => {
   const { t } = useTranslation();
-  const safeUrl = sanitizeUrl(url);
 
   if (type === 'button') {
     return (
@@ -45,11 +43,7 @@ export const ExternalLink = ({
         design={buttonDesign}
         className="sap-margin-x-tiny"
         onClick={() => {
-          const newWindow = window.open(
-            safeUrl,
-            '_blank',
-            'noopener, noreferrer',
-          );
+          const newWindow = window.open(url, '_blank', 'noopener, noreferrer');
           if (newWindow) newWindow.opener = null;
         }}
       >
@@ -61,7 +55,7 @@ export const ExternalLink = ({
   return (
     <Link
       design={design}
-      href={safeUrl}
+      href={url}
       target="_blank"
       className={linkClassName}
       accessibleName={text || children?.toString() || url}
