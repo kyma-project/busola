@@ -7,7 +7,7 @@ import { showTerminalAtom } from 'state/showTerminalAtom';
 import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
 
 const TERMINAL_DOCS_URL =
-  'https://kyma-project.io/external-content/busola/docs/user/01-50-terminal.html';
+  'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-dashboard-terminal';
 
 export function TerminalBanner() {
   const { t } = useTranslation();
