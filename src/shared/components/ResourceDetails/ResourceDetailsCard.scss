@@ -4,15 +4,15 @@
 }
 
 .form-without-background {
-  background-color: var(--sapBackgroundColor);
+  &::part(layout) {
+    background-color: var(--sapBackgroundColor);
+    padding: 0;
+  }
 
-  > ui5-form-group {
-    > *:not(:last-child) {
-      padding-bottom: 1rem;
-    }
+  &::part(column) {
+    padding-top: 0;
   }
 }
-
 .resource-card-layout {
   ui5-label {
     margin-bottom: 4px;
