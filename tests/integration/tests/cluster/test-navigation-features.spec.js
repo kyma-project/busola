@@ -1,28 +1,9 @@
 /// <reference types="cypress" />
-import jsyaml from 'js-yaml';
-
-function mockFeatures(features) {
-  const requestData = {
-    method: 'GET',
-    url: '/backend/api/v1/namespaces/kube-public/configmaps/busola-config',
-  };
-  const configmapMock = {
-    data: {
-      config: jsyaml.dump({ config: { features } }),
-    },
-  };
-  cy.intercept(requestData, configmapMock);
-}
-
 context('Test navigation features', () => {
   Cypress.skipAfterFail();
 
   before(() => {
-    mockFeatures({
-      HIDDEN_NAMESPACES: {
-        isEnabled: false,
-      },
-    });
+    cy.setBusolaInstallationFeature('HIDDEN_NAMESPACES', false);
     cy.loginAndSelectCluster();
   });
 

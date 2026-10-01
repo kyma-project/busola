@@ -25,6 +25,26 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
+  'setBusolaInstallationFeature',
+  (featureName, isEnabled, properties = {}) => {
+    cy.log(`Set Busola installation feature: ${featureName} -> ${isEnabled}`);
+
+    const body = JSON.stringify({
+      config: {
+        features: {
+          [featureName]: { isEnabled, ...properties },
+        },
+      },
+    });
+
+    cy.intercept(
+      { method: 'GET', url: /\/config\/config\.yaml/ },
+      { statusCode: 200, body },
+    );
+  },
+);
+
+Cypress.Commands.add(
   'mockConfigMap',
   ({ namespace = 'kube-public', label, data }) => {
     const requestData = {
