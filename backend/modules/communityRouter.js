@@ -34,9 +34,8 @@ async function handleGetCommunityResource(req, res) {
 
     const response = await fetch(url.href);
 
-    // Validate the final URL after redirect-following against the same allowlist.
-    // This prevents a trusted GitHub URL from redirecting to an arbitrary destination
-    // (SSRF via open redirect on a trusted host).
+    // We cannot disable redirects because github redirects to release assets.
+    // The final URL is checked if there was an open redirect vuln on github.com.
     const finalUrl = new URL(response.url);
     if (!isAllowedUrl(finalUrl)) {
       return res.status(400).json({
