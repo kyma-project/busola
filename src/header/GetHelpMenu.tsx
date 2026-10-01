@@ -10,7 +10,7 @@ import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
 import { useGetHelpLinks } from './SidebarMenu/useGetHelpLinks';
 import { type RefObject, useState } from 'react';
 import { ShellBarAction } from 'header/ShellBarAction';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { resolveOpener } from 'header/helpers';
 
@@ -24,6 +24,7 @@ interface GetHelpMenuProps {
 }
 
 export function GetHelpMenu({ shellbarRef }: GetHelpMenuProps) {
+  const { t } = useTranslation();
   const [isGetHelpOpen, setIsGetHelpOpen] = useState(false);
   const [opener, setOpener] = useState<HTMLElement | undefined>();
   const getHelpLinks = useGetHelpLinks();
