@@ -39,12 +39,41 @@ export function FormField({
   const inputInfoLink = useCreateResourceDescription(inputInfo);
   const [openPopover, setOpenPopover] = useState(false);
 
-  return (
-    <FormItem
-      className={classnames('form-field', className)}
-      style={style}
-      labelContent={
-        !isListItem && label ? (
+  const innerContent = (
+    <FlexBox
+      key={'messagestrip-flexbox'}
+      wrap="Wrap"
+      alignItems="Center"
+      className="full-width"
+    >
+      {messageStrip ||
+        input({
+          updatesOnInput,
+          required,
+          disabled,
+          className: 'full-width',
+          accessibleName: label,
+          id: label?.replace(' ', '-').toLowerCase(),
+          ...props,
+        })}
+      {inputInfo && (
+        <Label
+          wrappingType="Normal"
+          showColon={false}
+          style={{ marginTop: '5px' }}
+        >
+          {inputInfoLink}
+        </Label>
+      )}
+    </FlexBox>
+  );
+
+  if (!isListItem && label) {
+    return (
+      <FormItem
+        className={classnames('form-field', className)}
+        style={style}
+        labelContent={
           <FlexBox
             key={'labels-flexbox'}
             wrap="Wrap"
@@ -63,39 +92,25 @@ export function FormField({
                 showTitleDescription={openPopover}
                 description={tooltipContent}
                 className="sap-margin-begin-tiny"
-                ariaTitle={!isListItem ? label : ''}
+                ariaTitle={label}
               />
             )}
           </FlexBox>
-        ) : undefined
-      }
-    >
-      <FlexBox
-        key={'messagestrip-flexbox'}
-        wrap="Wrap"
-        alignItems="Center"
-        className="full-width"
+        }
       >
-        {messageStrip ||
-          input({
-            updatesOnInput,
-            required,
-            disabled,
-            className: 'full-width',
-            accessibleName: label,
-            id: label?.replace(' ', '-').toLowerCase(),
-            ...props,
-          })}
-        {inputInfo && (
-          <Label
-            wrappingType="Normal"
-            showColon={false}
-            style={{ marginTop: '5px' }}
-          >
-            {inputInfoLink}
-          </Label>
-        )}
-      </FlexBox>
-    </FormItem>
+        {innerContent}
+      </FormItem>
+    );
+  }
+
+  return (
+    <FlexBox
+      className={classnames('form-field', className)}
+      style={style}
+      wrap="Wrap"
+      alignItems="Center"
+    >
+      {innerContent}
+    </FlexBox>
   );
 }
