@@ -9,7 +9,7 @@ export function useCustomFormValidator() {
   const revalidate = (cv = customValid) => {
     // Has to adjusted after every Resource Form structure change
     const formContainer =
-      formElementRef.current?.querySelector('.resource-form')?.children[0];
+      formElementRef.current?.querySelector('.resource-form');
     if (formContainer) {
       setValid(cv && validateFormElement(formContainer, true).valid);
     }
