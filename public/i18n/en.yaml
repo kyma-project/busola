@@ -259,6 +259,7 @@ common:
     delete-module: Delete Module
     discard: Discard
     disconnect: Disconnect
+    documentation: Documentation
     edit: Edit
     learn-more: Learn More
     ok: OK
