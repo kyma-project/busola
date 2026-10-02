@@ -117,7 +117,7 @@ export function EventList({
     },
     {
       header: t('events.headers.message'),
-      width: '20%',
+      width: '20cqi',
       value: (e) => <Text>{e.message}</Text>,
     },
     {
@@ -171,7 +171,7 @@ export function EventList({
     },
     {
       header: t('events.headers.last-seen'),
-      width: '26ch',
+      width: '14ch',
       value: (e) => <ReadableCreationTimestamp timestamp={e.lastTimestamp} />,
     },
   ];
