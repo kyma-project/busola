@@ -3,7 +3,9 @@ import { renderHook } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { createElement, PropsWithChildren } from 'react';
 import { UserManager } from 'oidc-client-ts';
+import { getDefaultStore } from 'jotai';
 import { getIntendedPath } from '../intendedPathAtom';
+import { clusterAtom, CLUSTER_NAME_STORAGE_KEY } from '../clusterAtom';
 import {
   AUTH_REDIRECT_STORAGE_KEY,
   isAuthRedirectLoop,
@@ -51,6 +53,8 @@ describe('useReauthenticate', () => {
     mockNavigate.mockReset();
     notifyLoginFailureMock.mockReset();
     sessionStorage.clear();
+    localStorage.clear();
+    getDefaultStore().set(clusterAtom, null);
     resetReauthRedirectClaim();
   });
 
@@ -136,6 +140,52 @@ describe('useReauthenticate', () => {
     expect(userManager.signinRedirect).not.toHaveBeenCalled();
     expect(notifyLoginFailureMock).toHaveBeenCalled();
     expect(mockNavigate).toHaveBeenCalledWith('/clusters');
+  });
+
+  it('recovery action saves intended path and uses prompt=login', async () => {
+    // Pre-trip the guard.
+    registerAuthRedirect();
+    registerAuthRedirect();
+    registerAuthRedirect();
+
+    const userManager = makeUserManager();
+    const { result } = renderHook(() => useReauthenticate(), {
+      wrapper: makeWrapper('/cluster/foo/namespaces/bar'),
+    });
+
+    await result.current(userManager);
+
+    expect(notifyLoginFailureMock).toHaveBeenCalled();
+    const [, options] = notifyLoginFailureMock.mock.calls[0];
+    expect(options.onRetry).toBeDefined();
+
+    await options.onRetry();
+
+    expect(userManager.signinRedirect).toHaveBeenCalledWith({
+      prompt: 'login',
+    });
+    expect(getIntendedPath()?.path).toBe('/namespaces/bar');
+  });
+
+  it('recovery action re-persists the cluster so the callback can finish', async () => {
+    getDefaultStore().set(clusterAtom, { name: 'foo' } as never);
+    registerAuthRedirect();
+    registerAuthRedirect();
+    registerAuthRedirect();
+
+    const userManager = makeUserManager();
+    const { result } = renderHook(() => useReauthenticate(), {
+      wrapper: makeWrapper('/cluster/foo/namespaces/bar'),
+    });
+
+    await result.current(userManager);
+    // The loop branch cleared the cluster before showing the dialog.
+    expect(localStorage.getItem(CLUSTER_NAME_STORAGE_KEY)).toBeNull();
+
+    const [, options] = notifyLoginFailureMock.mock.calls[0];
+    await options.onRetry();
+
+    expect(localStorage.getItem(CLUSTER_NAME_STORAGE_KEY)).toBe('foo');
   });
 
   it('falls back to the cluster list when no UserManager is available', async () => {

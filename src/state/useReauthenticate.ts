@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { UserManager } from 'oidc-client-ts';
 import { useTranslation } from 'react-i18next';
-import { clusterAtom } from 'state/clusterAtom';
+import { clusterAtom, persistActiveClusterName } from 'state/clusterAtom';
 import {
   clearIntendedPath,
   saveIntendedPath,
@@ -20,16 +20,15 @@ import { useNotifyLoginFailure } from './useLoginFailureNotification';
 
 type NotifyError = (props: { content: string }) => void;
 
-// Session-drop recovery. With a UserManager, saves the current path and
-// redirects through the IdP. Without one (token/cert/exec auth — no IdP
-// round-trip possible) or when the redirect fails, falls back to the
-// cluster list instead, so no call site is left on a dead cluster page.
+// Redirects through the IdP to recover a dropped session. Falls back to /clusters
+// when there's no UserManager (token/cert/exec auth) or the redirect fails.
 export function useReauthenticate({
   notifyError,
 }: { notifyError?: NotifyError } = {}) {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const cluster = useAtomValue(clusterAtom);
   const setCluster = useSetAtom(clusterAtom);
   const notifyLoginFailure = useNotifyLoginFailure();
 
@@ -56,11 +55,25 @@ export function useReauthenticate({
       if (isAuthRedirectLoop()) {
         clearIntendedPath();
         // Clear the cluster so the login effect runs again on the next attempt.
+        const clusterName = cluster?.name;
         setCluster(null);
         notifyLoginFailure(undefined, {
+          // prompt: 'login' forces a fresh sign-in and returns the user to where they were.
           onRetry: () => {
+            const relative = toClusterRelative(fullPath);
+            if (relative) saveIntendedPath(relative);
             resetAuthRedirectGuard();
-            navigate(fullPath);
+            if (userManager) {
+              // Re-persist the cluster so the IdP callback (returns to the
+              // origin, cluster atom already null) can restore it and finish.
+              if (clusterName) persistActiveClusterName(clusterName);
+              userManager
+                .clearStaleState()
+                .then(() => userManager.signinRedirect({ prompt: 'login' }))
+                .catch(() => window.location.assign('/clusters'));
+            } else {
+              window.location.assign('/clusters');
+            }
           },
         });
         navigate('/clusters');
@@ -91,6 +104,7 @@ export function useReauthenticate({
       notifyError,
       notifyLoginFailure,
       setCluster,
+      cluster,
     ],
   );
 }
