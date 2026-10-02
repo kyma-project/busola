@@ -4,14 +4,16 @@ import { createElement, PropsWithChildren } from 'react';
 import { MemoryRouter } from 'react-router';
 import { Provider, createStore } from 'jotai';
 import { configurationAtom } from '../configuration/configurationAtom';
-import { clusterAtom } from '../clusterAtom';
+import { clusterAtom, CLUSTER_NAME_STORAGE_KEY } from '../clusterAtom';
+import { getIntendedPath, saveIntendedPath } from '../intendedPathAtom';
 import {
   isAuthRedirectLoop,
   registerAuthRedirect,
+  resetReauthRedirectClaim,
 } from '../utils/authRedirectLoopGuard';
 import { authDataAtom, useAuthHandler } from '../authDataAtom';
 
-const { managerMock } = vi.hoisted(() => ({
+const { managerMock, notifyLoginFailureMock } = vi.hoisted(() => ({
   managerMock: {
     getUser: vi.fn(),
     signinRedirect: vi.fn().mockResolvedValue(undefined),
@@ -19,6 +21,7 @@ const { managerMock } = vi.hoisted(() => ({
     clearStaleState: vi.fn().mockResolvedValue(undefined),
     events: { addAccessTokenExpiring: vi.fn(), addUserUnloaded: vi.fn() },
   },
+  notifyLoginFailureMock: vi.fn(),
 }));
 
 vi.mock('oidc-client-ts', () => ({
@@ -34,7 +37,10 @@ vi.mock('../silentRenewSetup', () => ({
   attachSilentRenewHandlers: vi.fn(() => ({ cleanup: vi.fn() })),
 }));
 
-// An OIDC cluster, so the login uses a UserManager instead of a static token.
+vi.mock('../useLoginFailureNotification', () => ({
+  useNotifyLoginFailure: () => notifyLoginFailureMock,
+}));
+
 const OIDC_CLUSTER = {
   name: 'foo',
   currentContext: {
@@ -72,6 +78,9 @@ describe('useAuthHandler redirect-loop guard', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     sessionStorage.clear();
+    localStorage.clear();
+    window.history.replaceState({}, '', '/');
+    resetReauthRedirectClaim();
     managerMock.getUser.mockResolvedValue({
       expired: false,
       id_token: 'jwt',
@@ -97,5 +106,68 @@ describe('useAuthHandler redirect-loop guard', () => {
     // If the guard was cleared here the counter would reset every cycle and
     // we would loop forever, the next reauth still needs to see it.
     expect(isAuthRedirectLoop()).toBe(true);
+  });
+
+  it('onLoginFailed saves the path and Retry forces a fresh login', async () => {
+    // Pre-trip the guard so handleLogin's stop-loop path fires onLoginFailed.
+    registerAuthRedirect();
+    registerAuthRedirect();
+    registerAuthRedirect();
+    managerMock.getUser.mockResolvedValue({ expired: true });
+    // handleLogin reads window.location to preserve the user's location.
+    window.history.replaceState({}, '', '/cluster/foo/namespaces/bar');
+
+    const { Wrapper } = makeWrapper();
+    renderHook(() => useAuthHandler(), { wrapper: Wrapper });
+
+    await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
+    // The user's location was preserved for the Retry action.
+    expect(getIntendedPath()?.path).toBe('/namespaces/bar');
+
+    // Even though userManagerRef was never set on the stop-loop path, Retry still uses prompt: 'login'.
+    const [, options] = notifyLoginFailureMock.mock.calls[0];
+    expect(options?.onRetry).toBeDefined();
+    await options.onRetry();
+    expect(managerMock.signinRedirect).toHaveBeenCalledWith({
+      prompt: 'login',
+    });
+  });
+
+  it('Retry re-persists the cluster so the IdP callback can finish the login', async () => {
+    registerAuthRedirect();
+    registerAuthRedirect();
+    registerAuthRedirect();
+    managerMock.getUser.mockResolvedValue({ expired: true });
+    window.history.replaceState({}, '', '/cluster/foo/namespaces/bar');
+
+    const { Wrapper } = makeWrapper();
+    renderHook(() => useAuthHandler(), { wrapper: Wrapper });
+
+    await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
+    // onLoginFailed cleared the cluster, so nothing would restore it on return.
+    expect(localStorage.getItem(CLUSTER_NAME_STORAGE_KEY)).toBeNull();
+
+    const [, options] = notifyLoginFailureMock.mock.calls[0];
+    await options.onRetry();
+
+    // Retry writes the name back so the redirect_uri (origin) load can restore
+    // the cluster and exchange the code instead of orphaning the callback.
+    expect(localStorage.getItem(CLUSTER_NAME_STORAGE_KEY)).toBe('foo');
+  });
+
+  it('onLoginFailed keeps the kubeconfigID marker on the saved path', async () => {
+    // A kubeconfigID deep-link flow is still pending: its marker must survive.
+    saveIntendedPath('/namespaces/bar', 'my-kubeconfig');
+    registerAuthRedirect();
+    registerAuthRedirect();
+    registerAuthRedirect();
+    managerMock.getUser.mockResolvedValue({ expired: true });
+    window.history.replaceState({}, '', '/cluster/foo/namespaces/bar');
+
+    const { Wrapper } = makeWrapper();
+    renderHook(() => useAuthHandler(), { wrapper: Wrapper });
+
+    await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
+    expect(getIntendedPath()?.kubeconfigId).toBe('my-kubeconfig');
   });
 });

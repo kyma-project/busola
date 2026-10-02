@@ -4,6 +4,11 @@ import { createElement, PropsWithChildren } from 'react';
 import { MemoryRouter } from 'react-router';
 import { Provider, createStore } from 'jotai';
 import { configurationAtom } from '../configuration/configurationAtom';
+import { getIntendedPath } from '../intendedPathAtom';
+import {
+  savePendingKubeconfigId,
+  consumePendingKubeconfigId,
+} from '../intendedPathAtom';
 import {
   isAuthRedirectLoop,
   registerAuthRedirect,
@@ -144,5 +149,66 @@ describe('useSSOLogin', () => {
     await waitFor(() => expect(store.get(ssoDataAtom)?.id_token).toBe('jwt'));
     expect(isAuthRedirectLoop()).toBe(false);
     expect(notifyLoginFailureMock).not.toHaveBeenCalled();
+  });
+
+  it('onRetry for loop-stop forces prompt=login and restores the path', async () => {
+    registerAuthRedirect();
+    registerAuthRedirect();
+    registerAuthRedirect();
+    // triggerForcedLogin reads window.location to preserve the user's path.
+    window.history.replaceState({}, '', '/cluster/foo/namespaces/bar');
+    const { Wrapper } = makeWrapper();
+
+    renderHook(() => useSSOLogin(), { wrapper: Wrapper });
+
+    await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
+
+    const [, options] = notifyLoginFailureMock.mock.calls[0];
+    expect(options?.onRetry).toBeDefined();
+    await options.onRetry();
+
+    expect(managerMock.signinRedirect).toHaveBeenCalledWith({
+      prompt: 'login',
+    });
+    expect(getIntendedPath()?.path).toBe('/namespaces/bar');
+  });
+
+  it('saves the kubeconfigID before redirecting so a deep link survives SSO', async () => {
+    window.history.replaceState({}, '', '/clusters?kubeconfigID=my.yaml');
+    const { Wrapper } = makeWrapper();
+
+    renderHook(() => useSSOLogin(), { wrapper: Wrapper });
+
+    await waitFor(() =>
+      expect(managerMock.signinRedirect).toHaveBeenCalledTimes(1),
+    );
+    // The pending ID is stored so the post-redirect callback can restore it.
+    expect(consumePendingKubeconfigId()).toBe('my.yaml');
+  });
+
+  it('restores the saved kubeconfigID into the URL after the SSO callback', async () => {
+    savePendingKubeconfigId('my.yaml');
+    // Owner lookup for the callback state must resolve to the SSO client.
+    localStorage.setItem(
+      'oidc.s1',
+      JSON.stringify({ client_id: 'sso-client' }),
+    );
+    window.history.replaceState({}, '', '/?code=abc&state=s1');
+    managerMock.getUser.mockResolvedValue(null);
+    managerMock.signinRedirectCallback.mockResolvedValue({
+      expired: false,
+      id_token: 'jwt',
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+    });
+    const { Wrapper } = makeWrapper();
+
+    renderHook(() => useSSOLogin(), { wrapper: Wrapper });
+
+    await waitFor(() =>
+      expect(window.location.search).toContain('kubeconfigID=my.yaml'),
+    );
+    // Callback params are stripped and the pending ID was consumed.
+    expect(window.location.search).not.toContain('code=');
+    expect(consumePendingKubeconfigId()).toBeNull();
   });
 });
