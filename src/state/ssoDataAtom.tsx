@@ -24,6 +24,7 @@ import {
   isAuthRedirectLoop,
   registerAuthRedirect,
   resetAuthRedirectGuard,
+  tryClaimReauthRedirect,
 } from './utils/authRedirectLoopGuard';
 import { useNotifyLoginFailure } from './useLoginFailureNotification';
 
@@ -84,7 +85,8 @@ async function trySilentRefresh(): Promise<boolean> {
 // path, then redirects through the IdP; on failure falls back to a full
 // load of /clusters. The saved path restores the location afterwards.
 function triggerReauthRedirect(userManager: UserManager | null) {
-  // Both paths re-enter login after a page load, count them for the loop guard.
+  // One expiry can fire several handlers; only the first should redirect.
+  if (!tryClaimReauthRedirect()) return;
   registerAuthRedirect();
   const fullPath = window.location.pathname + window.location.search;
   const relative = toClusterRelative(fullPath);

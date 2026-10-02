@@ -7,6 +7,7 @@ import { getIntendedPath } from '../intendedPathAtom';
 import {
   isAuthRedirectLoop,
   registerAuthRedirect,
+  resetReauthRedirectClaim,
 } from '../utils/authRedirectLoopGuard';
 import { useReauthenticate } from '../useReauthenticate';
 
@@ -49,6 +50,7 @@ describe('useReauthenticate', () => {
     mockNavigate.mockReset();
     notifyLoginFailureMock.mockReset();
     sessionStorage.clear();
+    resetReauthRedirectClaim();
   });
 
   it('redirects through the IdP and saves the intended path', async () => {
@@ -73,10 +75,12 @@ describe('useReauthenticate', () => {
       wrapper: makeWrapper('/cluster/foo'),
     });
 
-    await result.current(userManager);
-    await result.current(userManager);
+    await result.current(userManager); // simulated page load 1
+    resetReauthRedirectClaim();
+    await result.current(userManager); // simulated page load 2
     expect(isAuthRedirectLoop()).toBe(false);
-    await result.current(userManager);
+    resetReauthRedirectClaim();
+    await result.current(userManager); // simulated page load 3
     expect(isAuthRedirectLoop()).toBe(true);
   });
 

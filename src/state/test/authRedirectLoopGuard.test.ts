@@ -4,11 +4,14 @@ import {
   isAuthRedirectLoop,
   registerAuthRedirect,
   resetAuthRedirectGuard,
+  tryClaimReauthRedirect,
+  resetReauthRedirectClaim,
 } from '../utils/authRedirectLoopGuard';
 
 describe('authRedirectLoopGuard', () => {
   beforeEach(() => {
     sessionStorage.clear();
+    resetReauthRedirectClaim();
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2026-08-11T12:00:00Z'));
   });
@@ -53,6 +56,13 @@ describe('authRedirectLoopGuard', () => {
     expect(isAuthRedirectLoop()).toBe(false);
   });
 
+  it('also releases the per-load claim when reset', () => {
+    expect(tryClaimReauthRedirect()).toBe(true);
+    expect(tryClaimReauthRedirect()).toBe(false);
+    resetAuthRedirectGuard();
+    expect(tryClaimReauthRedirect()).toBe(true);
+  });
+
   it('fails open on corrupted storage', () => {
     sessionStorage.setItem(AUTH_REDIRECT_STORAGE_KEY, 'not json');
     expect(isAuthRedirectLoop()).toBe(false);
@@ -60,5 +70,26 @@ describe('authRedirectLoopGuard', () => {
 
     sessionStorage.setItem(AUTH_REDIRECT_STORAGE_KEY, '{"a":1}');
     expect(isAuthRedirectLoop()).toBe(false);
+  });
+});
+
+describe('tryClaimReauthRedirect', () => {
+  beforeEach(() => {
+    resetReauthRedirectClaim();
+  });
+
+  it('returns true on the first call', () => {
+    expect(tryClaimReauthRedirect()).toBe(true);
+  });
+
+  it('returns false on a second call in the same load', () => {
+    tryClaimReauthRedirect();
+    expect(tryClaimReauthRedirect()).toBe(false);
+  });
+
+  it('resetReauthRedirectClaim allows re-claiming', () => {
+    tryClaimReauthRedirect();
+    resetReauthRedirectClaim();
+    expect(tryClaimReauthRedirect()).toBe(true);
   });
 });
