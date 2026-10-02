@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Label } from '@ui5/webcomponents-react';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import './Presets.scss';
+import { FormItem } from '@ui5/webcomponents-react';
 
 export type PresetProps = {
   presets: {
@@ -35,7 +37,6 @@ export function Presets({
       options={options}
       disabled={disabled}
       selectedKey={selectedKey}
-      label={label}
       onSelect={(e, preset) => {
         e.stopPropagation();
         setSelectedKey(preset.key);
@@ -46,8 +47,6 @@ export function Presets({
   return inlinePresets ? (
     presetDropdown
   ) : (
-    <div className="ui5-content-density-compact preset-separator sap-margin-y-tiny">
-      {presetDropdown}
-    </div>
+    <FormItem labelContent={<Label>{label}</Label>}>{presetDropdown}</FormItem>
   );
 }
