@@ -24,6 +24,7 @@ import {
   isAuthRedirectLoop,
   registerAuthRedirect,
   resetAuthRedirectGuard,
+  tryClaimReauthRedirect,
 } from './utils/authRedirectLoopGuard';
 import { useNotifyLoginFailure } from './useLoginFailureNotification';
 
@@ -35,7 +36,6 @@ const defaultValue: SsoDataState = getSSOAuthData();
 
 export const ssoDataAtom = atom<SsoDataState>(defaultValue);
 
-// Set to true when the SSO login was stopped (IdP error or redirect loop).
 export const ssoLoginStoppedAtom = atom(false);
 
 export function setSSOAuthData(data: SsoDataState) {
@@ -59,7 +59,6 @@ export function useIsSSOEnabled() {
   return configuration?.features?.SSO_LOGIN?.isEnabled ?? false;
 }
 
-// Mutable SSO module state, kept in one object.
 const session: {
   userManager: UserManager | null;
   handlersAttached: boolean;
@@ -80,11 +79,10 @@ async function trySilentRefresh(): Promise<boolean> {
   return !!refreshedUser;
 }
 
-// Session-drop recovery outside React. Saves the current cluster-relative
-// path, then redirects through the IdP; on failure falls back to a full
-// load of /clusters. The saved path restores the location afterwards.
+// Session-drop recovery. Redirects through the IdP; falls back to /clusters on failure.
 function triggerReauthRedirect(userManager: UserManager | null) {
-  // Both paths re-enter login after a page load, count them for the loop guard.
+  // One expiry can fire several handlers; only the first should redirect.
+  if (!tryClaimReauthRedirect()) return;
   registerAuthRedirect();
   const fullPath = window.location.pathname + window.location.search;
   const relative = toClusterRelative(fullPath);
@@ -94,9 +92,7 @@ function triggerReauthRedirect(userManager: UserManager | null) {
   );
   if (kubeconfigId) savePendingKubeconfigId(kubeconfigId);
   if (!userManager) {
-    // No manager means handleSSOLogin never ran this page-load (the token
-    // was still valid at mount). The stored SSO entry is already cleared,
-    // so the full load at /clusters re-enters handleSSOLogin.
+    // handleSSOLogin never ran this load (token was valid at mount); full reload re-enters it.
     window.location.assign('/clusters');
     return;
   }
@@ -107,6 +103,22 @@ function triggerReauthRedirect(userManager: UserManager | null) {
       console.warn('SSO re-auth redirect failed:', e);
       window.location.assign('/clusters');
     });
+}
+
+// Forced re-login after loop guard tripped. Resets the guard and uses prompt: 'login'.
+function triggerForcedLogin(userManager: UserManager | null) {
+  resetAuthRedirectGuard();
+  const fullPath = window.location.pathname + window.location.search;
+  const relative = toClusterRelative(fullPath);
+  if (relative) saveIntendedPath(relative);
+  if (!userManager) {
+    window.location.assign('/clusters');
+    return;
+  }
+  userManager
+    .clearStaleState()
+    .then(() => userManager.signinRedirect({ prompt: 'login' }))
+    .catch(() => window.location.assign('/clusters'));
 }
 
 export function createSSOUserManager(oidcConfig: {
@@ -267,10 +279,9 @@ export function useSSOLogin() {
         setCluster(null);
         navigate('/clusters', { replace: true });
         notifyLoginFailure(failure, {
-          // Retry reloads the page, so SSO login starts again with a clean URL.
+          // prompt: 'login' returns the user to where they were instead of the cluster list.
           onRetry: () => {
-            resetAuthRedirectGuard();
-            window.location.assign('/clusters');
+            triggerForcedLogin(session.userManager);
           },
         });
       });
