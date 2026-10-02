@@ -1,10 +1,21 @@
-// Counts automatic OIDC login redirects so we can detect a redirect loop
-// (a misconfigured issuer bounces between Busola and the IdP forever). The
-// counter is kept in sessionStorage so it survives page loads (per tab).
+// Tracks automatic OIDC redirects to detect redirect loops; stored in sessionStorage to survive page loads.
 export const AUTH_REDIRECT_STORAGE_KEY = 'busola.auth-redirect-timestamps';
 
 const WINDOW_MS = 60 * 1000;
 const MAX_REDIRECTS_IN_WINDOW = 3;
+
+// One expiry can fire multiple handlers; only the first redirect counts per page load.
+let _reauthClaimedThisLoad = false;
+
+export function tryClaimReauthRedirect(): boolean {
+  if (_reauthClaimedThisLoad) return false;
+  _reauthClaimedThisLoad = true;
+  return true;
+}
+
+export function resetReauthRedirectClaim(): void {
+  _reauthClaimedThisLoad = false;
+}
 
 function readRecentRedirects(): number[] {
   try {
@@ -37,6 +48,8 @@ export function isAuthRedirectLoop(): boolean {
 }
 
 export function resetAuthRedirectGuard(): void {
+  // A reset means a deliberate fresh attempt, so free the claim too.
+  _reauthClaimedThisLoad = false;
   try {
     sessionStorage.removeItem(AUTH_REDIRECT_STORAGE_KEY);
   } catch {

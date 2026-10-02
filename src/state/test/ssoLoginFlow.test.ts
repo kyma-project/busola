@@ -7,6 +7,7 @@ import { configurationAtom } from '../configuration/configurationAtom';
 import {
   isAuthRedirectLoop,
   registerAuthRedirect,
+  resetReauthRedirectClaim,
 } from '../utils/authRedirectLoopGuard';
 import { ssoDataAtom, useSSOLogin } from '../ssoDataAtom';
 
@@ -75,6 +76,7 @@ describe('useSSOLogin', () => {
     localStorage.clear();
     window.history.replaceState({}, '', '/');
     managerMock.getUser.mockResolvedValue(null);
+    resetReauthRedirectClaim();
     Object.defineProperty(window, 'isSecureContext', {
       configurable: true,
       value: true,
