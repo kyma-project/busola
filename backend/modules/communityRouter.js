@@ -1,18 +1,21 @@
 import express from 'express';
 import cors from 'cors';
 import jsyaml from 'js-yaml';
+import config from '../src/config/config.js';
 
 const router = express.Router();
 router.use(express.json());
 router.use(cors());
 
 const ALLOWED_DOMAINS = ['githubusercontent.com', 'github.com', 'github.io'];
-const MAX_RESPONSE_BYTES = 1 * 1024 * 1024; // 1 MB
-const FETCH_TIMEOUT_MS = 10_000; // 10 s
+const MAX_RESPONSE_BYTES =
+  config.features?.COMMUNITY_PROXY?.maxResponseBytes ?? 1 * 1024 * 1024;
+const FETCH_TIMEOUT_MS =
+  config.features?.COMMUNITY_PROXY?.fetchTimeoutMs ?? 10_000;
 
 async function readBodyWithSizeLimit(response) {
   const contentLength = response.headers.get('content-length');
-  if (contentLength && parseInt(contentLength, 10) > MAX_RESPONSE_BYTES) {
+  if (contentLength && parseInt(contentLength) > MAX_RESPONSE_BYTES) {
     throw new Error('Response too large');
   }
 
