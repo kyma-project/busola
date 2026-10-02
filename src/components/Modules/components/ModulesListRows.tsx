@@ -10,7 +10,7 @@ import {
   ModuleTemplateType,
   resolveInstallationStateName,
 } from '../support';
-import { useGetManagerStatus, useGetModuleResource } from '../hooks';
+import { useGetManagerStatus } from '../hooks';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { getReadableTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { useTranslation } from 'react-i18next';
@@ -49,6 +49,9 @@ type ModulesListRowsProps = {
   protectedResource?: boolean;
   hasDetailsLink: (resource: any) => boolean;
   newestModuleTemplate?: ModuleTemplateType;
+  // Live CR instance for community rows, probed once at the list level
+  // (managed rows derive their status from the Kyma resource instead).
+  liveResource?: any;
 };
 
 export const ModulesListRows = ({
@@ -59,6 +62,7 @@ export const ModulesListRows = ({
   kymaResource,
   protectedResource,
   newestModuleTemplate,
+  liveResource,
 }: ModulesListRowsProps) => {
   const { t } = useTranslation();
   const { data: moduleReleaseMetas } = useModulesReleaseQuery({
@@ -93,6 +97,16 @@ export const ModulesListRows = ({
     if (isPendingDeletion && moduleStatus) {
       moduleStatus = { ...moduleStatus, state: ModuleTemplateStatus.Deleting };
     }
+  } else {
+    moduleStatus = {
+      name: resource.name,
+      resource: liveResource ?? null,
+      version: resource.version,
+      channel: resource.channel,
+      state: liveResource?.status?.state,
+      message: liveResource?.status?.message,
+      maintenance: false,
+    };
   }
   const currentModuleTemplate = findModuleTemplate(
     moduleTemplates,
@@ -118,21 +132,6 @@ export const ModulesListRows = ({
     };
     checkIfNamespaceIsMissing();
   }, [currentModuleTemplate]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const { data: moduleResource } = useGetModuleResource(
-    moduleResourceWithNamespace,
-  );
-  if (!kymaResource) {
-    moduleStatus = {
-      name: resource.name,
-      resource: moduleResource,
-      version: resource.version,
-      channel: resource.channel,
-      state: moduleResource?.status?.state,
-      message: moduleResource?.status?.message,
-      maintenance: false,
-    };
-  }
 
   const showDetailsLink = hasDetailsLink(resource);
   const moduleIndex =

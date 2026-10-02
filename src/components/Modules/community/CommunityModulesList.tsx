@@ -17,6 +17,10 @@ import { getUpdateTemplate } from './communityModulesHelpers';
 import { ModuleTemplatesContext } from 'components/Modules/providers/ModuleTemplatesProvider';
 import { UpdateAllModulesButton } from '../components/moduleUpdate/UpdateAllModulesButton/UpdateAllModulesButton';
 import { useModuleNavigation } from 'components/Modules/hooks/useModuleNavigation';
+import {
+  COMMUNITY_MODULES_POLLING_INTERVAL,
+  useModulesLiveResources,
+} from 'components/Modules/hooks';
 import { useModuleCrdsAndExtensions } from 'components/Modules/hooks/useModuleCrdsAndExtensions';
 import { useShowAddModule } from 'components/Modules/hooks/useShowAddModule';
 
@@ -76,6 +80,9 @@ export const CommunityModulesList = ({
       installedModules,
       setOpenedModuleIndex,
       setSelectedEntry,
+      // Community module entries have no top-level `state` field; keeping the
+      // positive-state gate would make every row non-interactive.
+      checkModuleState: false,
     });
 
   const handleShowAddModule = useShowAddModule(resourceUrl, 'community');
@@ -84,7 +91,8 @@ export const CommunityModulesList = ({
     CommunityModulesInstallationContext,
   );
 
-  // When multiple instances of the same module templates exist in different namespaces, we want to display only one instance of the module
+  // When multiple instances of the same module template exist across
+  // namespaces, display only one.
   function dedupeByModuleManager(modules: any[]) {
     const seen = new Set<string>();
 
@@ -96,30 +104,49 @@ export const CommunityModulesList = ({
 
       const key = `${module?.name}::${module?.version}::${managerName}::${managerNamespace}`;
 
-      return seen.has(key) ? false : seen.add(key);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
     });
   }
 
+  const uniqueInstalled = useMemo(
+    () => dedupeByModuleManager(installedModules),
+    [installedModules],
+  );
+
+  // A community module is "installed" once its operator is present, but details
+  // may only open when a live CR instance actually exists. The probed map feeds
+  // both the details gate (hasLiveResource) and each row's live status.
+  const liveResources = useModulesLiveResources(
+    uniqueInstalled,
+    modulesLoading,
+    COMMUNITY_MODULES_POLLING_INTERVAL,
+  );
+
   const modulesToDisplay = useMemo(() => {
-    const uniqueInstalled = dedupeByModuleManager(installedModules);
+    const installed = uniqueInstalled.map((module) => ({
+      ...module,
+      hasLiveResource: liveResources.has(module.name),
+    }));
 
     const modulesDuringProcessing = modulesDuringUpload.filter((m) => {
-      return !uniqueInstalled.find(
-        (installed) =>
-          installed.moduleTemplateName === m.moduleTpl.metadata.name,
+      return !installed.find(
+        (installedModule) =>
+          installedModule.moduleTemplateName === m.moduleTpl.metadata.name,
       );
     });
 
     if (modulesDuringProcessing.length === 0) {
-      return uniqueInstalled;
+      return installed;
     }
 
     const moduleTemplatesDuringUpload = modulesDuringProcessing
       .filter((m) => m.state !== State.Finished)
       .map((m) => createFakeModuleTemplateWithStatus(m));
 
-    return [...uniqueInstalled, ...moduleTemplatesDuringUpload];
-  }, [installedModules, modulesDuringUpload]);
+    return [...installed, ...moduleTemplatesDuringUpload];
+  }, [uniqueInstalled, modulesDuringUpload, liveResources]);
 
   const headerRenderer = () => [
     t('common.headers.name'),
@@ -209,6 +236,10 @@ export const CommunityModulesList = ({
             resource,
             moduleTemplates,
             hasDetailsLink,
+            // The list-level probe already holds each row's live CR; feed it so
+            // the State/Namespace columns reflect the real instance rather than
+            // the module template's default identity.
+            liveResource: liveResources.get(resource.name),
             newestModuleTemplate: getUpdateTemplate(
               resource.name,
               preloadedCommunityTemplates,
