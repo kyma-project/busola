@@ -110,7 +110,7 @@ export function ExtensibilityCreateCore({
   const hasSetInitialResource = useRef(false);
 
   useEffect(() => {
-    if (layoutState?.showEdit?.resource) return;
+    if (editMode || layoutState?.showEdit?.resource) return;
 
     setStore(
       getUIStoreFromResourceObj(
@@ -119,7 +119,7 @@ export function ExtensibilityCreateCore({
     );
     setInitialResource(initialExtensibilityResource);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialExtensibilityResource, layoutState?.showEdit?.resource]);
+  }, [initialExtensibilityResource, layoutState?.showEdit?.resource, editMode]);
 
   const presets = usePreparePresets(createResource?.presets, emptyTemplate);
 
