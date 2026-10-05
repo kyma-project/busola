@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { attachSilentRenewHandlers } from '../silentRenewSetup';
 
 type Handler = () => Promise<void> | void;
@@ -112,5 +112,91 @@ describe('attachSilentRenewHandlers', () => {
 
     expect(onRenewError).toHaveBeenCalledTimes(1);
     expect(onRenewError).toHaveBeenCalledWith(err);
+  });
+
+  describe('short-lived tokens', () => {
+    const renewed = (lifetimeSeconds: number) => ({
+      id_token: 'new',
+      expires_at: Math.floor(Date.now() / 1000) + lifetimeSeconds,
+    });
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-10-05T12:00:00Z'));
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('renews a token that arrives already expiring once, shortly before it runs out', async () => {
+      const um = makeMockUserManager();
+      um.signinSilent.mockImplementation(async () => renewed(40));
+      attachSilentRenewHandlers(um as any, {
+        onRenewed: () => {},
+        onRenewError: () => {},
+      });
+
+      await um.fireExpiring();
+      expect(um.signinSilent).toHaveBeenCalledTimes(1);
+
+      // The renewed token has 40s left, so the library fires again at once.
+      await vi.advanceTimersByTimeAsync(1000);
+      await um.fireExpiring();
+      expect(um.signinSilent).toHaveBeenCalledTimes(1);
+
+      // 39s are left at this point; the renewal is due 5s before expiry.
+      await vi.advanceTimersByTimeAsync(33000);
+      expect(um.signinSilent).toHaveBeenCalledTimes(1);
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(um.signinSilent).toHaveBeenCalledTimes(2);
+    });
+
+    it('renews immediately when the token is almost spent', async () => {
+      const um = makeMockUserManager();
+      um.signinSilent.mockImplementation(async () => renewed(3));
+      attachSilentRenewHandlers(um as any, {
+        onRenewed: () => {},
+        onRenewError: () => {},
+      });
+
+      await um.fireExpiring();
+      await vi.advanceTimersByTimeAsync(1000);
+      await um.fireExpiring();
+
+      expect(um.signinSilent).toHaveBeenCalledTimes(2);
+    });
+
+    it('renews a normal token immediately when its expiring event fires', async () => {
+      const um = makeMockUserManager();
+      um.signinSilent.mockImplementation(async () => renewed(3600));
+      attachSilentRenewHandlers(um as any, {
+        onRenewed: () => {},
+        onRenewError: () => {},
+      });
+
+      await um.fireExpiring();
+      // A one-hour token: the next event comes 59 minutes later.
+      await vi.advanceTimersByTimeAsync(59 * 60 * 1000);
+      await um.fireExpiring();
+
+      expect(um.signinSilent).toHaveBeenCalledTimes(2);
+    });
+
+    it('cleanup cancels a pending deferred renewal', async () => {
+      const um = makeMockUserManager();
+      um.signinSilent.mockImplementation(async () => renewed(40));
+      const { cleanup } = attachSilentRenewHandlers(um as any, {
+        onRenewed: () => {},
+        onRenewError: () => {},
+      });
+
+      await um.fireExpiring();
+      await um.fireExpiring();
+      cleanup();
+      await vi.advanceTimersByTimeAsync(60000);
+
+      expect(um.signinSilent).toHaveBeenCalledTimes(1);
+    });
   });
 });
