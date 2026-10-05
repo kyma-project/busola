@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { createElement, PropsWithChildren } from 'react';
 import { MemoryRouter } from 'react-router';
 import { Provider, createStore } from 'jotai';
@@ -13,7 +13,12 @@ import {
   resetReauthRedirectClaim,
   tryClaimReauthRedirect,
 } from '../utils/authRedirectLoopGuard';
-import { authDataAtom, useAuthHandler } from '../authDataAtom';
+import {
+  authDataAtom,
+  authUserManagerRef,
+  useAuthHandler,
+} from '../authDataAtom';
+import { attachSilentRenewHandlers } from '../silentRenewSetup';
 
 const { managerMock, notifyLoginFailureMock } = vi.hoisted(() => ({
   managerMock: {
@@ -202,5 +207,66 @@ describe('useAuthHandler redirect-loop guard', () => {
       path: '/namespaces/bar',
       kubeconfigId: 'my-kubeconfig',
     });
+  });
+
+  it('keeps the silent-renew handlers when the configuration reloads after login', async () => {
+    const { Wrapper, store } = makeWrapper();
+    renderHook(() => useAuthHandler(), { wrapper: Wrapper });
+    await waitFor(() => expect(authUserManagerRef.current).toBe(managerMock));
+    const { cleanup } = vi.mocked(attachSilentRenewHandlers).mock.results[0]
+      .value;
+
+    // The cluster's config is fetched once authenticated and replaces the atom.
+    act(() =>
+      store.set(configurationAtom, {
+        features: { SSO_LOGIN: { isEnabled: false } },
+      } as any),
+    );
+
+    expect(cleanup).not.toHaveBeenCalled();
+    expect(authUserManagerRef.current).toBe(managerMock);
+    expect(attachSilentRenewHandlers).toHaveBeenCalledTimes(1);
+  });
+
+  it('processes a login callback even while the previous token is still valid', async () => {
+    // Re-auth returned before the old token expired; its session cannot renew.
+    localStorage.setItem(
+      'oidc.s1',
+      JSON.stringify({ client_id: 'cluster-client' }),
+    );
+    window.history.replaceState({}, '', '/?code=abc&state=s1');
+    managerMock.signinRedirectCallback.mockResolvedValue({
+      expired: false,
+      id_token: 'fresh-jwt',
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+    });
+
+    const { Wrapper, store } = makeWrapper();
+    renderHook(() => useAuthHandler(), { wrapper: Wrapper });
+
+    await waitFor(() =>
+      expect(store.get(authDataAtom)).toEqual({ token: 'fresh-jwt' }),
+    );
+    expect(managerMock.signinRedirect).not.toHaveBeenCalled();
+  });
+
+  it('keeps the stored user when a stale callback URL cannot be processed', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    localStorage.setItem(
+      'oidc.s1',
+      JSON.stringify({ client_id: 'cluster-client' }),
+    );
+    window.history.replaceState({}, '', '/?code=abc&state=s1');
+    managerMock.signinRedirectCallback.mockRejectedValue(
+      new Error('No matching state found in storage'),
+    );
+
+    const { Wrapper, store } = makeWrapper();
+    renderHook(() => useAuthHandler(), { wrapper: Wrapper });
+
+    await waitFor(() =>
+      expect(store.get(authDataAtom)).toEqual({ token: 'jwt' }),
+    );
+    expect(notifyLoginFailureMock).not.toHaveBeenCalled();
   });
 });

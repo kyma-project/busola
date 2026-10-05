@@ -132,10 +132,21 @@ async function handleLogin({
     const storedUser = await userManager.getUser();
 
     let user: User;
-    if (storedUser && !storedUser.expired) {
-      user = storedUser;
+    const validStoredUser =
+      storedUser && !storedUser.expired ? storedUser : null;
+    const decision = decideOidcCallbackAction(oidcParams.clientId);
+    if (validStoredUser && decision.action === 'process-callback') {
+      // A re-auth can return while the previous token is still valid. The new
+      // login must win: the old session cannot renew and would redirect again.
+      user = await userManager
+        .signinRedirectCallback(window.location.href)
+        .catch((e) => {
+          console.warn('Login callback failed, keeping the stored user:', e);
+          return validStoredUser;
+        });
+    } else if (validStoredUser) {
+      user = validStoredUser;
     } else {
-      const decision = decideOidcCallbackAction(oidcParams.clientId);
       if (decision.action === 'foreign-callback') {
         // Callback belongs to another manager (e.g. SSO); let it run.
         return null;
@@ -231,6 +242,9 @@ export function useAuthHandler() {
   useEffect(() => {
     if (!configuration?.features) return;
     if (!ssoData && isSSOEnabled && !ssoLoginStopped) return;
+    // The configuration reloads after login and re-runs this effect; an
+    // unchanged cluster must keep its silent-renew handlers and UserManager.
+    if (cluster && isEqual(prevClusterRef.current, cluster)) return;
     if (cleanupRef.current) {
       cleanupRef.current();
       cleanupRef.current = null;
@@ -244,7 +258,6 @@ export function useAuthHandler() {
       setAuth(null);
       setIsLoading(false);
     } else {
-      if (isEqual(prevClusterRef.current, cluster)) return;
       prevClusterRef.current = cluster;
 
       const userCredentials = cluster.currentContext?.user?.user;
