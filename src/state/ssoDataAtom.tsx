@@ -105,7 +105,7 @@ function triggerReauthRedirect(userManager: UserManager | null) {
     });
 }
 
-// Forced re-login after loop guard tripped. Resets the guard and uses prompt: 'login'.
+// prompt: 'login' so a stale IdP session can't send us straight back into the loop.
 function triggerForcedLogin(
   userManager: UserManager | null,
   relative: string | null,
@@ -168,8 +168,7 @@ async function handleSSOLogin(
     const validStoredUser =
       storedUser && !storedUser.expired ? storedUser : null;
     const decision = decideOidcCallbackAction(ssoConfig.config.clientId);
-    // A re-auth can return while the previous token is still valid. The new
-    // login must win: the old session cannot renew and would redirect again.
+    // The new login must win: the old session can't renew and would redirect again.
     if (validStoredUser && decision.action !== 'process-callback') {
       user = validStoredUser;
     } else {
@@ -286,7 +285,7 @@ export function useSSOLogin() {
       if (bypass === 'true') return;
       handleSSOLogin(ssoConfig, setSsoState, setRenewing, (failure) => {
         // Unblock the app behind the dialog, navigating also removes the error params.
-        // Captured before the navigation below replaces the URL.
+        // Read the path before the navigation below replaces the URL.
         const relative = toClusterRelative(
           window.location.pathname + window.location.search,
         );
@@ -294,7 +293,6 @@ export function useSSOLogin() {
         setCluster(null);
         navigate('/clusters', { replace: true });
         notifyLoginFailure(failure, {
-          // prompt: 'login' returns the user to where they were instead of the cluster list.
           onRetry: () => {
             triggerForcedLogin(session.userManager, relative);
           },

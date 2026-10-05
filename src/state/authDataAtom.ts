@@ -136,8 +136,7 @@ async function handleLogin({
       storedUser && !storedUser.expired ? storedUser : null;
     const decision = decideOidcCallbackAction(oidcParams.clientId);
     if (validStoredUser && decision.action === 'process-callback') {
-      // A re-auth can return while the previous token is still valid. The new
-      // login must win: the old session cannot renew and would redirect again.
+      // The new login must win: the old session can't renew and would redirect again.
       user = await userManager
         .signinRedirectCallback(window.location.href)
         .catch((e) => {
@@ -199,7 +198,7 @@ async function handleLogin({
             await userManager.signinRedirect();
           } catch (redirectError) {
             console.warn('Login restart failed:', redirectError);
-            // We never left the page; release the claim so onError can redirect.
+            // Still on this page, so let onError redirect.
             resetReauthRedirectClaim();
             onError(
               redirectError instanceof Error
@@ -242,8 +241,7 @@ export function useAuthHandler() {
   useEffect(() => {
     if (!configuration?.features) return;
     if (!ssoData && isSSOEnabled && !ssoLoginStopped) return;
-    // The configuration reloads after login and re-runs this effect; an
-    // unchanged cluster must keep its silent-renew handlers and UserManager.
+    // A configuration reload re-runs this effect; an unchanged cluster keeps its handlers.
     if (cluster && isEqual(prevClusterRef.current, cluster)) return;
     if (cleanupRef.current) {
       cleanupRef.current();
@@ -311,24 +309,21 @@ export function useAuthHandler() {
           setAuth(null);
           // Clear the cluster so picking it again (or Retry) starts a new login.
           setCluster(null);
-          // The redirect stopped without leaving the page; release the claim so a later retry can redirect.
+          // Still on this page, so let a later retry redirect.
           resetReauthRedirectClaim();
           const relative = toClusterRelative(
             window.location.pathname + window.location.search,
           );
-          // Keep the kubeconfigID marker if the deep-link flow is still pending,
-          // otherwise restore defers to the wrong (stale) cluster.
+          // Keep the kubeconfigID of a pending deep link, or the path is restored on the wrong cluster.
           const kubeconfigId = getIntendedPath()?.kubeconfigId;
           notifyLoginFailure(failure, {
-            // prompt: 'login' avoids a stale IdP cookie bouncing back into the loop.
-            // handleLogin returned null here, so rebuild the manager from cluster OIDC params.
+            // prompt: 'login' so a stale IdP session can't send us straight back into the loop.
+            // handleLogin returned no manager, so create one from the cluster's OIDC settings.
             onRetry: () => {
-              // Saved only on Retry; a path left behind after Close would be
-              // restored on whichever cluster is opened next.
+              // Saved on Retry only; after Close it would be restored on the next cluster opened.
               if (relative) saveIntendedPath(relative, kubeconfigId);
               resetAuthRedirectGuard();
-              // Re-persist the cluster so the IdP callback (returns to the
-              // origin, cluster atom already null) can restore it and finish.
+              // The cluster was cleared above; store its name so the login callback can restore it.
               persistActiveClusterName(cluster.name);
               const userManager = createUserManager(
                 parseOIDCparams(userCredentials as KubeconfigOIDCAuth),

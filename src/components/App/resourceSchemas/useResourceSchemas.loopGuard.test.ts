@@ -79,7 +79,7 @@ describe('useResourceSchemas redirect-loop guard', () => {
     await waitFor(() => expect(isAuthRedirectLoop()).toBe(false));
   });
 
-  it('re-authenticates when the schema fetch is rejected as unauthorized', async () => {
+  it('logs in again when the schema request is unauthorized', async () => {
     const { Wrapper, store } = makeWrapper();
     store.set(openapiAtom as any, { state: 'hasError', error: { code: 401 } });
     renderHook(() => useResourceSchemas(), { wrapper: Wrapper });
@@ -87,7 +87,7 @@ describe('useResourceSchemas redirect-loop guard', () => {
     await waitFor(() => expect(reauthMock).toHaveBeenCalledTimes(1));
   });
 
-  it('does not re-authenticate when the schema fetch is rate limited', async () => {
+  it('does not log in again when the schema request is rate limited', async () => {
     const { Wrapper, store } = makeWrapper();
     store.set(openapiAtom as any, { state: 'hasError', error: { code: 429 } });
     renderHook(() => useResourceSchemas(), { wrapper: Wrapper });

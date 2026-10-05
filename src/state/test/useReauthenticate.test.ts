@@ -91,7 +91,7 @@ describe('useReauthenticate', () => {
     expect(isAuthRedirectLoop()).toBe(true);
   });
 
-  it('saves the page open at expiry, not the one open when the callback was created', async () => {
+  it('saves the page the user is on when the session expires', async () => {
     const userManager = makeUserManager();
     const { result } = renderHook(() => useReauthenticate(), {
       wrapper: makeWrapper('/cluster/foo/pods'),
@@ -120,7 +120,7 @@ describe('useReauthenticate', () => {
     expect(stored).toHaveLength(1);
   });
 
-  it('releases the claim after a failed redirect so a later attempt can retry', async () => {
+  it('allows another redirect after a failed one', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     const userManager = makeUserManager({
       signinRedirect: vi
@@ -132,8 +132,8 @@ describe('useReauthenticate', () => {
       wrapper: makeWrapper('/cluster/foo/namespaces/bar'),
     });
 
-    await result.current(userManager); // redirect rejects, claim released
-    await result.current(userManager); // same load, redirects again
+    await result.current(userManager); // redirect fails
+    await result.current(userManager); // redirects again
 
     expect(userManager.signinRedirect).toHaveBeenCalledTimes(2);
   });
@@ -157,8 +157,8 @@ describe('useReauthenticate', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/clusters');
   });
 
-  it('recovery action saves intended path and uses prompt=login', async () => {
-    // Pre-trip the guard.
+  it('Retry saves the path and forces a fresh login', async () => {
+    // A redirect loop is already in progress.
     registerAuthRedirect();
     registerAuthRedirect();
     registerAuthRedirect();
@@ -182,7 +182,7 @@ describe('useReauthenticate', () => {
     expect(getIntendedPath()?.path).toBe('/namespaces/bar');
   });
 
-  it('recovery action re-persists the cluster so the callback can finish', async () => {
+  it('Retry stores the cluster name so the login callback can restore the cluster', async () => {
     getDefaultStore().set(clusterAtom, { name: 'foo' } as never);
     registerAuthRedirect();
     registerAuthRedirect();
@@ -194,7 +194,7 @@ describe('useReauthenticate', () => {
     });
 
     await result.current(userManager);
-    // The loop branch cleared the cluster before showing the dialog.
+    // The stopped login cleared the cluster.
     expect(localStorage.getItem(CLUSTER_NAME_STORAGE_KEY)).toBeNull();
 
     const [, options] = notifyLoginFailureMock.mock.calls[0];

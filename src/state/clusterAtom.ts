@@ -79,9 +79,7 @@ export const clusterAtom = atom<ActiveClusterState, [ActiveClusterState], void>(
 );
 clusterAtom.debugLabel = 'clusterAtom';
 
-// Writes the active cluster name to storage without touching the atom. A forced
-// re-login (the recovery dialog) leaves the page with the atom already null, so
-// this lets the cluster be restored when the IdP redirects back to the origin.
+// Lets a login that starts after the cluster was cleared restore it on return.
 export function persistActiveClusterName(name: string): void {
   localStorage.setItem(CLUSTER_NAME_STORAGE_KEY, name);
 }

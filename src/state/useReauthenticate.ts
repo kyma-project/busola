@@ -46,7 +46,7 @@ export function useReauthenticate({
         return;
       }
 
-      // Read at call time; useAuthHandler keeps this callback across navigations.
+      // useAuthHandler keeps this callback across navigations, so read the URL now.
       const relative = toClusterRelative(
         window.location.pathname + window.location.search,
       );
@@ -59,12 +59,11 @@ export function useReauthenticate({
         const clusterName = cluster?.name;
         setCluster(null);
         notifyLoginFailure(undefined, {
-          // prompt: 'login' forces a fresh sign-in and returns the user to where they were.
+          // prompt: 'login' so a stale IdP session can't send us straight back into the loop.
           onRetry: () => {
             if (relative) saveIntendedPath(relative);
             resetAuthRedirectGuard();
-            // Re-persist the cluster so the IdP callback (returns to the
-            // origin, cluster atom already null) can restore it and finish.
+            // The cluster was cleared above; store its name so the login callback can restore it.
             if (clusterName) persistActiveClusterName(clusterName);
             userManager
               .clearStaleState()
@@ -85,7 +84,7 @@ export function useReauthenticate({
         await userManager.signinRedirect();
       } catch (redirectError) {
         console.warn('Silent re-auth via IdP failed:', redirectError);
-        // We never left the page; release the claim.
+        // Still on this page, so allow another attempt.
         resetReauthRedirectClaim();
         clearIntendedPath();
         fallBackToClusterList();

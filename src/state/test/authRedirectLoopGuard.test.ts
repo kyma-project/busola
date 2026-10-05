@@ -56,7 +56,7 @@ describe('authRedirectLoopGuard', () => {
     expect(isAuthRedirectLoop()).toBe(false);
   });
 
-  it('also releases the per-load claim when reset', () => {
+  it('also releases the claim when the guard is reset', () => {
     expect(tryClaimReauthRedirect()).toBe(true);
     expect(tryClaimReauthRedirect()).toBe(false);
     resetAuthRedirectGuard();
@@ -88,18 +88,18 @@ describe('tryClaimReauthRedirect', () => {
     expect(tryClaimReauthRedirect()).toBe(true);
   });
 
-  it('returns false on a second call in the same load', () => {
+  it('returns false on a second call', () => {
     tryClaimReauthRedirect();
     expect(tryClaimReauthRedirect()).toBe(false);
   });
 
-  it('resetReauthRedirectClaim allows re-claiming', () => {
+  it('can be claimed again after a reset', () => {
     tryClaimReauthRedirect();
     resetReauthRedirectClaim();
     expect(tryClaimReauthRedirect()).toBe(true);
   });
 
-  it('expires a claim whose redirect never left the page', () => {
+  it('lets the claim expire if the redirect never left the page', () => {
     tryClaimReauthRedirect();
     vi.advanceTimersByTime(29 * 1000);
     expect(tryClaimReauthRedirect()).toBe(false);
@@ -107,7 +107,7 @@ describe('tryClaimReauthRedirect', () => {
     expect(tryClaimReauthRedirect()).toBe(true);
   });
 
-  it('cannot trip the loop guard from a single page', () => {
+  it('cannot trip the loop guard from one page alone', () => {
     for (let elapsed = 0; elapsed <= 5 * 60; elapsed++) {
       if (tryClaimReauthRedirect()) registerAuthRedirect();
       expect(isAuthRedirectLoop()).toBe(false);
@@ -115,7 +115,7 @@ describe('tryClaimReauthRedirect', () => {
     }
   });
 
-  it('releases the claim when the page is restored from the bfcache', () => {
+  it('releases the claim when the page is restored from the back/forward cache', () => {
     tryClaimReauthRedirect();
     window.dispatchEvent(
       Object.assign(new Event('pageshow'), { persisted: false }),
