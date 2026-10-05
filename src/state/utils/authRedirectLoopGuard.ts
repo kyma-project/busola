@@ -5,17 +5,29 @@ const WINDOW_MS = 60 * 1000;
 const MAX_REDIRECTS_IN_WINDOW = 3;
 
 // One expiry can fire multiple handlers; only the first redirect counts per page load.
-let _reauthClaimedThisLoad = false;
+// The claim expires so a redirect that never left the page (cancelled navigation,
+// stale login) cannot block re-auth for good. Half the window keeps a single
+// page from ever reaching MAX_REDIRECTS_IN_WINDOW on its own.
+const CLAIM_TTL_MS = WINDOW_MS / 2;
+let reauthClaimedAt: number | null = null;
 
 export function tryClaimReauthRedirect(): boolean {
-  if (_reauthClaimedThisLoad) return false;
-  _reauthClaimedThisLoad = true;
+  const now = Date.now();
+  if (reauthClaimedAt !== null && now - reauthClaimedAt < CLAIM_TTL_MS) {
+    return false;
+  }
+  reauthClaimedAt = now;
   return true;
 }
 
 export function resetReauthRedirectClaim(): void {
-  _reauthClaimedThisLoad = false;
+  reauthClaimedAt = null;
 }
+
+// Back from the IdP can restore this page from the bfcache with the claim still held.
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) resetReauthRedirectClaim();
+});
 
 function readRecentRedirects(): number[] {
   try {
@@ -49,7 +61,7 @@ export function isAuthRedirectLoop(): boolean {
 
 export function resetAuthRedirectGuard(): void {
   // A reset means a deliberate fresh attempt, so free the claim too.
-  _reauthClaimedThisLoad = false;
+  resetReauthRedirectClaim();
   try {
     sessionStorage.removeItem(AUTH_REDIRECT_STORAGE_KEY);
   } catch {

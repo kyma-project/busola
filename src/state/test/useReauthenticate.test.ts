@@ -5,6 +5,7 @@ import { createElement, PropsWithChildren } from 'react';
 import { UserManager } from 'oidc-client-ts';
 import { getIntendedPath } from '../intendedPathAtom';
 import {
+  AUTH_REDIRECT_STORAGE_KEY,
   isAuthRedirectLoop,
   registerAuthRedirect,
   resetReauthRedirectClaim,
@@ -82,6 +83,40 @@ describe('useReauthenticate', () => {
     resetReauthRedirectClaim();
     await result.current(userManager); // simulated page load 3
     expect(isAuthRedirectLoop()).toBe(true);
+  });
+
+  it('redirects only once when triggered twice in the same page load', async () => {
+    const userManager = makeUserManager();
+    const { result } = renderHook(() => useReauthenticate(), {
+      wrapper: makeWrapper('/cluster/foo'),
+    });
+
+    await result.current(userManager);
+    await result.current(userManager); // same load, no reset
+
+    expect(userManager.signinRedirect).toHaveBeenCalledTimes(1);
+    const stored = JSON.parse(
+      sessionStorage.getItem(AUTH_REDIRECT_STORAGE_KEY) || '[]',
+    );
+    expect(stored).toHaveLength(1);
+  });
+
+  it('releases the claim after a failed redirect so a later attempt can retry', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const userManager = makeUserManager({
+      signinRedirect: vi
+        .fn()
+        .mockRejectedValueOnce(new Error('idp down'))
+        .mockResolvedValue(undefined),
+    } as Partial<UserManager>);
+    const { result } = renderHook(() => useReauthenticate(), {
+      wrapper: makeWrapper('/cluster/foo/namespaces/bar'),
+    });
+
+    await result.current(userManager); // redirect rejects, claim released
+    await result.current(userManager); // same load, redirects again
+
+    expect(userManager.signinRedirect).toHaveBeenCalledTimes(2);
   });
 
   it('stops and reports a failure instead of redirecting again once a loop is detected', async () => {

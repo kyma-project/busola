@@ -76,6 +76,12 @@ describe('authRedirectLoopGuard', () => {
 describe('tryClaimReauthRedirect', () => {
   beforeEach(() => {
     resetReauthRedirectClaim();
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-08-11T12:00:00Z'));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('returns true on the first call', () => {
@@ -90,6 +96,34 @@ describe('tryClaimReauthRedirect', () => {
   it('resetReauthRedirectClaim allows re-claiming', () => {
     tryClaimReauthRedirect();
     resetReauthRedirectClaim();
+    expect(tryClaimReauthRedirect()).toBe(true);
+  });
+
+  it('expires a claim whose redirect never left the page', () => {
+    tryClaimReauthRedirect();
+    vi.advanceTimersByTime(29 * 1000);
+    expect(tryClaimReauthRedirect()).toBe(false);
+    vi.advanceTimersByTime(1000);
+    expect(tryClaimReauthRedirect()).toBe(true);
+  });
+
+  it('cannot trip the loop guard from a single page', () => {
+    for (let elapsed = 0; elapsed <= 5 * 60; elapsed++) {
+      if (tryClaimReauthRedirect()) registerAuthRedirect();
+      expect(isAuthRedirectLoop()).toBe(false);
+      vi.advanceTimersByTime(1000);
+    }
+  });
+
+  it('releases the claim when the page is restored from the bfcache', () => {
+    tryClaimReauthRedirect();
+    window.dispatchEvent(
+      Object.assign(new Event('pageshow'), { persisted: false }),
+    );
+    expect(tryClaimReauthRedirect()).toBe(false);
+    window.dispatchEvent(
+      Object.assign(new Event('pageshow'), { persisted: true }),
+    );
     expect(tryClaimReauthRedirect()).toBe(true);
   });
 });

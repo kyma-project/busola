@@ -6,8 +6,11 @@ import { Provider, createStore } from 'jotai';
 import { configurationAtom } from '../configuration/configurationAtom';
 import { clusterAtom } from '../clusterAtom';
 import {
+  AUTH_REDIRECT_STORAGE_KEY,
   isAuthRedirectLoop,
   registerAuthRedirect,
+  resetReauthRedirectClaim,
+  tryClaimReauthRedirect,
 } from '../utils/authRedirectLoopGuard';
 import { authDataAtom, useAuthHandler } from '../authDataAtom';
 
@@ -72,6 +75,8 @@ describe('useAuthHandler redirect-loop guard', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     sessionStorage.clear();
+    window.history.replaceState({}, '', '/');
+    resetReauthRedirectClaim();
     managerMock.getUser.mockResolvedValue({
       expired: false,
       id_token: 'jwt',
@@ -97,5 +102,30 @@ describe('useAuthHandler redirect-loop guard', () => {
     // If the guard was cleared here the counter would reset every cycle and
     // we would loop forever, the next reauth still needs to see it.
     expect(isAuthRedirectLoop()).toBe(true);
+  });
+
+  it('redirects and counts once for an expired stored user', async () => {
+    managerMock.getUser.mockResolvedValue({ expired: true });
+    const { Wrapper } = makeWrapper();
+    renderHook(() => useAuthHandler(), { wrapper: Wrapper });
+
+    await waitFor(() =>
+      expect(managerMock.signinRedirect).toHaveBeenCalledTimes(1),
+    );
+    expect(
+      JSON.parse(sessionStorage.getItem(AUTH_REDIRECT_STORAGE_KEY) || '[]'),
+    ).toHaveLength(1);
+  });
+
+  it('does not redirect or count again while another handler holds the claim', async () => {
+    tryClaimReauthRedirect();
+    managerMock.getUser.mockResolvedValue({ expired: true });
+    const { Wrapper } = makeWrapper();
+    renderHook(() => useAuthHandler(), { wrapper: Wrapper });
+
+    await waitFor(() => expect(managerMock.getUser).toHaveBeenCalled());
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(managerMock.signinRedirect).not.toHaveBeenCalled();
+    expect(sessionStorage.getItem(AUTH_REDIRECT_STORAGE_KEY)).toBeNull();
   });
 });

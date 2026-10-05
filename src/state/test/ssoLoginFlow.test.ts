@@ -5,22 +5,35 @@ import { MemoryRouter } from 'react-router';
 import { Provider, createStore } from 'jotai';
 import { configurationAtom } from '../configuration/configurationAtom';
 import {
+  AUTH_REDIRECT_STORAGE_KEY,
   isAuthRedirectLoop,
   registerAuthRedirect,
   resetReauthRedirectClaim,
 } from '../utils/authRedirectLoopGuard';
 import { ssoDataAtom, useSSOLogin } from '../ssoDataAtom';
 
-const { managerMock, notifyLoginFailureMock } = vi.hoisted(() => ({
-  managerMock: {
-    getUser: vi.fn(),
-    signinRedirect: vi.fn().mockResolvedValue(undefined),
-    signinRedirectCallback: vi.fn(),
-    clearStaleState: vi.fn().mockResolvedValue(undefined),
-    events: { addUserUnloaded: vi.fn() },
-  },
-  notifyLoginFailureMock: vi.fn(),
-}));
+// The SSO module attaches its handlers once per module, so keep them across tests.
+const { managerMock, notifyLoginFailureMock, handlers } = vi.hoisted(() => {
+  const handlers: {
+    onRenewError?: (error: Error) => void;
+    onUserUnloaded?: () => void;
+  } = {};
+  return {
+    handlers,
+    managerMock: {
+      getUser: vi.fn(),
+      signinRedirect: vi.fn().mockResolvedValue(undefined),
+      signinRedirectCallback: vi.fn(),
+      clearStaleState: vi.fn().mockResolvedValue(undefined),
+      events: {
+        addUserUnloaded: vi.fn((callback: () => void) => {
+          handlers.onUserUnloaded = callback;
+        }),
+      },
+    },
+    notifyLoginFailureMock: vi.fn(),
+  };
+});
 
 vi.mock('oidc-client-ts', () => ({
   UserManager: class {
@@ -32,10 +45,12 @@ vi.mock('oidc-client-ts', () => ({
 }));
 
 vi.mock('../silentRenewSetup', () => ({
-  attachSilentRenewHandlers: vi.fn(() => ({
-    cleanup: vi.fn(),
-    renew: vi.fn(),
-  })),
+  attachSilentRenewHandlers: vi.fn(
+    (_manager: unknown, options: { onRenewError: (error: Error) => void }) => {
+      handlers.onRenewError = options.onRenewError;
+      return { cleanup: vi.fn(), renew: vi.fn() };
+    },
+  ),
 }));
 
 vi.mock('../useLoginFailureNotification', () => ({
@@ -144,5 +159,31 @@ describe('useSSOLogin', () => {
     await waitFor(() => expect(store.get(ssoDataAtom)?.id_token).toBe('jwt'));
     expect(isAuthRedirectLoop()).toBe(false);
     expect(notifyLoginFailureMock).not.toHaveBeenCalled();
+  });
+
+  it('redirects and counts once when one expiry fires several handlers', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    managerMock.getUser.mockResolvedValue({
+      expired: false,
+      id_token: 'jwt',
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+    });
+    const { Wrapper, store } = makeWrapper();
+    renderHook(() => useSSOLogin(), { wrapper: Wrapper });
+    await waitFor(() => expect(store.get(ssoDataAtom)?.id_token).toBe('jwt'));
+    expect(handlers.onRenewError).toBeDefined();
+    expect(handlers.onUserUnloaded).toBeDefined();
+
+    handlers.onRenewError!(new Error('invalid_grant'));
+    handlers.onUserUnloaded!();
+
+    await waitFor(() =>
+      expect(managerMock.signinRedirect).toHaveBeenCalledTimes(1),
+    );
+    await Promise.resolve();
+    expect(managerMock.signinRedirect).toHaveBeenCalledTimes(1);
+    expect(
+      JSON.parse(sessionStorage.getItem(AUTH_REDIRECT_STORAGE_KEY) || '[]'),
+    ).toHaveLength(1);
   });
 });
