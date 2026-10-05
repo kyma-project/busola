@@ -101,7 +101,7 @@ describe('useReauthenticate', () => {
     expect(stored).toHaveLength(1);
   });
 
-  it('releases the claim after a failed redirect so a later attempt can retry', async () => {
+  it('allows another redirect after a failed one', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     const userManager = makeUserManager({
       signinRedirect: vi
@@ -113,8 +113,8 @@ describe('useReauthenticate', () => {
       wrapper: makeWrapper('/cluster/foo/namespaces/bar'),
     });
 
-    await result.current(userManager); // redirect rejects, claim released
-    await result.current(userManager); // same load, redirects again
+    await result.current(userManager); // redirect fails
+    await result.current(userManager); // redirects again
 
     expect(userManager.signinRedirect).toHaveBeenCalledTimes(2);
   });

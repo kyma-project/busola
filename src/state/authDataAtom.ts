@@ -193,7 +193,7 @@ async function handleLogin({
             await userManager.signinRedirect();
           } catch (redirectError) {
             console.warn('Login restart failed:', redirectError);
-            // We never left the page; release the claim so onError can redirect.
+            // Still on this page, so let onError redirect.
             resetReauthRedirectClaim();
             onError(
               redirectError instanceof Error
@@ -306,7 +306,7 @@ export function useAuthHandler() {
           setAuth(null);
           // Clear the cluster so picking it again (or Retry) starts a new login.
           setCluster(null);
-          // The redirect stopped without leaving the page; release the claim so a later retry can redirect.
+          // Still on this page, so let a later retry redirect.
           resetReauthRedirectClaim();
           notifyLoginFailure(failure, {
             onRetry: () => {

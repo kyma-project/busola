@@ -4,10 +4,8 @@ export const AUTH_REDIRECT_STORAGE_KEY = 'busola.auth-redirect-timestamps';
 const WINDOW_MS = 60 * 1000;
 const MAX_REDIRECTS_IN_WINDOW = 3;
 
-// One expiry can fire multiple handlers; only the first redirect counts per page load.
-// The claim expires so a redirect that never left the page (cancelled navigation,
-// stale login) cannot block re-auth for good. Half the window keeps a single
-// page from ever reaching MAX_REDIRECTS_IN_WINDOW on its own.
+// One expiry can fire several handlers; only the first may redirect.
+// The claim expires in case the redirect never leaves the page. Half the window: one page can't trip the guard.
 const CLAIM_TTL_MS = WINDOW_MS / 2;
 let reauthClaimedAt: number | null = null;
 
@@ -24,7 +22,7 @@ export function resetReauthRedirectClaim(): void {
   reauthClaimedAt = null;
 }
 
-// Back from the IdP can restore this page from the bfcache with the claim still held.
+// The Back button can restore this page from the bfcache with the claim still set.
 window.addEventListener('pageshow', (event) => {
   if (event.persisted) resetReauthRedirectClaim();
 });
@@ -60,7 +58,6 @@ export function isAuthRedirectLoop(): boolean {
 }
 
 export function resetAuthRedirectGuard(): void {
-  // A reset means a deliberate fresh attempt, so free the claim too.
   resetReauthRedirectClaim();
   try {
     sessionStorage.removeItem(AUTH_REDIRECT_STORAGE_KEY);

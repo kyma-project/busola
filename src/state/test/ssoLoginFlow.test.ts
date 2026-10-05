@@ -12,7 +12,7 @@ import {
 } from '../utils/authRedirectLoopGuard';
 import { ssoDataAtom, useSSOLogin } from '../ssoDataAtom';
 
-// The SSO module attaches its handlers once per module, so keep them across tests.
+// The SSO module attaches its handlers only once, so keep them across tests.
 const { managerMock, notifyLoginFailureMock, handlers } = vi.hoisted(() => {
   const handlers: {
     onRenewError?: (error: Error) => void;
@@ -161,7 +161,7 @@ describe('useSSOLogin', () => {
     expect(notifyLoginFailureMock).not.toHaveBeenCalled();
   });
 
-  it('redirects and counts once when one expiry fires several handlers', async () => {
+  it('redirects only once when one expiry fires several handlers', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     managerMock.getUser.mockResolvedValue({
       expired: false,

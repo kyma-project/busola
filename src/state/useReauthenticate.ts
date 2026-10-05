@@ -77,7 +77,7 @@ export function useReauthenticate({
         await userManager.signinRedirect();
       } catch (redirectError) {
         console.warn('Silent re-auth via IdP failed:', redirectError);
-        // We never left the page; release the claim.
+        // Still on this page, so allow another attempt.
         resetReauthRedirectClaim();
         clearIntendedPath();
         fallBackToClusterList();

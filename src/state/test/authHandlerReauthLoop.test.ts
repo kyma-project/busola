@@ -104,7 +104,7 @@ describe('useAuthHandler redirect-loop guard', () => {
     expect(isAuthRedirectLoop()).toBe(true);
   });
 
-  it('redirects and counts once for an expired stored user', async () => {
+  it('redirects once and counts it when the stored user has expired', async () => {
     managerMock.getUser.mockResolvedValue({ expired: true });
     const { Wrapper } = makeWrapper();
     renderHook(() => useAuthHandler(), { wrapper: Wrapper });
@@ -117,7 +117,7 @@ describe('useAuthHandler redirect-loop guard', () => {
     ).toHaveLength(1);
   });
 
-  it('does not redirect or count again while another handler holds the claim', async () => {
+  it('does not redirect again while another redirect is under way', async () => {
     tryClaimReauthRedirect();
     managerMock.getUser.mockResolvedValue({ expired: true });
     const { Wrapper } = makeWrapper();
