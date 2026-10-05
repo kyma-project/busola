@@ -32,8 +32,7 @@ const SSO_KEY = 'SSO';
 
 export type SsoDataState = User | null;
 
-// An expired stored token is not a session. Treated as one, the app starts the
-// cluster login and its navigation before the SSO login has finished.
+// Ignore an expired stored token, or the cluster login starts before the SSO login has finished.
 const defaultValue: SsoDataState = hasValidStoredSSOToken()
   ? getSSOAuthData()
   : null;
@@ -109,12 +108,11 @@ function triggerReauthRedirect(userManager: UserManager | null) {
     });
 }
 
-// Starts the SSO login again after it was stopped and the dialog dismissed.
 export function restartSSOLogin() {
   triggerReauthRedirect(session.userManager);
 }
 
-// Forced re-login after loop guard tripped. Resets the guard and uses prompt: 'login'.
+// prompt: 'login' so a stale IdP session can't send us straight back into the loop.
 function triggerForcedLogin(
   userManager: UserManager | null,
   relative: string | null,
@@ -177,8 +175,7 @@ async function handleSSOLogin(
     const validStoredUser =
       storedUser && !storedUser.expired ? storedUser : null;
     const decision = decideOidcCallbackAction(ssoConfig.config.clientId);
-    // A re-auth can return while the previous token is still valid. The new
-    // login must win: the old session cannot renew and would redirect again.
+    // The new login must win: the old session can't renew and would redirect again.
     if (validStoredUser && decision.action !== 'process-callback') {
       user = validStoredUser;
     } else {
@@ -200,8 +197,7 @@ async function handleSSOLogin(
         console.warn('SSO login callback failed, keeping the stored user:', e);
         user = validStoredUser;
       }
-      // Remove the OAuth callback parameters: the cluster login would take
-      // them for another manager's callback and never start.
+      // Drop the callback parameters, or the cluster login waits for a foreign callback and never starts.
       const url = new URL(window.location.href);
       url.searchParams.delete('code');
       url.searchParams.delete('iss');
@@ -298,16 +294,15 @@ export function useSSOLogin() {
       if (bypass === 'true') return;
       handleSSOLogin(ssoConfig, setSsoState, setRenewing, (failure) => {
         // Unblock the app behind the dialog, navigating also removes the error params.
-        // Captured before the navigation below replaces the URL.
+        // Read the path before the navigation below replaces the URL.
         const relative = toClusterRelative(
           window.location.pathname + window.location.search,
         );
-        // Cluster first: a selected cluster with a stopped SSO login restarts it.
+        // Clear the cluster first; a selected cluster would restart the stopped SSO login.
         setCluster(null);
         setSsoLoginStopped(true);
         navigate('/clusters', { replace: true });
         notifyLoginFailure(failure, {
-          // prompt: 'login' returns the user to where they were instead of the cluster list.
           onRetry: () => {
             triggerForcedLogin(session.userManager, relative);
           },

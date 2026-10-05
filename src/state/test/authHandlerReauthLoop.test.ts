@@ -115,7 +115,7 @@ describe('useAuthHandler redirect-loop guard', () => {
     expect(isAuthRedirectLoop()).toBe(true);
   });
 
-  it('redirects and counts once for an expired stored user', async () => {
+  it('redirects once and counts it when the stored user has expired', async () => {
     managerMock.getUser.mockResolvedValue({ expired: true });
     const { Wrapper } = makeWrapper();
     renderHook(() => useAuthHandler(), { wrapper: Wrapper });
@@ -128,7 +128,7 @@ describe('useAuthHandler redirect-loop guard', () => {
     ).toHaveLength(1);
   });
 
-  it('does not redirect or count again while another handler holds the claim', async () => {
+  it('does not redirect again while another redirect is under way', async () => {
     tryClaimReauthRedirect();
     managerMock.getUser.mockResolvedValue({ expired: true });
     const { Wrapper } = makeWrapper();
@@ -141,20 +141,18 @@ describe('useAuthHandler redirect-loop guard', () => {
   });
 
   it('Retry saves the path and forces a fresh login', async () => {
-    // Pre-trip the guard so handleLogin's stop-loop path fires onLoginFailed.
+    // Three recent redirects make the next login stop and show the dialog.
     registerAuthRedirect();
     registerAuthRedirect();
     registerAuthRedirect();
     managerMock.getUser.mockResolvedValue({ expired: true });
-    // handleLogin reads window.location to preserve the user's location.
     window.history.replaceState({}, '', '/cluster/foo/namespaces/bar');
 
     const { Wrapper } = makeWrapper();
     renderHook(() => useAuthHandler(), { wrapper: Wrapper });
 
     await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
-    // Nothing is saved while the dialog is open; Close must not leave a path
-    // behind for the next cluster.
+    // Nothing saved yet: closing the dialog must not leave a path for the next cluster.
     expect(getIntendedPath()).toBeNull();
 
     const [, options] = notifyLoginFailureMock.mock.calls[0];
@@ -166,7 +164,7 @@ describe('useAuthHandler redirect-loop guard', () => {
     });
   });
 
-  it('Retry re-persists the cluster so the IdP callback can finish the login', async () => {
+  it('Retry stores the cluster name so the login callback can restore the cluster', async () => {
     registerAuthRedirect();
     registerAuthRedirect();
     registerAuthRedirect();
@@ -177,19 +175,16 @@ describe('useAuthHandler redirect-loop guard', () => {
     renderHook(() => useAuthHandler(), { wrapper: Wrapper });
 
     await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
-    // onLoginFailed cleared the cluster, so nothing would restore it on return.
+    // The stopped login cleared the cluster.
     expect(localStorage.getItem(CLUSTER_NAME_STORAGE_KEY)).toBeNull();
 
     const [, options] = notifyLoginFailureMock.mock.calls[0];
     await options.onRetry();
 
-    // Retry writes the name back so the redirect_uri (origin) load can restore
-    // the cluster and exchange the code instead of orphaning the callback.
     expect(localStorage.getItem(CLUSTER_NAME_STORAGE_KEY)).toBe('foo');
   });
 
-  it('Retry keeps the kubeconfigID marker on the saved path', async () => {
-    // A kubeconfigID deep-link flow is still pending: its marker must survive.
+  it('Retry keeps the kubeconfigID of a pending deep link on the saved path', async () => {
     saveIntendedPath('/namespaces/other', 'my-kubeconfig');
     registerAuthRedirect();
     registerAuthRedirect();
@@ -216,7 +211,7 @@ describe('useAuthHandler redirect-loop guard', () => {
     const { cleanup } = vi.mocked(attachSilentRenewHandlers).mock.results[0]
       .value;
 
-    // The cluster's config is fetched once authenticated and replaces the atom.
+    // After login the cluster's configuration is loaded and replaces the atom's value.
     act(() =>
       store.set(configurationAtom, {
         features: { SSO_LOGIN: { isEnabled: false } },
@@ -228,8 +223,7 @@ describe('useAuthHandler redirect-loop guard', () => {
     expect(attachSilentRenewHandlers).toHaveBeenCalledTimes(1);
   });
 
-  it('processes a login callback even while the previous token is still valid', async () => {
-    // Re-auth returned before the old token expired; its session cannot renew.
+  it('finishes a new login even if the old token is still valid', async () => {
     localStorage.setItem(
       'oidc.s1',
       JSON.stringify({ client_id: 'cluster-client' }),
@@ -250,7 +244,7 @@ describe('useAuthHandler redirect-loop guard', () => {
     expect(managerMock.signinRedirect).not.toHaveBeenCalled();
   });
 
-  it('keeps the stored user when a stale callback URL cannot be processed', async () => {
+  it('keeps the stored user when the callback in the URL is stale', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     localStorage.setItem(
       'oidc.s1',

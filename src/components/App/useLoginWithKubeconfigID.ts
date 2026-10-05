@@ -266,8 +266,7 @@ export function useLoginWithKubeconfigID() {
       return;
     }
 
-    // SSO login goes first. Adding the cluster now navigates away from the
-    // link, and the SSO redirect then loses the kubeconfigID it has to restore.
+    // Wait for the SSO login; otherwise its redirect loses the kubeconfigID.
     if (isSSOEnabled && !ssoData) return;
 
     lastProcessedKubeconfigIdRef.current = kubeconfigId;

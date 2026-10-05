@@ -9,12 +9,7 @@ import { resetReauthRedirectClaim } from '../utils/authRedirectLoopGuard';
 import { authDataAtom, useAuthHandler } from '../authDataAtom';
 import { ssoLoginStoppedAtom } from '../ssoDataAtom';
 
-// Characterization of the auth-type dispatch in useAuthHandler. The recovery
-// code the #5307 fixes touch (handleLogin / onLoginFailed / prompt:login) only
-// runs for OIDC clusters. These tests pin that boundary: token, client-cert
-// and generic-exec clusters must never construct or touch a UserManager, so a
-// future edit to the OIDC path cannot silently affect them. getUser being
-// called is the marker that handleLogin (the UserManager path) was entered.
+// Clusters without OIDC must never enter the OIDC login; a getUser call would show that they did.
 
 const mockNavigate = vi.fn();
 
@@ -80,7 +75,7 @@ function makeWrapper(user: unknown) {
   return { Wrapper, store };
 }
 
-describe('useAuthHandler auth-type dispatch', () => {
+describe('useAuthHandler auth types', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     sessionStorage.clear();
@@ -89,7 +84,7 @@ describe('useAuthHandler auth-type dispatch', () => {
     resetReauthRedirectClaim();
   });
 
-  it('a token cluster logs in directly without touching a UserManager', async () => {
+  it('logs in to a token cluster without the OIDC login', async () => {
     const { Wrapper, store } = makeWrapper({ token: 'abc' });
     renderHook(() => useAuthHandler(), { wrapper: Wrapper });
 
@@ -102,7 +97,7 @@ describe('useAuthHandler auth-type dispatch', () => {
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
-  it('a client-certificate cluster logs in directly without touching a UserManager', async () => {
+  it('logs in to a client-certificate cluster without the OIDC login', async () => {
     const credentials = {
       'client-certificate-data': 'cert',
       'client-key-data': 'key',
@@ -117,7 +112,7 @@ describe('useAuthHandler auth-type dispatch', () => {
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
-  it('a generic exec cluster is sent to the cluster list, not through the IdP', async () => {
+  it('sends a generic exec cluster to the cluster list, not to the IdP', async () => {
     const { Wrapper, store } = makeWrapper({ exec: { args: ['--not-oidc'] } });
     renderHook(() => useAuthHandler(), { wrapper: Wrapper });
 
@@ -128,7 +123,7 @@ describe('useAuthHandler auth-type dispatch', () => {
     expect(store.get(authDataAtom)).toBeNull();
   });
 
-  it('an OIDC cluster does go through the UserManager (boundary contrast)', async () => {
+  it('uses the OIDC login for an OIDC cluster', async () => {
     managerMock.getUser.mockResolvedValue({
       expired: false,
       id_token: 'jwt',

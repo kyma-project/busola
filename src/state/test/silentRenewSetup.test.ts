@@ -129,7 +129,7 @@ describe('attachSilentRenewHandlers', () => {
       vi.useRealTimers();
     });
 
-    it('renews a token that arrives already expiring once, shortly before it runs out', async () => {
+    it('renews a short-lived token once, just before it expires', async () => {
       const um = makeMockUserManager();
       um.signinSilent.mockImplementation(async () => renewed(40));
       attachSilentRenewHandlers(um as any, {
@@ -140,19 +140,19 @@ describe('attachSilentRenewHandlers', () => {
       await um.fireExpiring();
       expect(um.signinSilent).toHaveBeenCalledTimes(1);
 
-      // The renewed token has 40s left, so the library fires again at once.
+      // The new token has 40s left, so the library fires the event again right away.
       await vi.advanceTimersByTimeAsync(1000);
       await um.fireExpiring();
       expect(um.signinSilent).toHaveBeenCalledTimes(1);
 
-      // 39s are left at this point; the renewal is due 5s before expiry.
+      // 39s left now; the renewal is due 5s before expiry.
       await vi.advanceTimersByTimeAsync(33000);
       expect(um.signinSilent).toHaveBeenCalledTimes(1);
       await vi.advanceTimersByTimeAsync(1000);
       expect(um.signinSilent).toHaveBeenCalledTimes(2);
     });
 
-    it('renews immediately when the token is almost spent', async () => {
+    it('renews right away when the token is about to expire', async () => {
       const um = makeMockUserManager();
       um.signinSilent.mockImplementation(async () => renewed(3));
       attachSilentRenewHandlers(um as any, {
@@ -167,7 +167,7 @@ describe('attachSilentRenewHandlers', () => {
       expect(um.signinSilent).toHaveBeenCalledTimes(2);
     });
 
-    it('renews a normal token immediately when its expiring event fires', async () => {
+    it('renews a normal token right away', async () => {
       const um = makeMockUserManager();
       um.signinSilent.mockImplementation(async () => renewed(3600));
       attachSilentRenewHandlers(um as any, {
@@ -183,7 +183,7 @@ describe('attachSilentRenewHandlers', () => {
       expect(um.signinSilent).toHaveBeenCalledTimes(2);
     });
 
-    it('cleanup cancels a pending deferred renewal', async () => {
+    it('cleanup cancels a scheduled renewal', async () => {
       const um = makeMockUserManager();
       um.signinSilent.mockImplementation(async () => renewed(40));
       const { cleanup } = attachSilentRenewHandlers(um as any, {

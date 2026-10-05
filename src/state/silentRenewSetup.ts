@@ -8,9 +8,7 @@ interface Options {
   onRenewingChange?: (renewing: boolean) => void;
 }
 
-// A renewal this recent means the new token was already close to expiry.
 const SHORT_TOKEN_WINDOW_MS = 5000;
-// How long before its expiry such a short-lived token is renewed.
 const SHORT_TOKEN_RENEW_MARGIN_S = 5;
 
 // Runs `addAccessTokenExpiring`, `visibilitychange`, and external `renew()`
@@ -43,12 +41,9 @@ export function attachSilentRenewHandlers(
   };
 
   const expiringHandler = async () => {
-    // An IdP can cap a token at the end of its session. Such a token is
-    // "expiring" as soon as it arrives, and renewing it right away would
-    // repeat about once a second. Renew it once, shortly before it runs out.
+    // A short-lived token fires this right after each renewal; renew it once, just before expiry.
     if (Date.now() - lastRenewAt < SHORT_TOKEN_WINDOW_MS) {
-      // Not read via getUser(): that reloads the library's timers and fires
-      // this event again.
+      // getUser() would restart the library's timers and fire this event again.
       const secondsLeft = renewedTokenExpiresAt - Date.now() / 1000;
       if (secondsLeft > SHORT_TOKEN_RENEW_MARGIN_S) {
         clearTimeout(deferredRenew);

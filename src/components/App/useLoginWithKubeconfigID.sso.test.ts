@@ -65,8 +65,7 @@ describe('useLoginWithKubeconfigID with SSO login', () => {
       wrapper: Wrapper,
     });
 
-    // Loading it now would navigate away and drop the kubeconfigID that the
-    // SSO redirect has to carry over.
+    // Loading it now would drop the kubeconfigID before the SSO redirect saves it.
     await new Promise((resolve) => setTimeout(resolve, 50));
     expect(fetchMock).not.toHaveBeenCalled();
     expect(result.current).not.toBe('done');

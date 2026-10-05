@@ -48,9 +48,7 @@ export default function ClusterRoutes() {
 
   useEffect(() => {
     if (cluster?.name === currentClusterName) return;
-    // A stopped login clears the cluster and leaves for the cluster list. Until
-    // that navigation commits this route is still mounted; re-selecting the
-    // cluster here would restart the login in a loop.
+    // A stopped login is already navigating away; selecting the cluster again would restart it.
     if (!window.location.pathname.startsWith('/cluster/')) return;
     const currentCluster = clusters?.[currentClusterName];
     const kubeconfigId = search.get('kubeconfigID');

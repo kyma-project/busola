@@ -17,7 +17,7 @@ import {
 } from '../utils/authRedirectLoopGuard';
 import { ssoDataAtom, useSSOLogin } from '../ssoDataAtom';
 
-// The SSO module attaches its handlers once per module, so keep them across tests.
+// The SSO module attaches its handlers only once, so keep them across tests.
 const { managerMock, notifyLoginFailureMock, handlers } = vi.hoisted(() => {
   const handlers: {
     onRenewError?: (error: Error) => void;
@@ -166,7 +166,7 @@ describe('useSSOLogin', () => {
     expect(notifyLoginFailureMock).not.toHaveBeenCalled();
   });
 
-  it('redirects and counts once when one expiry fires several handlers', async () => {
+  it('redirects only once when one expiry fires several handlers', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     managerMock.getUser.mockResolvedValue({
       expired: false,
@@ -192,7 +192,7 @@ describe('useSSOLogin', () => {
     ).toHaveLength(1);
   });
 
-  it('onRetry for loop-stop forces prompt=login and restores the path', async () => {
+  it('Retry forces a fresh login and saves the path', async () => {
     registerAuthRedirect();
     registerAuthRedirect();
     registerAuthRedirect();
@@ -219,7 +219,7 @@ describe('useSSOLogin', () => {
     expect(getIntendedPath()?.path).toBe('/namespaces/bar');
   });
 
-  it('saves the kubeconfigID before redirecting so a deep link survives SSO', async () => {
+  it('saves the kubeconfigID before the SSO redirect', async () => {
     window.history.replaceState({}, '', '/clusters?kubeconfigID=my.yaml');
     const { Wrapper } = makeWrapper();
 
@@ -228,13 +228,12 @@ describe('useSSOLogin', () => {
     await waitFor(() =>
       expect(managerMock.signinRedirect).toHaveBeenCalledTimes(1),
     );
-    // The pending ID is stored so the post-redirect callback can restore it.
     expect(consumePendingKubeconfigId()).toBe('my.yaml');
   });
 
-  it('restores the saved kubeconfigID into the URL after the SSO callback', async () => {
+  it('puts the saved kubeconfigID back into the URL after the SSO login', async () => {
     savePendingKubeconfigId('my.yaml');
-    // Owner lookup for the callback state must resolve to the SSO client.
+    // Marks the callback as belonging to the SSO client.
     localStorage.setItem(
       'oidc.s1',
       JSON.stringify({ client_id: 'sso-client' }),
@@ -253,12 +252,11 @@ describe('useSSOLogin', () => {
     await waitFor(() =>
       expect(window.location.search).toContain('kubeconfigID=my.yaml'),
     );
-    // Callback params are stripped and the pending ID was consumed.
     expect(window.location.search).not.toContain('code=');
     expect(consumePendingKubeconfigId()).toBeNull();
   });
 
-  it('processes a login callback even while the previous SSO token is still valid', async () => {
+  it('finishes a new SSO login even if the old SSO token is still valid', async () => {
     localStorage.setItem(
       'oidc.s1',
       JSON.stringify({ client_id: 'sso-client' }),
@@ -284,7 +282,7 @@ describe('useSSOLogin', () => {
     expect(managerMock.signinRedirect).not.toHaveBeenCalled();
   });
 
-  it('removes the callback parameters once the SSO callback is processed', async () => {
+  it('removes the callback parameters from the URL after the SSO login', async () => {
     localStorage.setItem(
       'oidc.s1',
       JSON.stringify({ client_id: 'sso-client' }),
@@ -304,7 +302,7 @@ describe('useSSOLogin', () => {
     renderHook(() => useSSOLogin(), { wrapper: Wrapper });
 
     await waitFor(() => expect(store.get(ssoDataAtom)?.id_token).toBe('jwt'));
-    // Left in place, the cluster login treats them as a foreign callback.
+    // Otherwise the cluster login mistakes them for a foreign callback.
     expect(window.location.search).toBe('');
   });
 });
