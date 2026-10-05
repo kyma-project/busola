@@ -60,9 +60,9 @@ export const HeaderRenderer = ({
     } else if (h === 'Popin') {
       return '100%';
     } else if (disableHiding && (h === 'Name' || h === '')) {
-      return '200px';
+      return '150px';
     } else if (disableHiding) {
-      return 'auto';
+      return '75px';
     } else {
       return '100px';
     }

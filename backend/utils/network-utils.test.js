@@ -179,3 +179,85 @@ describe('resolveOrBlockPrivateIpAddress with IPv4-mapped IPv6', () => {
     expect(receivedError).toBeInstanceOf(PrivateIPUsedError);
   });
 });
+
+describe('resolveOrBlockPrivateIpAddress with dual-stack hosts', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  // A Gardener shoot kube-apiserver fronted by a dual-stack AWS NLB returns
+  // both an A (IPv4) and an AAAA (IPv6) record. On an IPv4-only node the IPv6
+  // attempt fails with ENETUNREACH, so the resolver must hand the socket BOTH
+  // families (IPv4 first) and let it fall back — not collapse to one address.
+  it('returns every resolved address (IPv4 first) when opts.all is true', async () => {
+    const dualStack = [
+      { address: '2600:1f12:4bc:ba05::1', family: 6 },
+      { address: '56.136.175.163', family: 4 },
+    ];
+    vi.spyOn(dns, 'lookup').mockResolvedValueOnce(dualStack);
+
+    let receivedErr;
+    let receivedAddresses;
+    await resolveOrBlockPrivateIpAddress(
+      'dual-stack-shoot.example.com',
+      { all: true },
+      (err, addresses) => {
+        receivedErr = err;
+        receivedAddresses = addresses;
+      },
+    );
+
+    expect(receivedErr).toBeNull();
+    // Both families must be present so Happy Eyeballs can fall back to IPv4...
+    expect(receivedAddresses).toHaveLength(2);
+    expect(receivedAddresses).toEqual(expect.arrayContaining(dualStack));
+    // ...and IPv4 is tried first so the IPv4-only host connects immediately.
+    expect(receivedAddresses[0].family).toBe(4);
+  });
+
+  it('prefers the IPv4 address for single-address callers (opts.all falsy)', async () => {
+    const dualStack = [
+      { address: '56.136.175.163', family: 4 },
+      // IPv6 is last — the previous collapse-to-last behavior picked this and
+      // became unreachable on the IPv4-only KCP cluster.
+      { address: '2600:1f12:4bc:ba05::1', family: 6 },
+    ];
+    vi.spyOn(dns, 'lookup').mockResolvedValueOnce(dualStack);
+
+    let receivedErr;
+    let receivedIp;
+    let receivedFamily;
+    await resolveOrBlockPrivateIpAddress(
+      'dual-stack-shoot-single.example.com',
+      {},
+      (err, ip, family) => {
+        receivedErr = err;
+        receivedIp = ip;
+        receivedFamily = family;
+      },
+    );
+
+    expect(receivedErr).toBeNull();
+    expect(receivedIp).toBe('56.136.175.163');
+    expect(receivedFamily).toBe(4);
+  });
+
+  it('blocks when ANY address in a dual-stack result is private (DNS-rebinding defense)', async () => {
+    const mixed = [
+      { address: '56.136.175.163', family: 4 }, // public
+      { address: '::ffff:10.0.0.1', family: 6 }, // private (IPv4-mapped)
+    ];
+    vi.spyOn(dns, 'lookup').mockResolvedValueOnce(mixed);
+
+    let receivedError;
+    await resolveOrBlockPrivateIpAddress(
+      'rebinding.example.com',
+      { all: true },
+      (err) => {
+        receivedError = err;
+      },
+    );
+
+    expect(receivedError).toBeInstanceOf(PrivateIPUsedError);
+  });
+});

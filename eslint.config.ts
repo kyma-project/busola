@@ -17,6 +17,7 @@ export default defineConfig(
       '**/__mocks__/**',
       '**/build/**',
       'backend/core-ui',
+      'backend/backend-production.js',
     ]),
 
     {
