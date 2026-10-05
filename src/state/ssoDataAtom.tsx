@@ -165,10 +165,14 @@ async function handleSSOLogin(
     const storedUser = await userManager?.getUser();
 
     let user: User;
-    if (storedUser && !storedUser.expired) {
-      user = storedUser;
+    const validStoredUser =
+      storedUser && !storedUser.expired ? storedUser : null;
+    const decision = decideOidcCallbackAction(ssoConfig.config.clientId);
+    // A re-auth can return while the previous token is still valid. The new
+    // login must win: the old session cannot renew and would redirect again.
+    if (validStoredUser && decision.action !== 'process-callback') {
+      user = validStoredUser;
     } else {
-      const decision = decideOidcCallbackAction(ssoConfig.config.clientId);
       if (decision.action === 'foreign-callback') {
         // Callback belongs to another manager (e.g. cluster OIDC); let it run.
         return;
@@ -180,7 +184,13 @@ async function handleSSOLogin(
         triggerReauthRedirect(userManager);
         return;
       }
-      user = await userManager?.signinRedirectCallback(window.location.href);
+      try {
+        user = await userManager?.signinRedirectCallback(window.location.href);
+      } catch (e) {
+        if (!validStoredUser) throw e;
+        console.warn('SSO login callback failed, keeping the stored user:', e);
+        user = validStoredUser;
+      }
       // Restore kubeconfigID that was saved before the SSO redirect so
       // useLoginWithKubeconfigID can still find it in the URL.
       const pendingKubeconfigId = consumePendingKubeconfigId();

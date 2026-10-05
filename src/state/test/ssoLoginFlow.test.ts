@@ -257,4 +257,30 @@ describe('useSSOLogin', () => {
     expect(window.location.search).not.toContain('code=');
     expect(consumePendingKubeconfigId()).toBeNull();
   });
+
+  it('processes a login callback even while the previous SSO token is still valid', async () => {
+    localStorage.setItem(
+      'oidc.s1',
+      JSON.stringify({ client_id: 'sso-client' }),
+    );
+    window.history.replaceState({}, '', '/?code=abc&state=s1');
+    managerMock.getUser.mockResolvedValue({
+      expired: false,
+      id_token: 'old-jwt',
+      expires_at: Math.floor(Date.now() / 1000) + 20,
+    });
+    managerMock.signinRedirectCallback.mockResolvedValue({
+      expired: false,
+      id_token: 'fresh-jwt',
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+    });
+    const { Wrapper, store } = makeWrapper();
+
+    renderHook(() => useSSOLogin(), { wrapper: Wrapper });
+
+    await waitFor(() =>
+      expect(store.get(ssoDataAtom)?.id_token).toBe('fresh-jwt'),
+    );
+    expect(managerMock.signinRedirect).not.toHaveBeenCalled();
+  });
 });

@@ -10,7 +10,14 @@ import {
   isAuthRedirectLoop,
   registerAuthRedirect,
 } from 'state/utils/authRedirectLoopGuard';
+import { openapiAtom } from 'state/openapi/openapiAtom';
 import { useResourceSchemas } from './useResourceSchemas';
+
+const { reauthMock } = vi.hoisted(() => ({ reauthMock: vi.fn() }));
+
+vi.mock('state/useReauthenticate', () => ({
+  useReauthenticate: () => reauthMock,
+}));
 
 vi.mock('./resourceSchemaWorkerApi', () => ({
   addWorkerErrorListener: vi.fn(),
@@ -49,12 +56,13 @@ function makeWrapper() {
       createElement(Provider, { store }, children),
     );
   Wrapper.displayName = 'TestWrapper';
-  return { Wrapper };
+  return { Wrapper, store };
 }
 
 describe('useResourceSchemas redirect-loop guard', () => {
   beforeEach(() => {
     sessionStorage.clear();
+    reauthMock.mockReset();
   });
 
   it('clears the redirect-loop guard once the session is proven usable', async () => {
@@ -69,5 +77,22 @@ describe('useResourceSchemas redirect-loop guard', () => {
 
     // A working session (schema fetched) should clear the loop count.
     await waitFor(() => expect(isAuthRedirectLoop()).toBe(false));
+  });
+
+  it('re-authenticates when the schema fetch is rejected as unauthorized', async () => {
+    const { Wrapper, store } = makeWrapper();
+    store.set(openapiAtom as any, { state: 'hasError', error: { code: 401 } });
+    renderHook(() => useResourceSchemas(), { wrapper: Wrapper });
+
+    await waitFor(() => expect(reauthMock).toHaveBeenCalledTimes(1));
+  });
+
+  it('does not re-authenticate when the schema fetch is rate limited', async () => {
+    const { Wrapper, store } = makeWrapper();
+    store.set(openapiAtom as any, { state: 'hasError', error: { code: 429 } });
+    renderHook(() => useResourceSchemas(), { wrapper: Wrapper });
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(reauthMock).not.toHaveBeenCalled();
   });
 });

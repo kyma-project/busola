@@ -57,6 +57,9 @@ export const useResourceSchemas = () => {
       authData &&
       activeClusterName === cluster?.contextName &&
       openApi?.state === 'hasError' &&
+      // Rate limiting is not a session drop; re-authenticating reloads the
+      // app and only adds more requests.
+      (openApi.error as { code?: number } | undefined)?.code !== 429 &&
       !isClusterList &&
       // A 401 during a silent renew is transient, not a session drop.
       !renewing &&
