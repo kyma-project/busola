@@ -9,7 +9,8 @@ import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
 const TERMINAL_DOCS_URL =
   'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-dashboard-terminal';
 
-const TERMINAL_BLOGPOST_URL = '';
+const TERMINAL_BLOGPOST_URL =
+  'https://community.sap.com/t5/blogs/blogworkflowpage/blog-id/technology-blog-sap/article-id/194777';
 
 export function TerminalBanner() {
   const { t } = useTranslation();
