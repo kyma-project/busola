@@ -42,7 +42,7 @@ export function isPrivateIp(ip) {
   return false;
 }
 
-async function isPrivateAddressCached(hostname) {
+async function resolveAddressesCached(hostname) {
   // Check Cache
   if (dnsCache.has(hostname)) {
     const entry = dnsCache.get(hostname);
@@ -54,34 +54,24 @@ async function isPrivateAddressCached(hostname) {
     dnsCache.set(hostname, entry);
 
     if (Date.now() - entry.timestamp < CACHE_TTL_MS) {
-      return {
-        isPrivate: entry.isPrivate,
-        ipAddress: entry.ipAddress,
-        familyAddress: entry.familyAddress,
-      };
+      return { isPrivate: entry.isPrivate, addresses: entry.addresses };
     }
   }
 
   // Perform Lookup
   let isPrivate = false;
-  let ipAddress = '';
-  let familyAddress = 0;
+  let addresses = [];
   try {
-    const addresses = await dns.lookup(hostname, { all: true });
-    for (const addr of addresses) {
-      ipAddress = addr.address;
-      familyAddress = addr.family;
-      if (isPrivateIp(addr.address)) {
-        isPrivate = true;
-        break;
-      }
-    }
+    // Keep every A/AAAA record so the socket can fall back between families.
+    addresses = await dns.lookup(hostname, { all: true });
+    // Block if any resolved address is private (SSRF / DNS-rebinding defense).
+    isPrivate = addresses.some((addr) => isPrivateIp(addr.address));
   } catch (err) {
     // Fail closed (secure) if DNS fails, but do not cache the failure:
     // a transient DNS outage would otherwise keep a valid cluster blocked
     // for the full cache TTL. Leaving it uncached lets the next request retry.
     console.warn(`DNS lookup failed for ${hostname}:`, err.message);
-    return { isPrivate: true, ipAddress: '', familyAddress: 0 };
+    return { isPrivate: true, addresses: [] };
   }
 
   if (dnsCache.size >= MAX_CACHE_SIZE) {
@@ -89,32 +79,29 @@ async function isPrivateAddressCached(hostname) {
     dnsCache.delete(oldestKey);
   }
 
-  dnsCache.set(hostname, {
-    timestamp: Date.now(),
-    isPrivate,
-    ipAddress,
-    familyAddress,
-  });
-  return { isPrivate, ipAddress, familyAddress };
+  dnsCache.set(hostname, { timestamp: Date.now(), isPrivate, addresses });
+  return { isPrivate, addresses };
 }
 
 export async function resolveOrBlockPrivateIpAddress(hostname, opts, callback) {
   try {
-    const result = await isPrivateAddressCached(hostname);
-    if (result.isPrivate) {
+    const { isPrivate, addresses } = await resolveAddressesCached(hostname);
+    if (isPrivate || addresses.length === 0) {
       callback(
         new PrivateIPUsedError(
           `The provided hostname: ${hostname} is private IP`,
         ),
       );
     } else if (opts?.all) {
-      // With the all option set to true, the arguments for callback change to (err, addresses),
-      // with addresses being an array of objects with the properties address and family.
-      callback(null, [
-        { address: result.ipAddress, family: result.familyAddress },
-      ]);
+      // Return all addresses, IPv4 first, so an IPv4-only host connects first
+      // while IPv6 stays available as a fallback.
+      const ipv4First = [...addresses].sort((a, b) => a.family - b.family);
+      callback(null, ipv4First);
     } else {
-      callback(null, result.ipAddress, result.familyAddress);
+      // Prefer IPv4 for single-address callers; fall back to the first address.
+      const preferred =
+        addresses.find((addr) => addr.family === 4) ?? addresses[0];
+      callback(null, preferred.address, preferred.family);
     }
   } catch (err) {
     callback(err);
