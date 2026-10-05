@@ -15,10 +15,7 @@ type OpenapiLoadable =
 
 const LOADING: OpenapiLoadable = { state: 'loading' };
 
-// Resolves with the error instead of rejecting. jotai's `loadable`/`unwrap`
-// re-subscribes to an already rejected promise when a superseded request
-// settles afterwards (e.g. the SSO session drops mid-request), which never
-// stops and freezes the tab.
+// Never rejects: jotai's `loadable`/`unwrap` can loop forever on a rejected promise and freeze the tab.
 const asyncOpenapiAtom = atom<Promise<OpenapiLoadable>>(async (get) => {
   try {
     const fetchFn = getFetchFn(get);

@@ -43,11 +43,10 @@ describe('openapiAtom', () => {
     return store;
   }
 
-  it('settles when a superseded request returns after the SSO session was dropped', async () => {
+  it('does not loop when an old request returns after the SSO session was dropped', async () => {
     const store = makeStore();
     let notifications = 0;
-    // A regression here is an endless microtask loop that would hang the test
-    // run, so stop listening once it is clearly running away.
+    // If this regresses it loops forever and hangs the test run, so stop listening after 200 updates.
     const unsubscribe = store.sub(openapiAtom, () => {
       if (++notifications > 200) unsubscribe();
     });
@@ -55,13 +54,12 @@ describe('openapiAtom', () => {
     await tick();
     expect(fetchMock).toHaveBeenCalledTimes(1);
 
-    // The SSO session drops while the schema request is still in flight; the
-    // replacement request is refused immediately.
+    // Without an SSO session the next request is refused at once.
     store.set(ssoDataAtom, null);
     await tick();
     expect(store.get(openapiAtom)).toMatchObject({ state: 'hasError' });
 
-    // The superseded request now comes back.
+    // The first request returns late.
     resolveFetch({ ok: true, json: async () => ({ swagger: '2.0' }) });
     await tick();
 
@@ -89,7 +87,7 @@ describe('openapiAtom', () => {
     unsubscribe();
   });
 
-  it('has no data without an authenticated cluster', async () => {
+  it('has no data when no cluster is logged in', async () => {
     const store = makeStore();
     store.set(authDataAtom, null);
     const unsubscribe = store.sub(openapiAtom, () => {});
