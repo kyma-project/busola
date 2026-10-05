@@ -24,6 +24,7 @@ import {
   multipleContextsAtom,
 } from 'state/multipleContextsAtom';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { ssoDataAtom, useIsSSOEnabled } from 'state/ssoDataAtom';
 import {
   manualKubeConfigIdAtom,
   ManualKubeConfigIdController,
@@ -192,6 +193,8 @@ export function useLoginWithKubeconfigID() {
   const [handledKubeconfigId, setHandledKubeconfigId] =
     useState<KubeconfigIdHandleState>('not started');
   const lastProcessedKubeconfigIdRef = useRef<string | null>(null);
+  const isSSOEnabled = useIsSSOEnabled();
+  const ssoData = useAtomValue(ssoDataAtom);
 
   useEffect(() => {
     if (contextsState?.chosenContext) {
@@ -263,6 +266,10 @@ export function useLoginWithKubeconfigID() {
       return;
     }
 
+    // SSO login goes first. Adding the cluster now navigates away from the
+    // link, and the SSO redirect then loses the kubeconfigID it has to restore.
+    if (isSSOEnabled && !ssoData) return;
+
     lastProcessedKubeconfigIdRef.current = kubeconfigId;
     setHandledKubeconfigId('loading');
     loadKubeconfigIdCluster(
@@ -290,6 +297,8 @@ export function useLoginWithKubeconfigID() {
     setContextsState,
     setManualKubeConfigId,
     manualKubeConfigId,
+    isSSOEnabled,
+    ssoData,
   ]);
 
   return handledKubeconfigId;
