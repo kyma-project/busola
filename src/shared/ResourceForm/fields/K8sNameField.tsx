@@ -50,42 +50,39 @@ export function K8sNameField({
   };
 
   return (
-    <ResourceForm.FormField
-      required={required}
-      className={className}
-      propertyPath="$.metadata.name"
-      label={t('common.labels.name')}
-      inputInfo={inputInfoLink}
-      tooltipContent={tooltipContent}
-      input={() => {
-        return (
-          <>
-            <div className="bsl-col-md--12">
-              <K8sNameInput
-                kind={kind ?? ''}
-                compact
-                required={required}
-                showLabel={false}
-                onChange={setValueOnChange}
-                onInput={setValueOnChange}
-                value={value}
-                readOnly={readOnly}
-                pattern={pattern}
-                {...props}
-              />
-            </div>
-            {showHelp && inputInfo === undefined ? (
-              <Label
-                wrappingType="Normal"
-                showColon={false}
-                style={{ marginTop: '5px' }}
-              >
-                {t('common.tooltips.k8s-name-input')}
-              </Label>
-            ) : null}
-          </>
-        );
-      }}
-    />
+    <>
+      <ResourceForm.FormField
+        required={required}
+        className={className}
+        propertyPath="$.metadata.name"
+        label={t('common.labels.name')}
+        inputInfo={inputInfoLink}
+        tooltipContent={tooltipContent}
+        input={() => (
+          <div className="bsl-col-md--12">
+            <K8sNameInput
+              kind={kind ?? ''}
+              compact
+              required={required}
+              showLabel={false}
+              onChange={setValueOnChange}
+              onInput={setValueOnChange}
+              value={value}
+              readOnly={readOnly}
+              pattern={pattern}
+              {...props}
+            />
+          </div>
+        )}
+      />
+      {showHelp && inputInfo === undefined && (
+        <div style={{ display: 'flex', marginTop: '5px' }}>
+          <div className="bsl-col-md--4" />
+          <Label wrappingType="Normal" showColon={false}>
+            {t('common.tooltips.k8s-name-input')}
+          </Label>
+        </div>
+      )}
+    </>
   );
 }
