@@ -33,7 +33,11 @@ import {
   tryClaimReauthRedirect,
 } from './utils/authRedirectLoopGuard';
 import { useNotifyLoginFailure } from './useLoginFailureNotification';
-import { ssoDataAtom, ssoLoginStoppedAtom } from './ssoDataAtom';
+import {
+  restartSSOLogin,
+  ssoDataAtom,
+  ssoLoginStoppedAtom,
+} from './ssoDataAtom';
 import { configFeaturesNames } from './types';
 import { useFeature } from 'hooks/useFeature';
 import { configurationAtom } from './configuration/configurationAtom';
@@ -241,7 +245,16 @@ export function useAuthHandler() {
 
   useEffect(() => {
     if (!configuration?.features) return;
-    if (!ssoData && isSSOEnabled && !ssoLoginStopped) return;
+    if (!ssoData && isSSOEnabled) {
+      if (!ssoLoginStopped) return;
+      // The stopped SSO login only unblocks the cluster list. Opening a
+      // cluster needs the SSO session first; a cluster login now would return
+      // to a page where neither login can finish.
+      if (cluster) {
+        restartSSOLogin();
+        return;
+      }
+    }
     // The configuration reloads after login and re-runs this effect; an
     // unchanged cluster must keep its silent-renew handlers and UserManager.
     if (cluster && isEqual(prevClusterRef.current, cluster)) return;

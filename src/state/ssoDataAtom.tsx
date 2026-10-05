@@ -32,7 +32,11 @@ const SSO_KEY = 'SSO';
 
 export type SsoDataState = User | null;
 
-const defaultValue: SsoDataState = getSSOAuthData();
+// An expired stored token is not a session. Treated as one, the app starts the
+// cluster login and its navigation before the SSO login has finished.
+const defaultValue: SsoDataState = hasValidStoredSSOToken()
+  ? getSSOAuthData()
+  : null;
 
 export const ssoDataAtom = atom<SsoDataState>(defaultValue);
 
@@ -103,6 +107,11 @@ function triggerReauthRedirect(userManager: UserManager | null) {
       console.warn('SSO re-auth redirect failed:', e);
       window.location.assign('/clusters');
     });
+}
+
+// Starts the SSO login again after it was stopped and the dialog dismissed.
+export function restartSSOLogin() {
+  triggerReauthRedirect(session.userManager);
 }
 
 // Forced re-login after loop guard tripped. Resets the guard and uses prompt: 'login'.
@@ -191,19 +200,22 @@ async function handleSSOLogin(
         console.warn('SSO login callback failed, keeping the stored user:', e);
         user = validStoredUser;
       }
+      // Remove the OAuth callback parameters: the cluster login would take
+      // them for another manager's callback and never start.
+      const url = new URL(window.location.href);
+      url.searchParams.delete('code');
+      url.searchParams.delete('iss');
+      url.searchParams.delete('state');
+      url.searchParams.delete('session_state');
       // Restore kubeconfigID that was saved before the SSO redirect so
       // useLoginWithKubeconfigID can still find it in the URL.
       const pendingKubeconfigId = consumePendingKubeconfigId();
       if (pendingKubeconfigId) {
-        const url = new URL(window.location.href);
-        // Remove OAuth callback parameters to prevent re-triggering auth
-        url.searchParams.delete('code');
-        url.searchParams.delete('iss');
-        url.searchParams.delete('state');
-        url.searchParams.delete('session_state');
         url.searchParams.set('kubeconfigID', pendingKubeconfigId);
         window.history.replaceState({}, '', url.toString());
         window.location.href = url.toString();
+      } else {
+        window.history.replaceState(window.history.state, '', url.toString());
       }
     }
 
@@ -290,8 +302,9 @@ export function useSSOLogin() {
         const relative = toClusterRelative(
           window.location.pathname + window.location.search,
         );
-        setSsoLoginStopped(true);
+        // Cluster first: a selected cluster with a stopped SSO login restarts it.
         setCluster(null);
+        setSsoLoginStopped(true);
         navigate('/clusters', { replace: true });
         notifyLoginFailure(failure, {
           // prompt: 'login' returns the user to where they were instead of the cluster list.

@@ -7,6 +7,7 @@ import { configurationAtom } from '../configuration/configurationAtom';
 import { clusterAtom } from '../clusterAtom';
 import { resetReauthRedirectClaim } from '../utils/authRedirectLoopGuard';
 import { authDataAtom, useAuthHandler } from '../authDataAtom';
+import { ssoLoginStoppedAtom } from '../ssoDataAtom';
 
 // Characterization of the auth-type dispatch in useAuthHandler. The recovery
 // code the #5307 fixes touch (handleLogin / onLoginFailed / prompt:login) only
@@ -17,16 +18,19 @@ import { authDataAtom, useAuthHandler } from '../authDataAtom';
 
 const mockNavigate = vi.fn();
 
-const { managerMock, notifyLoginFailureMock } = vi.hoisted(() => ({
-  managerMock: {
-    getUser: vi.fn(),
-    signinRedirect: vi.fn().mockResolvedValue(undefined),
-    signinRedirectCallback: vi.fn(),
-    clearStaleState: vi.fn().mockResolvedValue(undefined),
-    events: { addAccessTokenExpiring: vi.fn(), addUserUnloaded: vi.fn() },
-  },
-  notifyLoginFailureMock: vi.fn(),
-}));
+const { managerMock, notifyLoginFailureMock, restartSSOLoginMock } = vi.hoisted(
+  () => ({
+    restartSSOLoginMock: vi.fn(),
+    managerMock: {
+      getUser: vi.fn(),
+      signinRedirect: vi.fn().mockResolvedValue(undefined),
+      signinRedirectCallback: vi.fn(),
+      clearStaleState: vi.fn().mockResolvedValue(undefined),
+      events: { addAccessTokenExpiring: vi.fn(), addUserUnloaded: vi.fn() },
+    },
+    notifyLoginFailureMock: vi.fn(),
+  }),
+);
 
 vi.mock('oidc-client-ts', () => ({
   UserManager: class {
@@ -40,6 +44,12 @@ vi.mock('oidc-client-ts', () => ({
 vi.mock('../silentRenewSetup', () => ({
   attachSilentRenewHandlers: vi.fn(() => ({ cleanup: vi.fn() })),
 }));
+
+vi.mock('../ssoDataAtom', async () => {
+  const actual =
+    await vi.importActual<typeof import('../ssoDataAtom')>('../ssoDataAtom');
+  return { ...actual, restartSSOLogin: restartSSOLoginMock };
+});
 
 vi.mock('../useLoginFailureNotification', () => ({
   useNotifyLoginFailure: () => notifyLoginFailureMock,
@@ -139,5 +149,26 @@ describe('useAuthHandler auth-type dispatch', () => {
       expect(store.get(authDataAtom)).toEqual({ token: 'jwt' }),
     );
     expect(managerMock.getUser).toHaveBeenCalled();
+  });
+
+  it('restarts the SSO login instead of the cluster login when SSO was stopped', async () => {
+    const { Wrapper, store } = makeWrapper({
+      exec: {
+        args: [
+          '--oidc-issuer-url=https://idp.example',
+          '--oidc-client-id=cluster-client',
+        ],
+      },
+    });
+    store.set(configurationAtom, {
+      features: { SSO_LOGIN: { isEnabled: true } },
+    } as never);
+    store.set(ssoLoginStoppedAtom, true);
+
+    renderHook(() => useAuthHandler(), { wrapper: Wrapper });
+
+    await waitFor(() => expect(restartSSOLoginMock).toHaveBeenCalledTimes(1));
+    expect(managerMock.getUser).not.toHaveBeenCalled();
+    expect(managerMock.signinRedirect).not.toHaveBeenCalled();
   });
 });
