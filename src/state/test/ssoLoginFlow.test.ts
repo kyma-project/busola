@@ -196,7 +196,6 @@ describe('useSSOLogin', () => {
     registerAuthRedirect();
     registerAuthRedirect();
     registerAuthRedirect();
-    // triggerForcedLogin reads window.location to preserve the user's path.
     window.history.replaceState({}, '', '/cluster/foo/namespaces/bar');
     const { Wrapper } = makeWrapper();
 
@@ -204,13 +203,19 @@ describe('useSSOLogin', () => {
 
     await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
 
+    // By the time Retry is clicked the app has navigated to the cluster list.
+    window.history.replaceState({}, '', '/clusters');
+    expect(getIntendedPath()).toBeNull();
+
     const [, options] = notifyLoginFailureMock.mock.calls[0];
     expect(options?.onRetry).toBeDefined();
     await options.onRetry();
 
-    expect(managerMock.signinRedirect).toHaveBeenCalledWith({
-      prompt: 'login',
-    });
+    await waitFor(() =>
+      expect(managerMock.signinRedirect).toHaveBeenCalledWith({
+        prompt: 'login',
+      }),
+    );
     expect(getIntendedPath()?.path).toBe('/namespaces/bar');
   });
 

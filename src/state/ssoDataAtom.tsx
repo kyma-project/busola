@@ -106,10 +106,11 @@ function triggerReauthRedirect(userManager: UserManager | null) {
 }
 
 // Forced re-login after loop guard tripped. Resets the guard and uses prompt: 'login'.
-function triggerForcedLogin(userManager: UserManager | null) {
+function triggerForcedLogin(
+  userManager: UserManager | null,
+  relative: string | null,
+) {
   resetAuthRedirectGuard();
-  const fullPath = window.location.pathname + window.location.search;
-  const relative = toClusterRelative(fullPath);
   if (relative) saveIntendedPath(relative);
   if (!userManager) {
     window.location.assign('/clusters');
@@ -275,13 +276,17 @@ export function useSSOLogin() {
       if (bypass === 'true') return;
       handleSSOLogin(ssoConfig, setSsoState, setRenewing, (failure) => {
         // Unblock the app behind the dialog, navigating also removes the error params.
+        // Captured before the navigation below replaces the URL.
+        const relative = toClusterRelative(
+          window.location.pathname + window.location.search,
+        );
         setSsoLoginStopped(true);
         setCluster(null);
         navigate('/clusters', { replace: true });
         notifyLoginFailure(failure, {
           // prompt: 'login' returns the user to where they were instead of the cluster list.
           onRetry: () => {
-            triggerForcedLogin(session.userManager);
+            triggerForcedLogin(session.userManager, relative);
           },
         });
       });

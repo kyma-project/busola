@@ -135,7 +135,7 @@ describe('useAuthHandler redirect-loop guard', () => {
     expect(sessionStorage.getItem(AUTH_REDIRECT_STORAGE_KEY)).toBeNull();
   });
 
-  it('onLoginFailed saves the path and Retry forces a fresh login', async () => {
+  it('Retry saves the path and forces a fresh login', async () => {
     // Pre-trip the guard so handleLogin's stop-loop path fires onLoginFailed.
     registerAuthRedirect();
     registerAuthRedirect();
@@ -148,13 +148,14 @@ describe('useAuthHandler redirect-loop guard', () => {
     renderHook(() => useAuthHandler(), { wrapper: Wrapper });
 
     await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
-    // The user's location was preserved for the Retry action.
-    expect(getIntendedPath()?.path).toBe('/namespaces/bar');
+    // Nothing is saved while the dialog is open; Close must not leave a path
+    // behind for the next cluster.
+    expect(getIntendedPath()).toBeNull();
 
-    // Even though userManagerRef was never set on the stop-loop path, Retry still uses prompt: 'login'.
     const [, options] = notifyLoginFailureMock.mock.calls[0];
     expect(options?.onRetry).toBeDefined();
     await options.onRetry();
+    expect(getIntendedPath()?.path).toBe('/namespaces/bar');
     expect(managerMock.signinRedirect).toHaveBeenCalledWith({
       prompt: 'login',
     });
@@ -182,9 +183,9 @@ describe('useAuthHandler redirect-loop guard', () => {
     expect(localStorage.getItem(CLUSTER_NAME_STORAGE_KEY)).toBe('foo');
   });
 
-  it('onLoginFailed keeps the kubeconfigID marker on the saved path', async () => {
+  it('Retry keeps the kubeconfigID marker on the saved path', async () => {
     // A kubeconfigID deep-link flow is still pending: its marker must survive.
-    saveIntendedPath('/namespaces/bar', 'my-kubeconfig');
+    saveIntendedPath('/namespaces/other', 'my-kubeconfig');
     registerAuthRedirect();
     registerAuthRedirect();
     registerAuthRedirect();
@@ -195,6 +196,11 @@ describe('useAuthHandler redirect-loop guard', () => {
     renderHook(() => useAuthHandler(), { wrapper: Wrapper });
 
     await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
-    expect(getIntendedPath()?.kubeconfigId).toBe('my-kubeconfig');
+    const [, options] = notifyLoginFailureMock.mock.calls[0];
+    await options.onRetry();
+    expect(getIntendedPath()).toMatchObject({
+      path: '/namespaces/bar',
+      kubeconfigId: 'my-kubeconfig',
+    });
   });
 });

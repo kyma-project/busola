@@ -309,7 +309,7 @@ common:
     idp-rejected-login: 'The identity provider rejected the login: {{error}}.'
     login-error: 'The login attempt failed: {{error}}.'
     login-failed: Login failed
-    login-loop-stopped: Your session could not be re-established automatically. Click Retry to sign in again and return to your previous location.
+    login-loop-stopped: Your session could not be re-established automatically. Choose Retry to sign in again. If the problem persists, check the identity provider configuration.
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions
     no-permissions-message: Contact your administrator to grant you access.

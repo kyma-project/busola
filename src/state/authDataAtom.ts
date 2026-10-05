@@ -300,25 +300,26 @@ export function useAuthHandler() {
           setCluster(null);
           // The redirect stopped without leaving the page; release the claim so a later retry can redirect.
           resetReauthRedirectClaim();
-          const fullPath = window.location.pathname + window.location.search;
-          const relative = toClusterRelative(fullPath);
+          const relative = toClusterRelative(
+            window.location.pathname + window.location.search,
+          );
           // Keep the kubeconfigID marker if the deep-link flow is still pending,
           // otherwise restore defers to the wrong (stale) cluster.
-          if (relative)
-            saveIntendedPath(relative, getIntendedPath()?.kubeconfigId);
+          const kubeconfigId = getIntendedPath()?.kubeconfigId;
           notifyLoginFailure(failure, {
             // prompt: 'login' avoids a stale IdP cookie bouncing back into the loop.
             // handleLogin returned null here, so rebuild the manager from cluster OIDC params.
             onRetry: () => {
+              // Saved only on Retry; a path left behind after Close would be
+              // restored on whichever cluster is opened next.
+              if (relative) saveIntendedPath(relative, kubeconfigId);
               resetAuthRedirectGuard();
               // Re-persist the cluster so the IdP callback (returns to the
               // origin, cluster atom already null) can restore it and finish.
               persistActiveClusterName(cluster.name);
-              const userManager =
-                userManagerRef.current ??
-                createUserManager(
-                  parseOIDCparams(userCredentials as KubeconfigOIDCAuth),
-                );
+              const userManager = createUserManager(
+                parseOIDCparams(userCredentials as KubeconfigOIDCAuth),
+              );
               userManager
                 .clearStaleState()
                 .then(() => userManager.signinRedirect({ prompt: 'login' }))

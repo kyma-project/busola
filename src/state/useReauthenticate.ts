@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { UserManager } from 'oidc-client-ts';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +25,6 @@ type NotifyError = (props: { content: string }) => void;
 export function useReauthenticate({
   notifyError,
 }: { notifyError?: NotifyError } = {}) {
-  const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const cluster = useAtomValue(clusterAtom);
@@ -47,8 +46,10 @@ export function useReauthenticate({
         return;
       }
 
-      const fullPath =
-        location.pathname + (location.search ? location.search : '');
+      // Read at call time; useAuthHandler keeps this callback across navigations.
+      const relative = toClusterRelative(
+        window.location.pathname + window.location.search,
+      );
 
       // If the API server keeps rejecting the token we would redirect forever,
       // so stop here and show the error instead.
@@ -60,27 +61,21 @@ export function useReauthenticate({
         notifyLoginFailure(undefined, {
           // prompt: 'login' forces a fresh sign-in and returns the user to where they were.
           onRetry: () => {
-            const relative = toClusterRelative(fullPath);
             if (relative) saveIntendedPath(relative);
             resetAuthRedirectGuard();
-            if (userManager) {
-              // Re-persist the cluster so the IdP callback (returns to the
-              // origin, cluster atom already null) can restore it and finish.
-              if (clusterName) persistActiveClusterName(clusterName);
-              userManager
-                .clearStaleState()
-                .then(() => userManager.signinRedirect({ prompt: 'login' }))
-                .catch(() => window.location.assign('/clusters'));
-            } else {
-              window.location.assign('/clusters');
-            }
+            // Re-persist the cluster so the IdP callback (returns to the
+            // origin, cluster atom already null) can restore it and finish.
+            if (clusterName) persistActiveClusterName(clusterName);
+            userManager
+              .clearStaleState()
+              .then(() => userManager.signinRedirect({ prompt: 'login' }))
+              .catch(() => window.location.assign('/clusters'));
           },
         });
         navigate('/clusters');
         return;
       }
 
-      const relative = toClusterRelative(fullPath);
       if (relative) saveIntendedPath(relative);
       try {
         if (!tryClaimReauthRedirect()) return;
@@ -96,15 +91,6 @@ export function useReauthenticate({
         fallBackToClusterList();
       }
     },
-    [
-      location.pathname,
-      location.search,
-      navigate,
-      t,
-      notifyError,
-      notifyLoginFailure,
-      setCluster,
-      cluster,
-    ],
+    [navigate, t, notifyError, notifyLoginFailure, setCluster, cluster],
   );
 }

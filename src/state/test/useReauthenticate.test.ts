@@ -34,6 +34,8 @@ vi.mock('react-router', async () => {
 });
 
 function makeWrapper(initialPath: string) {
+  // The hook reads the browser URL, which MemoryRouter does not touch.
+  window.history.replaceState({}, '', initialPath);
   const Wrapper = ({ children }: PropsWithChildren) =>
     createElement(MemoryRouter, { initialEntries: [initialPath] }, children);
   Wrapper.displayName = 'TestWrapper';
@@ -87,6 +89,19 @@ describe('useReauthenticate', () => {
     resetReauthRedirectClaim();
     await result.current(userManager); // simulated page load 3
     expect(isAuthRedirectLoop()).toBe(true);
+  });
+
+  it('saves the page open at expiry, not the one open when the callback was created', async () => {
+    const userManager = makeUserManager();
+    const { result } = renderHook(() => useReauthenticate(), {
+      wrapper: makeWrapper('/cluster/foo/pods'),
+    });
+    const staleCallback = result.current;
+
+    window.history.replaceState({}, '', '/cluster/foo/deployments?layout=x');
+    await staleCallback(userManager);
+
+    expect(getIntendedPath()?.path).toBe('/deployments?layout=x');
   });
 
   it('redirects only once when triggered twice in the same page load', async () => {
