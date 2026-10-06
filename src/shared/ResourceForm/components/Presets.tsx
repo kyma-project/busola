@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Label, FormItem } from '@ui5/webcomponents-react';
+import { FormItem } from '@ui5/webcomponents-react';
+import { Label } from './Label';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 
 export type PresetProps = {
@@ -45,6 +46,14 @@ export function Presets({
   return inlinePresets ? (
     presetDropdown
   ) : (
-    <FormItem labelContent={<Label>{label}</Label>}>{presetDropdown}</FormItem>
+    <FormItem
+      labelContent={
+        <div className="form-field__label-box">
+          <Label>{label}</Label>
+        </div>
+      }
+    >
+      {presetDropdown}
+    </FormItem>
   );
 }

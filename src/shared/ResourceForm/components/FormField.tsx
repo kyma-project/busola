@@ -39,67 +39,66 @@ export function FormField({
   const inputInfoLink = useCreateResourceDescription(inputInfo);
   const [openPopover, setOpenPopover] = useState(false);
 
-  const innerContent = (
-    <FlexBox
-      key={'messagestrip-flexbox'}
-      wrap="Wrap"
-      alignItems="Center"
-      className="full-width"
-    >
-      {messageStrip ||
-        input({
-          updatesOnInput,
-          required,
-          disabled,
-          className: 'full-width',
-          accessibleName: label,
-          id: label?.replace(' ', '-').toLowerCase(),
-          ...props,
-        })}
-      {inputInfo && (
-        <Label
-          wrappingType="Normal"
-          showColon={false}
-          style={{ marginTop: '5px' }}
-        >
-          {inputInfoLink}
-        </Label>
-      )}
-    </FlexBox>
+  const inputContent =
+    messageStrip ||
+    input({
+      updatesOnInput,
+      required,
+      disabled,
+      className: 'full-width',
+      accessibleName: label,
+      id: label?.replace(' ', '-').toLowerCase(),
+      ...props,
+    });
+
+  const infoLabel = inputInfo && (
+    <Label wrappingType="Normal" showColon={false} style={{ marginTop: '5px' }}>
+      {inputInfoLink}
+    </Label>
   );
 
   if (!isListItem && label) {
     return (
-      <FormItem
-        className={classnames('form-field', className)}
-        style={style}
-        labelContent={
+      <>
+        <FormItem
+          className={classnames('form-field', className)}
+          style={style}
+          labelContent={
+            <div className="form-field__label-box">
+              <Label
+                forElement={label.replace(' ', '-').toLowerCase()}
+                required={required && !disabled}
+              >
+                {label}
+              </Label>
+              {tooltipContent && (
+                <span className="form-field__hint-slot">
+                  <HintButton
+                    setShowTitleDescription={setOpenPopover}
+                    showTitleDescription={openPopover}
+                    description={tooltipContent}
+                    className="sap-margin-begin-tiny"
+                    ariaTitle={label}
+                  />
+                </span>
+              )}
+            </div>
+          }
+        >
           <FlexBox
-            key={'labels-flexbox'}
+            key={'messagestrip-flexbox'}
             wrap="Wrap"
             alignItems="Center"
-            className="bsl-col-md--12"
+            className="full-width"
           >
-            <Label
-              forElement={label.replace(' ', '-').toLowerCase()}
-              required={required && !disabled}
-            >
-              {label}
-            </Label>
-            {tooltipContent && (
-              <HintButton
-                setShowTitleDescription={setOpenPopover}
-                showTitleDescription={openPopover}
-                description={tooltipContent}
-                className="sap-margin-begin-tiny"
-                ariaTitle={label}
-              />
-            )}
+            {inputContent}
           </FlexBox>
-        }
-      >
-        {innerContent}
-      </FormItem>
+        </FormItem>
+        {/* Own item: inside the field's cell it would push the input off its label */}
+        {infoLabel && (
+          <FormItem className="form-field__info">{infoLabel}</FormItem>
+        )}
+      </>
     );
   }
 
@@ -110,7 +109,15 @@ export function FormField({
       wrap="Wrap"
       alignItems="Center"
     >
-      {innerContent}
+      <FlexBox
+        key={'messagestrip-flexbox'}
+        wrap="Wrap"
+        alignItems="Center"
+        className="full-width"
+      >
+        {inputContent}
+        {infoLabel}
+      </FlexBox>
     </FlexBox>
   );
 }

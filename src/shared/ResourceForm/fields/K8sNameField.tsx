@@ -1,4 +1,3 @@
-import { Label } from '../components/Label';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
@@ -49,40 +48,37 @@ export function K8sNameField({
     setValue?.(event.target.value);
   };
 
+  const helpText =
+    inputInfo !== undefined
+      ? inputInfoLink
+      : showHelp
+        ? t('common.tooltips.k8s-name-input')
+        : undefined;
+
   return (
-    <>
-      <ResourceForm.FormField
-        required={required}
-        className={className}
-        propertyPath="$.metadata.name"
-        label={t('common.labels.name')}
-        inputInfo={inputInfoLink}
-        tooltipContent={tooltipContent}
-        input={() => (
-          <div className="bsl-col-md--12">
-            <K8sNameInput
-              kind={kind ?? ''}
-              compact
-              required={required}
-              showLabel={false}
-              onChange={setValueOnChange}
-              onInput={setValueOnChange}
-              value={value}
-              readOnly={readOnly}
-              pattern={pattern}
-              {...props}
-            />
-          </div>
-        )}
-      />
-      {showHelp && inputInfo === undefined && (
-        <div style={{ display: 'flex', marginTop: '5px' }}>
-          <div className="bsl-col-md--4" />
-          <Label wrappingType="Normal" showColon={false}>
-            {t('common.tooltips.k8s-name-input')}
-          </Label>
+    <ResourceForm.FormField
+      required={required}
+      className={className}
+      propertyPath="$.metadata.name"
+      label={t('common.labels.name')}
+      inputInfo={helpText}
+      tooltipContent={tooltipContent}
+      input={() => (
+        <div className="bsl-col-md--12">
+          <K8sNameInput
+            kind={kind ?? ''}
+            compact
+            required={required}
+            showLabel={false}
+            onChange={setValueOnChange}
+            onInput={setValueOnChange}
+            value={value}
+            readOnly={readOnly}
+            pattern={pattern}
+            {...props}
+          />
         </div>
       )}
-    </>
+    />
   );
 }

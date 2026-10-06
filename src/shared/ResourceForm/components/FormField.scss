@@ -6,8 +6,26 @@
 
 .form-field {
   padding-top: 0.5rem;
+}
 
-  &::part(layout) {
-    padding-right: 1rem;
-  }
+.form-field__label-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: var(--ui5-form-item-label-justify, end);
+}
+
+// One text line tall, so the input-height hint button doesn't grow the label row
+.form-field__hint-slot {
+  display: flex;
+  align-items: center;
+  font-family: var(--sapFontFamily);
+  font-size: var(--sapFontSize);
+  line-height: inherit;
+  height: 1lh;
+}
+
+// Empty label must not take up a row when stacked
+.form-field__info {
+  --ui5-form-item-label-padding: 0;
 }

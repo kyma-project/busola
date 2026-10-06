@@ -3,6 +3,15 @@
     padding: 0;
   }
 
+  // + UI5's .25rem content padding = 1rem from the edge (spec)
+  & > ui5-form-item::part(layout) {
+    padding: 0 0.75rem;
+  }
+
+  & > ui5-form-item:not(.form-field__info) {
+    padding-top: 0.5rem;
+  }
+
   form {
     overflow: hidden;
     flex-grow: 1;
@@ -29,7 +38,8 @@
     margin: -3px 0;
   }
 
-  .form-field + .resource-form__collapsible-section {
+  .form-field + .resource-form__collapsible-section,
+  .form-field__info + .resource-form__collapsible-section {
     padding-top: 16px;
   }
 
