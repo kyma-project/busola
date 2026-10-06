@@ -7,7 +7,7 @@ export function useCustomFormValidator() {
   const [customValid, setCustomValid] = useState(true);
 
   const revalidate = (cv = customValid) => {
-    // Has to adjusted after every Resource Form structure change
+    // Has to be adjusted after every Resource Form structure change
     const formContainer =
       formElementRef.current?.querySelector('.resource-form');
     if (formContainer) {

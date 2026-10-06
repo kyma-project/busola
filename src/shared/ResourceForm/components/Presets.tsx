@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Label } from '@ui5/webcomponents-react';
+import { Label, FormItem } from '@ui5/webcomponents-react';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import { FormItem } from '@ui5/webcomponents-react';
 
 export type PresetProps = {
   presets: {
