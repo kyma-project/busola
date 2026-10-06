@@ -87,6 +87,29 @@ describe('openapiAtom', () => {
     unsubscribe();
   });
 
+  it.each([401, 500])(
+    'reports an HTTP %s response as an error',
+    async (status) => {
+      const store = makeStore();
+      const unsubscribe = store.sub(openapiAtom, () => {});
+      store.get(openapiAtom);
+      await tick();
+
+      resolveFetch({
+        ok: false,
+        status,
+        json: async () => ({ message: 'request failed', status, code: status }),
+      });
+      await tick();
+
+      expect(store.get(openapiAtom)).toMatchObject({
+        state: 'hasError',
+        error: { code: status, status },
+      });
+      unsubscribe();
+    },
+  );
+
   it('has no data when no cluster is logged in', async () => {
     const store = makeStore();
     store.set(authDataAtom, null);
