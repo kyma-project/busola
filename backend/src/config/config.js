@@ -12,7 +12,6 @@ const configPaths = {
 
 function getEnvDir() {
   const environment = process.env.ENVIRONMENT;
-
   if (environment) {
     return path.join('environments', environment);
   }

@@ -79,6 +79,7 @@ export default function CommunityModulesEdit() {
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
+  const [isFetchingResources, setIsFetchingResources] = useState(false);
   const uploadResources = useUploadResources(
     resourcesToApply,
     setResourcesToApply,
@@ -135,6 +136,9 @@ export default function CommunityModulesEdit() {
 
       const moduleName = getModuleName(newModuleTemplateToApply);
 
+      // block Save until the picked version's resources finish downloading
+      setIsFetchingResources(true);
+
       setCommunityModulesTemplatesToApply((prev) => {
         const newMap = new Map(prev);
         const existingTemplate = prev.get(moduleName);
@@ -165,7 +169,7 @@ export default function CommunityModulesEdit() {
       communityModulesTemplatesToApply,
       setResourcesToApply,
       post,
-    );
+    ).finally(() => setIsFetchingResources(false));
   }, [communityModulesTemplatesToApply]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (installedCommunityModulesLoading || moduleTemplatesLoading) {
@@ -194,6 +198,7 @@ export default function CommunityModulesEdit() {
           headerActions={
             <Button
               className="min-width-button"
+              disabled={isFetchingResources}
               onClick={onSave(
                 uploadResources,
                 setIsResourceEdited,

@@ -117,7 +117,8 @@ export function EventList({
     },
     {
       header: t('events.headers.message'),
-      value: (e) => <p>{e.message}</p>,
+      width: '20cqi',
+      value: (e) => <Text>{e.message}</Text>,
     },
     {
       header: t('common.headers.name'),
@@ -146,7 +147,6 @@ export function EventList({
       ? [
           {
             header: t('common.headers.namespace'),
-            width: '20ch',
             value: (entry: any) => entry.metadata.namespace,
             id: 'namespace',
           },
@@ -167,11 +167,11 @@ export function EventList({
     {
       header: t('events.headers.count'),
       width: '10ch',
-      value: (e) => <p>{e.count || EMPTY_TEXT_PLACEHOLDER}</p>,
+      value: (e) => <Text>{e.count || EMPTY_TEXT_PLACEHOLDER}</Text>,
     },
     {
       header: t('events.headers.last-seen'),
-      width: '26ch',
+      width: '14ch',
       value: (e) => <ReadableCreationTimestamp timestamp={e.lastTimestamp} />,
     },
   ];

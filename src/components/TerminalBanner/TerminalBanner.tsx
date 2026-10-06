@@ -7,7 +7,10 @@ import { showTerminalAtom } from 'state/showTerminalAtom';
 import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
 
 const TERMINAL_DOCS_URL =
-  'https://kyma-project.io/external-content/busola/docs/user/01-50-terminal.html';
+  'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-dashboard-terminal';
+
+const TERMINAL_BLOGPOST_URL =
+  'https://community.sap.com/t5/technology-blog-posts-by-sap/troubleshoot-your-cluster-directly-from-kyma-dashboard-with-terminal/ba-p/14497218';
 
 export function TerminalBanner() {
   const { t } = useTranslation();
@@ -26,10 +29,20 @@ export function TerminalBanner() {
       </Button>
       <Button
         accessibleRole="Link"
-        accessibleName={t('common.buttons.learn-more')}
+        accessibleName={t('common.buttons.documentation')}
         endIcon="inspect"
         onClick={() =>
           window.open(TERMINAL_DOCS_URL, '_blank', 'noopener,noreferrer')
+        }
+      >
+        {t('common.buttons.documentation')}
+      </Button>
+      <Button
+        accessibleRole="Link"
+        accessibleName={t('common.buttons.learn-more')}
+        endIcon="inspect"
+        onClick={() =>
+          window.open(TERMINAL_BLOGPOST_URL, '_blank', 'noopener,noreferrer')
         }
       >
         {t('common.buttons.learn-more')}

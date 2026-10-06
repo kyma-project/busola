@@ -21,6 +21,7 @@ export function useDeleteResource({
   redirectBack = true,
   parentCrdName = /** @type {string | undefined} */ (undefined),
   forceConfirmDelete = false,
+  afterDelete = /** @type {(() => void) | undefined} */ (undefined),
 }) {
   const { t } = useTranslation();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -81,6 +82,8 @@ export function useDeleteResource({
               resourceType: prettifiedResourceName,
             }),
           });
+
+          afterDelete?.();
 
           if (
             navigateToListAfterDelete ||
@@ -164,6 +167,7 @@ export function useDeleteResource({
       redirectBack,
       layoutNumber,
       navigateToListAfterDelete,
+      afterDelete,
     ],
   );
 

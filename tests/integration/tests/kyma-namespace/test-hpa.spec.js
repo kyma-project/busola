@@ -50,7 +50,8 @@ context('Test HPA', () => {
       .find('input')
       .click()
       .clear()
-      .type(MAX_REPLICAS, { force: true });
+      .type(`${MAX_REPLICAS}`, { force: true })
+      .should('have.value', `${MAX_REPLICAS}`);
 
     chooseComboboxOption(
       '[data-testid="spec.scaleTargetRef.kind"]',
@@ -107,10 +108,9 @@ context('Test HPA', () => {
       .eq(0)
       .find('input')
       .click()
-      .wait(1000)
       .clear()
-      .wait(1000)
-      .type(MIN_REPLICAS);
+      .type(`${MIN_REPLICAS}`, { force: true })
+      .should('have.value', `${MIN_REPLICAS}`);
 
     cy.saveChanges('Edit');
     cy.inspectTab('View');
