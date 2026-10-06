@@ -111,33 +111,6 @@ context('Test Companion UI', () => {
     });
   });
 
-  describe('AI Announcement banner', () => {
-    it('AI Banner should be visible when feature is enabled', () => {
-      cy.get('ui5-card').as('featurecard');
-
-      cy.get('@featurecard').contains('Meet Joule').should('be.visible');
-
-      cy.get('@featurecard').contains('ui5-button', 'Try Out Joule').click();
-
-      cy.get('.kyma-companion').as('companion');
-
-      cy.wait(100);
-
-      cy.get('@companion')
-        .contains('Hi, I am your Kyma assistant! ')
-        .should('be.visible');
-    });
-
-    it('AI Banner should NOT be visible when feature is disabled', () => {
-      cy.setBusolaFeature('KYMA_COMPANION', false);
-      cy.reload();
-
-      cy.get('ui5-card').as('featurecard');
-
-      cy.get('@featurecard').contains('Meet Joule').should('not.exist');
-    });
-  });
-
   describe('Availability outside of cluster context', () => {
     it('Companion should not be available on cluster list', () => {
       cy.setBusolaFeature('KYMA_COMPANION', true);
@@ -157,7 +130,7 @@ context('Test Companion UI', () => {
       cy.wait(1000);
 
       cy.get('@shellbar')
-        .find('ui5-toggle-button[icon="da"]')
+        .find('ui5-shellbar-item[icon="da"]')
         .should('not.exist');
     });
   });

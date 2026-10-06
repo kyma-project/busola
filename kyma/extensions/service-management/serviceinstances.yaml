@@ -129,10 +129,10 @@ data:
             version: v1
             scope: namespace
           provideVar: secret
-          required: false
+          required: true
         - path: '[].secretKeyRef.key'
           enum: '$keys($secret.data)'
-          required: false
+          required: true
           placeholder: chooseSecretKey
     - path: spec.customTags
       widget: SimpleList

@@ -67,6 +67,7 @@ export const KymaModulesList = ({
     t('kyma-modules.namespaces'),
     t('kyma-modules.channel'),
     t('kyma-modules.version'),
+    t('kyma-modules.available-since'),
     t('kyma-modules.module-state'),
     t('kyma-modules.installation-state'),
     t('kyma-modules.documentation'),

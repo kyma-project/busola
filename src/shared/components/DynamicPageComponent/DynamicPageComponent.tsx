@@ -15,7 +15,6 @@ import {
 
 import './DynamicPageComponent.scss';
 import {
-  CSSProperties,
   ReactNode,
   RefObject,
   startTransition,
@@ -99,37 +98,6 @@ const useGetHeaderHeight = (
   return { headerHeight, tabContainerHeight };
 };
 
-type ColumnProps = {
-  title: string;
-  children: ReactNode;
-  columnSpan?: string;
-  image?: ReactNode;
-  style?: CSSProperties;
-};
-
-const Column = ({
-  title,
-  children,
-  columnSpan,
-  image,
-  style = {},
-}: ColumnProps) => {
-  const styleComputed = { gridColumn: columnSpan, ...style };
-  return (
-    <div className="page-header__column" style={styleComputed}>
-      {image && <div className="image">{image}</div>}
-      <div className="content-container">
-        <div className="title bsl-has-color-status-4 " tabIndex={0}>
-          {title}:
-        </div>
-        <span className="content bsl-has-color-text-1" tabIndex={0}>
-          {children}
-        </span>
-      </div>
-    </div>
-  );
-};
-
 type DynamicPageComponentProps = {
   headerContent?: ReactNode;
   title: string;
@@ -153,6 +121,7 @@ type DynamicPageComponentProps = {
     setIsFormOpen: (open: IsFormOpenState) => void,
   ) => void;
   isFirstColumnWithEdit?: boolean;
+  onScrollContainerReady?: (container: HTMLElement | null) => void;
 };
 
 export const DynamicPageComponent = ({
@@ -173,6 +142,7 @@ export const DynamicPageComponent = ({
   className,
   customActionIfFormOpen,
   isFirstColumnWithEdit = false,
+  onScrollContainerReady,
 }: DynamicPageComponentProps) => {
   const navigate = useNavigate();
   const [showTitleDescription, setShowTitleDescription] = useState(false);
@@ -402,6 +372,15 @@ export const DynamicPageComponent = ({
     if (button) {
       button.style['display'] = 'none';
     }
+
+    if (onScrollContainerReady && dynamicPage) {
+      void customElements.whenDefined('ui5-dynamic-page').then(() => {
+        const container = dynamicPage.shadowRoot?.querySelector(
+          '.ui5-dynamic-page-scroll-container',
+        ) as HTMLElement | null;
+        onScrollContainerReady(container);
+      });
+    }
   };
 
   if (inlineEditForm) {
@@ -512,5 +491,3 @@ export const DynamicPageComponent = ({
     </DynamicPage>
   );
 };
-
-DynamicPageComponent.Column = Column;

@@ -9,6 +9,7 @@ import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { LimitRangesList } from 'resources/LimitRanges/LimitRangesList';
 import { ResourceQuotasList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotasList';
+import PodDisruptionBudgetsList from 'resources/PodDisruptionBudgets/PodDisruptionBudgetsList';
 import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
 
 import { NamespaceStatus } from './NamespaceStatus';
@@ -66,6 +67,19 @@ export default function NamespaceDetails(props: NamespaceDetailsProps) {
     />
   );
 
+  const podDisruptionBudgetsParams = {
+    hasDetailsView: true,
+    resourceUrl: `/apis/policy/v1/namespaces/${props.resourceName}/poddisruptionbudgets`,
+    resourceType: 'PodDisruptionBudgets',
+    namespace: props.resourceName,
+    isCompact: true,
+    showTitle: true,
+  };
+
+  const PodDisruptionBudgets = (
+    <PodDisruptionBudgetsList {...podDisruptionBudgetsParams} />
+  );
+
   const headerActions = (
     <ToolbarButton
       onClick={() => {
@@ -108,6 +122,7 @@ export default function NamespaceDetails(props: NamespaceDetailsProps) {
     >
       {LimitrangesList}
       {ResourceQuotasList}
+      {PodDisruptionBudgets}
       {Events}
     </ResourceDetails>
   );

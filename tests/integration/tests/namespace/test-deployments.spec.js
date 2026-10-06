@@ -26,25 +26,21 @@ context('Test Deployments', () => {
 
     cy.get('[aria-label="Labels, collapsed"]').click();
 
-    cy.get('[placeholder="Enter key"]:visible')
+    cy.get('ui5-input[placeholder="Enter key"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .type('app');
 
-    cy.get('[placeholder="Enter value"]:visible')
+    cy.get('ui5-input[placeholder="Enter value"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .first()
       .type(DEPLOYMENT_NAME);
 
-    cy.get('[placeholder="Enter key"]:visible')
+    cy.get('ui5-input[placeholder="Enter key"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .type('example');
 
-    cy.get('[placeholder="Enter value"]:visible')
+    cy.get('ui5-input[placeholder="Enter value"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .first()
       .type(DEPLOYMENT_NAME);
 
@@ -94,31 +90,24 @@ context('Test Deployments', () => {
   });
 
   it('Edit a deployment', () => {
-    cy.getLeftNav().contains('Deployments').click();
+    cy.navigateTo('Workloads', 'Deployments');
 
     cy.clickGenericListLink(DEPLOYMENT_NAME);
 
     cy.getMidColumn()
-      .get('[data-testid="has-tooltip"]')
-      .contains('span', '1 / 1', {
-        timeout: 60 * 1000,
-      });
-    cy.wait(1000);
-
-    cy.wait(1000);
+      .contains('ui5-title', DEPLOYMENT_NAME)
+      .should('be.visible');
 
     cy.getMidColumn().inspectTab('Edit');
 
     cy.get('[aria-label="Labels, collapsed"]').click();
 
-    cy.get('[placeholder="Enter key"]:visible')
+    cy.get('ui5-input[placeholder="Enter key"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .type('label-key');
 
-    cy.get('[placeholder="Enter value"]:visible')
+    cy.get('ui5-input[placeholder="Enter value"][value=""]:visible')
       .find('input')
-      .filterWithNoValue()
       .first()
       .type('label-value');
 

@@ -5,7 +5,7 @@ import { useCreateResourceDescription } from 'components/Extensibility/helpers';
 
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
-import MessageStripDesign from '@ui5/webcomponents/dist/types/MessageStripDesign';
+import MessageStripDesign from '@ui5/webcomponents/dist/types/MessageStripDesign.js';
 import { Resource } from '../contexts/DataSources';
 import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 

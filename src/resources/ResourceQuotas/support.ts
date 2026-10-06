@@ -37,12 +37,8 @@ export const mapLimitsAndRequestsToChartsData = (resource?: ResourceQuota) => {
     {
       headerTitle: 'cluster-overview.statistics.cpu-limits',
       tooltipInfo: 'cluster-overview.statistics.cpu-limits-tooltip',
-      value: cpusToHumanReadable(totalUsageCpuLimits, {
-        unit: 'm',
-      }).value,
-      max: cpusToHumanReadable(totalCpuLimits, {
-        unit: 'm',
-      }).value,
+      value: totalUsageCpuLimits,
+      max: totalCpuLimits,
       color: 'var(--sapChart_OrderedColor_5)',
       additionalInfo: `${
         cpusToHumanReadable(totalUsageCpuLimits, {
@@ -57,12 +53,8 @@ export const mapLimitsAndRequestsToChartsData = (resource?: ResourceQuota) => {
     {
       headerTitle: 'namespaces.overview.resources.limits',
       tooltipInfo: 'cluster-overview.statistics.memory-limits-tooltip',
-      value: bytesToHumanReadable(totalUsageMemoryLimits, {
-        unit: 'Gi',
-      }).value,
-      max: bytesToHumanReadable(totalMemoryLimits, {
-        unit: 'Gi',
-      }).value,
+      value: totalUsageMemoryLimits,
+      max: totalMemoryLimits,
       color: 'var(--sapChart_OrderedColor_6)',
       additionalInfo: `${
         bytesToHumanReadable(totalUsageMemoryLimits, {
@@ -77,12 +69,8 @@ export const mapLimitsAndRequestsToChartsData = (resource?: ResourceQuota) => {
     {
       headerTitle: 'cluster-overview.statistics.cpu-requests',
       tooltipInfo: 'cluster-overview.statistics.cpu-requests-tooltip',
-      value: cpusToHumanReadable(totalUsageCpuRequests, {
-        unit: 'm',
-      }).value,
-      max: cpusToHumanReadable(totalCpuRequests, {
-        unit: 'm',
-      }).value,
+      value: totalUsageCpuRequests,
+      max: totalCpuRequests,
       color: 'var(--sapChart_OrderedColor_5)',
       additionalInfo: `${
         cpusToHumanReadable(totalUsageCpuRequests, {
@@ -97,12 +85,8 @@ export const mapLimitsAndRequestsToChartsData = (resource?: ResourceQuota) => {
     {
       headerTitle: 'namespaces.overview.resources.requests',
       tooltipInfo: 'cluster-overview.statistics.memory-requests-tooltip',
-      value: bytesToHumanReadable(totalUsageMemoryRequests, {
-        unit: 'Gi',
-      }).value,
-      max: bytesToHumanReadable(totalMemoryRequests, {
-        unit: 'Gi',
-      }).value,
+      value: totalUsageMemoryRequests,
+      max: totalMemoryRequests,
       color: 'var(--sapChart_OrderedColor_6)',
       additionalInfo: `${
         bytesToHumanReadable(totalUsageMemoryRequests, {
@@ -128,10 +112,8 @@ export const mapUsagesToChartsData = (podsMetrics?: UsageMetrics[]) => {
     {
       headerTitle: 'cluster-overview.statistics.cpu-usage',
       tooltipInfo: 'cluster-overview.statistics.cpu-usage-tooltip',
-      value: cpusToHumanReadable(cpu.usage, {
-        unit: 'm',
-      }).value,
-      max: cpusToHumanReadable(cpu.capacity, { unit: 'm' }).value,
+      value: cpu.usage,
+      max: cpu.capacity,
       color: 'var(--sapChart_OrderedColor_5)',
       additionalInfo: `${
         cpusToHumanReadable(cpu.usage, {
@@ -142,12 +124,12 @@ export const mapUsagesToChartsData = (podsMetrics?: UsageMetrics[]) => {
     {
       headerTitle: 'cluster-overview.statistics.memory-usage',
       tooltipInfo: 'cluster-overview.statistics.memory-usage-tooltip',
-      value: bytesToHumanReadable(memory.usage).value,
-      max: bytesToHumanReadable(memory.capacity).value,
+      value: memory.usage,
+      max: memory.capacity,
       color: 'var(--sapChart_OrderedColor_6)',
-      additionalInfo: `${bytesToHumanReadable(memory.usage).string} / ${
-        bytesToHumanReadable(memory.capacity).string
-      }`,
+      additionalInfo: `${
+        bytesToHumanReadable(memory.usage, { unit: 'Gi' }).string
+      } / ${bytesToHumanReadable(memory.capacity, { unit: 'Gi' }).string}`,
     },
   ];
 };

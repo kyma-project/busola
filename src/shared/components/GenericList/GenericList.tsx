@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty, isEqual } from 'lodash';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAtom, useAtomValue } from 'jotai';
@@ -33,8 +33,8 @@ import './GenericList.scss';
 import { asyncSort } from 'components/Extensibility/helpers/sortBy';
 import { useDebounce } from 'hooks/useDebounce';
 import { K8sResource } from 'types';
-import { TableRowClickEventDetail } from '@ui5/webcomponents/dist/Table';
-import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
+import { TableRowClickEventDetail } from '@ui5/webcomponents/dist/Table.js';
+import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout.js';
 
 type AsyncSortFunction = {
   asyncFn: (a: any, b: any) => Promise<any>;
@@ -77,6 +77,7 @@ type GenericListProps = {
   serverDataLoading?: boolean;
   pagination?: PaginationType;
   sortBy?: SortByObject | ((a: any) => SortByObject);
+  initialSort?: Sort;
   notFoundMessage?: string;
   searchSettings?: SearchSettingsType;
   emptyListProps?: EmptyListProps;
@@ -128,6 +129,7 @@ export const GenericList = ({
   serverDataLoading = false,
   pagination,
   sortBy,
+  initialSort,
   notFoundMessage = 'components.generic-list.messages.not-found',
   searchSettings = defaultSearch,
   emptyListProps,
@@ -157,10 +159,12 @@ export const GenericList = ({
   const [entrySelectedNamespace, setEntrySelectedNamespace] = useState('');
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
-  const [sort, setSort] = useState<Sort>({
+  const resolvedDefaultSort: Sort = initialSort ?? {
     name: sortBy && Object.keys(sortBy)[0],
     order: 'ASC',
-  });
+  };
+
+  const [sort, setSort] = useState<Sort>(resolvedDefaultSort);
 
   useEffect(() => {
     setEntrySelected(customSelectedEntry || '');
@@ -246,7 +250,8 @@ export const GenericList = ({
         searchQuery,
         searchSettings?.textSearchProperties,
       );
-      setFilteredEntries(filtered);
+      // keep the reference stable when unchanged so polling refreshes don't re-render the search input
+      setFilteredEntries((prev) => (isEqual(prev, filtered) ? prev : filtered));
     };
     getFilteredEntries();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -308,10 +313,7 @@ export const GenericList = ({
           sort={sort}
           setSort={setSort}
           disabled={!entries.length}
-          defaultSort={{
-            name: sortBy && Object.keys(sortBy)[0],
-            order: 'ASC',
-          }}
+          defaultSort={resolvedDefaultSort}
         />
       )}
     </>
@@ -442,86 +444,88 @@ export const GenericList = ({
       accessibleName={`${title} panel`}
       stickyHeader={!disableHiding}
     >
-      <Table
-        noData={
-          <div>
-            {!serverDataError &&
-              !serverDataLoading &&
-              !entries?.length &&
-              !searchQuery &&
-              !filteredEntries?.length &&
-              (emptyListProps?.simpleEmptyListMessage === false ||
-              (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
-                <EmptyListComponent
-                  titleText={emptyListProps.titleText ?? ''}
-                  subtitleText={emptyListProps.subtitleText}
-                  showButton={emptyListProps.showButton}
-                  buttonText={emptyListProps.buttonText}
-                  url={emptyListProps.url ?? ''}
-                  onClick={emptyListProps.onClick ?? (() => null)}
-                  image={emptyListProps?.image}
-                />
-              ) : (
-                <p>
-                  {emptyListProps?.titleText ? (
-                    <Trans
-                      i18nKey={emptyListProps?.titleText}
-                      defaults={emptyListProps?.titleText}
-                    />
-                  ) : (
-                    t(notFoundMessage, { defaultValue: notFoundMessage })
-                  )}
-                </p>
-              ))}
-          </div>
-        }
-        overflowMode={setOverflowMode()}
-        accessibleName={accessibleName ?? title}
-        rowActionCount={displayArrow ? 1 : 0}
-        className={`ui5-generic-list ${
-          hasDetailsView && filteredEntries.length && enableColumnLayout
-            ? 'cursor-pointer'
-            : ''
-        } ${renderPagination ? '' : 'last-row-with-border'}`}
-        onMouseDown={() => {
-          window.getSelection()?.removeAllRanges();
-        }}
-        onRowClick={(e) => {
-          const selection = window.getSelection()?.toString();
-          if (!hasDetailsView || (selection?.length && selection?.length > 0))
-            return;
-          navigateSafely(() => handleRowClick(e));
-        }}
-        headerRow={
-          <HeaderRenderer
+      <div style={{ containerType: 'inline-size', width: '100%' }}>
+        <Table
+          noData={
+            <div>
+              {!serverDataError &&
+                !serverDataLoading &&
+                !entries?.length &&
+                !searchQuery &&
+                !filteredEntries?.length &&
+                (emptyListProps?.simpleEmptyListMessage === false ||
+                (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
+                  <EmptyListComponent
+                    titleText={emptyListProps.titleText ?? ''}
+                    subtitleText={emptyListProps.subtitleText}
+                    showButton={emptyListProps.showButton}
+                    buttonText={emptyListProps.buttonText}
+                    url={emptyListProps.url ?? ''}
+                    onClick={emptyListProps.onClick ?? (() => null)}
+                    image={emptyListProps?.image}
+                  />
+                ) : (
+                  <p>
+                    {emptyListProps?.titleText ? (
+                      <Trans
+                        i18nKey={emptyListProps?.titleText}
+                        defaults={emptyListProps?.titleText}
+                      />
+                    ) : (
+                      t(notFoundMessage, { defaultValue: notFoundMessage })
+                    )}
+                  </p>
+                ))}
+            </div>
+          }
+          overflowMode={setOverflowMode()}
+          accessibleName={accessibleName ?? title}
+          rowActionCount={displayArrow ? 1 : 0}
+          className={`ui5-generic-list ${
+            hasDetailsView && filteredEntries.length && enableColumnLayout
+              ? 'cursor-pointer'
+              : ''
+          } ${renderPagination ? '' : 'last-row-with-border'}`}
+          onMouseDown={() => {
+            window.getSelection()?.removeAllRanges();
+          }}
+          onRowClick={(e) => {
+            const selection = window.getSelection()?.toString();
+            if (!hasDetailsView || (selection?.length && selection?.length > 0))
+              return;
+            navigateSafely(() => handleRowClick(e));
+          }}
+          headerRow={
+            <HeaderRenderer
+              actions={actions}
+              headerRenderer={headerRenderer}
+              columnWidths={columnWidths}
+              disableHiding={disableHiding}
+              noHideFields={noHideFields ?? []}
+              stickyHeader={!disableHiding}
+            />
+          }
+        >
+          <TableBody
+            serverDataError={serverDataError}
+            serverDataLoading={serverDataLoading}
+            filteredEntries={filteredEntries}
+            searchQuery={searchQuery}
+            searchSettings={searchSettings}
+            entries={entries}
+            pagination={pagination}
+            currentPage={currentPage}
+            layoutState={layoutState}
+            entrySelected={entrySelected}
+            entrySelectedNamespace={entrySelectedNamespace}
             actions={actions}
-            headerRenderer={headerRenderer}
-            columnWidths={columnWidths}
-            disableHiding={disableHiding}
-            noHideFields={noHideFields ?? []}
-            stickyHeader={!disableHiding}
+            rowRenderer={rowRenderer}
+            displayArrow={displayArrow}
+            hasRowDetails={hasRowDetails}
+            enableColumnLayout={!!enableColumnLayout}
           />
-        }
-      >
-        <TableBody
-          serverDataError={serverDataError}
-          serverDataLoading={serverDataLoading}
-          filteredEntries={filteredEntries}
-          searchQuery={searchQuery}
-          searchSettings={searchSettings}
-          entries={entries}
-          pagination={pagination}
-          currentPage={currentPage}
-          layoutState={layoutState}
-          entrySelected={entrySelected}
-          entrySelectedNamespace={entrySelectedNamespace}
-          actions={actions}
-          rowRenderer={rowRenderer}
-          displayArrow={displayArrow}
-          hasRowDetails={hasRowDetails}
-          enableColumnLayout={!!enableColumnLayout}
-        />
-      </Table>
+        </Table>
+      </div>
       {renderPagination && (
         <Pagination
           itemsTotal={filteredEntries.length}

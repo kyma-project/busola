@@ -16,6 +16,10 @@ Available skills:
 - `.agents/skills/pr-description/` — Generate a PR description from the project template
 - `.agents/skills/ui-text/` — Audit and fix user-visible text in `public/i18n/en.yaml` against Kyma content guidelines (`/ui-text` for full-file cleanup, `/ui-text review` for PR review)
 - `.agents/skills/review-code/` — Review current branch changes against a GitHub issue's requirements and acceptance criteria
+- `.agents/skills/check-unused-translations/` — Find translation keys in public/i18n/en.yaml that are not used in src/
 - `.agents/skills/analyze-pr-tests` — Analyze Cypress integration test failures on a given PR
+- `.agents/skills/watch-and-rerun-ci-pr/` — Watch a PR's CI checks and rerun flaky failures until the PR is green
+- `.agents/skills/watch-and-rerun-ci-release/` — Watch a release workflow run's CI and rerun only the failed (flaky) jobs until the release run is green
+- `.agents/skills/watch-and-rerun-ci-mq/` — Watch a PR's merge queue CI and re-add to the queue on flaky failures until the PR is merged
 
 > **Note:** To expose these as native Claude Code slash commands (e.g. `/create-compliant-pr`), place a markdown file per skill in `.claude/commands/` (e.g. `.claude/commands/create-compliant-pr.md`).

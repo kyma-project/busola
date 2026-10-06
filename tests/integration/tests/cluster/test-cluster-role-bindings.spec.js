@@ -2,6 +2,11 @@
 
 // Also column layout test
 
+import {
+  chooseComboboxOption,
+  chooseSelectOption,
+} from '../../support/helpers';
+
 const random = Math.floor(Math.random() * 9999) + 1000;
 const CRB_NAME = `test-###-crb-${random}`;
 const USER_NAME = 'test@kyma.eu';
@@ -20,31 +25,27 @@ context('Test Cluster Role Bindings', () => {
 
     cy.get('[accessible-name="ClusterRoleBinding name"]')
       .find('input')
-      .wait(1000)
+      .should('not.be.disabled')
       .click()
       .type(CRB_NAME);
 
-    cy.get(
-      'ui5-combobox[placeholder="Start typing to select ClusterRole from the list"]',
-    )
-      .find('input')
-      .wait(1000)
-      .click()
-      .type('admin');
-
-    cy.get('ui5-cb-item:visible').contains('cluster-admin').click();
-
+    // type the name before picking the role — the combobox popover closing re-renders the
+    // subject inputs and briefly disables user name, so do it first
     cy.get('[accessible-name="User name"]')
       .find('input')
-      .wait(1000)
+      .should('not.be.disabled')
       .type(USER_NAME)
       .blur({ force: true });
+
+    chooseComboboxOption(
+      '[placeholder="Start typing to select ClusterRole from the list"]',
+      'cluster-admin',
+    );
 
     cy.saveChanges('Create');
   });
 
   it('Checking details using column layout', () => {
-    cy.wait(3000); // wait for the resource to be refeched and displayed in the list
     cy.contains('ui5-title', CRB_NAME).should('be.visible');
 
     cy.inspectList(CRB_NAME);
@@ -63,16 +64,11 @@ context('Test Cluster Role Bindings', () => {
   });
 
   it('Edit', () => {
-    cy.wait(1000);
-
     cy.getMidColumn().inspectTab('Edit');
 
     cy.contains('[role="combobox"]', 'User').click();
 
-    cy.get('ui5-option:visible')
-      .contains('ServiceAccount')
-      .find('li')
-      .click({ force: true });
+    chooseSelectOption('ServiceAccount');
 
     cy.contains('Service Account Namespace').should('be.visible');
 
@@ -82,10 +78,16 @@ context('Test Cluster Role Bindings', () => {
 
     cy.contains('Group').click();
 
-    cy.wait(500);
+    // switching kind remounts the inputs and Group name is briefly disabled;
+    // wait for API Group to show its value — by then the inputs have settled
+    cy.get('[accessible-name="API Group"]')
+      .find('input')
+      .should('have.value', 'rbac.authorization.k8s.io');
 
     cy.get('[accessible-name="Group name"]')
       .find('input')
+      .should('not.be.disabled')
+      .click()
       .type('test-group')
       .blur({ force: true });
 

@@ -15,7 +15,7 @@ import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate'
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { usePrepareLayoutColumns } from 'shared/hooks/usePrepareLayout';
 import { K8sResource } from 'types';
-import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
+import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout.js';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 
 const List = lazyWithRetries(

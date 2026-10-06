@@ -1,5 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { act, render, screen, fireEvent } from '@testing-library/react';
+import { renderFinished } from '@ui5/webcomponents-base';
 
 const { ModuleTemplatesCtx, CommunityModuleCtx } = vi.hoisted(() => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -132,6 +133,14 @@ describe('UpdateAllModulesButton', () => {
     getUpdateTemplateMock.mockReset();
   });
 
+  // flush deferred UI5 Dialog renders before teardown (twice: first reschedules, second flushes)
+  afterEach(async () => {
+    await act(async () => {
+      await renderFinished();
+      await renderFinished();
+    });
+  });
+
   it('renders nothing when there are no updatable modules', () => {
     getUpdateTemplateMock.mockReturnValue(null);
     const { container } = renderWithContexts([installedModuleA], [], []);
@@ -154,10 +163,10 @@ describe('UpdateAllModulesButton', () => {
     ).toBeNull();
   });
 
-  it('opens the dialog when the button is clicked', () => {
+  it('opens the dialog when the button is clicked', async () => {
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     renderWithContexts([installedModuleA], [], [repoTplA]);
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('modules.community.update.update-all'));
     });
     expect(
@@ -177,23 +186,23 @@ describe('UpdateAllModulesButton', () => {
     ).toBeInTheDocument();
   });
 
-  it('shows current and new versions in the table', () => {
+  it('shows current and new versions in the table', async () => {
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     renderWithContexts([installedModuleA], [], [repoTplA]);
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('modules.community.update.update-all'));
     });
     expect(screen.getByText('1.0.0')).toBeInTheDocument();
     expect(screen.getByText('2.0.0')).toBeInTheDocument();
   });
 
-  it('closes the dialog when Cancel is clicked', () => {
+  it('closes the dialog when Cancel is clicked', async () => {
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     renderWithContexts([installedModuleA], [], [repoTplA]);
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('modules.community.update.update-all'));
     });
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('common.buttons.cancel'));
     });
     expect(
@@ -201,33 +210,33 @@ describe('UpdateAllModulesButton', () => {
     ).toBeNull();
   });
 
-  it('does not render DeleteOldModulesCheck when there are no old templates', () => {
+  it('does not render DeleteOldModulesCheck when there are no old templates', async () => {
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     renderWithContexts([installedModuleA], [], [repoTplA]);
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('modules.community.update.update-all'));
     });
     expect(screen.queryByTestId('delete-old-check')).toBeNull();
   });
 
-  it('renders DeleteOldModulesCheck when old templates exist', () => {
+  it('renders DeleteOldModulesCheck when old templates exist', async () => {
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     const oldTpl = makeTpl('mod-a', '0.9.0');
     renderWithContexts([installedModuleA], [oldTpl], [repoTplA]);
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('modules.community.update.update-all'));
     });
     expect(screen.getByTestId('delete-old-check')).toBeInTheDocument();
   });
 
-  it('sends update-started notification and closes dialog on confirm', () => {
+  it('sends update-started notification and closes dialog on confirm', async () => {
     getUpdateTemplateMock.mockReturnValue(repoTplA);
     renderWithContexts([installedModuleA], [], [repoTplA]);
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('modules.community.update.update-all'));
     });
 
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('kyma-modules.update'));
     });
 

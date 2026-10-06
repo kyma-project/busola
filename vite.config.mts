@@ -29,13 +29,13 @@ export default defineConfig({
         changeOrigin: true,
         ws: true,
         configure: (proxy) => {
-          proxy.on('error', (err, req, res) => {
+          proxy.on('error', (err: NodeJS.ErrnoException, req, res) => {
             if (
               ['ECONNREFUSED', 'ECONNRESET', 'ETIMEDOUT', 'ENOTFOUND'].includes(
-                err.code,
+                err.code ?? '',
               )
             ) {
-              res.statusCode = 503
+              res.statusCode = 503;
               res.end(JSON.stringify({ error: 'Service unavailable' }));
             } else {
               res.statusCode = 500;
@@ -48,6 +48,11 @@ export default defineConfig({
         target: 'http://localhost:3001',
         changeOrigin: true,
       },
+    },
+  },
+  test: {
+    coverage: {
+      exclude: ['**/*.md'],
     },
   },
   plugins: [

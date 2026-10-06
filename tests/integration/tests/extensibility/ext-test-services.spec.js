@@ -16,7 +16,7 @@ context('Test Services', () => {
   });
 
   it('Creates the EXT Services config', () => {
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
@@ -52,15 +52,11 @@ context('Test Services', () => {
   it('Displays the EXT Services list view', () => {
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav().contains('Namespaces').click();
-    cy.wait(1000);
+    cy.navigateTo('Namespaces');
     cy.typeInSearch('services');
 
     cy.clickListLink('services');
-    cy.wait(1000);
-    cy.getLeftNav().contains('Examples').click();
-
-    cy.getLeftNav().contains('Custom Services').click();
+    cy.navigateTo('Examples', 'Custom Services');
 
     cy.contains('Type');
     cy.contains('LoadBalancer');

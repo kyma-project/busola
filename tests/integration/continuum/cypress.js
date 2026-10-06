@@ -13,13 +13,29 @@ const accessEngineFilePath =
     '',
   ); // versions of Cypress prior to 5 include a leading forward slash in __dirname
 
-const setUpContinuum = (configFilePath) =>
+const setUpContinuum = (configFilePath) => {
   // Using the Continuum JavaScript SDK requires us to load the following files before invoking `Continuum.setUp`:
   // * the Continuum configuration file (continuum.conf.js) specified by `configFilePath`
   // * Access Engine (AccessEngine.professional.js), the underlying accessibility testing engine Continuum uses
   // Normally code outside the Continuum JavaScript SDK is not required to do this, but Cypress' design essentially forces our hand
 
-  cy
+  // Reuse the catalog we already fetched once in plugins/index.js. If we don't stub it here,
+  // the SDK fetches it again for every spec and setUp times out whenever CI egress is slow.
+  // The 60s is needed because taskTimeout is only 10s globally. If the prefetch returned null
+  // we let the stub fail right away, otherwise setUp would sit on the SDK's own 60s timeout.
+  cy.task('getBestPracticeCatalog', null, { timeout: 60000 }).then(
+    (catalog) => {
+      cy.intercept(
+        'GET',
+        '**/api/cont/bestpractices*',
+        catalog
+          ? { statusCode: 200, body: catalog }
+          : { forceNetworkError: true },
+      );
+    },
+  );
+
+  return cy
     .readFile(configFilePath)
     .then((configFileContents) => window.eval(configFileContents))
     .window()
@@ -35,6 +51,7 @@ const setUpContinuum = (configFilePath) =>
         )
         .then(() => Continuum.setUp(null, configFilePath, windowUnderTest)),
     );
+};
 
 const runAllAccessibilityTests = () =>
   // We verify Access Engine is loaded, loading it again only if necessary, before running our accessibility tests using `Continuum.runAllTests`

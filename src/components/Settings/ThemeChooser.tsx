@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { List, ListDomRef } from '@ui5/webcomponents-react';
-import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme';
+import { setTheme } from '@ui5/webcomponents-base';
 
 import { Theme, isSystemThemeDark, themeAtom } from 'state/settings/themeAtom';
 import { TileButton } from 'shared/components/TileButton/TileButton';

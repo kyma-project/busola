@@ -14,14 +14,14 @@ import {
 import { pathSegment } from 'resources/ClusterEvents';
 import { Link } from 'shared/components/Link/Link';
 import { CustomColumn } from 'shared/components/ResourcesList/types';
-import { SortByObject } from 'shared/components/GenericList/GenericList';
+import { eventInitialSort, eventSortByFn } from './eventSort';
 
 export interface EventListProps {
   resourceType: string;
   resourceUrl: string;
   defaultType?: { key: string; text: string };
   hideInvolvedObjects?: boolean;
-  filter?: (resource: any) => boolean;
+  filter?: (resource: any) => boolean | Promise<boolean>;
   isCompact?: boolean;
   isClusterView?: boolean;
   displayArrow?: boolean;
@@ -117,7 +117,8 @@ export function EventList({
     },
     {
       header: t('events.headers.message'),
-      value: (e) => <p>{e.message}</p>,
+      width: '20cqi',
+      value: (e) => <Text>{e.message}</Text>,
     },
     {
       header: t('common.headers.name'),
@@ -146,7 +147,6 @@ export function EventList({
       ? [
           {
             header: t('common.headers.namespace'),
-            width: '20ch',
             value: (entry: any) => entry.metadata.namespace,
             id: 'namespace',
           },
@@ -167,34 +167,23 @@ export function EventList({
     {
       header: t('events.headers.count'),
       width: '10ch',
-      value: (e) => <p>{e.count || EMPTY_TEXT_PLACEHOLDER}</p>,
+      value: (e) => <Text>{e.count || EMPTY_TEXT_PLACEHOLDER}</Text>,
     },
     {
       header: t('events.headers.last-seen'),
-      width: '26ch',
+      width: '14ch',
       value: (e) => <ReadableCreationTimestamp timestamp={e.lastTimestamp} />,
     },
   ];
 
-  const sortByFn = (defaultSort: any): SortByObject => {
-    const { name } = defaultSort;
-    return {
-      name,
-      type: (a: Record<string, any>, b: Record<string, any>) =>
-        a.type.localeCompare(b.type),
-      lastseen: (a: Record<string, any>, b: Record<string, any>) =>
-        new Date(b.lastTimestamp).getTime() -
-        new Date(a.lastTimestamp).getTime(),
-      count: (a: Record<string, any>, b: Record<string, any>) =>
-        (a.count || 0) - (b.count || 0),
-    };
-  };
+  const sortByFn = eventSortByFn;
 
   return (
     <ResourcesList
       listHeaderActions={MessageSelector}
       columns={customColumns}
       sortBy={sortByFn}
+      initialSort={eventInitialSort}
       description={ResourceDescription}
       showTitle={isCompact}
       title={t('events.title')}

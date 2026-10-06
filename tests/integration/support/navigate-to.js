@@ -1,15 +1,22 @@
 Cypress.Commands.add('navigateTo', (leftNav, resource) => {
-  cy.wait(1500)
-    .getLeftNav()
-    .get(`ui5-side-navigation-item[text="${leftNav}"]`)
-    .should('be.visible')
-    .click();
+  const categorySelector = `ui5-side-navigation-item[text="${leftNav}"]`;
 
-  if (resource) {
-    cy.getLeftNav()
-      .get(`ui5-side-navigation-sub-item[text="${resource}"]`)
-      .should('be.visible')
-      .click();
+  if (!resource) {
+    // clicking only starts the navigation; wait until it's done before returning
+    cy.getLeftNav().get(categorySelector).should('be.visible').click();
+    cy.getLeftNav().get(categorySelector).should('have.prop', 'selected', true);
+    return;
   }
-  cy.wait(1500);
+
+  const subItemSelector = `ui5-side-navigation-sub-item[text="${resource}"]`;
+
+  cy.getLeftNav().then(($nav) => {
+    if ($nav.find(`${subItemSelector}:visible`).length === 0) {
+      cy.getLeftNav().get(categorySelector).should('be.visible').click();
+    }
+  });
+
+  cy.getLeftNav().get(subItemSelector).should('be.visible').click();
+
+  cy.getLeftNav().get(subItemSelector).should('have.prop', 'selected', true);
 });

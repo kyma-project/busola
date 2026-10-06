@@ -44,6 +44,7 @@ import { MultiType } from './MultiType';
 import { Modules } from './Modules/Modules';
 import { BindingTypeGeneric } from '@ui-schema/react';
 import { SomeSchema } from '@ui-schema/ui-schema';
+import { checkRequiredType } from '../helpers';
 
 const SchemaPluginsAdapter = schemaPluginsAdapterBuilder([validatorPlugin]);
 
@@ -83,7 +84,13 @@ export const widgets: BindingTypeGeneric = {
     schema: SomeSchema;
     required: boolean;
   } & Record<string, any>) => {
-    required = schema.get('required') ?? required;
+    const schemaReq = schema.get('required');
+    required = checkRequiredType(
+      schemaReq,
+      required,
+      props?.parentSchema,
+      props?.storeKeys,
+    );
     return (WidgetRenderer as FunctionComponent<any>)({
       schema,
       required,

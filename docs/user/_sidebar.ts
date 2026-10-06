@@ -17,6 +17,17 @@ export default [
     text: 'Generating a Token for Busola Instances',
     link: './01-43-generate-token.md',
   },
+  { text: 'Terminal', link: './01-50-terminal.md' },
+  {
+    text: 'Tutorials',
+    collapsed: true,
+    items: [
+      {
+        text: 'Checking Services with curl in the Terminal',
+        link: './tutorials/01-51-terminal-tutorial-curl.md',
+      },
+    ],
+  },
   {
     text: 'Troubleshooting Guides',
     link: './troubleshooting-guides/README.md',

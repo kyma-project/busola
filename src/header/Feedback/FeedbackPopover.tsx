@@ -1,14 +1,7 @@
-import {
-  Button,
-  FlexBox,
-  ObjectStatus,
-  Popover,
-  ShellBarItem,
-  Text,
-  Title,
-} from '@ui5/webcomponents-react';
+import type { ShellBarDomRef } from '@ui5/webcomponents-react';
+import { FlexBox, Popover, Text, Title } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
-import { useState, useEffect } from 'react';
+import { type RefObject, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { configFeaturesNames } from 'state/types';
@@ -18,50 +11,81 @@ import {
   getShowFeedbackStorageKey,
   setNoFeedbackShowNextTime,
 } from 'components/KymaCompanion/components/JouleFeedbackDialog/helpers/feedbackViewHelpers';
+import { ShellBarAction } from '../ShellBarAction';
+import { CloudServiceSurveyCard } from './CloudServiceSurveyCard';
+import { JouleFeedbackCard } from './JouleFeedbackCard';
+import { KymaFeedbackCard } from './KymaFeedbackCard';
+import { KymaSurveyCard } from './KymaSurveyCard';
+import {
+  CLOUD_SERVICE_SURVEY_VIEWED_KEY,
+  isSurveyViewed,
+  KYMA_SURVEY_VIEWED_KEY,
+  markSurveyViewed,
+} from './surveyHelpers';
+import { resolveOpener } from 'header/helpers';
 
-export default function FeedbackPopover() {
+export default function FeedbackPopover({
+  shellbarRef,
+}: {
+  shellbarRef: RefObject<ShellBarDomRef | null>;
+}) {
   const { isEnabled: isFeedbackEnabled, config: kymaFeedbackConfig } =
     useFeature(configFeaturesNames.FEEDBACK);
   const {
     isEnabled: isKymaCompanionEnabled,
     config: { feedbackLink: companionFeedbackLink } = {},
   } = useFeature(configFeaturesNames.KYMA_COMPANION);
+  const {
+    isEnabled: isCloudServiceSurveyEnabled,
+    config: { signUpLink: cloudServiceSurveySignUpLink } = {},
+  } = useFeature(configFeaturesNames.CLOUD_SERVICE_SURVEY);
+  const {
+    isEnabled: isKymaSurveyEnabled,
+    config: { signUpLink: kymaSurveySignUpLink } = {},
+  } = useFeature(configFeaturesNames.KYMA_SURVEY);
 
   const { t } = useTranslation();
   const [feedbackOpen, setFeedbackOpen] = useState(false);
-  const [showNewIndicators, setShowNewIndicators] = useState(false);
+  const [opener, setOpener] = useState<HTMLElement | undefined>();
+  const [cloudSurveyNew, setCloudSurveyNew] = useState(false);
+  const [kymaSurveyNew, setKymaSurveyNew] = useState(false);
   const showFeedback = getShowFeedbackStorageKey();
 
   useEffect(() => {
-    if (
+    const shouldShow =
       showFeedback === null ||
       showFeedback === FEEDBACK_SHOW_TYPE.SHOW ||
-      showFeedback === FEEDBACK_SHOW_TYPE.DISMISSED_ONCE
-    ) {
-      const timeoutId = setTimeout(() => {
-        setShowNewIndicators(true);
-      }, 0);
+      showFeedback === FEEDBACK_SHOW_TYPE.DISMISSED_ONCE;
 
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    } else {
-      const timeoutId = setTimeout(() => {
-        setShowNewIndicators(false);
-      }, 0);
+    const timeoutId = setTimeout(() => {
+      setCloudSurveyNew(
+        shouldShow && !isSurveyViewed(CLOUD_SERVICE_SURVEY_VIEWED_KEY),
+      );
+      setKymaSurveyNew(shouldShow && !isSurveyViewed(KYMA_SURVEY_VIEWED_KEY));
+    }, 0);
 
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    }
+    return () => clearTimeout(timeoutId);
   }, [showFeedback]);
 
-  const handleNewFeedbackViewed = () => {
-    if (showNewIndicators) {
-      setNoFeedbackShowNextTime();
-      setShowNewIndicators(false);
-    }
+  const handleCloudSurveyViewed = () => {
+    markSurveyViewed(CLOUD_SERVICE_SURVEY_VIEWED_KEY);
+    setCloudSurveyNew(false);
+    if (!kymaSurveyNew) setNoFeedbackShowNextTime();
   };
+
+  const handleKymaSurveyViewed = () => {
+    markSurveyViewed(KYMA_SURVEY_VIEWED_KEY);
+    setKymaSurveyNew(false);
+    if (!cloudSurveyNew) setNoFeedbackShowNextTime();
+  };
+
+  const cloudSurveyActive =
+    isCloudServiceSurveyEnabled && !!cloudServiceSurveySignUpLink;
+  const newCount =
+    window.location.pathname !== '/clusters'
+      ? (cloudSurveyActive && cloudSurveyNew ? 1 : 0) +
+        (isKymaSurveyEnabled && kymaSurveyNew ? 1 : 0)
+      : 0;
 
   if (!isFeedbackEnabled) {
     return null;
@@ -69,24 +93,21 @@ export default function FeedbackPopover() {
 
   return (
     <>
-      <ShellBarItem
+      <ShellBarAction
         id="feedbackOpener"
-        onClick={() => setFeedbackOpen(true)}
+        onClick={() => {
+          const resolvedOpener = resolveOpener('feedbackOpener', shellbarRef);
+          setOpener(resolvedOpener);
+          setFeedbackOpen(true);
+        }}
         icon="feedback"
-        text={t('feedback.feedback')}
+        text={t('feedback.give-feedback')}
         title={t('feedback.give-feedback')}
-        count={
-          isKymaCompanionEnabled &&
-          companionFeedbackLink &&
-          showNewIndicators &&
-          window.location.pathname !== '/clusters'
-            ? '1'
-            : undefined
-        }
+        count={newCount > 0 ? String(newCount) : undefined}
       />
       {createPortal(
         <Popover
-          opener="feedbackOpener"
+          opener={opener}
           open={feedbackOpen}
           onClose={() => setFeedbackOpen(false)}
           horizontalAlign="End"
@@ -106,84 +127,25 @@ export default function FeedbackPopover() {
             </Title>
             <Text className="info-text">{t('feedback.intro.info')}</Text>
           </FlexBox>
+          {cloudSurveyActive && (
+            <CloudServiceSurveyCard
+              signUpLink={cloudServiceSurveySignUpLink}
+              showNewIndicators={cloudSurveyNew}
+              onSignUp={handleCloudSurveyViewed}
+            />
+          )}
+          <KymaSurveyCard
+            signUpLink={kymaSurveySignUpLink}
+            showNewIndicators={kymaSurveyNew}
+            emphasized={!cloudSurveyActive}
+            onSignUp={handleKymaSurveyViewed}
+          />
           {isKymaCompanionEnabled &&
             companionFeedbackLink &&
             window.location.pathname !== '/clusters' && (
-              <FlexBox
-                alignItems="Start"
-                direction="Column"
-                justifyContent="Start"
-                gap={16}
-                className="sap-margin-bottom-medium"
-              >
-                <FlexBox
-                  direction="Row"
-                  alignItems="Center"
-                  justifyContent="Start"
-                  gap={12}
-                >
-                  <Title level="H6" size="H6">
-                    {t('feedback.joule.title')}
-                  </Title>
-                  {showNewIndicators && (
-                    <ObjectStatus state="Information" inverted>
-                      {t('feedback.new')}
-                    </ObjectStatus>
-                  )}
-                </FlexBox>
-                <Text className="info-text">{t('feedback.joule.info')}</Text>
-                <Button
-                  accessibleRole="Link"
-                  accessibleName={t('feedback.give-feedback')}
-                  accessibleDescription="Open in new tab link"
-                  design="Emphasized"
-                  endIcon="inspect"
-                  onClick={() => {
-                    handleNewFeedbackViewed();
-                    const newWindow = window.open(
-                      companionFeedbackLink,
-                      '_blank',
-                      'noopener, noreferrer',
-                    );
-                    if (newWindow) newWindow.opener = null;
-                  }}
-                >
-                  {t('feedback.give-feedback')}
-                </Button>
-              </FlexBox>
+              <JouleFeedbackCard feedbackLink={companionFeedbackLink} />
             )}
-          <FlexBox
-            alignItems="Start"
-            direction="Column"
-            justifyContent="Start"
-            gap={16}
-          >
-            <Title level="H6" size="H6">
-              {t('feedback.kyma.title')}
-            </Title>
-            <Text className="info-text">{t('feedback.kyma.info')}</Text>
-            <Button
-              accessibleRole="Link"
-              accessibleName={t('feedback.give-feedback')}
-              accessibleDescription="Open in new tab link"
-              endIcon="inspect"
-              design={
-                !isKymaCompanionEnabled || !companionFeedbackLink
-                  ? 'Emphasized'
-                  : 'Default'
-              }
-              onClick={() => {
-                const newWindow = window.open(
-                  kymaFeedbackConfig.link,
-                  '_blank',
-                  'noopener, noreferrer',
-                );
-                if (newWindow) newWindow.opener = null;
-              }}
-            >
-              {t('feedback.give-feedback')}
-            </Button>
-          </FlexBox>
+          <KymaFeedbackCard feedbackLink={kymaFeedbackConfig.link} />
         </Popover>,
         document.body,
       )}

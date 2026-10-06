@@ -14,13 +14,14 @@ import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 
 export function useDeleteResource({
-  resourceTitle,
+  resourceTitle = /** @type {string | undefined} */ (undefined),
   resourceType,
   navigateToListAfterDelete = false,
-  layoutNumber,
+  layoutNumber = /** @type {string | undefined} */ (undefined),
   redirectBack = true,
-  parentCrdName,
+  parentCrdName = /** @type {string | undefined} */ (undefined),
   forceConfirmDelete = false,
+  afterDelete = /** @type {(() => void) | undefined} */ (undefined),
 }) {
   const { t } = useTranslation();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -81,6 +82,8 @@ export function useDeleteResource({
               resourceType: prettifiedResourceName,
             }),
           });
+
+          afterDelete?.();
 
           if (
             navigateToListAfterDelete ||
@@ -164,6 +167,7 @@ export function useDeleteResource({
       redirectBack,
       layoutNumber,
       navigateToListAfterDelete,
+      afterDelete,
     ],
   );
 

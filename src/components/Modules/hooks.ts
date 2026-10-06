@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
+import { isEqual } from 'lodash';
 import pluralize from 'pluralize';
 import { useGet, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
@@ -152,7 +153,7 @@ export const useFetchModuleData = (
 
       // Don't clear data during polling if all fetches fail
       if (Object.keys(cache).length > 0 || !isPolling) {
-        setData(cache);
+        setData((prev) => (isEqual(prev, cache) ? prev : cache));
       }
       if (errors.length) setError(errors.join('\n'));
       setLoading(false);
@@ -208,38 +209,40 @@ export const useGetInstalledNotInstalledModules = (
     COMMUNITY_MODULES_POLLING_INTERVAL,
   );
 
-  if (moduleTemplatesLoading) {
-    return {
-      installed: { items: [] },
-      notInstalled: { items: [] },
-      installedVersions: new Map(),
-      loading: true,
-      error: null,
-    };
-  }
-  if (!moduleTemplates) {
-    return {
-      installed: { items: [] },
-      notInstalled: { items: [] },
-      installedVersions: new Map(),
-      loading: false,
-      error: null,
-    };
-  }
+  return useMemo(() => {
+    if (moduleTemplatesLoading) {
+      return {
+        installed: { items: [] },
+        notInstalled: { items: [] },
+        installedVersions: new Map(),
+        loading: true,
+        error: null,
+      };
+    }
+    if (!moduleTemplates) {
+      return {
+        installed: { items: [] },
+        notInstalled: { items: [] },
+        installedVersions: new Map(),
+        loading: false,
+        error: null,
+      };
+    }
 
-  const { items: installedItems, installedVersions } = getInstalledModules(
-    moduleTemplates,
-    managers,
-  );
-  const notInstalled = getNotInstalledModules(moduleTemplates, managers);
+    const { items: installedItems, installedVersions } = getInstalledModules(
+      moduleTemplates,
+      managers,
+    );
+    const notInstalled = getNotInstalledModules(moduleTemplates, managers);
 
-  return {
-    installed: { items: installedItems },
-    notInstalled,
-    installedVersions,
-    loading,
-    error,
-  };
+    return {
+      installed: { items: installedItems },
+      notInstalled,
+      installedVersions,
+      loading,
+      error,
+    };
+  }, [moduleTemplates, managers, moduleTemplatesLoading, loading, error]);
 };
 
 export function useGetManagerStatus(manager?: ModuleManagerType) {

@@ -1,6 +1,8 @@
 import { Text } from './Text';
 import { Plain } from './Plain';
 import { Columns } from './Columns';
+import { Markdown } from './Markdown';
+import { FormGroup } from './FormGroup';
 import { Panel } from './Panel';
 import { Section } from './Section';
 import { CodeViewer } from './CodeViewer';
@@ -43,6 +45,8 @@ export const widgets = {
   ExternalLink,
   JoinedArray,
   Labels,
+  Markdown,
+  FormGroup,
   Panel,
   Plain,
   ResourceButton,

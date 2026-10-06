@@ -1,6 +1,6 @@
 import { Button, FlexBox, Link, Text } from '@ui5/webcomponents-react';
 import { useTranslation, Trans } from 'react-i18next';
-import JouleIcon from '../AIBanner/assets/JouleIconWhite.svg';
+import JouleIcon from './assets/JouleIconWhite.svg';
 import './Disclaimer.scss';
 
 interface DisclaimerProps {

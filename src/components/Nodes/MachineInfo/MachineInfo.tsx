@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { bytesToHumanReadable, getBytes } from 'shared/helpers/resources';
 import './MachineInfo.scss';
+import { FormItem, Label, Text } from '@ui5/webcomponents-react';
 
 interface NodeAddress {
   type: string;
@@ -37,7 +38,7 @@ export function MachineInfo({
   gpus,
 }: MachineInfoProps) {
   const formattedMemory = capacity?.memory
-    ? Math.round((parseInt(capacity.memory) / 1024 / 1024) * 10) / 10
+    ? bytesToHumanReadable(getBytes(capacity.memory), { unit: 'Gi' }).value
     : 0;
   const { t } = useTranslation();
 
@@ -47,63 +48,103 @@ export function MachineInfo({
       titleText={t('node-details.machine-info.title')}
       content={
         <>
-          <DynamicPageComponent.Column
-            title={t('node-details.machine-info.operating-system')}
+          <FormItem
+            labelContent={
+              <Label showColon>
+                {t('node-details.machine-info.operating-system')}
+              </Label>
+            }
           >
-            {`${nodeInfo?.operatingSystem} (${nodeInfo?.osImage})`}
-          </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column
-            title={t('node-details.machine-info.provider')}
+            <Text>{`${nodeInfo?.operatingSystem} (${nodeInfo?.osImage})`}</Text>
+          </FormItem>
+          <FormItem
+            labelContent={
+              <Label showColon>{t('node-details.machine-info.provider')}</Label>
+            }
           >
-            {spec?.providerID || EMPTY_TEXT_PLACEHOLDER}
-          </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column
-            title={t('node-details.machine-info.architecture')}
+            <Text>{spec?.providerID || EMPTY_TEXT_PLACEHOLDER}</Text>
+          </FormItem>
+          <FormItem
+            labelContent={
+              <Label showColon>
+                {t('node-details.machine-info.architecture')}
+              </Label>
+            }
           >
-            {nodeInfo?.architecture || EMPTY_TEXT_PLACEHOLDER}
-          </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column
-            title={t('node-details.machine-info.cpus')}
+            <Text>{nodeInfo?.architecture || EMPTY_TEXT_PLACEHOLDER}</Text>
+          </FormItem>
+          <FormItem
+            labelContent={
+              <Label showColon>{t('node-details.machine-info.cpus')}</Label>
+            }
           >
-            {capacity?.cpu || EMPTY_TEXT_PLACEHOLDER}
-          </DynamicPageComponent.Column>
+            <Text>{capacity?.cpu || EMPTY_TEXT_PLACEHOLDER}</Text>
+          </FormItem>
           {gpus > 0 && (
-            <DynamicPageComponent.Column
-              title={t('node-details.machine-info.nvidia-gpus')}
+            <FormItem
+              labelContent={
+                <Label showColon>
+                  {t('node-details.machine-info.nvidia-gpus')}
+                </Label>
+              }
             >
-              {gpus}
-            </DynamicPageComponent.Column>
+              <Text>{gpus}</Text>
+            </FormItem>
           )}
-          <DynamicPageComponent.Column
-            title={t('node-details.machine-info.memory')}
+          <FormItem
+            labelContent={
+              <Label showColon>{t('node-details.machine-info.memory')}</Label>
+            }
           >
-            {`${formattedMemory} ${t('node-details.machine-info.gib')}`}
-          </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column
-            title={t('node-details.machine-info.pods-capacity')}
+            <Text>{`${formattedMemory} ${t(
+              'node-details.machine-info.gib',
+            )}`}</Text>
+          </FormItem>
+          <FormItem
+            labelContent={
+              <Label showColon>
+                {t('node-details.machine-info.pods-capacity')}
+              </Label>
+            }
           >
-            {capacity?.pods || EMPTY_TEXT_PLACEHOLDER}
-          </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column title={t('node-details.pod-cidr')}>
-            {spec?.podCIDRs?.join(',') || EMPTY_TEXT_PLACEHOLDER}
-          </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column
-            title={t('node-details.machine-info.kubelet-version')}
+            <Text>{capacity?.pods || EMPTY_TEXT_PLACEHOLDER}</Text>
+          </FormItem>
+          <FormItem
+            labelContent={<Label showColon>{t('node-details.pod-cidr')}</Label>}
           >
-            {nodeInfo?.kubeletVersion || EMPTY_TEXT_PLACEHOLDER}
-          </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column
-            title={t('node-details.machine-info.internal-ip')}
+            <Text>{spec?.podCIDRs?.join(',') || EMPTY_TEXT_PLACEHOLDER}</Text>
+          </FormItem>
+          <FormItem
+            labelContent={
+              <Label showColon>
+                {t('node-details.machine-info.kubelet-version')}
+              </Label>
+            }
           >
-            {addresses?.find((a) => a.type === 'InternalIP')?.address ||
-              EMPTY_TEXT_PLACEHOLDER}
-          </DynamicPageComponent.Column>
-          <DynamicPageComponent.Column
-            title={t('node-details.machine-info.hostname')}
+            <Text>{nodeInfo?.kubeletVersion || EMPTY_TEXT_PLACEHOLDER}</Text>
+          </FormItem>
+          <FormItem
+            labelContent={
+              <Label showColon>
+                {t('node-details.machine-info.internal-ip')}
+              </Label>
+            }
           >
-            {addresses?.find((a) => a.type === 'Hostname')?.address ||
-              EMPTY_TEXT_PLACEHOLDER}
-          </DynamicPageComponent.Column>
+            <Text>
+              {addresses?.find((a) => a.type === 'InternalIP')?.address ||
+                EMPTY_TEXT_PLACEHOLDER}
+            </Text>
+          </FormItem>
+          <FormItem
+            labelContent={
+              <Label showColon>{t('node-details.machine-info.hostname')}</Label>
+            }
+          >
+            <Text>
+              {addresses?.find((a) => a.type === 'Hostname')?.address ||
+                EMPTY_TEXT_PLACEHOLDER}
+            </Text>
+          </FormItem>
         </>
       }
     />

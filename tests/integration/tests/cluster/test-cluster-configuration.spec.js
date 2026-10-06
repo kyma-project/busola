@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { chooseSelectOption } from '../../support/helpers';
 
 const configMock = {
   data: {
@@ -49,7 +50,7 @@ context('Test Cluster configuration', () => {
     cy.contains('Category from target cluster').should('be.visible');
 
     // custom storage type should be set
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
   });
 
   it('Test pagination', () => {
@@ -67,7 +68,7 @@ context('Test Cluster configuration', () => {
 
     cy.get('ui5-dialog').contains('20').click();
 
-    cy.get('ui5-option:visible').contains('10').click();
+    chooseSelectOption('10');
 
     cy.contains('Appearance').click();
 

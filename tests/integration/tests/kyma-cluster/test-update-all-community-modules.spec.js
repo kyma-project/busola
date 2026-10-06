@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import { chooseSelectOption } from '../../support/helpers';
 
 const MODULE_NAME = 'busola';
 const OLD_VERSION = '1.0.31';
@@ -14,15 +15,17 @@ context('Test Community Modules update-all functionality', () => {
   });
 
   it('Install busola module at old version as precondition', () => {
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
     cy.get('ui5-card').contains('Modify Modules').click();
     cy.url().should('match', /.*\/kymamodules/);
+    cy.get('ui5-dynamic-page.kyma-modules')
+      .find('ui5-dynamic-page-title')
+      .should('be.visible');
 
     cy.get('ui5-panel[data-testid="community-modules-list"]')
       .contains('ui5-button', 'Add')
       .click();
 
-    cy.wait(1000);
     cy.get('ui5-title').contains('Add Community Modules').should('be.visible');
 
     cy.get('ui5-title').contains(MODULE_NAME).click();
@@ -32,8 +35,6 @@ context('Test Community Modules update-all functionality', () => {
     cy.get('[data-testid="create-form-footer-bar"]')
       .contains('ui5-button:visible', 'Add')
       .click();
-
-    cy.wait(2000);
 
     cy.inspectTab('View');
 
@@ -190,11 +191,13 @@ context('Test Community Modules update-all functionality', () => {
       .find('ui5-button[design="Emphasized"]')
       .click();
 
-    cy.contains('Module update started').should('be.visible');
+    // the toast fades after ~3s but keeps its text; match the message, not visibility
+    cy.get('ui5-toast[accessible-name="notification-content"]').should(
+      'contain.text',
+      'Community Modules updated',
+    );
 
-    cy.wait(3000);
-
-    cy.get('.community-modules-list')
+    cy.get('.community-modules-list', { timeout: 15000 })
       .find('ui5-table-row')
       .contains(NEW_VERSION)
       .should('be.visible');
@@ -213,35 +216,38 @@ context('Test Community Modules update-all functionality', () => {
 
     cy.get('ui5-table-row').contains(OLD_TEMPLATE_NAME).should('be.visible');
 
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
     cy.get('ui5-card').contains('Modify Modules').click();
   });
 
   it('Reinstalls old version to prepare for delete-old-templates test', () => {
-    cy.wait(1000);
-
     cy.inspectTab('Edit');
-
-    cy.wait(1000);
 
     cy.contains('ui5-label', MODULE_NAME).should('be.visible');
 
+    // Save stays disabled until the picked version's resources download
+    cy.intercept('POST', '**/modules/community-resource').as(
+      'resourcesToApply',
+    );
+
     cy.contains('ui5-label', MODULE_NAME).parent().find('ui5-select').click();
 
-    cy.wait(500);
+    chooseSelectOption(OLD_VERSION);
 
-    cy.get('ui5-option:visible').contains(OLD_VERSION).click();
-
-    cy.wait(2000);
+    cy.wait('@resourcesToApply', { timeout: 30000 });
 
     cy.get('ui5-panel[data-testid="community-modules-edit"]')
       .find('ui5-button')
       .contains('Save')
+      .should('not.be.disabled')
       .click();
 
-    cy.contains('Community Modules updated').should('be.visible');
-
     cy.inspectTab('View');
+
+    cy.get('.community-modules-list')
+      .find('ui5-table-row')
+      .contains(OLD_VERSION, { timeout: 30000 })
+      .should('be.visible');
   });
 
   it('Confirms update and shows success notification', () => {
@@ -260,13 +266,15 @@ context('Test Community Modules update-all functionality', () => {
       .find('ui5-button[design="Emphasized"]')
       .click();
 
-    cy.contains('Module update started').should('be.visible');
+    // the toast fades after ~3s but keeps its text; match the message, not visibility
+    cy.get('ui5-toast[accessible-name="notification-content"]').should(
+      'contain.text',
+      'Community Modules updated',
+    );
   });
 
   it('Shows new version in the list after update and verifies old ModuleTemplate was deleted', () => {
-    cy.wait(2000);
-
-    cy.get('.community-modules-list')
+    cy.get('.community-modules-list', { timeout: 15000 })
       .find('ui5-table-row')
       .contains(MODULE_NAME)
       .should('be.visible');
@@ -290,7 +298,7 @@ context('Test Community Modules update-all functionality', () => {
 
     cy.get('ui5-table-row').contains(OLD_TEMPLATE_NAME).should('not.exist');
 
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
     cy.get('ui5-card').contains('Modify Modules').click();
   });
 

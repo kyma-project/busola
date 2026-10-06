@@ -31,15 +31,15 @@ SearchInput.propTypes = {
 };
 
 export function SearchInput({
-  searchQuery,
-  entriesKind,
-  filteredEntries,
+  searchQuery = /** @type {string | undefined} */ (undefined),
+  entriesKind = /** @type {string | undefined} */ (undefined),
+  filteredEntries = /** @type {any[] | undefined} */ (undefined),
   handleQueryChange,
-  suggestionProperties,
+  suggestionProperties = /** @type {any[] | undefined} */ (undefined),
   showSuggestion = true,
   disabled = false,
-  onKeyDown,
-  allowSlashShortcut,
+  onKeyDown = /** @type {((key: string) => void) | undefined} */ (undefined),
+  allowSlashShortcut = /** @type {boolean | undefined} */ (undefined),
 }) {
   const { t } = useTranslation();
   const isDetailsView = useContext(ResourceDetailContext);

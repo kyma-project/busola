@@ -42,12 +42,12 @@ context('Test Roles', () => {
     );
 
     chooseComboboxOption(
-      '[placeholder^="Start typing to select Verbs"]:visible',
+      '[placeholder^="Start typing to select Verbs"][value=""]:visible',
       'get',
     );
 
     chooseComboboxOption(
-      '[placeholder^="Start typing to select Verbs"]:visible',
+      '[placeholder^="Start typing to select Verbs"][value=""]:visible',
       'create',
     );
 
@@ -74,13 +74,12 @@ context('Test Roles', () => {
   });
 
   it('Edit the Role', () => {
-    cy.wait(1000);
-
     cy.inspectTab('Edit');
 
-    cy.get(`ui5-combobox[placeholder^="Start typing to select Verbs"]:visible`)
+    cy.get(
+      `ui5-combobox[placeholder^="Start typing to select Verbs"][value=""]:visible`,
+    )
       .find('input')
-      .filterWithNoValue()
       .click()
       .type('watch');
 
@@ -113,7 +112,7 @@ context('Test Roles', () => {
   });
 
   it('Clone the Role', () => {
-    cy.getLeftNav().contains('Roles').click();
+    cy.navigateTo('Configuration', 'Roles');
 
     cy.contains('ui5-table-row', ROLE_NAME)
       .find('ui5-button[data-testid="clone"]')

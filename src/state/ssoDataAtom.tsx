@@ -13,7 +13,19 @@ import {
   savePendingKubeconfigId,
   consumePendingKubeconfigId,
 } from './intendedPathAtom';
-import { isOwnOidcCallback } from './utils/isOwnOidcCallback';
+import {
+  decideOidcCallbackAction,
+  OidcErrorParams,
+  reportStoppedLogin,
+} from './utils/oidcCallbackDecision';
+import { useNavigate } from 'react-router';
+import { clusterAtom } from './clusterAtom';
+import {
+  isAuthRedirectLoop,
+  registerAuthRedirect,
+  resetAuthRedirectGuard,
+} from './utils/authRedirectLoopGuard';
+import { useNotifyLoginFailure } from './useLoginFailureNotification';
 
 const SSO_KEY = 'SSO';
 
@@ -22,6 +34,9 @@ export type SsoDataState = User | null;
 const defaultValue: SsoDataState = getSSOAuthData();
 
 export const ssoDataAtom = atom<SsoDataState>(defaultValue);
+
+// Set to true when the SSO login was stopped (IdP error or redirect loop).
+export const ssoLoginStoppedAtom = atom(false);
 
 export function setSSOAuthData(data: SsoDataState) {
   sessionStorage.setItem(SSO_KEY, JSON.stringify(data));
@@ -69,6 +84,8 @@ async function trySilentRefresh(): Promise<boolean> {
 // path, then redirects through the IdP; on failure falls back to a full
 // load of /clusters. The saved path restores the location afterwards.
 function triggerReauthRedirect(userManager: UserManager | null) {
+  // Both paths re-enter login after a page load, count them for the loop guard.
+  registerAuthRedirect();
   const fullPath = window.location.pathname + window.location.search;
   const relative = toClusterRelative(fullPath);
   if (relative) saveIntendedPath(relative);
@@ -122,6 +139,7 @@ async function handleSSOLogin(
   ssoConfig: ConfigFeature,
   setSsoState: (user: SsoDataState) => void,
   setRenewing?: (renewing: boolean) => void,
+  onLoginFailed?: (failure?: OidcErrorParams) => void,
 ) {
   if (!ssoConfig || !ssoConfig.config) {
     throw new Error('SSO configuration not found');
@@ -137,12 +155,15 @@ async function handleSSOLogin(
     if (storedUser && !storedUser.expired) {
       user = storedUser;
     } else {
-      const hasCode = new URLSearchParams(window.location.search).has('code');
-      if (hasCode && !isOwnOidcCallback(ssoConfig.config.clientId)) {
+      const decision = decideOidcCallbackAction(ssoConfig.config.clientId);
+      if (decision.action === 'foreign-callback') {
         // Callback belongs to another manager (e.g. cluster OIDC); let it run.
         return;
       }
-      if (!hasCode) {
+      if (reportStoppedLogin(decision, 'SSO', onLoginFailed)) {
+        return;
+      }
+      if (decision.action === 'redirect') {
         triggerReauthRedirect(userManager);
         return;
       }
@@ -195,17 +216,15 @@ async function handleSSOLogin(
 
     setSSOAuthData(user);
     setSsoState(user);
-  } catch {
-    const params = new URLSearchParams(window.location.search);
-    if (params.has('error')) {
-      console.error(
-        'SSO error from IdP:',
-        params.get('error'),
-        params.get('error_description'),
-      );
-      return;
+    resetAuthRedirectGuard();
+  } catch (e) {
+    // Usually a failed code exchange, IdP error callbacks never get this far.
+    console.error('SSO login failed:', e);
+    if (isAuthRedirectLoop()) {
+      onLoginFailed?.({ error: e instanceof Error ? e.message : String(e) });
+    } else {
+      triggerReauthRedirect(userManager);
     }
-    triggerReauthRedirect(userManager);
   } finally {
     session.loginInProgress = false;
   }
@@ -217,6 +236,10 @@ export function useSSOLogin() {
   const [ssoState, setSsoState] = useAtom(ssoDataAtom);
   const isSSOEnabled = useIsSSOEnabled();
   const setRenewing = useSetAtom(renewingAtom);
+  const setSsoLoginStopped = useSetAtom(ssoLoginStoppedAtom);
+  const setCluster = useSetAtom(clusterAtom);
+  const notifyLoginFailure = useNotifyLoginFailure();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // An expired stored user must fall through so handleSSOLogin can start
@@ -238,7 +261,19 @@ export function useSSOLogin() {
     const startLogin = async () => {
       const bypass = await getEnv(Envs.SSO_LOGIN_BYPASS);
       if (bypass === 'true') return;
-      handleSSOLogin(ssoConfig, setSsoState, setRenewing);
+      handleSSOLogin(ssoConfig, setSsoState, setRenewing, (failure) => {
+        // Unblock the app behind the dialog, navigating also removes the error params.
+        setSsoLoginStopped(true);
+        setCluster(null);
+        navigate('/clusters', { replace: true });
+        notifyLoginFailure(failure, {
+          // Retry reloads the page, so SSO login starts again with a clean URL.
+          onRetry: () => {
+            resetAuthRedirectGuard();
+            window.location.assign('/clusters');
+          },
+        });
+      });
     };
     startLogin();
     // eslint-disable-next-line react-hooks/exhaustive-deps

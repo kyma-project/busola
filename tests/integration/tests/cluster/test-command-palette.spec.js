@@ -179,6 +179,7 @@ context('Test Command Palette navigation', () => {
 
     cy.get('[accessible-name="ClusterRoleBinding name"]')
       .find('input')
+      .should('not.be.disabled')
       .click()
       .type('test-crb');
 

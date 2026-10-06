@@ -22,7 +22,7 @@ export default function ResourceDetailsCard({
     >
       <Form
         layout="S2 M2 L2 XL2"
-        labelSpan="S12 M12 L12 XL12"
+        labelSpan="S12 M4 L4 XL4"
         className="resource-card-layout"
       >
         {content}

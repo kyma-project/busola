@@ -322,6 +322,52 @@ describe('GenericList', () => {
     });
   });
 
+  describe('Sorting', () => {
+    const sortEntries = [
+      { id: '1', name: 'bravo', description: 'd1', metadata: { labels: {} } },
+      { id: '2', name: 'alpha', description: 'd2', metadata: { labels: {} } },
+      { id: '3', name: 'charlie', description: 'd3', metadata: { labels: {} } },
+    ];
+    const nameSort = (a, b) => a.name.localeCompare(b.name);
+
+    const rowNames = () => cy.get('ui5-table-row');
+
+    it('Defaults to first sortBy key ascending when no initialSort is given', () => {
+      cy.mount(
+        <GenericList
+          entries={sortEntries}
+          headerRenderer={mockHeaderRenderer}
+          rowRenderer={mockEntryRenderer}
+          sortBy={{ name: nameSort }}
+          pagination={{ autoHide: true }}
+        />,
+      );
+
+      // ascending by name: alpha, bravo, charlie
+      rowNames().eq(0).should('contain.text', 'alpha');
+      rowNames().eq(1).should('contain.text', 'bravo');
+      rowNames().eq(2).should('contain.text', 'charlie');
+    });
+
+    it('Honors initialSort order on first mount', () => {
+      cy.mount(
+        <GenericList
+          entries={sortEntries}
+          headerRenderer={mockHeaderRenderer}
+          rowRenderer={mockEntryRenderer}
+          sortBy={{ name: nameSort }}
+          initialSort={{ name: 'name', order: 'DESC' }}
+          pagination={{ autoHide: true }}
+        />,
+      );
+
+      // descending by name: charlie, bravo, alpha
+      rowNames().eq(0).should('contain.text', 'charlie');
+      rowNames().eq(1).should('contain.text', 'bravo');
+      rowNames().eq(2).should('contain.text', 'alpha');
+    });
+  });
+
   describe('Search', () => {
     it('Shows search field by default', () => {
       cy.mount(

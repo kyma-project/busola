@@ -2,7 +2,7 @@
 
 The troubleshooting guides aim to identify the most common recurring problems the users face, as well as the most suitable solutions to these problems.
 
-If you can't find a solution, check for open issues in the [Busola GitHub repository](https://github.com/kyma-project/busola/issues). If none of them addresses your problem, create a new one. You can also reach out to our [Slack channel](https://kyma-community.slack.com/) to get direct support from the community.
+If you can't find a solution, check for open issues in the [Busola GitHub repository](https://github.com/kyma-project/busola/issues). If none of them addresses your problem, create a new one. You can also reach out to our [Slack channel](https://kyma-community.slack.com/) to get direct support from the community. <!-- markdown-link-check-disable-line -->
 
 > [!TIP]
 > To solve most of the problems with Busola development, clear the browser cache or do a hard refresh of the website.

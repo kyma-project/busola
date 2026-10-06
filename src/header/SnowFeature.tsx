@@ -1,4 +1,3 @@
-import { ShellBarItem } from '@ui5/webcomponents-react';
 import { useFeature } from 'hooks/useFeature';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -6,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { themeAtom } from 'state/settings/themeAtom';
 import { configFeaturesNames } from 'state/types';
+import { ShellBarAction } from './ShellBarAction';
 import './SnowFeature.scss';
 
 const SNOW_STORAGE_KEY = 'snow-animation';
@@ -60,7 +60,7 @@ export function SnowFeature() {
           document.body,
         )}
       {isSnowEnabled && (
-        <ShellBarItem
+        <ShellBarAction
           onClick={handleSnowButtonClick}
           icon={isSnowOpen ? 'heating-cooling' : 'activate'}
           text={isSnowOpen ? t('navigation.snow-stop') : t('navigation.snow')}

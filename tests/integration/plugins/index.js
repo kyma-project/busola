@@ -1,5 +1,35 @@
 const fs = require('fs');
 
+// Continuum fetches this catalog from the browser during every spec's setUp. On CI that
+// call is often slow enough to time out, so we fetch it once here and replay it per spec.
+const BESTPRACTICES_URL = 'https://sap.levelaccess.net/api/cont/bestpractices';
+const FETCH_TIMEOUT_MS = 20000;
+let bestPracticeCatalogPromise = null;
+
+async function fetchBestPracticeCatalog() {
+  const attempt = async () => {
+    const res = await fetch(BESTPRACTICES_URL, {
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  };
+  try {
+    return await attempt();
+  } catch (first) {
+    try {
+      return await attempt(); // try again, the first call sometimes just fails
+    } catch (second) {
+      console.log(
+        `[a11y] Failed to prefetch best-practice catalog (${second}); ` +
+          `Continuum will run in degraded (unfiltered) mode for this run.`,
+      );
+      return null;
+    }
+  }
+}
+
 module.exports = (on, config) => {
   let namespaceName = process.env.NAMESPACE_NAME || null;
   // generate random namespace name if it wasn't provided as env
@@ -47,6 +77,13 @@ module.exports = (on, config) => {
       } else {
         return dynamicSharedStore[property.name];
       }
+    },
+    // fetch only once and reuse the promise for the other specs; null if it failed
+    getBestPracticeCatalog() {
+      if (!bestPracticeCatalogPromise) {
+        bestPracticeCatalogPromise = fetchBestPracticeCatalog();
+      }
+      return bestPracticeCatalogPromise;
     },
   });
   return config;

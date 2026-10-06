@@ -25,7 +25,7 @@ import { ClusterValidationConfigurationDialog } from './ClusterValidationConfigu
 
 import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
-import { ssoDataAtom } from 'state/ssoDataAtom';
+import { ssoDataAtom, useIsSSOEnabled } from 'state/ssoDataAtom';
 import { validationSchemasAtom } from 'state/validationSchemasAtom';
 import {
   getDefaultScanConfiguration,
@@ -44,16 +44,18 @@ export const ClusterValidation = () => {
   const authData = useAtomValue(authDataAtom);
   const cluster = useAtomValue(clusterAtom);
   const ssoData = useAtomValue(ssoDataAtom);
+  const isSSOEnabled = useIsSSOEnabled();
 
   const { fetch, post } = useMemo(() => {
     const fetch = createFetchFn({
       authData,
       cluster,
       ssoData,
+      isSSOEnabled,
     });
     const post = createPostFn(fetch);
     return { fetch, post };
-  }, [authData, cluster, ssoData]);
+  }, [authData, cluster, ssoData, isSSOEnabled]);
 
   const defaultPolicySet = usePolicySet();
   const { namespaces } = useAvailableNamespaces();
@@ -100,9 +102,15 @@ export const ClusterValidation = () => {
 
   useEffect(() => {
     if (!resources)
-      resourceLoader.loadResourceLists().then((resourceList) => {
-        setResources(resourceList);
-      });
+      resourceLoader
+        .loadResourceLists()
+        .then((resourceList) => {
+          setResources(resourceList);
+        })
+        .catch((e) => {
+          // panel can unmount mid-load on navigation; scan stays disabled until it retries
+          console.warn('Failed to load resource lists:', e);
+        });
   }, [resources, resourceLoader, setResources]);
 
   const [isConfigurationOpen, setConfigurationOpen] = useState(false);

@@ -9,6 +9,7 @@ import { TFunction } from 'i18next';
 const STDIN_CHANNEL = 0;
 const STDOUT_CHANNEL = 1;
 const STDERR_CHANNEL = 2;
+const RESIZE_CHANNEL = 4;
 
 const ANSI_RESET = '\x1b[0m';
 export const COLOR_SUCCESS = '\x1b[32m';
@@ -18,8 +19,23 @@ export const COLOR_ERROR = '\x1b[31m';
 // \r returns the cursor to column 0 — xterm is in raw mode, so a lone \n staircases.
 export const LINE_BREAK = '\r\n';
 
-export function terminalMessage(color: string, text: string) {
-  return `${LINE_BREAK}${color}${text}${ANSI_RESET}${LINE_BREAK}`;
+export function terminalSystemMessage(color: string, text: string) {
+  const currentDate = new Date(Date.now());
+  const hours = currentDate.getHours().toString().padStart(2, '0');
+  const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+  const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+  const dateNowFmt = `[${hours}:${minutes}:${seconds}]`;
+  return `${LINE_BREAK}${color}${dateNowFmt} ${text}${ANSI_RESET}${LINE_BREAK}`;
+}
+
+export function sendResize(ws: WebSocket, cols: number, rows: number): void {
+  if (ws.readyState !== WebSocket.OPEN) return;
+  const message = JSON.stringify({ Width: cols, Height: rows });
+  const bytes = new TextEncoder().encode(message);
+  const frame = new Uint8Array(bytes.length + 1);
+  frame[0] = RESIZE_CHANNEL;
+  frame.set(bytes, 1);
+  ws.send(frame);
 }
 
 function buildProtocols(authHeaders: Headers): string[] {
@@ -56,6 +72,7 @@ export async function connectTerminal({
   t,
   scheduleReconnect,
   onConnected,
+  silent = false,
 }: {
   authHeaders: Headers;
   term: Terminal;
@@ -67,6 +84,8 @@ export async function connectTerminal({
   t: TFunction;
   scheduleReconnect: (term: Terminal) => void;
   onConnected: () => void;
+  // Suppress the success banner on a proactive cycle; failures/drops still show.
+  silent?: boolean;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
   const ws = new WebSocket(
     buildAttachUrl(podName),
@@ -76,10 +95,13 @@ export async function connectTerminal({
 
   ws.onopen = () => {
     if (signal.aborted) return;
-    setSession((prev) => ({ ...prev, status: 'connected' }));
-    term.write(
-      terminalMessage(COLOR_SUCCESS, t('terminal.messages.connected')),
-    );
+    sendResize(ws, term.cols, term.rows);
+    if (!silent) {
+      setSession((prev) => ({ ...prev, status: 'connected' }));
+      term.write(
+        terminalSystemMessage(COLOR_SUCCESS, t('terminal.messages.connected')),
+      );
+    }
     onConnected();
   };
 
@@ -96,16 +118,21 @@ export async function connectTerminal({
       event.code !== 1000 && event.code !== 1005 && !event.reason;
     if (isUnexpectedDrop) {
       term.write(
-        terminalMessage(COLOR_WARNING, t('terminal.messages.connection-lost')),
+        terminalSystemMessage(
+          COLOR_WARNING,
+          t('terminal.messages.connection-lost'),
+        ),
       );
       setSession((prev) => ({ ...prev, status: 'reconnecting' }));
       scheduleReconnect(term);
     } else {
       setSession((prev) => ({ ...prev, status: 'idle' }));
       if (event.reason) {
-        term.write(terminalMessage(COLOR_ERROR, event.reason));
+        term.write(terminalSystemMessage(COLOR_ERROR, event.reason));
       }
-      term.write(terminalMessage(COLOR_WARNING, t('terminal.messages.closed')));
+      term.write(
+        terminalSystemMessage(COLOR_WARNING, t('terminal.messages.closed')),
+      );
     }
   };
 
@@ -118,7 +145,7 @@ export async function connectTerminal({
     }));
   };
 
-  const disposable = term.onData((input) => {
+  const dataDisposable = term.onData((input) => {
     if (ws.readyState !== WebSocket.OPEN) return;
     const bytes = new TextEncoder().encode(input);
     const frame = new Uint8Array(bytes.length + 1);
@@ -127,5 +154,17 @@ export async function connectTerminal({
     ws.send(frame);
   });
 
-  return { ws, disposable };
+  const resizeDisposable = term.onResize(({ cols, rows }) => {
+    sendResize(ws, cols, rows);
+  });
+
+  return {
+    ws,
+    disposable: {
+      dispose: () => {
+        dataDisposable.dispose();
+        resizeDisposable.dispose();
+      },
+    },
+  };
 }

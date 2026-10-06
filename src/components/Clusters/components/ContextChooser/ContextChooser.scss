@@ -4,6 +4,10 @@ ui5-dialog.context-chooser-message {
   ui5-icon {
     display: none;
   }
+
+  ui5-message-strip {
+    width: unset;
+  }
 }
 
 ui5-dialog.context-chooser-message::part(content) {

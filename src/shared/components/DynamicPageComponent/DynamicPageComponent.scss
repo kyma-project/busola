@@ -153,30 +153,6 @@
   grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
 }
 
-.page-header__column {
-  display: inline-block;
-
-  .title,
-  .content {
-    display: block;
-  }
-
-  .image {
-    display: inline-block;
-    margin-right: 0.5rem;
-  }
-
-  .content-container {
-    display: inline-block;
-    width: 100%;
-  }
-
-  .title {
-    color: var(--sapNeutralColor);
-    margin-bottom: 4px;
-  }
-}
-
 @media (max-width: 768px) {
   .column-wrapper {
     display: flex;

@@ -7,6 +7,7 @@ export type ClusterEventDetailsProps = {
   resourceName: string;
   resourceUrl: string | undefined;
   namespace: string | undefined;
+  [key: string]: unknown;
 };
 
 export default function ClusterEventDetails({
@@ -25,11 +26,11 @@ export default function ClusterEventDetails({
 
   return (
     <EventDetails
-      {...props}
+      {...(props as any)}
       layoutCloseCreateUrl={clusterUrl(pathSegment)}
       resourceName={resourceName}
-      namespace={overriddenNamespace}
-      resourceUrl={overriddenResourceUrl}
+      namespace={overriddenNamespace ?? ''}
+      resourceUrl={overriddenResourceUrl ?? ''}
     />
   );
 }

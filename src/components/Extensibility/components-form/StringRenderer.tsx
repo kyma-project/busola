@@ -1,4 +1,4 @@
-import { Key, RefAttributes, useState } from 'react';
+import { RefAttributes, useState } from 'react';
 import {
   Button,
   InputDomRef,
@@ -118,10 +118,10 @@ export function StringRenderer({
         input: (
           params: InputPropTypes &
             WithWebComponentPropTypes &
-            RefAttributes<InputDomRef> & { key: Key },
+            RefAttributes<InputDomRef>,
         ) => (
           <>
-            <Inputs.Text {...params} />
+            <Inputs.Text {...(params as any)} />
             {decodable && (
               <div className="bsl-col-md--1">
                 <Button

@@ -100,7 +100,6 @@ export function ResourceComponent({
     handleResourceDelete,
     performDelete,
     performCancel,
-    /*@ts-expect-error Type mismatch between js and ts*/
   } = useDeleteResource({
     resourceTitle,
     resourceType,
@@ -114,9 +113,6 @@ export function ResourceComponent({
   // Use isProtected for blocking modifications (considers user setting)
   const protectedResource = isProtected(resource) || isEntireListProtected;
   const [filteredStatusColumns, setFilteredStatusColumns] = useState<
-    CustomColumn[]
-  >([]);
-  const [filteredStatusColumnsLong, setFilteredStatusColumnsLong] = useState<
     CustomColumn[]
   >([]);
   const [filteredConditionsComponents, setFilteredConditionsComponents] =
@@ -145,15 +141,8 @@ export function ResourceComponent({
       ).then((res) => {
         const customCols = res
           .filter(Boolean)
-          ?.filter((col) => !col?.conditionComponent)
-          ?.filter((col) => !col?.fullWidth);
+          ?.filter((col) => !col?.conditionComponent);
         setFilteredStatusColumns(customCols as CustomColumn[]);
-
-        const customColsLong = res
-          .filter(Boolean)
-          ?.filter((col) => !col?.conditionComponent)
-          ?.filter((col) => col?.fullWidth && col?.fullWidth === true);
-        setFilteredStatusColumnsLong(customColsLong as CustomColumn[]);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -277,7 +266,6 @@ export function ResourceComponent({
                       customStatus={customStatus}
                       customStatusColumns={customStatusColumns}
                       filteredStatusColumns={filteredStatusColumns}
-                      filteredStatusColumnsLong={filteredStatusColumnsLong}
                       statusConditions={statusConditions}
                       customConditionsComponents={customConditionsComponents}
                       filteredConditionsComponents={

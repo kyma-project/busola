@@ -21,7 +21,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 
 import { useUploadResources } from 'resources/Namespaces/YamlUpload/useUploadResources';
 
-import { FlexBoxDirection } from '@ui5/webcomponents-react/dist/enums/FlexBoxDirection';
+import { FlexBoxDirection } from '@ui5/webcomponents-react/enums/FlexBoxDirection';
 import { namespacesAtom } from 'state/namespacesAtom';
 import { useAtomValue } from 'jotai';
 import { HintButton } from 'shared/components/HintButton/HintButton';
@@ -38,8 +38,8 @@ import {
   OPERATION_STATE_SOME_FAILED,
   OPERATION_STATE_SUCCEEDED,
 } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
-import { ButtonClickEventDetail } from '@ui5/webcomponents/dist/Button';
-import { PopupBeforeCloseEventDetail } from '@ui5/webcomponents/dist/Popup';
+import { ButtonClickEventDetail } from '@ui5/webcomponents/dist/Button.js';
+import { PopupBeforeCloseEventDetail } from '@ui5/webcomponents/dist/Popup.js';
 
 const DEFAULT_SOURCE_URL =
   'https://kyma-project.github.io/community-modules/all-modules.yaml';
@@ -59,8 +59,8 @@ export const AddSourceYamls = () => {
   const [resourcesToApply, setResourcesToApply] = useState<{ value: any }[]>(
     [],
   );
-  const [templatesNamespace, setTemplatesNamespace] = useState<string>(
-    DEFAULT_K8S_NAMESPACE,
+  const [selectedNamespace, setSelectedNamespace] = useState<string | null>(
+    null,
   );
   const [showDescription, setShowDescription] = useState(false);
 
@@ -95,21 +95,13 @@ export const AddSourceYamls = () => {
     resourcesToApply,
     setResourcesToApply,
     setLastOperationState,
-    templatesNamespace,
+    selectedNamespace ?? DEFAULT_K8S_NAMESPACE,
   );
 
+  // Just record the choice; the effect below re-applies it on every run so a
+  // ModuleTemplates refresh can't revert it to the YAML's namespace.
   const applyNamespace = (namespace: string) => {
-    const namespacedResources = resourcesToApply.map((resource) => ({
-      ...resource,
-      value: {
-        ...resource.value,
-        metadata: { ...resource.value.metadata, namespace: namespace },
-      },
-    }));
-
-    setTemplatesNamespace(namespace);
-
-    setResourcesToApply(namespacedResources);
+    setSelectedNamespace(namespace || null);
   };
 
   useEffect(() => {
@@ -130,23 +122,34 @@ export const AddSourceYamls = () => {
   }, [lastOperationState]);
 
   useEffect(() => {
-    if (existingModuleTemplates.length > 0) {
-      setResourcesToApply(
-        fetchedResources.filter(
-          (resource: any) =>
-            !existingModuleTemplates.some(
-              (mt: any) =>
-                mt.metadata.name === resource.value.metadata.name &&
-                mt.spec.version === resource.value.spec.version,
-            ),
-        ),
-      );
+    const withSelectedNamespace = (resource: any) =>
+      selectedNamespace
+        ? {
+            ...resource,
+            value: {
+              ...resource.value,
+              metadata: {
+                ...resource.value.metadata,
+                namespace: selectedNamespace,
+              },
+            },
+          }
+        : resource;
 
-      return;
-    }
+    const templatesToApply =
+      existingModuleTemplates.length > 0
+        ? fetchedResources.filter(
+            (resource: any) =>
+              !existingModuleTemplates.some(
+                (mt: any) =>
+                  mt.metadata.name === resource.value.metadata.name &&
+                  mt.spec.version === resource.value.spec.version,
+              ),
+          )
+        : fetchedResources;
 
-    setResourcesToApply(fetchedResources);
-  }, [fetchedResources, existingModuleTemplates]);
+    setResourcesToApply(templatesToApply.map(withSelectedNamespace));
+  }, [fetchedResources, existingModuleTemplates, selectedNamespace]);
 
   const handleApplySourceYAMLs = async () => {
     if (error) {

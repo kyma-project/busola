@@ -5,7 +5,7 @@ import {
 import { User, UserManager } from 'oidc-client-ts';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
 import { clusterAtom } from './clusterAtom';
 import { getPreviousPath } from './useAfterInitHook';
@@ -15,8 +15,18 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { attachSilentRenewHandlers } from './silentRenewSetup';
 import { useReauthenticate } from './useReauthenticate';
 import { renewingAtom } from './renewingAtom';
-import { isOwnOidcCallback } from './utils/isOwnOidcCallback';
-import { ssoDataAtom } from './ssoDataAtom';
+import {
+  decideOidcCallbackAction,
+  OidcErrorParams,
+  reportStoppedLogin,
+} from './utils/oidcCallbackDecision';
+import {
+  isAuthRedirectLoop,
+  registerAuthRedirect,
+  resetAuthRedirectGuard,
+} from './utils/authRedirectLoopGuard';
+import { useNotifyLoginFailure } from './useLoginFailureNotification';
+import { ssoDataAtom, ssoLoginStoppedAtom } from './ssoDataAtom';
 import { configFeaturesNames } from './types';
 import { useFeature } from 'hooks/useFeature';
 import { configurationAtom } from './configuration/configurationAtom';
@@ -47,6 +57,8 @@ type handleLoginProps = {
   setAuth: (_auth: AuthDataState) => void;
   onAfterLogin: () => void;
   onError: (error: Error) => void;
+  // Called when the login failed and we don't want to retry automatically.
+  onLoginFailed: (failure?: OidcErrorParams) => void;
   onRenewingChange?: (renewing: boolean) => void;
   // Returns false if a newer cluster has taken over; caller should abort.
   isCurrent?: () => boolean;
@@ -106,6 +118,7 @@ async function handleLogin({
   setAuth,
   onAfterLogin,
   onError,
+  onLoginFailed,
   onRenewingChange,
   isCurrent,
 }: handleLoginProps): Promise<HandleLoginResult | null> {
@@ -121,12 +134,16 @@ async function handleLogin({
     if (storedUser && !storedUser.expired) {
       user = storedUser;
     } else {
-      const hasCode = new URLSearchParams(window.location.search).has('code');
-      if (hasCode && !isOwnOidcCallback(oidcParams.clientId)) {
+      const decision = decideOidcCallbackAction(oidcParams.clientId);
+      if (decision.action === 'foreign-callback') {
         // Callback belongs to another manager (e.g. SSO); let it run.
         return null;
       }
-      if (!hasCode) {
+      if (reportStoppedLogin(decision, 'Cluster', onLoginFailed)) {
+        return null;
+      }
+      if (decision.action === 'redirect') {
+        registerAuthRedirect();
         await userManager.clearStaleState();
         await userManager.signinRedirect();
         return null;
@@ -161,10 +178,12 @@ async function handleLogin({
       // mismatch' means stale storage from a prior issuer. Both recover
       // by starting fresh.
       if (
-        e.message.includes('No state in response') ||
-        e.message.includes('authority mismatch')
+        (e.message.includes('No state in response') ||
+          e.message.includes('authority mismatch')) &&
+        !isAuthRedirectLoop()
       ) {
         try {
+          registerAuthRedirect();
           await userManager.clearStaleState();
           await userManager.signinRedirect();
         } catch (redirectError) {
@@ -176,7 +195,8 @@ async function handleLogin({
           );
         }
       } else {
-        alert('Login error: ' + e);
+        console.error('Cluster login failed:', e);
+        onLoginFailed({ error: e.message });
       }
     } else {
       throw e;
@@ -187,7 +207,7 @@ async function handleLogin({
 
 export function useAuthHandler() {
   const notification = useNotification();
-  const cluster = useAtomValue(clusterAtom);
+  const [cluster, setCluster] = useAtom(clusterAtom);
   const setAuth = useSetAtom(authDataAtom);
   const navigate = useNavigate();
   const setLastFetched = useSetAtom(openapiLastFetchedAtom);
@@ -200,13 +220,16 @@ export function useAuthHandler() {
   const loginGenRef = useRef(0);
   const setRenewing = useSetAtom(renewingAtom);
   const reauth = useReauthenticate({ notifyError: notification.notifyError });
+  const notifyLoginFailure = useNotifyLoginFailure();
   const ssoData = useAtomValue(ssoDataAtom);
+  // If SSO login failed for good the app should not stay stuck on the spinner.
+  const ssoLoginStopped = useAtomValue(ssoLoginStoppedAtom);
   const isSSOEnabled = useFeature(configFeaturesNames.SSO_LOGIN)?.isEnabled;
   const configuration = useAtomValue(configurationAtom);
 
   useEffect(() => {
     if (!configuration?.features) return;
-    if (!ssoData && isSSOEnabled) return;
+    if (!ssoData && isSSOEnabled && !ssoLoginStopped) return;
     if (cleanupRef.current) {
       // Detach the previous cluster's silent-renew listeners before switching.
       cleanupRef.current();
@@ -217,6 +240,7 @@ export function useAuthHandler() {
     const gen = ++loginGenRef.current;
 
     if (!cluster) {
+      prevClusterRef.current = null;
       setAuth(null);
       setIsLoading(false);
     } else {
@@ -268,11 +292,27 @@ export function useAuthHandler() {
           reauth(userManagerRef.current, error);
         };
 
+        const onLoginFailed = (failure?: OidcErrorParams) => {
+          if (gen !== loginGenRef.current) return;
+          setIsLoading(false);
+          setAuth(null);
+          // Clear the cluster so picking it again (or Retry) starts a new login.
+          setCluster(null);
+          notifyLoginFailure(failure, {
+            onRetry: () => {
+              resetAuthRedirectGuard();
+              navigate(`/cluster/${encodeURIComponent(cluster.name)}`);
+            },
+          });
+          navigate('/clusters');
+        };
+
         handleLogin({
           userCredentials: userCredentials as KubeconfigOIDCAuth,
           setAuth,
           onAfterLogin,
           onError,
+          onLoginFailed,
           onRenewingChange: setRenewing,
           isCurrent: () => gen === loginGenRef.current,
         }).then((result) => {
@@ -291,7 +331,7 @@ export function useAuthHandler() {
     setLastFetched(null);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster, ssoData, isSSOEnabled, configuration]);
+  }, [cluster, ssoData, ssoLoginStopped, isSSOEnabled, configuration]);
 
   useEffect(() => {
     return () => {

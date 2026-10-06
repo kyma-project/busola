@@ -1,6 +1,6 @@
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
@@ -13,10 +13,11 @@ import { useUrl } from 'hooks/useUrl';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
+import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { extractApiGroupVersion } from 'resources/Roles/helpers';
 import { useNavigate } from 'react-router';
 import { FormEvent, useMemo } from 'react';
-import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
+import type FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout.js';
 import { ErrorDetails } from 'shared/ResourceForm/components/ErrorDetails';
 
 export type SkinCreateFn = () => boolean;
@@ -36,7 +37,9 @@ export type useCreateResourcesProps = {
   afterCreatedCustomMessage?: string;
 };
 
-export type CreateResourceFn = (e?: FormEvent) => void;
+export type CreateResourceFn = (
+  e?: FormEvent,
+) => Promise<boolean | null | undefined>;
 export function useCreateResource({
   singularName,
   pluralKind,
@@ -60,6 +63,7 @@ export function useCreateResource({
   const { scopedUrl } = useUrl();
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
   const activeNamespace = useAtomValue(activeNamespaceIdAtom);
+  const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
 
   const { nextQuery, nextLayout } = usePrepareLayout(layoutNumber);
 
@@ -83,6 +87,7 @@ export function useCreateResource({
         ),
     });
     updateInitialResource(resource);
+    setIsResourceEdited({ isEdited: false });
 
     if (!isEdit || resetLayout) {
       if (resetLayout) {

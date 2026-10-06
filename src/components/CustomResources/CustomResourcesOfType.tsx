@@ -1,4 +1,5 @@
 import pluralize from 'pluralize';
+import { Form, FormGroup, FormItem, Label } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -76,15 +77,25 @@ export default function CustomResourcesOfType({
           />
         }
       >
-        <DynamicPageComponent.Column
-          title={t('custom-resource-definitions.name_singular')}
-        >
-          <Link
-            url={clusterUrl(`customresourcedefinitions/${crd?.metadata?.name}`)}
-          >
-            {crd?.metadata?.name}
-          </Link>
-        </DynamicPageComponent.Column>
+        <Form layout="S1 M1 L1 XL1">
+          <FormGroup>
+            <FormItem
+              labelContent={
+                <Label showColon>
+                  {t('custom-resource-definitions.name_singular')}
+                </Label>
+              }
+            >
+              <Link
+                url={clusterUrl(
+                  `customresourcedefinitions/${crd?.metadata?.name}`,
+                )}
+              >
+                {crd?.metadata?.name}
+              </Link>
+            </FormItem>
+          </FormGroup>
+        </Form>
       </DynamicPageComponent>
       {createPortal(<YamlUploadDialog />, document.body)}
     </>

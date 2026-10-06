@@ -5,6 +5,8 @@ export type ClusterInfo = {
   provider?: string;
   natGatewayIps?: string[];
   globalAccountID?: string;
+  region?: string;
+  seedRegion?: string;
   subaccountID?: string;
   [key: string]: unknown;
 };

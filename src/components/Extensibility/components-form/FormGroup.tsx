@@ -1,5 +1,8 @@
 import { ResourceForm } from 'shared/ResourceForm';
-import { useGetTranslation } from 'components/Extensibility/helpers';
+import {
+  checkRequiredType,
+  useGetTranslation,
+} from 'components/Extensibility/helpers';
 import { SomeSchema, StoreKeys } from '@ui-schema/ui-schema';
 import './FormGroup.scss';
 
@@ -27,7 +30,14 @@ export function FormGroup({
   const gridTemplateColumns = `repeat(${columns}, 1fr)`;
 
   const defaultOpen = schema.get('defaultExpanded') ?? false;
-  const schemaRequired = schema.get('required') ?? required;
+  const schemaReq = schema.get('required');
+  let schemaRequired = required;
+  schemaRequired = checkRequiredType(
+    schemaReq,
+    required,
+    props?.parentSchema,
+    storeKeys,
+  );
   const tooltipContent = schema.get('description');
 
   return (

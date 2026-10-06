@@ -187,6 +187,59 @@ describe('Check how configs are merged', () => {
   });
 });
 
+describe('ALLOW_PRIVATE_IPS env override', () => {
+  it('enables ALLOW_PRIVATE_IPS when the env var is "true", even if env config sets it false', () => {
+    // GIVEN
+    vi.stubEnv('ENVIRONMENT', customEnv);
+    vi.stubEnv('ALLOW_PRIVATE_IPS', 'true');
+    createConfig(testConfigPaths.ENV_CONFIG_PATH, {
+      ALLOW_PRIVATE_IPS: { isEnabled: false },
+    });
+
+    //WHEN
+    const config = loadConfig('/');
+
+    //THEN
+    expect(config?.features?.ALLOW_PRIVATE_IPS?.isEnabled).toBe(true);
+  });
+
+  it('adds the ALLOW_PRIVATE_IPS feature when the env var is "true" and no config defines it', () => {
+    // GIVEN
+    vi.stubEnv('ALLOW_PRIVATE_IPS', 'true');
+
+    //WHEN
+    const config = loadConfig('/');
+
+    //THEN
+    expect(config?.features?.ALLOW_PRIVATE_IPS?.isEnabled).toBe(true);
+  });
+
+  it('does not enable ALLOW_PRIVATE_IPS when the env var is unset', () => {
+    // GIVEN
+    vi.stubEnv('ENVIRONMENT', customEnv);
+    createConfig(testConfigPaths.ENV_CONFIG_PATH, {
+      ALLOW_PRIVATE_IPS: { isEnabled: false },
+    });
+
+    //WHEN
+    const config = loadConfig('/');
+
+    //THEN
+    expect(config?.features?.ALLOW_PRIVATE_IPS?.isEnabled).toBe(false);
+  });
+
+  it('does not enable ALLOW_PRIVATE_IPS for values other than "true"', () => {
+    // GIVEN
+    vi.stubEnv('ALLOW_PRIVATE_IPS', '1');
+
+    //WHEN
+    const config = loadConfig('/');
+
+    //THEN
+    expect(config?.features?.ALLOW_PRIVATE_IPS?.isEnabled).toBeUndefined();
+  });
+});
+
 describe('Check error handling', () => {
   it('default config is not available', () => {
     //GIVEN

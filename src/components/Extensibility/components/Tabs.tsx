@@ -29,7 +29,6 @@ export function Tabs({ value, structure, schema, ...props }: TabsProps) {
                   structure={def}
                   schema={schema}
                   inlineRenderer={InlineWidget}
-                  inlineContext={true}
                   {...props}
                 />
               ))}

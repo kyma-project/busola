@@ -76,7 +76,7 @@ export const ColumnWrapper = () => {
   const { data: crd } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${crdResourceName}`,
     {
-      pollingInterval: null,
+      pollingInterval: 0,
       skip: !crdResourceName,
     },
   );
@@ -94,9 +94,10 @@ export const ColumnWrapper = () => {
         <CustomResource
           params={{
             customResourceDefinitionName:
-              layoutState?.endColumn?.resourceType ?? crdName,
-            resourceName: layoutState?.endColumn?.resourceName ?? crName,
-            resourceNamespace: layoutState?.endColumn?.namespaceId ?? namespace,
+              layoutState?.endColumn?.resourceType ?? crdName ?? '',
+            resourceName: layoutState?.endColumn?.resourceName ?? crName ?? '',
+            resourceNamespace:
+              layoutState?.endColumn?.namespaceId ?? namespace ?? '',
           }}
         />
       );
@@ -182,9 +183,10 @@ export const ColumnWrapper = () => {
       <CustomResource
         params={{
           customResourceDefinitionName:
-            layoutState?.endColumn?.resourceType ?? crdName,
+            layoutState?.endColumn?.resourceType ?? crdName ?? '',
           resourceName: layoutState?.endColumn?.resourceName ?? crName,
-          resourceNamespace: layoutState?.endColumn?.namespaceId ?? namespace,
+          resourceNamespace:
+            layoutState?.endColumn?.namespaceId ?? namespace ?? undefined,
         }}
       />
     );

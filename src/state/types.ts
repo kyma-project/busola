@@ -25,6 +25,15 @@ export interface KymaCompanionFeature extends ConfigFeature {
   jouleConfig?: KymaCompanionJouleConfig;
 }
 
+export interface TerminalFeature extends ConfigFeature {
+  config?: {
+    image?: string;
+    // Deployment's hard request-duration cap (e.g. Cloud Run ~900s); when set,
+    // reconnect just before it. Unset disables proactive reconnect.
+    maxSessionDurationMs?: number;
+  };
+}
+
 export type ConfigFeaturesNames =
   (typeof configFeaturesNames)[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {
@@ -44,6 +53,8 @@ export const configFeaturesNames = {
   RESOURCE_VALIDATION: 'RESOURCE_VALIDATION',
   CLUSTER_VALIDATION: 'CLUSTER_VALIDATION',
   FEEDBACK: 'FEEDBACK',
+  CLOUD_SERVICE_SURVEY: 'CLOUD_SERVICE_SURVEY',
+  KYMA_SURVEY: 'KYMA_SURVEY',
   SNOW: 'SNOW',
   SSO_LOGIN: 'SSO_LOGIN',
   COMMUNITY_MODULES: 'COMMUNITY_MODULES',

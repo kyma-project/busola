@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
 
 describe('GPU counter tests', () => {
@@ -23,7 +24,7 @@ describe('GPU counter tests', () => {
   });
 });
 
-function fixGPUNode(gpuCount) {
+function fixGPUNode(gpuCount: number) {
   return {
     status: {
       allocatable: {

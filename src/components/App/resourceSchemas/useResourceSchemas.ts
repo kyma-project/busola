@@ -21,6 +21,7 @@ import { ssoDataAtom, useIsSSOEnabled } from 'state/ssoDataAtom';
 import { renewingAtom } from 'state/renewingAtom';
 import { useReauthenticate } from 'state/useReauthenticate';
 import { authUserManagerRef } from 'state/authDataAtom';
+import { resetAuthRedirectGuard } from 'state/utils/authRedirectLoopGuard';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
@@ -45,6 +46,10 @@ export const useResourceSchemas = () => {
   const [lastFetched, setLastFetched] = useAtom(openapiLastFetchedAtom);
 
   useEffect(() => {
+    // A successful schema fetch means the session works, so clear the loop count.
+    if (openApi?.state === 'hasData' && authData) {
+      resetAuthRedirectGuard();
+    }
     if (openApi?.state !== 'hasError' || !authData) {
       reauthTriggeredRef.current = false;
     }
@@ -80,14 +85,16 @@ export const useResourceSchemas = () => {
   ]);
 
   useEffect(() => {
-    const isOngoingClusterChange =
-      !currentCluster || !activeClusterName || !authData;
+    const isNavigatingAway = !currentCluster || !activeClusterName;
 
-    if (isOngoingClusterChange) {
+    if (isNavigatingAway) {
       setSchemasState({ areSchemasComputed: false, schemasError: null });
       setLastFetched(null);
       return;
     }
+
+    // authData is briefly null during a token refresh, skip so we don't re-resolve the whole OpenAPI
+    if (!authData) return;
 
     // authData updates a few times during cluster load. The below line cancels repeated requests after the first fetch
     if (lastFetched === activeClusterName) return;

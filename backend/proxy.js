@@ -2,7 +2,12 @@
 import { request as httpsRequest } from 'https';
 import { URL } from 'url';
 import { pipeline } from 'stream/promises';
-import { isPrivateAddressCached, isValidHost } from './utils/network-utils.js';
+import {
+  isValidHost,
+  PrivateIPUsedError,
+  resolveOrBlockPrivateIpAddress,
+} from './utils/network-utils.js';
+import { proxyAgent } from './utils/https-agent.js';
 
 async function proxyHandler(req, res) {
   const targetUrl = req.query.url;
@@ -21,8 +26,18 @@ async function proxyHandler(req, res) {
       return res.status(403).send('Request Forbidden');
     }
 
-    if (await isPrivateAddressCached(parsedUrl.hostname)) {
-      return res.status(403).send('Request Forbidden');
+    const ALLOWED_REQUEST_HEADERS = new Set([
+      'accept',
+      'accept-encoding',
+      'accept-language',
+      'content-type',
+      'content-length',
+    ]);
+    const forwardedHeaders = { host: parsedUrl.host };
+    for (const [key, value] of Object.entries(req.headers)) {
+      if (ALLOWED_REQUEST_HEADERS.has(key.toLowerCase())) {
+        forwardedHeaders[key] = value;
+      }
     }
 
     const options = {
@@ -30,8 +45,10 @@ async function proxyHandler(req, res) {
       port: parsedUrl.port || 443,
       path: parsedUrl.pathname + parsedUrl.search,
       method: req.method,
-      headers: { ...req.headers, host: parsedUrl.host },
+      headers: forwardedHeaders,
       timeout: 30000,
+      agent: proxyAgent,
+      lookup: resolveOrBlockPrivateIpAddress,
     };
 
     await new Promise((resolve, reject) => {
@@ -61,8 +78,13 @@ async function proxyHandler(req, res) {
     });
   } catch (err) {
     req.log.error({ err }, 'Proxy error');
+    if (err instanceof PrivateIPUsedError) {
+      return res.status(403).send('Request Forbidden');
+    }
     if (!res.headersSent) {
-      res.status(502).send('An error occurred while making the proxy request.');
+      return res
+        .status(502)
+        .send('An error occurred while making the proxy request.');
     }
   }
 }

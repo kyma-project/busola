@@ -14,7 +14,7 @@ export const usePopulateWithNamespace = () => {
   }) => {
     const currentModuleTemplateData = cloneDeep(resource);
     const { group, version } = extractApiGroupVersion(
-      currentModuleTemplateData?.apiVersion,
+      currentModuleTemplateData?.apiVersion ?? '',
     );
 
     let isNamespaced;
@@ -22,7 +22,7 @@ export const usePopulateWithNamespace = () => {
       isNamespaced = await getScope(
         group,
         version,
-        currentModuleTemplateData?.kind,
+        currentModuleTemplateData?.kind ?? '',
       );
     } catch (e) {
       if (e instanceof HttpError && e.code === 404) {

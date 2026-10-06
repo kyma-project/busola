@@ -163,7 +163,12 @@ export default function NamespaceCreate({
 
     if (!rejectedRequest) {
       onCompleted(
-        `Namespace ${namespace.metadata.name} ${isEdit ? 'edited' : 'created'}`,
+        t(
+          isEdit
+            ? 'common.create-form.messages.patch-success'
+            : 'common.create-form.messages.create-success',
+          { resourceType: t('namespaces.name_singular') },
+        ),
       );
     } else {
       onError(

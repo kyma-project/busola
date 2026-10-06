@@ -4,7 +4,6 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   Avatar,
   ShellBar,
-  ShellBarItem,
   type ShellBarDomRef,
 } from '@ui5/webcomponents-react';
 
@@ -37,7 +36,6 @@ export function Header() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isGetHelpOpen, setIsGetHelpOpen] = useState(false);
   const [shellbarWidth, setShellbarWidth] = useState(window.innerWidth);
   const isLargeScreen = shellbarWidth > SCREEN_SIZE_BREAKPOINT_M;
   const shellbarRef = useRef<ShellBarDomRef>(null);
@@ -132,21 +130,12 @@ export function Header() {
         ref={shellbarRef}
       >
         <SnowFeature />
-        <FeedbackPopover />
+        <FeedbackPopover shellbarRef={shellbarRef} />
         <AIAssistantFeature />
         <TerminalFeature />
-        <ShellBarItem
-          onClick={() => setIsGetHelpOpen(true)}
-          id="openGetHelpMenu"
-          icon="sys-help"
-          text={t('navigation.menu.get-help')}
-        />
+        <GetHelpMenu shellbarRef={shellbarRef} />
       </ShellBar>
       <HeaderMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-      <GetHelpMenu
-        isMenuOpen={isGetHelpOpen}
-        onClose={() => setIsGetHelpOpen(false)}
-      />
     </>
   );
 }

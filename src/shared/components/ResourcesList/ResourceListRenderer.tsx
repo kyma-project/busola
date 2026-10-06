@@ -30,7 +30,7 @@ import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
 import DeleteResourceModal from '../DeleteResourceModal/DeleteResourceModal';
 import { ResourceListRendererProps } from './types';
 import { K8sResource } from 'types';
-import { LinkClickEventDetail } from '@ui5/webcomponents/dist/Link';
+import { LinkClickEventDetail } from '@ui5/webcomponents/dist/Link.js';
 
 export function ResourceListRenderer({
   resourceUrl,
@@ -68,6 +68,7 @@ export function ResourceListRenderer({
     name: nameLocaleSort,
     time: timeSort,
   },
+  initialSort,
   searchSettings,
   isCompact,
   parentCrdName,
@@ -78,6 +79,7 @@ export function ResourceListRenderer({
   accessibleName,
   createFormRef = null,
   noRedirectAfterDelete = false,
+  afterDelete,
 }: ResourceListRendererProps) {
   useVersionWarning({
     resourceUrl,
@@ -99,6 +101,7 @@ export function ResourceListRenderer({
     layoutNumber,
     redirectBack: false,
     parentCrdName,
+    afterDelete,
   });
 
   const [activeResource, setActiveResource] = useState<Record<
@@ -464,6 +467,7 @@ export function ResourceListRenderer({
           extraHeaderContent={extraHeaderContent}
           testid={testid}
           sortBy={sortBy}
+          initialSort={initialSort}
           searchSettings={{
             ...searchSettings,
             textSearchProperties: textSearchProperties(),

@@ -10,7 +10,7 @@ context('Test Cluster Overview', () => {
   });
 
   it('Check Cluster Overview details', () => {
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
 
     cy.contains('ui5-title', 'Cluster Overview').should('be.visible');
 
@@ -60,14 +60,15 @@ context('Test Cluster Overview', () => {
       .should('be.visible');
 
     // remove injection
-    cy.getLeftNav().contains('Back To Cluster Overview').click({ force: true });
+    cy.goToClusterOverview();
+
     cy.navigateTo('Configuration', 'Extensions');
     cy.deleteFromGenericList('Extension', 'hpatest');
 
     cy.reload();
 
     // test injected statistical card does not exist
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
 
     cy.contains('.ui5-card-header-title', 'MyTitle').should('not.exist');
 

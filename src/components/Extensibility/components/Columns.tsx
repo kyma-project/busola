@@ -1,28 +1,24 @@
+import { Form, FormGroup } from '@ui5/webcomponents-react';
 import { Widget } from './Widget';
-import { isNil } from 'lodash';
-
-import './InlineDisplay.scss';
 
 interface ColumnsProps {
   structure: any;
-  inlineContext?: boolean;
   [key: string]: any;
 }
 
-export function Columns({ structure, inlineContext, ...props }: ColumnsProps) {
-  const inline = isNil(structure.inline) ? inlineContext : structure.inline;
-
-  const classNames = inline ? 'inline-display' : 'panel-grid';
+export function Columns({ structure, ...props }: ColumnsProps) {
+  const allFormGroups = (structure.children || []).every(
+    (child: any) => child.widget === 'FormGroup',
+  );
+  const layout = allFormGroups ? 'S1 M2 L2 XL2' : 'S1 M1 L2 XL2';
 
   return (
-    <div className={classNames} data-testid="extensibility-columns">
+    <Form layout={layout} data-testid="extensibility-columns">
       {(structure.children || []).map((child: any) => (
-        <Widget
-          structure={child}
-          key={`column-${child.path || child.name}`}
-          {...props}
-        />
+        <FormGroup key={`form-group-${child.path || child.name}`}>
+          <Widget structure={child} {...props} />
+        </FormGroup>
       ))}
-    </div>
+    </Form>
   );
 }

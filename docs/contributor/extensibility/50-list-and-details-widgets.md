@@ -22,6 +22,8 @@ You can distinguish the following widget types:
   - [`Columns`](#columns)
   - [`EventList`](#eventlist)
   - [`FeatureCard`](#featuredcard)
+  - [`FormGroup`](#formgroup)
+  - [`Markdown`](#markdown)
   - [`Panel`](#panel)
   - [`Plain`](#plain)
   - [`Section`](#section)
@@ -557,6 +559,61 @@ injections: |-
 ```
 
 <img src="./assets/display-widgets/FeaturedCard.png" alt="Example of a FeaturedCard widget">
+
+### `FormGroup`
+
+The `FormGroup` widget renders an object's fields using the SAP UI5 Form layout, displaying each child as a labeled form item (label above, value below). It is designed for structured objects — such as keystore configurations — where the label–value pair layout improves readability compared to a plain panel.
+
+These are the available `FormGroup` widget parameters:
+
+| Parameter       | Required | Type                                           | Description                                                                                                                |
+| --------------- | -------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **name**        | **Yes**  | string                                         | The group heading. Supports translation keys.                                                                              |
+| **children**    | No       | []objects                                      | Widgets to render as labeled form items inside the group.                                                                  |
+| **description** | No       | string or [JSONata](100-jsonata.md) expression | Additional information displayed in a tooltip when clicking the hint icon next to the group heading. It can contain links. |
+
+See the following example:
+
+```yaml
+- widget: Columns
+  inline: false
+  visibility: $exists(spec.keystores.jks)
+  children:
+    - name: JKS
+      description: Java KeyStore (JKS) is a repository of security, authorization or public key certificates.
+      widget: FormGroup
+      children:
+        - name: spec.keystores.create
+          source: spec.keystores.jks.create
+    - name: spec.keystores.passwordSecretRef
+      widget: FormGroup
+      visibility: $exists(spec.keystores.jks.passwordSecretRef)
+      children:
+        - name: Password Secret Ref
+          source: spec.keystores.jks.passwordSecretRef.name
+```
+
+### `Markdown`
+
+The `Markdown` widget renders a string value as formatted Markdown. It is useful for displaying human-readable, richly formatted text stored as a plain string (for example, a `ConfigMap` **data** entry), instead of showing it in a read-only code editor.
+
+The Markdown source is sanitized: any embedded raw HTML is rendered as escaped text and is never executed.
+
+These are the available `Markdown` widget parameters:
+
+| Parameter       | Required | Type   | Description                                                                                                                                                                                                       |
+| --------------- | -------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **placeholder** | No       | string | Changes the default empty text placeholder `-` with a custom string. If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used. |
+
+See the following example:
+
+```yaml
+- widget: Panel
+  name: Notes
+  children:
+    - source: spec.description
+      widget: Markdown
+```
 
 ### `Panel`
 

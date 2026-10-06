@@ -1,12 +1,14 @@
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { showTerminalAtom } from 'state/showTerminalAtom';
 import { terminalSessionAtom } from 'state/terminalSessionAtom';
+import { clusterAtom } from 'state/clusterAtom';
 import { useAtom, useAtomValue } from 'jotai';
-import { themeAtom } from 'state/settings/themeAtom';
+import { attachThemeLoaded, detachThemeLoaded } from '@ui5/webcomponents-base';
 import { getXtermTheme } from './terminalThemes';
 import { useTerminalSession } from './useTerminalSession';
 import './BusolaTerminal.scss';
@@ -23,18 +25,29 @@ export function BusolaTerminal({
   const termDOM = useRef<HTMLDivElement>(null);
   const termRef = useRef<Terminal | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
+  const location = useLocation();
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
   const sessionState = useAtomValue(terminalSessionAtom);
   // Ref so the cleanup effect reads the current podName, not the mount-time value.
   const podNameRef = useRef<string | null>(null);
-  const theme = useAtomValue(themeAtom);
   const { connect, disconnect } = useTerminalSession();
+  const cluster = useAtomValue(clusterAtom);
+  const openedOnClusterRef = useRef(cluster?.name);
+  const isOnClustersPage = location.pathname === '/clusters';
+
+  useEffect(() => {
+    if (cluster?.name !== openedOnClusterRef.current || isOnClustersPage) {
+      openedOnClusterRef.current = cluster?.name;
+      disconnect(podNameRef.current);
+      setShowTerminal((prev) => ({ ...prev, isOpen: false }));
+    }
+  }, [cluster?.name, setShowTerminal, disconnect, isOnClustersPage]);
 
   podNameRef.current = sessionState.podName;
 
   useEffect(() => {
     if (!termDOM?.current) return;
-    const term = new Terminal({ theme: getXtermTheme(theme) });
+    const term = new Terminal({ theme: getXtermTheme() });
     const fitAddon = new FitAddon();
     termRef.current = term;
     fitAddonRef.current = fitAddon;
@@ -54,7 +67,7 @@ export function BusolaTerminal({
           ?.querySelector<HTMLElement>('.terminal-card__header')?.offsetHeight;
         const cellHeight = xtermRow?.offsetHeight ?? 20;
         const headerHeight = cardHeader ?? 60;
-        const contentPadding = 40; // 1rem top + bottom from padding + rounded up for a better experience.
+        const contentPadding = 40; // margin (0.5rem+1rem) + padding (2×0.5rem)
         onMinHeightComputed(
           Math.ceil(headerHeight + contentPadding + cellHeight),
         );
@@ -73,20 +86,18 @@ export function BusolaTerminal({
   }, []);
 
   useEffect(() => {
-    const applyTheme = () => {
+    const applyTerminalTheme = () => {
       if (termRef.current) {
-        termRef.current.options.theme = getXtermTheme(theme);
+        termRef.current.options.theme = getXtermTheme();
       }
     };
 
-    applyTheme();
-
-    if (theme === 'light_dark') {
-      const mq = window.matchMedia('(prefers-color-scheme: dark)');
-      mq.addEventListener('change', applyTheme);
-      return () => mq.removeEventListener('change', applyTheme);
-    }
-  }, [theme]);
+    // UI5 applies the theme's CSS variables to :root asynchronously, so the
+    // resolved colors are only available after this event fires. Re-read them
+    // here to keep the terminal in sync on every theme change.
+    attachThemeLoaded(applyTerminalTheme);
+    return () => detachThemeLoaded(applyTerminalTheme);
+  }, []);
 
   const handleClose = () => {
     disconnect(podNameRef.current);
@@ -114,9 +125,8 @@ export function BusolaTerminal({
       statusLabel = t('terminal.status.provisioning');
       break;
     case 'error':
-      statusLabel = t('terminal.status.error', {
-        error: sessionState.errorMessage,
-      });
+      console.warn('Terminal state is in error:', sessionState.errorMessage);
+      statusLabel = t('terminal.status.error');
       break;
     case 'reconnecting':
       statusLabel = t('terminal.status.reconnecting');

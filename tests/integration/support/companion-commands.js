@@ -7,7 +7,7 @@ import {
 
 Cypress.Commands.add('openCompanion', () => {
   cy.get('ui5-shellbar')
-    .find('ui5-toggle-button[icon="da"]')
+    .find('ui5-shellbar-item[icon="da"]')
     .should('be.visible')
     .click();
 });

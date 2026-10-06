@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { FormItem, Text, Label } from '@ui5/webcomponents-react';
+import { FormItem, Label, Text } from '@ui5/webcomponents-react';
 import { Tokens } from 'shared/components/Tokens';
 import { useGetClusterInfo } from './useGetClusterInfo';
 
@@ -31,6 +31,24 @@ export const ClusterInfoFields = ({
   return (
     <>
       <GardenerProvider provider={clusterInfo?.provider} />
+      {!!clusterInfo?.region && (
+        <FormItem
+          labelContent={
+            <Label showColon>{t('clusters.overview.region')}</Label>
+          }
+        >
+          <Text>{clusterInfo?.region}</Text>
+        </FormItem>
+      )}
+      {!!clusterInfo?.seedRegion && (
+        <FormItem
+          labelContent={
+            <Label showColon>{t('clusters.overview.seed-region')}</Label>
+          }
+        >
+          <Text>{clusterInfo?.seedRegion}</Text>
+        </FormItem>
+      )}
       {!!(
         kymaResourceLabels?.['kyma-project.io/global-account-id'] ||
         clusterInfo?.globalAccountID

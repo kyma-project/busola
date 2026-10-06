@@ -405,6 +405,26 @@ const pushExtToEventTypes = (extensions: any) => {
   });
 };
 
+// OpenAPI is fetched once at login, so a newly installed extension can stay invisible all session.
+// CRDs don't have this lag, so we treat an installed CRD as proof that its resource exists.
+const getCrdResourcePathIds = (crds: unknown): string[] => {
+  const items =
+    (crds as { items?: CustomResourceDefinition[] } | null)?.items ?? [];
+
+  return items.flatMap((crd) => {
+    const group = crd?.spec?.group;
+    const kind = crd?.spec?.names?.kind;
+    if (!group || !kind) return [];
+
+    const resourceNamePlural = pluralize(kind).toLowerCase();
+    return (crd?.spec?.versions ?? [])
+      .filter((version) => version?.served)
+      .map((version) =>
+        `/apis/${group}/${version.name}/${resourceNamePlural}`.toLowerCase(),
+      );
+  });
+};
+
 export const useGetExtensions = () => {
   const cluster = useAtomValue(clusterAtom);
   const auth = useAtomValue(authDataAtom);
@@ -476,6 +496,7 @@ export const useGetExtensions = () => {
   }, [crds]);
 
   useEffect(() => {
+    let cancelled = false;
     const manageExtensions = async () => {
       if (!cluster) {
         setExtensions([]);
@@ -510,6 +531,10 @@ export const useGetExtensions = () => {
         permissionSet,
       );
 
+      // the effect re-ran while we were fetching; drop this result so a stale
+      // run can't overwrite a newer one and make nav categories disappear
+      if (cancelled) return;
+
       if (!wizardConfigs || !isExtensibilityWizardEnabled) {
         setWizard([]);
       } else {
@@ -522,9 +547,13 @@ export const useGetExtensions = () => {
         setExtensions([]);
         setAllExtensions([]);
       } else {
+        const crdResourcePathIds = getCrdResourcePathIds(crds);
         const configSet = {
           configFeatures: features!,
-          openapiPathIdList,
+          // CRDs are available immediately, so use them to fill the gap until OpenAPI catches up
+          openapiPathIdList: crdResourcePathIds.length
+            ? [...openapiPathIdList, ...crdResourcePathIds]
+            : openapiPathIdList,
           permissionSet,
         };
 
@@ -579,6 +608,9 @@ export const useGetExtensions = () => {
       }
     };
     void manageExtensions();
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     cluster,
@@ -586,6 +618,7 @@ export const useGetExtensions = () => {
     permissionSet,
     namespace,
     openapiPathIdList,
+    crds,
     features,
     refreshExtenshions,
   ]);
