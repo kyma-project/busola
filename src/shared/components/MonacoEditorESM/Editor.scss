@@ -28,6 +28,8 @@
   overflow: hidden;
   flex-grow: 1;
   border: 1px solid var(--sapNeutralBackground);
+  // Monaco sets its own px width; without containment the Form grid can't shrink
+  contain: inline-size;
 
   .monaco-editor {
     textarea.inputarea {

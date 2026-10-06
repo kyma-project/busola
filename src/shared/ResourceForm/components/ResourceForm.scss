@@ -1,6 +1,8 @@
 .resource-form {
   &::part(layout) {
     padding: 0;
+    // 1fr = minmax(auto, 1fr): the widest item would set the minimum for all
+    grid-template-columns: minmax(0, 1fr);
   }
 
   // + UI5's .25rem content padding = 1rem from the edge (spec)
@@ -36,6 +38,17 @@
 
   .simple-list {
     margin: -3px 0;
+  }
+
+  // Outside a UI5 Form (dialogs): no responsive container, and fr tracks would
+  // inflate a content-sized dialog — keep stacked
+  form > ui5-form-item {
+    --ui5-form-item-layout: 1fr;
+    --ui5-form-item-label-justify: start;
+
+    &:not(.form-field__info) {
+      --ui5-form-item-label-padding: 0.625rem 0.25rem 0.3125rem 0.25rem;
+    }
   }
 
   .form-field + .resource-form__collapsible-section,
