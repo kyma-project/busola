@@ -10,7 +10,7 @@ const TERMINAL_DOCS_URL =
   'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-dashboard-terminal';
 
 const TERMINAL_BLOGPOST_URL =
-  'https://community.sap.com/t5/blogs/blogworkflowpage/blog-id/technology-blog-sap/article-id/194777';
+  'https://community.sap.com/t5/technology-blog-posts-by-sap/troubleshoot-your-cluster-directly-from-kyma-dashboard-with-terminal/ba-p/14497218';
 
 export function TerminalBanner() {
   const { t } = useTranslation();
