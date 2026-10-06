@@ -11,7 +11,12 @@ export function useCustomFormValidator() {
     const formContainer =
       formElementRef.current?.querySelector('.resource-form');
     if (formContainer) {
-      setValid(cv && validateFormElement(formContainer, true).valid);
+      if (formContainer.children.length > 0) {
+        setValid(cv && validateFormElement(formContainer, true).valid);
+      } else {
+        // Form has no visible fields (e.g. YAML mode) — validity follows cv directly
+        setValid(cv);
+      }
     }
   };
 
