@@ -1,28 +1,30 @@
-/* global  require, process, __dirname */
 import {
   handleK8sRequests,
   k8sRateLimiter,
   requireK8sCredential,
-} from './kubernetes/handler';
+} from './kubernetes/handler.js';
 // Enable after: https://github.com/kyma-project/busola/issues/5299
 // import { proxyHandler } from './proxy.js';
-import { setupJWTCheck } from './jwtCheck';
-import companionRouter from './companion/companionRouter';
-import communityRouter from './modules/communityRouter';
-import oidcDiscoveryRouter from './modules/oidcDiscoveryRouter';
-import { createSlowRequestLogger, pinoMiddleware } from './logging';
-import { serveMonaco, serveStaticApp } from './statics';
+import { setupJWTCheck } from './jwtCheck.js';
+import companionRouter from './companion/companionRouter.js';
+import communityRouter from './modules/communityRouter.js';
+import oidcDiscoveryRouter from './modules/oidcDiscoveryRouter.js';
+import { createSlowRequestLogger, pinoMiddleware } from './logging/index.js';
+import { serveMonaco, serveStaticApp } from './statics.js';
 import crypto from 'crypto';
-import config from './src/config/config';
+import config from './src/config/config.js';
 
-import { fillActiveEnvForFrontend } from './utils/active-env';
-import registerWebSocket from './src/terminal/handler';
+import { fillActiveEnvForFrontend } from './utils/active-env.js';
+import registerWebSocket from './src/terminal/handler.js';
+import express from 'express';
+import compression from 'compression';
+import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
+import https from 'https';
+import http from 'http';
 
-const express = require('express');
-const compression = require('compression');
-const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
+const __dirname = import.meta.dirname;
 
 const app = express();
 app.disable('x-powered-by');
@@ -96,14 +98,12 @@ if (
   process.env.BUSOLA_SSL_KEY_FILE !== '' &&
   process.env.BUSOLA_SSL_CRT_FILE !== ''
 ) {
-  const https = require('https');
   const options = {
     key: fs.readFileSync(process.env.BUSOLA_SSL_KEY_FILE),
     cert: fs.readFileSync(process.env.BUSOLA_SSL_CRT_FILE),
   };
   server = https.createServer(options, app);
 } else {
-  const http = require('http');
   server = http.createServer(app);
 }
 
