@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, FlexBox, Icon, Link } from '@ui5/webcomponents-react';
-import { sanitizeUrl } from 'shared/helpers/sanitizeUrl';
+import { sanitizeURLSync } from 'url-sanitizer';
 
 type LinkProps = {
   url: string;
@@ -33,7 +33,7 @@ export const ExternalLink = ({
   linkClassName,
 }: LinkProps) => {
   const { t } = useTranslation();
-  const safeUrl = sanitizeUrl(url);
+  const safeUrl = sanitizeURLSync(url) ?? '';
 
   if (type === 'button') {
     return (

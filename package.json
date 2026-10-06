@@ -105,7 +105,8 @@
     "react-syntax-highlighter": "^15.6.1",
     "react-zoom-pan-pinch": "^3.7.0",
     "resize-observer-polyfill": "^1.5.1",
-    "rfc6902": "^5.1.2"
+    "rfc6902": "^5.1.2",
+    "url-sanitizer": "^5.3.3"
   },
   "devDependencies": {
     "@cypress/code-coverage": "^4.0.3",
