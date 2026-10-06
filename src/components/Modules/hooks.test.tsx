@@ -7,15 +7,16 @@ vi.mock('shared/hooks/BackendAPI/useFetch', () => ({
   useFetch: () => fetchMock,
 }));
 
-// Namespace is already present on the fixtures below, so the hook never needs
-// to resolve scope — the passthrough keeps the test focused on existence.
+const populateMock = vi.fn(async (resource: any) => resource);
 vi.mock('hooks/usePopulateWithNamespace', () => ({
-  usePopulateWithNamespace: () => async (resource: any) => resource,
+  usePopulateWithNamespace: () => populateMock,
 }));
 
 describe('useModulesLiveResources', () => {
   beforeEach(() => {
     fetchMock.mockReset();
+    populateMock.mockReset();
+    populateMock.mockImplementation(async (resource: any) => resource);
   });
 
   it('includes only modules whose live CR instance exists on the cluster', async () => {
@@ -83,6 +84,51 @@ describe('useModulesLiveResources', () => {
     );
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    expect(result.current.has('broken')).toBe(false);
+  });
+
+  it('keeps healthy modules when another module throws a non-404', async () => {
+    populateMock.mockImplementation(async (resource: any) => {
+      if (resource.kind === 'Broken') {
+        throw new Error('scope lookup failed');
+      }
+      return resource;
+    });
+    fetchMock.mockImplementation(
+      async ({ relativeUrl }: { relativeUrl: string }) => ({
+        json: async () =>
+          relativeUrl.includes('registryproxies')
+            ? { items: [{ metadata: { name: 'registry-proxy' } }] }
+            : { items: [] },
+      }),
+    );
+
+    const modules = [
+      {
+        name: 'broken',
+        resource: {
+          kind: 'Broken',
+          apiVersion: 'example.com/v1',
+          metadata: { name: 'broken', namespace: 'default' },
+        },
+      },
+      {
+        name: 'registry-proxy',
+        resource: {
+          kind: 'RegistryProxy',
+          apiVersion: 'operator.kyma-project.io/v1',
+          metadata: { name: 'registry-proxy', namespace: 'default' },
+        },
+      },
+    ];
+
+    const { result } = renderHook(() =>
+      useModulesLiveResources(modules, false),
+    );
+
+    await waitFor(() =>
+      expect(result.current.has('registry-proxy')).toBe(true),
+    );
     expect(result.current.has('broken')).toBe(false);
   });
 

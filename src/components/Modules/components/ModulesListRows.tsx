@@ -49,9 +49,10 @@ type ModulesListRowsProps = {
   protectedResource?: boolean;
   hasDetailsLink: (resource: any) => boolean;
   newestModuleTemplate?: ModuleTemplateType;
-  // Live CR instance for community rows, probed once at the list level
-  // (managed rows derive their status from the Kyma resource instead).
-  liveResource?: any;
+  liveResource?: {
+    metadata?: { name?: string; namespace?: string };
+    status?: { state?: string; message?: string };
+  };
 };
 
 export const ModulesListRows = ({

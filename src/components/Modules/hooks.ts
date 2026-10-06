@@ -334,14 +334,18 @@ export const useModulesLiveResources = (
 
   // Stable dependency: re-probe only when the modules (by name + CR identity)
   // actually change, not on every render's new array reference.
-  const modulesKey = JSON.stringify(
-    (installedModules ?? []).map((module) => ({
-      name: module?.name,
-      kind: module?.resource?.kind,
-      apiVersion: module?.resource?.apiVersion,
-      resourceName: module?.resource?.metadata?.name,
-      namespace: module?.resource?.metadata?.namespace,
-    })),
+  const modulesKey = useMemo(
+    () =>
+      JSON.stringify(
+        (installedModules ?? []).map((module) => ({
+          name: module?.name,
+          kind: module?.resource?.kind,
+          apiVersion: module?.resource?.apiVersion,
+          resourceName: module?.resource?.metadata?.name,
+          namespace: module?.resource?.metadata?.namespace,
+        })),
+      ),
+    [installedModules],
   );
 
   useEffect(() => {
@@ -354,7 +358,7 @@ export const useModulesLiveResources = (
       }
 
       const found = new Map<string, any>();
-      await Promise.all(
+      await Promise.allSettled(
         installedModules.map(async (module) => {
           if (!module?.resource || !module?.name) return;
           // populateWithNamespace returns false when scope can't be resolved
