@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer';
 import express from 'express';
 import cors from 'cors';
 import jsyaml from 'js-yaml';
@@ -19,30 +20,16 @@ async function readBodyWithSizeLimit(response) {
     throw new Error('Response too large');
   }
 
-  const reader = response.body.getReader();
   const chunks = [];
   let totalSize = 0;
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      totalSize += value.length;
-      if (totalSize > MAX_RESPONSE_BYTES) {
-        throw new Error('Response too large');
-      }
-      chunks.push(value);
-    }
-  } finally {
-    reader.releaseLock();
+
+  for await (const chunk of response.body) {
+    totalSize += chunk.length;
+    if (totalSize > MAX_RESPONSE_BYTES) throw new Error('Response too large');
+    chunks.push(chunk);
   }
 
-  const merged = new Uint8Array(totalSize);
-  let offset = 0;
-  for (const chunk of chunks) {
-    merged.set(chunk, offset);
-    offset += chunk.length;
-  }
-  return new TextDecoder().decode(merged);
+  return new TextDecoder().decode(Buffer.concat(chunks));
 }
 
 function isAllowedUrl(url) {
