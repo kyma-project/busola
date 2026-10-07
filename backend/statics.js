@@ -1,6 +1,7 @@
-/* global __dirname */
 import express from 'express';
 import path from 'path';
+
+const __dirname = import.meta.dirname;
 
 export const serveStaticApp = (app, requestPath, directoryPath) => {
   app.use(requestPath, express.static(path.join(__dirname, directoryPath)));

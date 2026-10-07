@@ -1,5 +1,4 @@
-/* global Buffer */
-import { InvalidInputError } from '../errors/errors';
+import { InvalidInputError } from '../errors/errors.js';
 
 export default function parseProtocolHeaders(secHeader) {
   if (!secHeader)

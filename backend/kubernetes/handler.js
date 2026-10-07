@@ -1,7 +1,6 @@
-/* global Buffer, __dirname */
 import rateLimit from 'express-rate-limit';
-import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution';
-import { filters } from '../request-filters';
+import { handleDockerDesktopSubsitution } from '../docker-desktop-substitution.js';
+import { filters } from '../request-filters.js';
 import { pipeline } from 'stream/promises';
 import { tokenAuthAgent } from '../utils/https-agent.js';
 import {
@@ -18,6 +17,8 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import escape from 'lodash.escape';
+
+const __dirname = import.meta.dirname;
 
 export const requireK8sCredential = requireCredential(
   getK8sCredentialFromHeaders,
