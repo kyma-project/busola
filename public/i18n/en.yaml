@@ -100,7 +100,19 @@ clusters:
     title: There are no clusters yet
   gardener:
     button: Connect a Gardener cluster
+    connect: Connect shoot
+    detected: 'Detected Gardener shoot "{{name}}" in namespace {{namespace}} (landscape: {{identity}}).'
     error: 'Connecting clusters failed: {{message}}.'
+    errors:
+      garden-parse: Could not parse the garden kubeconfig YAML.
+      no-garden-server: The garden kubeconfig has no cluster server URL.
+      no-shoot-ref: This kubeconfig has no Gardener shootRef; it is not a supported gardenlogin kubeconfig.
+      no-token: Paste a garden token to continue.
+      oidc-not-supported: This garden kubeconfig uses OIDC. In-wizard OIDC login is not available yet — paste a garden token instead.
+    garden-kubeconfig-label: Garden cluster kubeconfig
+    token-hint: Paste a bearer token for the garden cluster (e.g. from `kubectl oidc-login get-token`). Required while OIDC login in the wizard is not yet available.
+    token-label: Garden token
+    wizard-title: Connect a Gardener shoot
   kubeconfig-list:
     title: Kubeconfig files
   labels:
