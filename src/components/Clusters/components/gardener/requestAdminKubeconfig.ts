@@ -36,7 +36,17 @@ export async function requestAdminKubeconfig({
     },
   });
 
-  if (!response.ok) throw new Error(response.statusText);
+  if (!response.ok) {
+    let message = response.statusText;
+    try {
+      const body = await response.json();
+      if (body?.message) message = body.message;
+    } catch {
+      // body empty or non-JSON – keep statusText
+    }
+    if (!message) message = `HTTP ${response.status}`;
+    throw new Error(message);
+  }
 
   const result = (await response.json()) as AdminKubeconfigResponse;
   return jsyaml.load(base64Decode(result.status.kubeconfig)) as ValidKubeconfig;

@@ -35,10 +35,42 @@ describe('requestAdminKubeconfig', () => {
     expect((result as any)['current-context']).toBe('c');
   });
 
-  it('throws statusText on non-ok response', async () => {
+  it('uses Kubernetes Status message from response body on non-ok response', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue({ ok: false, statusText: 'Forbidden' }),
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        statusText: 'Forbidden',
+        json: async () => ({
+          message: 'shoots.core.gardener.cloud "x" is forbidden: token expired',
+        }),
+      }),
+    );
+    await expect(
+      requestAdminKubeconfig({
+        backendAddress: '/backend',
+        gardenServer: 'g',
+        token: 't',
+        namespace: 'n',
+        shootName: 's',
+      }),
+    ).rejects.toThrow(
+      'shoots.core.gardener.cloud "x" is forbidden: token expired',
+    );
+  });
+
+  it('falls back to statusText when response body has no message', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        statusText: 'Forbidden',
+        json: async () => {
+          throw new SyntaxError('empty body');
+        },
+      }),
     );
     await expect(
       requestAdminKubeconfig({
@@ -49,5 +81,28 @@ describe('requestAdminKubeconfig', () => {
         shootName: 's',
       }),
     ).rejects.toThrow('Forbidden');
+  });
+
+  it('falls back to HTTP status code when statusText is empty', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        statusText: '',
+        json: async () => {
+          throw new SyntaxError('empty body');
+        },
+      }),
+    );
+    await expect(
+      requestAdminKubeconfig({
+        backendAddress: '/backend',
+        gardenServer: 'g',
+        token: 't',
+        namespace: 'n',
+        shootName: 's',
+      }),
+    ).rejects.toThrow('HTTP 403');
   });
 });
