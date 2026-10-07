@@ -1,6 +1,5 @@
-import jsyaml from 'js-yaml';
-import { base64Decode } from 'shared/helpers';
 import { addCluster } from 'components/Clusters/shared';
+import { requestAdminKubeconfig } from 'components/Clusters/components/gardener/requestAdminKubeconfig';
 import { K8sResource, ValidKubeconfig } from 'types';
 import { PermissionSet } from 'state/permissionSetsAtom';
 import { ActiveClusterState } from 'state/clusterAtom';
@@ -60,6 +59,8 @@ export function useGardenerLogin(setReport: (report: string) => void) {
   };
 
   const getKubeconfigs = async (
+    serverAddress: string,
+    token: string,
     fetchHeaders: HeadersInit,
     availableProjects: string[],
   ) => {
@@ -67,10 +68,6 @@ export function useGardenerLogin(setReport: (report: string) => void) {
 
     type ShootsResult = {
       items: K8sResource[];
-    };
-
-    type KubeconfigResult = {
-      status: { kubeconfig: string };
     };
 
     const kubeconfigs: ValidKubeconfig[] = [];
@@ -88,21 +85,14 @@ export function useGardenerLogin(setReport: (report: string) => void) {
             shoots.items.length
           })`,
         );
-        const payload = {
-          apiVersion: 'authentication.gardener.cloud/v1alpha1',
-          kind: 'AdminKubeconfigRequest',
-          spec: { expirationSeconds: 3 * 60 * 60 }, // 3h
-        };
-
-        const kubeconfigUrl = `${backendAddress}/apis/core.gardener.cloud/v1beta1/namespaces/garden-${project}/shoots/${shoot.metadata.name}/adminkubeconfig`;
-        const res = await failFastFetch<KubeconfigResult>(kubeconfigUrl, {
-          method: 'POST',
-          body: JSON.stringify(payload),
-          headers: fetchHeaders,
+        const kubeconfig = await requestAdminKubeconfig({
+          backendAddress,
+          gardenServer: serverAddress,
+          token,
+          namespace: `garden-${project}`,
+          shootName: shoot.metadata.name,
         });
-        kubeconfigs.push(
-          jsyaml.load(base64Decode(res.status.kubeconfig)) as ValidKubeconfig,
-        );
+        kubeconfigs.push(kubeconfig);
       }
     }
     return kubeconfigs;
@@ -139,7 +129,12 @@ export function useGardenerLogin(setReport: (report: string) => void) {
     };
 
     const availableProjects = await getAvailableProjects(fetchHeaders);
-    const kubeconfigs = await getKubeconfigs(fetchHeaders, availableProjects);
+    const kubeconfigs = await getKubeconfigs(
+      serverAddress,
+      token,
+      fetchHeaders,
+      availableProjects,
+    );
     kubeconfigs.forEach(addKubeconfig);
   };
 }
