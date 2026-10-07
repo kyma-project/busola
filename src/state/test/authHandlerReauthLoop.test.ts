@@ -128,6 +128,30 @@ describe('useAuthHandler redirect-loop guard', () => {
     ).toHaveLength(1);
   });
 
+  it('releases the claim when the redirect fails, even after a cluster switch', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    managerMock.getUser.mockResolvedValue({ expired: true });
+    let rejectRedirect: (e: Error) => void = () => {};
+    managerMock.signinRedirect.mockImplementationOnce(
+      () =>
+        new Promise((_, reject) => {
+          rejectRedirect = reject;
+        }),
+    );
+    const { Wrapper, store } = makeWrapper();
+    renderHook(() => useAuthHandler(), { wrapper: Wrapper });
+    await waitFor(() =>
+      expect(managerMock.signinRedirect).toHaveBeenCalledTimes(1),
+    );
+
+    // The cluster switch makes the later failure belong to a superseded login.
+    act(() => store.set(clusterAtom, { ...OIDC_CLUSTER, name: 'bar' } as any));
+    rejectRedirect(new Error('idp down'));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(tryClaimReauthRedirect()).toBe(true);
+  });
+
   it('does not redirect again while another redirect is under way', async () => {
     tryClaimReauthRedirect();
     managerMock.getUser.mockResolvedValue({ expired: true });
