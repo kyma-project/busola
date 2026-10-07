@@ -59,6 +59,7 @@ export default function LimitRangeList(props: any) {
 
   return (
     <ResourcesList
+      disableHiding
       resourceTitle={t('limit-ranges.title')}
       description={ResourceDescription}
       {...props}
