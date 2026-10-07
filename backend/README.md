@@ -6,7 +6,7 @@ This is a REST proxy for Busola
 
 ## Prerequisites
 
-- Node.js v12
+- Node.js v22
 - npm or Yarn
 
 ## Installation

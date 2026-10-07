@@ -24,8 +24,6 @@ import path from 'path';
 import https from 'https';
 import http from 'http';
 
-const __dirname = import.meta.dirname;
-
 const app = express();
 app.disable('x-powered-by');
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
@@ -76,7 +74,7 @@ app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
 app.get('/backend/kubeconfig', (req, res) => {
   const kubeconfigDir = path.join(
-    __dirname,
+    import.meta.dirname,
     process.env.IS_DOCKER ? '/core-ui/kubeconfig' : '../public/kubeconfig',
   );
   fs.readdir(kubeconfigDir, (err, files) => {

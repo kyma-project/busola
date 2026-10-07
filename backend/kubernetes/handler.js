@@ -18,8 +18,6 @@ import fs from 'fs';
 import path from 'path';
 import escape from 'lodash.escape';
 
-const __dirname = import.meta.dirname;
-
 export const requireK8sCredential = requireCredential(
   getK8sCredentialFromHeaders,
 );
@@ -40,8 +38,8 @@ export const k8sRateLimiter = rateLimit({
 // Try both, then fall back to the working directory.
 const loadCerts = () => {
   const candidates = [
-    path.join(__dirname, 'certs.pem'),
-    path.join(__dirname, '..', 'certs.pem'),
+    path.join(import.meta.dirname, 'certs.pem'),
+    path.join(import.meta.dirname, '..', 'certs.pem'),
     'certs.pem',
   ];
   for (const candidate of candidates) {
