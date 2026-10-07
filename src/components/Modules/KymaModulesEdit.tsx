@@ -13,7 +13,6 @@ import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalCon
 import {
   Button,
   CheckBox,
-  FlexBox,
   Form,
   FormItem,
   Label,
@@ -257,11 +256,11 @@ export default function KymaModulesEdit({
           )[0]?.version;
 
           return (
-            <FormItem
-              key={module?.name}
-              labelContent={<Label showColon>{module.name}</Label>}
-            >
-              <FlexBox direction="Column" style={{ gap: '0.5rem' }}>
+            <>
+              <FormItem
+                key={module?.name}
+                labelContent={<Label showColon>{module.name}</Label>}
+              >
                 <Select
                   accessibleName={`${module.name} channel select`}
                   onChange={(event) => {
@@ -316,6 +315,8 @@ export default function KymaModulesEdit({
                     </Option>
                   ))}
                 </Select>
+              </FormItem>
+              <FormItem key={`${module?.name}-managed`}>
                 <CheckBox
                   accessibleName={`${module.name} managed checkbox`}
                   text={t('kyma-modules.managed')}
@@ -326,8 +327,8 @@ export default function KymaModulesEdit({
                     setManaged(event.target.checked, index);
                   }}
                 />
-              </FlexBox>
-            </FormItem>
+              </FormItem>
+            </>
           );
         })}
       </Form>
