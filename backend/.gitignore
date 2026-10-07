@@ -23,8 +23,8 @@ yarn-debug.log*
 yarn-error.log*
 
 
-backend-production.js
-backend-production.js.LICENSE*
+backend-production.cjs
+backend-production.cjs.LICENSE*
 core-ui
 busola.log
 
