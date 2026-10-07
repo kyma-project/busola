@@ -24,6 +24,8 @@ import {
   isAuthRedirectLoop,
   registerAuthRedirect,
   resetAuthRedirectGuard,
+  resetReauthRedirectClaim,
+  tryClaimReauthRedirect,
 } from './utils/authRedirectLoopGuard';
 import { useNotifyLoginFailure } from './useLoginFailureNotification';
 import { ssoDataAtom, ssoLoginStoppedAtom } from './ssoDataAtom';
@@ -143,9 +145,17 @@ async function handleLogin({
         return null;
       }
       if (decision.action === 'redirect') {
-        registerAuthRedirect();
-        await userManager.clearStaleState();
-        await userManager.signinRedirect();
+        if (tryClaimReauthRedirect()) {
+          try {
+            registerAuthRedirect();
+            await userManager.clearStaleState();
+            await userManager.signinRedirect();
+          } catch (redirectError) {
+            // Still on this page, so allow another attempt.
+            resetReauthRedirectClaim();
+            throw redirectError;
+          }
+        }
         return null;
       }
       user = await userManager.signinRedirectCallback(window.location.href);
@@ -182,17 +192,21 @@ async function handleLogin({
           e.message.includes('authority mismatch')) &&
         !isAuthRedirectLoop()
       ) {
-        try {
-          registerAuthRedirect();
-          await userManager.clearStaleState();
-          await userManager.signinRedirect();
-        } catch (redirectError) {
-          console.warn('Login restart failed:', redirectError);
-          onError(
-            redirectError instanceof Error
-              ? redirectError
-              : new Error(String(redirectError)),
-          );
+        if (tryClaimReauthRedirect()) {
+          try {
+            registerAuthRedirect();
+            await userManager.clearStaleState();
+            await userManager.signinRedirect();
+          } catch (redirectError) {
+            console.warn('Login restart failed:', redirectError);
+            // Still on this page, so let onError redirect.
+            resetReauthRedirectClaim();
+            onError(
+              redirectError instanceof Error
+                ? redirectError
+                : new Error(String(redirectError)),
+            );
+          }
         }
       } else {
         console.error('Cluster login failed:', e);
@@ -298,6 +312,8 @@ export function useAuthHandler() {
           setAuth(null);
           // Clear the cluster so picking it again (or Retry) starts a new login.
           setCluster(null);
+          // Still on this page, so let a later retry redirect.
+          resetReauthRedirectClaim();
           notifyLoginFailure(failure, {
             onRetry: () => {
               resetAuthRedirectGuard();

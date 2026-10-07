@@ -13,6 +13,8 @@ import {
   isAuthRedirectLoop,
   registerAuthRedirect,
   resetAuthRedirectGuard,
+  resetReauthRedirectClaim,
+  tryClaimReauthRedirect,
 } from 'state/utils/authRedirectLoopGuard';
 import { useNotifyLoginFailure } from './useLoginFailureNotification';
 
@@ -68,13 +70,15 @@ export function useReauthenticate({
       const relative = toClusterRelative(fullPath);
       if (relative) saveIntendedPath(relative);
       try {
+        if (!tryClaimReauthRedirect()) return;
         // Count the redirect so we can detect a loop when the IdP sends us back.
         registerAuthRedirect();
         await userManager.clearStaleState();
         await userManager.signinRedirect();
       } catch (redirectError) {
         console.warn('Silent re-auth via IdP failed:', redirectError);
-        // Otherwise a later cluster pick would reuse the stale path.
+        // Still on this page, so allow another attempt.
+        resetReauthRedirectClaim();
         clearIntendedPath();
         fallBackToClusterList();
       }
