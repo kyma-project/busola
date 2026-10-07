@@ -50,6 +50,7 @@ export function GardenerLoginForm({
 
       <label>{t('clusters.gardener.garden-kubeconfig-label')}</label>
       <FileInput
+        id="garden-kubeconfig-file"
         fileInputChanged={async (files: FileList) => {
           if (files?.[0]) setGardenText(await readFile(files[0]));
         }}
