@@ -1,5 +1,6 @@
 import { MessageStrip, TextArea } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
+import { FileInput } from 'shared/components/FileInput/FileInput';
 import { Kubeconfig } from 'types';
 import { extractShootRef } from './gardenlogin';
 
@@ -10,6 +11,13 @@ type Props = {
   tokenInput: string;
   setTokenInput: (value: string) => void;
 };
+
+const readFile = (file: File): Promise<string> =>
+  new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => resolve((e?.target?.result as string) ?? '');
+    reader.readAsText(file);
+  });
 
 // Step content for a detected gardenlogin shoot kubeconfig. Rendered inside the
 // Add Cluster wizard as a normal step (not a separate dialog); the wizard's
@@ -41,7 +49,15 @@ export function GardenerLoginForm({
       </MessageStrip>
 
       <label>{t('clusters.gardener.garden-kubeconfig-label')}</label>
+      <FileInput
+        fileInputChanged={async (files: FileList) => {
+          if (files?.[0]) setGardenText(await readFile(files[0]));
+        }}
+        acceptedFileFormats=".yaml,.yml"
+        customMessage={t('clusters.wizard.kubeconfig-upload')}
+      />
       <TextArea
+        className="sap-margin-top-tiny"
         rows={8}
         value={gardenText}
         onInput={(e) => setGardenText(e.target.value ?? '')}
