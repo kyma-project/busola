@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { createElement, PropsWithChildren } from 'react';
 import { MemoryRouter } from 'react-router';
 import { Provider, createStore } from 'jotai';
@@ -115,6 +115,30 @@ describe('useAuthHandler redirect-loop guard', () => {
     expect(
       JSON.parse(sessionStorage.getItem(AUTH_REDIRECT_STORAGE_KEY) || '[]'),
     ).toHaveLength(1);
+  });
+
+  it('releases the claim when the redirect fails, even after a cluster switch', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    managerMock.getUser.mockResolvedValue({ expired: true });
+    let rejectRedirect: (e: Error) => void = () => {};
+    managerMock.signinRedirect.mockImplementationOnce(
+      () =>
+        new Promise((_, reject) => {
+          rejectRedirect = reject;
+        }),
+    );
+    const { Wrapper, store } = makeWrapper();
+    renderHook(() => useAuthHandler(), { wrapper: Wrapper });
+    await waitFor(() =>
+      expect(managerMock.signinRedirect).toHaveBeenCalledTimes(1),
+    );
+
+    // The cluster switch makes the later failure belong to a superseded login.
+    act(() => store.set(clusterAtom, { ...OIDC_CLUSTER, name: 'bar' } as any));
+    rejectRedirect(new Error('idp down'));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(tryClaimReauthRedirect()).toBe(true);
   });
 
   it('does not redirect again while another redirect is under way', async () => {

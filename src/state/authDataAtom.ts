@@ -146,9 +146,15 @@ async function handleLogin({
       }
       if (decision.action === 'redirect') {
         if (tryClaimReauthRedirect()) {
-          registerAuthRedirect();
-          await userManager.clearStaleState();
-          await userManager.signinRedirect();
+          try {
+            registerAuthRedirect();
+            await userManager.clearStaleState();
+            await userManager.signinRedirect();
+          } catch (redirectError) {
+            // Still on this page, so allow another attempt.
+            resetReauthRedirectClaim();
+            throw redirectError;
+          }
         }
         return null;
       }
