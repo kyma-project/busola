@@ -37,6 +37,8 @@ import { useNonInteractiveOidcContexts } from './oidc-interactive-check';
 
 import './AddClusterWizard.scss';
 import { WizardStepChangeEventDetail } from '@ui5/webcomponents-fiori/dist/Wizard.js';
+import { isGardenloginKubeconfig } from './gardener/gardenlogin';
+import { GardenerLoginStep } from './gardener/GardenerLoginStep';
 
 export function AddClusterWizard({
   config = {} as ClusterConfig,
@@ -188,6 +190,21 @@ export function AddClusterWizard({
       checkAuthRequiredInputs(authFormRef, setHasInvalidInputs);
     });
   };
+
+  if (kubeconfig && isGardenloginKubeconfig(kubeconfig)) {
+    return (
+      <GardenerLoginStep
+        shootKubeconfig={kubeconfig}
+        config={config}
+        onCancel={onCancel}
+        onConnected={() => {
+          setIsFormOpen({ formOpen: false });
+          setShowWizard(false);
+          updateKubeconfig();
+        }}
+      />
+    );
+  }
 
   return (
     <>
