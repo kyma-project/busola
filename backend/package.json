@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.29.2",
-    "compression": "^1.8.1",
+    "compression": "^1.8.2",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "express-jwt": "^8.5.1",
