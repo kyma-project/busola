@@ -431,6 +431,10 @@ export const GenericList = ({
     return 'Popin';
   };
 
+  const renderPagination =
+    pagination &&
+    (!pagination.autoHide || filteredEntries.length > AVAILABLE_PAGE_SIZES[0]);
+
   return (
     <UI5Panel
       title={title}
@@ -438,6 +442,7 @@ export const GenericList = ({
       testid={testid}
       className={className}
       accessibleName={`${title} panel`}
+      stickyHeader={!disableHiding}
     >
       <div style={{ containerType: 'inline-size', width: '100%' }}>
         <Table
@@ -480,7 +485,7 @@ export const GenericList = ({
             hasDetailsView && filteredEntries.length && enableColumnLayout
               ? 'cursor-pointer'
               : ''
-          }`}
+          } ${renderPagination ? '' : 'last-row-with-border'}`}
           onMouseDown={() => {
             window.getSelection()?.removeAllRanges();
           }}
@@ -497,6 +502,7 @@ export const GenericList = ({
               columnWidths={columnWidths}
               disableHiding={disableHiding}
               noHideFields={noHideFields ?? []}
+              stickyHeader={!disableHiding}
             />
           }
         >
@@ -520,17 +526,15 @@ export const GenericList = ({
           />
         </Table>
       </div>
-      {pagination &&
-        (!pagination.autoHide ||
-          filteredEntries.length > AVAILABLE_PAGE_SIZES[0]) && (
-          <Pagination
-            itemsTotal={filteredEntries.length}
-            currentPage={currentPage}
-            itemsPerPage={pagination.itemsPerPage ?? 0}
-            onChangePage={setCurrentPage}
-            setLocalPageSize={setPageSize}
-          />
-        )}
+      {renderPagination && (
+        <Pagination
+          itemsTotal={filteredEntries.length}
+          currentPage={currentPage}
+          itemsPerPage={pagination?.itemsPerPage ?? 0}
+          onChangePage={setCurrentPage}
+          setLocalPageSize={setPageSize}
+        />
+      )}
     </UI5Panel>
   );
 };

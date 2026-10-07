@@ -81,6 +81,7 @@ export function GroupingListPage({
         .map(([group, crds]) => (
           <li key={group} className="cr-group-list-item">
             <ResourceListRenderer
+              disableHiding
               resourceUrl={resourceUrl}
               resourceType="CustomResourceDefinition"
               resourceTitle="customresourcedefinition"
