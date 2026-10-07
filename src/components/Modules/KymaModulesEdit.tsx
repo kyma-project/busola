@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom';
 import { cloneDeep } from 'lodash';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { createPatch } from 'rfc6902';
 import { useTranslation } from 'react-i18next';
 
@@ -14,6 +14,8 @@ import {
   Button,
   CheckBox,
   FlexBox,
+  Form,
+  FormItem,
   Label,
   MessageStrip,
   Option,
@@ -242,89 +244,94 @@ export default function KymaModulesEdit({
   };
 
   const renderModules = () => {
-    const modulesList: ReactNode[] = [];
-    modulesEditData?.forEach((module) => {
-      const index = selectedModules?.findIndex((selectedModule) => {
-        return selectedModule.name === module?.name;
-      });
+    return (
+      <Form layout="S1 M2 L2 XL2" labelSpan="S12 M4 L4 XL4">
+        {modulesEditData?.map((module) => {
+          const index = selectedModules?.findIndex((selectedModule) => {
+            return selectedModule.name === module?.name;
+          });
 
-      const modulePredefinedVersion = module.channels?.filter(
-        (channel: ChannelType) =>
-          channel.channel === kymaResource?.spec?.channel,
-      )[0]?.version;
+          const modulePredefinedVersion = module.channels?.filter(
+            (channel: ChannelType) =>
+              channel.channel === kymaResource?.spec?.channel,
+          )[0]?.version;
 
-      const mod = (
-        <FlexBox
-          direction="Column"
-          style={{ gap: '0.5rem' }}
-          key={module?.name}
-        >
-          <Label>{`${module.name}:`}</Label>
-          <Select
-            accessibleName={`${module.name} channel select`}
-            onChange={(event) => {
-              onChange(module, event.detail.selectedOption.value ?? '', index);
-            }}
-            value={
-              findModuleSpec(kymaResource, module.name)?.channel || 'predefined'
-            }
-            className="channel-select"
-          >
-            {!!modulePredefinedVersion && (
-              <Option
-                selected={
-                  !module.channels?.filter(
-                    (channel: ChannelType) =>
-                      channel.channel ===
-                      findModuleSpec(kymaResource, module.name)?.channel,
-                  )
-                }
-                value={'predefined'}
-                key={`predefined-${module.name}`}
-              >
-                {`${t(
-                  'kyma-modules.predefined-channel',
-                )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
-                  1,
-                )} v${modulePredefinedVersion})`}
-              </Option>
-            )}
-            {module.channels?.map((channel: ChannelType) => (
-              <Option
-                selected={
-                  channel.channel ===
-                  findModuleSpec(kymaResource, module.name)?.channel
-                }
-                key={`${channel.channel}-${module.name}${
-                  channel.isMetaRelease ? '-meta' : ''
-                }`}
-                value={channel.channel}
-                additionalText={channel?.isBeta ? 'Beta' : ''}
-              >
-                {`${(
-                  channel?.channel[0] || ''
-                ).toUpperCase()}${channel.channel.slice(1)} (v${
-                  channel.version
-                })`}{' '}
-              </Option>
-            ))}
-          </Select>
-          <CheckBox
-            accessibleName={`${module.name} managed checkbox`}
-            text={t('kyma-modules.managed')}
-            checked={
-              (findModuleSpec(kymaResource, module.name) as any)?.managed
-            }
-            onChange={(event) => {
-              setManaged(event.target.checked, index);
-            }}
-          />
-        </FlexBox>
-      );
-      modulesList.push(mod);
-    });
-
-    return <div className="gridbox-editModule">{modulesList}</div>;
+          return (
+            <FormItem
+              key={module?.name}
+              labelContent={<Label showColon>{module.name}</Label>}
+            >
+              <FlexBox direction="Column" style={{ gap: '0.5rem' }}>
+                <Select
+                  accessibleName={`${module.name} channel select`}
+                  onChange={(event) => {
+                    onChange(
+                      module,
+                      event.detail.selectedOption.value ?? '',
+                      index,
+                    );
+                  }}
+                  value={
+                    findModuleSpec(kymaResource, module.name)?.channel ||
+                    'predefined'
+                  }
+                  className="channel-select"
+                >
+                  {!!modulePredefinedVersion && (
+                    <Option
+                      selected={
+                        !module.channels?.filter(
+                          (channel: ChannelType) =>
+                            channel.channel ===
+                            findModuleSpec(kymaResource, module.name)?.channel,
+                        )
+                      }
+                      value={'predefined'}
+                      key={`predefined-${module.name}`}
+                    >
+                      {`${t(
+                        'kyma-modules.predefined-channel',
+                      )} (${kymaResource?.spec?.channel[0].toUpperCase()}${kymaResource?.spec?.channel.slice(
+                        1,
+                      )} v${modulePredefinedVersion})`}
+                    </Option>
+                  )}
+                  {module.channels?.map((channel: ChannelType) => (
+                    <Option
+                      selected={
+                        channel.channel ===
+                        findModuleSpec(kymaResource, module.name)?.channel
+                      }
+                      key={`${channel.channel}-${module.name}${
+                        channel.isMetaRelease ? '-meta' : ''
+                      }`}
+                      value={channel.channel}
+                      additionalText={channel?.isBeta ? 'Beta' : ''}
+                    >
+                      {`${(
+                        channel?.channel[0] || ''
+                      ).toUpperCase()}${channel.channel.slice(1)} (v${
+                        channel.version
+                      })`}{' '}
+                    </Option>
+                  ))}
+                </Select>
+                <CheckBox
+                  accessibleName={`${module.name} managed checkbox`}
+                  text={t('kyma-modules.managed')}
+                  checked={
+                    (findModuleSpec(kymaResource, module.name) as any)?.managed
+                  }
+                  onChange={(event) => {
+                    setManaged(event.target.checked, index);
+                  }}
+                />
+              </FlexBox>
+            </FormItem>
+          );
+        })}
+      </Form>
+    );
   };
 
   const showError = (error: Error) => {
