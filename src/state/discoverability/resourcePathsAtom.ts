@@ -3,13 +3,12 @@ import { unwrap } from 'jotai/utils';
 import { getFetchFn } from 'state/utils/getFetchFn';
 import { openapiPathIdListAtom } from 'state/openapi/openapiPathIdAtom';
 
-// Requests Kubernetes Aggregated Discovery v2 (/api and /apis list every
-// resource in one call). Clusters <1.27 ignore it and return the legacy format.
-const ACCEPT_AGGREGATED_DISCOVERY =
-  'application/json;' +
-  'g=apidiscovery.k8s.io;' +
-  'v=v2;' +
-  'as=APIGroupDiscoveryList';
+// Accept header for aggregated discovery — newest format first, legacy JSON last.
+const ACCEPT_AGGREGATED_DISCOVERY = [
+  'application/json;g=apidiscovery.k8s.io;v=v2;as=APIGroupDiscoveryList',
+  'application/json;g=apidiscovery.k8s.io;v=v2beta1;as=APIGroupDiscoveryList',
+  'application/json',
+].join(',');
 
 type DiscoveryDoc = {
   kind?: string;
@@ -45,23 +44,29 @@ export function aggregatedDiscoveryPathIds(
   return paths;
 }
 
-const resourcePathsAsyncAtom = atom<Promise<string[]>>(async (get) => {
+// Fetches aggregated discovery once per cluster. null means the cluster doesn't
+// support it so callers fall back to OpenAPI.
+const discoveryPathIdsAtom = atom<Promise<string[] | null>>(async (get) => {
   const fetchFn = getFetchFn(get);
-  if (!fetchFn) return [];
+  if (!fetchFn) return null;
 
-  let discovered: string[] | null = null;
   try {
     const init = { headers: { Accept: ACCEPT_AGGREGATED_DISCOVERY } };
     const [core, apis] = await Promise.all([
       fetchFn({ relativeUrl: '/api', init }).then((r) => r.json()),
       fetchFn({ relativeUrl: '/apis', init }).then((r) => r.json()),
     ]);
-    discovered = aggregatedDiscoveryPathIds([core, apis]);
+    return aggregatedDiscoveryPathIds([core, apis]);
   } catch (e) {
     console.warn('Aggregated discovery failed, falling back to OpenAPI:', e);
+    return null;
   }
+});
+discoveryPathIdsAtom.debugLabel = 'discoveryPathIdsAtom';
 
-  // Fall back to the openapi path list when discovery is unsupported/failed.
+// Fall back to the openapi path list when discovery is unsupported/failed.
+const resourcePathsAsyncAtom = atom<Promise<string[]>>(async (get) => {
+  const discovered = await get(discoveryPathIdsAtom);
   return discovered ?? get(openapiPathIdListAtom);
 });
 
@@ -69,3 +74,4 @@ export const resourcePathsAtom = unwrap(
   resourcePathsAsyncAtom,
   (prev) => prev ?? [],
 );
+resourcePathsAtom.debugLabel = 'resourcePathsAtom';
