@@ -37,17 +37,14 @@ export function ResourceDetailsForm({
   className = '',
 }: ResourceDetailsFormProps) {
   const items = flattenItems(children);
-  // UI5 flows one group's items across columns by height; one group per
-  // column keeps reading order.
-  const half = Math.ceil(items.length / 2);
-  const content = items.every(isFormGroup) ? (
-    items
-  ) : (
-    <>
-      <FormGroup>{items.slice(0, half)}</FormGroup>
-      {items.length > half && <FormGroup>{items.slice(half)}</FormGroup>}
-    </>
-  );
+  // fill row by row, with a lone last item on the left
+  const content = items.every(isFormGroup)
+    ? items
+    : Array.from({ length: Math.ceil(items.length / 2) }, (_, row) => (
+        <FormGroup key={row} colSpan="S1 M2 L2 XL2">
+          {items.slice(row * 2, row * 2 + 2)}
+        </FormGroup>
+      ));
 
   return (
     <Form

@@ -22,10 +22,10 @@
   }
 }
 
-// Spec: 1rem from header to first row; UI5 stacks its layout and column
-// insets to 1.5rem.
+// Spec: 1rem from header to first row; UI5 adds 1.5rem.
 .resource-card-layout::part(column) {
   padding-top: 0;
+  padding-bottom: 0;
 }
 
 // Stacked labels: the spec has a gap below the label, UI5 emits none.
@@ -36,7 +36,7 @@
 }
 
 // A wrapped label's lines fall back to start alignment.
-@container (width >= 600px) {
+@container (width >=600px) {
   .resource-card-layout ui5-label {
     text-align: end;
   }
