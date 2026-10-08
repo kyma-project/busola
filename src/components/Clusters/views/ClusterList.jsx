@@ -18,6 +18,7 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyListComponent';
 import { Link } from 'shared/components/Link/Link';
+import { getReadableTimestampWithTime } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 
 import { Button } from '@ui5/webcomponents-react';
 
@@ -122,6 +123,8 @@ function ClusterList() {
     t('clusters.common.api-server-address'),
     t('clusters.storage.title'),
     t('common.headers.description'),
+    t('clusters.labels.connected'),
+    t('clusters.labels.expires'),
   ];
   const textSearchProperties = [
     'kubeconfig.current-context',
@@ -142,6 +145,8 @@ function ClusterList() {
       clusterConfig={entry.config}
     />,
     entry.config?.description || EMPTY_TEXT_PLACEHOLDER,
+    getReadableTimestampWithTime(entry.connectedAt),
+    getReadableTimestampWithTime(entry.expiresAt),
   ];
 
   const actions = [

@@ -4,11 +4,16 @@ import { requestAdminKubeconfig } from '../requestAdminKubeconfig';
 afterEach(() => vi.restoreAllMocks());
 
 describe('requestAdminKubeconfig', () => {
-  it('POSTs AdminKubeconfigRequest and decodes status.kubeconfig', async () => {
+  it('POSTs AdminKubeconfigRequest and returns the decoded kubeconfig + expiry', async () => {
     const mintedYaml = 'apiVersion: v1\nkind: Config\ncurrent-context: c\n';
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ status: { kubeconfig: btoa(mintedYaml) } }),
+      json: async () => ({
+        status: {
+          kubeconfig: btoa(mintedYaml),
+          expirationTimestamp: '2026-10-08T12:00:00Z',
+        },
+      }),
     });
     vi.stubGlobal('fetch', fetchMock);
 
@@ -32,7 +37,8 @@ describe('requestAdminKubeconfig', () => {
       kind: 'AdminKubeconfigRequest',
       spec: { expirationSeconds: 10800 },
     });
-    expect((result as any)['current-context']).toBe('c');
+    expect((result.kubeconfig as any)['current-context']).toBe('c');
+    expect(result.expirationTimestamp).toBe('2026-10-08T12:00:00Z');
   });
 
   it('uses Kubernetes Status message from response body on non-ok response', async () => {

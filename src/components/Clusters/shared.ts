@@ -57,7 +57,17 @@ export function addCluster(
   switchCluster = true,
 ) {
   const { setClusters } = clustersInfo;
-  setClusters((prev) => ({ ...prev, [params.contextName]: params }));
+  setClusters((prev) => ({
+    ...prev,
+    [params.contextName]: {
+      ...params,
+      // Stamp the first connection time; preserve it on re-add.
+      connectedAt:
+        params.connectedAt ??
+        prev?.[params.contextName]?.connectedAt ??
+        new Date().toISOString(),
+    },
+  }));
 
   if (switchCluster) {
     addCurrentCluster(params, clustersInfo);
@@ -166,12 +176,14 @@ export const addByContext = (
     storage = 'sessionStorage',
     switchCluster = true,
     config = {},
+    expiresAt,
   }: {
     kubeconfig: Kubeconfig;
     context: KubeconfigContext;
     storage: ClusterStorage;
     switchCluster?: boolean;
     config: any;
+    expiresAt?: string;
   },
   clustersInfo: useClustersInfoType,
   manualKubeConfigId?: ManualKubeConfigIdController,
@@ -244,6 +256,7 @@ export const addByContext = (
       contextName: context.name,
       config: { ...config, storage },
       currentContext: getContext(kubeconfig, context.name),
+      expiresAt,
     };
 
     addCluster(clusterParams, clustersInfo, switchCluster);

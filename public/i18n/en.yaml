@@ -119,7 +119,9 @@ clusters:
   labels:
     client-id: Client ID
     client-secret: Client Secret
+    connected: Connected
     context: Context
+    expires: Token expires
     issuer-url: Issuer URL
     name: Clusters
     scopes: Scopes

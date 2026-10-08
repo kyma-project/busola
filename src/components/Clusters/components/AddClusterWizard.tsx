@@ -142,21 +142,28 @@ export function AddClusterWizard({
     if (!token) throw new Error(t('clusters.gardener.errors.no-token'));
 
     const { backendAddress } = getClusterConfig();
-    const minted = await requestAdminKubeconfig({
-      backendAddress,
-      gardenServer,
-      token,
-      namespace: shootRef.namespace,
-      shootName: shootRef.name,
-      expirationSeconds: gardenExpirationHours * 60 * 60,
-    });
+    const { kubeconfig: minted, expirationTimestamp } =
+      await requestAdminKubeconfig({
+        backendAddress,
+        gardenServer,
+        token,
+        namespace: shootRef.namespace,
+        shootName: shootRef.name,
+        expirationSeconds: gardenExpirationHours * 60 * 60,
+      });
 
     const mintedContextName = minted['current-context'];
     const context = minted.contexts.find(
       (c) => c.name === mintedContextName,
     ) as KubeconfigContext;
     addByContext(
-      { kubeconfig: minted as Kubeconfig, context, storage, config },
+      {
+        kubeconfig: minted as Kubeconfig,
+        context,
+        storage,
+        config,
+        expiresAt: expirationTimestamp,
+      },
       clustersInfo,
     );
   };

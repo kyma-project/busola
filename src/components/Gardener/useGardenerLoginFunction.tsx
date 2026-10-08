@@ -1,6 +1,9 @@
 import { addCluster } from 'components/Clusters/shared';
-import { requestAdminKubeconfig } from 'components/Clusters/components/gardener/requestAdminKubeconfig';
-import { K8sResource, ValidKubeconfig } from 'types';
+import {
+  requestAdminKubeconfig,
+  AdminKubeconfigResult,
+} from 'components/Clusters/components/gardener/requestAdminKubeconfig';
+import { K8sResource } from 'types';
 import { PermissionSet } from 'state/permissionSetsAtom';
 import { ActiveClusterState } from 'state/clusterAtom';
 import { getClusterConfig } from 'state/utils/getBackendInfo';
@@ -71,7 +74,7 @@ export function useGardenerLogin(setReport: (report: string) => void) {
       items: K8sResource[];
     };
 
-    const kubeconfigs: ValidKubeconfig[] = [];
+    const kubeconfigs: AdminKubeconfigResult[] = [];
 
     for (const project of availableProjects) {
       setReport('Fetching shoots in ' + project);
@@ -86,7 +89,7 @@ export function useGardenerLogin(setReport: (report: string) => void) {
             shoots.items.length
           })`,
         );
-        const kubeconfig = await requestAdminKubeconfig({
+        const result = await requestAdminKubeconfig({
           backendAddress,
           gardenServer: serverAddress,
           token,
@@ -94,13 +97,16 @@ export function useGardenerLogin(setReport: (report: string) => void) {
           shootName: shoot.metadata.name,
           expirationSeconds,
         });
-        kubeconfigs.push(kubeconfig);
+        kubeconfigs.push(result);
       }
     }
     return kubeconfigs;
   };
 
-  const addKubeconfig = (kubeconfig: ValidKubeconfig) => {
+  const addKubeconfig = ({
+    kubeconfig,
+    expirationTimestamp,
+  }: AdminKubeconfigResult) => {
     const contextName = kubeconfig['current-context'];
     const context =
       kubeconfig.contexts?.find((ctx) => ctx.name === contextName) ||
@@ -118,6 +124,7 @@ export function useGardenerLogin(setReport: (report: string) => void) {
       currentContext,
       kubeconfig,
       config: { storage: 'sessionStorage' },
+      expiresAt: expirationTimestamp,
     };
 
     addCluster(cluster, clustersInfo, false);

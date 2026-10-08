@@ -2,7 +2,15 @@ import jsyaml from 'js-yaml';
 import { base64Decode } from 'shared/helpers';
 import { ValidKubeconfig } from 'types';
 
-type AdminKubeconfigResponse = { status: { kubeconfig: string } };
+type AdminKubeconfigResponse = {
+  status: { kubeconfig: string; expirationTimestamp?: string };
+};
+
+export type AdminKubeconfigResult = {
+  kubeconfig: ValidKubeconfig;
+  // The actual expiry the garden granted (may be shorter than requested).
+  expirationTimestamp?: string;
+};
 
 export async function requestAdminKubeconfig({
   backendAddress,
@@ -18,7 +26,7 @@ export async function requestAdminKubeconfig({
   namespace: string;
   shootName: string;
   expirationSeconds?: number;
-}): Promise<ValidKubeconfig> {
+}): Promise<AdminKubeconfigResult> {
   const url = `${backendAddress}/apis/core.gardener.cloud/v1beta1/namespaces/${namespace}/shoots/${shootName}/adminkubeconfig`;
   const payload = {
     apiVersion: 'authentication.gardener.cloud/v1alpha1',
@@ -49,5 +57,10 @@ export async function requestAdminKubeconfig({
   }
 
   const result = (await response.json()) as AdminKubeconfigResponse;
-  return jsyaml.load(base64Decode(result.status.kubeconfig)) as ValidKubeconfig;
+  return {
+    kubeconfig: jsyaml.load(
+      base64Decode(result.status.kubeconfig),
+    ) as ValidKubeconfig,
+    expirationTimestamp: result.status.expirationTimestamp,
+  };
 }
