@@ -271,35 +271,41 @@ describe('resolveOrBlockPrivateIpAddress on a real socket', () => {
     await new Promise((resolve) => server.close(resolve));
   });
 
-  it('connects over IPv4 when IPv6 is unreachable', async () => {
+  it('uses the IPv4 address when DNS also returns IPv6', async () => {
     server = createServer((_req, res) => res.end('ok'));
     await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 
-    // Nothing listens on ::1, so the IPv6 attempt fails.
+    // Nothing listens on ::1, so picking the IPv6 address fails.
     vi.spyOn(dns, 'lookup').mockResolvedValueOnce([
       { address: '127.0.0.1', family: 4 },
       { address: '::1', family: 6 },
     ]);
-    // Let loopback pass the private-IP check so we can reach the test server.
+    // Let loopback pass the private-IP check.
     vi.spyOn(net, 'isIPv4').mockReturnValue(false);
     vi.spyOn(net, 'isIPv6').mockReturnValue(false);
 
-    const statusCode = await new Promise((resolve, reject) => {
-      get(
-        {
-          hostname: 'dual-stack-socket.example.com',
-          port: server.address().port,
-          lookup: resolveOrBlockPrivateIpAddress,
-          agent: false,
-        },
-        (res) => {
-          res.resume();
-          resolve(res.statusCode);
-        },
-      ).on('error', reject);
-    });
+    const { statusCode, remoteAddress } = await new Promise(
+      (resolve, reject) => {
+        get(
+          {
+            hostname: 'dual-stack-socket.example.com',
+            port: server.address().port,
+            lookup: resolveOrBlockPrivateIpAddress,
+            agent: false,
+          },
+          (res) => {
+            res.resume();
+            resolve({
+              statusCode: res.statusCode,
+              remoteAddress: res.socket.remoteAddress,
+            });
+          },
+        ).on('error', reject);
+      },
+    );
 
     expect(statusCode).toBe(200);
+    expect(remoteAddress).toBe('127.0.0.1');
   });
 });
 

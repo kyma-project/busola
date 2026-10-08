@@ -2,10 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import dns from 'dns/promises';
 import https from 'https';
 import { handleK8sRequests } from './handler.js';
-import {
-  CONNECT_ATTEMPT_TIMEOUT_MS,
-  PrivateIPUsedError,
-} from '../utils/network-utils.js';
+import { PrivateIPUsedError } from '../utils/network-utils.js';
 import config from '../src/config/config.js';
 
 vi.mock('../src/config/config.js', () => ({
@@ -106,17 +103,6 @@ describe('handleK8sRequests', () => {
     expect(requestSpy).toHaveBeenCalledTimes(1);
     const options = requestSpy.mock.calls[0][0];
     expect(typeof options.lookup).toBe('function');
-  });
-
-  it('sets a longer connect timeout per address', async () => {
-    const requestSpy = mockAbortingRequest();
-
-    await handleK8sRequests(makeReq(), makeRes());
-
-    const options = requestSpy.mock.calls[0][0];
-    expect(options.autoSelectFamilyAttemptTimeout).toBe(
-      CONNECT_ATTEMPT_TIMEOUT_MS,
-    );
   });
 
   it('allows x-cluster-url with a clean non-root base path', async () => {

@@ -11,7 +11,7 @@ import {
 } from '../utils/rate-limit-key.js';
 import { buildK8sRequestPath } from './path-utils.js';
 import {
-  CONNECT_ATTEMPT_TIMEOUT_MS,
+  PER_ADDRESS_CONNECT_TIMEOUT_MS,
   resolveOrBlockPrivateIpAddress,
 } from '../utils/network-utils.js';
 import config from '../src/config/config.js';
@@ -131,7 +131,7 @@ export async function handleK8sRequests(req, res) {
     headers,
     method: req.method,
     port: targetApiServer.port || defaultPort,
-    autoSelectFamilyAttemptTimeout: CONNECT_ATTEMPT_TIMEOUT_MS,
+    autoSelectFamilyAttemptTimeout: PER_ADDRESS_CONNECT_TIMEOUT_MS,
     ...(allowPrivateIps ? {} : { lookup: resolveOrBlockPrivateIpAddress }),
     ...(isHttps && { ca, cert, key, agent }),
   };

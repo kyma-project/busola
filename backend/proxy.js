@@ -5,7 +5,7 @@ import { pipeline } from 'stream/promises';
 import {
   isValidHost,
   PrivateIPUsedError,
-  CONNECT_ATTEMPT_TIMEOUT_MS,
+  PER_ADDRESS_CONNECT_TIMEOUT_MS,
   resolveOrBlockPrivateIpAddress,
 } from './utils/network-utils.js';
 import { proxyAgent } from './utils/https-agent.js';
@@ -50,7 +50,7 @@ async function proxyHandler(req, res) {
       timeout: 30000,
       agent: proxyAgent,
       lookup: resolveOrBlockPrivateIpAddress,
-      autoSelectFamilyAttemptTimeout: CONNECT_ATTEMPT_TIMEOUT_MS,
+      autoSelectFamilyAttemptTimeout: PER_ADDRESS_CONNECT_TIMEOUT_MS,
     };
 
     await new Promise((resolve, reject) => {

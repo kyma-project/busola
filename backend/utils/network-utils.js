@@ -6,9 +6,9 @@ const MAX_CACHE_SIZE = 1000;
 
 const dnsCache = new Map();
 
-// Node's default of 250ms per address is too short for slow connections:
-// the IPv4 attempt gets dropped before it can finish.
-export const CONNECT_ATTEMPT_TIMEOUT_MS = 2000;
+// Node's default (250ms, 500ms from Node 26) drops a slow IPv4 attempt
+// before it can finish and moves on to the unreachable IPv6 address.
+export const PER_ADDRESS_CONNECT_TIMEOUT_MS = 2000;
 
 export class PrivateIPUsedError extends Error {}
 
