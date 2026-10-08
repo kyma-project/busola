@@ -1,12 +1,36 @@
+import { Buffer } from 'node:buffer';
 import express from 'express';
 import cors from 'cors';
 import jsyaml from 'js-yaml';
+import config from '../src/config/config.js';
 
 const router = express.Router();
 router.use(express.json());
 router.use(cors());
 
 const ALLOWED_DOMAINS = ['githubusercontent.com', 'github.com', 'github.io'];
+const MAX_RESPONSE_BYTES =
+  config.features?.COMMUNITY_PROXY?.maxResponseBytes ?? 1 * 1024 * 1024;
+const FETCH_TIMEOUT_MS =
+  config.features?.COMMUNITY_PROXY?.fetchTimeoutMs ?? 10_000;
+
+async function readBodyWithSizeLimit(response) {
+  const contentLength = response.headers.get('content-length');
+  if (contentLength && parseInt(contentLength) > MAX_RESPONSE_BYTES) {
+    throw new Error('Response too large');
+  }
+
+  const chunks = [];
+  let totalSize = 0;
+
+  for await (const chunk of response.body) {
+    totalSize += chunk.length;
+    if (totalSize > MAX_RESPONSE_BYTES) throw new Error('Response too large');
+    chunks.push(chunk);
+  }
+
+  return new TextDecoder().decode(Buffer.concat(chunks));
+}
 
 function isAllowedUrl(url) {
   const isAllowedHost = ALLOWED_DOMAINS.some(
@@ -32,7 +56,9 @@ async function handleGetCommunityResource(req, res) {
       });
     }
 
-    const response = await fetch(url.href);
+    const response = await fetch(url.href, {
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    });
 
     // We cannot disable redirects because github redirects to release assets.
     // The final URL is checked if there was an open redirect vuln on github.com.
@@ -48,9 +74,14 @@ async function handleGetCommunityResource(req, res) {
         message: `The resource doesn't exist`,
       });
     }
-    const data = await response.text();
+    const data = await readBodyWithSizeLimit(response);
     res.json(jsyaml.loadAll(data));
   } catch (error) {
+    if (error.message === 'Response too large') {
+      return res
+        .status(413)
+        .json({ message: 'Community resource is too large.' });
+    }
     res
       .status(500)
       .json({ message: `Failed to fetch community resource. ${error}` });

@@ -5,8 +5,10 @@ import { createElement, PropsWithChildren } from 'react';
 import { UserManager } from 'oidc-client-ts';
 import { getIntendedPath } from '../intendedPathAtom';
 import {
+  AUTH_REDIRECT_STORAGE_KEY,
   isAuthRedirectLoop,
   registerAuthRedirect,
+  resetReauthRedirectClaim,
 } from '../utils/authRedirectLoopGuard';
 import { useReauthenticate } from '../useReauthenticate';
 
@@ -49,6 +51,7 @@ describe('useReauthenticate', () => {
     mockNavigate.mockReset();
     notifyLoginFailureMock.mockReset();
     sessionStorage.clear();
+    resetReauthRedirectClaim();
   });
 
   it('redirects through the IdP and saves the intended path', async () => {
@@ -73,11 +76,47 @@ describe('useReauthenticate', () => {
       wrapper: makeWrapper('/cluster/foo'),
     });
 
-    await result.current(userManager);
-    await result.current(userManager);
+    await result.current(userManager); // simulated page load 1
+    resetReauthRedirectClaim();
+    await result.current(userManager); // simulated page load 2
     expect(isAuthRedirectLoop()).toBe(false);
-    await result.current(userManager);
+    resetReauthRedirectClaim();
+    await result.current(userManager); // simulated page load 3
     expect(isAuthRedirectLoop()).toBe(true);
+  });
+
+  it('redirects only once when triggered twice in the same page load', async () => {
+    const userManager = makeUserManager();
+    const { result } = renderHook(() => useReauthenticate(), {
+      wrapper: makeWrapper('/cluster/foo'),
+    });
+
+    await result.current(userManager);
+    await result.current(userManager); // same load, no reset
+
+    expect(userManager.signinRedirect).toHaveBeenCalledTimes(1);
+    const stored = JSON.parse(
+      sessionStorage.getItem(AUTH_REDIRECT_STORAGE_KEY) || '[]',
+    );
+    expect(stored).toHaveLength(1);
+  });
+
+  it('allows another redirect after a failed one', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const userManager = makeUserManager({
+      signinRedirect: vi
+        .fn()
+        .mockRejectedValueOnce(new Error('idp down'))
+        .mockResolvedValue(undefined),
+    } as Partial<UserManager>);
+    const { result } = renderHook(() => useReauthenticate(), {
+      wrapper: makeWrapper('/cluster/foo/namespaces/bar'),
+    });
+
+    await result.current(userManager); // redirect fails
+    await result.current(userManager); // redirects again
+
+    expect(userManager.signinRedirect).toHaveBeenCalledTimes(2);
   });
 
   it('stops and reports a failure instead of redirecting again once a loop is detected', async () => {
