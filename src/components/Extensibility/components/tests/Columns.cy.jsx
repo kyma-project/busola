@@ -34,4 +34,51 @@ describe('Columns Component', () => {
       .children()
       .should('have.length', 0);
   });
+
+  it('Skips the form group for a child whose widget is not visible', () => {
+    const structure = {
+      children: [
+        {
+          name: 'columns.left',
+          widget: 'Panel',
+          children: [{ path: 'spec.value1' }],
+        },
+        {
+          name: 'columns.right',
+          widget: 'Panel',
+          visibility: 'false',
+          children: [{ path: 'spec.value2' }],
+        },
+      ],
+    };
+
+    cy.mount(<Columns structure={structure} />);
+
+    cy.get('[data-testid="extensibility-columns"]')
+      .children()
+      .should('have.length', 1);
+  });
+
+  it('Collapses the form when every child is hidden', () => {
+    const structure = {
+      children: [
+        {
+          name: 'columns.left',
+          widget: 'Panel',
+          visibility: 'false',
+          children: [{ path: 'spec.value1' }],
+        },
+        {
+          name: 'columns.right',
+          widget: 'Panel',
+          visibility: 'false',
+          children: [{ path: 'spec.value2' }],
+        },
+      ],
+    };
+
+    cy.mount(<Columns structure={structure} />);
+
+    cy.get('[data-testid="extensibility-columns"]').should('not.be.visible');
+  });
 });

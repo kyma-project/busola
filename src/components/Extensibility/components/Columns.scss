@@ -1,0 +1,5 @@
+// Hidden children render no group; without this the empty form still paints
+// its grid chrome.
+.extensibility-columns:not(:has(ui5-form-group)) {
+  display: none;
+}

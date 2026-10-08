@@ -188,6 +188,9 @@ export type WidgetProps = {
   singleRootResource?: any;
   embedResource?: any;
   index?: number;
+  // Applied only around rendered content, so a hidden widget leaves no empty
+  // wrapper behind.
+  wrapper?: (props: { children: ReactNode }) => ReactNode;
   [key: string]: any;
 };
 
@@ -200,6 +203,7 @@ export function Widget({
   singleRootResource,
   embedResource,
   index,
+  wrapper: Wrapper,
   ...props
 }: WidgetProps) {
   const { Plain, Text } = widgets;
@@ -267,6 +271,9 @@ export function Widget({
 
   if (visible === false) return null;
 
+  const wrap = (node: ReactNode) =>
+    Wrapper ? <Wrapper>{node}</Wrapper> : node;
+
   if (structure.valuePreprocessor) {
     const Preprocessor = (valuePreprocessors as any)[
       structure.valuePreprocessor
@@ -281,19 +288,20 @@ export function Widget({
         originalResource={originalResource}
         singleRootResource={singleRootResource}
         embedResource={embedResource}
+        wrapper={Wrapper}
         {...props}
       />
     );
   }
 
   if (Array.isArray(structure)) {
-    return (
+    return wrap(
       <Plain
         value={value}
         structure={{ children: structure }}
         originalResource={originalResource}
         {...props}
-      />
+      />,
     );
   }
   let Renderer = structure.children ? Plain : Text;
@@ -309,34 +317,36 @@ export function Widget({
   if (sanitizedValue?.loading) {
     return null;
   }
-  return Array.isArray(sanitizedValue) && !(Renderer as any).array ? (
-    sanitizedValue.map((valueItem: any, index: number) => (
-      <SingleWidget
-        key={index}
-        {...props}
-        inlineRenderer={inlineRenderer}
-        Renderer={Renderer}
-        value={valueItem}
-        arrayItems={[...arrayItems, valueItem]}
-        structure={structure}
-        originalResource={originalResource}
-        singleRootResource={valueItem}
-        embedResource={embedResource}
-        scope={valueItem}
-      />
-    ))
-  ) : (
-    <SingleWidget
-      {...props}
-      inlineRenderer={inlineRenderer}
-      Renderer={Renderer}
-      value={sanitizedValue}
-      scope={value}
-      arrayItems={arrayItems}
-      structure={structure}
-      originalResource={originalResource}
-      singleRootResource={singleRootResource || originalResource}
-      embedResource={embedResource}
-    />
-  );
+  return Array.isArray(sanitizedValue) && !(Renderer as any).array
+    ? wrap(
+        sanitizedValue.map((valueItem: any, index: number) => (
+          <SingleWidget
+            key={index}
+            {...props}
+            inlineRenderer={inlineRenderer}
+            Renderer={Renderer}
+            value={valueItem}
+            arrayItems={[...arrayItems, valueItem]}
+            structure={structure}
+            originalResource={originalResource}
+            singleRootResource={valueItem}
+            embedResource={embedResource}
+            scope={valueItem}
+          />
+        )),
+      )
+    : wrap(
+        <SingleWidget
+          {...props}
+          inlineRenderer={inlineRenderer}
+          Renderer={Renderer}
+          value={sanitizedValue}
+          scope={value}
+          arrayItems={arrayItems}
+          structure={structure}
+          originalResource={originalResource}
+          singleRootResource={singleRootResource || originalResource}
+          embedResource={embedResource}
+        />,
+      );
 }
