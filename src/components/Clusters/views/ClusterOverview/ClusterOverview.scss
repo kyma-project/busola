@@ -3,8 +3,11 @@
 }
 
 .modules-statuses {
+  // CountingCard sets a fixed inline width; follow the grid track instead so
+  // narrow columns don't scroll sideways.
+  width: 100% !important;
+  min-width: 0 !important;
   max-width: 500px !important;
-  width: max-content !important;
 
   span {
     max-width: unset;

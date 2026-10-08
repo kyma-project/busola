@@ -4,6 +4,8 @@ import { Dispatch, JSX, ReactNode, SetStateAction, useId } from 'react';
 import { createTranslationTextWithLinks } from '../../helpers/linkExtractor';
 import { useTranslation } from 'react-i18next'; // this regex catch 2 things, markdown URL or normal URL
 
+import './HintButton.scss';
+
 type HintButtonProps = {
   setShowTitleDescription: Dispatch<SetStateAction<boolean>>;
   showTitleDescription: boolean;
