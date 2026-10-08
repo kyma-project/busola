@@ -96,6 +96,23 @@ export function deleteCluster(
   });
 }
 
+export function deleteAllClusters(clustersInfo: useClustersInfoType) {
+  const { setClusters, setCurrentCluster } = clustersInfo;
+  setClusters((prev) => {
+    Object.values(prev ?? {}).forEach((cluster) => {
+      const credentials = cluster?.currentContext?.user?.user;
+      const exec = (credentials as KubeconfigOIDCAuth)?.exec;
+      if (!hasNonOidcAuth(credentials) && isOIDCExec(exec)) {
+        createUserManager(parseOIDCparams(credentials as KubeconfigOIDCAuth))
+          .removeUser()
+          .catch(console.warn);
+      }
+    });
+    return {};
+  });
+  setCurrentCluster(null);
+}
+
 export function getContext(
   userKubeconfig: Kubeconfig,
   contextName: string,

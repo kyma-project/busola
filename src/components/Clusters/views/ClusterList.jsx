@@ -22,7 +22,7 @@ import { getReadableTimestampWithTime } from 'shared/components/ReadableCreation
 
 import { Button } from '@ui5/webcomponents-react';
 
-import { deleteCluster } from '../shared';
+import { deleteCluster, deleteAllClusters } from '../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
 import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
@@ -195,6 +195,17 @@ function ClusterList() {
           {t('clusters.gardener.button')}
         </Button>
       )}
+      <Button
+        design="Transparent"
+        onClick={() => {
+          deleteAllClusters(clustersInfo);
+          notification.notifySuccess({
+            content: t('clusters.disconnect-all-success'),
+          });
+        }}
+      >
+        {t('clusters.disconnect-all')}
+      </Button>
     </>
   );
 

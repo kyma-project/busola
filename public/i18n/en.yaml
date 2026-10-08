@@ -94,6 +94,8 @@ clusters:
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
   description-visibility: Description is shown on the Clusters view
   disconnect: Cluster disconnected
+  disconnect-all: Disconnect all
+  disconnect-all-success: All clusters disconnected.
   edit-cluster: Edit Cluster
   empty:
     subtitle: Connect one to use the Kyma dashboard.
