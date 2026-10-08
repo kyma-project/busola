@@ -31,10 +31,7 @@ export default function GardenerLogin() {
         setToken(user.token);
       } else {
         const auth = user as KubeconfigOIDCAuth;
-        const userManager = createUserManager(
-          parseOIDCparams(auth),
-          '/gardener-login',
-        );
+        const userManager = createUserManager(parseOIDCparams(auth), '');
         try {
           const storedUser = await userManager.getUser();
           const user =
@@ -50,6 +47,10 @@ export default function GardenerLogin() {
           } else {
             // no response data yet, try to log in
             await userManager.clearStaleState();
+            // Redirect to the bare-origin redirect_uri (the one registered with
+            // the IdP). The app entry bounces the callback back to
+            // /gardener-login to finish; this one-shot marker scopes that bounce.
+            sessionStorage.setItem('gardener-oidc-return', '1');
             userManager.signinRedirect();
           }
         }
