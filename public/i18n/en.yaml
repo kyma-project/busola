@@ -102,6 +102,7 @@ clusters:
     button: Connect a Gardener cluster
     connect: Connect shoot
     detected: 'Detected Gardener shoot "{{name}}" in namespace {{namespace}} (landscape: {{identity}}).'
+    duration-label: Access duration
     error: 'Connecting clusters failed: {{message}}.'
     errors:
       garden-parse: Could not parse the garden kubeconfig YAML.

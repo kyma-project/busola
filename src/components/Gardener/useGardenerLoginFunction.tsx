@@ -61,6 +61,7 @@ export function useGardenerLogin(setReport: (report: string) => void) {
   const getKubeconfigs = async (
     serverAddress: string,
     token: string,
+    expirationSeconds: number | undefined,
     fetchHeaders: HeadersInit,
     availableProjects: string[],
   ) => {
@@ -91,6 +92,7 @@ export function useGardenerLogin(setReport: (report: string) => void) {
           token,
           namespace: `garden-${project}`,
           shootName: shoot.metadata.name,
+          expirationSeconds,
         });
         kubeconfigs.push(kubeconfig);
       }
@@ -121,7 +123,11 @@ export function useGardenerLogin(setReport: (report: string) => void) {
     addCluster(cluster, clustersInfo, false);
   };
 
-  return async (serverAddress: string, token: string) => {
+  return async (
+    serverAddress: string,
+    token: string,
+    expirationSeconds?: number,
+  ) => {
     const fetchHeaders = {
       'Content-Type': 'application/json',
       'X-Cluster-Url': serverAddress,
@@ -132,6 +138,7 @@ export function useGardenerLogin(setReport: (report: string) => void) {
     const kubeconfigs = await getKubeconfigs(
       serverAddress,
       token,
+      expirationSeconds,
       fetchHeaders,
       availableProjects,
     );

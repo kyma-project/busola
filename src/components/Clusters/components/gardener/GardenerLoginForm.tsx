@@ -1,4 +1,9 @@
-import { MessageStrip, TextArea } from '@ui5/webcomponents-react';
+import {
+  MessageStrip,
+  Option,
+  Select,
+  TextArea,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { FileInput } from 'shared/components/FileInput/FileInput';
 import { Kubeconfig } from 'types';
@@ -10,7 +15,13 @@ type Props = {
   setGardenText: (value: string) => void;
   tokenInput: string;
   setTokenInput: (value: string) => void;
+  expirationHours: number;
+  setExpirationHours: (value: number) => void;
 };
+
+// Preset lifetimes for the minted shoot admin kubeconfig, capped at 24h: these
+// are cluster-admin certs held in the browser, so we keep the ceiling low.
+const DURATION_PRESETS_HOURS = [1, 4, 8, 24];
 
 const readFile = (file: File): Promise<string> =>
   new Promise((resolve) => {
@@ -28,6 +39,8 @@ export function GardenerLoginForm({
   setGardenText,
   tokenInput,
   setTokenInput,
+  expirationHours,
+  setExpirationHours,
 }: Props) {
   const { t } = useTranslation();
   const shootRef = extractShootRef(shootKubeconfig);
@@ -73,6 +86,21 @@ export function GardenerLoginForm({
         placeholder={t('clusters.gardener.token-hint')}
         onInput={(e) => setTokenInput(e.target.value ?? '')}
       />
+
+      <label className="sap-margin-top-small">
+        {t('clusters.gardener.duration-label')}
+      </label>
+      <Select
+        onChange={(e) =>
+          setExpirationHours(Number(e.detail.selectedOption.value))
+        }
+      >
+        {DURATION_PRESETS_HOURS.map((h) => (
+          <Option key={h} value={String(h)} selected={h === expirationHours}>
+            {`${h} h`}
+          </Option>
+        ))}
+      </Select>
     </div>
   );
 }

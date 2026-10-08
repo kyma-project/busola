@@ -81,6 +81,7 @@ export function AddClusterWizard({
   // Gardenlogin step inputs: the garden cluster kubeconfig + a bearer token.
   const [gardenText, setGardenText] = useState('');
   const [gardenToken, setGardenToken] = useState('');
+  const [gardenExpirationHours, setGardenExpirationHours] = useState(8);
 
   const {
     isValid: authValid,
@@ -147,6 +148,7 @@ export function AddClusterWizard({
       token,
       namespace: shootRef.namespace,
       shootName: shootRef.name,
+      expirationSeconds: gardenExpirationHours * 60 * 60,
     });
 
     const mintedContextName = minted['current-context'];
@@ -300,6 +302,8 @@ export function AddClusterWizard({
                 setGardenText={setGardenText}
                 tokenInput={gardenToken}
                 setTokenInput={setGardenToken}
+                expirationHours={gardenExpirationHours}
+                setExpirationHours={setGardenExpirationHours}
               />
             ) : (
               <div className="cluster-wizard__auth-container">
