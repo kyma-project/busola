@@ -11,7 +11,6 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { toSentenceCase } from 'shared/utils/helpers';
 import { useUrl } from 'hooks/useUrl';
-import { ProgressIndicatorWithTooltip } from 'shared/components/ProgressIndicatorWithTooltip/ProgressIndicatorWithTooltip';
 import { Link } from 'shared/components/Link/Link';
 import { UsageMetrics } from 'resources/Pods/types';
 
@@ -70,13 +69,13 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
 
   const headerRenderer = () => [
     t('common.headers.name'),
-    t('cluster-overview.headers.cpu'),
-    t('cluster-overview.headers.memory'),
-    t('common.headers.created'),
     t('common.headers.status'),
-    t('node-details.pool'),
-    t('node-details.machine-type'),
+    t('cluster-overview.headers.cpu-usage'),
+    t('cluster-overview.headers.cpu-requests'),
+    t('cluster-overview.headers.memory-usage'),
+    t('cluster-overview.headers.memory-requests'),
     t('common.headers.zone'),
+    t('common.headers.created'),
   ];
 
   // Create a link without layout parameter as the node view is full page.
@@ -104,41 +103,17 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
       >
         {entry?.metadata?.name}
       </Link>,
-      cpu ? (
-        <ProgressIndicatorWithTooltip
-          displayValue={cpu.percentage}
-          value={Number(cpu.percentageValue)}
-          tooltip={t('cluster-overview.tooltips.cpu-used-percentage', {
-            percentage: cpu.percentage,
-          })}
-          accessibleName="CPU usage"
-        />
-      ) : (
-        EMPTY_TEXT_PLACEHOLDER
-      ),
-      memory ? (
-        <ProgressIndicatorWithTooltip
-          displayValue={memory.percentage}
-          value={Number(memory.percentageValue)}
-          tooltip={t('cluster-overview.tooltips.memory-used-percentage', {
-            percentage: memory.percentage,
-          })}
-          accessibleName="Memory usage"
-        />
-      ) : (
-        EMPTY_TEXT_PLACEHOLDER
-      ),
+      getStatus(entry?.status),
+      cpu ? `${cpu.percentageValue}%` : EMPTY_TEXT_PLACEHOLDER,
+      cpu ? `${cpu.requestValue}%` : EMPTY_TEXT_PLACEHOLDER,
+      memory ? `${memory.percentageValue}%` : EMPTY_TEXT_PLACEHOLDER,
+      memory ? `${memory.requestValue}%` : EMPTY_TEXT_PLACEHOLDER,
+      entry?.metadata?.labels?.['topology.kubernetes.io/zone'] ??
+        EMPTY_TEXT_PLACEHOLDER,
       <ReadableCreationTimestamp
         key={entry?.metadata?.creationTimestamp}
         timestamp={entry?.metadata?.creationTimestamp ?? ''}
       />,
-      getStatus(entry?.status),
-      entry?.metadata?.labels?.['worker.gardener.cloud/pool'] ??
-        EMPTY_TEXT_PLACEHOLDER,
-      entry?.metadata?.labels?.['node.kubernetes.io/instance-type'] ??
-        EMPTY_TEXT_PLACEHOLDER,
-      entry?.metadata?.labels?.['topology.kubernetes.io/zone'] ??
-        EMPTY_TEXT_PLACEHOLDER,
     ];
   };
   const Events = <WarningEvents />;

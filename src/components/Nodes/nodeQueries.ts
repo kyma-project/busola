@@ -18,12 +18,14 @@ interface UsageMetrics {
     capacity: number;
     percentage: string;
     percentageValue: number;
+    requestValue?: number | string;
   };
   memory: {
     usage: number;
     capacity: number;
     percentage: string;
     percentageValue: number;
+    requestValue?: number | string;
   };
 }
 
@@ -81,22 +83,62 @@ export function useNodesQuery(skip = false) {
     loading: nodesLoading,
   } = useGet('/api/v1/nodes', { pollingInterval: 5500, skip } as any);
 
+  const { data: pods } = useGet('/api/v1/pods', {
+    pollingInterval: 10000,
+    skip,
+  } as any);
+
   const data = useMemo(() => {
     if (nodes) {
-      const getNodeMetrics = (node: any) => {
+      const getNodeUsageMetrics = (node: any) => {
         const metricsForNode = (nodeMetrics as any)?.items?.find(
           (metrics: any) => node?.metadata?.name === metrics?.metadata?.name,
         );
         return createUsageMetrics(node, metricsForNode);
       };
 
-      return (nodes as any).items?.map((n: any) => ({
-        ...n,
-        metrics: nodeMetrics ? getNodeMetrics(n) : {},
-      }));
+      const podsByNode = new Map<string, any[]>();
+      for (const pod of (pods as any)?.items ?? []) {
+        const nodeName = pod?.spec?.nodeName;
+        if (nodeName) {
+          if (!podsByNode.has(nodeName)) podsByNode.set(nodeName, []);
+          podsByNode.get(nodeName)!.push(pod);
+        }
+      }
+
+      return (nodes as any).items?.map((n: any) => {
+        const nodeName = n?.metadata?.name;
+        const usageMetrics = nodeMetrics ? getNodeUsageMetrics(n) : null;
+
+        const podsForNode = podsByNode.get(nodeName) ?? [];
+        const nodeResources = calcNodeResources({ items: podsForNode });
+        const cpuAllocatable = getCpus(n?.status?.allocatable?.cpu);
+        const memAllocatable = getBytes(n?.status?.allocatable?.memory);
+        const cpuRequestValue = getPercentageFromUsage(
+          nodeResources.requests.cpu,
+          cpuAllocatable,
+        );
+        const memRequestValue = getPercentageFromUsage(
+          nodeResources.requests.memory,
+          memAllocatable,
+        );
+
+        const metrics = usageMetrics
+          ? {
+              ...usageMetrics,
+              cpu: { ...usageMetrics.cpu, requestValue: cpuRequestValue },
+              memory: {
+                ...usageMetrics.memory,
+                requestValue: memRequestValue,
+              },
+            }
+          : {};
+
+        return { ...n, metrics };
+      });
     }
     return null;
-  }, [nodes, nodeMetrics]);
+  }, [nodes, nodeMetrics, pods]);
 
   return {
     nodes: data,

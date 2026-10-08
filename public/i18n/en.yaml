@@ -3,8 +3,10 @@ apps:
 cluster-overview:
   headers:
     cluster-overview: Cluster Overview
-    cpu: CPU
-    memory: Memory
+    cpu-requests: CPU Requests
+    cpu-usage: CPU Usage
+    memory-requests: Memory Requests
+    memory-usage: Memory Usage
     metadata: Metadata
     metrics: Metrics
     nodes: Nodes
