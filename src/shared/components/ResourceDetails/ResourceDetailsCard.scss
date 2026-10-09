@@ -13,6 +13,7 @@
     padding-top: 0;
   }
 }
+
 .resource-card-layout {
   ui5-label {
     margin-bottom: 4px;
@@ -20,6 +21,15 @@
 
   &::part(column) {
     padding-bottom: 0;
+  }
+}
+
+// UI5 right-aligns the label box, but a label that wraps
+// fills the box and its lines fall back to start alignment, leaving a gap to
+// the value. Align the text to the end as well.
+@container (width >=600px) {
+  .resource-card-layout ui5-label {
+    text-align: end;
   }
 }
 
