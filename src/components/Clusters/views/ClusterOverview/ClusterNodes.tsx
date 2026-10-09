@@ -9,7 +9,6 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
-import { toSentenceCase } from 'shared/utils/helpers';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from 'shared/components/Link/Link';
 import { UsageMetrics } from 'resources/Pods/types';
@@ -32,7 +31,6 @@ type RowRendererEntry = {
     labels?: Record<string, string>;
   };
   status?: {
-    conditions?: { status?: string; type?: string; message?: string }[];
     nodeInfo?: {
       kubeletVersion?: string;
     };
@@ -44,26 +42,36 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
   const { clusterUrl } = useUrl();
   const { t } = useTranslation();
 
-  const getStatusType = (status?: string) => {
-    if (status === 'Ready') return 'Positive';
-    return 'None';
-  };
+  const getUsageStatus = (
+    cpu?: UsageMetrics['cpu'],
+    memory?: UsageMetrics['memory'],
+  ) => {
+    if (!cpu && !memory) return EMPTY_TEXT_PLACEHOLDER;
 
-  const getStatus = (status?: {
-    conditions?: { status?: string; type?: string; message?: string }[];
-  }) => {
-    const conditions = status?.conditions || [];
-    const currentStatus = conditions.find((c) => c?.status === 'True');
-    return currentStatus ? (
-      <StatusBadge
-        additionalContent={currentStatus.message}
-        resourceKind="nodes"
-        type={getStatusType(currentStatus.type)}
-      >
-        {toSentenceCase(currentStatus.type)}
+    const cpuPct = cpu ? Number(cpu.percentageValue) : 0;
+    const memPct = memory ? Number(memory.percentageValue) : 0;
+
+    let label: string;
+    let type: 'Positive' | 'Critical' | 'Negative';
+
+    if (memPct >= 81) {
+      label = 'Memory Pressure';
+      type = 'Negative';
+    } else if (cpuPct >= 81) {
+      label = 'CPU Pressure';
+      type = 'Negative';
+    } else if (memPct >= 51 || cpuPct >= 51) {
+      label = 'Warning';
+      type = 'Critical';
+    } else {
+      label = 'Ready';
+      type = 'Positive';
+    }
+
+    return (
+      <StatusBadge resourceKind="nodes" type={type}>
+        {label}
       </StatusBadge>
-    ) : (
-      EMPTY_TEXT_PLACEHOLDER
     );
   };
 
@@ -103,7 +111,7 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
       >
         {entry?.metadata?.name}
       </Link>,
-      getStatus(entry?.status),
+      getUsageStatus(cpu, memory),
       cpu ? `${cpu.percentageValue}%` : EMPTY_TEXT_PLACEHOLDER,
       cpu ? `${cpu.requestValue}%` : EMPTY_TEXT_PLACEHOLDER,
       memory ? `${memory.percentageValue}%` : EMPTY_TEXT_PLACEHOLDER,
