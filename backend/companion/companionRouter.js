@@ -1,6 +1,6 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-import { TokenManager } from './TokenManager';
+import { TokenManager } from './TokenManager.js';
 import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
 import escape from 'lodash.escape';
