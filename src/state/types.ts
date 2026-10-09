@@ -34,6 +34,12 @@ export interface TerminalFeature extends ConfigFeature {
   };
 }
 
+export interface ForceConfirmDeleteFeature extends ConfigFeature {
+  config?: {
+    resources: Array<{ kind: string }>;
+  };
+}
+
 export type ConfigFeaturesNames =
   (typeof configFeaturesNames)[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {
@@ -59,6 +65,7 @@ export const configFeaturesNames = {
   SSO_LOGIN: 'SSO_LOGIN',
   COMMUNITY_MODULES: 'COMMUNITY_MODULES',
   TERMINAL: 'TERMINAL',
+  FORCE_CONFIRM_DELETE: 'FORCE_CONFIRM_DELETE',
 } as const;
 
 export type ConfigFeatureList = {

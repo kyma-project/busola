@@ -9,6 +9,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
+import { useForceConfirmDelete } from 'shared/hooks/useForceConfirmDelete';
 import { ResourceCreate } from 'shared/components/ResourceCreate/ResourceCreate';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import { ResourceHealthCard } from '../ResourceHealthCard/ResourceHealthCard';
@@ -94,6 +95,7 @@ export function ResourceComponent({
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
   const { isProtected, isProtectedResource } = useProtectedResources();
+  const forceConfirmDelete = useForceConfirmDelete(resourceType);
 
   const {
     showDeleteDialog,
@@ -105,6 +107,7 @@ export function ResourceComponent({
     resourceType,
     navigateToListAfterDelete: true,
     layoutNumber,
+    forceConfirmDelete,
   });
 
   // Use isProtectedResource for showing the icon (always show if resource matches rules)
@@ -221,6 +224,7 @@ export function ResourceComponent({
             performDelete={performDelete}
             showDeleteDialog={showDeleteDialog}
             performCancel={performCancel}
+            forceConfirmDelete={forceConfirmDelete}
           />
         }
         protectedResource={showProtectedResourceWarning}

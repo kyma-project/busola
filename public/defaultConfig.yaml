@@ -90,3 +90,12 @@ config:
       isEnabled: false
       config:
         image: europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest
+    FORCE_CONFIRM_DELETE:
+      isEnabled: true
+      config:
+        resources:
+          - kind: Namespaces
+          - kind: ServiceInstances
+          - kind: RedisInstance
+          - kind: NfsInstance
+          
