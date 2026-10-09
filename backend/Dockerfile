@@ -11,7 +11,7 @@ RUN npm run build
 FROM node:24.21-alpine3.24
 
 WORKDIR /app
-COPY --chown=65532:65532 --from=builder /app/backend-production.js ./
+COPY --chown=65532:65532 --from=builder /app/backend-production.cjs ./
 COPY --chown=65532:65532 settings settings/
 COPY --chown=65532:65532 environments environments/
 COPY --chown=65532:65532 certs.pem certs.pem

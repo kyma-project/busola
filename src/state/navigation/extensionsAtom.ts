@@ -10,7 +10,7 @@ import { authDataAtom } from '../authDataAtom';
 import { refreshExtenshionsAtom } from '../refreshExtenshionsAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { configurationAtom } from 'state/configuration/configurationAtom';
-import { openapiPathIdListAtom } from 'state/openapi/openapiPathIdAtom';
+import { resourcePathsAtom } from 'state/discoverability/resourcePathsAtom';
 import {
   getPermissionResourceRules,
   permissionSetsAtom,
@@ -437,7 +437,7 @@ export const useGetExtensions = () => {
   const fetchFn = getFetchFn(useAtomValue);
   const configuration = useAtomValue(configurationAtom);
   const features = configuration?.features;
-  const openapiPathIdList = useAtomValue(openapiPathIdListAtom);
+  const openapiPathIdList = useAtomValue(resourcePathsAtom);
   const permissionSet = useAtomValue(permissionSetsAtomSync);
   const { namespace } = useUrl();
   const { isEnabled: isExtensibilityInjectionsEnabled } = useFeature(

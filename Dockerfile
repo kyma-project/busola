@@ -45,7 +45,7 @@ WORKDIR /app
 
 COPY --chown=65532:65532 --from=builder /app/build /app/core-ui
 COPY --chown=65532:65532 --from=builder /app/backend/node_modules /app/node_modules
-COPY --chown=65532:65532 --from=builder /app/backend/backend-production.js /app/backend-production.js
+COPY --chown=65532:65532 --from=builder /app/backend/backend-production.cjs /app/backend-production.cjs
 COPY --chown=65532:65532 --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --chown=65532:65532 --from=builder /app/backend/settings/* /app/settings/
 COPY --chown=65532:65532 --from=builder /app/backend/environments /app/environments
@@ -56,4 +56,4 @@ USER 65532:65532
 EXPOSE 3001
 ENV ADDRESS=0.0.0.0 IS_DOCKER=true ENVIRONMENT="" NODE_ENV=production
 
-CMD ["backend-production.js"]
+CMD ["backend-production.cjs"]

@@ -1,18 +1,17 @@
-/* global require, module, __dirname */
-const path = require('path');
-require('@babel/register');
-const nodeExternals = require('webpack-node-externals');
+import path from 'path';
+import nodeExternals from 'webpack-node-externals';
 
-module.exports = {
+export default {
   externals: [nodeExternals()],
   target: 'node',
-  entry: path.resolve(__dirname, './index.js'),
+  entry: path.resolve(import.meta.dirname, './index.js'),
   module: {
     rules: [
       {
-        test: /\.(js)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader'],
+        test: /\.js$/,
+        resolve: {
+          fullySpecified: false,
+        },
       },
     ],
   },
@@ -20,10 +19,10 @@ module.exports = {
     extensions: ['.js'],
   },
   output: {
-    path: path.resolve(__dirname, '.'),
-    filename: 'backend-production.js',
+    path: path.resolve(import.meta.dirname, '.'),
+    filename: 'backend-production.cjs',
   },
   optimization: {
-    nodeEnv: false, //don't substitute process.env.NODE_ENV
+    nodeEnv: false,
   },
 };
