@@ -13,12 +13,12 @@
     pointer-events: none;
 
     [slot='actionsBar'],
-    [slot='navigationBar'],
+    [slot='breadcrumbs'],
     .protected-resource-button {
       pointer-events: auto;
     }
 
-    [slot='navigationBar'] {
+    [slot='breadcrumbs'] {
       margin-bottom: 0.5rem;
     }
   }
