@@ -281,4 +281,63 @@ describe('useSSOLogin', () => {
     );
     expect(managerMock.signinRedirect).not.toHaveBeenCalled();
   });
+
+  it('removes the callback parameters from the URL after the SSO login', async () => {
+    localStorage.setItem(
+      'oidc.s1',
+      JSON.stringify({ client_id: 'sso-client' }),
+    );
+    window.history.replaceState(
+      {},
+      '',
+      '/?code=abc&state=s1&session_state=x&iss=https%3A%2F%2Fidp.example',
+    );
+    managerMock.signinRedirectCallback.mockResolvedValue({
+      expired: false,
+      id_token: 'jwt',
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+    });
+    const { Wrapper, store } = makeWrapper();
+
+    renderHook(() => useSSOLogin(), { wrapper: Wrapper });
+
+    await waitFor(() => expect(store.get(ssoDataAtom)?.id_token).toBe('jwt'));
+    // Otherwise the cluster login mistakes them for a foreign callback.
+    expect(window.location.search).toBe('');
+  });
+});
+
+describe('ssoDataAtom initial value', () => {
+  const load = async () => {
+    vi.resetModules();
+    const { createStore: freshStore } = await import('jotai');
+    const { ssoDataAtom: freshAtom } = await import('../ssoDataAtom');
+    return freshStore().get(freshAtom);
+  };
+
+  beforeEach(() => {
+    sessionStorage.clear();
+  });
+
+  it('ignores an expired stored SSO token', async () => {
+    sessionStorage.setItem(
+      'SSO',
+      JSON.stringify({
+        id_token: 'old',
+        expires_at: Math.floor(Date.now() / 1000) - 10,
+      }),
+    );
+    expect(await load()).toBeNull();
+  });
+
+  it('keeps a valid stored SSO token', async () => {
+    sessionStorage.setItem(
+      'SSO',
+      JSON.stringify({
+        id_token: 'live',
+        expires_at: Math.floor(Date.now() / 1000) + 600,
+      }),
+    );
+    expect((await load())?.id_token).toBe('live');
+  });
 });

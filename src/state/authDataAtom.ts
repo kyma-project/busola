@@ -33,7 +33,11 @@ import {
   tryClaimReauthRedirect,
 } from './utils/authRedirectLoopGuard';
 import { useNotifyLoginFailure } from './useLoginFailureNotification';
-import { ssoDataAtom, ssoLoginStoppedAtom } from './ssoDataAtom';
+import {
+  restartSSOLogin,
+  ssoDataAtom,
+  ssoLoginStoppedAtom,
+} from './ssoDataAtom';
 import { configFeaturesNames } from './types';
 import { useFeature } from 'hooks/useFeature';
 import { configurationAtom } from './configuration/configurationAtom';
@@ -246,7 +250,14 @@ export function useAuthHandler() {
 
   useEffect(() => {
     if (!configuration?.features) return;
-    if (!ssoData && isSSOEnabled && !ssoLoginStopped) return;
+    if (!ssoData && isSSOEnabled) {
+      if (!ssoLoginStopped) return;
+      // The cluster login can't finish without an SSO session, so start the SSO login again.
+      if (cluster) {
+        restartSSOLogin();
+        return;
+      }
+    }
     // A configuration reload re-runs this effect; an unchanged cluster keeps its handlers.
     if (cluster && isEqual(prevClusterRef.current, cluster)) return;
     if (cleanupRef.current) {
