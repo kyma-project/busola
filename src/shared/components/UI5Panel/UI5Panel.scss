@@ -10,6 +10,11 @@
   }
 }
 
+// Not `hidden`: a scroll container would unstick the sticky header.
+ui5-panel.bsl-panel-header {
+  overflow: clip;
+}
+
 ui5-panel::part(header-wrapper) {
   top: 64px;
   border-radius: var(--_ui5_panel_border_radius) var(--_ui5_panel_border_radius)

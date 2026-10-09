@@ -1,5 +1,6 @@
 import { Form, FormGroup } from '@ui5/webcomponents-react';
 import { Widget } from './Widget';
+import './Columns.scss';
 
 interface ColumnsProps {
   structure: any;
@@ -13,11 +14,18 @@ export function Columns({ structure, ...props }: ColumnsProps) {
   const layout = allFormGroups ? 'S1 M2 L2 XL2' : 'S1 M1 L2 XL2';
 
   return (
-    <Form layout={layout} data-testid="extensibility-columns">
+    <Form
+      className="extensibility-columns"
+      layout={layout}
+      data-testid="extensibility-columns"
+    >
       {(structure.children || []).map((child: any) => (
-        <FormGroup key={`form-group-${child.path || child.name}`}>
-          <Widget structure={child} {...props} />
-        </FormGroup>
+        <Widget
+          key={`form-group-${child.path || child.name}`}
+          structure={child}
+          wrapper={FormGroup}
+          {...props}
+        />
       ))}
     </Form>
   );
