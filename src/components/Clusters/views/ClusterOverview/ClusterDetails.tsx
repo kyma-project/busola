@@ -4,10 +4,10 @@ import { useAtomValue } from 'jotai';
 import { unwrap } from 'jotai/utils';
 
 import { useGetVersions } from './useGetVersions';
-import { ClusterInfoFields } from './ClusterInfoFields';
+import { useClusterInfoFields } from './ClusterInfoFields';
 import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
 
-import { FormItem, Text, Title, Label, Form } from '@ui5/webcomponents-react';
+import { FormItem, Text, Title, Label } from '@ui5/webcomponents-react';
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 import ClusterModulesCard from './ClusterModulesCard';
 import { ClusterStorageType } from '../ClusterStorageType';
@@ -49,9 +49,13 @@ export default function ClusterDetails({
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     configFeaturesNames.COMMUNITY_MODULES,
   );
+  const clusterInfoFields = useClusterInfoFields(kymaResourceLabels);
 
   return (
-    <section aria-labelledby="cluster-details-heading">
+    <section
+      aria-labelledby="cluster-details-heading"
+      className="resource-details-section"
+    >
       <Title
         level="H3"
         size="H3"
@@ -60,7 +64,7 @@ export default function ClusterDetails({
       >
         {t('cluster-overview.headers.cluster-overview')}
       </Title>
-      <Form layout="S1 M2 L2 XL2" className="form-without-background">
+      <div className="resource-details-cards">
         <ResourceDetailsCard
           titleText={t('cluster-overview.headers.metadata')}
           content={
@@ -105,7 +109,7 @@ export default function ClusterDetails({
                   {currentCluster?.currentContext?.cluster?.cluster?.server}
                 </Text>
               </FormItem>
-              <ClusterInfoFields kymaResourceLabels={kymaResourceLabels} />
+              {clusterInfoFields}
             </>
           }
         />
@@ -116,7 +120,7 @@ export default function ClusterDetails({
             </CommunityModuleContextProvider>
           </ModuleTemplatesContextProvider>
         )}
-      </Form>
+      </div>
     </section>
   );
 }

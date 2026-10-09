@@ -1,4 +1,5 @@
-import { Form, FormItem, Label, Text } from '@ui5/webcomponents-react';
+import { FormItem, Label, Text } from '@ui5/webcomponents-react';
+import { ResourceDetailsForm } from './ResourceDetailsForm';
 
 export type CustomColumn = {
   header?: string;
@@ -24,11 +25,7 @@ export function ResourceCustomStatusColumns({
   resource,
 }: ResourceCustomStatusColumnsProps) {
   return (
-    <Form
-      layout="S2 M2 L2 XL2"
-      labelSpan="S12 M4 L4 XL4"
-      className="resource-status-card__custom-columns"
-    >
+    <ResourceDetailsForm>
       {filteredStatusColumns?.map((col) => (
         <FormItem
           key={col.header}
@@ -37,6 +34,6 @@ export function ResourceCustomStatusColumns({
           <Text className="text-with-padding">{col.value(resource)}</Text>
         </FormItem>
       ))}
-    </Form>
+    </ResourceDetailsForm>
   );
 }

@@ -72,7 +72,7 @@ export function FormField({
                 {label}
               </Label>
               {tooltipContent && (
-                <span className="form-field__hint-slot">
+                <span className="hint-button-slot">
                   <HintButton
                     setShowTitleDescription={setOpenPopover}
                     showTitleDescription={openPopover}
