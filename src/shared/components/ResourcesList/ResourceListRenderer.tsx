@@ -20,6 +20,7 @@ import {
 } from 'shared/components/GenericList/GenericList';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
+import { useForceConfirmDelete } from 'shared/hooks/useForceConfirmDelete';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
@@ -87,6 +88,7 @@ export function ResourceListRenderer({
   });
   const { t } = useTranslation();
   const { isProtected } = useProtectedResources();
+  const forceConfirmDelete = useForceConfirmDelete(resourceType);
   const navigate = useNavigate();
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
 
@@ -102,6 +104,7 @@ export function ResourceListRenderer({
     redirectBack: false,
     parentCrdName,
     afterDelete,
+    forceConfirmDelete,
   });
 
   const [activeResource, setActiveResource] = useState<Record<
@@ -438,6 +441,7 @@ export function ResourceListRenderer({
           performCancel={performCancel}
           performDelete={performDelete}
           showDeleteDialog={showDeleteDialog}
+          forceConfirmDelete={forceConfirmDelete}
         />,
         document.body,
       )}

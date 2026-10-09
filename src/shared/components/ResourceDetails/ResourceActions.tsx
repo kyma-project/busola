@@ -21,6 +21,7 @@ type ResourceActionsProps = {
   resourceType: string;
   resourceUrl?: string;
   disableDelete?: boolean;
+  forceConfirmDelete?: boolean;
   handleResourceDelete: ({
     resource,
     resourceUrl,
@@ -50,6 +51,7 @@ export const ResourceActions = ({
   resourceType,
   resourceUrl,
   disableDelete,
+  forceConfirmDelete,
   handleResourceDelete,
   protectedResource,
   performDelete,
@@ -96,10 +98,10 @@ export const ResourceActions = ({
               performDelete={performDelete}
               showDeleteDialog={showDeleteDialog}
               performCancel={performCancel}
+              forceConfirmDelete={forceConfirmDelete}
             />,
             document.body,
           )}
-          \
         </>
       )}
       {createPortal(<YamlUploadDialog />, document.body)}
