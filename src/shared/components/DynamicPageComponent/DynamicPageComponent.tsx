@@ -348,7 +348,7 @@ export const DynamicPageComponent = ({
         </FlexBox>
       }
       actionsBar={actionsBar}
-      navigationBar={navigationBar}
+      breadcrumbs={navigationBar}
     />
   );
 
