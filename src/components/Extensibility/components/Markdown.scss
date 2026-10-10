@@ -19,4 +19,27 @@
     border: 1px solid var(--sapList_BorderColor);
     padding: 0.5rem;
   }
+
+  pre {
+    background-color: var(--sapBaseColor);
+    border: 1px solid var(--sapList_BorderColor);
+    border-radius: 4px;
+    padding: 0.75rem;
+    overflow-x: auto;
+    margin: 0.5em 0;
+
+    code {
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+  }
+
+  code {
+    background-color: var(--sapBaseColor);
+    border: 1px solid var(--sapList_BorderColor);
+    border-radius: 3px;
+    padding: 0.1em 0.3em;
+    font-family: monospace;
+  }
 }

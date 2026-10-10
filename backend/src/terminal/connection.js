@@ -1,4 +1,3 @@
-/* global Buffer */
 import { WebSocket } from 'ws';
 
 const Colors = Object.freeze({

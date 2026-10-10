@@ -7,12 +7,16 @@ export function useCustomFormValidator() {
   const [customValid, setCustomValid] = useState(true);
 
   const revalidate = (cv = customValid) => {
-    // Has to adjusted after every Resource Form structure change
-    const formContainer = formElementRef.current?.querySelector(
-      '.resource-form ui5-form-item',
-    )?.children[0];
+    // Has to be adjusted after every Resource Form structure change
+    const formContainer =
+      formElementRef.current?.querySelector('.resource-form');
     if (formContainer) {
-      setValid(cv && validateFormElement(formContainer, true).valid);
+      if (formContainer.children.length > 0) {
+        setValid(cv && validateFormElement(formContainer, true).valid);
+      } else {
+        // Form has no visible fields (e.g. YAML mode) — validity follows cv directly
+        setValid(cv);
+      }
     }
   };
 

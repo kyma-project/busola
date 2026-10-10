@@ -3,18 +3,18 @@
   "version": "1.0.0",
   "description": "APIserver proxy for Busola",
   "main": "backend.index.js",
+  "type": "module",
   "scripts": {
-    "start": "SSL_CERT_FILE=certs.pem NODE_ENV=development nodemon --exec babel-node index.js",
+    "start": "SSL_CERT_FILE=certs.pem NODE_ENV=development nodemon index.js",
     "build": "webpack --mode=production",
-    "start:prod": "SSL_CERT_FILE=certs.pem NODE_ENV=production node --max-http-header-size 24576 backend-production.js",
+    "start:prod": "SSL_CERT_FILE=certs.pem NODE_ENV=production node --max-http-header-size 24576 backend-production.cjs",
     "test": "vitest run"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/runtime": "^7.29.2",
-    "compression": "^1.8.1",
+    "compression": "^1.8.2",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "express-jwt": "^8.5.1",
@@ -29,12 +29,6 @@
     "ws": "^8.21.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.28.6",
-    "@babel/node": "^7.29.0",
-    "@babel/preset-env": "^7.29.2",
-    "@babel/register": "^7.28.6",
-    "babel-loader": "^10.1.1",
-    "core-js": "^3.49.0",
     "nodemon": "^3.1.14",
     "vitest": "^4.1.11",
     "memfs": "^4.57.6",

@@ -24,6 +24,7 @@ import {
   isAuthRedirectLoop,
   registerAuthRedirect,
   resetAuthRedirectGuard,
+  tryClaimReauthRedirect,
 } from './utils/authRedirectLoopGuard';
 import { useNotifyLoginFailure } from './useLoginFailureNotification';
 
@@ -35,7 +36,6 @@ const defaultValue: SsoDataState = getSSOAuthData();
 
 export const ssoDataAtom = atom<SsoDataState>(defaultValue);
 
-// Set to true when the SSO login was stopped (IdP error or redirect loop).
 export const ssoLoginStoppedAtom = atom(false);
 
 export function setSSOAuthData(data: SsoDataState) {
@@ -59,7 +59,6 @@ export function useIsSSOEnabled() {
   return configuration?.features?.SSO_LOGIN?.isEnabled ?? false;
 }
 
-// Mutable SSO module state, kept in one object.
 const session: {
   userManager: UserManager | null;
   handlersAttached: boolean;
@@ -80,11 +79,10 @@ async function trySilentRefresh(): Promise<boolean> {
   return !!refreshedUser;
 }
 
-// Session-drop recovery outside React. Saves the current cluster-relative
-// path, then redirects through the IdP; on failure falls back to a full
-// load of /clusters. The saved path restores the location afterwards.
+// Session-drop recovery. Redirects through the IdP; falls back to /clusters on failure.
 function triggerReauthRedirect(userManager: UserManager | null) {
-  // Both paths re-enter login after a page load, count them for the loop guard.
+  // One expiry can fire several handlers; only the first should redirect.
+  if (!tryClaimReauthRedirect()) return;
   registerAuthRedirect();
   const fullPath = window.location.pathname + window.location.search;
   const relative = toClusterRelative(fullPath);
@@ -94,9 +92,7 @@ function triggerReauthRedirect(userManager: UserManager | null) {
   );
   if (kubeconfigId) savePendingKubeconfigId(kubeconfigId);
   if (!userManager) {
-    // No manager means handleSSOLogin never ran this page-load (the token
-    // was still valid at mount). The stored SSO entry is already cleared,
-    // so the full load at /clusters re-enters handleSSOLogin.
+    // handleSSOLogin never ran this load (token was valid at mount); full reload re-enters it.
     window.location.assign('/clusters');
     return;
   }
@@ -107,6 +103,23 @@ function triggerReauthRedirect(userManager: UserManager | null) {
       console.warn('SSO re-auth redirect failed:', e);
       window.location.assign('/clusters');
     });
+}
+
+// prompt: 'login' so a stale IdP session can't send us straight back into the loop.
+function triggerForcedLogin(
+  userManager: UserManager | null,
+  relative: string | null,
+) {
+  resetAuthRedirectGuard();
+  if (relative) saveIntendedPath(relative);
+  if (!userManager) {
+    window.location.assign('/clusters');
+    return;
+  }
+  userManager
+    .clearStaleState()
+    .then(() => userManager.signinRedirect({ prompt: 'login' }))
+    .catch(() => window.location.assign('/clusters'));
 }
 
 export function createSSOUserManager(oidcConfig: {
@@ -152,10 +165,13 @@ async function handleSSOLogin(
     const storedUser = await userManager?.getUser();
 
     let user: User;
-    if (storedUser && !storedUser.expired) {
-      user = storedUser;
+    const validStoredUser =
+      storedUser && !storedUser.expired ? storedUser : null;
+    const decision = decideOidcCallbackAction(ssoConfig.config.clientId);
+    // The new login must win: the old session can't renew and would redirect again.
+    if (validStoredUser && decision.action !== 'process-callback') {
+      user = validStoredUser;
     } else {
-      const decision = decideOidcCallbackAction(ssoConfig.config.clientId);
       if (decision.action === 'foreign-callback') {
         // Callback belongs to another manager (e.g. cluster OIDC); let it run.
         return;
@@ -167,7 +183,13 @@ async function handleSSOLogin(
         triggerReauthRedirect(userManager);
         return;
       }
-      user = await userManager?.signinRedirectCallback(window.location.href);
+      try {
+        user = await userManager?.signinRedirectCallback(window.location.href);
+      } catch (e) {
+        if (!validStoredUser) throw e;
+        console.warn('SSO login callback failed, keeping the stored user:', e);
+        user = validStoredUser;
+      }
       // Restore kubeconfigID that was saved before the SSO redirect so
       // useLoginWithKubeconfigID can still find it in the URL.
       const pendingKubeconfigId = consumePendingKubeconfigId();
@@ -263,14 +285,16 @@ export function useSSOLogin() {
       if (bypass === 'true') return;
       handleSSOLogin(ssoConfig, setSsoState, setRenewing, (failure) => {
         // Unblock the app behind the dialog, navigating also removes the error params.
+        // Read the path before the navigation below replaces the URL.
+        const relative = toClusterRelative(
+          window.location.pathname + window.location.search,
+        );
         setSsoLoginStopped(true);
         setCluster(null);
         navigate('/clusters', { replace: true });
         notifyLoginFailure(failure, {
-          // Retry reloads the page, so SSO login starts again with a clean URL.
           onRetry: () => {
-            resetAuthRedirectGuard();
-            window.location.assign('/clusters');
+            triggerForcedLogin(session.userManager, relative);
           },
         });
       });

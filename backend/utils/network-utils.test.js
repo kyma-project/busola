@@ -5,7 +5,7 @@ import {
   PrivateIPUsedError,
   isPrivateIp,
   resolveOrBlockPrivateIpAddress,
-} from './network-utils';
+} from './network-utils.js';
 import { createServer, get, request } from 'node:http';
 
 const internetIPAddress = [{ address: '20.11.11.11', family: 4 }];

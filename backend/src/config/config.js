@@ -1,4 +1,3 @@
-/* global process */
 import fs from 'node:fs';
 import jsyaml from 'js-yaml';
 import merge from 'lodash.merge';
@@ -12,7 +11,6 @@ const configPaths = {
 
 function getEnvDir() {
   const environment = process.env.ENVIRONMENT;
-
   if (environment) {
     return path.join('environments', environment);
   }
