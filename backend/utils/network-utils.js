@@ -6,6 +6,10 @@ const MAX_CACHE_SIZE = 1000;
 
 const dnsCache = new Map();
 
+// Node's default (250ms, 500ms from Node 26) drops a slow IPv4 attempt
+// before it can finish and moves on to the unreachable IPv6 address.
+export const PER_ADDRESS_CONNECT_TIMEOUT_MS = 2000;
+
 export class PrivateIPUsedError extends Error {}
 
 export function isLocalDomain(hostname) {
@@ -86,7 +90,13 @@ async function resolveAddressesCached(hostname) {
 export async function resolveOrBlockPrivateIpAddress(hostname, opts, callback) {
   try {
     const { isPrivate, addresses } = await resolveAddressesCached(hostname);
-    if (isPrivate || addresses.length === 0) {
+    if (addresses.length === 0) {
+      callback(
+        new PrivateIPUsedError(
+          `The provided hostname: ${hostname} could not be resolved`,
+        ),
+      );
+    } else if (isPrivate) {
       callback(
         new PrivateIPUsedError(
           `The provided hostname: ${hostname} is private IP`,

@@ -1,11 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import dns from 'dns/promises';
+import net from 'net';
 import {
   PrivateIPUsedError,
   isPrivateIp,
   resolveOrBlockPrivateIpAddress,
 } from './network-utils.js';
-import { request } from 'node:http';
+import { createServer, get, request } from 'node:http';
 
 const internetIPAddress = [{ address: '20.11.11.11', family: 4 }];
 const localIpAddress = [{ address: '127.0.0.1', family: 4 }];
@@ -259,5 +260,73 @@ describe('resolveOrBlockPrivateIpAddress with dual-stack hosts', () => {
     );
 
     expect(receivedError).toBeInstanceOf(PrivateIPUsedError);
+  });
+});
+
+describe('resolveOrBlockPrivateIpAddress on a real socket', () => {
+  let server;
+
+  afterEach(async () => {
+    vi.restoreAllMocks();
+    await new Promise((resolve) => server.close(resolve));
+  });
+
+  it('uses the IPv4 address when DNS also returns IPv6', async () => {
+    server = createServer((_req, res) => res.end('ok'));
+    await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+
+    // Nothing listens on ::1, so picking the IPv6 address fails.
+    vi.spyOn(dns, 'lookup').mockResolvedValueOnce([
+      { address: '127.0.0.1', family: 4 },
+      { address: '::1', family: 6 },
+    ]);
+    // Let loopback pass the private-IP check.
+    vi.spyOn(net, 'isIPv4').mockReturnValue(false);
+    vi.spyOn(net, 'isIPv6').mockReturnValue(false);
+
+    const { statusCode, remoteAddress } = await new Promise(
+      (resolve, reject) => {
+        get(
+          {
+            hostname: 'dual-stack-socket.example.com',
+            port: server.address().port,
+            lookup: resolveOrBlockPrivateIpAddress,
+            agent: false,
+          },
+          (res) => {
+            res.resume();
+            resolve({
+              statusCode: res.statusCode,
+              remoteAddress: res.socket.remoteAddress,
+            });
+          },
+        ).on('error', reject);
+      },
+    );
+
+    expect(statusCode).toBe(200);
+    expect(remoteAddress).toBe('127.0.0.1');
+  });
+});
+
+describe('resolveOrBlockPrivateIpAddress with an empty DNS result', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('reports that the hostname could not be resolved', async () => {
+    vi.spyOn(dns, 'lookup').mockResolvedValueOnce([]);
+
+    let receivedError;
+    await resolveOrBlockPrivateIpAddress(
+      'no-records.example.com',
+      {},
+      (err) => {
+        receivedError = err;
+      },
+    );
+
+    expect(receivedError).toBeInstanceOf(PrivateIPUsedError);
+    expect(receivedError.message).toContain('could not be resolved');
   });
 });
