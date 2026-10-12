@@ -111,6 +111,8 @@ function triggerForcedLogin(
   relative: string | null,
 ) {
   resetAuthRedirectGuard();
+  // Claimed only so the spinner covers this redirect too.
+  tryClaimReauthRedirect();
   if (relative) saveIntendedPath(relative);
   if (!userManager) {
     window.location.assign('/clusters');

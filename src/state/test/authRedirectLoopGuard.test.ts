@@ -2,8 +2,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   AUTH_REDIRECT_STORAGE_KEY,
   isAuthRedirectLoop,
+  isReauthRedirectPending,
   registerAuthRedirect,
   resetAuthRedirectGuard,
+  subscribeReauthRedirect,
   tryClaimReauthRedirect,
   resetReauthRedirectClaim,
 } from '../utils/authRedirectLoopGuard';
@@ -103,8 +105,26 @@ describe('tryClaimReauthRedirect', () => {
     tryClaimReauthRedirect();
     vi.advanceTimersByTime(29 * 1000);
     expect(tryClaimReauthRedirect()).toBe(false);
+    expect(isReauthRedirectPending()).toBe(true);
     vi.advanceTimersByTime(1000);
+    expect(isReauthRedirectPending()).toBe(false);
     expect(tryClaimReauthRedirect()).toBe(true);
+  });
+
+  it('reports the pending redirect to subscribers while the claim is held', () => {
+    const listener = vi.fn();
+    const unsubscribe = subscribeReauthRedirect(listener);
+    expect(isReauthRedirectPending()).toBe(false);
+    tryClaimReauthRedirect();
+    tryClaimReauthRedirect();
+    expect(isReauthRedirectPending()).toBe(true);
+    expect(listener).toHaveBeenCalledTimes(1);
+    resetReauthRedirectClaim();
+    expect(isReauthRedirectPending()).toBe(false);
+    expect(listener).toHaveBeenCalledTimes(2);
+    unsubscribe();
+    tryClaimReauthRedirect();
+    expect(listener).toHaveBeenCalledTimes(2);
   });
 
   it('cannot trip the loop guard from one page alone', () => {
@@ -124,6 +144,7 @@ describe('tryClaimReauthRedirect', () => {
     window.dispatchEvent(
       Object.assign(new Event('pageshow'), { persisted: true }),
     );
+    expect(isReauthRedirectPending()).toBe(false);
     expect(tryClaimReauthRedirect()).toBe(true);
   });
 });
