@@ -485,7 +485,7 @@ export const GenericList = ({
             hasDetailsView && filteredEntries.length && enableColumnLayout
               ? 'cursor-pointer'
               : ''
-          } ${renderPagination ? '' : 'last-row-with-border'}`}
+          }`}
           onMouseDown={() => {
             window.getSelection()?.removeAllRanges();
           }}
