@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM --platform=$BUILDPLATFORM node:24.21-alpine3.24 AS builder
+FROM --platform=$BUILDPLATFORM node:26.11-alpine3.24 AS builder
 WORKDIR /app
 COPY . .
 RUN npm ci
@@ -8,10 +8,10 @@ RUN npm ci
 RUN npm run build
 
 # ---- Serve ----
-FROM node:24.21-alpine3.24
+FROM node:26.11-alpine3.24
 
 WORKDIR /app
-COPY --chown=65532:65532 --from=builder /app/backend-production.js ./
+COPY --chown=65532:65532 --from=builder /app/backend-production.cjs ./
 COPY --chown=65532:65532 settings settings/
 COPY --chown=65532:65532 environments environments/
 COPY --chown=65532:65532 certs.pem certs.pem

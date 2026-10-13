@@ -1,5 +1,4 @@
-/* global Buffer */
-import { getKcpToken } from './getKcpToken';
+import { getKcpToken } from './getKcpToken.js';
 
 export class TokenManager {
   constructor() {

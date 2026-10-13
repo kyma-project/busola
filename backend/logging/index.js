@@ -1,4 +1,3 @@
-/* global process */
 import PinoHttp from 'pino-http';
 import { v4 as uuid } from 'uuid';
 import escape from 'lodash.escape';

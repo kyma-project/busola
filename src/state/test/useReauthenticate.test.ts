@@ -3,7 +3,9 @@ import { renderHook } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { createElement, PropsWithChildren } from 'react';
 import { UserManager } from 'oidc-client-ts';
+import { getDefaultStore } from 'jotai';
 import { getIntendedPath } from '../intendedPathAtom';
+import { clusterAtom, CLUSTER_NAME_STORAGE_KEY } from '../clusterAtom';
 import {
   AUTH_REDIRECT_STORAGE_KEY,
   isAuthRedirectLoop,
@@ -32,6 +34,8 @@ vi.mock('react-router', async () => {
 });
 
 function makeWrapper(initialPath: string) {
+  // The hook reads the browser URL, which MemoryRouter does not touch.
+  window.history.replaceState({}, '', initialPath);
   const Wrapper = ({ children }: PropsWithChildren) =>
     createElement(MemoryRouter, { initialEntries: [initialPath] }, children);
   Wrapper.displayName = 'TestWrapper';
@@ -51,6 +55,8 @@ describe('useReauthenticate', () => {
     mockNavigate.mockReset();
     notifyLoginFailureMock.mockReset();
     sessionStorage.clear();
+    localStorage.clear();
+    getDefaultStore().set(clusterAtom, null);
     resetReauthRedirectClaim();
   });
 
@@ -83,6 +89,19 @@ describe('useReauthenticate', () => {
     resetReauthRedirectClaim();
     await result.current(userManager); // simulated page load 3
     expect(isAuthRedirectLoop()).toBe(true);
+  });
+
+  it('saves the page the user is on when the session expires', async () => {
+    const userManager = makeUserManager();
+    const { result } = renderHook(() => useReauthenticate(), {
+      wrapper: makeWrapper('/cluster/foo/pods'),
+    });
+    const staleCallback = result.current;
+
+    window.history.replaceState({}, '', '/cluster/foo/deployments?layout=x');
+    await staleCallback(userManager);
+
+    expect(getIntendedPath()?.path).toBe('/deployments?layout=x');
   });
 
   it('redirects only once when triggered twice in the same page load', async () => {
@@ -136,6 +155,52 @@ describe('useReauthenticate', () => {
     expect(userManager.signinRedirect).not.toHaveBeenCalled();
     expect(notifyLoginFailureMock).toHaveBeenCalled();
     expect(mockNavigate).toHaveBeenCalledWith('/clusters');
+  });
+
+  it('Retry saves the path and forces a fresh login', async () => {
+    // A redirect loop is already in progress.
+    registerAuthRedirect();
+    registerAuthRedirect();
+    registerAuthRedirect();
+
+    const userManager = makeUserManager();
+    const { result } = renderHook(() => useReauthenticate(), {
+      wrapper: makeWrapper('/cluster/foo/namespaces/bar'),
+    });
+
+    await result.current(userManager);
+
+    expect(notifyLoginFailureMock).toHaveBeenCalled();
+    const [, options] = notifyLoginFailureMock.mock.calls[0];
+    expect(options.onRetry).toBeDefined();
+
+    await options.onRetry();
+
+    expect(userManager.signinRedirect).toHaveBeenCalledWith({
+      prompt: 'login',
+    });
+    expect(getIntendedPath()?.path).toBe('/namespaces/bar');
+  });
+
+  it('Retry stores the cluster name so the login callback can restore the cluster', async () => {
+    getDefaultStore().set(clusterAtom, { name: 'foo' } as never);
+    registerAuthRedirect();
+    registerAuthRedirect();
+    registerAuthRedirect();
+
+    const userManager = makeUserManager();
+    const { result } = renderHook(() => useReauthenticate(), {
+      wrapper: makeWrapper('/cluster/foo/namespaces/bar'),
+    });
+
+    await result.current(userManager);
+    // The stopped login cleared the cluster.
+    expect(localStorage.getItem(CLUSTER_NAME_STORAGE_KEY)).toBeNull();
+
+    const [, options] = notifyLoginFailureMock.mock.calls[0];
+    await options.onRetry();
+
+    expect(localStorage.getItem(CLUSTER_NAME_STORAGE_KEY)).toBe('foo');
   });
 
   it('falls back to the cluster list when no UserManager is available', async () => {

@@ -5,6 +5,11 @@ import { MemoryRouter } from 'react-router';
 import { Provider, createStore } from 'jotai';
 import { configurationAtom } from '../configuration/configurationAtom';
 import {
+  getIntendedPath,
+  savePendingKubeconfigId,
+  consumePendingKubeconfigId,
+} from '../intendedPathAtom';
+import {
   AUTH_REDIRECT_STORAGE_KEY,
   isAuthRedirectLoop,
   registerAuthRedirect,
@@ -185,5 +190,95 @@ describe('useSSOLogin', () => {
     expect(
       JSON.parse(sessionStorage.getItem(AUTH_REDIRECT_STORAGE_KEY) || '[]'),
     ).toHaveLength(1);
+  });
+
+  it('Retry forces a fresh login and saves the path', async () => {
+    registerAuthRedirect();
+    registerAuthRedirect();
+    registerAuthRedirect();
+    window.history.replaceState({}, '', '/cluster/foo/namespaces/bar');
+    const { Wrapper } = makeWrapper();
+
+    renderHook(() => useSSOLogin(), { wrapper: Wrapper });
+
+    await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
+
+    // By the time Retry is clicked the app has navigated to the cluster list.
+    window.history.replaceState({}, '', '/clusters');
+    expect(getIntendedPath()).toBeNull();
+
+    const [, options] = notifyLoginFailureMock.mock.calls[0];
+    expect(options?.onRetry).toBeDefined();
+    await options.onRetry();
+
+    await waitFor(() =>
+      expect(managerMock.signinRedirect).toHaveBeenCalledWith({
+        prompt: 'login',
+      }),
+    );
+    expect(getIntendedPath()?.path).toBe('/namespaces/bar');
+  });
+
+  it('saves the kubeconfigID before the SSO redirect', async () => {
+    window.history.replaceState({}, '', '/clusters?kubeconfigID=my.yaml');
+    const { Wrapper } = makeWrapper();
+
+    renderHook(() => useSSOLogin(), { wrapper: Wrapper });
+
+    await waitFor(() =>
+      expect(managerMock.signinRedirect).toHaveBeenCalledTimes(1),
+    );
+    expect(consumePendingKubeconfigId()).toBe('my.yaml');
+  });
+
+  it('puts the saved kubeconfigID back into the URL after the SSO login', async () => {
+    savePendingKubeconfigId('my.yaml');
+    // Marks the callback as belonging to the SSO client.
+    localStorage.setItem(
+      'oidc.s1',
+      JSON.stringify({ client_id: 'sso-client' }),
+    );
+    window.history.replaceState({}, '', '/?code=abc&state=s1');
+    managerMock.getUser.mockResolvedValue(null);
+    managerMock.signinRedirectCallback.mockResolvedValue({
+      expired: false,
+      id_token: 'jwt',
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+    });
+    const { Wrapper } = makeWrapper();
+
+    renderHook(() => useSSOLogin(), { wrapper: Wrapper });
+
+    await waitFor(() =>
+      expect(window.location.search).toContain('kubeconfigID=my.yaml'),
+    );
+    expect(window.location.search).not.toContain('code=');
+    expect(consumePendingKubeconfigId()).toBeNull();
+  });
+
+  it('finishes a new SSO login even if the old SSO token is still valid', async () => {
+    localStorage.setItem(
+      'oidc.s1',
+      JSON.stringify({ client_id: 'sso-client' }),
+    );
+    window.history.replaceState({}, '', '/?code=abc&state=s1');
+    managerMock.getUser.mockResolvedValue({
+      expired: false,
+      id_token: 'old-jwt',
+      expires_at: Math.floor(Date.now() / 1000) + 20,
+    });
+    managerMock.signinRedirectCallback.mockResolvedValue({
+      expired: false,
+      id_token: 'fresh-jwt',
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+    });
+    const { Wrapper, store } = makeWrapper();
+
+    renderHook(() => useSSOLogin(), { wrapper: Wrapper });
+
+    await waitFor(() =>
+      expect(store.get(ssoDataAtom)?.id_token).toBe('fresh-jwt'),
+    );
+    expect(managerMock.signinRedirect).not.toHaveBeenCalled();
   });
 });

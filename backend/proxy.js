@@ -1,4 +1,3 @@
-/* global Buffer */
 import { request as httpsRequest } from 'https';
 import { URL } from 'url';
 import { pipeline } from 'stream/promises';

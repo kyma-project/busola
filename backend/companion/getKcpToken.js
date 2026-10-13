@@ -1,5 +1,5 @@
-/* global Buffer, require */
 import config from '../src/config/config.js';
+import fs from 'fs';
 
 export async function getKcpToken() {
   const tokenUrl = config.features?.KYMA_COMPANION?.config?.tokenUrl ?? '';
@@ -51,7 +51,6 @@ export async function getKcpToken() {
 }
 
 function getLocalCredentials() {
-  const fs = require('fs');
   try {
     return JSON.parse(fs.readFileSync('companion/credentials.json', 'utf8'));
   } catch (error) {
@@ -63,7 +62,6 @@ function getLocalCredentials() {
 }
 
 function getSecretManagerCredentials() {
-  const fs = require('fs');
   try {
     return {
       clientId: fs

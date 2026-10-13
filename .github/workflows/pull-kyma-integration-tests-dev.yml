@@ -56,7 +56,7 @@ jobs:
         name: Setup node
         timeout-minutes: 5
         with:
-          node-version: 24
+          node-version: 26
       - name: Build Busola Docker Image
         shell: bash
         run: docker build -t "${IMG}" -f Dockerfile . | tee busola-build.log

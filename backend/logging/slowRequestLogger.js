@@ -1,4 +1,3 @@
-/* global process */
 import escape from 'lodash.escape';
 
 /**

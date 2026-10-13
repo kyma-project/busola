@@ -1,4 +1,4 @@
-import parseProtocolHeaders from './protocolHeaderParser';
+import parseProtocolHeaders from './protocolHeaderParser.js';
 
 function encodeBase64URL(input) {
   return Buffer.from(input).toString('base64url');
