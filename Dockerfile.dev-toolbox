@@ -10,4 +10,5 @@ RUN apk add --no-cache \
       yq
 
 # Upgrade all packages and clean up
+
 RUN apk upgrade --no-cache
