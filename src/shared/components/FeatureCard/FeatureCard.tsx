@@ -136,6 +136,7 @@ export function FeatureCardBanner({
     localStorage.setItem(hideBannerKey, 'true');
   };
   const illustration = getIllustration(image, theme);
+  const isInnerContainerVisible = title || description || buttons;
   return (
     <div className={`sap-margin-top-small ${className}`}>
       <Card accessibleName={title} className="feature-card-container">
@@ -148,7 +149,7 @@ export function FeatureCardBanner({
             accessibleName={t('common.buttons.close')}
           />
           <div className={`outer-container ${design.toLowerCase()}`}>
-            {(title || description) && (
+            {isInnerContainerVisible && (
               <div className="inner-container">
                 <div style={{ width: '100%' }} className="title-container">
                   <Title
