@@ -52,4 +52,49 @@ describe('FeatureCardBanner', () => {
 
     expect(screen.getByText('Banner title')).toBeInTheDocument();
   });
+
+  describe('Teched design variant', () => {
+    const renderTeched = (overrides = {}) =>
+      render(
+        <FeatureCardBanner
+          id="teched-banner"
+          title=""
+          description=""
+          design="Teched"
+          {...overrides}
+        />,
+      );
+
+    beforeEach(() => {
+      localStorage.clear();
+    });
+
+    it('applies the teched CSS class to the outer container', () => {
+      const { container } = renderTeched();
+      expect(
+        container.querySelector('.outer-container.teched'),
+      ).toBeInTheDocument();
+    });
+
+    it('applies the TechEd navy gradient as inline background style', () => {
+      const { container } = renderTeched();
+      expect(container.querySelector('.feature-card')).toHaveStyle(
+        'background: linear-gradient(to right, #00144A, #002A86)',
+      );
+    });
+
+    it('hides the inner container when there is no title, description, or buttons', () => {
+      const { container } = renderTeched();
+      expect(
+        container.querySelector('.inner-container'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('renders the TechEd illustration when image is Teched', () => {
+      renderTeched({ image: 'Teched' });
+      expect(
+        screen.getByRole('img', { name: 'FeaturedCard Illustration' }),
+      ).toBeInTheDocument();
+    });
+  });
 });
