@@ -111,7 +111,7 @@ function triggerForcedLogin(
   relative: string | null,
 ) {
   resetAuthRedirectGuard();
-  // Claimed only so the spinner covers this redirect too.
+  // Claimed so the chunk loader knows a redirect is in flight.
   tryClaimReauthRedirect();
   if (relative) saveIntendedPath(relative);
   if (!userManager) {
