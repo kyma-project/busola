@@ -23,7 +23,11 @@ const companionApiBaseUrl =
 const allowedIssuerUrl =
   config.features?.KYMA_COMPANION?.config?.issuerUrl ?? '';
 
-const stripTrailingSlash = (url) => url.replace(/\/+$/, '');
+const stripTrailingSlash = (url) => {
+  let end = url.length;
+  while (end > 0 && url[end - 1] === '/') end--;
+  return url.slice(0, end);
+};
 
 const COMPANION_API_BASE_URL = `${companionApiBaseUrl}/api/conversations/`;
 
