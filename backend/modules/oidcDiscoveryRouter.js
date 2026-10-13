@@ -56,8 +56,14 @@ router.get('/oidc-discovery', oidcDiscoveryRateLimiter, async (req, res) => {
   }
 
   try {
-    const base = issuer.endsWith('/') ? issuer.slice(0, -1) : issuer;
-    const response = await fetch(`${base}/.well-known/openid-configuration`);
+    const cleanPath = url.pathname.endsWith('/')
+      ? url.pathname.slice(0, -1)
+      : url.pathname;
+    const discoveryUrl = new URL(
+      `${cleanPath}/.well-known/openid-configuration`,
+      url.origin,
+    );
+    const response = await fetch(discoveryUrl);
     if (!response.ok) {
       return res
         .status(response.status)
