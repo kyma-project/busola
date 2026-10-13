@@ -53,6 +53,23 @@ describe('lazyWithRetries during a redirect to the IdP', () => {
     expect(screen.getByText('failed')).toBeTruthy();
   });
 
+  it('keeps waiting when Retry resets and takes the claim again', async () => {
+    tryClaimReauthRedirect();
+    renderLazy(() => Promise.reject(chunkError));
+    await flush();
+
+    act(() => {
+      resetReauthRedirectClaim();
+      tryClaimReauthRedirect();
+    });
+    await flush();
+    expect(screen.getByText('loading')).toBeTruthy();
+
+    act(() => resetReauthRedirectClaim());
+    await flush();
+    expect(screen.getByText('failed')).toBeTruthy();
+  });
+
   it('fails right away when no redirect is pending', async () => {
     renderLazy(() => Promise.reject(chunkError));
     await flush();

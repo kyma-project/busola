@@ -22,7 +22,7 @@ export const lazyWithRetries = <T extends ComponentType<any>>(
     } catch (error: any) {
       // Safari fails pending chunk loads once the IdP redirect starts, while the
       // old page is still on screen; stay suspended until the page has left.
-      if (isReauthRedirectPending()) await untilReauthRedirectReleased();
+      while (isReauthRedirectPending()) await untilReauthRedirectReleased();
       const isChunkLoadFailed = error?.message?.includes(
         'Failed to fetch dynamically imported module',
       );
