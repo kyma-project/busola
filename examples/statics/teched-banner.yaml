@@ -1,0 +1,21 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: teched-banner
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: teched-banner
+    busola.io/extension: statics
+    busola.io/extension-version: '0.5'
+data:
+  injections: |-
+    - name: TechEd
+      widget: FeaturedCard
+      source: $
+      id: TechEdBanner
+      order: 0
+      illustration: Teched
+      design: Teched
+      targets:
+        - slot: banner
+          location: ClusterOverview

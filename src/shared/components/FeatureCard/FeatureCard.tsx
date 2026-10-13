@@ -10,6 +10,7 @@ import AiIllustrationHCdark from './assets/AI/AiIllustrationHCdark.svg';
 import DiscoveryIllustration from './assets/Discovery/Team.png';
 import KymaCLIIllustration from './assets/KymaCLI/KymaCLIIllustration.svg';
 import TerminalIllustration from './assets/Terminal/Terminal.svg';
+import TechEdIllustration from './assets/TechEd/TechEd.png';
 import { useAtomValue } from 'jotai';
 import {
   BackgroundStyle,
@@ -35,6 +36,8 @@ const getIllustration = (
       return KymaCLIIllustration;
     case 'Terminal':
       return TerminalIllustration;
+    case 'Teched':
+      return TechEdIllustration;
     case 'AI':
       switch (theme) {
         case 'sap_horizon_hcw':
@@ -116,6 +119,10 @@ export function FeatureCardBanner({
           background:
             'linear-gradient(to right, var(--sapLegendBackgroundColor6), var(--sapLegendBackgroundColor18))',
         };
+      case 'Teched':
+        return {
+          background: 'linear-gradient(to right, #00144A, #002A86)',
+        };
       default:
         return {
           background:
@@ -140,33 +147,35 @@ export function FeatureCardBanner({
             onClick={handleToggle}
             accessibleName={t('common.buttons.close')}
           />
-          <div className="outer-container">
-            <div className="inner-container">
-              <div style={{ width: '100%' }} className="title-container">
-                <Title
-                  level="H2"
-                  size="H1"
-                  wrappingType="Normal"
-                  style={{
-                    display: 'inline-flex',
-                  }}
-                >
-                  {/* This extra span element is for the ability to add additional styles that cannot be added to the Title component. */}
-                  <span className="banner-title">{title}</span>
-                </Title>
-                {titleIcon && (
-                  <img
-                    src={titleIcon}
-                    alt="Title Icon"
-                    className="bsl-icon-xxl"
-                  />
-                )}
+          <div className={`outer-container ${design.toLowerCase()}`}>
+            {(title || description) && (
+              <div className="inner-container">
+                <div style={{ width: '100%' }} className="title-container">
+                  <Title
+                    level="H2"
+                    size="H1"
+                    wrappingType="Normal"
+                    style={{
+                      display: 'inline-flex',
+                    }}
+                  >
+                    {/* This extra span element is for the ability to add additional styles that cannot be added to the Title component. */}
+                    <span className="banner-title">{title}</span>
+                  </Title>
+                  {titleIcon && (
+                    <img
+                      src={titleIcon}
+                      alt="Title Icon"
+                      className="bsl-icon-xxl"
+                    />
+                  )}
+                </div>
+                <Text>{description}</Text>
+                <div className="button-container sap-margin-top-small">
+                  {buttons && buttons}
+                </div>
               </div>
-              <Text>{description}</Text>
-              <div className="button-container sap-margin-top-small">
-                {buttons && buttons}
-              </div>
-            </div>
+            )}
             {illustration && (
               <img
                 src={illustration}
