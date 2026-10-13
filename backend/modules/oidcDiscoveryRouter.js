@@ -46,8 +46,21 @@ router.get('/oidc-discovery', oidcDiscoveryRateLimiter, async (req, res) => {
     return res.status(400).json({ error: 'Issuer URL must use HTTPS' });
   }
 
+  const cleanPath = url.pathname.endsWith('/')
+    ? url.pathname.slice(0, -1)
+    : url.pathname;
+  let discoveryUrl;
   try {
-    await assertNotPrivateHost(url.hostname);
+    discoveryUrl = new URL(
+      `${cleanPath}/.well-known/openid-configuration`,
+      url.origin,
+    );
+  } catch {
+    return res.status(400).json({ error: 'Invalid issuer URL' });
+  }
+
+  try {
+    await assertNotPrivateHost(discoveryUrl.hostname);
   } catch (err) {
     if (err instanceof PrivateIPUsedError) {
       return res.status(400).json({ error: err.message });
@@ -56,13 +69,6 @@ router.get('/oidc-discovery', oidcDiscoveryRateLimiter, async (req, res) => {
   }
 
   try {
-    const cleanPath = url.pathname.endsWith('/')
-      ? url.pathname.slice(0, -1)
-      : url.pathname;
-    const discoveryUrl = new URL(
-      `${cleanPath}/.well-known/openid-configuration`,
-      url.origin,
-    );
     const response = await fetch(discoveryUrl);
     if (!response.ok) {
       return res
