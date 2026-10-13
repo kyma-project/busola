@@ -144,12 +144,10 @@ describe('attachSilentRenewHandlers', () => {
       await um.fireExpiring();
       expect(um.signinSilent).toHaveBeenCalledTimes(1);
 
-      // The new token has 40s left, so the library fires the event again right away.
       await vi.advanceTimersByTimeAsync(1000);
       await um.fireExpiring();
       expect(um.signinSilent).toHaveBeenCalledTimes(1);
 
-      // 39s left now; the renewal is due 5s before expiry.
       await vi.advanceTimersByTimeAsync(33000);
       expect(um.signinSilent).toHaveBeenCalledTimes(1);
       await vi.advanceTimersByTimeAsync(1000);
@@ -170,20 +168,18 @@ describe('attachSilentRenewHandlers', () => {
       const { um } = setup(3600);
 
       await um.fireExpiring();
-      // A one-hour token: the next event comes 59 minutes later.
       await vi.advanceTimersByTimeAsync(59 * 60 * 1000);
       await um.fireExpiring();
 
       expect(um.signinSilent).toHaveBeenCalledTimes(2);
     });
 
-    it('renews a token between one and two minutes once per lifetime', async () => {
+    it('renews a token valid for one to two minutes once, just before it expires', async () => {
       const { um } = setup(66);
 
       await um.fireExpiring();
       expect(um.signinSilent).toHaveBeenCalledTimes(1);
 
-      // The library fires 60s before expiry, so 6s after this renewal.
       await vi.advanceTimersByTimeAsync(6000);
       await um.fireExpiring();
       expect(um.signinSilent).toHaveBeenCalledTimes(1);

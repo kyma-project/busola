@@ -18,11 +18,10 @@ export function attachSilentRenewHandlers(
 ): { cleanup: () => void; renew: () => Promise<User | null> } {
   const renewSilently = createSingleFlight<User | null>();
 
-  // The library raises `expiring` this long before expiry, or 1 s after loading a shorter token.
   const expiringLeadS =
     userManager.settings.accessTokenExpiringNotificationTimeInSeconds;
-  let renewedAt = 0; // epoch seconds
-  let renewedTokenExpiresAt = 0; // epoch seconds
+  let renewedAt = 0;
+  let renewedTokenExpiresAt = 0;
   let deferredRenew: ReturnType<typeof setTimeout> | undefined;
 
   const runRenew = async (): Promise<User | null> => {
@@ -44,10 +43,10 @@ export function attachSilentRenewHandlers(
   };
 
   const expiringHandler = async () => {
-    // Shorter than twice the lead, the event fires right after each renewal; renew once, just before expiry.
-    // From the last renewal, not getUser(), which would re-arm the timers and fire this again.
+    // No getUser() here, it restarts the timer and fires this event again.
     const lifetimeS = renewedTokenExpiresAt - renewedAt;
     const secondsLeft = renewedTokenExpiresAt - Date.now() / 1000;
+    // For a short-lived token this event fires right after every renewal.
     if (
       lifetimeS < 2 * expiringLeadS &&
       secondsLeft > SHORT_TOKEN_RENEW_MARGIN_S
