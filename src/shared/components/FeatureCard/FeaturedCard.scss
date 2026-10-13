@@ -84,11 +84,6 @@
     padding: 32px 32px 0 32px;
   }
 
-  .teched {
-    padding: 0;
-    height: 266px;
-  }
-
   .inner-container {
     display: flex;
     flex-direction: column;
@@ -135,6 +130,16 @@
   .illustration {
     height: 100%;
     max-width: 50%;
+  }
+
+  .teched {
+    padding: 0 0 0 32px;
+    height: 266px;
+
+    .illustration {
+      height: 100%;
+      max-width: 100%;
+    }
   }
 }
 
