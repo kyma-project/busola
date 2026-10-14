@@ -11,7 +11,6 @@ RUN npm run build
 FROM node:26.11-alpine3.24
 
 WORKDIR /app
-RUN apk del apk-tools alpine-baselayout busybox
 
 COPY --chown=65532:65532 --from=builder /app/backend-production.cjs ./
 COPY --chown=65532:65532 settings settings/
@@ -19,6 +18,8 @@ COPY --chown=65532:65532 environments environments/
 COPY --chown=65532:65532 certs.pem certs.pem
 COPY --chown=65532:65532 package* ./
 RUN npm ci --only=production
+
+RUN apk del apk-tools alpine-baselayout busybox
 
 USER 65532:65532
 
