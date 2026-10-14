@@ -19,7 +19,7 @@ describe('useForceConfirmDelete', () => {
   it('returns false when the feature is disabled', () => {
     featureValue = {
       isEnabled: false,
-      config: { resources: [{ kind: 'Namespaces' }] },
+      config: { resources: [{ kind: 'Namespace' }] },
     };
 
     const { result } = renderHook(() => useForceConfirmDelete('Namespaces'));
@@ -27,11 +27,11 @@ describe('useForceConfirmDelete', () => {
     expect(result.current).toBe(false);
   });
 
-  it('returns true when the feature is enabled and resourceType matches a configured kind', () => {
+  it('matches a standard resource whose resourceType is a PascalCase plural', () => {
     featureValue = {
       isEnabled: true,
       config: {
-        resources: [{ kind: 'Namespaces' }, { kind: 'ServiceInstances' }],
+        resources: [{ kind: 'Namespace' }, { kind: 'ServiceInstance' }],
       },
     };
 
@@ -40,10 +40,23 @@ describe('useForceConfirmDelete', () => {
     expect(result.current).toBe(true);
   });
 
+  it('matches an extensibility resource whose resourceType is a lowercase plural URL path', () => {
+    featureValue = {
+      isEnabled: true,
+      config: { resources: [{ kind: 'RedisInstance' }] },
+    };
+
+    const { result } = renderHook(() =>
+      useForceConfirmDelete('redisinstances'),
+    );
+
+    expect(result.current).toBe(true);
+  });
+
   it('returns false when the feature is enabled but resourceType does not match any configured kind', () => {
     featureValue = {
       isEnabled: true,
-      config: { resources: [{ kind: 'Namespaces' }] },
+      config: { resources: [{ kind: 'Namespace' }] },
     };
 
     const { result } = renderHook(() => useForceConfirmDelete('Pods'));
@@ -54,7 +67,7 @@ describe('useForceConfirmDelete', () => {
   it('returns false when resourceType is undefined', () => {
     featureValue = {
       isEnabled: true,
-      config: { resources: [{ kind: 'Namespaces' }] },
+      config: { resources: [{ kind: 'Namespace' }] },
     };
 
     const { result } = renderHook(() => useForceConfirmDelete(undefined));

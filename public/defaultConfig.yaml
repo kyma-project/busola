@@ -94,8 +94,7 @@ config:
       isEnabled: true
       config:
         resources:
-          - kind: Namespaces
-          - kind: ServiceInstances
+          - kind: Namespace
+          - kind: ServiceInstance
           - kind: RedisInstance
           - kind: NfsInstance
-          
