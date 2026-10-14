@@ -516,7 +516,7 @@ See the following examples:
 
 ### `FeaturedCard`
 
-The `FeaturedCard` widgets render a promotional banner with its own title, description, illustration, and a maximum of 2 additional children.
+The `FeaturedCard` widgets render a promotional banner with its own title, description, illustration, and a maximum of 3 additional children.
 The `FeaturedCard` can be closed in the top right corner.
 It is important to select a unique ID for each `FeaturedCard`, since it will be displayed/hidden based on its ID.
 
@@ -529,7 +529,7 @@ These are the available `FeatureCard` widget parameters:
 | **title**        | No       | string    | Renders the title.                                                                                                                                                |
 | **description**  | No       | string    | Renders the description.                                                                                                                                          |
 | **id**           | **Yes**  | string    | Defines the banner's **(unique!)** identifier.                                                                                                                    |
-| **children**     | No       | []objects | Defines the banner's children that are displayed below the description. It is recommended to use button-like components here. The maximum number of objects is 2. |
+| **children**     | No       | []objects | Defines the banner's children that are displayed below the description. It is recommended to use button-like components here. The maximum number of objects is 3. |
 | **illustration** | No       | string    | Defines the illustration displayed on the right. Can be one of the following: `Modules` (default), `AI`, `Discovery`, `None`                                      |
 | **design**       | No       | string    | Defines the background color-gradient of the banner. Can be one of the following: `information-1` (default), `information-2`, `information-3`.                    |
 
