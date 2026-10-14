@@ -19,7 +19,7 @@ COPY --chown=65532:65532 certs.pem certs.pem
 COPY --chown=65532:65532 package* ./
 RUN npm ci --only=production
 
-RUN apk del apk-tools alpine-baselayout busybox
+RUN apk del apk-tools alpine-baselayout
 
 USER 65532:65532
 

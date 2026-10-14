@@ -43,7 +43,7 @@ RUN make prepare-configuration
 FROM node:26.11-alpine3.24
 WORKDIR /app
 
-RUN apk del apk-tools alpine-baselayout busybox
+RUN apk del apk-tools alpine-baselayout
 
 COPY --chown=65532:65532 --from=builder /app/build /app/core-ui
 COPY --chown=65532:65532 --from=builder /app/backend/node_modules /app/node_modules
