@@ -28,10 +28,11 @@
   padding-bottom: 0;
 }
 
-// Stacked labels: the spec has a gap below the label, UI5 emits none.
+// Spec: 0.25rem below a stacked label + 0.3125rem above the value; UI5 adds
+// neither.
 @container (width < 600px) {
-  .resource-card-layout ui5-label {
-    padding-bottom: 0.25rem;
+  .resource-card-layout ui5-label[slot='labelContent'] {
+    padding-bottom: 0.5625rem;
   }
 }
 

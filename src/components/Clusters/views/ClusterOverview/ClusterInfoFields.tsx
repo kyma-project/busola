@@ -6,8 +6,7 @@ import { useGetClusterInfo } from './useGetClusterInfo';
 
 type KymaResourceLabels = { [key: string]: string };
 
-// A list rather than a component, so the form can count the items when
-// splitting them into columns.
+// A list, not a component, so the form can count items to split into columns.
 export const useClusterInfoFields = (
   kymaResourceLabels?: KymaResourceLabels,
 ): ReactNode[] => {

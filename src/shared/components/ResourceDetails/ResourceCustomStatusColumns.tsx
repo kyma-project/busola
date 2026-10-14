@@ -31,7 +31,7 @@ export function ResourceCustomStatusColumns({
           key={col.header}
           labelContent={<Label showColon>{col.header ?? ''}</Label>}
         >
-          <Text className="text-with-padding">{col.value(resource)}</Text>
+          <Text>{col.value(resource)}</Text>
         </FormItem>
       ))}
     </ResourceDetailsForm>

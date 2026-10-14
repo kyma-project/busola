@@ -15,6 +15,7 @@ interface ResourceDetailsFormProps {
 }
 
 // Children.toArray stops at fragments, which is how card content arrives.
+// A component counts as one item however many FormItems it renders.
 function flattenItems(children: ReactNode, prefix = ''): ReactNode[] {
   return Children.toArray(children).flatMap((child) => {
     if (!isValidElement(child)) return child;
@@ -37,14 +38,15 @@ export function ResourceDetailsForm({
   className = '',
 }: ResourceDetailsFormProps) {
   const items = flattenItems(children);
-  // fill row by row, with a lone last item on the left
-  const content = items.every(isFormGroup)
-    ? items
-    : Array.from({ length: Math.ceil(items.length / 2) }, (_, row) => (
-        <FormGroup key={row} colSpan="S1 M2 L2 XL2">
-          {items.slice(row * 2, row * 2 + 2)}
-        </FormGroup>
-      ));
+  const half = Math.ceil(items.length / 2);
+  const content = items.every(isFormGroup) ? (
+    items
+  ) : (
+    <>
+      <FormGroup>{items.slice(0, half)}</FormGroup>
+      {items.length > half && <FormGroup>{items.slice(half)}</FormGroup>}
+    </>
+  );
 
   return (
     <Form
