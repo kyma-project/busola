@@ -8,6 +8,21 @@ Element.prototype.scroll = () => {};
 
 window.ResizeObserver = ResizeObserverPolyfill;
 
+// Node 26 adds localStorage/sessionStorage to globalThis as undefined, which causes
+// Vitest's populateGlobal to skip them (they're already "in global" but not in its
+// hardcoded KEYS list). Re-bridge them from jsdom's window explicitly.
+if (typeof localStorage === 'undefined' && global.jsdom) {
+  const jsdomWindow = global.jsdom.window;
+  Object.defineProperty(global, 'localStorage', {
+    get: () => jsdomWindow.localStorage,
+    configurable: true,
+  });
+  Object.defineProperty(global, 'sessionStorage', {
+    get: () => jsdomWindow.sessionStorage,
+    configurable: true,
+  });
+}
+
 const originalConsoleError = console.error;
 const originalConsoleWarn = console.warn;
 export const ignoreConsoleErrors = (patterns) => {

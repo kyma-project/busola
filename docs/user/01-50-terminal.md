@@ -21,7 +21,7 @@ Kyma dashboard creates the `busola-terminal` namespace in your cluster (if it do
 
 The terminal provides a full interactive Bash shell (`/bin/bash`) inside the `busola-dev-toolbox` container. The following are available by default:
 
-- Standard Linux commands (`ls`, `cat`, `grep`, `curl`, `wget`, and more)
+- Standard Linux commands (`ls`, `cat`, `grep`, `curl`, and more)
 - Additional tools bundled in the [`busola-dev-toolbox` image](https://github.com/kyma-project/busola/blob/main/Dockerfile.dev-toolbox)
 
 > [!NOTE]
