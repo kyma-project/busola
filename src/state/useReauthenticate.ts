@@ -63,6 +63,7 @@ export function useReauthenticate({
           onRetry: () => {
             if (relative) saveIntendedPath(relative);
             resetAuthRedirectGuard();
+            tryClaimReauthRedirect();
             // The cluster was cleared above; store its name so the login callback can restore it.
             if (clusterName) persistActiveClusterName(clusterName);
             userManager

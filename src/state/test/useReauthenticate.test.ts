@@ -9,6 +9,7 @@ import { clusterAtom, CLUSTER_NAME_STORAGE_KEY } from '../clusterAtom';
 import {
   AUTH_REDIRECT_STORAGE_KEY,
   isAuthRedirectLoop,
+  isReauthRedirectPending,
   registerAuthRedirect,
   resetReauthRedirectClaim,
 } from '../utils/authRedirectLoopGuard';
@@ -179,6 +180,7 @@ describe('useReauthenticate', () => {
     expect(userManager.signinRedirect).toHaveBeenCalledWith({
       prompt: 'login',
     });
+    expect(isReauthRedirectPending()).toBe(true);
     expect(getIntendedPath()?.path).toBe('/namespaces/bar');
   });
 

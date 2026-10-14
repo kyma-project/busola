@@ -1,4 +1,17 @@
 import { ComponentType, lazy } from 'react';
+import {
+  isReauthRedirectPending,
+  subscribeReauthRedirect,
+} from 'state/utils/authRedirectLoopGuard';
+
+const untilReauthRedirectReleased = () =>
+  new Promise<void>((resolve) => {
+    const unsubscribe = subscribeReauthRedirect(() => {
+      if (isReauthRedirectPending()) return;
+      unsubscribe();
+      resolve();
+    });
+  });
 
 export const lazyWithRetries = <T extends ComponentType<any>>(
   importer: () => Promise<{ default: T }>,
@@ -7,6 +20,9 @@ export const lazyWithRetries = <T extends ComponentType<any>>(
     try {
       return await importer();
     } catch (error: any) {
+      // Safari fails pending chunk loads once the IdP redirect starts, while the
+      // old page is still on screen; stay suspended until the page has left.
+      while (isReauthRedirectPending()) await untilReauthRedirectReleased();
       const isChunkLoadFailed = error?.message?.includes(
         'Failed to fetch dynamically imported module',
       );

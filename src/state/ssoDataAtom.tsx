@@ -121,6 +121,8 @@ function triggerForcedLogin(
   kubeconfigId?: string,
 ) {
   resetAuthRedirectGuard();
+  // Claimed so the chunk loader knows a redirect is in flight.
+  tryClaimReauthRedirect();
   if (relative) saveIntendedPath(relative, kubeconfigId);
   if (!userManager) {
     window.location.assign('/clusters');
