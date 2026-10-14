@@ -111,6 +111,8 @@ function triggerForcedLogin(
   relative: string | null,
 ) {
   resetAuthRedirectGuard();
+  // Claimed so the chunk loader knows a redirect is in flight.
+  tryClaimReauthRedirect();
   if (relative) saveIntendedPath(relative);
   if (!userManager) {
     window.location.assign('/clusters');
