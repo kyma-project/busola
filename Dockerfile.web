@@ -26,6 +26,7 @@ FROM --platform=$BUILDPLATFORM node:26.11-alpine3.24 AS configuration
 WORKDIR /kyma
 
 RUN apk add make
+RUN apk del apk-tools alpine-baselayout busybox
 
 #Copy /kyma configuration into container to /kyma
 COPY /kyma /kyma

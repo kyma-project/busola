@@ -10,6 +10,8 @@ RUN npm run build
 # ---- Serve ----
 FROM node:26.11-alpine3.24
 
+RUN apk del apk-tools alpine-baselayout busybox
+
 WORKDIR /app
 COPY --chown=65532:65532 --from=builder /app/backend-production.cjs ./
 COPY --chown=65532:65532 settings settings/
