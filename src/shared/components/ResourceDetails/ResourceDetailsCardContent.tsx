@@ -93,15 +93,14 @@ export const ResourceDetailsCardContent = ({
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {resource.kind}
               {description && (
-                <span className="hint-button-slot">
-                  <HintButton
-                    className="sap-margin-begin-tiny"
-                    setShowTitleDescription={setShowTitleDescription}
-                    showTitleDescription={showTitleDescription}
-                    description={description}
-                    ariaTitle={resource?.kind}
-                  />
-                </span>
+                <HintButton
+                  className="sap-margin-begin-tiny"
+                  setShowTitleDescription={setShowTitleDescription}
+                  showTitleDescription={showTitleDescription}
+                  description={description}
+                  ariaTitle={resource?.kind}
+                  inline
+                />
               )}
             </div>
           </FormItem>

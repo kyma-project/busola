@@ -72,15 +72,14 @@ export function FormField({
                 {label}
               </Label>
               {tooltipContent && (
-                <span className="hint-button-slot">
-                  <HintButton
-                    setShowTitleDescription={setOpenPopover}
-                    showTitleDescription={openPopover}
-                    description={tooltipContent}
-                    className="sap-margin-begin-tiny"
-                    ariaTitle={label}
-                  />
-                </span>
+                <HintButton
+                  setShowTitleDescription={setOpenPopover}
+                  showTitleDescription={openPopover}
+                  description={tooltipContent}
+                  className="sap-margin-begin-tiny"
+                  ariaTitle={label}
+                  inline
+                />
               )}
             </div>
           }

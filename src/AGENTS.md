@@ -18,7 +18,7 @@ There are two distinct routing trees: `components/App/ClusterRoutes.jsx` for clu
 
 All UI components come from `@ui5/webcomponents-react` (SAP Fiori design system). Themes are served from `public/themes/` — this directory is populated at build time by the `copy-themes` script, which copies CSS from node modules into `public/themes/@sap-theming/`. Available themes: `light_dark` (system-adaptive default), `sap_horizon`, `sap_horizon_dark`, `sap_horizon_hcw`, `sap_horizon_hcb`. Icons from `@ui5/webcomponents-icons`.
 
-For label+value display and edit forms, use `Form`/`FormItem` with `labelSpan="S12 M4 L4 XL4"` (stacks below 600px, horizontal above).
+For label+value display and edit forms, use `Form`/`FormItem` with `labelSpan="S12 M4 L4 XL4"` (stacks below 600px, horizontal above). In detail-view cards, use `ResourceDetailsForm`, which wraps this setup for read-only forms.
 
 ### Feature Flags
 
