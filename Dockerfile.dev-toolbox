@@ -4,7 +4,6 @@ RUN apk update
 
 RUN apk add --no-cache \
       curl \
-      wget \
       bash \
       jq \
       yq
