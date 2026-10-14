@@ -61,6 +61,12 @@ export const configFeaturesNames = {
   TERMINAL: 'TERMINAL',
 } as const;
 
+export const PROTECTED_CONFIG_FEATURES: string[] = [
+  configFeaturesNames.EXTENSIBILITY_CUSTOM_COMPONENTS,
+  configFeaturesNames.PROTECTED_RESOURCES,
+  configFeaturesNames.HIDDEN_NAMESPACES,
+];
+
 export type ConfigFeatureList = {
   [_key in ConfigFeaturesNames]?: ConfigFeature;
 };
