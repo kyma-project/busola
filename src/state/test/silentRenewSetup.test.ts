@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { attachSilentRenewHandlers } from '../silentRenewSetup';
 
 type Handler = () => Promise<void> | void;
@@ -9,6 +9,7 @@ function makeMockUserManager() {
   const removeAccessTokenExpiring = vi.fn();
   return {
     signinSilent,
+    settings: { accessTokenExpiringNotificationTimeInSeconds: 60 },
     events: {
       addAccessTokenExpiring: vi.fn((h: Handler) => {
         tokenExpiringHandler = h;
@@ -112,5 +113,92 @@ describe('attachSilentRenewHandlers', () => {
 
     expect(onRenewError).toHaveBeenCalledTimes(1);
     expect(onRenewError).toHaveBeenCalledWith(err);
+  });
+
+  describe('short-lived tokens', () => {
+    const setup = (lifetimeSeconds: number) => {
+      const um = makeMockUserManager();
+      um.signinSilent.mockImplementation(async () => ({
+        id_token: 'new',
+        expires_at: Math.floor(Date.now() / 1000) + lifetimeSeconds,
+      }));
+      const { cleanup } = attachSilentRenewHandlers(um as any, {
+        onRenewed: () => {},
+        onRenewError: () => {},
+      });
+      return { um, cleanup };
+    };
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-10-05T12:00:00Z'));
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('renews a short-lived token once, just before it expires', async () => {
+      const { um } = setup(40);
+
+      await um.fireExpiring();
+      expect(um.signinSilent).toHaveBeenCalledTimes(1);
+
+      await vi.advanceTimersByTimeAsync(1000);
+      await um.fireExpiring();
+      expect(um.signinSilent).toHaveBeenCalledTimes(1);
+
+      await vi.advanceTimersByTimeAsync(33000);
+      expect(um.signinSilent).toHaveBeenCalledTimes(1);
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(um.signinSilent).toHaveBeenCalledTimes(2);
+    });
+
+    it('renews right away when the token is about to expire', async () => {
+      const { um } = setup(3);
+
+      await um.fireExpiring();
+      await vi.advanceTimersByTimeAsync(1000);
+      await um.fireExpiring();
+
+      expect(um.signinSilent).toHaveBeenCalledTimes(2);
+    });
+
+    it('renews a normal token right away', async () => {
+      const { um } = setup(3600);
+
+      await um.fireExpiring();
+      await vi.advanceTimersByTimeAsync(59 * 60 * 1000);
+      await um.fireExpiring();
+
+      expect(um.signinSilent).toHaveBeenCalledTimes(2);
+    });
+
+    it('renews a token valid for one to two minutes once, just before it expires', async () => {
+      const { um } = setup(66);
+
+      await um.fireExpiring();
+      expect(um.signinSilent).toHaveBeenCalledTimes(1);
+
+      await vi.advanceTimersByTimeAsync(6000);
+      await um.fireExpiring();
+      expect(um.signinSilent).toHaveBeenCalledTimes(1);
+
+      await vi.advanceTimersByTimeAsync(54000);
+      expect(um.signinSilent).toHaveBeenCalledTimes(1);
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(um.signinSilent).toHaveBeenCalledTimes(2);
+    });
+
+    it('cleanup cancels a scheduled renewal', async () => {
+      const { um, cleanup } = setup(40);
+
+      await um.fireExpiring();
+      await um.fireExpiring();
+      cleanup();
+      await vi.advanceTimersByTimeAsync(60000);
+
+      expect(um.signinSilent).toHaveBeenCalledTimes(1);
+    });
   });
 });
