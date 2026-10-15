@@ -10,7 +10,7 @@ import AiIllustrationHCdark from './assets/AI/AiIllustrationHCdark.svg';
 import DiscoveryIllustration from './assets/Discovery/Team.png';
 import KymaCLIIllustration from './assets/KymaCLI/KymaCLIIllustration.svg';
 import TerminalIllustration from './assets/Terminal/Terminal.svg';
-import TechEdIllustration from './assets/TechEd/TechEd.png';
+import TechEdIllustration from './assets/TechEd/TechEd.svg';
 import { useAtomValue } from 'jotai';
 import {
   BackgroundStyle,
@@ -144,7 +144,7 @@ export function FeatureCardBanner({
           <Button
             design="Transparent"
             icon="decline"
-            className="decline-button"
+            className={`decline-button ${design.toLowerCase()}-btn`}
             onClick={handleToggle}
             accessibleName={t('common.buttons.close')}
           />

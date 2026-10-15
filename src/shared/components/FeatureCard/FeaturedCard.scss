@@ -125,6 +125,10 @@
     top: 8px;
     right: 8px;
     color: var(--sapContent_IconColor);
+
+    &.teched-btn {
+      color: #ffffff;
+    }
   }
 
   .illustration {
