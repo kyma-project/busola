@@ -4,7 +4,7 @@ context('Test Custom Components', () => {
   Cypress.skipAfterFail();
 
   before(() => {
-    cy.setBusolaFeature('EXTENSIBILITY_CUSTOM_COMPONENTS', true);
+    cy.setBusolaInstallationFeature('EXTENSIBILITY_CUSTOM_COMPONENTS', true);
     cy.loginAndSelectCluster();
   });
 

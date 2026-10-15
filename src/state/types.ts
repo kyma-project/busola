@@ -61,6 +61,7 @@ export const configFeaturesNames = {
   TERMINAL: 'TERMINAL',
 } as const;
 
+// Protected config features. Installation-only.
 export const PROTECTED_CONFIG_FEATURES: string[] = [
   configFeaturesNames.EXTENSIBILITY_CUSTOM_COMPONENTS,
   configFeaturesNames.PROTECTED_RESOURCES,
