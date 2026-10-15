@@ -10,6 +10,7 @@ import { getFetchFn } from '../utils/getFetchFn';
 import { ConfigFeatureList } from '../types';
 import { apiGroupAtom } from '../discoverability/apiGroupsAtom';
 import { getFeatures } from './getFeatures';
+import { sanitizeClusterConfig } from './sanitizeClusterConfig';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { getConfigDir } from 'shared/utils/env';
 
@@ -85,7 +86,7 @@ export const getConfigs = async (fetchFn: FetchFn | undefined) => {
     return mergeWith(
       defaultParams?.config,
       configParams?.config,
-      mapParams?.config,
+      sanitizeClusterConfig(mapParams?.config),
       customizer,
     ) as Configuration;
   } catch (e) {
