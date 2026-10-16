@@ -18,10 +18,11 @@ import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/Dyn
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { EmptyListComponent } from 'shared/components/EmptyListComponent/EmptyListComponent';
 import { Link } from 'shared/components/Link/Link';
+import { getReadableTimestampWithTime } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 
 import { Button } from '@ui5/webcomponents-react';
 
-import { deleteCluster } from '../shared';
+import { deleteCluster, deleteAllClusters } from '../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
 import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
@@ -122,6 +123,8 @@ function ClusterList() {
     t('clusters.common.api-server-address'),
     t('clusters.storage.title'),
     t('common.headers.description'),
+    t('clusters.labels.connected'),
+    t('clusters.labels.expires'),
   ];
   const textSearchProperties = [
     'kubeconfig.current-context',
@@ -142,6 +145,8 @@ function ClusterList() {
       clusterConfig={entry.config}
     />,
     entry.config?.description || EMPTY_TEXT_PLACEHOLDER,
+    getReadableTimestampWithTime(entry.connectedAt),
+    getReadableTimestampWithTime(entry.expiresAt),
   ];
 
   const actions = [
@@ -190,6 +195,17 @@ function ClusterList() {
           {t('clusters.gardener.button')}
         </Button>
       )}
+      <Button
+        design="Transparent"
+        onClick={() => {
+          deleteAllClusters(clustersInfo);
+          notification.notifySuccess({
+            content: t('clusters.disconnect-all-success'),
+          });
+        }}
+      >
+        {t('clusters.disconnect-all')}
+      </Button>
     </>
   );
 

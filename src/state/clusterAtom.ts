@@ -12,6 +12,11 @@ export interface Cluster {
   contextName: string;
   currentContext: CurrentContext;
   kubeconfig: ValidKubeconfig;
+  // ISO timestamp set when the cluster is first connected.
+  connectedAt?: string;
+  // ISO timestamp when the cluster credential (e.g. a Gardener admin cert)
+  // expires, when known.
+  expiresAt?: string;
 }
 
 interface ClusterWithName extends Cluster {

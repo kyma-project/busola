@@ -57,7 +57,17 @@ export function addCluster(
   switchCluster = true,
 ) {
   const { setClusters } = clustersInfo;
-  setClusters((prev) => ({ ...prev, [params.contextName]: params }));
+  setClusters((prev) => ({
+    ...prev,
+    [params.contextName]: {
+      ...params,
+      // Stamp the first connection time; preserve it on re-add.
+      connectedAt:
+        params.connectedAt ??
+        prev?.[params.contextName]?.connectedAt ??
+        new Date().toISOString(),
+    },
+  }));
 
   if (switchCluster) {
     addCurrentCluster(params, clustersInfo);
@@ -84,6 +94,23 @@ export function deleteCluster(
     delete newList?.[clusterName];
     return newList;
   });
+}
+
+export function deleteAllClusters(clustersInfo: useClustersInfoType) {
+  const { setClusters, setCurrentCluster } = clustersInfo;
+  setClusters((prev) => {
+    Object.values(prev ?? {}).forEach((cluster) => {
+      const credentials = cluster?.currentContext?.user?.user;
+      const exec = (credentials as KubeconfigOIDCAuth)?.exec;
+      if (!hasNonOidcAuth(credentials) && isOIDCExec(exec)) {
+        createUserManager(parseOIDCparams(credentials as KubeconfigOIDCAuth))
+          .removeUser()
+          .catch(console.warn);
+      }
+    });
+    return {};
+  });
+  setCurrentCluster(null);
 }
 
 export function getContext(
@@ -166,12 +193,14 @@ export const addByContext = (
     storage = 'sessionStorage',
     switchCluster = true,
     config = {},
+    expiresAt,
   }: {
     kubeconfig: Kubeconfig;
     context: KubeconfigContext;
     storage: ClusterStorage;
     switchCluster?: boolean;
     config: any;
+    expiresAt?: string;
   },
   clustersInfo: useClustersInfoType,
   manualKubeConfigId?: ManualKubeConfigIdController,
@@ -244,6 +273,7 @@ export const addByContext = (
       contextName: context.name,
       config: { ...config, storage },
       currentContext: getContext(kubeconfig, context.name),
+      expiresAt,
     };
 
     addCluster(clusterParams, clustersInfo, switchCluster);
