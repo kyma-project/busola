@@ -37,6 +37,9 @@ RUN make prepare-configuration
 FROM nginxinc/nginx-unprivileged:1.31-alpine3.24
 WORKDIR /app
 
+USER root:root
+RUN apk del zlib
+
 # apps
 COPY --from=builder /app/build /app/core-ui
 
@@ -50,7 +53,6 @@ COPY --from=builder --chown=nginx /app/start_nginx.sh /app/start_nginx.sh
 #environment configuration
 COPY --from=configuration /kyma/build /app/core-ui/environments
 
-USER root:root
 RUN chown -R nginx:root /etc/nginx /app/core-ui
 USER nginx:nginx
 

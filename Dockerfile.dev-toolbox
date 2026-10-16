@@ -5,8 +5,9 @@ RUN apk update
 RUN apk add --no-cache \
       curl \
       bash \
-      jq \
-      yq
+      jq 
+
+RUN apk add yq --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community
 
 # Upgrade all packages and clean up
 RUN apk upgrade --no-cache
