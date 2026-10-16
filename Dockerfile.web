@@ -38,7 +38,7 @@ FROM nginxinc/nginx-unprivileged:1.31-alpine3.24
 WORKDIR /app
 
 USER root:root
-RUN apk del zlib
+RUN apk del zlib nginx-module-xslt libxslt libxml2
 
 # apps
 COPY --from=builder /app/build /app/core-ui
