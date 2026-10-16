@@ -4,6 +4,8 @@ import { Dispatch, JSX, ReactNode, SetStateAction, useId } from 'react';
 import { createTranslationTextWithLinks } from '../../helpers/linkExtractor';
 import { useTranslation } from 'react-i18next'; // this regex catch 2 things, markdown URL or normal URL
 
+import './HintButton.scss';
+
 type HintButtonProps = {
   setShowTitleDescription: Dispatch<SetStateAction<boolean>>;
   showTitleDescription: boolean;
@@ -12,6 +14,7 @@ type HintButtonProps = {
   ariaTitle?: string | JSX.Element;
   className?: string;
   id?: string;
+  inline?: boolean;
 };
 
 export function HintButton({
@@ -22,6 +25,7 @@ export function HintButton({
   ariaTitle = '',
   className,
   id,
+  inline = false,
 }: HintButtonProps) {
   const ID = useId();
   const { t, i18n } = useTranslation();
@@ -31,21 +35,25 @@ export function HintButton({
     const result = createTranslationTextWithLinks(description, t, i18n);
     desc = result;
   }
+  const button = (
+    <Button
+      className={className}
+      id={id ?? `descriptionOpener-${ID}`}
+      icon="hint"
+      design="Transparent"
+      onClick={(e) => {
+        e.stopPropagation();
+        setShowTitleDescription(true);
+      }}
+      accessibleName={`${ariaTitle} information`}
+      tooltip={`${ariaTitle} Information`}
+      style={{ pointerEvents: 'auto' }}
+    />
+  );
+
   return (
     <>
-      <Button
-        className={className}
-        id={id ?? `descriptionOpener-${ID}`}
-        icon="hint"
-        design="Transparent"
-        onClick={(e) => {
-          e.stopPropagation();
-          setShowTitleDescription(true);
-        }}
-        accessibleName={`${ariaTitle} information`}
-        tooltip={`${ariaTitle} Information`}
-        style={{ pointerEvents: 'auto' }}
-      />
+      {inline ? <span className="hint-button-slot">{button}</span> : button}
       {createPortal(
         <Popover
           opener={`descriptionOpener-${ID}`}

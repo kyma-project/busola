@@ -3,24 +3,36 @@
   height: min-content;
 }
 
-.form-without-background {
-  &::part(layout) {
-    background-color: var(--sapBackgroundColor);
-    padding: 0;
-  }
+// Container query so the cards follow the FCL column, not the viewport.
+// Grid rather than flex so a lone card keeps its half width.
+.resource-details-section {
+  container-type: inline-size;
+  container-name: resource-details;
+}
 
-  &::part(column) {
-    padding-top: 0;
+.resource-details-cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@container resource-details (min-width: 600px) {
+  .resource-details-cards {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 }
 
-.resource-card-layout {
-  ui5-label {
-    margin-bottom: 4px;
-  }
+// Spec: 1rem from header to first row; UI5 adds 1.5rem.
+.resource-card-layout::part(column) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
 
-  &::part(column) {
-    padding-bottom: 0;
+// Spec: 0.25rem below a stacked label + 0.3125rem above the value; UI5 adds
+// neither.
+@container (width < 600px) {
+  .resource-card-layout ui5-label[slot='labelContent'] {
+    padding-bottom: 0.5625rem;
   }
 }
 
@@ -33,10 +45,10 @@
   }
 }
 
-@container (max-width: 420px) {
-  .resource-card-layout::part(layout) {
-    grid-template-columns: 1fr !important;
-  }
+// UI5 clips the value cell, which would cut the hint button's hit area.
+.resource-card-layout ui5-form-item:has(.hint-button-slot)::part(content) {
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 .labels-annotations-panel {
@@ -48,12 +60,8 @@
 }
 
 .labels-annotations-panel__content {
+  // The panel supplies the bottom inset.
   &::part(layout) {
-    padding-top: 0;
     padding-bottom: 0;
-  }
-
-  ui5-label {
-    margin-bottom: 4px;
   }
 }

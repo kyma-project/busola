@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { Form, FormGroup, Title } from '@ui5/webcomponents-react';
+import { Title } from '@ui5/webcomponents-react';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -237,7 +237,10 @@ export function ResourceComponent({
               />
             </BannerCarousel>
             {!disableResourceDetailsCard && (
-              <section aria-labelledby="namespace-details-heading">
+              <section
+                aria-labelledby="namespace-details-heading"
+                className="resource-details-section"
+              >
                 <Title
                   level="H3"
                   size="H3"
@@ -246,34 +249,30 @@ export function ResourceComponent({
                 >
                   {title ?? t('common.headers.resource-details')}
                 </Title>
-                <Form layout="S1 M2 L2 XL2" className="form-without-background">
-                  <FormGroup>
-                    <ResourceDetailsCardContent
-                      resource={resource}
-                      description={description}
-                      setShowTitleDescription={setShowTitleDescription}
-                      showTitleDescription={showTitleDescription}
-                      lastUpdate={lastUpdate}
-                      renderUpdateDate={renderUpdateDate}
-                      filteredDetailsCardColumns={filteredDetailsCardColumns}
-                      hideLastUpdate={hideLastUpdate}
-                      hideLabels={hideLabels}
-                      hideAnnotations={hideAnnotations}
-                    />
-                    <ResourceStatusCardContent
-                      resource={resource}
-                      statusBadge={statusBadge}
-                      customStatus={customStatus}
-                      customStatusColumns={customStatusColumns}
-                      filteredStatusColumns={filteredStatusColumns}
-                      statusConditions={statusConditions}
-                      customConditionsComponents={customConditionsComponents}
-                      filteredConditionsComponents={
-                        filteredConditionsComponents
-                      }
-                    />
-                  </FormGroup>
-                </Form>
+                <div className="resource-details-cards">
+                  <ResourceDetailsCardContent
+                    resource={resource}
+                    description={description}
+                    setShowTitleDescription={setShowTitleDescription}
+                    showTitleDescription={showTitleDescription}
+                    lastUpdate={lastUpdate}
+                    renderUpdateDate={renderUpdateDate}
+                    filteredDetailsCardColumns={filteredDetailsCardColumns}
+                    hideLastUpdate={hideLastUpdate}
+                    hideLabels={hideLabels}
+                    hideAnnotations={hideAnnotations}
+                  />
+                  <ResourceStatusCardContent
+                    resource={resource}
+                    statusBadge={statusBadge}
+                    customStatus={customStatus}
+                    customStatusColumns={customStatusColumns}
+                    filteredStatusColumns={filteredStatusColumns}
+                    statusConditions={statusConditions}
+                    customConditionsComponents={customConditionsComponents}
+                    filteredConditionsComponents={filteredConditionsComponents}
+                  />
+                </div>
                 <ResourceHealthCard
                   customHealthCards={customOverviewCard}
                   showHealthCardsTitle={showHealthCardsTitle}
