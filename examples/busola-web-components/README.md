@@ -4,11 +4,16 @@ This example demonstrates the use of custom web components, including the Dynami
 
 ## Prerequisites
 
-Before you begin, ensure you have custom extensions enabled in your cluster:
+Before you begin, ensure custom extensions are enabled in your Busola installation. The `EXTENSIBILITY_CUSTOM_COMPONENTS` feature flag is **installation-only** (it can no longer be enabled through a cluster's `kube-public/busola-config` ConfigMap). For local development, set it in `public/config/config.yaml`:
 
+```yaml
+config:
+  features:
+    EXTENSIBILITY_CUSTOM_COMPONENTS:
+      isEnabled: true
 ```
-kubectl apply -f busola-config.yaml
-```
+
+See [Busola Configuration](../../docs/user/technical-reference/configuration.md) for details.
 
 ## Set Up Your Custom Busola Extension
 

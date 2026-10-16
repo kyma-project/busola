@@ -4,11 +4,18 @@ This example contains a basic custom extension that queries all deployments of a
 
 To set up and deploy your own custom Busola extension, follow these steps.
 
-1. Enable custom extensions in your cluster:
+1. Enable custom extensions.
 
+   Custom components execute cluster-supplied JavaScript, so the `EXTENSIBILITY_CUSTOM_COMPONENTS` feature flag is **installation-only** — it must be enabled in your Busola installation configuration and can no longer be turned on through a cluster's `kube-public/busola-config` ConfigMap. For local development, set it in `public/config/config.yaml`:
+
+```yaml
+config:
+  features:
+    EXTENSIBILITY_CUSTOM_COMPONENTS:
+      isEnabled: true
 ```
-kubectl apply -f busola-config.yaml
-```
+
+See [Busola Configuration](../../docs/user/technical-reference/configuration.md) for installation configuration in a deployed Busola.
 
 2. Adjust the static HTML content.
 
