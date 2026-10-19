@@ -12,7 +12,7 @@ To learn how to work with the Busola configuration files, see [Configuration.md]
 > The list is in alphabetical order.
 
 > [!NOTE]
-> Some flags are **installation-only** — they can only be configured at the Busola installation level and are silently ignored in a cluster's `kube-public/busola-config` ConfigMap. These flags are marked as `(installation-only)` in the table below. For details, see [Protected Feature Flags](configuration.md#protected-installation-only-feature-flags).
+> Some flags are installation-only. You can only configure them at the Busola installation level. They are silently ignored in a cluster's `kube-public/busola-config` ConfigMap. These flags are marked as `(installation-only)` in the following table. For details, see [Protected Feature Flags](configuration.md#protected-installation-only-feature-flags).
 
 This table lists the configurable frontend feature flags, their descriptions, and default values.
 
