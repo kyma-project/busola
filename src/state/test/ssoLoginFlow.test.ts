@@ -12,6 +12,7 @@ import {
 import {
   AUTH_REDIRECT_STORAGE_KEY,
   isAuthRedirectLoop,
+  isReauthRedirectPending,
   registerAuthRedirect,
   resetReauthRedirectClaim,
 } from '../utils/authRedirectLoopGuard';
@@ -216,6 +217,7 @@ describe('useSSOLogin', () => {
         prompt: 'login',
       }),
     );
+    expect(isReauthRedirectPending()).toBe(true);
     expect(getIntendedPath()?.path).toBe('/namespaces/bar');
   });
 

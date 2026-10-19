@@ -329,6 +329,7 @@ export function useAuthHandler() {
               // Saved on Retry only; after Close it would be restored on the next cluster opened.
               if (relative) saveIntendedPath(relative, kubeconfigId);
               resetAuthRedirectGuard();
+              tryClaimReauthRedirect();
               // The cluster was cleared above; store its name so the login callback can restore it.
               persistActiveClusterName(cluster.name);
               const userManager = createUserManager(
@@ -337,9 +338,10 @@ export function useAuthHandler() {
               userManager
                 .clearStaleState()
                 .then(() => userManager.signinRedirect({ prompt: 'login' }))
-                .catch(() =>
-                  navigate(`/cluster/${encodeURIComponent(cluster.name)}`),
-                );
+                .catch(() => {
+                  resetReauthRedirectClaim();
+                  navigate(`/cluster/${encodeURIComponent(cluster.name)}`);
+                });
             },
           });
           navigate('/clusters');

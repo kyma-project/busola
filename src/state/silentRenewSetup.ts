@@ -8,6 +8,8 @@ interface Options {
   onRenewingChange?: (renewing: boolean) => void;
 }
 
+const SHORT_TOKEN_RENEW_MARGIN_S = 5;
+
 // Runs `addAccessTokenExpiring`, `visibilitychange`, and external `renew()`
 // callers through one single-flight `signinSilent()`.
 export function attachSilentRenewHandlers(
@@ -16,13 +18,23 @@ export function attachSilentRenewHandlers(
 ): { cleanup: () => void; renew: () => Promise<User | null> } {
   const renewSilently = createSingleFlight<User | null>();
 
+  const expiringLeadS =
+    userManager.settings.accessTokenExpiringNotificationTimeInSeconds;
+  let renewedAt = 0;
+  let renewedTokenExpiresAt = 0;
+  let deferredRenew: ReturnType<typeof setTimeout> | undefined;
+
   const runRenew = async (): Promise<User | null> => {
+    clearTimeout(deferredRenew);
     onRenewingChange?.(true);
     try {
       const user = await renewSilently(() => userManager.signinSilent());
       if (user) onRenewed(user);
+      renewedAt = Date.now() / 1000;
+      renewedTokenExpiresAt = user?.expires_at ?? 0;
       return user;
     } catch (e) {
+      renewedTokenExpiresAt = 0;
       onRenewError(e instanceof Error ? e : new Error(String(e)));
       return null;
     } finally {
@@ -31,6 +43,21 @@ export function attachSilentRenewHandlers(
   };
 
   const expiringHandler = async () => {
+    // No getUser() here, it restarts the timer and fires this event again.
+    const lifetimeS = renewedTokenExpiresAt - renewedAt;
+    const secondsLeft = renewedTokenExpiresAt - Date.now() / 1000;
+    // For a short-lived token this event fires right after every renewal.
+    if (
+      lifetimeS < 2 * expiringLeadS &&
+      secondsLeft > SHORT_TOKEN_RENEW_MARGIN_S
+    ) {
+      clearTimeout(deferredRenew);
+      deferredRenew = setTimeout(
+        runRenew,
+        (secondsLeft - SHORT_TOKEN_RENEW_MARGIN_S) * 1000,
+      );
+      return;
+    }
     await runRenew();
   };
   userManager.events.addAccessTokenExpiring(expiringHandler);
@@ -47,6 +74,7 @@ export function attachSilentRenewHandlers(
 
   return {
     cleanup: () => {
+      clearTimeout(deferredRenew);
       userManager.events.removeAccessTokenExpiring(expiringHandler);
       document.removeEventListener('visibilitychange', visibilityHandler);
     },

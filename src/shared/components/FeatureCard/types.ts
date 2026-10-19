@@ -15,6 +15,7 @@ export type IllustrationType =
   | 'Modules'
   | 'Discovery'
   | 'Terminal'
+  | 'Teched'
   | string;
 export type ThemeType =
   | 'sap_horizon_hcw'
@@ -32,4 +33,5 @@ export type DesignType =
   | 'information-1'
   | 'information-2'
   | 'information-3'
+  | 'Teched'
   | string;
