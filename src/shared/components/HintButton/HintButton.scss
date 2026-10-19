@@ -1,0 +1,9 @@
+// One text line tall, so the button doesn't grow its row
+.hint-button-slot {
+  display: flex;
+  align-items: center;
+  font-family: var(--sapFontFamily);
+  font-size: var(--sapFontSize);
+  line-height: inherit;
+  height: 1lh;
+}
