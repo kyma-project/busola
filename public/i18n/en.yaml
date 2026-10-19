@@ -11,6 +11,9 @@ cluster-overview:
     metrics: Metrics
     nodes: Nodes
   statistics:
+    autoscaling: Autoscaling
+    autoscaling-scale-down: Scale Down
+    autoscaling-scale-up: Scale Up
     cpu-limits: CPU limits
     cpu-limits-tooltip: The maximum amount of CPU resources your Pods can consume. Monitor these limits to understand your cluster's resource allocation and scaling capacity. Kubernetes allows the total limits across a node to exceed 100% of physical capacity (overcommitment), which is configurable.
     cpu-requests: CPU requests

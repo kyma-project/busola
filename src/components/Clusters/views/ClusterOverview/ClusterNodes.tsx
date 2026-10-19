@@ -9,6 +9,7 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { Sort } from 'shared/components/GenericList/SortModalPanel';
 import { useUrl } from 'hooks/useUrl';
 import { Link } from 'shared/components/Link/Link';
 import { UsageMetrics } from 'resources/Pods/types';
@@ -42,14 +43,24 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
   const { clusterUrl } = useUrl();
   const { t } = useTranslation();
 
+  const getSeverityScore = (entry?: RowRendererEntry) => {
+    const { cpu, memory } = entry?.metrics || {};
+    if (!cpu && !memory) return 0;
+    const cpuPct = cpu ? Number(cpu.requestValue) : 0;
+    const memPct = memory ? Number(memory.requestValue) : 0;
+    if (memPct >= 81 || cpuPct >= 81) return 3;
+    if (memPct >= 51 || cpuPct >= 51) return 2;
+    return 1;
+  };
+
   const getUsageStatus = (
     cpu?: UsageMetrics['cpu'],
     memory?: UsageMetrics['memory'],
   ) => {
     if (!cpu && !memory) return EMPTY_TEXT_PLACEHOLDER;
 
-    const cpuPct = cpu ? Number(cpu.percentageValue) : 0;
-    const memPct = memory ? Number(memory.percentageValue) : 0;
+    const cpuPct = cpu ? Number(cpu.requestValue) : 0;
+    const memPct = memory ? Number(memory.requestValue) : 0;
 
     let label: string;
     let type: 'Positive' | 'Critical' | 'Negative';
@@ -74,6 +85,14 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
       </StatusBadge>
     );
   };
+
+  const statusHeader = t('common.headers.status');
+  const sortBy = (defaultSort: object) => ({
+    ...defaultSort,
+    [statusHeader]: (a: RowRendererEntry, b: RowRendererEntry) =>
+      getSeverityScore(a) - getSeverityScore(b),
+  });
+  const initialSort: Sort = { name: statusHeader, order: 'DESC' };
 
   const headerRenderer = () => [
     t('common.headers.name'),
@@ -145,6 +164,8 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
           serverDataError={error}
           serverDataLoading={!data && loading}
           pagination={{ autoHide: true }}
+          sortBy={sortBy}
+          initialSort={initialSort}
           testid="cluster-nodes"
           searchSettings={{
             showSearchField: false,
