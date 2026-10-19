@@ -1,47 +1,26 @@
 const NAME = `test-resource-${Math.floor(Math.random() * 9999) + 1000}`;
 const IMAGE = 'nginx:latest';
 
-const busolaConfig = JSON.stringify({
-  config: {
-    features: {
-      PROTECTED_RESOURCES: {
-        isEnabled: true,
-        config: {
-          resources: [
-            {
-              match: { '$.metadata.labels.protected': 'true' },
-            },
-            {
-              match: {
-                '$.metadata.ownerReferences[0].kind':
-                  '^[a-zA-Z]([a-zA-Z0-9_-]*)$',
-              },
-              regex: true,
-            },
-          ],
-        },
-      },
-    },
-  },
-});
-
-const configMap = JSON.stringify({
-  kind: 'ConfigMap',
-  apiVersion: 'v1',
-  data: { config: busolaConfig },
-});
-
 context('Test Protected Resources', () => {
   Cypress.skipAfterFail();
 
   before(() => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: /kube-public\/configmaps\/busola-config$/,
+    cy.setBusolaInstallationFeature('PROTECTED_RESOURCES', true, {
+      config: {
+        resources: [
+          {
+            match: { '$.metadata.labels.protected': 'true' },
+          },
+          {
+            match: {
+              '$.metadata.ownerReferences[0].kind':
+                '^[a-zA-Z]([a-zA-Z0-9_-]*)$',
+            },
+            regex: true,
+          },
+        ],
       },
-      configMap,
-    );
+    });
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });

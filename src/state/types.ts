@@ -68,6 +68,13 @@ export const configFeaturesNames = {
   FORCE_CONFIRM_DELETE: 'FORCE_CONFIRM_DELETE',
 } as const;
 
+// Protected config features. Installation-only.
+export const PROTECTED_CONFIG_FEATURES: ReadonlyArray<ConfigFeaturesNames> = [
+  configFeaturesNames.EXTENSIBILITY_CUSTOM_COMPONENTS,
+  configFeaturesNames.PROTECTED_RESOURCES,
+  configFeaturesNames.HIDDEN_NAMESPACES,
+];
+
 export type ConfigFeatureList = {
   [_key in ConfigFeaturesNames]?: ConfigFeature;
 };

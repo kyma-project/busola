@@ -1,5 +1,6 @@
 import jsyaml from 'js-yaml';
-import { isArray, mergeWith } from 'lodash';
+import { isArray, isEmpty, mergeWith } from 'lodash';
+import { ConfigFeaturesNames, PROTECTED_CONFIG_FEATURES } from '../types';
 import { useEffect, useState } from 'react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { unwrap } from 'jotai/utils';
@@ -33,6 +34,23 @@ type ConfigMapResponse =
   | undefined;
 
 const defaultValue: Configuration = {};
+
+const filterOutProtectedFeatures = (
+  clusterConfig: Configuration | undefined,
+) => {
+  if (!clusterConfig?.features || isEmpty(clusterConfig?.features)) {
+    return clusterConfig;
+  }
+
+  const sanitizedFeatures = Object.fromEntries(
+    Object.entries(clusterConfig.features).filter(
+      ([name]) =>
+        !PROTECTED_CONFIG_FEATURES.includes(name as ConfigFeaturesNames),
+    ),
+  );
+
+  return { ...clusterConfig, features: sanitizedFeatures };
+};
 
 export const getConfigs = async (fetchFn: FetchFn | undefined) => {
   try {
@@ -85,7 +103,7 @@ export const getConfigs = async (fetchFn: FetchFn | undefined) => {
     return mergeWith(
       defaultParams?.config,
       configParams?.config,
-      mapParams?.config,
+      filterOutProtectedFeatures(mapParams?.config),
       customizer,
     ) as Configuration;
   } catch (e) {
