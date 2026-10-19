@@ -64,7 +64,7 @@ jobs:
     with:
       name: busola
       dockerfile: Dockerfile
-      tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
+      tags: ${{ inputs.tag != '' && inputs.tag || (github.event_name == 'push' && 'latest' || '') }}
       build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}
   build-busola-fips-image:
     name: Build Fips Image
@@ -74,6 +74,6 @@ jobs:
     with:
       name: busola-fips
       dockerfile: Dockerfile.fips
-      tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
+      tags: ${{ inputs.tag != '' && inputs.tag || (github.event_name == 'push' && 'latest' || '') }}
       use-restricted-registry: true
       build-args: BASE_IMAGE=europe-docker.pkg.dev/kyma-project/${{ contains(fromJSON('["pull_request_target","merge_group"]'), github.event_name) && 'dev' || 'prod' }}/busola@${{ needs.build-busola-image.outputs.digest }}

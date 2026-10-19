@@ -57,7 +57,7 @@ jobs:
     with:
       name: busola-web
       dockerfile: Dockerfile.web
-      tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
+      tags: ${{ inputs.tag != '' && inputs.tag || (github.event_name == 'push' && 'latest' || '') }}
       build-args: ${{ inputs.tag != '' && format('tag={0}', inputs.tag) || '' }}
 
   extract-image-tag:
