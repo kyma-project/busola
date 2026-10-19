@@ -39,6 +39,7 @@ export function ResourceDetailsForm({
 }: ResourceDetailsFormProps) {
   const items = flattenItems(children);
   const half = Math.ceil(items.length / 2);
+  // Mixed FormGroup/FormItem children would nest FormGroups; not supported.
   const content = items.every(isFormGroup) ? (
     items
   ) : (

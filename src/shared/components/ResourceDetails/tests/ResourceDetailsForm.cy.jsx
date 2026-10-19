@@ -22,6 +22,21 @@ describe('ResourceDetailsForm', () => {
     cy.get('ui5-form-group').last().children().should('have.length', 2);
   });
 
+  it('drops empty entries before splitting', () => {
+    cy.mount(
+      <ResourceDetailsForm>
+        <>
+          {item('a')}
+          {[false, item('b'), null, item('c')]}
+        </>
+      </ResourceDetailsForm>,
+    );
+
+    cy.get('ui5-form-item').should('have.length', 3);
+    cy.get('ui5-form-group').first().children().should('have.length', 2);
+    cy.get('ui5-form-group').last().children().should('have.length', 1);
+  });
+
   it('keeps FormGroup children as they are', () => {
     cy.mount(
       <ResourceDetailsForm>
