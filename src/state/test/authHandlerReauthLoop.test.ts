@@ -9,6 +9,7 @@ import { getIntendedPath, saveIntendedPath } from '../intendedPathAtom';
 import {
   AUTH_REDIRECT_STORAGE_KEY,
   isAuthRedirectLoop,
+  isReauthRedirectPending,
   registerAuthRedirect,
   resetReauthRedirectClaim,
   tryClaimReauthRedirect,
@@ -183,9 +184,26 @@ describe('useAuthHandler redirect-loop guard', () => {
     expect(options?.onRetry).toBeDefined();
     await options.onRetry();
     expect(getIntendedPath()?.path).toBe('/namespaces/bar');
+    expect(isReauthRedirectPending()).toBe(true);
     expect(managerMock.signinRedirect).toHaveBeenCalledWith({
       prompt: 'login',
     });
+  });
+
+  it('Retry releases the claim when its redirect fails', async () => {
+    registerAuthRedirect();
+    registerAuthRedirect();
+    registerAuthRedirect();
+    managerMock.getUser.mockResolvedValue({ expired: true });
+    managerMock.signinRedirect.mockRejectedValueOnce(new Error('idp down'));
+
+    const { Wrapper } = makeWrapper();
+    renderHook(() => useAuthHandler(), { wrapper: Wrapper });
+    await waitFor(() => expect(notifyLoginFailureMock).toHaveBeenCalled());
+
+    const [, options] = notifyLoginFailureMock.mock.calls[0];
+    await options.onRetry();
+    await waitFor(() => expect(isReauthRedirectPending()).toBe(false));
   });
 
   it('Retry stores the cluster name so the login callback can restore the cluster', async () => {

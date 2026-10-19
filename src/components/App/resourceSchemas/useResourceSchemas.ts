@@ -21,7 +21,10 @@ import { ssoDataAtom, useIsSSOEnabled } from 'state/ssoDataAtom';
 import { renewingAtom } from 'state/renewingAtom';
 import { useReauthenticate } from 'state/useReauthenticate';
 import { authUserManagerRef } from 'state/authDataAtom';
-import { resetAuthRedirectGuard } from 'state/utils/authRedirectLoopGuard';
+import {
+  isReauthRedirectPending,
+  resetAuthRedirectGuard,
+} from 'state/utils/authRedirectLoopGuard';
 
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
@@ -47,7 +50,12 @@ export const useResourceSchemas = () => {
 
   useEffect(() => {
     // A successful schema fetch means the session works, so clear the loop count.
-    if (openApi?.state === 'hasData' && authData) {
+    // Not while a redirect is in flight: the data predates it and the claim must stay.
+    if (
+      openApi?.state === 'hasData' &&
+      authData &&
+      !isReauthRedirectPending()
+    ) {
       resetAuthRedirectGuard();
     }
     if (openApi?.state !== 'hasError' || !authData) {

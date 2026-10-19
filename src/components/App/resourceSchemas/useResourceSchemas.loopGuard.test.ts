@@ -8,7 +8,10 @@ import { clusterAtom } from 'state/clusterAtom';
 import { configurationAtom } from 'state/configuration/configurationAtom';
 import {
   isAuthRedirectLoop,
+  isReauthRedirectPending,
   registerAuthRedirect,
+  resetReauthRedirectClaim,
+  tryClaimReauthRedirect,
 } from 'state/utils/authRedirectLoopGuard';
 import { openapiAtom } from 'state/openapi/openapiAtom';
 import { useResourceSchemas } from './useResourceSchemas';
@@ -62,7 +65,22 @@ function makeWrapper() {
 describe('useResourceSchemas redirect-loop guard', () => {
   beforeEach(() => {
     sessionStorage.clear();
+    resetReauthRedirectClaim();
     reauthMock.mockReset();
+  });
+
+  it('keeps the loop count and the claim while a redirect is in flight', async () => {
+    registerAuthRedirect();
+    registerAuthRedirect();
+    registerAuthRedirect();
+    tryClaimReauthRedirect();
+
+    const { Wrapper } = makeWrapper();
+    renderHook(() => useResourceSchemas(), { wrapper: Wrapper });
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(isAuthRedirectLoop()).toBe(true);
+    expect(isReauthRedirectPending()).toBe(true);
   });
 
   it('clears the redirect-loop guard once the session is proven usable', async () => {

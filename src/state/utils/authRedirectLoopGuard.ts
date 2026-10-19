@@ -8,6 +8,8 @@ const MAX_REDIRECTS_IN_WINDOW = 3;
 // The claim expires in case the redirect never leaves the page. Half the window: one page can't trip the guard.
 const CLAIM_TTL_MS = WINDOW_MS / 2;
 let reauthClaimedAt: number | null = null;
+let claimExpiry: ReturnType<typeof setTimeout> | undefined;
+const claimListeners = new Set<() => void>();
 
 export function tryClaimReauthRedirect(): boolean {
   const now = Date.now();
@@ -15,11 +17,28 @@ export function tryClaimReauthRedirect(): boolean {
     return false;
   }
   reauthClaimedAt = now;
+  clearTimeout(claimExpiry);
+  claimExpiry = setTimeout(resetReauthRedirectClaim, CLAIM_TTL_MS);
+  claimListeners.forEach((listener) => listener());
   return true;
 }
 
 export function resetReauthRedirectClaim(): void {
+  clearTimeout(claimExpiry);
+  if (reauthClaimedAt === null) return;
   reauthClaimedAt = null;
+  claimListeners.forEach((listener) => listener());
+}
+
+export function isReauthRedirectPending(): boolean {
+  return reauthClaimedAt !== null;
+}
+
+export function subscribeReauthRedirect(listener: () => void): () => void {
+  claimListeners.add(listener);
+  return () => {
+    claimListeners.delete(listener);
+  };
 }
 
 // The Back button can restore this page from the bfcache with the claim still set.
