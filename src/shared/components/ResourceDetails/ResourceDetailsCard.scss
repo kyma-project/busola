@@ -45,6 +45,11 @@
   }
 }
 
+// Spec: a label lines up with the first line of its value; UI5 centers it.
+.resource-card-layout ui5-form-item::part(layout) {
+  align-items: start;
+}
+
 // UI5 clips the value cell, which would cut the hint button's hit area.
 .resource-card-layout ui5-form-item:has(.hint-button-slot)::part(content) {
   overflow-x: clip;
