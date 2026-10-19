@@ -1,6 +1,6 @@
 import jsyaml from 'js-yaml';
 import { isArray, isEmpty, mergeWith } from 'lodash';
-import { PROTECTED_CONFIG_FEATURES } from '../types';
+import { ConfigFeaturesNames, PROTECTED_CONFIG_FEATURES } from '../types';
 import { useEffect, useState } from 'react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { unwrap } from 'jotai/utils';
@@ -44,7 +44,8 @@ const filterOutProtectedFeatures = (
 
   const sanitizedFeatures = Object.fromEntries(
     Object.entries(clusterConfig.features).filter(
-      ([name]) => !PROTECTED_CONFIG_FEATURES.includes(name),
+      ([name]) =>
+        !PROTECTED_CONFIG_FEATURES.includes(name as ConfigFeaturesNames),
     ),
   );
 

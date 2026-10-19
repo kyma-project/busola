@@ -32,6 +32,18 @@ You can configure Busola at two levels:
 - Environment-specific configuration with `extensibility` and `config` located in `public/environments`. Activate it with the `active.env` file. See [Environment-Specific Settings](#environment-specific-settings).
 - **Per-cluster configuration**, available in the target cluster in ConfigMap `kube-public/busola-config` under the key **config**. Busola requests that resource during the bootstrap process.
 
+### Protected (Installation-Only) Feature Flags
+
+Some feature flags are **protected** — they can only be set at the installation level and are silently ignored if present in a cluster's `kube-public/busola-config` ConfigMap. This prevents individual clusters from overriding security-sensitive or administrator-controlled settings.
+
+| Feature flag                        | Why it is protected                                                            |
+| ----------------------------------- | ------------------------------------------------------------------------------ |
+| **EXTENSIBILITY_CUSTOM_COMPONENTS** | Executes cluster-supplied JavaScript; requires explicit administrator opt-in.  |
+| **HIDDEN_NAMESPACES**               | Controls which system namespaces are hidden from all users across the cluster. |
+| **PROTECTED_RESOURCES**             | Defines resources that cannot be edited or deleted by users.                   |
+
+To configure these flags, use the installation-level configuration described in the [Backend](#backend) and [Frontend](#frontend) sections above.
+
 ## Changing the Configuration
 
 With the `feature` toggles, you can switch each Busola feature on or off and configure them to fit your needs.
