@@ -34,7 +34,7 @@ You can configure Busola at two levels:
 
 ### Protected (Installation-Only) Feature Flags
 
-Some feature flags are **protected** — they can only be set at the installation level and are silently ignored if present in a cluster's `kube-public/busola-config` ConfigMap. This prevents individual clusters from overriding security-sensitive or administrator-controlled settings.
+Some feature flags are protected. You can only set them at the installation level. They are silently ignored if present in a cluster's `kube-public/busola-config` ConfigMap. This prevents individual clusters from overriding security-sensitive or administrator-controlled settings.
 
 | Feature flag                        | Why it is protected                                                            |
 | ----------------------------------- | ------------------------------------------------------------------------------ |
