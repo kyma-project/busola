@@ -1,4 +1,4 @@
-import { FormEventHandler, RefObject, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
 
@@ -6,9 +6,14 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { useUpsert } from 'shared/hooks/BackendAPI/useUpsert';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { ResourceForm } from 'shared/ResourceForm';
+import { ResourceFormProps } from 'shared/ResourceForm/components/ResourceForm';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
-import { createConfigmap, createExtensibilityTemplate } from './helpers';
+import {
+  createConfigmap,
+  createConfigMapTemplate,
+  createExtensibilityTemplate,
+} from './helpers';
 import { ColumnsInput } from './ColumnsInput';
 import './ExtensibilityStarterForm.scss';
 import { clusterAtom } from 'state/clusterAtom';
@@ -18,15 +23,18 @@ import { useNavigate } from 'react-router';
 import { Crd, LayoutColumnName } from 'types';
 import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout.js';
 
-type BusolaExtensionCreateProps = {
-  formElementRef: RefObject<HTMLFormElement | null>;
-  onChange: FormEventHandler<HTMLFormElement>;
+type BusolaExtensionCreateProps = Pick<
+  ResourceFormProps,
+  'formElementRef' | 'onChange' | 'setCustomValid' | 'stickyHeaderHeight'
+> & {
   layoutNumber: LayoutColumnName;
 };
 
 export default function BusolaExtensionCreate({
   formElementRef,
   onChange,
+  setCustomValid,
+  stickyHeaderHeight,
   layoutNumber,
 }: BusolaExtensionCreateProps) {
   const { t } = useTranslation();
@@ -44,63 +52,93 @@ export default function BusolaExtensionCreate({
   const [crd, setCrd] = useState<Crd | null>(null);
   const [state, setState] = useState({});
 
+  const [initialConfigMap] = useState(() =>
+    createConfigMapTemplate('kube-public'),
+  );
+  const configMap = useMemo(
+    () => (crd ? createConfigmap(crd, state) : initialConfigMap),
+    [crd, state, initialConfigMap],
+  );
+
+  // ResourceForm only calls this when reverting
+  const resetForm = () => {
+    setCrd(null);
+    setState({});
+  };
+
+  const createExtension = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    // the combobox also accepts text that matches no CRD
+    if (!crd) {
+      notificationManager.notifyError({
+        content: t('common.messages.must-fill-required'),
+      });
+      return;
+    }
+
+    const onError = (e: Error) =>
+      notificationManager.notifyError({
+        content: t('common.messages.error', { error: e.message }),
+        header: t('extensibility.starter-modal.messages.error'),
+      });
+
+    const onSuccess = () => {
+      notificationManager.notifySuccess({
+        content: t('extensibility.starter-modal.messages.success'),
+      });
+
+      setLayoutColumn({
+        layout: nextLayout as FCLLayout,
+        showCreate: null,
+        startColumn: {
+          resourceName: null,
+          resourceType: 'Extensions',
+          rawResourceTypeName: 'ConfigMap',
+          namespaceId: 'kube-public',
+        },
+        midColumn: {
+          resourceName: crd.metadata.name,
+          resourceType: 'Extensions',
+          rawResourceTypeName: 'ConfigMap',
+          namespaceId: 'kube-public',
+        },
+        endColumn: null,
+      });
+      navigate(
+        `/cluster/${cluster?.contextName}/busolaextensions/kube-public/${crd.metadata.name}${nextQuery}`,
+      );
+    };
+
+    await upsert({
+      url: '/api/v1/namespaces/kube-public/configmaps',
+      resource: configMap,
+      onSuccess,
+      onError,
+    });
+  };
+
   return (
-    <div className="extension-create-container">
-      <ResourceForm.Single
-        formElementRef={formElementRef}
-        onChange={onChange}
-        resource={state}
-        initialResource={{}}
-        setResource={setState}
-        className="resource-form--unset-height"
-        createResource={async () => {
-          const onError = (e: Error) =>
-            notificationManager.notifyError({
-              content: t('common.messages.error', { error: e.message }),
-              header: t('extensibility.starter-modal.messages.error'),
-            });
-
-          const onSuccess = () => {
-            notificationManager.notifySuccess({
-              content: t('extensibility.starter-modal.messages.success'),
-            });
-
-            setLayoutColumn({
-              layout: nextLayout as FCLLayout,
-              showCreate: null,
-              startColumn: {
-                resourceName: null,
-                resourceType: 'Extensions',
-                rawResourceTypeName: 'ConfigMap',
-                namespaceId: 'kube-public',
-              },
-              midColumn: {
-                resourceName: crd?.metadata?.name ?? null,
-                resourceType: 'Extensions',
-                rawResourceTypeName: 'ConfigMap',
-                namespaceId: 'kube-public',
-              },
-              endColumn: null,
-            });
-            navigate(
-              `/cluster/${cluster?.contextName}/busolaextensions/kube-public/${crd?.metadata?.name}${nextQuery}`,
-            );
-          };
-
-          const configmap = createConfigmap(crd, state);
-          await upsert({
-            url: '/api/v1/namespaces/kube-public/configmaps',
-            resource: configmap,
-            onSuccess,
-            onError,
-          });
-        }}
-      >
+    <ResourceForm
+      singularName={t('config-maps.name_singular')}
+      resource={configMap}
+      initialResource={initialConfigMap}
+      setResource={resetForm}
+      onChange={onChange}
+      formElementRef={formElementRef}
+      setCustomValid={setCustomValid}
+      stickyHeaderHeight={stickyHeaderHeight}
+      onSubmit={createExtension}
+      disableDefaultFields
+      initialMode="MODE_FORM"
+      modeSelectorDisabled
+    >
+      <ResourceForm.Wrapper resource={state} setResource={setState}>
         <ResourceForm.FormField
           updatesOnInput={false}
           required
           label={t('extensibility.starter-modal.crd')}
-          value={crd?.metadata.name}
+          value={crd?.metadata.name ?? ''}
           setValue={(value: string) => {
             const crd = crds?.find((crd) => crd.metadata.name === value);
             if (crd) {
@@ -146,7 +184,7 @@ export default function BusolaExtensionCreate({
             </ResourceForm.CollapsibleSection>
           </>
         )}
-      </ResourceForm.Single>
-    </div>
+      </ResourceForm.Wrapper>
+    </ResourceForm>
   );
 }

@@ -1,5 +1,6 @@
 import { prettifyKind } from 'shared/utils/helpers';
 import pluralize from 'pluralize';
+import { cloneDeep } from 'lodash';
 import { getLatestVersion } from 'components/Extensibility/migration';
 import { EXTENSION_VERSION_LABEL } from './constants';
 import jsyaml from 'js-yaml';
@@ -114,7 +115,9 @@ export function createExtensibilityTemplate(crd, t) {
   };
 }
 
-export function createConfigmap(crd, data) {
+export function createConfigmap(crd, formState) {
+  // the form still uses formState
+  const data = cloneDeep(formState);
   const filterViewProps = (arr) =>
     (arr ?? [])
       .filter((e) => e.isSelected)
