@@ -61,6 +61,28 @@ describe('FeatureCardBanner', () => {
     expect(screen.getByText('Banner title')).toBeInTheDocument();
   });
 
+  it('should migrate legacy hideBanner keys to atom on first render', () => {
+    const legacyId = 'LegacyBanner';
+    const legacyKey = `hideBanner${legacyId}`;
+
+    // Set legacy localStorage key
+    localStorage.setItem(legacyKey, 'true');
+
+    renderBanner(legacyId);
+
+    // Banner should be hidden due to migration
+    expect(screen.queryByText('Banner title')).not.toBeInTheDocument();
+
+    // Legacy key should be removed
+    expect(localStorage.getItem(legacyKey)).toBeNull();
+
+    // New atom storage should contain the ID
+    const stored = localStorage.getItem('busola.dismissedBanners');
+    expect(stored).toBeDefined();
+    const dismissedBanners = JSON.parse(stored || '[]');
+    expect(dismissedBanners).toContain(legacyId);
+  });
+
   describe('Teched design variant', () => {
     const renderTeched = (overrides = {}) =>
       render(
