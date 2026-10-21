@@ -17,7 +17,6 @@ import { getAvailableNvidiaGPUs } from 'components/Nodes/nodeHelpers';
 import { UsageMetrics } from 'resources/Pods/types';
 import { lazyWithRetries } from 'shared/helpers/lazyWithRetries';
 import { ResourceRadialChart } from 'shared/components/ResourceRadialChart/ResourceRadialChart';
-import { ClusterAutoscalingCard } from './ClusterAutoscalingCard';
 
 const Injections = lazyWithRetries(
   () => import('../../../Extensibility/ExtensibilityInjections'),
@@ -151,7 +150,6 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
             accessibleName={t('cluster-overview.statistics.memory-usage')}
           />
         </div>
-        <ClusterAutoscalingCard />
         {nodesData && (
           <div className="item-wrapper card-small">
             <CountingCard
