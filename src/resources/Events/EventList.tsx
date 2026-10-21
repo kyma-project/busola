@@ -93,7 +93,7 @@ export function EventList({
                 aria-label="Error"
                 icon={<Icon accessibleName="Error" name="error" />}
                 state="Negative"
-                title={e.type}
+                title={t('node-details.error')}
               />
             ) : (
               <ObjectStatus
@@ -105,11 +105,11 @@ export function EventList({
             )
           ) : (
             <ObjectStatus
-              aria-label="Normal"
+              aria-label="Information"
               className="bsl-icon-m"
-              icon={<Icon accessibleName="Normal" name="information" />}
+              icon={<Icon accessibleName="Information" name="information" />}
               state="Information"
-              title={e.type}
+              title={t('node-details.information')}
             />
           )}
         </div>
@@ -192,9 +192,18 @@ export function EventList({
       hasDetailsView
       readOnly
       filter={async (res) => {
-        const typeFilter =
-          displayType.key === EVENT_MESSAGE_TYPE.ALL.key ||
-          res.type === displayType.key;
+        let typeFilter;
+        if (displayType.key === EVENT_MESSAGE_TYPE.ALL.key) {
+          typeFilter = true;
+        } else if (displayType.key === EVENT_MESSAGE_TYPE.ERROR.key) {
+          typeFilter =
+            res.type === 'Warning' && res.message.startsWith('Error');
+        } else if (displayType.key === EVENT_MESSAGE_TYPE.WARNING.key) {
+          typeFilter =
+            res.type === 'Warning' && !res.message.startsWith('Error');
+        } else {
+          typeFilter = res.type === displayType.key;
+        }
 
         const propsFilter = filter ? await filter(res) : true;
 
