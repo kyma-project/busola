@@ -21,6 +21,7 @@ export function BusolaTerminal({
   dockedHeight?: number;
   onMinHeightComputed?: (minHeight: number) => void;
 }) {
+  console.log('Opening terminal', dockedHeight);
   const { t } = useTranslation();
   const termDOM = useRef<HTMLDivElement>(null);
   const termRef = useRef<Terminal | null>(null);

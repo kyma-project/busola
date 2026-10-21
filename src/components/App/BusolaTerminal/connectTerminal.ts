@@ -1,7 +1,9 @@
 import { Terminal } from '@xterm/xterm';
 import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { TerminalSessionState } from 'state/terminalSessionAtom';
-import { CONTAINER_NAME, TERMINAL_NAMESPACE } from './provisionPod';
+import {
+  ConnectionType,
+  TerminalSessionState,
+} from 'state/terminalSessionAtom';
 import { encodeBase64Url } from 'shared/utils/base64url';
 import { TFunction } from 'i18next';
 
@@ -47,13 +49,20 @@ function buildProtocols(authHeaders: Headers): string[] {
   ];
 }
 
-function buildAttachUrl(podName: string): string {
+function buildAttachUrl(
+  namespace: string,
+  podName: string,
+  containerName: string,
+  command: string,
+  connectionType: ConnectionType,
+): string {
   const { protocol, host } = window.location;
   const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
   const { backendAddress } = getClusterConfig();
-  const attachPath = `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/${podName}/attach`;
+  const attachPath = `/api/v1/namespaces/${namespace}/pods/${podName}/${connectionType}`;
   const params = new URLSearchParams({
-    container: CONTAINER_NAME,
+    command: command,
+    container: containerName,
     stdin: 'true',
     stdout: 'true',
     stderr: 'true',
@@ -67,6 +76,10 @@ export async function connectTerminal({
   authHeaders,
   term,
   podName,
+  containerName,
+  command,
+  connectionType,
+  namespace,
   setSession,
   signal,
   t,
@@ -77,6 +90,10 @@ export async function connectTerminal({
   authHeaders: Headers;
   term: Terminal;
   podName: string;
+  containerName: string;
+  command: string;
+  connectionType: ConnectionType;
+  namespace: string;
   setSession: (
     update: (prev: TerminalSessionState) => TerminalSessionState,
   ) => void;
@@ -87,8 +104,11 @@ export async function connectTerminal({
   // Suppress the success banner on a proactive cycle; failures/drops still show.
   silent?: boolean;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
+  console.log(
+    buildAttachUrl(namespace, podName, containerName, command, connectionType),
+  );
   const ws = new WebSocket(
-    buildAttachUrl(podName),
+    buildAttachUrl(namespace, podName, containerName, command, connectionType),
     buildProtocols(authHeaders),
   );
   ws.binaryType = 'arraybuffer';

@@ -74,6 +74,7 @@ export default function registerWebSocket(server) {
     try {
       const url = new URL(req.url, 'http://' + req.socket.remoteAddress);
       const remoteURL = buildRemoteURL(url, req.authHeaders.clusterURL);
+      console.log('REMOTE URL:', remoteURL);
       req.logger.info('Connecting to:' + remoteURL);
 
       connection = new WebSocketConnection(

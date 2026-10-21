@@ -1,8 +1,9 @@
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
-
-export const TERMINAL_NAMESPACE = 'busola-terminal';
-export const CONTAINER_NAME = 'dev-toolbox';
+import {
+  TERMINAL_CONTAINER_NAME,
+  TERMINAL_NAMESPACE_NAME,
+} from 'components/App/BusolaTerminal/useTerminalSession';
 
 const POD_TTL_MS = 60 * 60 * 1000;
 const POD_POLL_INTERVAL_MS = 2000;
@@ -27,7 +28,7 @@ function buildPodManifest(podName: string, image: string) {
     kind: 'Pod',
     metadata: {
       name: podName,
-      namespace: TERMINAL_NAMESPACE,
+      namespace: TERMINAL_NAMESPACE_NAME,
       labels: { run: 'busola-terminal' },
       annotations: { 'busola.io/time-to-live': ttl },
     },
@@ -35,7 +36,7 @@ function buildPodManifest(podName: string, image: string) {
       containers: [
         {
           image,
-          name: CONTAINER_NAME,
+          name: TERMINAL_CONTAINER_NAME,
           resources: {
             requests: { cpu: '100m', memory: '128Mi' },
             limits: { cpu: '500m', memory: '256Mi' },
@@ -90,7 +91,7 @@ async function waitIfTerminating(
   abortController: AbortController,
   deadline: number,
 ): Promise<void> {
-  const podUrl = `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/${podName}`;
+  const podUrl = `/api/v1/namespaces/${TERMINAL_NAMESPACE_NAME}/pods/${podName}`;
   let isTerminating: boolean;
   try {
     const res = await fetchFn({ relativeUrl: podUrl, abortController });
@@ -128,7 +129,7 @@ async function pollPodReady(
     if (abortController.signal.aborted)
       throw new DOMException('Aborted', 'AbortError');
     const res = await fetchFn({
-      relativeUrl: `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/${podName}`,
+      relativeUrl: `/api/v1/namespaces/${TERMINAL_NAMESPACE_NAME}/pods/${podName}`,
       abortController,
     });
     const pod = await res.json();
@@ -160,14 +161,14 @@ export async function provisionPod({
     {
       apiVersion: 'v1',
       kind: 'Namespace',
-      metadata: { name: TERMINAL_NAMESPACE },
+      metadata: { name: TERMINAL_NAMESPACE_NAME },
     },
     abortController,
   );
   await waitIfTerminating(fetchFn, podName, abortController, deadline);
   await createIfMissing(
     fetchFn,
-    `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods`,
+    `/api/v1/namespaces/${TERMINAL_NAMESPACE_NAME}/pods`,
     buildPodManifest(podName, image),
     abortController,
   );

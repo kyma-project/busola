@@ -1,6 +1,6 @@
 import { RefObject, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { Terminal } from '@xterm/xterm';
 import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
@@ -10,6 +10,7 @@ import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames, TerminalFeature } from 'state/types';
 import {
+  ConnectionType,
   terminalSessionAtom,
   TerminalSessionState,
 } from 'state/terminalSessionAtom';
@@ -25,6 +26,9 @@ import {
   terminalSystemMessage,
 } from './connectTerminal';
 import { TFunction } from 'i18next';
+
+export const TERMINAL_CONTAINER_NAME = 'dev-toolbox';
+export const TERMINAL_NAMESPACE_NAME = 'busola-terminal';
 
 const DEFAULT_IMAGE =
   'europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest';
@@ -81,7 +85,8 @@ export function useTerminalSession() {
   const cluster = useAtomValue(clusterAtom);
   const ssoData = useAtomValue(ssoDataAtom);
   const fetchFn = useFetch();
-  const setSession = useSetAtom(terminalSessionAtom);
+  const [sessionInfo, setSession] = useAtom(terminalSessionAtom);
+  console.log(sessionInfo);
   const { config } = useFeature<TerminalFeature>(configFeaturesNames.TERMINAL);
   const image: string = config?.image ?? DEFAULT_IMAGE;
   const maxSessionDurationMs: number | undefined = config?.maxSessionDurationMs;
@@ -115,7 +120,7 @@ export function useTerminalSession() {
       const clusterServer =
         cluster?.currentContext?.cluster?.cluster?.server ?? '';
 
-      if (!silent) {
+      if (!silent && sessionInfo.connectionType !== ConnectionType.Exec) {
         setSession({
           status: 'provisioning',
           podName: null,
@@ -131,25 +136,26 @@ export function useTerminalSession() {
           authHeaders.get('X-K8s-Authorization')?.replace('Bearer ', '') ??
           authHeaders.get('X-Client-Certificate-Data') ??
           '';
-        const podName = await generateTerminalPodName(
-          clusterServer,
-          credential,
-        );
+        let podName = sessionInfo.podName || 'test';
+        if (sessionInfo.connectionType !== ConnectionType.Exec) {
+          podName = await generateTerminalPodName(clusterServer, credential);
+        }
         setSession((prev) => ({ ...prev, podName }));
-
-        try {
-          await provisionPod({
-            fetchFn,
-            podName,
-            image,
-            abortController: abort,
-          });
-        } catch (e) {
-          // If the reconnection is not in active phase, throw hard error
-          if (attemptRef.current === 0) {
-            throw e;
+        if (sessionInfo.connectionType !== ConnectionType.Exec) {
+          try {
+            await provisionPod({
+              fetchFn,
+              podName,
+              image,
+              abortController: abort,
+            });
+          } catch (e) {
+            // If the reconnection is not in active phase, throw hard error
+            if (attemptRef.current === 0) {
+              throw e;
+            }
+            console.warn(e);
           }
-          console.warn(e);
         }
 
         // Bail if torn down during provisioning — the socket we'd open would leak.
@@ -160,6 +166,10 @@ export function useTerminalSession() {
           authHeaders,
           term,
           podName,
+          command: sessionInfo.command || 'bash',
+          containerName: sessionInfo.container || TERMINAL_CONTAINER_NAME,
+          connectionType: sessionInfo.connectionType,
+          namespace: sessionInfo.namespace || TERMINAL_NAMESPACE_NAME,
           setSession,
           signal: abort.signal,
           t,
@@ -241,7 +251,7 @@ export function useTerminalSession() {
 
       try {
         await fetchFn({
-          relativeUrl: `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/${podName}`,
+          relativeUrl: `/api/v1/namespaces/${TERMINAL_NAMESPACE_NAME}/pods/${podName}`,
           init: { method: 'DELETE' },
         });
       } catch {

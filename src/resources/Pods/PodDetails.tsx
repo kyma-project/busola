@@ -16,7 +16,12 @@ import { useUrl } from 'hooks/useUrl';
 import { PodType, ResourceDescription } from 'resources/Pods';
 import { Link } from 'shared/components/Link/Link';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
+import { Button } from '@ui5/webcomponents-react';
+import { PodExecDialog } from 'resources/Pods/PodExecDialog';
+import { TERMINAL_MIN_HEIGHT } from 'components/App/BusolaTerminal/terminalThemes';
+import { useAtom } from 'jotai';
+import { showTerminalAtom } from 'state/showTerminalAtom';
 
 type PodDetailsProps = {
   resourceName: string;
@@ -40,6 +45,11 @@ export function PodDetails({
 }: PodDetailsProps) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
+  const [execDialogOpen, setExecDialogOpen] = useState(false);
+  const [showTerminalState, setShowTerminalState] = useAtom(showTerminalAtom);
+
+  const [terminalMinHeight, setTerminalMinHeight] =
+    useState(TERMINAL_MIN_HEIGHT);
 
   const Events = () => (
     <EventsList
@@ -160,7 +170,22 @@ export function PodDetails({
 
   return (
     <ResourceDetails
-      customComponents={[VolumesList, Containers, InitContainers, Events]}
+      headerActions={
+        <Button onClick={() => setExecDialogOpen(true)}>Exec into pod</Button>
+      }
+      customComponents={[
+        VolumesList,
+        Containers,
+        InitContainers,
+        Events,
+        PodExecDialog({
+          open: execDialogOpen,
+          close: () => setExecDialogOpen(false),
+          // TODO: move it to podExecDialog?
+          launchTerminal: () =>
+            setShowTerminalState((prev) => ({ ...prev, isOpen: true })),
+        }),
+      ]}
       customColumns={customColumns}
       description={ResourceDescription}
       createResourceForm={PodCreate}
