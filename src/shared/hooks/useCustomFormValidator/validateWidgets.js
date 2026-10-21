@@ -14,11 +14,19 @@ export function validateFormField(formField) {
   const pattern = input?.getAttribute('pattern');
   const value = input?.value;
 
-  const isValid = !(
-    (required && (value === '' || value === 'NaN')) ||
-    (pattern && !value.match(pattern))
-  );
-  return { valid: isValid, filled: value !== '' && value !== 'NaN', required };
+  const isEmpty = required && (value === '' || value === 'NaN');
+  const isPatternMismatch = !isEmpty && pattern && !value.match(pattern);
+  const isValid = !isEmpty && !isPatternMismatch;
+
+  const label = formField.querySelector('ui5-label')?.textContent?.trim();
+  const reason = isEmpty ? 'empty' : isPatternMismatch ? 'pattern' : undefined;
+  return {
+    valid: isValid,
+    filled: value !== '' && value !== 'NaN',
+    required,
+    label,
+    reason,
+  };
 }
 
 export function validateMultiCheckboxes(formField, isRequired) {
