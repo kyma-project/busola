@@ -45,6 +45,16 @@ function useEventUrl(resourceType: string, clusterView?: boolean) {
   };
 }
 
+type EventSeverity = 'Error' | 'Warning' | 'Normal';
+
+function getEventSeverity(e: {
+  type?: string;
+  message?: string;
+}): EventSeverity {
+  if (e.type !== 'Warning') return 'Normal';
+  return e.message?.startsWith('Error') ? 'Error' : 'Warning';
+}
+
 export function EventList({
   defaultType,
   hideInvolvedObjects,
@@ -192,21 +202,11 @@ export function EventList({
       hasDetailsView
       readOnly
       filter={async (res) => {
-        let typeFilter;
-        if (displayType.key === EVENT_MESSAGE_TYPE.ALL.key) {
-          typeFilter = true;
-        } else if (displayType.key === EVENT_MESSAGE_TYPE.ERROR.key) {
-          typeFilter =
-            res.type === 'Warning' && res.message.startsWith('Error');
-        } else if (displayType.key === EVENT_MESSAGE_TYPE.WARNING.key) {
-          typeFilter =
-            res.type === 'Warning' && !res.message.startsWith('Error');
-        } else {
-          typeFilter = res.type === displayType.key;
-        }
+        const typeFilter =
+          displayType.key === EVENT_MESSAGE_TYPE.ALL.key ||
+          getEventSeverity(res) === displayType.key;
 
         const propsFilter = filter ? await filter(res) : true;
-
         return typeFilter && propsFilter;
       }}
       searchSettings={{
