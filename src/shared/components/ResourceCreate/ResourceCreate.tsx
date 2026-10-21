@@ -134,22 +134,16 @@ export const ResourceCreate = ({
     } else {
       const emptyFields = emptyFieldsRef.current ?? [];
       const invalidFormatFields = invalidFormatFieldsRef.current ?? [];
-      console.error(
-        'Form validation failed. Empty fields:',
-        emptyFields,
-        'Invalid format fields:',
-        invalidFormatFields,
-      );
-      const parts: string[] = [];
+      const allInvalidParts: string[] = [];
       if (emptyFields.length > 0) {
-        parts.push(
+        allInvalidParts.push(
           t('common.messages.must-fill-required-fields', {
             fields: emptyFields.join(', '),
           }),
         );
       }
       if (invalidFormatFields.length > 0) {
-        parts.push(
+        allInvalidParts.push(
           t('common.messages.invalid-format-fields', {
             fields: invalidFormatFields.join(', '),
           }),
@@ -157,8 +151,8 @@ export const ResourceCreate = ({
       }
       notificationManager.notifyError({
         content:
-          parts.length > 0
-            ? parts.join(' ')
+          allInvalidParts.length > 0
+            ? allInvalidParts.join(' ')
             : t('common.messages.must-fill-required'),
       });
     }

@@ -43,7 +43,8 @@ export function validateFormElement(element, isRequired) {
           invalidFormatFields: nestedInvalidFormat,
         } = validateFormElement(contentParent, required);
         const sectionName = child.getAttribute('accessible-name');
-        const prefix = (f) => (sectionName ? `${sectionName} > ${f}` : f);
+        const prefix = (field) =>
+          sectionName ? `${sectionName} > ${field}` : field;
         emptyFields.push(...(nestedEmpty?.map(prefix) || []));
         invalidFormatFields.push(...(nestedInvalidFormat?.map(prefix) || []));
         // GenericList
