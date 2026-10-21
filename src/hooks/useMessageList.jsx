@@ -11,6 +11,7 @@ export const EVENT_MESSAGE_TYPE = {
   ALL: { key: 'All', text: 'all' },
   NORMAL: { key: 'Normal', text: 'information' },
   WARNING: { key: 'Warning', text: 'warnings' },
+  ERROR: { key: 'Error', text: 'errors' },
 };
 
 export const RESOURCE_PATH = {
