@@ -144,6 +144,7 @@ export function useNodesQuery(skip = false) {
 
   return {
     nodes: data,
+    pods: (pods as any)?.items ?? null,
     error: nodesError,
     loading: metricsLoading || nodesLoading,
   };
