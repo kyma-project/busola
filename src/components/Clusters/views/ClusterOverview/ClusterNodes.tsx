@@ -129,7 +129,13 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
     <>
       {!(error && error.toString().includes('Error: nodes is forbidden')) && (
         <GenericList
-          title={`${t('cluster-overview.headers.nodes')}${data ? ` (${data.length})` : ''}`}
+          title={
+            data
+              ? t('cluster-overview.headers.nodes-title', {
+                  count: data.length,
+                })
+              : t('cluster-overview.headers.nodes')
+          }
           actions={[]}
           entries={data || []}
           headerRenderer={headerRenderer}
