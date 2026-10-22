@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
-import { showTerminalAtom } from 'state/showTerminalAtom';
+import { showTerminalAtom, TerminalState } from 'state/showTerminalAtom';
 import { terminalSessionAtom } from 'state/terminalSessionAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { useAtom, useAtomValue } from 'jotai';
@@ -13,6 +13,9 @@ import { getXtermTheme } from './terminalThemes';
 import { useTerminalSession } from './useTerminalSession';
 import './BusolaTerminal.scss';
 import '@xterm/xterm/css/xterm.css';
+import { createBusolaTerminalPod } from 'components/App/BusolaTerminal/useProvisionPod';
+import { useFeature } from 'hooks/useFeature';
+import { configFeaturesNames, TerminalFeature } from 'state/types';
 
 export function BusolaTerminal({
   dockedHeight,
@@ -21,7 +24,6 @@ export function BusolaTerminal({
   dockedHeight?: number;
   onMinHeightComputed?: (minHeight: number) => void;
 }) {
-  console.log('Opening terminal', dockedHeight);
   const { t } = useTranslation();
   const termDOM = useRef<HTMLDivElement>(null);
   const termRef = useRef<Terminal | null>(null);

@@ -30,9 +30,6 @@ import { TFunction } from 'i18next';
 export const TERMINAL_CONTAINER_NAME = 'dev-toolbox';
 export const TERMINAL_NAMESPACE_NAME = 'busola-terminal';
 
-const DEFAULT_IMAGE =
-  'europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest';
-
 const RECONNECTION_MIN_DELAY_MS = 1_000;
 const RECONNECTION_MAX_DELAY_MS = 30_000;
 // Headroom before the hard cap for the re-provision + re-attach to finish.
@@ -88,7 +85,7 @@ export function useTerminalSession() {
   const [sessionInfo, setSession] = useAtom(terminalSessionAtom);
   console.log(sessionInfo);
   const { config } = useFeature<TerminalFeature>(configFeaturesNames.TERMINAL);
-  const image: string = config?.image ?? DEFAULT_IMAGE;
+
   const maxSessionDurationMs: number | undefined = config?.maxSessionDurationMs;
 
   const wsRef = useRef<WebSocket | null>(null);
@@ -117,46 +114,9 @@ export function useTerminalSession() {
       const abort = new AbortController();
       abortRef.current = abort;
 
-      const clusterServer =
-        cluster?.currentContext?.cluster?.cluster?.server ?? '';
-
-      if (!silent && sessionInfo.connectionType !== ConnectionType.Exec) {
-        setSession({
-          status: 'provisioning',
-          podName: null,
-          errorMessage: null,
-        });
-      }
-
       try {
         const headers = createHeaders(authData, cluster, ssoData);
         const authHeaders = new Headers(headers);
-
-        const credential =
-          authHeaders.get('X-K8s-Authorization')?.replace('Bearer ', '') ??
-          authHeaders.get('X-Client-Certificate-Data') ??
-          '';
-        let podName = sessionInfo.podName || 'test';
-        if (sessionInfo.connectionType !== ConnectionType.Exec) {
-          podName = await generateTerminalPodName(clusterServer, credential);
-        }
-        setSession((prev) => ({ ...prev, podName }));
-        if (sessionInfo.connectionType !== ConnectionType.Exec) {
-          try {
-            await provisionPod({
-              fetchFn,
-              podName,
-              image,
-              abortController: abort,
-            });
-          } catch (e) {
-            // If the reconnection is not in active phase, throw hard error
-            if (attemptRef.current === 0) {
-              throw e;
-            }
-            console.warn(e);
-          }
-        }
 
         // Bail if torn down during provisioning — the socket we'd open would leak.
         if (abort.signal.aborted) return;
@@ -165,7 +125,7 @@ export function useTerminalSession() {
         const { ws, disposable } = await connectTerminal({
           authHeaders,
           term,
-          podName,
+          podName: sessionInfo.podName || '',
           command: sessionInfo.command || 'bash',
           containerName: sessionInfo.container || TERMINAL_CONTAINER_NAME,
           connectionType: sessionInfo.connectionType,
@@ -206,7 +166,7 @@ export function useTerminalSession() {
         if (err?.name === 'AbortError') return;
         console.error(err);
         const message = err?.message ?? t('terminal.messages.unknown-error');
-        setSession((prev) => ({
+        setSession((prev: TerminalSessionState) => ({
           ...prev,
           status: 'error',
           errorMessage: message,
@@ -216,50 +176,27 @@ export function useTerminalSession() {
         );
       }
     },
-    [
-      authData,
-      cluster,
-      ssoData,
-      fetchFn,
-      image,
-      maxSessionDurationMs,
-      setSession,
-      t,
-    ],
+    [authData, cluster, ssoData, fetchFn, maxSessionDurationMs, setSession, t],
   );
 
-  const disconnect = useCallback(
-    async (podName: string | null) => {
-      if (disconnectedRef.current) return;
-      disconnectedRef.current = true;
+  const disconnect = useCallback(async (podName: string | null) => {
+    if (disconnectedRef.current) return;
+    disconnectedRef.current = true;
 
-      abortRef.current?.abort();
-      // Cancel scheduled reconnects so they can't revive a torn-down terminal.
-      clearTimeout(reconnectTimer.current);
-      reconnectTimer.current = undefined;
-      clearTimeout(proactiveReconnectTimer.current);
-      proactiveReconnectTimer.current = undefined;
-      attemptRef.current = 0;
-      onDataDisposableRef.current?.dispose();
-      onDataDisposableRef.current = null;
-      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-        wsRef.current.close();
-      }
-      wsRef.current = null;
-
-      if (!podName) return;
-
-      try {
-        await fetchFn({
-          relativeUrl: `/api/v1/namespaces/${TERMINAL_NAMESPACE_NAME}/pods/${podName}`,
-          init: { method: 'DELETE' },
-        });
-      } catch {
-        // best-effort
-      }
-    },
-    [fetchFn],
-  );
+    abortRef.current?.abort();
+    // Cancel scheduled reconnects so they can't revive a torn-down terminal.
+    clearTimeout(reconnectTimer.current);
+    reconnectTimer.current = undefined;
+    clearTimeout(proactiveReconnectTimer.current);
+    proactiveReconnectTimer.current = undefined;
+    attemptRef.current = 0;
+    onDataDisposableRef.current?.dispose();
+    onDataDisposableRef.current = null;
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.close();
+    }
+    wsRef.current = null;
+  }, []);
 
   return { connect, disconnect };
 }

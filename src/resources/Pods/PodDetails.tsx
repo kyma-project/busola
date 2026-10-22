@@ -151,6 +151,18 @@ export function PodDetails({
     );
   };
 
+  const ExecIntoPod = (resource: Record<any, any>) => (
+    <PodExecDialog
+      open={execDialogOpen}
+      close={() => setExecDialogOpen(false)}
+      // TODO: move it to podExecDialog?
+      launchTerminal={() =>
+        setShowTerminalState((prev) => ({ ...prev, isOpen: true }))
+      }
+      podResource={resource}
+    />
+  );
+
   const Containers = (resource: Record<string, any>) => (
     <ContainersData
       key="containers"
@@ -178,13 +190,7 @@ export function PodDetails({
         Containers,
         InitContainers,
         Events,
-        PodExecDialog({
-          open: execDialogOpen,
-          close: () => setExecDialogOpen(false),
-          // TODO: move it to podExecDialog?
-          launchTerminal: () =>
-            setShowTerminalState((prev) => ({ ...prev, isOpen: true })),
-        }),
+        ExecIntoPod,
       ]}
       customColumns={customColumns}
       description={ResourceDescription}
