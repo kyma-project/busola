@@ -99,6 +99,8 @@ export function useNodesQuery(skip = false) {
 
       const podsByNode = new Map<string, any[]>();
       for (const pod of (pods as any)?.items ?? []) {
+        const phase = pod?.status?.phase;
+        if (phase === 'Succeeded' || phase === 'Failed') continue;
         const nodeName = pod?.spec?.nodeName;
         if (nodeName) {
           if (!podsByNode.has(nodeName)) podsByNode.set(nodeName, []);
