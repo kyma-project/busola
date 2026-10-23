@@ -1090,6 +1090,8 @@ no-permissions:
   enter-namespace-name-placeholder: Enter Namespace name
 node-details:
   all: All messages
+  error: Error
+  errors: Errors
   information: Information
   machine-info:
     architecture: Architecture
