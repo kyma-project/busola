@@ -18,14 +18,14 @@ interface UsageMetrics {
     capacity: number;
     percentage: string;
     percentageValue: number;
-    requestValue?: number | string;
+    requestValue?: number | string | null;
   };
   memory: {
     usage: number;
     capacity: number;
     percentage: string;
     percentageValue: number;
-    requestValue?: number | string;
+    requestValue?: number | string | null;
   };
 }
 
@@ -97,6 +97,7 @@ export function useNodesQuery(skip = false) {
         return createUsageMetrics(node, metricsForNode);
       };
 
+      const podsLoaded = pods !== null;
       const podsByNode = new Map<string, any[]>();
       for (const pod of (pods as any)?.items ?? []) {
         const phase = pod?.status?.phase;
@@ -116,14 +117,15 @@ export function useNodesQuery(skip = false) {
         const nodeResources = calcNodeResources({ items: podsForNode });
         const cpuAllocatable = getCpus(n?.status?.allocatable?.cpu);
         const memAllocatable = getBytes(n?.status?.allocatable?.memory);
-        const cpuRequestValue = getPercentageFromUsage(
-          nodeResources.requests.cpu,
-          cpuAllocatable,
-        );
-        const memRequestValue = getPercentageFromUsage(
-          nodeResources.requests.memory,
-          memAllocatable,
-        );
+        const cpuRequestValue = podsLoaded
+          ? getPercentageFromUsage(nodeResources.requests.cpu, cpuAllocatable)
+          : null;
+        const memRequestValue = podsLoaded
+          ? getPercentageFromUsage(
+              nodeResources.requests.memory,
+              memAllocatable,
+            )
+          : null;
 
         const metrics = usageMetrics
           ? {
@@ -134,7 +136,10 @@ export function useNodesQuery(skip = false) {
                 requestValue: memRequestValue,
               },
             }
-          : {};
+          : {
+              cpu: { requestValue: cpuRequestValue },
+              memory: { requestValue: memRequestValue },
+            };
 
         return { ...n, metrics };
       });

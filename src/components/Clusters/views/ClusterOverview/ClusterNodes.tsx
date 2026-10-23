@@ -104,10 +104,18 @@ export function ClusterNodes({ data, error, loading }: ClusterNodesProps) {
         {entry?.metadata?.name}
       </Link>,
       getStatus(entry?.status),
-      cpu ? `${cpu.percentageValue}%` : EMPTY_TEXT_PLACEHOLDER,
-      cpu ? `${cpu.requestValue}%` : EMPTY_TEXT_PLACEHOLDER,
-      memory ? `${memory.percentageValue}%` : EMPTY_TEXT_PLACEHOLDER,
-      memory ? `${memory.requestValue}%` : EMPTY_TEXT_PLACEHOLDER,
+      cpu?.percentageValue != null
+        ? `${cpu.percentageValue}%`
+        : EMPTY_TEXT_PLACEHOLDER,
+      cpu?.requestValue != null
+        ? `${cpu.requestValue}%`
+        : EMPTY_TEXT_PLACEHOLDER,
+      memory?.percentageValue != null
+        ? `${memory.percentageValue}%`
+        : EMPTY_TEXT_PLACEHOLDER,
+      memory?.requestValue != null
+        ? `${memory.requestValue}%`
+        : EMPTY_TEXT_PLACEHOLDER,
       entry?.metadata?.labels?.['topology.kubernetes.io/zone'] ??
         EMPTY_TEXT_PLACEHOLDER,
       <ReadableCreationTimestamp
