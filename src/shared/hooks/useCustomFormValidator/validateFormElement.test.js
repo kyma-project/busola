@@ -1,5 +1,10 @@
 import { validateFormElement } from './validateFormElement';
-import { validateMultiCheckboxes } from './validateWidgets';
+import {
+  validateMultiCheckboxes,
+  validateInputList,
+  validateKeyValuePairs,
+  validateRuntimeProfile,
+} from './validateWidgets';
 
 function makeInput({ required = false, value = '' } = {}) {
   const input = document.createElement('ui5-input');
@@ -184,6 +189,7 @@ describe('validateMultiCheckboxes — label and reason', () => {
     const result = validateMultiCheckboxes(field, true);
     expect(result.valid).toBe(true);
     expect(result.label).toBe('Supported Modes');
+    expect(result.reason).toBeUndefined();
   });
 
   it('returns no label when no ui5-label is present', () => {
@@ -194,5 +200,206 @@ describe('validateMultiCheckboxes — label and reason', () => {
 
     const result = validateMultiCheckboxes(field, true);
     expect(result.label).toBeUndefined();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Helpers for list / profile widgets
+// ---------------------------------------------------------------------------
+
+function makeSimpleList({ label = '', items = [] } = {}) {
+  const list = document.createElement('div');
+  list.classList.add('simple-list');
+  if (label) {
+    const lbl = document.createElement('ui5-label');
+    lbl.textContent = label;
+    list.appendChild(lbl);
+  }
+  const ul = document.createElement('ul');
+  items.forEach(({ value = '', pattern = null } = {}) => {
+    const li = document.createElement('li');
+    const input = document.createElement('ui5-input');
+    input.value = value;
+    if (pattern) input.setAttribute('pattern', pattern);
+    li.appendChild(input);
+    ul.appendChild(li);
+  });
+  // placeholder item (always present, excluded from validation by .slice(0, -1))
+  const placeholderLi = document.createElement('li');
+  placeholderLi.appendChild(document.createElement('ui5-input'));
+  ul.appendChild(placeholderLi);
+  list.appendChild(ul);
+  return list;
+}
+
+function makeKeyValueList({ label = '', pairs = [] } = {}) {
+  const list = document.createElement('div');
+  list.classList.add('multi-input');
+  if (label) {
+    const lbl = document.createElement('ui5-label');
+    lbl.textContent = label;
+    list.appendChild(lbl);
+  }
+  const ul = document.createElement('ul');
+  pairs.forEach(({ key = '', value = '', pattern = null } = {}) => {
+    const li = document.createElement('li');
+    const keyInput = document.createElement('ui5-input');
+    keyInput.value = key;
+    keyInput.setAttribute('placeholder', 'Enter key');
+    const valInput = document.createElement('ui5-input');
+    valInput.value = value;
+    if (pattern) valInput.setAttribute('pattern', pattern);
+    li.appendChild(keyInput);
+    li.appendChild(valInput);
+    ul.appendChild(li);
+  });
+  // placeholder row (last 2 inputs excluded by .slice(0, -2))
+  const placeholderLi = document.createElement('li');
+  const placeholderKey = document.createElement('ui5-input');
+  placeholderKey.setAttribute('placeholder', 'Enter key');
+  placeholderLi.appendChild(placeholderKey);
+  placeholderLi.appendChild(document.createElement('ui5-input'));
+  ul.appendChild(placeholderLi);
+  list.appendChild(ul);
+  return list;
+}
+
+function makeRuntimeProfile({ label = '', inputs: inputDefs = [] } = {}) {
+  const profile = document.createElement('div');
+  profile.classList.add('runtime-profile-form');
+  if (label) {
+    const lbl = document.createElement('ui5-label');
+    lbl.textContent = label;
+    profile.appendChild(lbl);
+  }
+  inputDefs.forEach(({ required = false, value = '' } = {}) => {
+    const input = document.createElement('ui5-input');
+    input.required = required;
+    input.value = value;
+    profile.appendChild(input);
+  });
+  return profile;
+}
+
+// ---------------------------------------------------------------------------
+
+describe('validateInputList — label and reason', () => {
+  it('returns label and reason=empty for a required empty list', () => {
+    const list = makeSimpleList({ label: 'Annotations' });
+    const result = validateInputList(list, true);
+    expect(result.valid).toBe(false);
+    expect(result.label).toBe('Annotations');
+    expect(result.reason).toBe('empty');
+  });
+
+  it('returns label and reason=pattern when an item fails pattern validation', () => {
+    const list = makeSimpleList({
+      label: 'Names',
+      items: [{ value: 'INVALID', pattern: '^[a-z]+$' }],
+    });
+    const result = validateInputList(list, false);
+    expect(result.valid).toBe(false);
+    expect(result.label).toBe('Names');
+    expect(result.reason).toBe('pattern');
+  });
+
+  it('returns label and reason=empty when a list item has an empty value', () => {
+    const list = makeSimpleList({
+      label: 'Names',
+      items: [{ value: '' }],
+    });
+    const result = validateInputList(list, false);
+    expect(result.valid).toBe(false);
+    expect(result.label).toBe('Names');
+    expect(result.reason).toBe('empty');
+  });
+
+  it('returns label and no reason when all items are valid', () => {
+    const list = makeSimpleList({
+      label: 'Names',
+      items: [{ value: 'valid', pattern: '^[a-z]+$' }],
+    });
+    const result = validateInputList(list, false);
+    expect(result.valid).toBe(true);
+    expect(result.label).toBe('Names');
+    expect(result.reason).toBeUndefined();
+  });
+});
+
+describe('validateKeyValuePairs — label and reason', () => {
+  it('returns label and reason=empty for a required empty list', () => {
+    const list = makeKeyValueList({ label: 'Labels' });
+    const result = validateKeyValuePairs(list, true);
+    expect(result.valid).toBe(false);
+    expect(result.label).toBe('Labels');
+    expect(result.reason).toBe('empty');
+  });
+
+  it('returns label and reason=empty when a key is empty', () => {
+    const list = makeKeyValueList({
+      label: 'Labels',
+      pairs: [{ key: '', value: 'some-value' }],
+    });
+    const result = validateKeyValuePairs(list, false);
+    expect(result.valid).toBe(false);
+    expect(result.label).toBe('Labels');
+    expect(result.reason).toBe('empty');
+  });
+
+  it('returns label and reason=pattern when a value fails pattern validation', () => {
+    const list = makeKeyValueList({
+      label: 'Labels',
+      pairs: [{ key: 'my-key', value: 'INVALID', pattern: '^[a-z]+$' }],
+    });
+    const result = validateKeyValuePairs(list, false);
+    expect(result.valid).toBe(false);
+    expect(result.label).toBe('Labels');
+    expect(result.reason).toBe('pattern');
+  });
+
+  it('returns label and no reason when all pairs are valid', () => {
+    const list = makeKeyValueList({
+      label: 'Labels',
+      pairs: [{ key: 'env', value: 'prod' }],
+    });
+    const result = validateKeyValuePairs(list, false);
+    expect(result.valid).toBe(true);
+    expect(result.label).toBe('Labels');
+    expect(result.reason).toBeUndefined();
+  });
+});
+
+describe('validateRuntimeProfile — label and reason', () => {
+  it('returns label and reason=empty when a required input is empty', () => {
+    const profile = makeRuntimeProfile({
+      label: 'Runtime',
+      inputs: [{ required: true, value: '' }],
+    });
+    const result = validateRuntimeProfile(profile);
+    expect(result.valid).toBe(false);
+    expect(result.label).toBe('Runtime');
+    expect(result.reason).toBe('empty');
+  });
+
+  it('returns label and reason=empty when a value is NaN', () => {
+    const profile = makeRuntimeProfile({
+      label: 'Runtime',
+      inputs: [{ required: false, value: 'NaN' }],
+    });
+    const result = validateRuntimeProfile(profile);
+    expect(result.valid).toBe(false);
+    expect(result.label).toBe('Runtime');
+    expect(result.reason).toBe('empty');
+  });
+
+  it('returns label and no reason when all inputs are valid', () => {
+    const profile = makeRuntimeProfile({
+      label: 'Runtime',
+      inputs: [{ required: true, value: '42' }],
+    });
+    const result = validateRuntimeProfile(profile);
+    expect(result.valid).toBe(true);
+    expect(result.label).toBe('Runtime');
+    expect(result.reason).toBeUndefined();
   });
 });

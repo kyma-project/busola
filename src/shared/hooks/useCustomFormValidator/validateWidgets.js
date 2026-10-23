@@ -38,48 +38,73 @@ export function validateMultiCheckboxes(formField, isRequired) {
     valid: !isRequired || isFilled,
     filled: isFilled,
     label,
-    reason: 'empty',
+    reason: isFilled ? undefined : 'empty',
   };
 }
 
 export function validateInputList(list, isRequired) {
+  const label = list.querySelector('ui5-label')?.textContent?.trim();
   const items = list.querySelectorAll('ul > li');
   // The list is invalid if it has no children
-  if (isRequired && items.length < 2) return { valid: false, filled: false };
+  if (isRequired && items.length < 2)
+    return { valid: false, filled: false, label, reason: 'empty' };
   // Validates the inputs of all the list's child elements
   const inputs = Array.from(list.querySelectorAll('ui5-input')).slice(0, -1);
+  let reason;
   const isValid = inputs.every((input) => {
     const pattern = input.getAttribute('pattern');
     const value = input.value;
-    return value !== '' && (!pattern || value.match(pattern));
+    if (value === '') {
+      reason = 'empty';
+      return false;
+    }
+    if (pattern && !value.match(pattern)) {
+      reason = 'pattern';
+      return false;
+    }
+    return true;
   });
-
-  return { valid: isValid, filled: items.length >= 2 };
+  return { valid: isValid, filled: items.length >= 2, label, reason };
 }
 
 export function validateKeyValuePairs(list, isRequired) {
+  const label = list.querySelector('ui5-label')?.textContent?.trim();
   const items = list.querySelectorAll('ul > li');
   // The list is invalid if it has no children
-  if (isRequired && items.length < 2) return { valid: false, filled: false };
+  if (isRequired && items.length < 2)
+    return { valid: false, filled: false, label, reason: 'empty' };
   // Validates the inputs (except for the last two placeholder inputs)
   const inputs = Array.from(list.querySelectorAll('ui5-input')).slice(0, -2);
+  let reason;
   const isValid = inputs.every((input) => {
     const isKey = input.getAttribute('placeholder') === 'Enter key';
     const pattern = input.getAttribute('pattern');
     const value = input.value;
-    return (!isKey || value !== '') && (!pattern || value.match(pattern));
+    if (isKey && value === '') {
+      reason = 'empty';
+      return false;
+    }
+    if (pattern && !value.match(pattern)) {
+      reason = 'pattern';
+      return false;
+    }
+    return true;
   });
-
-  return { valid: isValid, filled: items.length >= 2 };
+  return { valid: isValid, filled: items.length >= 2, label, reason };
 }
 
 export function validateRuntimeProfile(parent) {
+  const label = parent.querySelector('ui5-label')?.textContent?.trim();
   const inputs = Array.from(parent.querySelectorAll('ui5-input'));
+  let reason;
   const isValid = inputs.every((input) => {
     const isRequired = input.required;
     const inputValue = input.value;
-    return inputValue !== 'NaN' && (!isRequired || inputValue !== '');
+    if (inputValue === 'NaN' || (isRequired && inputValue === '')) {
+      reason = 'empty';
+      return false;
+    }
+    return true;
   });
-
-  return { valid: isValid, filled: true };
+  return { valid: isValid, filled: true, label, reason };
 }
