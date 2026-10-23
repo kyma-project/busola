@@ -45,8 +45,23 @@ export function validateFormElement(element, isRequired) {
         const sectionName = child.getAttribute('accessible-name');
         const prefix = (field) =>
           sectionName ? `${sectionName} > ${field}` : field;
+        const beforeEmpty = emptyFields.length;
+        const beforeInvalidFormat = invalidFormatFields.length;
         emptyFields.push(...(nestedEmpty?.map(prefix) || []));
         invalidFormatFields.push(...(nestedInvalidFormat?.map(prefix) || []));
+        // Fallback: if the section failed but no specific fields were identified, report the section itself
+        if (
+          !valid &&
+          sectionName &&
+          emptyFields.length === beforeEmpty &&
+          invalidFormatFields.length === beforeInvalidFormat
+        ) {
+          if (!filled) {
+            emptyFields.push(sectionName);
+          } else {
+            invalidFormatFields.push(sectionName);
+          }
+        }
         // GenericList
         if (child.querySelector('.actions')?.innerText === 'Add') {
           isPartiallyFilled = isPartiallyFilled || filled || !valid;

@@ -371,7 +371,7 @@ common:
     discard-changes-warning: You haven't saved your changes. Navigating out will discard them.
     error: 'Error: {{error}}'
     fill-required-data: Fill the remaining required data.
-    invalid-format-fields: 'Correct the format of: {{fields}}'
+    invalid-content-fields: 'Correct the content of: {{fields}}'
     must-fill-required: You must fill in all required data.
     must-fill-required-fields: 'Fill in required fields: {{fields}}'
     no-entries-found: No entries found

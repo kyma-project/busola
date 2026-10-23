@@ -144,7 +144,7 @@ export const ResourceCreate = ({
       }
       if (invalidFormatFields.length > 0) {
         allInvalidParts.push(
-          t('common.messages.invalid-format-fields', {
+          t('common.messages.invalid-content-fields', {
             fields: invalidFormatFields.join(', '),
           }),
         );

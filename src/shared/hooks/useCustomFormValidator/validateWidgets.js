@@ -32,8 +32,14 @@ export function validateFormField(formField) {
 export function validateMultiCheckboxes(formField, isRequired) {
   const checkboxes = Array.from(formField.querySelectorAll('ui5-checkbox'));
   const isFilled = checkboxes.some((checkbox) => checkbox.checked);
+  const label = formField.querySelector('ui5-label')?.textContent?.trim();
 
-  return { valid: !isRequired || isFilled, filled: isFilled };
+  return {
+    valid: !isRequired || isFilled,
+    filled: isFilled,
+    label,
+    reason: 'empty',
+  };
 }
 
 export function validateInputList(list, isRequired) {
