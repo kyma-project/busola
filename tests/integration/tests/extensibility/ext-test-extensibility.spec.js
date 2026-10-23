@@ -8,6 +8,7 @@ const FIRST_DESCRIPTION = 'My Description';
 const UPDATED_DESCRIPTION = 'Updated description';
 const SECOND_DETAIL = 'weight';
 const EXTENSION_NAME = 'potatoes';
+const CRD_NAME = 'potatoes.busola.example.com';
 
 context('Test Extensibility Create/Update', () => {
   Cypress.skipAfterFail();
@@ -65,6 +66,18 @@ context('Test Extensibility Create/Update', () => {
 
     cy.openCreate();
 
+    cy.get('.create-form ui5-panel.resource-form--panel')
+      .find('ui5-segmented-button-item[data-mode="MODE_YAML"]')
+      .should('have.prop', 'disabled', true);
+
+    cy.get('[data-testid="create-form-footer-bar"]')
+      .contains('ui5-button:visible', 'Create')
+      .click();
+    cy.get('ui5-dialog.error-modal')
+      .should('be.visible')
+      .contains('You must fill in all required data.');
+    cy.get('ui5-dialog.error-modal').contains('ui5-button', 'Close').click();
+
     chooseComboboxOption('[id="combobox-input"]', 'potato', true);
 
     cy.wait(500);
@@ -85,6 +98,8 @@ context('Test Extensibility Create/Update', () => {
     });
 
     cy.saveChanges('Create');
+
+    cy.getMidColumn().contains('ui5-title', CRD_NAME).should('be.visible');
   });
 
   it('Check if Extensions is created', () => {
