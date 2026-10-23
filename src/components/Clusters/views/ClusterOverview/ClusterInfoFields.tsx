@@ -70,8 +70,8 @@ export const useClusterInfoFields = (
           aria-label={t('clusters.overview.dual-stack-ip')}
         >
           {dualStackIPEnabled
-            ? t('clusters.overview.dual-stack-enabled')
-            : t('clusters.overview.dual-stack-disabled')}
+            ? t('common.labels.enabled')
+            : t('common.labels.disabled')}
         </ObjectStatus>
       </FormItem>
     ),

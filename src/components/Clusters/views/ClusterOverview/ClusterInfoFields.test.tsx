@@ -85,9 +85,7 @@ describe('useClusterInfoFields', () => {
         }
       </>,
     );
-    expect(
-      screen.getByText('clusters.overview.dual-stack-enabled'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('common.labels.enabled')).toBeInTheDocument();
   });
 
   it('renders the dual stack IP as a Disabled badge', () => {
@@ -99,9 +97,7 @@ describe('useClusterInfoFields', () => {
         }
       </>,
     );
-    expect(
-      screen.getByText('clusters.overview.dual-stack-disabled'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('common.labels.disabled')).toBeInTheDocument();
   });
 
   it('omits the dual stack IP field when networkDetails is absent', () => {

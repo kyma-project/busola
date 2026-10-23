@@ -122,8 +122,6 @@ clusters:
   name_singular: Cluster
   oidc: OIDC
   overview:
-    dual-stack-disabled: Disabled
-    dual-stack-enabled: Enabled
     dual-stack-ip: Dual Stack IP
     environment-instance-id: Environment Instance ID
     global-account-id: Global Account ID
@@ -368,6 +366,8 @@ common:
   labels:
     category: Category
     data: Data
+    disabled: Disabled
+    enabled: Enabled
     last-transition: Last Transition Time
     message-type: Message Type
     name: Name
