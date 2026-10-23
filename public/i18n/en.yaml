@@ -1468,6 +1468,7 @@ settings:
   general:
     description: Cluster interaction, resource validation
     disableResourceProtection: Allow for modification of protected resources
+    dismissed-banners: Dismissed banners
     dontConfirmDelete: Delete without confirmation
     edit-view:
       always-form: Always form
@@ -1483,6 +1484,7 @@ settings:
       validateResources: Validate Resources
       validation-disabled: Resource validation is disabled
       validation-policies: Validation Policies
+    restore-banners: Restore all
     showHiddenNamespaces: Show hidden Namespaces
     title: Advanced Options
   language:
