@@ -9,31 +9,31 @@ import {
 
 describe('isTheSameNameAndUrl', () => {
   it('returns true when both name and urlPath are identical', () => {
-    const a = { general: { name: 'Widgets', urlPath: 'widgets' } };
-    const b = { general: { name: 'Widgets', urlPath: 'widgets' } };
+    const a = { general: { name: 'Widgets', urlPath: 'widgets' } } as any;
+    const b = { general: { name: 'Widgets', urlPath: 'widgets' } } as any;
     expect(isTheSameNameAndUrl(a, b)).toBe(true);
   });
 
   it('returns false when names differ', () => {
-    const a = { general: { name: 'Widgets', urlPath: 'widgets' } };
-    const b = { general: { name: 'Gadgets', urlPath: 'widgets' } };
+    const a = { general: { name: 'Widgets', urlPath: 'widgets' } } as any;
+    const b = { general: { name: 'Gadgets', urlPath: 'widgets' } } as any;
     expect(isTheSameNameAndUrl(a, b)).toBe(false);
   });
 
   it('returns false when urlPaths differ', () => {
-    const a = { general: { name: 'Widgets', urlPath: 'widgets' } };
-    const b = { general: { name: 'Widgets', urlPath: 'gadgets' } };
+    const a = { general: { name: 'Widgets', urlPath: 'widgets' } } as any;
+    const b = { general: { name: 'Widgets', urlPath: 'gadgets' } } as any;
     expect(isTheSameNameAndUrl(a, b)).toBe(false);
   });
 
   it('returns false when one extension has no general section', () => {
-    const a = { general: { name: 'Widgets', urlPath: 'widgets' } };
-    const b = {};
+    const a = { general: { name: 'Widgets', urlPath: 'widgets' } } as any;
+    const b = {} as any;
     expect(isTheSameNameAndUrl(a, b)).toBe(false);
   });
 
   it('returns true for two empty objects (both general.name and urlPath are undefined)', () => {
-    expect(isTheSameNameAndUrl({}, {})).toBe(true);
+    expect(isTheSameNameAndUrl({} as any, {} as any)).toBe(true);
   });
 });
 
@@ -41,25 +41,25 @@ describe('isTheSameNameAndUrl', () => {
 
 describe('isTheSameId', () => {
   it('returns true when both extensions share the same id', () => {
-    const a = { general: { id: 'ext-001' } };
-    const b = { general: { id: 'ext-001' } };
+    const a = { general: { id: 'ext-001' } } as any;
+    const b = { general: { id: 'ext-001' } } as any;
     expect(isTheSameId(a, b)).toBe(true);
   });
 
   it('returns false when ids differ', () => {
-    const a = { general: { id: 'ext-001' } };
-    const b = { general: { id: 'ext-002' } };
+    const a = { general: { id: 'ext-001' } } as any;
+    const b = { general: { id: 'ext-002' } } as any;
     expect(isTheSameId(a, b)).toBe(false);
   });
 
   it('returns false when one extension has no general section', () => {
-    const a = { general: { id: 'ext-001' } };
-    const b = {};
+    const a = { general: { id: 'ext-001' } } as any;
+    const b = {} as any;
     expect(isTheSameId(a, b)).toBe(false);
   });
 
   it('returns true for two objects without a general.id (both undefined)', () => {
-    expect(isTheSameId({}, {})).toBe(true);
+    expect(isTheSameId({} as any, {} as any)).toBe(true);
   });
 });
 
