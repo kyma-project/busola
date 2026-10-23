@@ -7,14 +7,14 @@ export type UsageMetrics = {
     capacity: number;
     percentage: string;
     percentageValue: string | number;
-    requestValue?: string | number;
+    requestValue?: string | number | null;
   };
   memory: {
     usage: number;
     capacity: number;
     percentage: string;
     percentageValue: string | number;
-    requestValue?: string | number;
+    requestValue?: string | number | null;
   };
 };
 
