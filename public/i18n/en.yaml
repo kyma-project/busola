@@ -2,11 +2,14 @@ apps:
   title: Apps
 cluster-overview:
   headers:
+    btp-account: BTP Account
     cluster-overview: Cluster Overview
     cpu: CPU
+    infrastructure: Infrastructure
     memory: Memory
     metadata: Metadata
     metrics: Metrics
+    network: Network
     nodes: Nodes
   statistics:
     cpu-limits: CPU limits
@@ -119,15 +122,26 @@ clusters:
   name_singular: Cluster
   oidc: OIDC
   overview:
+    dual-stack-ip: Dual Stack IP
+    environment-instance-id: Environment Instance ID
     global-account-id: Global Account ID
+    instance-name: Instance Name
     kubernetes-version: Kubernetes Version
     kyma-version: Kyma Version
     nat-gateway-ips: NAT Gateway IP Addresses
+    platform-region: Platform Region
     region: Worker Node Region
     seed-region: Kubernetes Control Plane Region
     subaccount-id: Subaccount ID
     title-all-clusters: Clusters
     title-current-cluster: Cluster Overview
+    worker-pools:
+      ha-zones: HA Zones
+      machine-type: Machine Type
+      max-nodes: Max Nodes
+      min-nodes: Min Nodes
+      pool: Pool
+      title: Worker Pools
   statuses:
     localstorage: Local Storage
     sessionstorage: Session Storage
@@ -352,6 +366,8 @@ common:
   labels:
     category: Category
     data: Data
+    disabled: Disabled
+    enabled: Enabled
     last-transition: Last Transition Time
     message-type: Message Type
     name: Name
@@ -365,6 +381,7 @@ common:
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     type: Type
     version: 'Kyma Dashboard version:'
+    'yes': 'Yes'
   messages:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
     choose: Choose {{value}}
