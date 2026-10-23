@@ -1,19 +1,27 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormItem, Label, Text } from '@ui5/webcomponents-react';
+import { FormItem, Label, ObjectStatus, Text } from '@ui5/webcomponents-react';
 import { Tokens } from 'shared/components/Tokens';
 import { useGetClusterInfo } from './useGetClusterInfo';
 
 type KymaResourceLabels = { [key: string]: string };
 
-// A list, not a component, so the form can count items to split into columns.
+export type ClusterInfoFieldGroups = {
+  infrastructure: ReactNode[];
+  btpAccount: ReactNode[];
+  network: ReactNode[];
+};
+
+// Lists, not components, so each card's form can count items to split into columns.
 export const useClusterInfoFields = (
   kymaResourceLabels?: KymaResourceLabels,
-): ReactNode[] => {
+): ClusterInfoFieldGroups => {
   const { t } = useTranslation();
   const { clusterInfo, loading } = useGetClusterInfo();
 
-  if (loading) return [];
+  if (loading) {
+    return { infrastructure: [], btpAccount: [], network: [] };
+  }
 
   const globalAccountID =
     kymaResourceLabels?.['kyma-project.io/global-account-id'] ||
@@ -21,8 +29,9 @@ export const useClusterInfoFields = (
   const subaccountID =
     kymaResourceLabels?.['kyma-project.io/subaccount-id'] ||
     clusterInfo?.subaccountID;
+  const dualStackIPEnabled = clusterInfo?.networkDetails?.dualStackIPEnabled;
 
-  return [
+  const infrastructure = [
     !!clusterInfo?.provider && (
       <FormItem
         key="provider"
@@ -39,6 +48,33 @@ export const useClusterInfoFields = (
         <Text>{clusterInfo.region}</Text>
       </FormItem>
     ),
+    !!clusterInfo?.platformRegion && (
+      <FormItem
+        key="platform-region"
+        labelContent={
+          <Label showColon>{t('clusters.overview.platform-region')}</Label>
+        }
+      >
+        <Text>{clusterInfo.platformRegion}</Text>
+      </FormItem>
+    ),
+    dualStackIPEnabled !== undefined && (
+      <FormItem
+        key="dual-stack-ip"
+        labelContent={
+          <Label showColon>{t('clusters.overview.dual-stack-ip')}</Label>
+        }
+      >
+        <ObjectStatus
+          state={dualStackIPEnabled ? 'Positive' : 'None'}
+          aria-label={t('clusters.overview.dual-stack-ip')}
+        >
+          {dualStackIPEnabled
+            ? t('clusters.overview.dual-stack-enabled')
+            : t('clusters.overview.dual-stack-disabled')}
+        </ObjectStatus>
+      </FormItem>
+    ),
     !!clusterInfo?.seedRegion && (
       <FormItem
         key="seed-region"
@@ -49,6 +85,9 @@ export const useClusterInfoFields = (
         <Text>{clusterInfo.seedRegion}</Text>
       </FormItem>
     ),
+  ];
+
+  const btpAccount = [
     !!globalAccountID && (
       <FormItem
         key="global-account-id"
@@ -69,6 +108,31 @@ export const useClusterInfoFields = (
         <Text>{subaccountID}</Text>
       </FormItem>
     ),
+    !!clusterInfo?.environmentInstanceID && (
+      <FormItem
+        key="environment-instance-id"
+        labelContent={
+          <Label showColon>
+            {t('clusters.overview.environment-instance-id')}
+          </Label>
+        }
+      >
+        <Text>{clusterInfo.environmentInstanceID}</Text>
+      </FormItem>
+    ),
+    !!clusterInfo?.instanceName && (
+      <FormItem
+        key="instance-name"
+        labelContent={
+          <Label showColon>{t('clusters.overview.instance-name')}</Label>
+        }
+      >
+        <Text>{clusterInfo.instanceName}</Text>
+      </FormItem>
+    ),
+  ];
+
+  const network = [
     !!clusterInfo?.natGatewayIps && (
       <FormItem
         key="nat-gateway-ips"
@@ -80,4 +144,6 @@ export const useClusterInfoFields = (
       </FormItem>
     ),
   ];
+
+  return { infrastructure, btpAccount, network };
 };

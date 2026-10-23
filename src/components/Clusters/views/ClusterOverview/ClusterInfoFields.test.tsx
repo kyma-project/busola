@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { isValidElement, ReactElement } from 'react';
+import { isValidElement, ReactElement, ReactNode } from 'react';
 import { render, renderHook, screen } from '@testing-library/react';
 import { useClusterInfoFields } from './ClusterInfoFields';
 import { ClusterInfo } from './useGetClusterInfo';
@@ -14,54 +14,113 @@ const fullInfo: ClusterInfo = {
   provider: 'gcp',
   region: 'europe-west3',
   seedRegion: 'europe-west1',
+  platformRegion: 'cf-eu10-canary',
+  networkDetails: { dualStackIPEnabled: false },
   globalAccountID: 'ga-from-cm',
   subaccountID: 'sa-from-cm',
+  environmentInstanceID: 'env-1',
+  instanceName: 'instance-1',
   natGatewayIps: ['1.2.3.4'],
 };
 
-function getFields(
+function getGroups(
   clusterInfo: ClusterInfo,
   { loading = false, kymaResourceLabels = {} } = {},
 ) {
   mockUseGetClusterInfo.mockReturnValue({ clusterInfo, loading });
   const { result } = renderHook(() => useClusterInfoFields(kymaResourceLabels));
-  return result.current.filter(isValidElement) as ReactElement[];
+  return result.current;
 }
 
-const keys = (fields: ReactElement[]) => fields.map((field) => field.key);
+const keys = (fields: ReactNode[]) =>
+  (fields.filter(isValidElement) as ReactElement[]).map((field) => field.key);
 
 describe('useClusterInfoFields', () => {
-  it('returns no fields while loading', () => {
-    expect(getFields(fullInfo, { loading: true })).toEqual([]);
+  it('returns empty groups while loading', () => {
+    const groups = getGroups(fullInfo, { loading: true });
+    expect(groups.infrastructure).toEqual([]);
+    expect(groups.btpAccount).toEqual([]);
+    expect(groups.network).toEqual([]);
   });
 
-  it('returns every field in display order', () => {
-    expect(keys(getFields(fullInfo))).toEqual([
+  it('groups infrastructure fields in display order', () => {
+    expect(keys(getGroups(fullInfo).infrastructure)).toEqual([
       'provider',
       'region',
+      'platform-region',
+      'dual-stack-ip',
       'seed-region',
-      'global-account-id',
-      'subaccount-id',
-      'nat-gateway-ips',
     ]);
   });
 
+  it('groups BTP account fields in display order', () => {
+    expect(keys(getGroups(fullInfo).btpAccount)).toEqual([
+      'global-account-id',
+      'subaccount-id',
+      'environment-instance-id',
+      'instance-name',
+    ]);
+  });
+
+  it('groups network fields', () => {
+    expect(keys(getGroups(fullInfo).network)).toEqual(['nat-gateway-ips']);
+  });
+
   it('returns only the fields clusterInfo has', () => {
+    const groups = getGroups({
+      region: 'europe-west3',
+      natGatewayIps: ['1.2.3.4'],
+    });
+    expect(keys(groups.infrastructure)).toEqual(['region']);
+    expect(keys(groups.btpAccount)).toEqual([]);
+    expect(keys(groups.network)).toEqual(['nat-gateway-ips']);
+  });
+
+  it('renders the dual stack IP as an Enabled badge', () => {
+    render(
+      <>
+        {
+          getGroups({ networkDetails: { dualStackIPEnabled: true } })
+            .infrastructure
+        }
+      </>,
+    );
     expect(
-      keys(getFields({ region: 'europe-west3', natGatewayIps: ['1.2.3.4'] })),
-    ).toEqual(['region', 'nat-gateway-ips']);
-    expect(getFields({})).toEqual([]);
+      screen.getByText('clusters.overview.dual-stack-enabled'),
+    ).toBeInTheDocument();
+  });
+
+  it('renders the dual stack IP as a Disabled badge', () => {
+    render(
+      <>
+        {
+          getGroups({ networkDetails: { dualStackIPEnabled: false } })
+            .infrastructure
+        }
+      </>,
+    );
+    expect(
+      screen.getByText('clusters.overview.dual-stack-disabled'),
+    ).toBeInTheDocument();
+  });
+
+  it('omits the dual stack IP field when networkDetails is absent', () => {
+    expect(keys(getGroups({ provider: 'gcp' }).infrastructure)).toEqual([
+      'provider',
+    ]);
   });
 
   it('prefers the Kyma resource labels for the account IDs', () => {
     render(
       <>
-        {getFields(fullInfo, {
-          kymaResourceLabels: {
-            'kyma-project.io/global-account-id': 'ga-from-label',
-            'kyma-project.io/subaccount-id': 'sa-from-label',
-          },
-        })}
+        {
+          getGroups(fullInfo, {
+            kymaResourceLabels: {
+              'kyma-project.io/global-account-id': 'ga-from-label',
+              'kyma-project.io/subaccount-id': 'sa-from-label',
+            },
+          }).btpAccount
+        }
       </>,
     );
 
@@ -72,7 +131,7 @@ describe('useClusterInfoFields', () => {
   });
 
   it('shows the account IDs from the labels when clusterInfo has none', () => {
-    const fields = getFields(
+    const groups = getGroups(
       {},
       {
         kymaResourceLabels: {
@@ -81,6 +140,6 @@ describe('useClusterInfoFields', () => {
       },
     );
 
-    expect(keys(fields)).toEqual(['global-account-id']);
+    expect(keys(groups.btpAccount)).toEqual(['global-account-id']);
   });
 });
