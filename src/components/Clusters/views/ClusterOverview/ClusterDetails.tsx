@@ -122,15 +122,6 @@ export default function ClusterDetails({
               content={<>{network}</>}
             />
           )}
-        </div>
-        <div className="cluster-overview-column">
-          {btpAccount.some(Boolean) && (
-            <ResourceDetailsCard
-              titleText={t('cluster-overview.headers.btp-account')}
-              content={<>{btpAccount}</>}
-            />
-          )}
-          <ClusterWorkerPoolsCard />
           {(kymaResources || isCommunityModulesEnabled) && (
             <div className="cluster-overview-modules">
               <ModuleTemplatesContextProvider>
@@ -140,6 +131,15 @@ export default function ClusterDetails({
               </ModuleTemplatesContextProvider>
             </div>
           )}
+        </div>
+        <div className="cluster-overview-column">
+          {btpAccount.some(Boolean) && (
+            <ResourceDetailsCard
+              titleText={t('cluster-overview.headers.btp-account')}
+              content={<>{btpAccount}</>}
+            />
+          )}
+          <ClusterWorkerPoolsCard />
         </div>
       </div>
     </section>
