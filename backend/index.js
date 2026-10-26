@@ -63,6 +63,7 @@ app.use(pinoMiddleware);
 
 setupJWTCheck(app);
 
+let companionHandler = companionRouter;
 if (
   config.features?.KYMA_COMPANION?.config?.apiBaseUrl &&
   !config.features?.JWT_CHECK_CONFIG?.isEnabled &&
@@ -70,9 +71,15 @@ if (
 ) {
   console.warn(
     '[security] KYMA_COMPANION is enabled but JWT_CHECK_CONFIG is disabled — ' +
-      '/backend/ai-chat/* is accessible without authentication. ' +
-      'Enable JWT_CHECK_CONFIG on hosted instances.',
+      'refusing to serve /backend/ai-chat/* to unauthenticated callers. ' +
+      'Enable JWT_CHECK_CONFIG, or set JWT_CHECK_BYPASS=true for trusted environments.',
   );
+  companionHandler = (_req, res) =>
+    res.status(503).json({
+      error:
+        'AI assistant is not available: JWT_CHECK_CONFIG must be enabled on hosted instances. ' +
+        'Set JWT_CHECK_BYPASS=true for trusted environments.',
+    });
 }
 
 const SLOW_REQUEST_THRESHOLD_MS = parseInt(
@@ -125,14 +132,14 @@ if (isDocker) {
   // Running in dev mode
   // yup, order matters here
   serveMonaco(app);
-  app.use('/backend/ai-chat', companionRouter);
+  app.use('/backend/ai-chat', companionHandler);
   app.use('/backend', oidcDiscoveryRouter);
   app.use('/backend/modules', requireK8sCredential, communityRouter);
   app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
   serveStaticApp(app, '/', '/core-ui');
 } else {
   // Running in prod mode
-  app.use('/backend/ai-chat', companionRouter);
+  app.use('/backend/ai-chat', companionHandler);
   app.use('/backend', oidcDiscoveryRouter);
   app.use('/backend/modules', requireK8sCredential, communityRouter);
   app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
