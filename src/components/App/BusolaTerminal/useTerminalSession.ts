@@ -78,8 +78,11 @@ export function useTerminalSession() {
 
   const wsRef = useRef<WebSocket | null>(null);
   const onDataDisposableRef = useRef<{ dispose: () => void } | null>(null);
-  // Prevents double pod DELETE — close button and unmount cleanup both call disconnect.
+  // Prevents double teardown — close button and unmount cleanup both call disconnect.
   const disconnectedRef = useRef(false);
+  // Latches the deprovision call per pod so an in-flight DELETE from a prior
+  // disconnect can't be re-fired by a new connect→disconnect cycle.
+  const deprovisioningRef = useRef(false);
   const reconnectTimer = useRef<NodeJS.Timeout>(undefined);
   const proactiveReconnectTimer = useRef<NodeJS.Timeout>(undefined);
   const attemptRef = useRef(0);
@@ -87,15 +90,17 @@ export function useTerminalSession() {
   const connect = useCallback(
     async (term: Terminal, silent = false) => {
       disconnectedRef.current = false;
-      // Abort first so connectTerminal's onclose guard skips the banner and
-      // reactive reconnect on a deliberate cycle.
-      // sessionInfo.abortController?.abort();
+      deprovisioningRef.current = false;
+      // TODO: the abortController now lives on the session atom and is owned by
+      // TerminalFeature; a deliberate connect cycle no longer aborts the old one
+      // here. Re-establish that once pod lifecycle ownership is consolidated.
       // A proactive cycle's old socket is still open; close it to avoid a
       // leak / double-attach (a reactive drop already closed it).
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
         wsRef.current.close();
         wsRef.current = null;
       }
+      console.log('Connecting', sessionInfo);
       clearTimeout(proactiveReconnectTimer.current);
       proactiveReconnectTimer.current = undefined;
 
@@ -169,11 +174,14 @@ export function useTerminalSession() {
     ],
   );
 
+  // Only the teardown fields are read here; depending on them (not the whole
+  // sessionInfo) keeps disconnect's identity stable across status/errorMessage
+  // flips, so BusolaTerminal's cluster effect doesn't re-subscribe each time.
+  const { abortController, deprovisionPod } = sessionInfo;
   const disconnect = useCallback(async () => {
     if (disconnectedRef.current) return;
     disconnectedRef.current = true;
-    // TODO: run cleanup method from sessionState
-    sessionInfo.abortController?.abort();
+    abortController?.abort();
     // Cancel scheduled reconnects so they can't revive a torn-down terminal.
     clearTimeout(reconnectTimer.current);
     reconnectTimer.current = undefined;
@@ -186,8 +194,11 @@ export function useTerminalSession() {
       wsRef.current.close();
     }
     wsRef.current = null;
-    await sessionInfo.deprovisionPod();
-  }, [sessionInfo]);
+    if (!deprovisioningRef.current) {
+      deprovisioningRef.current = true;
+      await deprovisionPod();
+    }
+  }, [abortController, deprovisionPod]);
 
   return { connect, disconnect };
 }

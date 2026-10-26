@@ -4,7 +4,6 @@ import { HttpError } from 'shared/hooks/BackendAPI/config';
 const POD_TTL_MS = 60 * 60 * 1000;
 const POD_POLL_INTERVAL_MS = 2000;
 const POD_POLL_TIMEOUT_MS = 120_000;
-const TERMINAL_CONTAINER_NAME = 'dev-toolbox';
 
 export async function generateTerminalPodName(
   clusterServer: string,
@@ -18,7 +17,12 @@ export async function generateTerminalPodName(
   return `busola-terminal-${hex.slice(0, 16)}`;
 }
 
-function buildPodManifest(podName: string, namespace: string, image: string) {
+function buildPodManifest(
+  podName: string,
+  namespace: string,
+  containerName: string,
+  image: string,
+) {
   const ttl = new Date(Date.now() + POD_TTL_MS).toISOString();
   return {
     apiVersion: 'v1',
@@ -33,7 +37,7 @@ function buildPodManifest(podName: string, namespace: string, image: string) {
       containers: [
         {
           image,
-          name: TERMINAL_CONTAINER_NAME,
+          name: containerName,
           resources: {
             requests: { cpu: '100m', memory: '128Mi' },
             limits: { cpu: '500m', memory: '256Mi' },
@@ -57,7 +61,6 @@ function buildPodManifest(podName: string, namespace: string, image: string) {
   };
 }
 
-// 409 (already exists) is treated as success.
 async function createIfMissing(
   fetchFn: FetchFn,
   relativeUrl: string,
@@ -75,6 +78,7 @@ async function createIfMissing(
       },
     });
   } catch (err) {
+    // 409 (already exists) is treated as success.
     if (!(err instanceof HttpError && err.code === 409)) throw err;
   }
 }
@@ -147,12 +151,14 @@ export async function provisionPod({
   podName,
   image,
   namespace,
+  containerName,
   abortController,
 }: {
   fetchFn: FetchFn;
   podName: string;
   image: string;
   namespace: string;
+  containerName: string;
   abortController: AbortController;
 }): Promise<void> {
   const deadline = Date.now() + POD_POLL_TIMEOUT_MS;
@@ -176,7 +182,7 @@ export async function provisionPod({
   await createIfMissing(
     fetchFn,
     `/api/v1/namespaces/${namespace}/pods`,
-    buildPodManifest(podName, namespace, image),
+    buildPodManifest(podName, namespace, containerName, image),
     abortController,
   );
   await pollPodReady(fetchFn, podName, namespace, abortController, deadline);

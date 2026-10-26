@@ -22,7 +22,6 @@ import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { authDataAtom } from 'state/authDataAtom';
 import { ssoDataAtom } from 'state/ssoDataAtom';
 import { FetchFn, useFetch } from 'shared/hooks/BackendAPI/useFetch';
-import { RefObject, useRef } from 'react';
 
 const DEFAULT_IMAGE =
   'europe-docker.pkg.dev/kyma-project/prod/busola-dev-toolbox:latest';
@@ -35,13 +34,9 @@ export function TerminalFeature() {
   const { t } = useTranslation();
   const fetchFn = useFetch();
   const setShowTerminal = useSetAtom(showTerminalAtom);
-  const { isEnabled: isTerminalEnabled } = useFeature(
-    configFeaturesNames.TERMINAL,
-  );
+  const { isEnabled: isTerminalEnabled, config } =
+    useFeature<TerminalFeatureConfig>(configFeaturesNames.TERMINAL);
   const setSession = useSetAtom(terminalSessionAtom);
-  const { config } = useFeature<TerminalFeatureConfig>(
-    configFeaturesNames.TERMINAL,
-  );
   const image: string = config?.image ?? DEFAULT_IMAGE;
   const location = useLocation();
   const isOnClustersPage = location.pathname === '/clusters';
@@ -49,16 +44,8 @@ export function TerminalFeature() {
   const cluster = useAtomValue(clusterAtom);
   const ssoData = useAtomValue(ssoDataAtom);
   const clusterServer = cluster?.currentContext?.cluster?.cluster?.server ?? '';
-  const abortControllerRef = useRef<AbortController>(new AbortController());
 
   if (!isTerminalEnabled || isOnClustersPage || !authData) return null;
-
-  const headers = createHeaders(authData, cluster, ssoData);
-  const authHeaders = new Headers(headers);
-  const credential =
-    authHeaders.get('X-K8s-Authorization')?.replace('Bearer ', '') ??
-    authHeaders.get('X-Client-Certificate-Data') ??
-    '';
 
   return (
     <ShellBarAction
@@ -66,18 +53,26 @@ export function TerminalFeature() {
       text={t('terminal.name')}
       title={t('terminal.name')}
       onClick={async () => {
-        abortControllerRef.current = new AbortController();
+        const abortController = new AbortController();
+        const authHeaders = new Headers(
+          createHeaders(authData, cluster, ssoData),
+        );
+        const credential =
+          authHeaders.get('X-K8s-Authorization')?.replace('Bearer ', '') ??
+          authHeaders.get('X-Client-Certificate-Data') ??
+          '';
         const podName = await generateTerminalPodName(
           clusterServer,
           credential,
         );
-        await createBusolaTerminalPod(
+        createBusolaTerminalPod(
           fetchFn,
           setSession,
           image,
           podName,
           TERMINAL_NAMESPACE_NAME,
-          abortControllerRef,
+          TERMINAL_CONTAINER_NAME,
+          abortController,
         );
         setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }));
       }}
@@ -91,19 +86,21 @@ async function createBusolaTerminalPod(
   image: string,
   podName: string,
   namespace: string,
-  abortControllerRef: RefObject<AbortController>,
+  containerName: string,
+  abortController: AbortController,
 ): Promise<void> {
+  setSession((prev) => ({ ...prev, status: 'provisioning' }));
   try {
     await provisionPod({
       fetchFn,
       podName,
       image,
       namespace,
-      abortController: abortControllerRef.current,
+      containerName,
+      abortController,
     });
   } catch (e) {
-    // TODO: Handler reconnections
-    abortControllerRef.current.abort(e);
+    abortController.abort(e);
     throw e;
   }
 
@@ -111,17 +108,23 @@ async function createBusolaTerminalPod(
     connectionType: ConnectionType.Attach,
     podName: podName,
     container: TERMINAL_CONTAINER_NAME,
-    namespace: TERMINAL_NAMESPACE_NAME,
+    namespace,
     command: TERMINAL_COMMAND,
-    status: 'provisioning',
+    status: 'provisioned',
     errorMessage: null,
-    abortController: abortControllerRef.current,
-    deprovisionPod: deprovisionPod(fetchFn, TERMINAL_NAMESPACE_NAME, podName),
+    abortController,
+    deprovisionPod: deprovisionPod(fetchFn, namespace, podName, setSession),
   });
 }
 
-function deprovisionPod(fetchFn: FetchFn, namespace: string, podName: string) {
+function deprovisionPod(
+  fetchFn: FetchFn,
+  namespace: string,
+  podName: string,
+  setSession: (update: SetStateAction<TerminalSessionState>) => void,
+) {
   return async () => {
+    setSession((prev) => ({ ...prev, status: 'error' }));
     try {
       await fetchFn({
         relativeUrl: `/api/v1/namespaces/${namespace}/pods/${podName}`,

@@ -1,7 +1,8 @@
 import { atom } from 'jotai';
 
 export type TerminalSessionStatus =
-  'idle' | 'provisioning' | 'connected' | 'error' | 'reconnecting';
+  'idle' | 'provisioning' | 'provisioned'
+  | 'connected' | 'error' | 'reconnecting';
 
 export enum ConnectionType {
   Attach = 'attach',

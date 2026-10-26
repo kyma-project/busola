@@ -28,7 +28,6 @@ export function BusolaTerminal({
   const location = useLocation();
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
   const sessionState = useAtomValue(terminalSessionAtom);
-  // Ref so the cleanup effect reads the current podName, not the mount-time value.
   const { connect, disconnect } = useTerminalSession();
   const cluster = useAtomValue(clusterAtom);
   const openedOnClusterRef = useRef(cluster?.name);
@@ -43,6 +42,11 @@ export function BusolaTerminal({
   }, [cluster?.name, setShowTerminal, disconnect, isOnClustersPage]);
 
   useEffect(() => {
+    console.log('status changed to:', sessionState.status);
+    if (sessionState.status !== 'provisioned') {
+      return;
+    }
+
     if (!termDOM?.current) return;
     const term = new Terminal({ theme: getXtermTheme() });
     const fitAddon = new FitAddon();
@@ -52,6 +56,8 @@ export function BusolaTerminal({
     term.loadAddon(fitAddon);
     term.open(termDOM.current);
     fitAddon.fit();
+    console.log(sessionState.status);
+
     connect(term);
 
     const observer = new ResizeObserver(() => {
@@ -73,6 +79,9 @@ export function BusolaTerminal({
     observer.observe(termDOM.current);
 
     return () => {
+      if (sessionState.status === 'provisioned') {
+        return;
+      }
       observer.disconnect();
       disconnect();
       term.dispose();
@@ -80,7 +89,7 @@ export function BusolaTerminal({
       fitAddonRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [sessionState.status]);
 
   useEffect(() => {
     const applyTerminalTheme = () => {

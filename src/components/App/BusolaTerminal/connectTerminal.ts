@@ -49,13 +49,19 @@ function buildProtocols(authHeaders: Headers): string[] {
   ];
 }
 
-function buildAttachUrl(
-  namespace: string,
-  podName: string,
-  containerName: string,
-  command: string,
-  connectionType: ConnectionType,
-): string {
+function buildAttachUrl({
+  namespace,
+  podName,
+  containerName,
+  command,
+  connectionType,
+}: {
+  namespace: string;
+  podName: string;
+  containerName: string;
+  command: string;
+  connectionType: ConnectionType;
+}): string {
   const { protocol, host } = window.location;
   const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
   const { backendAddress } = getClusterConfig();
@@ -71,7 +77,7 @@ function buildAttachUrl(
   return `${wsProtocol}//${host}${backendAddress}/ws${attachPath}?${params}`;
 }
 
-// Auth encoded into Sec-WebSocket-Protocol — browser WebSocket has no headers param; #4920 decodes.
+// Auth encoded into Sec-WebSocket-Protocol — browser WebSocket has no headers param
 export async function connectTerminal({
   authHeaders,
   term,
@@ -105,7 +111,13 @@ export async function connectTerminal({
   silent?: boolean;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
   const ws = new WebSocket(
-    buildAttachUrl(namespace, podName, containerName, command, connectionType),
+    buildAttachUrl({
+      namespace,
+      podName,
+      containerName,
+      command,
+      connectionType,
+    }),
     buildProtocols(authHeaders),
   );
   ws.binaryType = 'arraybuffer';
