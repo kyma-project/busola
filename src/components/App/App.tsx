@@ -20,6 +20,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
+import { useFeature } from 'hooks/useFeature';
 
 import { clusterAtom } from 'state/clusterAtom';
 import { languageAtom } from 'state/settings/languageAtom';
@@ -29,6 +30,7 @@ import { useGetConfiguration } from 'state/configuration/configurationAtom';
 import { useGetExtensions } from 'state/navigation/extensionsAtom';
 import { useGetExtensibilitySchemas } from 'state/extensibilitySchemasAtom';
 import { useGetValidationSchemas } from 'state/validationSchemasAtom';
+import { configFeaturesNames } from 'state/types';
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import { useMakeGardenerLoginRoute } from 'components/Gardener/useMakeGardenerLoginRoute';
 import { useHandleResetEndpoint, Users } from 'components/Clusters/shared';
@@ -132,6 +134,18 @@ export default function App() {
   const companionPanelOpen =
     showAssistant && showCompanion.show && !showCompanion.useJoule;
   const [showTerminalState, setShowTerminalState] = useAtom(showTerminalAtom);
+  const { isEnabled: isTerminalEnabled } = useFeature(
+    configFeaturesNames.TERMINAL,
+  );
+  const openTerminalOnLoad = useRef(search.get('terminal') === 'open');
+
+  useEffect(() => {
+    if (isTerminalEnabled && openTerminalOnLoad.current) {
+      openTerminalOnLoad.current = false;
+      setShowTerminalState((prev) => ({ ...prev, isOpen: true }));
+    }
+  }, [isTerminalEnabled, setShowTerminalState]);
+
   const {
     isOpen: isTerminalOpen,
     isDocked: isTerminalDocked,
