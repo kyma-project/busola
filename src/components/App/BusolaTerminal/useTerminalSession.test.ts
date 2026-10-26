@@ -82,6 +82,8 @@ function makeSessionState(
   };
 }
 
+const jsonResponse = (data: any) => ({ json: () => Promise.resolve(data) });
+
 function makeTerm() {
   return {
     write: vi.fn(),

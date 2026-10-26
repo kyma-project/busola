@@ -5,7 +5,6 @@ import { Terminal } from '@xterm/xterm';
 import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { ssoDataAtom } from 'state/ssoDataAtom';
-import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames, TerminalFeature } from 'state/types';
@@ -72,7 +71,6 @@ export function useTerminalSession() {
   const authData = useAtomValue(authDataAtom);
   const cluster = useAtomValue(clusterAtom);
   const ssoData = useAtomValue(ssoDataAtom);
-  const fetchFn = useFetch();
   const [sessionInfo, setSession] = useAtom(terminalSessionAtom);
   const { config } = useFeature<TerminalFeature>(configFeaturesNames.TERMINAL);
 
@@ -160,7 +158,15 @@ export function useTerminalSession() {
         );
       }
     },
-    [authData, cluster, ssoData, fetchFn, maxSessionDurationMs, setSession, t],
+    [
+      authData,
+      cluster,
+      ssoData,
+      maxSessionDurationMs,
+      sessionInfo,
+      setSession,
+      t,
+    ],
   );
 
   const disconnect = useCallback(async () => {
@@ -181,7 +187,7 @@ export function useTerminalSession() {
     }
     wsRef.current = null;
     await sessionInfo.deprovisionPod();
-  }, []);
+  }, [sessionInfo]);
 
   return { connect, disconnect };
 }

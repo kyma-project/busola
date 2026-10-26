@@ -127,8 +127,8 @@ function deprovisionPod(fetchFn: FetchFn, namespace: string, podName: string) {
         relativeUrl: `/api/v1/namespaces/${namespace}/pods/${podName}`,
         init: { method: 'DELETE' },
       });
-    } catch (e) {
-      console.warn(`Couldn't delete terminal pod: ${podName}, error: :${e}`);
+    } catch {
+      // best-effort
     }
   };
 }
