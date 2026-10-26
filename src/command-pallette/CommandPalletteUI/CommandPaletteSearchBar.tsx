@@ -35,6 +35,7 @@ export function CommandPaletteSearchBar({
     // disable opening palette if other modal is present
     if (!modalPresent || !value) {
       setOpen(value);
+      setShouldFocus?.(value);
     }
   };
 

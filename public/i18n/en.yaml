@@ -371,7 +371,9 @@ common:
     discard-changes-warning: You haven't saved your changes. Navigating out will discard them.
     error: 'Error: {{error}}'
     fill-required-data: Fill the remaining required data.
+    invalid-content-fields: 'Correct the content of: {{fields}}'
     must-fill-required: You must fill in all required data.
+    must-fill-required-fields: 'Fill in required fields: {{fields}}'
     no-entries-found: No entries found
     no-instances-found: No matching {{value}} found
     no-instances-found-namespace: No matching {{value}} found in this Namespace
@@ -1089,6 +1091,8 @@ no-permissions:
   enter-namespace-name-placeholder: Enter Namespace name
 node-details:
   all: All messages
+  error: Error
+  errors: Errors
   information: Information
   machine-info:
     architecture: Architecture
