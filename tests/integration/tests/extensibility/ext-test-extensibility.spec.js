@@ -75,7 +75,7 @@ context('Test Extensibility Create/Update', () => {
       .click();
     cy.get('ui5-dialog.error-modal')
       .should('be.visible')
-      .contains('You must fill in all required data.');
+      .contains('Fill in required fields: Resource');
     cy.get('ui5-dialog.error-modal').contains('ui5-button', 'Close').click();
 
     chooseComboboxOption('[id="combobox-input"]', 'potato', true);
