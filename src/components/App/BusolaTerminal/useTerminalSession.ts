@@ -21,9 +21,6 @@ import {
 } from './connectTerminal';
 import { TFunction } from 'i18next';
 
-export const TERMINAL_CONTAINER_NAME = 'dev-toolbox';
-export const TERMINAL_NAMESPACE_NAME = 'busola-terminal';
-
 const RECONNECTION_MIN_DELAY_MS = 1_000;
 const RECONNECTION_MAX_DELAY_MS = 30_000;
 // Headroom before the hard cap for the re-provision + re-attach to finish.
@@ -183,6 +180,7 @@ export function useTerminalSession() {
       wsRef.current.close();
     }
     wsRef.current = null;
+    await sessionInfo.deprovisionPod();
   }, []);
 
   return { connect, disconnect };
