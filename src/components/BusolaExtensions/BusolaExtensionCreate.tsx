@@ -60,7 +60,7 @@ export default function BusolaExtensionCreate({
     [crd, state, initialConfigMap],
   );
 
-  // ResourceForm only calls this when reverting
+  // YAML mode is disabled, so ResourceForm only calls this to revert
   const resetForm = () => {
     setCrd(null);
     setState({});
@@ -72,7 +72,7 @@ export default function BusolaExtensionCreate({
     // the combobox also accepts text that matches no CRD
     if (!crd) {
       notificationManager.notifyError({
-        content: t('common.messages.must-fill-required'),
+        content: t('extensibility.starter-modal.messages.select-crd'),
       });
       return;
     }

@@ -690,6 +690,7 @@ extensibility:
     messages:
       error: Failed to upsert UI configuration.
       no-columns: No example values could be inferred from the CRD.
+      select-crd: Select a resource from the list.
       success: UI configuration upserted.
   title: Extensions
   version:

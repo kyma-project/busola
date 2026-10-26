@@ -116,7 +116,7 @@ export function createExtensibilityTemplate(crd, t) {
 }
 
 export function createConfigmap(crd, formState) {
-  // the form still uses formState
+  // formState is React state, and the code below changes data in place
   const data = cloneDeep(formState);
   const filterViewProps = (arr) =>
     (arr ?? [])
