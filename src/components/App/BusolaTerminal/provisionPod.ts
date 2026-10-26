@@ -4,6 +4,7 @@ import { HttpError } from 'shared/hooks/BackendAPI/config';
 const POD_TTL_MS = 60 * 60 * 1000;
 const POD_POLL_INTERVAL_MS = 2000;
 const POD_POLL_TIMEOUT_MS = 120_000;
+const TERMINAL_CONTAINER_NAME = 'dev-toolbox';
 
 export async function generateTerminalPodName(
   clusterServer: string,
