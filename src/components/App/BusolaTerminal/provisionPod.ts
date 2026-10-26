@@ -1,9 +1,6 @@
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
-import {
-  TERMINAL_CONTAINER_NAME,
-  TERMINAL_NAMESPACE_NAME,
-} from 'components/App/BusolaTerminal/useTerminalSession';
+import { TERMINAL_CONTAINER_NAME } from 'components/App/BusolaTerminal/useTerminalSession';
 
 const POD_TTL_MS = 60 * 60 * 1000;
 const POD_POLL_INTERVAL_MS = 2000;
@@ -21,14 +18,14 @@ export async function generateTerminalPodName(
   return `busola-terminal-${hex.slice(0, 16)}`;
 }
 
-function buildPodManifest(podName: string, image: string) {
+function buildPodManifest(podName: string, namespace: string, image: string) {
   const ttl = new Date(Date.now() + POD_TTL_MS).toISOString();
   return {
     apiVersion: 'v1',
     kind: 'Pod',
     metadata: {
       name: podName,
-      namespace: TERMINAL_NAMESPACE_NAME,
+      namespace,
       labels: { run: 'busola-terminal' },
       annotations: { 'busola.io/time-to-live': ttl },
     },
@@ -88,10 +85,11 @@ async function createIfMissing(
 async function waitIfTerminating(
   fetchFn: FetchFn,
   podName: string,
+  namespace: string,
   abortController: AbortController,
   deadline: number,
 ): Promise<void> {
-  const podUrl = `/api/v1/namespaces/${TERMINAL_NAMESPACE_NAME}/pods/${podName}`;
+  const podUrl = `/api/v1/namespaces/${namespace}/pods/${podName}`;
   let isTerminating: boolean;
   try {
     const res = await fetchFn({ relativeUrl: podUrl, abortController });
@@ -122,6 +120,7 @@ async function waitIfTerminating(
 async function pollPodReady(
   fetchFn: FetchFn,
   podName: string,
+  namespace: string,
   abortController: AbortController,
   deadline: number,
 ): Promise<void> {
@@ -129,7 +128,7 @@ async function pollPodReady(
     if (abortController.signal.aborted)
       throw new DOMException('Aborted', 'AbortError');
     const res = await fetchFn({
-      relativeUrl: `/api/v1/namespaces/${TERMINAL_NAMESPACE_NAME}/pods/${podName}`,
+      relativeUrl: `/api/v1/namespaces/${namespace}/pods/${podName}`,
       abortController,
     });
     const pod = await res.json();
@@ -147,11 +146,13 @@ export async function provisionPod({
   fetchFn,
   podName,
   image,
+  namespace,
   abortController,
 }: {
   fetchFn: FetchFn;
   podName: string;
   image: string;
+  namespace: string;
   abortController: AbortController;
 }): Promise<void> {
   const deadline = Date.now() + POD_POLL_TIMEOUT_MS;
@@ -161,16 +162,22 @@ export async function provisionPod({
     {
       apiVersion: 'v1',
       kind: 'Namespace',
-      metadata: { name: TERMINAL_NAMESPACE_NAME },
+      metadata: { name: namespace },
     },
     abortController,
   );
-  await waitIfTerminating(fetchFn, podName, abortController, deadline);
+  await waitIfTerminating(
+    fetchFn,
+    podName,
+    namespace,
+    abortController,
+    deadline,
+  );
   await createIfMissing(
     fetchFn,
-    `/api/v1/namespaces/${TERMINAL_NAMESPACE_NAME}/pods`,
-    buildPodManifest(podName, image),
+    `/api/v1/namespaces/${namespace}/pods`,
+    buildPodManifest(podName, namespace, image),
     abortController,
   );
-  await pollPodReady(fetchFn, podName, abortController, deadline);
+  await pollPodReady(fetchFn, podName, namespace, abortController, deadline);
 }

@@ -36,7 +36,6 @@ export function PodExecDialog({
 
   const [container, setContainer] = useState('');
   const [command, setCommand] = useState('');
-  console.log(podResource);
   const podName = podResource.metadata.name;
   const namespace = podResource.metadata.namespace;
   const containersNames = podResource.spec.containers.map(
@@ -45,18 +44,12 @@ export function PodExecDialog({
   const selectedContainer = container || containersNames[0];
   return (
     <Dialog
-      headerText={'Exec options'}
+      headerText={t('terminal.exec.title')}
       open={open}
       footer={
         <Bar design="Footer">
           <Button
             onClick={() => {
-              console.log(
-                'Lets connect to the desired pod using: ',
-                command,
-                'and container: ',
-                container,
-              );
               setTerminalSession({
                 podName: podName,
                 container: selectedContainer,
@@ -68,21 +61,21 @@ export function PodExecDialog({
               close();
             }}
           >
-            Exec
+            {t('terminal.exec.exec')}
           </Button>
           <Button onClick={() => close()}> {t('common.buttons.cancel')}</Button>
         </Bar>
       }
     >
       <Form onSubmit={(e) => e.preventDefault()}>
-        <FormItem labelContent={<Label>{'Command'}</Label>}>
+        <FormItem labelContent={<Label>{t('terminal.exec.command')}</Label>}>
           <Input
             onInput={(e) => setCommand(e.target.value)}
             value={command}
             type={InputType.Text}
           ></Input>
         </FormItem>
-        <FormItem labelContent={<Label>Container</Label>}>
+        <FormItem labelContent={<Label>{t('terminal.exec.container')}</Label>}>
           <Select
             onSelect={(e) => setContainer(e.details.selectedOption.value)}
             defaultValue={selectedContainer}

@@ -1,29 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
+import { ReactNode } from 'react';
+import { Provider, createStore } from 'jotai';
 import { useTerminalSession } from './useTerminalSession';
 import { encodeBase64Url } from 'shared/utils/base64url';
-
-vi.mock('state/authDataAtom', () => ({ authDataAtom: { id: 'auth' } }));
-vi.mock('state/clusterAtom', () => ({ clusterAtom: { id: 'cluster' } }));
-vi.mock('state/ssoDataAtom', () => ({ ssoDataAtom: { id: 'sso' } }));
-vi.mock('state/terminalSessionAtom', () => ({
-  terminalSessionAtom: { id: 'session' },
-}));
-
-let mockAuthData: any;
-let mockCluster: any;
-const setSession = vi.fn();
-
-vi.mock('jotai', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('jotai')>()),
-  useAtomValue: (a: any) => {
-    if (a?.id === 'auth') return mockAuthData;
-    if (a?.id === 'cluster') return mockCluster;
-    if (a?.id === 'sso') return null;
-    return undefined;
-  },
-  useSetAtom: () => setSession,
-}));
+import { authDataAtom } from 'state/authDataAtom';
+import { clusterAtom } from 'state/clusterAtom';
+import { ssoDataAtom } from 'state/ssoDataAtom';
+import {
+  ConnectionType,
+  terminalSessionAtom,
+  TerminalSessionState,
+} from 'state/terminalSessionAtom';
 
 const hookFetch = vi.fn();
 vi.mock('shared/hooks/BackendAPI/useFetch', () => ({
@@ -52,8 +40,48 @@ vi.mock('./provisionPod', async (importOriginal) => ({
 
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
+const CONTAINER = 'dev-toolbox';
 
-const jsonResponse = (data: any) => ({ json: () => Promise.resolve(data) });
+function makeSessionState(
+  overrides: Partial<TerminalSessionState> = {},
+): TerminalSessionState {
+  return {
+    status: 'provisioning',
+    podName: POD,
+    container: CONTAINER,
+    namespace: NS,
+    command: 'bash',
+    connectionType: ConnectionType.Attach,
+    errorMessage: null,
+    abortController: new AbortController(),
+    deprovisionPod: async () => {},
+    ...overrides,
+  };
+}
+
+// Real jotai store hydrated per the jotai testing guide, rather than mocking
+// the jotai module. The hook reads auth/cluster/sso and the session state
+// (podName, container, abortController, ...) straight from these atoms.
+function makeStore(session: TerminalSessionState = makeSessionState()) {
+  const store = createStore();
+  store.set(authDataAtom, { token: 'tok123' } as any);
+  store.set(clusterAtom, {
+    currentContext: {
+      cluster: { cluster: { server: 'https://cluster.example.com' } },
+    },
+  } as any);
+  store.set(ssoDataAtom, null as any);
+  store.set(terminalSessionAtom, session);
+  return store;
+}
+
+function renderSession(store: ReturnType<typeof createStore>) {
+  return renderHook(() => useTerminalSession(), {
+    wrapper: ({ children }: { children: ReactNode }) => (
+      <Provider store={store}>{children}</Provider>
+    ),
+  });
+}
 
 function makeTerm() {
   return {
@@ -97,17 +125,10 @@ const wsInstances: MockWebSocket[] = [];
 const lastWs = () => wsInstances.at(-1);
 
 beforeEach(() => {
-  mockAuthData = { token: 'tok123' };
-  mockCluster = {
-    currentContext: {
-      cluster: { cluster: { server: 'https://cluster.example.com' } },
-    },
-  };
   // Proactive reconnect off by default; individual tests opt in.
   mockTerminalFeature = { isEnabled: true, config: {} };
   wsInstances.length = 0;
   hookFetch.mockReset();
-  setSession.mockReset();
   vi.stubGlobal('WebSocket', MockWebSocket as any);
 });
 
@@ -117,114 +138,120 @@ afterEach(() => {
 });
 
 describe('useTerminalSession', () => {
-  function setupHappyHookFetch() {
-    hookFetch.mockImplementation(({ relativeUrl, init }: any) => {
-      const method = init?.method ?? 'GET';
-      if (method === 'GET' && relativeUrl.includes('/pods/'))
-        return Promise.resolve(jsonResponse({ status: { phase: 'Running' } }));
-      return Promise.resolve(jsonResponse({}));
-    });
-  }
-
-  it('connect provisions the pod and opens the attach socket with auth in protocols', async () => {
-    setupHappyHookFetch();
-    const { result } = renderHook(() => useTerminalSession());
+  it('connect opens the attach socket for the session pod with auth in protocols', async () => {
+    const { result } = renderSession(makeStore());
 
     await act(async () => {
       await result.current.connect(makeTerm() as any);
     });
 
-    expect(lastWs()?.url).toContain('/attach?');
+    expect(lastWs()?.url).toContain(`/pods/${POD}/attach?`);
     expect(lastWs()?.protocols).toContain('v4.channel.k8s.io');
     expect(lastWs()?.protocols).toContain(
       `base64url.header.x-k8s-authorization.value.${encodeBase64Url('Bearer tok123')}`,
     );
   });
 
-  it('connect resets session state (including podName) before provisioning', async () => {
-    setupHappyHookFetch();
-    const { result } = renderHook(() => useTerminalSession());
+  it('connect uses the exec endpoint when the session connection type is exec', async () => {
+    const { result } = renderSession(
+      makeStore(makeSessionState({ connectionType: ConnectionType.Exec })),
+    );
 
     await act(async () => {
       await result.current.connect(makeTerm() as any);
     });
 
-    expect(setSession).toHaveBeenCalledWith({
-      status: 'provisioning',
-      podName: null,
-      errorMessage: null,
-    });
+    expect(lastWs()?.url).toContain(`/pods/${POD}/exec?`);
   });
 
-  it('disconnect closes the socket and deletes the pod', async () => {
-    setupHappyHookFetch();
-    const { result } = renderHook(() => useTerminalSession());
+  it('connect does not provision the pod or reset the session state', async () => {
+    const store = makeStore();
+    const before = store.get(terminalSessionAtom);
+    const { result } = renderSession(store);
+
+    await act(async () => {
+      await result.current.connect(makeTerm() as any);
+    });
+
+    // Provisioning moved to createBusolaTerminalPod; connect must not fetch
+    // against the API nor reset the session (podName/status stay as hydrated).
+    expect(hookFetch).not.toHaveBeenCalled();
+    const after = store.get(terminalSessionAtom);
+    expect(after.podName).toBe(before.podName);
+    expect(after.status).toBe(before.status);
+  });
+
+  it('disconnect closes the socket and aborts the session controller', async () => {
+    const session = makeSessionState();
+    const { result } = renderSession(makeStore(session));
     await act(async () => {
       await result.current.connect(makeTerm() as any);
     });
     const ws = lastWs()!;
-    hookFetch.mockClear();
 
     await act(async () => {
-      await result.current.disconnect(POD);
+      await result.current.disconnect();
     });
 
     expect(ws.readyState).toBe(MockWebSocket.CLOSED);
-    expect(hookFetch).toHaveBeenCalledWith({
-      relativeUrl: `/api/v1/namespaces/${NS}/pods/${POD}`,
-      init: { method: 'DELETE' },
-    });
+    expect(session.abortController?.signal.aborted).toBe(true);
   });
 
-  it('deletes the pod only once when disconnect is called repeatedly', async () => {
-    setupHappyHookFetch();
-    const { result } = renderHook(() => useTerminalSession());
+  it('disconnect no longer deletes the pod', async () => {
+    const { result } = renderSession(makeStore());
     await act(async () => {
       await result.current.connect(makeTerm() as any);
     });
     hookFetch.mockClear();
 
     await act(async () => {
-      await result.current.disconnect(POD);
-      await result.current.disconnect(POD);
+      await result.current.disconnect();
     });
 
+    // Pod lifecycle (DELETE) is owned elsewhere now, not by disconnect.
     const deleteCalls = hookFetch.mock.calls.filter(
-      ([arg]: any) => arg.init?.method === 'DELETE',
+      ([arg]: any) => arg?.init?.method === 'DELETE',
     );
-    expect(deleteCalls).toHaveLength(1);
+    expect(deleteCalls).toHaveLength(0);
   });
 
-  it('disconnect does not reset session state, preventing a concurrent connect from being overwritten', async () => {
-    setupHappyHookFetch();
-    const { result } = renderHook(() => useTerminalSession());
+  it('disconnect runs its teardown only once when called repeatedly', async () => {
+    const session = makeSessionState();
+    const abortSpy = vi.spyOn(session.abortController!, 'abort');
+    const { result } = renderSession(makeStore(session));
     await act(async () => {
       await result.current.connect(makeTerm() as any);
     });
-    setSession.mockClear();
 
     await act(async () => {
-      await result.current.disconnect(POD);
+      await result.current.disconnect();
+      await result.current.disconnect();
     });
 
-    expect(setSession).not.toHaveBeenCalled();
+    // disconnectedRef guards against a double teardown.
+    expect(abortSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('disconnect is a no-op without a pod name', async () => {
-    const { result } = renderHook(() => useTerminalSession());
+  it('disconnect does not reset session state, preventing a concurrent connect from being overwritten', async () => {
+    const store = makeStore();
+    const { result } = renderSession(store);
+    await act(async () => {
+      await result.current.connect(makeTerm() as any);
+    });
+    const beforeDisconnect = store.get(terminalSessionAtom);
 
     await act(async () => {
-      await result.current.disconnect(null);
+      await result.current.disconnect();
     });
 
-    expect(hookFetch).not.toHaveBeenCalled();
+    // disconnect must not write the session atom.
+    expect(store.get(terminalSessionAtom)).toBe(beforeDisconnect);
   });
 
   it('cancels a pending reconnect on disconnect so it cannot revive a torn-down terminal', async () => {
     vi.useFakeTimers();
     try {
-      setupHappyHookFetch();
-      const { result } = renderHook(() => useTerminalSession());
+      const { result } = renderSession(makeStore());
 
       await act(async () => {
         await result.current.connect(makeTerm() as any);
@@ -237,7 +264,7 @@ describe('useTerminalSession', () => {
       expect(wsInstances).toHaveLength(1);
 
       await act(async () => {
-        await result.current.disconnect(POD);
+        await result.current.disconnect();
       });
 
       // past the backoff + jitter (<= ~2s)
@@ -263,9 +290,8 @@ describe('useTerminalSession', () => {
         isEnabled: true,
         config: { maxSessionDurationMs: CAP_MS },
       };
-      setupHappyHookFetch();
       const term = makeTerm();
-      const { result } = renderHook(() => useTerminalSession());
+      const { result } = renderSession(makeStore());
 
       await act(async () => {
         await result.current.connect(term as any);
@@ -276,7 +302,6 @@ describe('useTerminalSession', () => {
       });
       expect(wsInstances).toHaveLength(1);
 
-      setSession.mockClear();
       term.write.mockClear();
 
       await act(async () => {
@@ -284,12 +309,7 @@ describe('useTerminalSession', () => {
       });
 
       expect(wsInstances).toHaveLength(2);
-      // silent: no provisioning flash, no output
-      expect(setSession).not.toHaveBeenCalledWith({
-        status: 'provisioning',
-        podName: null,
-        errorMessage: null,
-      });
+      // silent: no output written on the proactive cycle
       expect(term.write).not.toHaveBeenCalled();
     } finally {
       vi.useRealTimers();
@@ -300,8 +320,7 @@ describe('useTerminalSession', () => {
     vi.useFakeTimers();
     try {
       mockTerminalFeature = { isEnabled: true, config: {} };
-      setupHappyHookFetch();
-      const { result } = renderHook(() => useTerminalSession());
+      const { result } = renderSession(makeStore());
 
       await act(async () => {
         await result.current.connect(makeTerm() as any);
@@ -327,8 +346,7 @@ describe('useTerminalSession', () => {
         isEnabled: true,
         config: { maxSessionDurationMs: CAP_MS },
       };
-      setupHappyHookFetch();
-      const { result } = renderHook(() => useTerminalSession());
+      const { result } = renderSession(makeStore());
 
       await act(async () => {
         await result.current.connect(makeTerm() as any);
@@ -338,7 +356,7 @@ describe('useTerminalSession', () => {
       });
 
       await act(async () => {
-        await result.current.disconnect(POD);
+        await result.current.disconnect();
       });
 
       await act(async () => {
@@ -358,9 +376,8 @@ describe('useTerminalSession', () => {
         isEnabled: true,
         config: { maxSessionDurationMs: CAP_MS },
       };
-      setupHappyHookFetch();
       const term = makeTerm();
-      const { result } = renderHook(() => useTerminalSession());
+      const { result } = renderSession(makeStore());
 
       await act(async () => {
         await result.current.connect(term as any);
@@ -401,9 +418,8 @@ describe('useTerminalSession', () => {
         isEnabled: true,
         config: { maxSessionDurationMs: CAP_MS },
       };
-      setupHappyHookFetch();
       const term = makeTerm();
-      const { result } = renderHook(() => useTerminalSession());
+      const { result } = renderSession(makeStore());
 
       await act(async () => {
         await result.current.connect(term as any);

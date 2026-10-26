@@ -19,8 +19,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ReactNode, useState } from 'react';
 import { Button } from '@ui5/webcomponents-react';
 import { PodExecDialog } from 'resources/Pods/PodExecDialog';
-import { TERMINAL_MIN_HEIGHT } from 'components/App/BusolaTerminal/terminalThemes';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { showTerminalAtom } from 'state/showTerminalAtom';
 
 type PodDetailsProps = {
@@ -46,10 +45,7 @@ export function PodDetails({
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
   const [execDialogOpen, setExecDialogOpen] = useState(false);
-  const [showTerminalState, setShowTerminalState] = useAtom(showTerminalAtom);
-
-  const [terminalMinHeight, setTerminalMinHeight] =
-    useState(TERMINAL_MIN_HEIGHT);
+  const setShowTerminalState = useSetAtom(showTerminalAtom);
 
   const Events = () => (
     <EventsList
@@ -183,7 +179,9 @@ export function PodDetails({
   return (
     <ResourceDetails
       headerActions={
-        <Button onClick={() => setExecDialogOpen(true)}>Exec into pod</Button>
+        <Button onClick={() => setExecDialogOpen(true)}>
+          {t('terminal.exec.open')}
+        </Button>
       }
       customComponents={[
         VolumesList,

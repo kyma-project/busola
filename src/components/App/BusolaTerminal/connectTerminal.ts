@@ -97,16 +97,13 @@ export async function connectTerminal({
   setSession: (
     update: (prev: TerminalSessionState) => TerminalSessionState,
   ) => void;
-  signal: AbortSignal;
+  signal?: AbortSignal;
   t: TFunction;
   scheduleReconnect: (term: Terminal) => void;
   onConnected: () => void;
   // Suppress the success banner on a proactive cycle; failures/drops still show.
   silent?: boolean;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
-  console.log(
-    buildAttachUrl(namespace, podName, containerName, command, connectionType),
-  );
   const ws = new WebSocket(
     buildAttachUrl(namespace, podName, containerName, command, connectionType),
     buildProtocols(authHeaders),
@@ -114,7 +111,7 @@ export async function connectTerminal({
   ws.binaryType = 'arraybuffer';
 
   ws.onopen = () => {
-    if (signal.aborted) return;
+    if (signal?.aborted) return;
     sendResize(ws, term.cols, term.rows);
     if (!silent) {
       setSession((prev) => ({ ...prev, status: 'connected' }));
@@ -133,7 +130,7 @@ export async function connectTerminal({
   };
 
   ws.onclose = (event) => {
-    if (signal.aborted) return;
+    if (signal?.aborted) return;
     const isUnexpectedDrop =
       event.code !== 1000 && event.code !== 1005 && !event.reason;
     if (isUnexpectedDrop) {
@@ -157,7 +154,7 @@ export async function connectTerminal({
   };
 
   ws.onerror = () => {
-    if (signal.aborted) return;
+    if (signal?.aborted) return;
     setSession((prev) => ({
       ...prev,
       status: 'error',

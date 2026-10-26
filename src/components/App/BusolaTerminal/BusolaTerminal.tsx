@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
-import { showTerminalAtom, TerminalState } from 'state/showTerminalAtom';
+import { showTerminalAtom } from 'state/showTerminalAtom';
 import { terminalSessionAtom } from 'state/terminalSessionAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { useAtom, useAtomValue } from 'jotai';
@@ -13,9 +13,6 @@ import { getXtermTheme } from './terminalThemes';
 import { useTerminalSession } from './useTerminalSession';
 import './BusolaTerminal.scss';
 import '@xterm/xterm/css/xterm.css';
-import { createBusolaTerminalPod } from 'components/App/BusolaTerminal/useProvisionPod';
-import { useFeature } from 'hooks/useFeature';
-import { configFeaturesNames, TerminalFeature } from 'state/types';
 
 export function BusolaTerminal({
   dockedHeight,
@@ -32,7 +29,6 @@ export function BusolaTerminal({
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
   const sessionState = useAtomValue(terminalSessionAtom);
   // Ref so the cleanup effect reads the current podName, not the mount-time value.
-  const podNameRef = useRef<string | null>(null);
   const { connect, disconnect } = useTerminalSession();
   const cluster = useAtomValue(clusterAtom);
   const openedOnClusterRef = useRef(cluster?.name);
@@ -41,12 +37,10 @@ export function BusolaTerminal({
   useEffect(() => {
     if (cluster?.name !== openedOnClusterRef.current || isOnClustersPage) {
       openedOnClusterRef.current = cluster?.name;
-      disconnect(podNameRef.current);
+      disconnect();
       setShowTerminal((prev) => ({ ...prev, isOpen: false }));
     }
   }, [cluster?.name, setShowTerminal, disconnect, isOnClustersPage]);
-
-  podNameRef.current = sessionState.podName;
 
   useEffect(() => {
     if (!termDOM?.current) return;
@@ -80,7 +74,7 @@ export function BusolaTerminal({
 
     return () => {
       observer.disconnect();
-      disconnect(podNameRef.current);
+      disconnect();
       term.dispose();
       termRef.current = null;
       fitAddonRef.current = null;
@@ -103,7 +97,7 @@ export function BusolaTerminal({
   }, []);
 
   const handleClose = () => {
-    disconnect(podNameRef.current);
+    disconnect();
     setShowTerminal((prev) => ({ ...prev, isOpen: false }));
   };
 

@@ -10,15 +10,9 @@ import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames, TerminalFeature } from 'state/types';
 import {
-  ConnectionType,
   terminalSessionAtom,
   TerminalSessionState,
 } from 'state/terminalSessionAtom';
-import {
-  generateTerminalPodName,
-  provisionPod,
-  TERMINAL_NAMESPACE,
-} from './provisionPod';
 import {
   COLOR_ERROR,
   COLOR_WARNING,
@@ -83,13 +77,11 @@ export function useTerminalSession() {
   const ssoData = useAtomValue(ssoDataAtom);
   const fetchFn = useFetch();
   const [sessionInfo, setSession] = useAtom(terminalSessionAtom);
-  console.log(sessionInfo);
   const { config } = useFeature<TerminalFeature>(configFeaturesNames.TERMINAL);
 
   const maxSessionDurationMs: number | undefined = config?.maxSessionDurationMs;
 
   const wsRef = useRef<WebSocket | null>(null);
-  const abortRef = useRef<AbortController | null>(null);
   const onDataDisposableRef = useRef<{ dispose: () => void } | null>(null);
   // Prevents double pod DELETE — close button and unmount cleanup both call disconnect.
   const disconnectedRef = useRef(false);
@@ -102,7 +94,7 @@ export function useTerminalSession() {
       disconnectedRef.current = false;
       // Abort first so connectTerminal's onclose guard skips the banner and
       // reactive reconnect on a deliberate cycle.
-      abortRef.current?.abort();
+      // sessionInfo.abortController?.abort();
       // A proactive cycle's old socket is still open; close it to avoid a
       // leak / double-attach (a reactive drop already closed it).
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
@@ -111,27 +103,22 @@ export function useTerminalSession() {
       }
       clearTimeout(proactiveReconnectTimer.current);
       proactiveReconnectTimer.current = undefined;
-      const abort = new AbortController();
-      abortRef.current = abort;
 
       try {
         const headers = createHeaders(authData, cluster, ssoData);
         const authHeaders = new Headers(headers);
 
-        // Bail if torn down during provisioning — the socket we'd open would leak.
-        if (abort.signal.aborted) return;
-
         onDataDisposableRef.current?.dispose();
         const { ws, disposable } = await connectTerminal({
           authHeaders,
           term,
-          podName: sessionInfo.podName || '',
-          command: sessionInfo.command || 'bash',
-          containerName: sessionInfo.container || TERMINAL_CONTAINER_NAME,
+          podName: sessionInfo.podName,
+          command: sessionInfo.command,
+          containerName: sessionInfo.container,
           connectionType: sessionInfo.connectionType,
-          namespace: sessionInfo.namespace || TERMINAL_NAMESPACE_NAME,
+          namespace: sessionInfo.namespace,
           setSession,
-          signal: abort.signal,
+          signal: sessionInfo.abortController?.signal,
           t,
           silent,
           scheduleReconnect: (term: Terminal) => {
@@ -179,11 +166,11 @@ export function useTerminalSession() {
     [authData, cluster, ssoData, fetchFn, maxSessionDurationMs, setSession, t],
   );
 
-  const disconnect = useCallback(async (podName: string | null) => {
+  const disconnect = useCallback(async () => {
     if (disconnectedRef.current) return;
     disconnectedRef.current = true;
-
-    abortRef.current?.abort();
+    // TODO: run cleanup method from sessionState
+    sessionInfo.abortController?.abort();
     // Cancel scheduled reconnects so they can't revive a torn-down terminal.
     clearTimeout(reconnectTimer.current);
     reconnectTimer.current = undefined;

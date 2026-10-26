@@ -10,21 +10,25 @@ export enum ConnectionType {
 
 export type TerminalSessionState = {
   status: TerminalSessionStatus;
-  podName: string | null;
+  abortController: AbortController | null;
+  podName: string;
   errorMessage: string | null;
   command: string;
   namespace: string;
-  container?: string;
+  container: string;
   connectionType: ConnectionType;
+  deprovisionPod: () => Promise<void>;
 };
 
 export const terminalSessionAtom = atom<TerminalSessionState>({
   status: 'idle',
-  podName: null,
+  podName: '',
   errorMessage: null,
   command: 'bash',
-  container: null,
+  container: '',
   namespace: '',
   connectionType: ConnectionType.Attach,
+  abortController: null,
+  deprovisionPod: async () => {},
 });
 terminalSessionAtom.debugLabel = 'terminalSessionAtom';

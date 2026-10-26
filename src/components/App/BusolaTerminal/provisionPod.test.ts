@@ -55,6 +55,7 @@ describe('provisionPod', () => {
     await provisionPod({
       fetchFn: fetchFn as any,
       podName: POD,
+      namespace: NS,
       image: 'i',
       abortController,
     });
@@ -78,6 +79,7 @@ describe('provisionPod', () => {
     await provisionPod({
       fetchFn: fetchFn as any,
       podName: POD,
+      namespace: NS,
       image: 'i',
       abortController,
     });
@@ -96,6 +98,7 @@ describe('provisionPod', () => {
       provisionPod({
         fetchFn: fetchFn as any,
         podName: POD,
+        namespace: NS,
         image: 'i',
         abortController: aborted,
       }),
@@ -107,6 +110,7 @@ describe('provisionPod', () => {
     await provisionPod({
       fetchFn: fetchFn as any,
       podName: POD,
+      namespace: NS,
       image: 'my-registry/dev:1.2.3',
       abortController,
     });
@@ -121,6 +125,7 @@ describe('provisionPod', () => {
     await provisionPod({
       fetchFn: fetchFn as any,
       podName: POD,
+      namespace: NS,
       image: 'i',
       abortController,
     });
@@ -145,6 +150,7 @@ describe('provisionPod', () => {
       provisionPod({
         fetchFn: fetchFn as any,
         podName: POD,
+        namespace: NS,
         image: 'i',
         abortController,
       }),
@@ -158,6 +164,7 @@ describe('provisionPod', () => {
       provisionPod({
         fetchFn: fetchFn as any,
         podName: POD,
+        namespace: NS,
         image: 'i',
         abortController,
       }),
@@ -170,6 +177,7 @@ describe('provisionPod', () => {
       provisionPod({
         fetchFn: fetchFn as any,
         podName: POD,
+        namespace: NS,
         image: 'i',
         abortController,
       }),
@@ -206,6 +214,7 @@ describe('provisionPod', () => {
       provisionPod({
         fetchFn: fetchFn as any,
         podName: POD,
+        namespace: NS,
         image: 'i',
         abortController,
       }),
@@ -229,6 +238,7 @@ describe('provisionPod', () => {
     await provisionPod({
       fetchFn: fetchFn as any,
       podName: POD,
+      namespace: NS,
       image: 'i',
       abortController,
     });
@@ -257,6 +267,7 @@ describe('provisionPod', () => {
     await provisionPod({
       fetchFn: fetchFn as any,
       podName: POD,
+      namespace: NS,
       image: 'i',
       abortController,
     });
@@ -281,6 +292,7 @@ describe('provisionPod', () => {
     const provision = provisionPod({
       fetchFn: fetchFn as any,
       podName: POD,
+      namespace: NS,
       image: 'i',
       abortController,
     });
@@ -316,6 +328,7 @@ describe('provisionPod', () => {
       provisionPod({
         fetchFn: fetchFn as any,
         podName: POD,
+        namespace: NS,
         image: 'i',
         abortController: aborted,
       }),
