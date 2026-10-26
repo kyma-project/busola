@@ -51,9 +51,6 @@ cluster-overview:
     total-statefulsets: Total Stateful Sets
     unhealthy-daemonsets: Unhealthy Daemon Sets
     unhealthy-statefulsets: Unhealthy Stateful Sets
-  tooltips:
-    cpu-used-percentage: 'CPU used: {{percentage}}'
-    memory-used-percentage: 'Memory used: {{percentage}}'
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
