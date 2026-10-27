@@ -84,8 +84,7 @@ export const SortModalPanel = ({
         onItemClick={(e) => {
           setOrder(
             (e?.detail?.item?.children[0] as HTMLInputElement)?.value as
-              | 'ASC'
-              | 'DESC',
+              'ASC' | 'DESC',
           );
         }}
         accessibleName="sortOrderList"

@@ -1,5 +1,10 @@
-import { describe, expect, vi } from 'vitest';
-import { calcNodeResources } from './nodeQueries';
+import { describe, expect, vi, it, beforeEach } from 'vitest';
+import { renderHook } from '@testing-library/react';
+import { calcNodeResources, useNodesQuery } from './nodeQueries';
+
+const mockUseGet = vi.hoisted(() => vi.fn());
+
+vi.mock('shared/hooks/BackendAPI/useGet', () => ({ useGet: mockUseGet }));
 
 vi.mock('shared/components/UI5RadialChart/UI5RadialChart', () => {
   return {
@@ -139,3 +144,90 @@ function fixResources(
     },
   };
 }
+
+const node = {
+  metadata: { name: 'test-node' },
+  status: { allocatable: { cpu: '1000m', memory: '1Gi' } },
+};
+
+const runningPod = {
+  metadata: { name: 'running-pod' },
+  spec: {
+    nodeName: 'test-node',
+    containers: [{ resources: { requests: { cpu: '500m', memory: '128Mi' } } }],
+  },
+  status: { phase: 'Running' },
+};
+
+const succeededPod = {
+  metadata: { name: 'succeeded-pod' },
+  spec: {
+    nodeName: 'test-node',
+    containers: [{ resources: { requests: { cpu: '500m', memory: '128Mi' } } }],
+  },
+  status: { phase: 'Succeeded' },
+};
+
+const failedPod = {
+  metadata: { name: 'failed-pod' },
+  spec: {
+    nodeName: 'test-node',
+    containers: [{ resources: { requests: { cpu: '500m', memory: '128Mi' } } }],
+  },
+  status: { phase: 'Failed' },
+};
+
+describe('useNodesQuery request numbers', () => {
+  beforeEach(() => {
+    mockUseGet.mockImplementation((url: string) => {
+      if (url === '/api/v1/nodes') {
+        return { data: { items: [node] }, loading: false, error: null };
+      }
+      if (url === '/api/v1/pods') {
+        return { data: null, loading: true, error: null };
+      }
+      return { data: null, loading: false, error: null };
+    });
+  });
+
+  it('request values are null while pods are still loading', () => {
+    const { result } = renderHook(() => useNodesQuery());
+    expect(result.current.nodes?.[0].metrics.cpu.requestValue).toBeNull();
+    expect(result.current.nodes?.[0].metrics.memory.requestValue).toBeNull();
+  });
+
+  it('request values are computed once pods arrive', () => {
+    mockUseGet.mockImplementation((url: string) => {
+      if (url === '/api/v1/nodes') {
+        return { data: { items: [node] }, loading: false, error: null };
+      }
+      if (url === '/api/v1/pods') {
+        return { data: { items: [runningPod] }, loading: false, error: null };
+      }
+      return { data: null, loading: false, error: null };
+    });
+
+    const { result } = renderHook(() => useNodesQuery());
+    expect(result.current.nodes?.[0].metrics.cpu.requestValue).toBe(50);
+  });
+
+  it('Succeeded and Failed pods do not contribute to request values', () => {
+    mockUseGet.mockImplementation((url: string) => {
+      if (url === '/api/v1/nodes') {
+        return { data: { items: [node] }, loading: false, error: null };
+      }
+      if (url === '/api/v1/pods') {
+        return {
+          data: { items: [runningPod, succeededPod, failedPod] },
+          loading: false,
+          error: null,
+        };
+      }
+      return { data: null, loading: false, error: null };
+    });
+
+    const { result } = renderHook(() => useNodesQuery());
+    // Only runningPod (500m / 1000m = 50%) should count
+    expect(result.current.nodes?.[0].metrics.cpu.requestValue).toBe(50);
+  });
+});
