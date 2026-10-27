@@ -1,4 +1,9 @@
 export default [
+  {
+    text: 'How-To Guides',
+    collapsed: false,
+    items: [{ text: 'Managing Deployments', link: './01-50-deployments.md' }],
+  },
   { text: 'Command Palette', link: './01-20-command-palette.md' },
   { text: 'Extensibility', link: './01-30-extensibility.md' },
   {
