@@ -104,24 +104,25 @@ describe('useDeleteResource', () => {
     });
   });
 
-  it('keeps layout changes made while the delete request is running', async () => {
+  it('keeps layout updates made on the same page while the delete request is running', async () => {
     const { result, finishDelete } = startDelete();
-    const otherDeployment = {
-      resourceType: 'Deployment',
-      resourceName: 'deploy-b',
+    const filledInMidColumn = {
+      ...initialLayout.midColumn,
+      apiGroup: 'apps',
+      apiVersion: 'v1',
     };
 
     act(() =>
       result.current.setLayout((prev) => ({
         ...prev,
-        midColumn: otherDeployment,
+        midColumn: filledInMidColumn,
       })),
     );
     await finishDelete();
 
     expect(result.current.layout).toMatchObject({
       layout: 'TwoColumnsMidExpanded',
-      midColumn: otherDeployment,
+      midColumn: filledInMidColumn,
       endColumn: null,
     });
   });
