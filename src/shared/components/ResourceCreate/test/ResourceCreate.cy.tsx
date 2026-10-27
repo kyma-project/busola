@@ -81,7 +81,7 @@ describe('ResourceCreate', () => {
       },
     );
 
-    cy.get('[accessible-name="close-column"]').click({ force: true });
+    cy.get('[accessible-name="close-column"]').first().click({ force: true });
     cy.get('[data-testid="location-pathname"]')
       .invoke('text')
       .should('include', '/home');
