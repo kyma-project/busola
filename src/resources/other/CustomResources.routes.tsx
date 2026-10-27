@@ -138,9 +138,9 @@ export const ColumnWrapper = () => {
       />
     );
   }
-  if (
-    !(layoutState?.layout === 'OneColumn' && defaultColumn === 'listOfType')
-  ) {
+  if (!(
+    layoutState?.layout === 'OneColumn' && defaultColumn === 'listOfType'
+  )) {
     midColumnComponent = (
       <CustomResourcesOfType
         crdName={layoutState?.midColumn?.resourceName ?? crdName ?? ''}

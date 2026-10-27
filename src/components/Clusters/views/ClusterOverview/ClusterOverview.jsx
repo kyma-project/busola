@@ -38,7 +38,7 @@ export function ClusterOverview() {
   const currentCluster = clustersInfo?.currentCluster;
   const notification = useNotification();
   const navigate = useNavigate();
-  const { nodes, error, loading } = useNodesQuery();
+  const { nodes, pods, error, loading } = useNodesQuery();
   const {
     showDeleteDialog,
     handleResourceDelete,
@@ -116,7 +116,7 @@ export function ClusterOverview() {
               />
             </Suspense>
             <ClusterDetails currentCluster={currentCluster} />
-            <ClusterStats nodesData={nodes} />
+            <ClusterStats nodesData={nodes} podsData={pods} />
             <ClusterNodes data={nodes} error={error} loading={loading} />
             {clusterValidation?.isEnabled && <ClusterValidation />}
             <Suspense fallback={null}>
