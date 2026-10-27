@@ -3,11 +3,14 @@ apps:
 cluster-overview:
   headers:
     cluster-overview: Cluster Overview
-    cpu: CPU
-    memory: Memory
+    cpu-requests: CPU Requests
+    cpu-usage: CPU Usage
+    memory-requests: Memory Requests
+    memory-usage: Memory Usage
     metadata: Metadata
     metrics: Metrics
     nodes: Nodes
+    nodes-title: Nodes ({{count}})
   statistics:
     cpu-limits: CPU limits
     cpu-limits-tooltip: The maximum amount of CPU resources your Pods can consume. Monitor these limits to understand your cluster's resource allocation and scaling capacity. Kubernetes allows the total limits across a node to exceed 100% of physical capacity (overcommitment), which is configurable.
@@ -48,9 +51,6 @@ cluster-overview:
     total-statefulsets: Total Stateful Sets
     unhealthy-daemonsets: Unhealthy Daemon Sets
     unhealthy-statefulsets: Unhealthy Stateful Sets
-  tooltips:
-    cpu-used-percentage: 'CPU used: {{percentage}}'
-    memory-used-percentage: 'Memory used: {{percentage}}'
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
