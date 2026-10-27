@@ -6,7 +6,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useStore } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import './ResourceCreate.scss';
@@ -89,14 +89,14 @@ export const ResourceCreate = ({
   const notificationManager = useNotification();
   const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
-  const isResourceEdited = useAtomValue(isResourceEditedAtom);
+  const store = useStore();
 
   const confirmText = confirmTextProp || t('common.buttons.create');
 
   const blocker = useBlocker(({ historyAction }) => {
     const isBrowserNav = historyAction === 'POP';
 
-    return isBrowserNav && isResourceEdited.isEdited;
+    return isBrowserNav && store.get(isResourceEditedAtom).isEdited;
   });
 
   const { navigateSafely } = useFormNavigation(blocker);

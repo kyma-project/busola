@@ -11,9 +11,9 @@ export function chooseComboboxOption(selector, optionText, force = false) {
     .clear()
     .type(optionText)
     .then(($input) => {
-      // Fast typing sometimes gets partly overwritten, leaving a wrong value in the field.
-      // If that happened, set the value directly instead.
-      // TODO: remove once https://github.com/UI5/webcomponents/issues/14097 is fixed.
+      // A late popover "open" event from the previous combobox can steal focus mid-typing;
+      // this combobox's own refocus then selects the whole value and the next keys replace it.
+      // If that happened, set the value directly.
       if (!$input.val().startsWith(optionText)) {
         const input = $input[0];
         input.value = optionText;
