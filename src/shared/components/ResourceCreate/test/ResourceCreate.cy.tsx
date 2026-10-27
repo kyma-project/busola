@@ -2,6 +2,7 @@
 import { useLocation } from 'react-router';
 import { NotificationProvider } from 'shared/contexts/NotificationContext';
 import { ResourceCreate } from '../ResourceCreate';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 function LocationDisplay() {
   const location = useLocation();
@@ -63,6 +64,21 @@ describe('ResourceCreate', () => {
         <ResourceCreate {...baseProps} layoutCloseCreateUrl="/home" />
         <LocationDisplay />
       </NotificationProvider>,
+      {
+        initializeJotai: [
+          [
+            columnLayoutAtom,
+            {
+              layout: 'TwoColumnsMidExpanded',
+              startColumn: null,
+              midColumn: null,
+              endColumn: null,
+              showCreate: { resourceType: 'ConfigMap', namespaceId: 'default' },
+              showEdit: null,
+            },
+          ],
+        ],
+      },
     );
 
     cy.get('[accessible-name="close-column"]').click({ force: true });
