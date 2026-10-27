@@ -2,7 +2,7 @@ apps:
   title: Apps
 cluster-overview:
   headers:
-    btp-account: BTP Account
+    btp-account: SAP BTP Accounts
     cluster-overview: Cluster Overview
     cpu: CPU
     cpu-requests: CPU Requests
