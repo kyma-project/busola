@@ -35,9 +35,7 @@ export function ResourceFormWrapper({
   useEffect(() => {
     setInputRefs(
       Children.map(children, (_, i) => inputRefs?.[i] || createRef()) as
-        | RefObject<HTMLInputElement>[]
-        | null
-        | undefined,
+        RefObject<HTMLInputElement>[] | null | undefined,
     );
   }, [children]); // eslint-disable-line react-hooks/exhaustive-deps
 
