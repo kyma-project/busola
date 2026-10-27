@@ -25,12 +25,6 @@ const { crd, upsert } = vi.hoisted(() => ({
   upsert: vi.fn(),
 }));
 
-// ResourceForm imports these fields, and they load monaco-editor, which doesn't work in jsdom
-vi.mock('shared/ResourceForm/fields', () => ({
-  K8sNameField: () => null,
-  KeyValueField: () => null,
-}));
-
 vi.mock('shared/hooks/BackendAPI/useUpsert', () => ({
   useUpsert: () => upsert,
 }));
