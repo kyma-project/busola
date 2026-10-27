@@ -70,6 +70,26 @@ describe('ResourcesList', () => {
     cy.contains(/Connection refused/i).should('exist');
   });
 
+  describe('Actions column', () => {
+    it('shows actions column by default', () => {
+      cy.mount(<ResourcesList {...baseProps} resources={mockResources} />);
+
+      cy.get('[aria-label="actions-column"]').should('exist');
+    });
+
+    it('hides actions column when readOnly is true', () => {
+      cy.mount(
+        <ResourcesList
+          {...baseProps}
+          resources={mockResources}
+          readOnly={true}
+        />,
+      );
+
+      cy.get('[aria-label="actions-column"]').should('not.exist');
+    });
+  });
+
   describe('Create button', () => {
     it('shows create button when createResourceForm is configured', () => {
       cy.mount(

@@ -57,6 +57,20 @@ describe('ResourceCreate', () => {
       .should('eq', '/home');
   });
 
+  it('clicking the close-column button navigates to layoutCloseCreateUrl', () => {
+    cy.mount(
+      <NotificationProvider>
+        <ResourceCreate {...baseProps} layoutCloseCreateUrl="/home" />
+        <LocationDisplay />
+      </NotificationProvider>,
+    );
+
+    cy.get('[accessible-name="close-column"]').click({ force: true });
+    cy.get('[data-testid="location-pathname"]')
+      .invoke('text')
+      .should('include', '/home');
+  });
+
   it('clicking submit dispatches a form submit event', () => {
     const submitStub = cy.stub().as('submitStub');
 
