@@ -5,12 +5,17 @@ cluster-overview:
     btp-account: BTP Account
     cluster-overview: Cluster Overview
     cpu: CPU
+    cpu-requests: CPU Requests
+    cpu-usage: CPU Usage
     infrastructure: Infrastructure
     memory: Memory
+    memory-requests: Memory Requests
+    memory-usage: Memory Usage
     metadata: Metadata
     metrics: Metrics
     network: Network
     nodes: Nodes
+    nodes-title: Nodes ({{count}})
   statistics:
     cpu-limits: CPU limits
     cpu-limits-tooltip: The maximum amount of CPU resources your Pods can consume. Monitor these limits to understand your cluster's resource allocation and scaling capacity. Kubernetes allows the total limits across a node to exceed 100% of physical capacity (overcommitment), which is configurable.
@@ -51,9 +56,6 @@ cluster-overview:
     total-statefulsets: Total Stateful Sets
     unhealthy-daemonsets: Unhealthy Daemon Sets
     unhealthy-statefulsets: Unhealthy Stateful Sets
-  tooltips:
-    cpu-used-percentage: 'CPU used: {{percentage}}'
-    memory-used-percentage: 'Memory used: {{percentage}}'
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
@@ -388,7 +390,9 @@ common:
     discard-changes-warning: You haven't saved your changes. Navigating out will discard them.
     error: 'Error: {{error}}'
     fill-required-data: Fill the remaining required data.
+    invalid-content-fields: 'Correct the content of: {{fields}}'
     must-fill-required: You must fill in all required data.
+    must-fill-required-fields: 'Fill in required fields: {{fields}}'
     no-entries-found: No entries found
     no-instances-found: No matching {{value}} found
     no-instances-found-namespace: No matching {{value}} found in this Namespace

@@ -29,9 +29,13 @@ type ClusterStatsProps = {
       allocatable: any;
     };
   }[];
+  podsData: Record<string, any>[] | null;
 };
 
-export default function ClusterStats({ nodesData }: ClusterStatsProps) {
+export default function ClusterStats({
+  nodesData,
+  podsData,
+}: ClusterStatsProps) {
   const { t } = useTranslation();
 
   const cpu = { usage: 0, capacity: 0 };
@@ -45,10 +49,6 @@ export default function ClusterStats({ nodesData }: ClusterStatsProps) {
       memory.capacity += node?.metrics?.memory?.capacity ?? 0;
     }
   }
-
-  const { data: podsData } = useGetList()(`/api/v1/pods`, {
-    pollingInterval: 3200,
-  } as any) as { data: Record<string, any>[] | null };
 
   const { data: deploymentsData } = useGetList()('/apis/apps/v1/deployments', {
     pollingInterval: 3200,
