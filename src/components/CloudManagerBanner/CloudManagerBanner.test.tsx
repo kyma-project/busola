@@ -16,15 +16,15 @@ vi.mock('shared/components/FeatureCard/FeatureCard', () => ({
 }));
 
 describe('CloudManagerBanner', () => {
-  it('renders nothing for non-SAP users', () => {
-    vi.mocked(useCheckSAPUser).mockReturnValue(false);
-    const { container } = render(<CloudManagerBanner />);
-    expect(container.firstChild).toBeNull();
-  });
-
   it('renders the banner for SAP users', () => {
     vi.mocked(useCheckSAPUser).mockReturnValue(true);
     render(<CloudManagerBanner />);
     expect(screen.getByText('cloud-manager.banner.title')).toBeInTheDocument();
+  });
+
+  it('renders nothing for non-SAP users', () => {
+    vi.mocked(useCheckSAPUser).mockReturnValue(false);
+    const { container } = render(<CloudManagerBanner />);
+    expect(container.firstChild).toBeNull();
   });
 });
