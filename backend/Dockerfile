@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM --platform=$BUILDPLATFORM node:26.12.1-alpine3.24 AS builder
+FROM --platform=$BUILDPLATFORM node:26.12-alpine3.24 AS builder
 WORKDIR /app
 COPY . .
 RUN npm ci
@@ -8,7 +8,7 @@ RUN npm ci
 RUN npm run build
 
 # ---- Serve ----
-FROM node:26.12.1-alpine3.24
+FROM node:26.12-alpine3.24
 
 WORKDIR /app
 
