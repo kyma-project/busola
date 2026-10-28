@@ -1,4 +1,4 @@
-import { Form, FormGroup } from '@ui5/webcomponents-react';
+import { Form } from '@ui5/webcomponents-react';
 import { Widget } from './Widget';
 import './Columns.scss';
 
@@ -8,25 +8,43 @@ interface ColumnsProps {
 }
 
 export function Columns({ structure, ...props }: ColumnsProps) {
-  const allFormGroups = (structure.children || []).every(
+  const children = structure.children || [];
+  const allFormGroups = children.every(
     (child: any) => child.widget === 'FormGroup',
   );
-  const layout = allFormGroups ? 'S1 M2 L2 XL2' : 'S1 M1 L2 XL2';
+
+  if (allFormGroups) {
+    return (
+      <Form
+        className="extensibility-columns"
+        layout="S1 M2 L2 XL2"
+        labelSpan="S12 M4 L4 XL4"
+        data-testid="extensibility-columns"
+      >
+        {children.map((child: any) => (
+          <Widget
+            key={`form-group-${child.path || child.name}`}
+            structure={child}
+            nestedInColumns
+            {...props}
+          />
+        ))}
+      </Form>
+    );
+  }
 
   return (
-    <Form
-      className="extensibility-columns"
-      layout={layout}
+    <div
+      className="extensibility-columns-grid"
       data-testid="extensibility-columns"
     >
-      {(structure.children || []).map((child: any) => (
+      {children.map((child: any) => (
         <Widget
           key={`form-group-${child.path || child.name}`}
           structure={child}
-          wrapper={FormGroup}
           {...props}
         />
       ))}
-    </Form>
+    </div>
   );
 }
