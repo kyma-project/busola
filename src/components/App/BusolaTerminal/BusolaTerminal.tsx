@@ -42,7 +42,10 @@ export function BusolaTerminal({
   }, [cluster?.name, setShowTerminal, disconnect, isOnClustersPage]);
 
   useEffect(() => {
-    if (sessionState.status !== 'provisioned') {
+    if (
+      sessionState.status !== 'provisioned' &&
+      sessionState.status !== 'reconnecting'
+    ) {
       return;
     }
 
@@ -77,7 +80,10 @@ export function BusolaTerminal({
     observer.observe(termDOM.current);
 
     return () => {
-      if (sessionState.status === 'provisioned') {
+      if (
+        sessionState.status === 'provisioned' ||
+        sessionState.status === 'reconnecting'
+      ) {
         return;
       }
       observer.disconnect();
