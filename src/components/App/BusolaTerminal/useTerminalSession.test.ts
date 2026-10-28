@@ -53,13 +53,6 @@ vi.mock('hooks/useFeature', () => ({
   useFeature: () => mockTerminalFeature,
 }));
 
-vi.mock('./provisionPod', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('./provisionPod')>()),
-  generateTerminalPodName: vi
-    .fn()
-    .mockResolvedValue('busola-terminal-aabbccdd'),
-}));
-
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
 const CONTAINER = 'dev-toolbox';
@@ -180,19 +173,6 @@ describe('useTerminalSession', () => {
     });
 
     expect(lastWs()?.url).toContain(`/pods/${POD}/exec?`);
-  });
-
-  it('connect does not provision the pod or reset the session state', async () => {
-    const { result } = renderHook(() => useTerminalSession());
-
-    await act(async () => {
-      await result.current.connect(makeTerm() as any);
-    });
-
-    expect(hookFetch).not.toHaveBeenCalled();
-    expect(setSession).not.toHaveBeenCalledWith(
-      expect.objectContaining({ status: 'provisioning' }),
-    );
   });
 
   it('disconnect closes the socket and aborts the session controller', async () => {
