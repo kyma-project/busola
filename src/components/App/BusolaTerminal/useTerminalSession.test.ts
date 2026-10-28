@@ -28,7 +28,6 @@ vi.mock('jotai', async (importOriginal) => ({
     if (a?.id === 'sso') return null;
     return undefined;
   },
-  // connect/disconnect read session state via useAtom(terminalSessionAtom).
   useAtom: (a: any) => {
     if (a?.id === 'session') return [mockSessionInfo, setSession];
     return [undefined, setSession];
@@ -190,8 +189,6 @@ describe('useTerminalSession', () => {
       await result.current.connect(makeTerm() as any);
     });
 
-    // Provisioning moved to createBusolaTerminalPod; connect must not fetch
-    // against the API nor reset the session to a provisioning state.
     expect(hookFetch).not.toHaveBeenCalled();
     expect(setSession).not.toHaveBeenCalledWith(
       expect.objectContaining({ status: 'provisioning' }),
@@ -225,7 +222,6 @@ describe('useTerminalSession', () => {
       await result.current.disconnect();
     });
 
-    // Pod lifecycle (DELETE) is owned elsewhere now, not by disconnect.
     const deleteCalls = hookFetch.mock.calls.filter(
       ([arg]: any) => arg?.init?.method === 'DELETE',
     );
@@ -244,7 +240,6 @@ describe('useTerminalSession', () => {
       await result.current.disconnect();
     });
 
-    // disconnectedRef guards against a double teardown.
     expect(abortSpy).toHaveBeenCalledTimes(1);
   });
 
