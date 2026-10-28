@@ -104,7 +104,6 @@ export function useTerminalSession() {
         wsRef.current.close();
         wsRef.current = null;
       }
-      console.log('Connecting', sessionInfo);
       clearTimeout(proactiveReconnectTimer.current);
       proactiveReconnectTimer.current = undefined;
 

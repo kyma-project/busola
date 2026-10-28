@@ -42,7 +42,6 @@ export function BusolaTerminal({
   }, [cluster?.name, setShowTerminal, disconnect, isOnClustersPage]);
 
   useEffect(() => {
-    console.log('status changed to:', sessionState.status);
     if (sessionState.status !== 'provisioned') {
       return;
     }
@@ -56,7 +55,6 @@ export function BusolaTerminal({
     term.loadAddon(fitAddon);
     term.open(termDOM.current);
     fitAddon.fit();
-    console.log(sessionState.status);
 
     connect(term);
 
