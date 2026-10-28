@@ -1,4 +1,4 @@
-import { RefObject, useCallback, useRef } from 'react';
+import { RefObject, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtom, useAtomValue } from 'jotai';
 import { Terminal } from '@xterm/xterm';
@@ -87,6 +87,10 @@ export function useTerminalSession() {
   const proactiveReconnectTimer = useRef<NodeJS.Timeout>(undefined);
   const attemptRef = useRef(0);
 
+  const connectRef = useRef<
+    (term: Terminal, silent?: boolean) => Promise<void>
+  >(() => Promise.resolve());
+
   const connect = useCallback(
     async (term: Terminal, silent = false) => {
       disconnectedRef.current = false;
@@ -125,7 +129,14 @@ export function useTerminalSession() {
             // A real drop cancels the pending proactive cycle.
             clearTimeout(proactiveReconnectTimer.current);
             proactiveReconnectTimer.current = undefined;
-            reconnect(attemptRef, term, t, setSession, reconnectTimer, connect);
+            reconnect(
+              attemptRef,
+              term,
+              t,
+              setSession,
+              reconnectTimer,
+              connectRef.current,
+            );
           },
           onConnected: () => {
             attemptRef.current = 0;
@@ -142,7 +153,7 @@ export function useTerminalSession() {
                 maxSessionDurationMs - PROACTIVE_RECONNECT_SAFETY_BUFFER_MS;
               proactiveReconnectTimer.current = setTimeout(() => {
                 proactiveReconnectTimer.current = undefined;
-                connect(term, true);
+                connectRef.current(term, true);
               }, delay);
             }
           },
@@ -173,6 +184,9 @@ export function useTerminalSession() {
       t,
     ],
   );
+  useEffect(() => {
+    connectRef.current = connect;
+  }, [connect]);
 
   // Only the teardown fields are read here; depending on them (not the whole
   // sessionInfo) keeps disconnect's identity stable across status/errorMessage
