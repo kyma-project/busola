@@ -10,6 +10,9 @@ import { Label } from '../../ResourceForm/components/Label';
 import { ComponentProps, useState } from 'react';
 
 export const k8sNamePattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
+// Kubernetes DNS subdomain naming (RFC 1123): allows dots in addition to hyphens,
+// used for resource types like Secrets whose names can contain dots.
+export const k8sDnsSubdomainPattern = '^[a-z0-9]([a-z0-9.\\-]*[a-z0-9])?$';
 
 type K8sNameInputProps = {
   id?: string;

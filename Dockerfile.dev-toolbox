@@ -3,11 +3,11 @@ FROM alpine:3.24
 RUN apk update
 
 RUN apk add --no-cache \
-      curl \
       bash \
       jq 
 
 RUN apk add yq --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community
+RUN apk add curl --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main
 
 # Upgrade all packages and clean up
 RUN apk upgrade --no-cache

@@ -56,7 +56,4 @@ export interface I18nInterfaces {
 }
 
 export type LayoutColumnName =
-  | 'startColumn'
-  | 'midColumn'
-  | 'endColumn'
-  | undefined;
+  'startColumn' | 'midColumn' | 'endColumn' | undefined;

@@ -26,8 +26,10 @@ import { resolveOpener } from 'header/helpers';
 
 export default function FeedbackPopover({
   shellbarRef,
+  isSearchOpen,
 }: {
   shellbarRef: RefObject<ShellBarDomRef | null>;
+  isSearchOpen: boolean;
 }) {
   const { isEnabled: isFeedbackEnabled, config: kymaFeedbackConfig } =
     useFeature(configFeaturesNames.FEEDBACK);
@@ -108,7 +110,7 @@ export default function FeedbackPopover({
       {createPortal(
         <Popover
           opener={opener}
-          open={feedbackOpen}
+          open={feedbackOpen && !isSearchOpen}
           onClose={() => setFeedbackOpen(false)}
           horizontalAlign="End"
           placement="Bottom"

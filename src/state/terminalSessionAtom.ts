@@ -1,11 +1,7 @@
 import { atom } from 'jotai';
 
 export type TerminalSessionStatus =
-  | 'idle'
-  | 'provisioning'
-  | 'connected'
-  | 'error'
-  | 'reconnecting';
+  'idle' | 'provisioning' | 'connected' | 'error' | 'reconnecting';
 
 export type TerminalSessionState = {
   status: TerminalSessionStatus;
