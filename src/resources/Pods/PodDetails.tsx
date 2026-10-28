@@ -179,7 +179,10 @@ export function PodDetails({
   return (
     <ResourceDetails
       headerActions={
-        <Button onClick={() => setExecDialogOpen(true)}>
+        <Button
+          icon="command-line-interfaces"
+          onClick={() => setExecDialogOpen(true)}
+        >
           {t('terminal.exec.open')}
         </Button>
       }

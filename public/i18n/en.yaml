@@ -1559,7 +1559,7 @@ terminal:
     command: Command
     container: Container
     exec: Exec
-    open: Exec into pod
+    open: Exec
     title: Exec options
   messages:
     closed: Connection closed.

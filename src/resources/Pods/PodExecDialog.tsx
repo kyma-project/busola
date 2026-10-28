@@ -4,16 +4,17 @@ import {
   Dialog,
   Form,
   FormItem,
+  Icon,
   Input,
   Option,
   Select,
 } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { Label } from 'shared/ResourceForm/components/Label';
-import InputType from '@ui5/webcomponents/types/InputType';
 import { useState } from 'react';
 import { useSetAtom } from 'jotai';
 import { ConnectionType, terminalSessionAtom } from 'state/terminalSessionAtom';
+import InputType from '@ui5/webcomponents/types/InputType';
 
 export type PodExecDialogProps = {
   open: boolean;
@@ -21,9 +22,8 @@ export type PodExecDialogProps = {
   launchTerminal: Function;
   podResource: Record<any, any>;
 };
-// TODO:
-// Pod name, namespace, to which container container?
 
+const DEFAULT_COMMAND = 'sh';
 export function PodExecDialog({
   open,
   close,
@@ -31,17 +31,16 @@ export function PodExecDialog({
   podResource,
 }: PodExecDialogProps) {
   const setTerminalSession = useSetAtom(terminalSessionAtom);
-
   const { t } = useTranslation();
-
-  const [container, setContainer] = useState('');
-  const [command, setCommand] = useState('');
-  const podName = podResource.metadata.name;
-  const namespace = podResource.metadata.namespace;
   const containersNames = podResource.spec.containers.map(
     (container: { name: any }) => container.name,
   );
-  const selectedContainer = container || containersNames[0];
+
+  const [container, setContainer] = useState(containersNames[0] || '');
+  const [command, setCommand] = useState(DEFAULT_COMMAND);
+  const podName = podResource.metadata.name;
+  const namespace = podResource.metadata.namespace;
+
   return (
     <Dialog
       headerText={t('terminal.exec.title')}
@@ -51,8 +50,11 @@ export function PodExecDialog({
           <Button
             onClick={() => {
               setTerminalSession({
+                status: 'provisioned',
+                abortController: null,
+                deprovisionPod: async () => {},
                 podName: podName,
-                container: selectedContainer,
+                container: container,
                 command,
                 namespace: namespace,
                 connectionType: ConnectionType.Exec,
@@ -77,8 +79,10 @@ export function PodExecDialog({
         </FormItem>
         <FormItem labelContent={<Label>{t('terminal.exec.container')}</Label>}>
           <Select
-            onSelect={(e) => setContainer(e.details.selectedOption.value)}
-            defaultValue={selectedContainer}
+            onChange={(event) =>
+              setContainer(event.detail.selectedOption.value)
+            }
+            defaultValue={container}
           >
             {containersNames.map((name: string) => (
               <Option key={name} value={name}>

@@ -17,7 +17,7 @@ export type TerminalSessionState = {
   status: TerminalSessionStatus;
   abortController: AbortController | null;
   podName: string;
-  errorMessage: string | null;
+  errorMessage?: string | null;
   command: string;
   namespace: string;
   container: string;
