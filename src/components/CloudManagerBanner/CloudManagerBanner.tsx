@@ -1,5 +1,6 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
+import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
 
 const CLOUD_MANAGER_URL =
@@ -7,6 +8,9 @@ const CLOUD_MANAGER_URL =
 
 export function CloudManagerBanner() {
   const { t } = useTranslation();
+  const isSapUser = useCheckSAPUser();
+
+  if (!isSapUser) return null;
 
   const buttons = (
     <Button
