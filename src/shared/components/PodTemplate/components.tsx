@@ -214,7 +214,10 @@ function VolumeComponent({ volume }: { volume: any }) {
   return (
     <>
       <ListItemGroup headerText={name} />
-      <PodTemplateRow label="Type" component={<Text>{typeLabel}</Text>} />
+      <PodTemplateRow
+        label={t('common.labels.type')}
+        component={<Text>{typeLabel}</Text>}
+      />
       {k8sResource && (
         <PodTemplateRow
           label={t('common.headers.resource')}
