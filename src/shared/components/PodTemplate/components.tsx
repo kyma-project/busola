@@ -14,7 +14,6 @@ import {
   Text,
   Title,
 } from '@ui5/webcomponents-react';
-import { Labels } from '../Labels/Labels';
 import { PodTemplateRow } from './PodTemplateRow';
 import { Link } from '../Link/Link';
 
@@ -170,18 +169,12 @@ function ContainerComponent({ container }: ContainerComponentProps) {
 
 interface VolumesPanelProps {
   title: string;
-  labels: Record<string, string>;
   volumes: any[];
 }
 
-export function VolumesPanel({ title, labels, volumes }: VolumesPanelProps) {
-  const { t } = useTranslation();
+export function VolumesPanel({ title, volumes }: VolumesPanelProps) {
   return (
     <List headerText={title}>
-      <PodTemplateRow
-        label={t('common.headers.labels')}
-        component={<Labels labels={labels} />}
-      />
       {volumes.map((volume) => (
         <VolumeComponent key={volume.name} volume={volume} />
       ))}

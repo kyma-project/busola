@@ -40,7 +40,6 @@ export function PodTemplate({ template }: { template: any }) {
       {template.spec.volumes && (
         <VolumesPanel
           title={t('pods.labels.volumes')}
-          labels={template.metadata.labels}
           volumes={template.spec.volumes}
         />
       )}
