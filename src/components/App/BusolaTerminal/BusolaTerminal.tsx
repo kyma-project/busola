@@ -5,7 +5,10 @@ import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { Button, Card, Title } from '@ui5/webcomponents-react';
 import { showTerminalAtom } from 'state/showTerminalAtom';
-import { terminalSessionAtom } from 'state/terminalSessionAtom';
+import {
+  terminalSessionAtom,
+  TerminalSessionStatus,
+} from 'state/terminalSessionAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { useAtom, useAtomValue } from 'jotai';
 import { attachThemeLoaded, detachThemeLoaded } from '@ui5/webcomponents-base';
@@ -75,6 +78,13 @@ export function BusolaTerminal({
   }, [cluster?.name, setShowTerminal, disconnect, isOnClustersPage]);
 
   useEffect(() => {
+    if (
+      sessionInfo.status !== TerminalSessionStatus.Provisioned &&
+      sessionInfo.status !== TerminalSessionStatus.Reconnecting
+    ) {
+      return;
+    }
+
     if (!termDOM?.current) return;
     switch (sessionInfo.status) {
       case 'reconnecting': {
@@ -144,17 +154,20 @@ export function BusolaTerminal({
 
   let statusLabel: string | null;
   switch (sessionInfo.status) {
-    case 'provisioning':
+    case TerminalSessionStatus.Recreating:
+      statusLabel = t('terminal.status.recreating');
+      break;
+    case TerminalSessionStatus.Provisioning:
       statusLabel = t('terminal.status.provisioning');
       break;
-    case 'provisioned':
+    case TerminalSessionStatus.Provisioned:
       statusLabel = t('terminal.status.connecting');
       break;
-    case 'error':
+    case TerminalSessionStatus.Error:
       console.warn('Terminal state is in error:', sessionInfo.errorMessage);
       statusLabel = t('terminal.status.error');
       break;
-    case 'reconnecting':
+    case TerminalSessionStatus.Reconnecting:
       statusLabel = t('terminal.status.reconnecting');
       break;
     default:
@@ -188,17 +201,6 @@ export function BusolaTerminal({
                   }))
                 }
               />
-              {/*TODO: Initial changes are ready (docking, undocking). It will be improved (e.g. moving undocked terminal) in the next task. */}
-              {/* <Button
-                design="Transparent"
-                icon={showTerminal.isDocked ? 'pushpin-on' : 'pushpin-off'}
-                onClick={() =>
-                  setShowTerminal((prev) => ({
-                    ...prev,
-                    isDocked: !prev.isDocked,
-                  }))
-                }
-              /> */}
               <Button
                 design="Transparent"
                 accessibleName="close-terminal"

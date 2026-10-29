@@ -3,6 +3,7 @@ import { getClusterConfig } from 'state/utils/getBackendInfo';
 import {
   ConnectionType,
   TerminalSessionState,
+  TerminalSessionStatus,
 } from 'state/terminalSessionAtom';
 import { encodeBase64Url } from 'shared/utils/base64url';
 import { TFunction } from 'i18next';
@@ -126,7 +127,10 @@ export async function connectToPod({
     if (signal?.aborted) return;
     sendResize(ws, term.cols, term.rows);
     if (!silent) {
-      setSession((prev) => ({ ...prev, status: 'connected' }));
+      setSession((prev) => ({
+        ...prev,
+        status: TerminalSessionStatus.Connected,
+      }));
       term.write(
         terminalSystemMessage(COLOR_SUCCESS, t('terminal.messages.connected')),
       );
@@ -152,10 +156,16 @@ export async function connectToPod({
           t('terminal.messages.connection-lost'),
         ),
       );
-      setSession((prev) => ({ ...prev, status: 'reconnecting' }));
+      setSession((prev) => ({
+        ...prev,
+        status: TerminalSessionStatus.Reconnecting,
+      }));
       scheduleReconnect(term);
     } else {
-      setSession((prev) => ({ ...prev, status: 'idle' }));
+      setSession((prev) => ({
+        ...prev,
+        status: TerminalSessionStatus.Idle,
+      }));
       if (event.reason) {
         term.write(terminalSystemMessage(COLOR_ERROR, event.reason));
       }
@@ -169,7 +179,7 @@ export async function connectToPod({
     if (signal?.aborted) return;
     setSession((prev) => ({
       ...prev,
-      status: 'error',
+      status: TerminalSessionStatus.Error,
       errorMessage: t('terminal.messages.connection-error'),
     }));
   };

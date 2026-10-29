@@ -1,17 +1,25 @@
 import { atom } from 'jotai';
 
-export type TerminalSessionStatus =
-  | 'idle'
-  | 'provisioning'
-  | 'provisioned'
-  | 'connected'
-  | 'error'
-  | 'reconnecting';
+export const TerminalSessionStatus = {
+  Idle: 'idle',
+  Provisioning: 'provisioning',
+  Provisioned: 'provisioned',
+  Connected: 'connected',
+  Error: 'error',
+  Reconnecting: 'reconnecting',
+  Recreating: 'recreating',
+} as const;
 
-export enum ConnectionType {
-  Attach = 'attach',
-  Exec = 'exec',
-}
+export type TerminalSessionStatus =
+  (typeof TerminalSessionStatus)[keyof typeof TerminalSessionStatus];
+
+export const ConnectionType = {
+  Attach: 'attach',
+  Exec: 'exec',
+} as const;
+
+export type ConnectionType =
+  (typeof ConnectionType)[keyof typeof ConnectionType];
 
 export type TerminalSessionState = {
   status: TerminalSessionStatus;
@@ -26,7 +34,7 @@ export type TerminalSessionState = {
 };
 
 export const terminalSessionAtom = atom<TerminalSessionState>({
-  status: 'idle',
+  status: TerminalSessionStatus.Idle,
   podName: '',
   errorMessage: null,
   command: 'bash',

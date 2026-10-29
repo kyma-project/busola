@@ -41,6 +41,7 @@ describe('generateTerminalPodName', () => {
 
 describe('provisionPod', () => {
   const abortController = new AbortController();
+  const setSession = vi.fn();
 
   function podFetch(phase = 'Running') {
     return vi.fn<FetchFn>(({ relativeUrl, init }) => {
@@ -60,6 +61,7 @@ describe('provisionPod', () => {
       image: 'i',
       containerName: 'name',
       abortController,
+      setSession,
     });
 
     expect(fetchFn).toHaveBeenCalledWith(
@@ -85,6 +87,7 @@ describe('provisionPod', () => {
       image: 'i',
       containerName: 'name',
       abortController,
+      setSession,
     });
 
     expect(fetchFn).toHaveBeenCalled();
@@ -105,6 +108,7 @@ describe('provisionPod', () => {
         image: 'i',
         containerName: 'name',
         abortController: aborted,
+        setSession,
       }),
     ).rejects.toMatchObject({ name: 'AbortError' });
   });
@@ -118,6 +122,7 @@ describe('provisionPod', () => {
       image: 'my-registry/dev:1.2.3',
       containerName: 'name',
       abortController,
+      setSession,
     });
     const podCall = fetchFn.mock.calls.find(([arg]: any) =>
       arg.relativeUrl.endsWith('/pods'),
@@ -134,6 +139,7 @@ describe('provisionPod', () => {
       image: 'i',
       containerName: 'name',
       abortController,
+      setSession,
     });
     const podCall = fetchFn.mock.calls.find(([arg]: any) =>
       arg.relativeUrl.endsWith('/pods'),
@@ -160,6 +166,7 @@ describe('provisionPod', () => {
         image: 'i',
         containerName: 'name',
         abortController,
+        setSession,
       }),
     ).resolves.toBeUndefined();
   });
@@ -175,6 +182,7 @@ describe('provisionPod', () => {
         image: 'i',
         containerName: 'name',
         abortController,
+        setSession,
       }),
     ).rejects.toBe(boom);
   });
@@ -189,6 +197,7 @@ describe('provisionPod', () => {
         image: 'i',
         containerName: 'name',
         abortController,
+        setSession,
       }),
     ).rejects.toThrow(/Failed/);
   });
@@ -227,6 +236,7 @@ describe('provisionPod', () => {
         image: 'i',
         containerName: 'name',
         abortController,
+        setSession,
       }),
     ).resolves.toBeUndefined();
 
@@ -252,6 +262,7 @@ describe('provisionPod', () => {
       image: 'i',
       containerName: 'name',
       abortController,
+      setSession,
     });
 
     // One pre-check GET + one pollPodReady GET — no deletion-wait loop
@@ -282,6 +293,7 @@ describe('provisionPod', () => {
       image: 'i',
       containerName: 'name',
       abortController,
+      setSession,
     });
 
     expect(getCallCount).toBe(2);
@@ -308,6 +320,7 @@ describe('provisionPod', () => {
       image: 'i',
       containerName: 'name',
       abortController,
+      setSession,
     });
     const assertion = expect(provision).rejects.toThrow(
       'Timed out waiting for terminal pod to finish terminating.',
@@ -345,6 +358,7 @@ describe('provisionPod', () => {
         image: 'i',
         containerName: 'name',
         abortController: aborted,
+        setSession,
       }),
     ).rejects.toMatchObject({ name: 'AbortError' });
   });

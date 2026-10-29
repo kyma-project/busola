@@ -1,9 +1,17 @@
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
+import { SetStateAction } from 'jotai';
+import {
+  TerminalSessionState,
+  TerminalSessionStatus,
+} from 'state/terminalSessionAtom';
 
 const POD_TTL_MS = 60 * 60 * 1000;
 const POD_POLL_INTERVAL_MS = 2000;
 const POD_POLL_TIMEOUT_MS = 120_000;
+
+const TERMINAL_POD_LABEL_KEY = 'run';
+const TERMINAL_POD_LABEL_VALUE = 'busola-terminal';
 
 export async function generateTerminalPodName(
   clusterServer: string,
@@ -30,7 +38,7 @@ function buildPodManifest(
     metadata: {
       name: podName,
       namespace,
-      labels: { run: 'busola-terminal' },
+      labels: { [TERMINAL_POD_LABEL_KEY]: TERMINAL_POD_LABEL_VALUE },
       annotations: { 'busola.io/time-to-live': ttl },
     },
     spec: {
@@ -53,6 +61,9 @@ function buildPodManifest(
               name: 'PROMPT_COMMAND',
               value: 'printf "%*s\\r" "${COLUMNS:-80}" ""',
             },
+            // It's timeout for Bash to logout user after time of inactivity.
+            // Gluing it with policy Restart: never will make the pod to go `Completed` and nothing left running will be on th cluster.
+            { name: 'TMOUT', value: '5' },
           ],
         },
       ],
@@ -83,15 +94,13 @@ async function createIfMissing(
   }
 }
 
-// Waits until a pod that is currently Terminating (has deletionTimestamp) is
-// fully deleted. If the pod does not exist or is not terminating, returns
-// immediately. The caller should re-create the pod afterwards.
 async function waitIfTerminating(
   fetchFn: FetchFn,
   podName: string,
   namespace: string,
   abortController: AbortController,
   deadline: number,
+  setSession: (update: SetStateAction<TerminalSessionState>) => void,
 ): Promise<void> {
   const podUrl = `/api/v1/namespaces/${namespace}/pods/${podName}`;
   let isTerminating: boolean;
@@ -104,6 +113,7 @@ async function waitIfTerminating(
     throw err;
   }
   if (!isTerminating) return;
+  setSession((prev) => ({ ...prev, status: TerminalSessionStatus.Recreating }));
 
   while (Date.now() < deadline) {
     if (abortController.signal.aborted)
@@ -146,6 +156,43 @@ async function pollPodReady(
   throw new Error('Timed out waiting for terminal pod to become ready.');
 }
 
+export async function cleanupAllCompletedTerminals({
+  fetchFn,
+  namespace,
+}: {
+  fetchFn: FetchFn;
+  namespace: string;
+}): Promise<void> {
+  try {
+    const query = new URLSearchParams({
+      labelSelector: `${TERMINAL_POD_LABEL_KEY}=${TERMINAL_POD_LABEL_VALUE}`,
+    });
+    const res = await fetchFn({
+      relativeUrl: `/api/v1/namespaces/${namespace}/pods?${query}`,
+    });
+    const podList = await res.json();
+    const completedPods = (podList?.items ?? []).filter(
+      (pod: any) => pod?.status?.phase === 'Succeeded',
+    );
+
+    await Promise.all(
+      completedPods.map(async (pod: any) => {
+        const name = pod?.metadata?.name;
+        try {
+          await fetchFn({
+            relativeUrl: `/api/v1/namespaces/${namespace}/pods/${name}`,
+            init: { method: 'DELETE' },
+          });
+        } catch (err) {
+          console.warn(`Failed to delete completed terminal pod ${name}:`, err);
+        }
+      }),
+    );
+  } catch (err) {
+    console.warn('Failed to clean up completed terminal pods:', err);
+  }
+}
+
 export async function provisionPod({
   fetchFn,
   podName,
@@ -153,6 +200,7 @@ export async function provisionPod({
   namespace,
   containerName,
   abortController,
+  setSession,
 }: {
   fetchFn: FetchFn;
   podName: string;
@@ -160,6 +208,7 @@ export async function provisionPod({
   namespace: string;
   containerName: string;
   abortController: AbortController;
+  setSession: (update: SetStateAction<TerminalSessionState>) => void;
 }): Promise<void> {
   const deadline = Date.now() + POD_POLL_TIMEOUT_MS;
   await createIfMissing(
@@ -178,6 +227,7 @@ export async function provisionPod({
     namespace,
     abortController,
     deadline,
+    setSession,
   );
   await createIfMissing(
     fetchFn,

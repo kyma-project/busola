@@ -11,6 +11,7 @@ import { configFeaturesNames, TerminalFeature } from 'state/types';
 import {
   terminalSessionAtom,
   TerminalSessionState,
+  TerminalSessionStatus,
 } from 'state/terminalSessionAtom';
 import {
   COLOR_ERROR,
@@ -44,7 +45,7 @@ const reconnect = (
         t('terminal.messages.reconnect-failed'),
       ),
     );
-    setSession((prev) => ({ ...prev, status: 'error' }));
+    setSession((prev) => ({ ...prev, status: TerminalSessionStatus.Error }));
     return;
   }
 
@@ -164,7 +165,7 @@ export function useTerminalSession() {
         const message = err?.message ?? t('terminal.messages.unknown-error');
         setSessionInfo((prev: TerminalSessionState) => ({
           ...prev,
-          status: 'error',
+          status: TerminalSessionStatus.Error,
           errorMessage: message,
         }));
         term.write(

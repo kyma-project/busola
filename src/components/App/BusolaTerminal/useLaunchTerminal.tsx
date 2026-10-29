@@ -121,6 +121,7 @@ async function createBusolaTerminalPod(
       namespace,
       containerName,
       abortController,
+      setSession,
     });
   } catch (e) {
     abortController.abort(e);
