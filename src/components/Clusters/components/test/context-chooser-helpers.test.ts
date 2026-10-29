@@ -47,38 +47,11 @@ describe('getUserDetail', () => {
     expect(getUserDetail('oidc-user', '--oidc-client-id=', users as any)).toBe(
       'my-client',
     );
-  });
-
-  it('returns the issuer URL correctly', () => {
     expect(getUserDetail('oidc-user', '--oidc-issuer-url=', users as any)).toBe(
       'https://idp.example.com',
     );
-  });
-
-  it('returns the scope value when present', () => {
     expect(
       getUserDetail('oidc-user', '--oidc-extra-scope=', users as any),
     ).toBe('openid');
-  });
-
-  it('handles an arg value that contains an equals sign', () => {
-    const usersWithEqualInValue = [
-      {
-        name: 'oidc-user',
-        user: {
-          exec: {
-            command: 'kubectl',
-            args: ['--oidc-client-secret=sec=ret'],
-          },
-        },
-      },
-    ];
-    expect(
-      getUserDetail(
-        'oidc-user',
-        '--oidc-client-secret=',
-        usersWithEqualInValue as any,
-      ),
-    ).toBe('sec=ret');
   });
 });

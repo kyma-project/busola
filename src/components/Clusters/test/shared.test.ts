@@ -29,33 +29,31 @@ const makeKubeconfig = (
   ...overrides,
 });
 
-// ─── getContext ───────────────────────────────────────────────────────────────
-
 describe('getContext', () => {
   it('returns first cluster and user when contexts array is empty', () => {
+    //given
     const kubeconfig = makeKubeconfig({ contexts: [], 'current-context': '' });
+    //when
     const result = getContext(kubeconfig, '');
+    //then
     expect(result.cluster).toEqual(kubeconfig.clusters[0]);
     expect(result.user).toEqual(kubeconfig.users[0]);
   });
 
   it('returns first cluster and user when no current-context is set', () => {
+    //given
     const kubeconfig = makeKubeconfig({ contexts: [], 'current-context': '' });
+    //when
     const result = getContext(kubeconfig, '');
+    //then
     expect(result.cluster?.name).toBe('dev-cluster');
     expect(result.user?.name).toBe('dev-user');
   });
 
-  it('returns correct cluster and user for a named context', () => {
+  it('returns correct cluster, user, and namespace for a named context', () => {
+    //given
     const kubeconfig = makeKubeconfig();
-    const result = getContext(kubeconfig, 'dev');
-    expect(result.cluster?.name).toBe('dev-cluster');
-    expect(result.user?.name).toBe('dev-user');
-    expect(result.namespace).toBeUndefined();
-  });
-
-  it('includes namespace when the context specifies one', () => {
-    const kubeconfig = makeKubeconfig({
+    const kubeconfigWithNamespace = makeKubeconfig({
       contexts: [
         {
           name: 'dev',
@@ -67,13 +65,22 @@ describe('getContext', () => {
         },
       ],
     });
+    //when
     const result = getContext(kubeconfig, 'dev');
-    expect(result.namespace).toBe('my-ns');
+    const resultWithNamespace = getContext(kubeconfigWithNamespace, 'dev');
+    //then
+    expect(result.cluster?.name).toBe('dev-cluster');
+    expect(result.user?.name).toBe('dev-user');
+    expect(result.namespace).toBeUndefined();
+    expect(resultWithNamespace.namespace).toBe('my-ns');
   });
 
   it('falls back to current-context when contextName is empty', () => {
+    //given
     const kubeconfig = makeKubeconfig({ 'current-context': 'dev' });
+    //when
     const result = getContext(kubeconfig, '');
+    //then
     expect(result.cluster?.name).toBe('dev-cluster');
     expect(result.user?.name).toBe('dev-user');
   });
@@ -88,7 +95,7 @@ describe('getContext', () => {
       ],
     });
     expect(() => getContext(kubeconfig, 'dev')).toThrow(
-      'Unable to add context',
+      'Unable to add context. Error: cluster not found',
     );
   });
 
@@ -102,11 +109,12 @@ describe('getContext', () => {
       ],
     });
     expect(() => getContext(kubeconfig, 'dev')).toThrow(
-      'Unable to add context',
+      'Unable to add context. Error: user not found',
     );
   });
 
   it('selects the right context from a multi-context kubeconfig', () => {
+    //given
     const kubeconfig = makeKubeconfig({
       clusters: [
         {
@@ -136,13 +144,13 @@ describe('getContext', () => {
         },
       ],
     });
+    //when
     const result = getContext(kubeconfig, 'prod');
+    //then
     expect(result.cluster?.name).toBe('prod-cluster');
     expect(result.user?.name).toBe('prod-user');
   });
 });
-
-// ─── getUserIndex ─────────────────────────────────────────────────────────────
 
 describe('getUserIndex', () => {
   it('returns 0 when kubeconfig is undefined', () => {
@@ -171,7 +179,6 @@ describe('getUserIndex', () => {
         { name: 'dev', context: { cluster: 'dev-cluster', user: 'dev-user' } },
       ],
     });
-    // dev-user is at index 0
     expect(getUserIndex(kubeconfig)).toBe(0);
   });
 
@@ -187,8 +194,6 @@ describe('getUserIndex', () => {
     expect(getUserIndex(kubeconfig)).toBe(0);
   });
 });
-
-// ─── getUser ─────────────────────────────────────────────────────────────────
 
 describe('getUser', () => {
   it('returns undefined when kubeconfig has no contexts', () => {
@@ -211,8 +216,6 @@ describe('getUser', () => {
   });
 });
 
-// ─── hasKubeconfigAuth ────────────────────────────────────────────────────────
-
 describe('hasKubeconfigAuth', () => {
   it('returns the token when the user authenticates with a bearer token', () => {
     const kubeconfig = makeKubeconfig();
@@ -232,6 +235,21 @@ describe('hasKubeconfigAuth', () => {
       ],
     });
     expect(hasKubeconfigAuth(kubeconfig)).toBeTruthy();
+  });
+
+  it('returns false when the user has client-key-data but no client-certificate-data', () => {
+    const kubeconfig = makeKubeconfig({
+      users: [
+        {
+          name: 'dev-user',
+          user: {
+            'client-certificate-data': '',
+            'client-key-data': 'key-data',
+          },
+        },
+      ],
+    });
+    expect(hasKubeconfigAuth(kubeconfig)).toBeFalsy();
   });
 
   it('returns false when the user has client-certificate-data but no client-key-data', () => {
