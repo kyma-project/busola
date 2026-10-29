@@ -63,18 +63,6 @@ app.use(pinoMiddleware);
 
 setupJWTCheck(app);
 
-if (
-  config.features?.KYMA_COMPANION?.config?.apiBaseUrl &&
-  !config.features?.JWT_CHECK_CONFIG?.isEnabled &&
-  process.env.JWT_CHECK_BYPASS !== 'true'
-) {
-  console.warn(
-    '[security] KYMA_COMPANION is enabled but JWT_CHECK_CONFIG is disabled — ' +
-      '/backend/ai-chat/* is accessible without authentication. ' +
-      'Enable JWT_CHECK_CONFIG on hosted instances.',
-  );
-}
-
 const SLOW_REQUEST_THRESHOLD_MS = parseInt(
   process.env.SLOW_REQUEST_THRESHOLD_MS || '4000',
   10,
