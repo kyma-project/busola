@@ -2,12 +2,20 @@ apps:
   title: Apps
 cluster-overview:
   headers:
+    btp-account: SAP BTP Accounts
     cluster-overview: Cluster Overview
     cpu: CPU
+    cpu-requests: CPU Requests
+    cpu-usage: CPU Usage
+    infrastructure: Infrastructure
     memory: Memory
+    memory-requests: Memory Requests
+    memory-usage: Memory Usage
     metadata: Metadata
     metrics: Metrics
+    network: Network
     nodes: Nodes
+    nodes-title: Nodes ({{count}})
   statistics:
     cpu-limits: CPU limits
     cpu-limits-tooltip: The maximum amount of CPU resources your Pods can consume. Monitor these limits to understand your cluster's resource allocation and scaling capacity. Kubernetes allows the total limits across a node to exceed 100% of physical capacity (overcommitment), which is configurable.
@@ -48,9 +56,6 @@ cluster-overview:
     total-statefulsets: Total Stateful Sets
     unhealthy-daemonsets: Unhealthy Daemon Sets
     unhealthy-statefulsets: Unhealthy Stateful Sets
-  tooltips:
-    cpu-used-percentage: 'CPU used: {{percentage}}'
-    memory-used-percentage: 'Memory used: {{percentage}}'
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
@@ -119,15 +124,26 @@ clusters:
   name_singular: Cluster
   oidc: OIDC
   overview:
+    dual-stack-ip: Dual Stack IP
+    environment-instance-id: Environment Instance ID
     global-account-id: Global Account ID
+    instance-name: Instance Name
     kubernetes-version: Kubernetes Version
     kyma-version: Kyma Version
     nat-gateway-ips: NAT Gateway IP Addresses
+    platform-region: Platform Region
     region: Worker Node Region
     seed-region: Kubernetes Control Plane Region
     subaccount-id: Subaccount ID
     title-all-clusters: Clusters
     title-current-cluster: Cluster Overview
+    worker-pools:
+      ha-zones: HA Zones
+      machine-type: Machine Type
+      max-nodes: Max Nodes
+      min-nodes: Min Nodes
+      pool: Pool
+      title: Worker Pools
   statuses:
     localstorage: Local Storage
     sessionstorage: Session Storage
@@ -352,6 +368,8 @@ common:
   labels:
     category: Category
     data: Data
+    disabled: Disabled
+    enabled: Enabled
     last-transition: Last Transition Time
     message-type: Message Type
     name: Name
@@ -365,6 +383,7 @@ common:
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     type: Type
     version: 'Kyma Dashboard version:'
+    'yes': 'Yes'
   messages:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
     choose: Choose {{value}}
@@ -692,6 +711,7 @@ extensibility:
     messages:
       error: Failed to upsert UI configuration.
       no-columns: No example values could be inferred from the CRD.
+      select-crd: Select a resource from the list.
       success: UI configuration upserted.
   title: Extensions
   version:
@@ -1470,6 +1490,7 @@ settings:
   general:
     description: Cluster interaction, resource validation
     disableResourceProtection: Allow for modification of protected resources
+    dismissed-banners: Dismissed banners
     dontConfirmDelete: Delete without confirmation
     edit-view:
       always-form: Always form
@@ -1485,6 +1506,7 @@ settings:
       validateResources: Validate Resources
       validation-disabled: Resource validation is disabled
       validation-policies: Validation Policies
+    restore-banners: Restore all
     showHiddenNamespaces: Show hidden Namespaces
     title: Advanced Options
   language:

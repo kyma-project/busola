@@ -79,6 +79,41 @@ describe('useGetClusterInfo', () => {
     });
   });
 
+  it('parses nested provisioning details (workerPools, networkDetails) into clusterInfo', () => {
+    const details = [
+      'platformRegion: cf-eu10-canary',
+      'environmentInstanceID: env-1',
+      'instanceName: instance-1',
+      'networkDetails:',
+      '  dualStackIPEnabled: true',
+      'workerPools:',
+      '  cpu-worker-0:',
+      '    name: cpu-worker-0',
+      '    machineType: Standard_D2s_v5',
+      '    autoScalerMin: 3',
+      '    autoScalerMax: 20',
+      '    haZones: true',
+      '',
+    ].join('\n');
+    setupMocks({ kymaProvisioningInfo: { data: { details } } });
+    const { result } = renderHook(() => useGetClusterInfo());
+    expect(result.current.clusterInfo).toMatchObject({
+      platformRegion: 'cf-eu10-canary',
+      environmentInstanceID: 'env-1',
+      instanceName: 'instance-1',
+      networkDetails: { dualStackIPEnabled: true },
+      workerPools: {
+        'cpu-worker-0': {
+          name: 'cpu-worker-0',
+          machineType: 'Standard_D2s_v5',
+          autoScalerMin: 3,
+          autoScalerMax: 20,
+          haZones: true,
+        },
+      },
+    });
+  });
+
   it('returns an empty clusterInfo without crashing when all CMs are absent', () => {
     setupMocks();
     const { result } = renderHook(() => useGetClusterInfo());

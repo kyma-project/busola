@@ -26,6 +26,7 @@ import ThemeChooser from './ThemeChooser';
 
 import './Settings.scss';
 import EditViewSettings from './EditViewSettings';
+import BannerSettings from './BannerSettings';
 
 export function Settings() {
   const { t } = useTranslation();
@@ -159,6 +160,7 @@ export function Settings() {
             <Tab key="other-settings" text={t('settings.other.title')}>
               <Form labelSpan="S12 M4 L4 XL4" layout="S1 M1 L1 XL1">
                 <OtherSettings />
+                <BannerSettings />
               </Form>
             </Tab>
           </TabContainer>
