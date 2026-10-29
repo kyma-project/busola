@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
-import { Label, Switch } from '@ui5/webcomponents-react';
+import { Switch } from '@ui5/webcomponents-react';
+import { FormField } from 'shared/ResourceForm/components/FormField';
 import { dontConfirmDeleteAtom } from 'state/settings/dontConfirmDeleteAtom';
 
 export default function ConfirmationSettings() {
@@ -10,23 +11,17 @@ export default function ConfirmationSettings() {
   );
 
   return (
-    <div className="settings-row">
-      <Label
-        for="dont-confirm-delete-switch"
-        className="bsl-has-color-status-4"
-      >
-        {t('settings.general.dontConfirmDelete')}
-      </Label>
-      <div>
+    <FormField
+      label={t('settings.general.dontConfirmDelete')}
+      input={(props) => (
         <Switch
-          id="dont-confirm-delete-switch"
-          accessibleName={t('settings.general.dontConfirmDelete')}
+          {...props}
           checked={dontConfirmDelete}
           onChange={() =>
             setDontConfirmDelete((previousState) => !previousState)
           }
         />
-      </div>
-    </div>
+      )}
+    />
   );
 }

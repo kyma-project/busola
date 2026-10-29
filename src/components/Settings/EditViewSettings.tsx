@@ -1,4 +1,5 @@
-import { Label, Option, Select } from '@ui5/webcomponents-react';
+import { Option, Select } from '@ui5/webcomponents-react';
+import { FormField } from 'shared/ResourceForm/components/FormField';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import {
@@ -19,14 +20,11 @@ export default function EditViewSettings() {
   const { preferencesViewType } = getEditViewModeState(editViewMode);
 
   return (
-    <>
-      <div className="settings-row">
-        <Label for="editTypeComboBox" className="bsl-has-color-status-4">
-          {t('settings.general.edit-view.choose')}
-        </Label>
+    <FormField
+      label={t('settings.general.edit-view.choose')}
+      input={(props) => (
         <Select
-          id="editTypeComboBox"
-          accessibleName={t('settings.general.edit-view.choose')}
+          {...props}
           onChange={(e) => {
             setEditViewMode({
               preferencesViewType: e.target.value ?? 'MODE_DEFAULT',
@@ -45,7 +43,7 @@ export default function EditViewSettings() {
             </Option>
           ))}
         </Select>
-      </div>
-    </>
+      )}
+    />
   );
 }
