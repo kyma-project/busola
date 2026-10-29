@@ -6,7 +6,6 @@ import { Readable } from 'stream';
 import escape from 'lodash.escape';
 import {
   getK8sCredentialFromBody,
-  hashCredential,
   requireCredential,
 } from '../utils/rate-limit-key.js';
 import { createBoundedCache } from '../utils/bounded-cache.js';
@@ -46,24 +45,6 @@ const companionRateLimiter = rateLimit({
   message: 'Too many requests, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
-  // When JWT auth is active, key on the verified subject so the limit cannot
-  // be bypassed by rotating the attacker-supplied clusterToken.
-  keyGenerator: (req) =>
-    req.auth?.sub
-      ? hashCredential(req.auth.sub, 'jwt')
-      : hashCredential(getK8sCredentialFromBody(req), 'cred'),
-});
-
-const publicKeyRateLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 30,
-  message: 'Too many requests, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
-  keyGenerator: (req) =>
-    req.auth?.sub
-      ? hashCredential(req.auth.sub, 'jwt')
-      : hashCredential(req.ip ?? 'unknown', 'ip'),
 });
 
 // A cluster's region never changes, so we can keep it cached for the whole run.
@@ -459,7 +440,7 @@ async function handleJouleEligibility(req, res) {
   }
 }
 
-router.post('/public-key', publicKeyRateLimiter, handlePublicKey);
+router.post('/public-key', handlePublicKey);
 router.post(
   '/suggestions',
   requireCompanionCredential,
