@@ -6,6 +6,7 @@ import { Readable } from 'stream';
 import escape from 'lodash.escape';
 import {
   getK8sCredentialFromBody,
+  hashCredential,
   requireCredential,
 } from '../utils/rate-limit-key.js';
 import { createBoundedCache } from '../utils/bounded-cache.js';
@@ -45,6 +46,7 @@ const companionRateLimiter = rateLimit({
   message: 'Too many requests, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: (req) => hashCredential(getK8sCredentialFromBody(req), 'cred'),
 });
 
 // A cluster's region never changes, so we can keep it cached for the whole run.
