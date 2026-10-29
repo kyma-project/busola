@@ -61,13 +61,8 @@ export default function ResourceValidationSettings() {
 
   return (
     <>
-      <Form
-        className="sap-margin-small"
-        labelSpan="S12 M4 L4 XL4"
-        layout="S1 M1 L1 XL1"
-      >
+      <Form labelSpan="S12 M4 L4 XL4" layout="S1 M1 L1 XL1">
         <FormField
-          className="resources-validation-switch"
           label={t('settings.general.resourcesValidation.validateResources')}
           input={(props) => (
             <Switch
@@ -85,48 +80,44 @@ export default function ResourceValidationSettings() {
             </span>
           </div>
         )}
-        {isEnabled && policyList.length > 0 && (
-          <>
-            <GenericList
-              className="resource-validation-table sap-margin-small"
-              title={t(
-                'settings.general.resourcesValidation.validation-policies',
-              )}
-              //@ts-expect-error Type mismatch between js and ts
-              entries={policyList}
-              headerRenderer={() => ['']} //Throws an error if it's empty - header column is hidden with CSS
-              rowRenderer={(entry) => [
-                <FlexBox gap="0.5rem" key={entry.text} className="policy-row">
-                  <Switch
-                    accessibleName={t(
-                      'settings.general.resourcesValidation.select-policy',
-                      {
-                        name: entry.text,
-                      },
-                    )}
-                    checked={entry.selected}
-                    onChange={() => {
-                      if (entry.selected) deleteSelectedPolicy(entry.key);
-                      else addSelectedPolicy(entry.key);
-                    }}
-                  />
-                  <span>{entry.text}</span>
-                </FlexBox>,
-              ]}
-              searchSettings={{
-                showSearchSuggestion: false,
-                noSearchResultTitle: t(
-                  'settings.general.resourcesValidation.no-policies-found',
-                ),
-                noSearchResultSubtitle: '',
-                textSearchProperties: ['key', 'text'],
-                showSearchField: true,
-                allowSlashShortcut: true,
-              }}
-            />
-          </>
-        )}
       </Form>
+      {isEnabled && policyList.length > 0 && (
+        <GenericList
+          className="resource-validation-table sap-margin-x-small"
+          title={t('settings.general.resourcesValidation.validation-policies')}
+          //@ts-expect-error Type mismatch between js and ts
+          entries={policyList}
+          headerRenderer={() => ['']} //Throws an error if it's empty - header column is hidden with CSS
+          rowRenderer={(entry) => [
+            <FlexBox gap="0.5rem" key={entry.text} className="policy-row">
+              <Switch
+                accessibleName={t(
+                  'settings.general.resourcesValidation.select-policy',
+                  {
+                    name: entry.text,
+                  },
+                )}
+                checked={entry.selected}
+                onChange={() => {
+                  if (entry.selected) deleteSelectedPolicy(entry.key);
+                  else addSelectedPolicy(entry.key);
+                }}
+              />
+              <span>{entry.text}</span>
+            </FlexBox>,
+          ]}
+          searchSettings={{
+            showSearchSuggestion: false,
+            noSearchResultTitle: t(
+              'settings.general.resourcesValidation.no-policies-found',
+            ),
+            noSearchResultSubtitle: '',
+            textSearchProperties: ['key', 'text'],
+            showSearchField: true,
+            allowSlashShortcut: true,
+          }}
+        />
+      )}
     </>
   );
 }
