@@ -20,7 +20,9 @@ import ClusterDetails from './ClusterDetails';
 import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { TerminalBanner } from 'components/TerminalBanner/TerminalBanner';
+import { CloudManagerBanner } from 'components/CloudManagerBanner/CloudManagerBanner';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
+import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 
 import './ClusterOverview.scss';
 import { configFeaturesNames } from 'state/types';
@@ -34,6 +36,10 @@ const Injections = lazyWithRetries(
 export function ClusterOverview() {
   const { t } = useTranslation();
   const clusterValidation = useFeature(configFeaturesNames.CLUSTER_VALIDATION);
+  const { isEnabled: isTerminalEnabled } = useFeature(
+    configFeaturesNames.TERMINAL,
+  );
+  const isSapUser = useCheckSAPUser();
   const clustersInfo = useClustersInfo();
   const currentCluster = clustersInfo?.currentCluster;
   const notification = useNotification();
@@ -99,7 +105,8 @@ export function ClusterOverview() {
         content={
           <>
             <BannerCarousel>
-              <TerminalBanner />
+              {isSapUser && <CloudManagerBanner />}
+              {isTerminalEnabled && <TerminalBanner />}
               <Suspense fallback={null}>
                 <Injections
                   destination="ClusterOverview"

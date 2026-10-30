@@ -10,7 +10,15 @@ export type FeatureCardBannerProps = {
 };
 
 export type IllustrationType =
-  'None' | 'AI' | 'Modules' | 'Discovery' | 'Terminal' | 'Teched' | string;
+  | 'None'
+  | 'AI'
+  | 'Modules'
+  | 'Discovery'
+  | 'Terminal'
+  | 'Teched'
+  | 'Satellite'
+  | string;
+
 export type ThemeType =
   | 'sap_horizon_hcw'
   | 'sap_horizon_hcb'
