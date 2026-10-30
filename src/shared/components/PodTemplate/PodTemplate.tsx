@@ -25,25 +25,26 @@ export function PodTemplate({ template }: { template: any }) {
         label={t('common.headers.labels')}
         component={<Labels labels={template.metadata.labels} />}
       />
-      {template.spec.containers && (
-        <ContainersPanel
-          title={t('pods.labels.containers')}
-          containers={template.spec.containers}
-        />
-      )}
-      {template.spec.initContainers && (
-        <ContainersPanel
-          title={t('pods.labels.init-containers')}
-          containers={template.spec.initContainers}
-        />
-      )}
-      {template.spec.volumes && (
-        <VolumesPanel
-          title={t('pods.labels.volumes')}
-          labels={template.metadata.labels}
-          volumes={template.spec.volumes}
-        />
-      )}
+      <div className="pod-template-groups">
+        {template.spec.containers && (
+          <ContainersPanel
+            title={t('pods.labels.containers')}
+            containers={template.spec.containers}
+          />
+        )}
+        {template.spec.initContainers && (
+          <ContainersPanel
+            title={t('pods.labels.init-containers')}
+            containers={template.spec.initContainers}
+          />
+        )}
+        {template.spec.volumes && (
+          <VolumesPanel
+            title={t('pods.labels.volumes')}
+            volumes={template.spec.volumes}
+          />
+        )}
+      </div>
     </Card>
   );
 }
