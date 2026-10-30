@@ -40,6 +40,10 @@ export interface ForceConfirmDeleteFeature extends ConfigFeature {
   };
 }
 
+export interface CloudManagerBannerFeature extends ConfigFeature {
+  internalOnly?: boolean;
+}
+
 export type ConfigFeaturesNames =
   (typeof configFeaturesNames)[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {
@@ -66,6 +70,7 @@ export const configFeaturesNames = {
   COMMUNITY_MODULES: 'COMMUNITY_MODULES',
   TERMINAL: 'TERMINAL',
   FORCE_CONFIRM_DELETE: 'FORCE_CONFIRM_DELETE',
+  CLOUD_MANAGER_BANNER: 'CLOUD_MANAGER_BANNER',
 } as const;
 
 // Protected config features. Installation-only.
