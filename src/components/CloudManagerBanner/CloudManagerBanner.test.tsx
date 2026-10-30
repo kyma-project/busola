@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { CloudManagerBanner } from './CloudManagerBanner';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 import { useFeature } from 'hooks/useFeature';
@@ -17,7 +17,18 @@ vi.mock('hooks/useFeature', () => ({
 }));
 
 vi.mock('shared/components/FeatureCard/FeatureCard', () => ({
-  FeatureCardBanner: ({ title }: { title: string }) => <div>{title}</div>,
+  FeatureCardBanner: ({
+    title,
+    buttons,
+  }: {
+    title: string;
+    buttons?: React.ReactNode;
+  }) => (
+    <div>
+      {title}
+      {buttons}
+    </div>
+  ),
 }));
 
 describe('CloudManagerBanner', () => {
@@ -59,5 +70,24 @@ describe('CloudManagerBanner', () => {
     vi.mocked(useCheckSAPUser).mockReturnValue(false);
     render(<CloudManagerBanner />);
     expect(screen.getByText('cloud-manager.banner.title')).toBeInTheDocument();
+  });
+
+  it('opens CLOUD_MANAGER_URL in a new tab when the Sign Up button is clicked', () => {
+    const openSpy = vi.spyOn(window, 'open').mockReturnValue(null);
+    vi.mocked(useFeature).mockReturnValue({
+      isEnabled: true,
+      internalOnly: false,
+    });
+    vi.mocked(useCheckSAPUser).mockReturnValue(false);
+    render(<CloudManagerBanner />);
+
+    fireEvent.click(screen.getByText('cloud-manager.banner.open'));
+
+    expect(openSpy).toHaveBeenCalledWith(
+      'https://sapit-home-prod-004.launchpad.cfapps.eu10.hana.ondemand.com/site#my-events?sap-ui-app-id-hint=5cc2dc3b-651c-488f-be2d-3e9b3ca02ebb&/ig=16643034',
+      '_blank',
+      'noopener,noreferrer',
+    );
+    openSpy.mockRestore();
   });
 });
