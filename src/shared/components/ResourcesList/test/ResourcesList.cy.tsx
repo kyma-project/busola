@@ -1,10 +1,23 @@
 /* global cy, describe, it */
 import { useLocation } from 'react-router';
+import { useAtomValue } from 'jotai';
 import { ResourcesList } from '../ResourcesList';
+import { columnLayoutAtom } from 'state/columnLayoutAtom';
 
 function LocationDisplay() {
   const location = useLocation();
   return <span data-testid="location-search">{location.search}</span>;
+}
+
+function ColumnLayoutDisplay() {
+  const layout = useAtomValue(columnLayoutAtom);
+  return (
+    <div
+      data-testid="column-layout-state"
+      data-layout={layout.layout}
+      data-show-create={layout.showCreate !== null ? 'active' : 'null'}
+    />
+  );
 }
 
 const mockResources = [
@@ -116,7 +129,7 @@ describe('ResourcesList', () => {
       cy.get('[data-testid="create-ConfigMaps"]').should('not.exist');
     });
 
-    it('clicking create button navigates to create view', () => {
+    it('clicking create button updates columnLayoutAtom and navigates to create view', () => {
       cy.mount(
         <>
           <ResourcesList
@@ -125,6 +138,7 @@ describe('ResourcesList', () => {
             createResourceForm={{}}
           />
           <LocationDisplay />
+          <ColumnLayoutDisplay />
         </>,
       );
 
@@ -134,6 +148,9 @@ describe('ResourcesList', () => {
       cy.get('[data-testid="location-search"]')
         .invoke('text')
         .should('include', 'showCreate=true');
+      cy.get('[data-testid="column-layout-state"]')
+        .should('have.attr', 'data-layout', 'TwoColumnsMidExpanded')
+        .and('have.attr', 'data-show-create', 'active');
     });
   });
 });
