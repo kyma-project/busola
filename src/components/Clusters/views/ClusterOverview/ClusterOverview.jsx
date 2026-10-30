@@ -109,11 +109,11 @@ export function ClusterOverview() {
         content={
           <>
             <BannerCarousel>
-              {isTerminalEnabled && <TerminalBanner />}
               {isCloudManagerEnabled &&
                 (!isCloudManagerInternal || isSapUser) && (
                   <CloudManagerBanner />
                 )}
+              {isTerminalEnabled && <TerminalBanner />}
               <Suspense fallback={null}>
                 <Injections
                   destination="ClusterOverview"
