@@ -13,7 +13,7 @@ context('Test app settings and preferences', () => {
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains('.settings-row', 'Delete without confirmation')
+    cy.contains('.form-field', 'Delete without confirmation')
       .find('ui5-switch')
       .find('div[role="switch"')
       .click({ force: true });
@@ -49,7 +49,7 @@ context('Test app settings and preferences', () => {
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains('.settings-row', 'Delete without confirmation')
+    cy.contains('.form-field', 'Delete without confirmation')
       .find('ui5-switch')
       .find('div[role="switch"')
       .click({ force: true });
@@ -86,12 +86,12 @@ context('Test app settings and preferences', () => {
 
     cy.contains('Cluster interaction').click();
 
-    cy.contains('.settings-row', 'Show hidden Namespaces')
+    cy.contains('.form-field', 'Show hidden Namespaces')
       .find('[accessible-name="Show hidden Namespaces"]')
       .invoke('attr', 'aria-checked')
       .then((value) => {
         if (value === 'true' || value === 'checked') {
-          cy.contains('.settings-row', 'Show hidden Namespaces')
+          cy.contains('.form-field', 'Show hidden Namespaces')
             .find('ui5-switch')
             .find('div[role="switch"')
             .click({ force: true });
