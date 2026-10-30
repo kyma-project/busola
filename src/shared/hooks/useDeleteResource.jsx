@@ -51,6 +51,7 @@ export function useDeleteResource({
     async (resource, resourceUrl, deleteFn, noRedirectAfterDelete) => {
       const withoutQueryString = (path) => path?.split('?')?.[0];
       const url = withoutQueryString(resourceUrl);
+      const pathnameAtDelete = window.location.pathname;
 
       const forceRedirect =
         ((layoutColumn.midColumn?.resourceType === resource?.kind ||
@@ -85,9 +86,12 @@ export function useDeleteResource({
 
           afterDelete?.();
 
+          // Don't pull users back if they navigated away while the request was running.
+          const stayedOnPage = window.location.pathname === pathnameAtDelete;
           if (
-            navigateToListAfterDelete ||
-            (forceRedirect && !noRedirectAfterDelete)
+            stayedOnPage &&
+            (navigateToListAfterDelete ||
+              (forceRedirect && !noRedirectAfterDelete))
           ) {
             if (window.location.search.includes('layout')) {
               if (window.location.pathname.includes('busolaextensions')) {
@@ -106,17 +110,17 @@ export function useDeleteResource({
               }
 
               if (goToLayout === 'TwoColumnsMidExpanded') {
-                setLayoutColumn({
-                  ...layoutColumn,
+                setLayoutColumn((prev) => ({
+                  ...prev,
                   endColumn: null,
                   layout: goToLayout,
-                });
+                }));
               } else {
-                setLayoutColumn({
-                  ...layoutColumn,
+                setLayoutColumn((prev) => ({
+                  ...prev,
                   midColumn: null,
                   layout: goToLayout,
-                });
+                }));
               }
             } else {
               if (window.location.pathname.includes('busolaextensions')) {
@@ -128,12 +132,12 @@ export function useDeleteResource({
               } else {
                 navigate(resourceListUrl(resource, { resourceType }));
               }
-              setLayoutColumn({
-                ...layoutColumn,
+              setLayoutColumn((prev) => ({
+                ...prev,
                 midColumn: null,
                 endColumn: null,
                 layout: 'OneColumn',
-              });
+              }));
             }
           }
         }
