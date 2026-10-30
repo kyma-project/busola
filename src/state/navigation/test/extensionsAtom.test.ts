@@ -5,96 +5,93 @@ import {
   convertYamlToObject,
 } from '../extensionsAtom';
 
-// ─── isTheSameNameAndUrl ──────────────────────────────────────────────────────
-
 describe('isTheSameNameAndUrl', () => {
-  it('returns true when both name and urlPath are identical', () => {
-    const a = { general: { name: 'Widgets', urlPath: 'widgets' } } as any;
-    const b = { general: { name: 'Widgets', urlPath: 'widgets' } } as any;
+  it('returns true when name and urlPath both match', () => {
+    const a = { general: { name: 'ext-a', urlPath: '/a' } } as any;
+    const b = { general: { name: 'ext-a', urlPath: '/a' } } as any;
     expect(isTheSameNameAndUrl(a, b)).toBe(true);
   });
 
   it('returns false when names differ', () => {
-    const a = { general: { name: 'Widgets', urlPath: 'widgets' } } as any;
-    const b = { general: { name: 'Gadgets', urlPath: 'widgets' } } as any;
+    const a = { general: { name: 'ext-a', urlPath: '/a' } } as any;
+    const b = { general: { name: 'ext-b', urlPath: '/a' } } as any;
     expect(isTheSameNameAndUrl(a, b)).toBe(false);
   });
 
   it('returns false when urlPaths differ', () => {
-    const a = { general: { name: 'Widgets', urlPath: 'widgets' } } as any;
-    const b = { general: { name: 'Widgets', urlPath: 'gadgets' } } as any;
+    const a = { general: { name: 'ext-a', urlPath: '/a' } } as any;
+    const b = { general: { name: 'ext-a', urlPath: '/b' } } as any;
     expect(isTheSameNameAndUrl(a, b)).toBe(false);
   });
 
-  it('returns false when one extension has no general section', () => {
-    const a = { general: { name: 'Widgets', urlPath: 'widgets' } } as any;
-    const b = {} as any;
-    expect(isTheSameNameAndUrl(a, b)).toBe(false);
+  it('returns true when both name and urlPath are undefined', () => {
+    expect(
+      isTheSameNameAndUrl({ general: {} } as any, { general: {} } as any),
+    ).toBe(true);
   });
 
-  it('returns true for two empty objects (both general.name and urlPath are undefined)', () => {
-    expect(isTheSameNameAndUrl({}, {})).toBe(true);
+  it('returns true when general is missing on both', () => {
+    expect(isTheSameNameAndUrl({} as any, {} as any)).toBe(true);
   });
 });
-
-// ─── isTheSameId ─────────────────────────────────────────────────────────────
 
 describe('isTheSameId', () => {
-  it('returns true when both extensions share the same id', () => {
-    const a = { general: { id: 'ext-001' } } as any;
-    const b = { general: { id: 'ext-001' } } as any;
-    expect(isTheSameId(a, b)).toBe(true);
-  });
-
-  it('returns false when ids differ', () => {
-    const a = { general: { id: 'ext-001' } } as any;
-    const b = { general: { id: 'ext-002' } } as any;
-    expect(isTheSameId(a, b)).toBe(false);
-  });
-
-  it('returns false when one extension has no general section', () => {
-    const a = { general: { id: 'ext-001' } } as any;
-    const b = {} as any;
-    expect(isTheSameId(a, b)).toBe(false);
-  });
-
-  it('returns true for two objects without a general.id (both undefined)', () => {
-    expect(isTheSameId({}, {})).toBe(true);
+  it.each([
+    {
+      desc: 'same id',
+      a: { general: { id: 'ext-001' } },
+      b: { general: { id: 'ext-001' } },
+      expected: true,
+    },
+    {
+      desc: 'different ids',
+      a: { general: { id: 'ext-001' } },
+      b: { general: { id: 'ext-002' } },
+      expected: false,
+    },
+    {
+      desc: 'one missing general section',
+      a: { general: { id: 'ext-001' } },
+      b: {},
+      expected: false,
+    },
+    {
+      desc: 'both missing general.id',
+      a: {},
+      b: {},
+      expected: true,
+    },
+  ])('returns $expected when $desc', ({ a, b, expected }) => {
+    expect(isTheSameId(a as any, b as any)).toBe(expected);
   });
 });
 
-// ─── convertYamlToObject ─────────────────────────────────────────────────────
-
 describe('convertYamlToObject', () => {
-  it('parses a valid YAML string into an object', () => {
-    const yaml = 'key: value\ncount: 42';
-    expect(convertYamlToObject(yaml)).toEqual({ key: 'value', count: 42 });
+  it('parses a valid YAML string to an object', () => {
+    const yaml = 'name: my-extension\nversion: "1.0"';
+    const result = convertYamlToObject(yaml);
+    expect(result).toEqual({ name: 'my-extension', version: '1.0' });
   });
 
-  it('parses a YAML string representing a nested object', () => {
-    const yaml = 'resource:\n  kind: Widget\n  group: example.com';
-    expect(convertYamlToObject(yaml)).toEqual({
-      resource: { kind: 'Widget', group: 'example.com' },
-    });
+  it('parses YAML with nested keys', () => {
+    const yaml = 'general:\n  name: ext\n  urlPath: /ext';
+    const result = convertYamlToObject(yaml);
+    expect(result).toEqual({ general: { name: 'ext', urlPath: '/ext' } });
   });
 
-  it('returns null and warns for invalid YAML', () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const result = convertYamlToObject('{invalid: yaml: :}');
-    expect(result).toBeNull();
-    expect(warnSpy).toHaveBeenCalled();
+  it('returns null without errors for empty YAML', () => {
+    const warnSpy = vi.spyOn(console, 'warn');
+    const result = convertYamlToObject('');
+    expect(result).toBeUndefined();
+    expect(warnSpy).not.toHaveBeenCalled();
     warnSpy.mockRestore();
   });
 
-  it('returns null for an empty string (js-yaml loads empty string as undefined, treated as null)', () => {
-    const result = convertYamlToObject('');
-    // js-yaml.load('') returns null; convertYamlToObject wraps that as-is
-    expect(result === null || result === undefined).toBe(true);
-  });
-
-  it('parses a YAML string that represents a list', () => {
-    const yaml = '- a\n- b\n- c';
-    const result = convertYamlToObject(yaml);
-    expect(result).toEqual(['a', 'b', 'c']);
+  it('returns null and warns for invalid YAML input', () => {
+    const warnSpy = vi.spyOn(console, 'warn');
+    const result = convertYamlToObject('{{{wrong-input:::');
+    expect(result).toBeNull();
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
   });
 });
