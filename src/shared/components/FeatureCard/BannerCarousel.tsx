@@ -9,7 +9,8 @@ export default function BannerCarousel({
 }) {
   const { t } = useTranslation();
   const carouselRef = useRef<React.ElementRef<typeof Carousel>>(null);
-  const childrenLength = Children.count(children);
+  const items = Children.toArray(children).filter(Boolean);
+  const childrenLength = items.length;
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -53,7 +54,7 @@ export default function BannerCarousel({
       onMouseLeave={handleMouseLeave}
       accessibleName={t('components.banner-carousel')}
     >
-      {children}
+      {items}
     </Carousel>
   );
 }
