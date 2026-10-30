@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getUserDetail } from '../ContextChooser/helpers';
+import { getUserDetail } from './helpers';
 
 describe('getUserDetail', () => {
   const users = [
