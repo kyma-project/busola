@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { Provider, useAtomValue } from 'jotai';
+import { Provider, useAtomValue, useSetAtom } from 'jotai';
 import { ReactNode } from 'react';
 import { Blocker } from 'react-router';
 import { JotaiHydrator } from 'testing/reactTestingUtils';
@@ -161,5 +161,26 @@ describe('useFormNavigation', () => {
     act(() => result.current.confirmDiscard());
     expect(proceed).toHaveBeenCalledTimes(1);
     expect(action).not.toHaveBeenCalled();
+  });
+
+  // The sidebar, header and lists all use this hook, so a subscription here
+  // re-renders the whole page chrome whenever a form becomes edited.
+  it('does not re-render its users when the edit state changes', () => {
+    let renders = 0;
+    const { result } = renderHook(
+      () => {
+        renders++;
+        return {
+          ...useFormNavigation(),
+          setEdited: useSetAtom(isResourceEditedAtom),
+        };
+      },
+      { wrapper: makeWrapper({ formOpen: true }) },
+    );
+    const rendersBefore = renders;
+
+    act(() => result.current.setEdited({ isEdited: true }));
+
+    expect(renders).toBe(rendersBefore);
   });
 });

@@ -1,11 +1,11 @@
 import { useCallback, useEffect } from 'react';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { isFormOpenAtom } from 'state/formOpenAtom';
-import { useAtom, useSetAtom, useStore } from 'jotai';
+import { useSetAtom, useStore } from 'jotai';
 import { Blocker } from 'react-router';
 
 export function useFormNavigation(blocker?: Blocker) {
-  const [isResourceEdited, setIsResourceEdited] = useAtom(isResourceEditedAtom);
+  const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
   const setIsFormOpen = useSetAtom(isFormOpenAtom);
   const store = useStore();
 
@@ -42,15 +42,16 @@ export function useFormNavigation(blocker?: Blocker) {
 
   const confirmDiscard = useCallback(
     (leaveFormOpen = false) => {
-      if (isResourceEdited.discardAction) {
-        isResourceEdited.discardAction();
+      const { discardAction } = store.get(isResourceEditedAtom);
+      if (discardAction) {
+        discardAction();
       }
 
       // Reset states
       setIsFormOpen({ formOpen: leaveFormOpen, leavingForm: false });
       setIsResourceEdited({ isEdited: false });
     },
-    [isResourceEdited, setIsFormOpen, setIsResourceEdited],
+    [store, setIsFormOpen, setIsResourceEdited],
   );
 
   const cancelDiscard = useCallback(() => {
