@@ -4,8 +4,6 @@ import { getPorts } from '../GetContainersPorts';
 import { useUrl } from 'hooks/useUrl';
 import {
   Label,
-  List,
-  ListItemGroup,
   Table,
   TableCell,
   TableHeaderCell,
@@ -66,11 +64,14 @@ interface ContainersPanelProps {
 
 export function ContainersPanel({ title, containers }: ContainersPanelProps) {
   return (
-    <List headerText={title}>
-      {containers?.map((container) => (
-        <ContainerComponent key={container.name} container={container} />
-      ))}
-    </List>
+    <div className="pod-template-panel sap-margin-small">
+      <Text className="pod-template-section-title">{title}</Text>
+      <div className="pod-template-groups">
+        {containers?.map((container) => (
+          <ContainerComponent key={container.name} container={container} />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -82,8 +83,8 @@ function ContainerComponent({ container }: ContainerComponentProps) {
   const { t } = useTranslation();
 
   return (
-    <>
-      <ListItemGroup headerText={container.name} />
+    <div>
+      <Text className="pod-template-group-title">{container.name}</Text>
       <PodTemplateRow
         label={t('pods.labels.image')}
         component={
@@ -163,7 +164,7 @@ function ContainerComponent({ container }: ContainerComponentProps) {
           component={<p className="code-block">{container.args.join(' ')}</p>}
         />
       )}
-    </>
+    </div>
   );
 }
 
@@ -174,11 +175,14 @@ interface VolumesPanelProps {
 
 export function VolumesPanel({ title, volumes }: VolumesPanelProps) {
   return (
-    <List headerText={title}>
-      {volumes.map((volume) => (
-        <VolumeComponent key={volume.name} volume={volume} />
-      ))}
-    </List>
+    <div className="pod-template-panel sap-margin-small">
+      <Text className="pod-template-section-title">{title}</Text>
+      <div className="pod-template-groups">
+        {volumes.map((volume) => (
+          <VolumeComponent key={volume.name} volume={volume} />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -205,8 +209,8 @@ function VolumeComponent({ volume }: { volume: any }) {
   const k8sResourceName = configMap?.name || secret?.secretName;
 
   return (
-    <>
-      <ListItemGroup headerText={name} />
+    <div>
+      <Text className="pod-template-group-title">{name}</Text>
       <PodTemplateRow
         label={t('common.labels.type')}
         component={<Text>{typeLabel}</Text>}
@@ -246,6 +250,6 @@ function VolumeComponent({ volume }: { volume: any }) {
           }
         />
       )}
-    </>
+    </div>
   );
 }

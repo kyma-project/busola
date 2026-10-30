@@ -8,18 +8,47 @@
 
 .pod-template-row {
   display: grid;
-  grid-template-columns: 1fr 5fr;
+  grid-template-columns: 2fr 4fr;
   grid-auto-flow: row;
-  gap: 40px;
+  gap: 1rem;
 }
 
 .pod-template-row-label {
   text-align: end;
 }
 
+.pod-template-section-title {
+  display: block;
+  font-weight: var(--sapFontBoldWeight, bold);
+  font-size: var(--sapFontSize);
+  padding: 0.5rem 0 0.25rem;
+}
+
+.pod-template-group-title {
+  display: block;
+  font-weight: var(--sapFontBoldWeight, bold);
+  font-size: var(--sapFontSize);
+  margin-bottom: 0.25rem;
+}
+
+.pod-template-panel {
+  container-type: inline-size;
+}
+
+.pod-template-groups {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@container (min-width: 600px) {
+  .pod-template-groups {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @container (max-width: 650px) {
   .pod-template-row {
-    display: grid;
     grid-template-columns: 1fr;
     gap: 5px;
   }
