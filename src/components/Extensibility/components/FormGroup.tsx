@@ -61,20 +61,19 @@ interface FormGroupProps {
   [key: string]: any;
 }
 
-export function FormGroup({
+function Group({
   value,
   structure,
   schema,
   singleRootResource,
   embedResource,
-  nestedInColumns = false,
   ...props
 }: FormGroupProps) {
   const { widgetT } = useGetTranslation();
   const description = useCreateResourceDescription(structure?.description);
   const [showDescription, setShowDescription] = useState(false);
 
-  const group = (
+  return (
     <UI5FormGroup headerText={description ? undefined : widgetT(structure)}>
       {description && (
         <div className="ui5-form-group-heading">
@@ -105,9 +104,14 @@ export function FormGroup({
         ))}
     </UI5FormGroup>
   );
+}
 
+export function FormGroup({
+  nestedInColumns = false,
+  ...props
+}: FormGroupProps) {
   if (nestedInColumns) {
-    return group;
+    return <Group {...props} />;
   }
 
   return (
@@ -116,7 +120,7 @@ export function FormGroup({
       layout="S1 M1 L1 XL1"
       labelSpan="S12 M4 L4 XL4"
     >
-      {group}
+      <Group {...props} />
     </Form>
   );
 }
