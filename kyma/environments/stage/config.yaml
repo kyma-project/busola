@@ -102,6 +102,3 @@ config:
         # Cloud Run's ~900s request cap; reconnect just before it (the pod
         # persists, so the shell survives).
         maxSessionDurationMs: 900000
-    CLOUD_MANAGER_BANNER:
-      isEnabled: true
-      internalOnly: true

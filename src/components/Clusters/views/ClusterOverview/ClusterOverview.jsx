@@ -39,10 +39,6 @@ export function ClusterOverview() {
   const { isEnabled: isTerminalEnabled } = useFeature(
     configFeaturesNames.TERMINAL,
   );
-  const {
-    isEnabled: isCloudManagerEnabled,
-    internalOnly: isCloudManagerInternal,
-  } = useFeature(configFeaturesNames.CLOUD_MANAGER_BANNER);
   const isSapUser = useCheckSAPUser();
   const clustersInfo = useClustersInfo();
   const currentCluster = clustersInfo?.currentCluster;
@@ -109,10 +105,7 @@ export function ClusterOverview() {
         content={
           <>
             <BannerCarousel>
-              {isCloudManagerEnabled &&
-                (!isCloudManagerInternal || isSapUser) && (
-                  <CloudManagerBanner />
-                )}
+              {isSapUser && <CloudManagerBanner />}
               {isTerminalEnabled && <TerminalBanner />}
               <Suspense fallback={null}>
                 <Injections

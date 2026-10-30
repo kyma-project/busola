@@ -1,8 +1,6 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
-import { useFeature } from 'hooks/useFeature';
-import { CloudManagerBannerFeature, configFeaturesNames } from 'state/types';
 import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
 
 const CLOUD_MANAGER_URL =
@@ -10,12 +8,9 @@ const CLOUD_MANAGER_URL =
 
 export function CloudManagerBanner() {
   const { t } = useTranslation();
-  const { isEnabled, internalOnly } = useFeature<CloudManagerBannerFeature>(
-    configFeaturesNames.CLOUD_MANAGER_BANNER,
-  );
   const isSapUser = useCheckSAPUser();
 
-  if (!isEnabled || (internalOnly && !isSapUser)) return null;
+  if (!isSapUser) return null;
 
   const buttons = (
     <Button

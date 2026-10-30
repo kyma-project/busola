@@ -2,7 +2,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { CloudManagerBanner } from './CloudManagerBanner';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
-import { useFeature } from 'hooks/useFeature';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
@@ -10,10 +9,6 @@ vi.mock('react-i18next', () => ({
 
 vi.mock('hooks/useCheckSAPUser', () => ({
   useCheckSAPUser: vi.fn(),
-}));
-
-vi.mock('hooks/useFeature', () => ({
-  useFeature: vi.fn(),
 }));
 
 vi.mock('shared/components/FeatureCard/FeatureCard', () => ({
@@ -32,53 +27,21 @@ vi.mock('shared/components/FeatureCard/FeatureCard', () => ({
 }));
 
 describe('CloudManagerBanner', () => {
-  it('renders when feature is enabled and user is SAP (internalOnly: true)', () => {
-    vi.mocked(useFeature).mockReturnValue({
-      isEnabled: true,
-      internalOnly: true,
-    });
+  it('renders for SAP users', () => {
     vi.mocked(useCheckSAPUser).mockReturnValue(true);
     render(<CloudManagerBanner />);
     expect(screen.getByText('cloud-manager.banner.title')).toBeInTheDocument();
   });
 
-  it('hides when feature is disabled, even for SAP users', () => {
-    vi.mocked(useFeature).mockReturnValue({
-      isEnabled: false,
-      internalOnly: true,
-    });
-    vi.mocked(useCheckSAPUser).mockReturnValue(true);
-    const { container } = render(<CloudManagerBanner />);
-    expect(container.firstChild).toBeNull();
-  });
-
-  it('hides when feature is enabled and internalOnly but user is not SAP', () => {
-    vi.mocked(useFeature).mockReturnValue({
-      isEnabled: true,
-      internalOnly: true,
-    });
+  it('hides for non-SAP users', () => {
     vi.mocked(useCheckSAPUser).mockReturnValue(false);
     const { container } = render(<CloudManagerBanner />);
     expect(container.firstChild).toBeNull();
-  });
-
-  it('renders when feature is enabled, internalOnly is false, and user is not SAP', () => {
-    vi.mocked(useFeature).mockReturnValue({
-      isEnabled: true,
-      internalOnly: false,
-    });
-    vi.mocked(useCheckSAPUser).mockReturnValue(false);
-    render(<CloudManagerBanner />);
-    expect(screen.getByText('cloud-manager.banner.title')).toBeInTheDocument();
   });
 
   it('opens CLOUD_MANAGER_URL in a new tab when the Sign Up button is clicked', () => {
     const openSpy = vi.spyOn(window, 'open').mockReturnValue(null);
-    vi.mocked(useFeature).mockReturnValue({
-      isEnabled: true,
-      internalOnly: false,
-    });
-    vi.mocked(useCheckSAPUser).mockReturnValue(false);
+    vi.mocked(useCheckSAPUser).mockReturnValue(true);
     render(<CloudManagerBanner />);
 
     fireEvent.click(screen.getByText('cloud-manager.banner.open'));
