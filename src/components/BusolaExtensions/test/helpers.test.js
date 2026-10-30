@@ -7,11 +7,6 @@ import {
 } from '../helpers';
 import jsyaml from 'js-yaml';
 
-vi.mock('components/Extensibility/migration', () => ({
-  getLatestVersion: () => '0.5',
-}));
-
-// Minimal CRD fixture used across tests.
 const makeCrd = (overrides = {}) => ({
   metadata: { name: 'widgets.example.com' },
   spec: {
@@ -46,21 +41,14 @@ const makeCrd = (overrides = {}) => ({
   ...overrides,
 });
 
-// ─── extractValueColumns ──────────────────────────────────────────────────────
-
 describe('extractValueColumns', () => {
-  it('excludes object and array type properties from first-level columns', () => {
-    const columns = extractValueColumns(makeCrd());
-    const names = columns.map((c) => c.name);
-    expect(names).not.toContain('config');
-    expect(names).not.toContain('tags');
-  });
-
-  it('includes scalar (string, integer) first-level spec properties', () => {
+  it('extracts simpleValues columns from crd', () => {
     const columns = extractValueColumns(makeCrd());
     const names = columns.map((c) => c.name);
     expect(names).toContain('color');
     expect(names).toContain('replicas');
+    expect(names).not.toContain('config');
+    expect(names).not.toContain('tags');
   });
 
   it('marks all extracted columns as selected', () => {
@@ -130,8 +118,6 @@ describe('extractValueColumns', () => {
     expect(nameCol?.widget).toBeUndefined();
   });
 });
-
-// ─── createExtensibilityTemplate ─────────────────────────────────────────────
 
 describe('createExtensibilityTemplate', () => {
   const t = (key) => key;
@@ -206,8 +192,6 @@ describe('createExtensibilityTemplate', () => {
   });
 });
 
-// ─── createConfigmap ──────────────────────────────────────────────────────────
-
 describe('createConfigmap', () => {
   const buildData = () => ({
     general: { resource: { kind: 'Widget' } },
@@ -236,70 +220,57 @@ describe('createConfigmap', () => {
     translations: { en: {} },
   });
 
-  it('creates a ConfigMap with kind v1', () => {
-    const configMap = createConfigmap(makeCrd(), buildData());
-    expect(configMap.kind).toBe('ConfigMap');
-    expect(configMap.apiVersion).toBe('v1');
-  });
+  it('creates the expected ConfigMap from the CRD and extension data', () => {
+    const result = createConfigmap(makeCrd(), buildData());
 
-  it('sets the ConfigMap name from the CRD metadata name', () => {
-    const configMap = createConfigmap(makeCrd(), buildData());
-    expect(configMap.metadata.name).toBe('widgets.example.com');
-  });
+    const expectedCm = {
+      kind: 'ConfigMap',
+      apiVersion: 'v1',
+      metadata: {
+        name: 'widgets.example.com',
+        namespace: 'kube-public',
+        labels: {
+          'app.kubernetes.io/name': 'widgets.example.com',
+          'busola.io/extension': 'resource',
+          'busola.io/extension-version': '0.5',
+        },
+      },
+      data: {
+        general: jsyaml.dump({ resource: { kind: 'Widget' } }, null, 2),
+        list: jsyaml.dump([{ name: 'Color', source: 'spec.color' }], null, 2),
+        form: jsyaml.dump([{ path: 'spec.color', required: true }], null, 2),
+        details: jsyaml.dump(
+          {
+            header: [],
+            body: [
+              {
+                name: 'Summary',
+                widget: 'Panel',
+                children: [{ name: 'Color' }],
+              },
+              { source: 'spec', widget: 'CodeViewer' },
+            ],
+          },
+          null,
+          2,
+        ),
+        translations: jsyaml.dump({ en: {} }, null, 2),
+      },
+    };
 
-  it('places the ConfigMap in kube-public namespace', () => {
-    const configMap = createConfigmap(makeCrd(), buildData());
-    expect(configMap.metadata.namespace).toBe('kube-public');
-  });
-
-  it('sets the busola extension label', () => {
-    const configMap = createConfigmap(makeCrd(), buildData());
-    expect(configMap.metadata.labels['busola.io/extension']).toBe('resource');
-  });
-
-  it('sets the extension version label', () => {
-    const configMap = createConfigmap(makeCrd(), buildData());
-    expect(configMap.metadata.labels['busola.io/extension-version']).toBe(
-      '0.5',
-    );
-  });
-
-  it('filters out non-selected list columns', () => {
-    const configMap = createConfigmap(makeCrd(), buildData());
-    const list = jsyaml.load(configMap.data.list);
-    const names = list.map((c) => c.name);
-    expect(names).toContain('Color');
-    expect(names).not.toContain('Replicas');
-  });
-
-  it('filters out non-selected form fields', () => {
-    const configMap = createConfigmap(makeCrd(), buildData());
-    const form = jsyaml.load(configMap.data.form);
-    const paths = form.map((f) => f.path);
-    expect(paths).toContain('spec.color');
-    expect(paths).not.toContain('spec.replicas');
-  });
-
-  it('serializes data sections as YAML strings', () => {
-    const configMap = createConfigmap(makeCrd(), buildData());
-    expect(typeof configMap.data.general).toBe('string');
-    expect(typeof configMap.data.list).toBe('string');
-    expect(typeof configMap.data.form).toBe('string');
+    expect(result).toEqual(expectedCm);
   });
 });
 
-// ─── createConfigMapTemplate ──────────────────────────────────────────────────
-
 describe('createConfigMapTemplate', () => {
-  it('creates a ConfigMap skeleton with the given namespace', () => {
-    const template = createConfigMapTemplate('kube-public');
-    expect(template.kind).toBe('ConfigMap');
-    expect(template.apiVersion).toBe('v1');
-    expect(template.metadata.namespace).toBe('kube-public');
-  });
+  it('creates the expected ConfigMap skeleton for the given namespace', () => {
+    const result = createConfigMapTemplate('kube-public');
 
-  it('creates an empty data object', () => {
-    const template = createConfigMapTemplate('my-ns');
-    expect(template.data).toEqual({});
+    expect(result).toEqual({
+      apiVersion: 'v1',
+      kind: 'ConfigMap',
+      metadata: { namespace: 'kube-public' },
+      data: {},
+    });
   });
 });
