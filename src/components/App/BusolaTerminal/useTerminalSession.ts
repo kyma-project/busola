@@ -24,6 +24,7 @@ const RECONNECTION_MIN_DELAY_MS = 1_000;
 const RECONNECTION_MAX_DELAY_MS = 30_000;
 // Headroom before the hard cap for the re-provision + re-attach to finish.
 const PROACTIVE_RECONNECT_SAFETY_BUFFER_MS = 30_000;
+const MAX_ATTEMPTS = 10;
 
 const reconnect = (
   attemptRef: RefObject<number>,
@@ -36,7 +37,7 @@ const reconnect = (
   connect: (term: Terminal) => Promise<void>,
 ) => {
   const attempt = attemptRef.current;
-  if (attempt >= 10) {
+  if (attempt >= MAX_ATTEMPTS) {
     term.write(
       terminalSystemMessage(
         COLOR_ERROR,
@@ -57,7 +58,11 @@ const reconnect = (
   term.write(
     terminalSystemMessage(
       COLOR_WARNING,
-      t('terminal.messages.reconnecting', { delay: Math.round(delay / 1000) }),
+      t('terminal.messages.reconnecting', {
+        delay: Math.round(delay / 1000),
+        current: attempt,
+        max: MAX_ATTEMPTS,
+      }),
     ),
   );
   reconnectTimer.current = setTimeout(() => {
@@ -92,9 +97,7 @@ export function useTerminalSession() {
     async (term: Terminal, silent = false) => {
       disconnectedRef.current = false;
       deprovisioningRef.current = false;
-      // A proactive cycle's old socket is still open; close it to avoid a
-      // leak / double-attach (a reactive drop already closed it).
-      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      if (wsRef.current && wsRef.current.readyState !== WebSocket.CLOSED) {
         wsRef.current.close();
         wsRef.current = null;
       }
@@ -119,7 +122,6 @@ export function useTerminalSession() {
           t,
           silent,
           scheduleReconnect: (term: Terminal) => {
-            // A real drop cancels the pending proactive cycle.
             clearTimeout(proactiveReconnectTimer.current);
             proactiveReconnectTimer.current = undefined;
             reconnect(
@@ -194,7 +196,7 @@ export function useTerminalSession() {
     attemptRef.current = 0;
     onDataDisposableRef.current?.dispose();
     onDataDisposableRef.current = null;
-    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+    if (wsRef.current && wsRef.current.readyState !== WebSocket.CLOSED) {
       wsRef.current.close();
     }
     wsRef.current = null;
