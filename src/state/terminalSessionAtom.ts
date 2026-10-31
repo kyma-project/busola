@@ -1,17 +1,40 @@
 import { atom } from 'jotai';
 
 export type TerminalSessionStatus =
-  'idle' | 'provisioning' | 'connected' | 'error' | 'reconnecting';
+  | 'idle'
+  | 'provisioning'
+  | 'provisioned'
+  | 'connected'
+  | 'error'
+  | 'disconnecting'
+  | 'reconnecting';
+
+export enum ConnectionType {
+  Attach = 'attach',
+  Exec = 'exec',
+}
 
 export type TerminalSessionState = {
   status: TerminalSessionStatus;
-  podName: string | null;
+  abortController: AbortController | null;
+  podName: string;
   errorMessage: string | null;
+  command: string;
+  namespace: string;
+  container: string;
+  connectionType: ConnectionType;
+  deprovisionPod: () => Promise<void>;
 };
 
 export const terminalSessionAtom = atom<TerminalSessionState>({
   status: 'idle',
-  podName: null,
+  podName: '',
   errorMessage: null,
+  command: 'bash',
+  container: '',
+  namespace: '',
+  connectionType: ConnectionType.Attach,
+  abortController: null,
+  deprovisionPod: async () => {},
 });
 terminalSessionAtom.debugLabel = 'terminalSessionAtom';

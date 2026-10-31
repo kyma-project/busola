@@ -5,6 +5,7 @@ import { Terminal } from '@xterm/xterm';
 import { BusolaTerminal } from './BusolaTerminal';
 import { clusterAtom } from 'state/clusterAtom';
 import { showTerminalAtom } from 'state/showTerminalAtom';
+import { ConnectionType, terminalSessionAtom } from 'state/terminalSessionAtom';
 
 const mockLocation = vi.hoisted(() => ({ pathname: '/namespace/default' }));
 
@@ -91,6 +92,18 @@ describe('BusolaTerminal', () => {
       isFullscreen: false,
       isOpen: true,
       dockedHeight: 0,
+    });
+
+    store.set(terminalSessionAtom, {
+      status: 'provisioned',
+      podName: 'busola-terminal-aabbccdd',
+      errorMessage: null,
+      command: 'bash',
+      container: 'dev-toolbox',
+      namespace: 'busola-terminal',
+      connectionType: ConnectionType.Attach,
+      abortController: null,
+      deprovisionPod: async () => {},
     });
 
     render(

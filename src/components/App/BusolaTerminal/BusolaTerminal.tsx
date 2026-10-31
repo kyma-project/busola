@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Terminal } from '@xterm/xterm';
@@ -14,6 +14,36 @@ import { useTerminalSession } from './useTerminalSession';
 import './BusolaTerminal.scss';
 import '@xterm/xterm/css/xterm.css';
 
+function createXTerm() {
+  const term = new Terminal({ theme: getXtermTheme() });
+  const fitAddon = new FitAddon();
+  term.loadAddon(fitAddon);
+  fitAddon.fit();
+  return { term, fitAddon };
+}
+
+function createResizeObserver(
+  fitAddon: FitAddon,
+  termDOM: RefObject<HTMLDivElement | null>,
+  onMinHeightComputed?: (minHeight: number) => void,
+) {
+  return new ResizeObserver(() => {
+    fitAddon.fit();
+    if (onMinHeightComputed && termDOM.current) {
+      const xtermRow =
+        termDOM.current.querySelector<HTMLElement>('.xterm-rows > div');
+      const cardHeader = termDOM.current
+        .closest('.terminal-card')
+        ?.querySelector<HTMLElement>('.terminal-card__header')?.offsetHeight;
+      const cellHeight = xtermRow?.offsetHeight ?? 20;
+      const headerHeight = cardHeader ?? 60;
+      const contentPadding = 40; // margin (0.5rem+1rem) + padding (2×0.5rem)
+      onMinHeightComputed(
+        Math.ceil(headerHeight + contentPadding + cellHeight),
+      );
+    }
+  });
+}
 export function BusolaTerminal({
   dockedHeight,
   onMinHeightComputed,
@@ -24,12 +54,10 @@ export function BusolaTerminal({
   const { t } = useTranslation();
   const termDOM = useRef<HTMLDivElement>(null);
   const termRef = useRef<Terminal | null>(null);
-  const fitAddonRef = useRef<FitAddon | null>(null);
+  const observerRef = useRef<ResizeObserver | null>(null);
   const location = useLocation();
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
-  const sessionState = useAtomValue(terminalSessionAtom);
-  // Ref so the cleanup effect reads the current podName, not the mount-time value.
-  const podNameRef = useRef<string | null>(null);
+  const [sessionInfo, setSessionInfo] = useAtom(terminalSessionAtom);
   const { connect, disconnect } = useTerminalSession();
   const cluster = useAtomValue(clusterAtom);
   const openedOnClusterRef = useRef(cluster?.name);
@@ -38,52 +66,38 @@ export function BusolaTerminal({
   useEffect(() => {
     if (cluster?.name !== openedOnClusterRef.current || isOnClustersPage) {
       openedOnClusterRef.current = cluster?.name;
-      disconnect(podNameRef.current);
+      disconnect();
       setShowTerminal((prev) => ({ ...prev, isOpen: false }));
     }
   }, [cluster?.name, setShowTerminal, disconnect, isOnClustersPage]);
 
-  podNameRef.current = sessionState.podName;
-
   useEffect(() => {
+    console.log(sessionInfo.status);
+
     if (!termDOM?.current) return;
-    const term = new Terminal({ theme: getXtermTheme() });
-    const fitAddon = new FitAddon();
-    termRef.current = term;
-    fitAddonRef.current = fitAddon;
-
-    term.loadAddon(fitAddon);
-    term.open(termDOM.current);
-    fitAddon.fit();
-    connect(term);
-
-    const observer = new ResizeObserver(() => {
-      fitAddon.fit();
-      if (onMinHeightComputed && termDOM.current) {
-        const xtermRow =
-          termDOM.current.querySelector<HTMLElement>('.xterm-rows > div');
-        const cardHeader = termDOM.current
-          .closest('.terminal-card')
-          ?.querySelector<HTMLElement>('.terminal-card__header')?.offsetHeight;
-        const cellHeight = xtermRow?.offsetHeight ?? 20;
-        const headerHeight = cardHeader ?? 60;
-        const contentPadding = 40; // margin (0.5rem+1rem) + padding (2×0.5rem)
-        onMinHeightComputed(
-          Math.ceil(headerHeight + contentPadding + cellHeight),
-        );
+    switch (sessionInfo.status) {
+      case 'reconnecting': {
+        termRef.current
+          ? connect(termRef.current)
+          : console.warn('Reconnecting to not existing terminal, aborting');
+        break;
       }
-    });
-    observer.observe(termDOM.current);
-
-    return () => {
-      observer.disconnect();
-      disconnect(podNameRef.current);
-      term.dispose();
-      termRef.current = null;
-      fitAddonRef.current = null;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      case 'provisioned': {
+        const { term, fitAddon } = createXTerm();
+        term.open(termDOM.current);
+        termRef.current = term;
+        connect(term);
+        const observer = createResizeObserver(
+          fitAddon,
+          termDOM,
+          onMinHeightComputed,
+        );
+        observerRef.current = observer;
+        observer.observe(termDOM.current);
+        break;
+      }
+    }
+  }, [sessionInfo.status]);
 
   useEffect(() => {
     const applyTerminalTheme = () => {
@@ -99,8 +113,23 @@ export function BusolaTerminal({
     return () => detachThemeLoaded(applyTerminalTheme);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      //   cleanup on dismount
+      console.log('Cleaning on dismount');
+      observerRef.current?.disconnect();
+      observerRef.current = null;
+      disconnect();
+      termRef.current?.dispose();
+      termRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleClose = () => {
-    disconnect(podNameRef.current);
+    console.log('closing');
+    setSessionInfo((prev) => ({ ...prev, status: 'disconnecting' }));
+    disconnect();
     setShowTerminal((prev) => ({ ...prev, isOpen: false }));
   };
 
@@ -120,12 +149,15 @@ export function BusolaTerminal({
       : undefined;
 
   let statusLabel: string | null;
-  switch (sessionState.status) {
+  switch (sessionInfo.status) {
     case 'provisioning':
       statusLabel = t('terminal.status.provisioning');
       break;
+    case 'provisioned':
+      statusLabel = t('terminal.status.connecting');
+      break;
     case 'error':
-      console.warn('Terminal state is in error:', sessionState.errorMessage);
+      console.warn('Terminal state is in error:', sessionInfo.errorMessage);
       statusLabel = t('terminal.status.error');
       break;
     case 'reconnecting':
