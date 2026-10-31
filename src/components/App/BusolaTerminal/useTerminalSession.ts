@@ -71,7 +71,7 @@ export function useTerminalSession() {
   const authData = useAtomValue(authDataAtom);
   const cluster = useAtomValue(clusterAtom);
   const ssoData = useAtomValue(ssoDataAtom);
-  const [sessionInfo, setSession] = useAtom(terminalSessionAtom);
+  const [sessionInfo, setSessionInfo] = useAtom(terminalSessionAtom);
   const { config } = useFeature<TerminalFeature>(configFeaturesNames.TERMINAL);
 
   const maxSessionDurationMs: number | undefined = config?.maxSessionDurationMs;
@@ -114,7 +114,7 @@ export function useTerminalSession() {
           containerName: sessionInfo.container,
           connectionType: sessionInfo.connectionType,
           namespace: sessionInfo.namespace,
-          setSession,
+          setSession: setSessionInfo,
           signal: sessionInfo.abortController?.signal,
           t,
           silent,
@@ -126,7 +126,7 @@ export function useTerminalSession() {
               attemptRef,
               term,
               t,
-              setSession,
+              setSessionInfo,
               reconnectTimer,
               connectRef.current,
             );
@@ -157,7 +157,7 @@ export function useTerminalSession() {
         if (err?.name === 'AbortError') return;
         console.error(err);
         const message = err?.message ?? t('terminal.messages.unknown-error');
-        setSession((prev: TerminalSessionState) => ({
+        setSessionInfo((prev: TerminalSessionState) => ({
           ...prev,
           status: 'error',
           errorMessage: message,
@@ -173,7 +173,7 @@ export function useTerminalSession() {
       ssoData,
       maxSessionDurationMs,
       sessionInfo,
-      setSession,
+      setSessionInfo,
       t,
     ],
   );

@@ -130,8 +130,8 @@ function deprovisionPod(
         relativeUrl: `/api/v1/namespaces/${namespace}/pods/${podName}`,
         init: { method: 'DELETE' },
       });
-    } catch {
-      // best-effort
+    } catch (e) {
+      console.warn(`Failed to deprovision terminal pod ${podName}`, e);
     }
   };
 }
