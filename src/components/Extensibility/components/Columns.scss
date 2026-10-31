@@ -1,5 +1,18 @@
-// Hidden children render no group; without this the empty form still paints
-// its grid chrome.
+// Hide the Form when all FormGroup children are invisible (Widget returns null)
 .extensibility-columns:not(:has(ui5-form-group)) {
   display: none;
+}
+
+// Non-FormGroup variant: responsive 2-column grid, no form chrome.
+// auto-fit + minmax responds to the container's available width, not the viewport.
+// min(20rem, 100%) prevents overflow in very narrow containers.
+.extensibility-columns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+  gap: 1rem;
+
+  // Hide when all children are invisible (Widget returns null)
+  &:not(:has(> *)) {
+    display: none;
+  }
 }

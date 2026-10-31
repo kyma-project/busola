@@ -57,10 +57,11 @@ interface FormGroupProps {
   schema: any;
   singleRootResource: any;
   embedResource: any;
+  nestedInColumns?: boolean;
   [key: string]: any;
 }
 
-export function FormGroup({
+function Group({
   value,
   structure,
   schema,
@@ -73,40 +74,53 @@ export function FormGroup({
   const [showDescription, setShowDescription] = useState(false);
 
   return (
+    <UI5FormGroup headerText={description ? undefined : widgetT(structure)}>
+      {description && (
+        <div className="ui5-form-group-heading">
+          <Title level="H3" size="H6">
+            {widgetT(structure)}
+          </Title>
+          <HintButton
+            className="sap-margin-begin-tiny"
+            setShowTitleDescription={setShowDescription}
+            showTitleDescription={showDescription}
+            description={description}
+          />
+        </div>
+      )}
+      {Array.isArray(structure?.children) &&
+        structure.children.map((def: any, idx: number) => (
+          <Widget
+            key={idx}
+            value={value}
+            structure={def}
+            schema={schema}
+            inlineRenderer={FormItemWidget}
+            inlineContext={true}
+            singleRootResource={singleRootResource}
+            embedResource={embedResource}
+            {...props}
+          />
+        ))}
+    </UI5FormGroup>
+  );
+}
+
+export function FormGroup({
+  nestedInColumns = false,
+  ...props
+}: FormGroupProps) {
+  if (nestedInColumns) {
+    return <Group {...props} />;
+  }
+
+  return (
     <Form
       className="extensibility-read-form-group"
       layout="S1 M1 L1 XL1"
-      labelSpan="S12 M12 L12 XL12"
+      labelSpan="S12 M4 L4 XL4"
     >
-      <UI5FormGroup headerText={description ? undefined : widgetT(structure)}>
-        {description && (
-          <div className="ui5-form-group-heading">
-            <Title level="H3" size="H6">
-              {widgetT(structure)}
-            </Title>
-            <HintButton
-              className="sap-margin-begin-tiny"
-              setShowTitleDescription={setShowDescription}
-              showTitleDescription={showDescription}
-              description={description}
-            />
-          </div>
-        )}
-        {Array.isArray(structure?.children) &&
-          structure.children.map((def: any, idx: number) => (
-            <Widget
-              key={idx}
-              value={value}
-              structure={def}
-              schema={schema}
-              inlineRenderer={FormItemWidget}
-              inlineContext={true}
-              singleRootResource={singleRootResource}
-              embedResource={embedResource}
-              {...props}
-            />
-          ))}
-      </UI5FormGroup>
+      <Group {...props} />
     </Form>
   );
 }
