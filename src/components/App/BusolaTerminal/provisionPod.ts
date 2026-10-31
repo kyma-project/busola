@@ -1,12 +1,10 @@
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 
-export const TERMINAL_NAMESPACE = 'busola-terminal';
-export const CONTAINER_NAME = 'dev-toolbox';
-
 const POD_TTL_MS = 60 * 60 * 1000;
 const POD_POLL_INTERVAL_MS = 2000;
 const POD_POLL_TIMEOUT_MS = 120_000;
+const TERMINAL_CONTAINER_NAME = 'dev-toolbox';
 
 export async function generateTerminalPodName(
   clusterServer: string,
@@ -20,14 +18,19 @@ export async function generateTerminalPodName(
   return `busola-terminal-${hex.slice(0, 16)}`;
 }
 
-function buildPodManifest(podName: string, image: string) {
+function buildPodManifest(
+  podName: string,
+  namespace: string,
+  containerName: string,
+  image: string,
+) {
   const ttl = new Date(Date.now() + POD_TTL_MS).toISOString();
   return {
     apiVersion: 'v1',
     kind: 'Pod',
     metadata: {
       name: podName,
-      namespace: TERMINAL_NAMESPACE,
+      namespace,
       labels: { run: 'busola-terminal' },
       annotations: { 'busola.io/time-to-live': ttl },
     },
@@ -35,7 +38,7 @@ function buildPodManifest(podName: string, image: string) {
       containers: [
         {
           image,
-          name: CONTAINER_NAME,
+          name: containerName,
           resources: {
             requests: { cpu: '100m', memory: '128Mi' },
             limits: { cpu: '500m', memory: '256Mi' },
@@ -59,7 +62,6 @@ function buildPodManifest(podName: string, image: string) {
   };
 }
 
-// 409 (already exists) is treated as success.
 async function createIfMissing(
   fetchFn: FetchFn,
   relativeUrl: string,
@@ -77,6 +79,7 @@ async function createIfMissing(
       },
     });
   } catch (err) {
+    // 409 (already exists) is treated as success.
     if (!(err instanceof HttpError && err.code === 409)) throw err;
   }
 }
@@ -87,10 +90,11 @@ async function createIfMissing(
 async function waitIfTerminating(
   fetchFn: FetchFn,
   podName: string,
+  namespace: string,
   abortController: AbortController,
   deadline: number,
 ): Promise<void> {
-  const podUrl = `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/${podName}`;
+  const podUrl = `/api/v1/namespaces/${namespace}/pods/${podName}`;
   let isTerminating: boolean;
   try {
     const res = await fetchFn({ relativeUrl: podUrl, abortController });
@@ -121,6 +125,7 @@ async function waitIfTerminating(
 async function pollPodReady(
   fetchFn: FetchFn,
   podName: string,
+  namespace: string,
   abortController: AbortController,
   deadline: number,
 ): Promise<void> {
@@ -128,7 +133,7 @@ async function pollPodReady(
     if (abortController.signal.aborted)
       throw new DOMException('Aborted', 'AbortError');
     const res = await fetchFn({
-      relativeUrl: `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/${podName}`,
+      relativeUrl: `/api/v1/namespaces/${namespace}/pods/${podName}`,
       abortController,
     });
     const pod = await res.json();
@@ -146,11 +151,15 @@ export async function provisionPod({
   fetchFn,
   podName,
   image,
+  namespace,
+  containerName,
   abortController,
 }: {
   fetchFn: FetchFn;
   podName: string;
   image: string;
+  namespace: string;
+  containerName: string;
   abortController: AbortController;
 }): Promise<void> {
   const deadline = Date.now() + POD_POLL_TIMEOUT_MS;
@@ -160,16 +169,22 @@ export async function provisionPod({
     {
       apiVersion: 'v1',
       kind: 'Namespace',
-      metadata: { name: TERMINAL_NAMESPACE },
+      metadata: { name: namespace },
     },
     abortController,
   );
-  await waitIfTerminating(fetchFn, podName, abortController, deadline);
+  await waitIfTerminating(
+    fetchFn,
+    podName,
+    namespace,
+    abortController,
+    deadline,
+  );
   await createIfMissing(
     fetchFn,
-    `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods`,
-    buildPodManifest(podName, image),
+    `/api/v1/namespaces/${namespace}/pods`,
+    buildPodManifest(podName, namespace, containerName, image),
     abortController,
   );
-  await pollPodReady(fetchFn, podName, abortController, deadline);
+  await pollPodReady(fetchFn, podName, namespace, abortController, deadline);
 }

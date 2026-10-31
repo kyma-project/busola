@@ -2,16 +2,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useTerminalSession } from './useTerminalSession';
 import { encodeBase64Url } from 'shared/utils/base64url';
+import {
+  ConnectionType,
+  TerminalSessionState,
+} from 'state/terminalSessionAtom';
 
 vi.mock('state/authDataAtom', () => ({ authDataAtom: { id: 'auth' } }));
 vi.mock('state/clusterAtom', () => ({ clusterAtom: { id: 'cluster' } }));
 vi.mock('state/ssoDataAtom', () => ({ ssoDataAtom: { id: 'sso' } }));
-vi.mock('state/terminalSessionAtom', () => ({
+vi.mock('state/terminalSessionAtom', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('state/terminalSessionAtom')>()),
   terminalSessionAtom: { id: 'session' },
 }));
 
 let mockAuthData: any;
 let mockCluster: any;
+let mockSessionInfo: TerminalSessionState;
 const setSession = vi.fn();
 
 vi.mock('jotai', async (importOriginal) => ({
@@ -21,6 +27,11 @@ vi.mock('jotai', async (importOriginal) => ({
     if (a?.id === 'cluster') return mockCluster;
     if (a?.id === 'sso') return null;
     return undefined;
+  },
+  // connect/disconnect read session state via useAtom(terminalSessionAtom).
+  useAtom: (a: any) => {
+    if (a?.id === 'session') return [mockSessionInfo, setSession];
+    return [undefined, setSession];
   },
   useSetAtom: () => setSession,
 }));
@@ -52,6 +63,24 @@ vi.mock('./provisionPod', async (importOriginal) => ({
 
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
+const CONTAINER = 'dev-toolbox';
+
+function makeSessionState(
+  overrides: Partial<TerminalSessionState> = {},
+): TerminalSessionState {
+  return {
+    status: 'provisioning',
+    podName: POD,
+    container: CONTAINER,
+    namespace: NS,
+    command: 'bash',
+    connectionType: ConnectionType.Attach,
+    errorMessage: null,
+    abortController: new AbortController(),
+    deprovisionPod: async () => {},
+    ...overrides,
+  };
+}
 
 const jsonResponse = (data: any) => ({ json: () => Promise.resolve(data) });
 
@@ -105,6 +134,7 @@ beforeEach(() => {
   };
   // Proactive reconnect off by default; individual tests opt in.
   mockTerminalFeature = { isEnabled: true, config: {} };
+  mockSessionInfo = makeSessionState();
   wsInstances.length = 0;
   hookFetch.mockReset();
   setSession.mockReset();
@@ -126,58 +156,65 @@ describe('useTerminalSession', () => {
     });
   }
 
-  it('connect provisions the pod and opens the attach socket with auth in protocols', async () => {
-    setupHappyHookFetch();
+  it('connect opens the attach socket for the session pod with auth in protocols', async () => {
     const { result } = renderHook(() => useTerminalSession());
 
     await act(async () => {
       await result.current.connect(makeTerm() as any);
     });
 
-    expect(lastWs()?.url).toContain('/attach?');
+    expect(lastWs()?.url).toContain(`/pods/${POD}/attach?`);
     expect(lastWs()?.protocols).toContain('v4.channel.k8s.io');
     expect(lastWs()?.protocols).toContain(
       `base64url.header.x-k8s-authorization.value.${encodeBase64Url('Bearer tok123')}`,
     );
   });
 
-  it('connect resets session state (including podName) before provisioning', async () => {
-    setupHappyHookFetch();
+  it('connect uses the exec endpoint when the session connection type is exec', async () => {
+    mockSessionInfo = makeSessionState({
+      connectionType: ConnectionType.Exec,
+    });
     const { result } = renderHook(() => useTerminalSession());
 
     await act(async () => {
       await result.current.connect(makeTerm() as any);
     });
 
-    expect(setSession).toHaveBeenCalledWith({
-      status: 'provisioning',
-      podName: null,
-      errorMessage: null,
-    });
+    expect(lastWs()?.url).toContain(`/pods/${POD}/exec?`);
   });
 
-  it('disconnect closes the socket and deletes the pod', async () => {
-    setupHappyHookFetch();
+  it('connect does not provision the pod or reset the session state', async () => {
+    const { result } = renderHook(() => useTerminalSession());
+
+    await act(async () => {
+      await result.current.connect(makeTerm() as any);
+    });
+
+    // Provisioning moved to createBusolaTerminalPod; connect must not fetch
+    // against the API nor reset the session to a provisioning state.
+    expect(hookFetch).not.toHaveBeenCalled();
+    expect(setSession).not.toHaveBeenCalledWith(
+      expect.objectContaining({ status: 'provisioning' }),
+    );
+  });
+
+  it('disconnect closes the socket and aborts the session controller', async () => {
+    const abort = mockSessionInfo.abortController!;
     const { result } = renderHook(() => useTerminalSession());
     await act(async () => {
       await result.current.connect(makeTerm() as any);
     });
     const ws = lastWs()!;
-    hookFetch.mockClear();
 
     await act(async () => {
-      await result.current.disconnect(POD);
+      await result.current.disconnect();
     });
 
     expect(ws.readyState).toBe(MockWebSocket.CLOSED);
-    expect(hookFetch).toHaveBeenCalledWith({
-      relativeUrl: `/api/v1/namespaces/${NS}/pods/${POD}`,
-      init: { method: 'DELETE' },
-    });
+    expect(abort.signal.aborted).toBe(true);
   });
 
-  it('deletes the pod only once when disconnect is called repeatedly', async () => {
-    setupHappyHookFetch();
+  it('disconnect no longer deletes the pod', async () => {
     const { result } = renderHook(() => useTerminalSession());
     await act(async () => {
       await result.current.connect(makeTerm() as any);
@@ -185,18 +222,33 @@ describe('useTerminalSession', () => {
     hookFetch.mockClear();
 
     await act(async () => {
-      await result.current.disconnect(POD);
-      await result.current.disconnect(POD);
+      await result.current.disconnect();
     });
 
+    // Pod lifecycle (DELETE) is owned elsewhere now, not by disconnect.
     const deleteCalls = hookFetch.mock.calls.filter(
-      ([arg]: any) => arg.init?.method === 'DELETE',
+      ([arg]: any) => arg?.init?.method === 'DELETE',
     );
-    expect(deleteCalls).toHaveLength(1);
+    expect(deleteCalls).toHaveLength(0);
+  });
+
+  it('disconnect runs its teardown only once when called repeatedly', async () => {
+    const abortSpy = vi.spyOn(mockSessionInfo.abortController!, 'abort');
+    const { result } = renderHook(() => useTerminalSession());
+    await act(async () => {
+      await result.current.connect(makeTerm() as any);
+    });
+
+    await act(async () => {
+      await result.current.disconnect();
+      await result.current.disconnect();
+    });
+
+    // disconnectedRef guards against a double teardown.
+    expect(abortSpy).toHaveBeenCalledTimes(1);
   });
 
   it('disconnect does not reset session state, preventing a concurrent connect from being overwritten', async () => {
-    setupHappyHookFetch();
     const { result } = renderHook(() => useTerminalSession());
     await act(async () => {
       await result.current.connect(makeTerm() as any);
@@ -204,20 +256,10 @@ describe('useTerminalSession', () => {
     setSession.mockClear();
 
     await act(async () => {
-      await result.current.disconnect(POD);
+      await result.current.disconnect();
     });
 
     expect(setSession).not.toHaveBeenCalled();
-  });
-
-  it('disconnect is a no-op without a pod name', async () => {
-    const { result } = renderHook(() => useTerminalSession());
-
-    await act(async () => {
-      await result.current.disconnect(null);
-    });
-
-    expect(hookFetch).not.toHaveBeenCalled();
   });
 
   it('cancels a pending reconnect on disconnect so it cannot revive a torn-down terminal', async () => {
@@ -237,7 +279,7 @@ describe('useTerminalSession', () => {
       expect(wsInstances).toHaveLength(1);
 
       await act(async () => {
-        await result.current.disconnect(POD);
+        await result.current.disconnect();
       });
 
       // past the backoff + jitter (<= ~2s)
@@ -338,7 +380,7 @@ describe('useTerminalSession', () => {
       });
 
       await act(async () => {
-        await result.current.disconnect(POD);
+        await result.current.disconnect();
       });
 
       await act(async () => {

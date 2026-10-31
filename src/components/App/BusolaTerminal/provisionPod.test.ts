@@ -1,11 +1,12 @@
 import { describe, it, expect, vi } from 'vitest';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { generateTerminalPodName, provisionPod } from './provisionPod';
+import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
 
-const jsonResponse = (data: any) => ({ json: () => Promise.resolve(data) });
+const jsonResponse = (data: any) => new Response(JSON.stringify(data));
 
 describe('generateTerminalPodName', () => {
   it('produces the expected prefix', async () => {
@@ -42,7 +43,7 @@ describe('provisionPod', () => {
   const abortController = new AbortController();
 
   function podFetch(phase = 'Running') {
-    return vi.fn(({ relativeUrl, init }: any) => {
+    return vi.fn<FetchFn>(({ relativeUrl, init }) => {
       const method = init?.method ?? 'GET';
       if (method === 'GET' && relativeUrl.includes('/pods/'))
         return Promise.resolve(jsonResponse({ status: { phase } }));
@@ -53,9 +54,11 @@ describe('provisionPod', () => {
   it('creates the namespace and pod, then resolves once Running', async () => {
     const fetchFn = podFetch('Running');
     await provisionPod({
-      fetchFn: fetchFn as any,
+      fetchFn,
       podName: POD,
+      namespace: NS,
       image: 'i',
+      containerName: 'name',
       abortController,
     });
 
@@ -76,9 +79,11 @@ describe('provisionPod', () => {
   it('forwards the abort controller to every request so teardown can cancel them', async () => {
     const fetchFn = podFetch('Running');
     await provisionPod({
-      fetchFn: fetchFn as any,
+      fetchFn,
       podName: POD,
+      namespace: NS,
       image: 'i',
+      containerName: 'name',
       abortController,
     });
 
@@ -94,9 +99,11 @@ describe('provisionPod', () => {
     aborted.abort();
     await expect(
       provisionPod({
-        fetchFn: fetchFn as any,
+        fetchFn,
         podName: POD,
+        namespace: NS,
         image: 'i',
+        containerName: 'name',
         abortController: aborted,
       }),
     ).rejects.toMatchObject({ name: 'AbortError' });
@@ -105,9 +112,11 @@ describe('provisionPod', () => {
   it('puts the configured image into the pod manifest', async () => {
     const fetchFn = podFetch('Running');
     await provisionPod({
-      fetchFn: fetchFn as any,
+      fetchFn,
       podName: POD,
+      namespace: NS,
       image: 'my-registry/dev:1.2.3',
+      containerName: 'name',
       abortController,
     });
     const podCall = fetchFn.mock.calls.find(([arg]: any) =>
@@ -119,9 +128,11 @@ describe('provisionPod', () => {
   it('sets PROMPT_COMMAND so the prompt never appears on the same line as partial output', async () => {
     const fetchFn = podFetch('Running');
     await provisionPod({
-      fetchFn: fetchFn as any,
+      fetchFn,
       podName: POD,
+      namespace: NS,
       image: 'i',
+      containerName: 'name',
       abortController,
     });
     const podCall = fetchFn.mock.calls.find(([arg]: any) =>
@@ -137,15 +148,17 @@ describe('provisionPod', () => {
 
   it('tolerates a 409 when the namespace or pod already exists', async () => {
     const conflict = new HttpError('Conflict', 409, 409);
-    const fetchFn = vi.fn(({ init }: any) => {
+    const fetchFn = vi.fn<FetchFn>(({ init }) => {
       if ((init?.method ?? 'GET') === 'POST') return Promise.reject(conflict);
       return Promise.resolve(jsonResponse({ status: { phase: 'Running' } }));
     });
     await expect(
       provisionPod({
-        fetchFn: fetchFn as any,
+        fetchFn,
         podName: POD,
+        namespace: NS,
         image: 'i',
+        containerName: 'name',
         abortController,
       }),
     ).resolves.toBeUndefined();
@@ -153,12 +166,14 @@ describe('provisionPod', () => {
 
   it('rethrows non-409 errors', async () => {
     const boom = new HttpError('Boom', 500, 500);
-    const fetchFn = vi.fn(() => Promise.reject(boom));
+    const fetchFn = vi.fn<FetchFn>(() => Promise.reject(boom));
     await expect(
       provisionPod({
-        fetchFn: fetchFn as any,
+        fetchFn,
         podName: POD,
+        namespace: NS,
         image: 'i',
+        containerName: 'name',
         abortController,
       }),
     ).rejects.toBe(boom);
@@ -168,9 +183,11 @@ describe('provisionPod', () => {
     const fetchFn = podFetch('Failed');
     await expect(
       provisionPod({
-        fetchFn: fetchFn as any,
+        fetchFn,
         podName: POD,
+        namespace: NS,
         image: 'i',
+        containerName: 'name',
         abortController,
       }),
     ).rejects.toThrow(/Failed/);
@@ -178,7 +195,7 @@ describe('provisionPod', () => {
 
   it('waits for a Terminating pod to be deleted before provisioning a fresh one', async () => {
     let getCallCount = 0;
-    const fetchFn = vi.fn(({ relativeUrl, init }: any) => {
+    const fetchFn = vi.fn<FetchFn>(({ relativeUrl, init }) => {
       const method = init?.method ?? 'GET';
       if (method === 'POST') return Promise.resolve(jsonResponse({}));
       if (relativeUrl.includes(`/pods/${POD}`)) {
@@ -204,9 +221,11 @@ describe('provisionPod', () => {
 
     await expect(
       provisionPod({
-        fetchFn: fetchFn as any,
+        fetchFn,
         podName: POD,
+        namespace: NS,
         image: 'i',
+        containerName: 'name',
         abortController,
       }),
     ).resolves.toBeUndefined();
@@ -216,7 +235,7 @@ describe('provisionPod', () => {
 
   it('does not wait when no Terminating pod is present', async () => {
     let getCallCount = 0;
-    const fetchFn = vi.fn(({ relativeUrl, init }: any) => {
+    const fetchFn = vi.fn<FetchFn>(({ relativeUrl, init }) => {
       const method = init?.method ?? 'GET';
       if (method === 'POST') return Promise.resolve(jsonResponse({}));
       if (relativeUrl.includes(`/pods/${POD}`)) {
@@ -227,9 +246,11 @@ describe('provisionPod', () => {
     });
 
     await provisionPod({
-      fetchFn: fetchFn as any,
+      fetchFn,
       podName: POD,
+      namespace: NS,
       image: 'i',
+      containerName: 'name',
       abortController,
     });
 
@@ -239,7 +260,7 @@ describe('provisionPod', () => {
 
   it('does not wait when no pod exists yet', async () => {
     let getCallCount = 0;
-    const fetchFn = vi.fn(({ relativeUrl, init }: any) => {
+    const fetchFn = vi.fn<FetchFn>(({ relativeUrl, init }) => {
       const method = init?.method ?? 'GET';
       if (method === 'POST') return Promise.resolve(jsonResponse({}));
       if (relativeUrl.includes(`/pods/${POD}`)) {
@@ -255,9 +276,11 @@ describe('provisionPod', () => {
     });
 
     await provisionPod({
-      fetchFn: fetchFn as any,
+      fetchFn,
       podName: POD,
+      namespace: NS,
       image: 'i',
+      containerName: 'name',
       abortController,
     });
 
@@ -266,7 +289,7 @@ describe('provisionPod', () => {
 
   it('throws when the deadline expires while waiting for a Terminating pod', async () => {
     vi.useFakeTimers();
-    const fetchFn = vi.fn(({ relativeUrl, init }: any) => {
+    const fetchFn = vi.fn<FetchFn>(({ relativeUrl, init }) => {
       const method = init?.method ?? 'GET';
       if (method === 'POST') return Promise.resolve(jsonResponse({}));
       if (relativeUrl.includes(`/pods/${POD}`))
@@ -279,9 +302,11 @@ describe('provisionPod', () => {
     });
 
     const provision = provisionPod({
-      fetchFn: fetchFn as any,
+      fetchFn,
       podName: POD,
+      namespace: NS,
       image: 'i',
+      containerName: 'name',
       abortController,
     });
     const assertion = expect(provision).rejects.toThrow(
@@ -295,7 +320,7 @@ describe('provisionPod', () => {
   it('throws AbortError when aborted while waiting for a Terminating pod', async () => {
     const aborted = new AbortController();
     let initialCheckDone = false;
-    const fetchFn = vi.fn(({ relativeUrl, init }: any) => {
+    const fetchFn = vi.fn<FetchFn>(({ relativeUrl, init }) => {
       const method = init?.method ?? 'GET';
       if (method === 'POST') return Promise.resolve(jsonResponse({}));
       if (relativeUrl.includes(`/pods/${POD}`)) {
@@ -314,9 +339,11 @@ describe('provisionPod', () => {
 
     await expect(
       provisionPod({
-        fetchFn: fetchFn as any,
+        fetchFn,
         podName: POD,
+        namespace: NS,
         image: 'i',
+        containerName: 'name',
         abortController: aborted,
       }),
     ).rejects.toMatchObject({ name: 'AbortError' });
