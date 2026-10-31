@@ -89,7 +89,11 @@ async function createBusolaTerminalPod(
   containerName: string,
   abortController: AbortController,
 ): Promise<void> {
-  setSession((prev) => ({ ...prev, status: 'provisioning' }));
+  setSession((prev) => ({
+    ...prev,
+    status: 'provisioning',
+    deprovisionPod: deprovisionPod(fetchFn, namespace, podName, setSession),
+  }));
   try {
     await provisionPod({
       fetchFn,
@@ -124,7 +128,7 @@ function deprovisionPod(
   setSession: (update: SetStateAction<TerminalSessionState>) => void,
 ) {
   return async () => {
-    setSession((prev) => ({ ...prev, status: 'error' }));
+    setSession((prev) => ({ ...prev, status: 'idle' }));
     try {
       await fetchFn({
         relativeUrl: `/api/v1/namespaces/${namespace}/pods/${podName}`,

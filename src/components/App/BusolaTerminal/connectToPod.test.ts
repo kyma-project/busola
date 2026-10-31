@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { connectTerminal } from './connectTerminal';
+import { connectToPod } from './connectToPod';
 import { encodeBase64Url } from 'shared/utils/base64url';
 import { ConnectionType } from 'state/terminalSessionAtom';
 import { TFunction } from 'i18next';
@@ -78,7 +78,7 @@ async function attach(
   const term = makeTerm();
   const sess = vi.fn();
   const onConnected = vi.fn();
-  const { ws, disposable } = await connectTerminal({
+  const { ws, disposable } = await connectToPod({
     authHeaders: AUTH_HEADERS,
     term: term as any,
     podName: POD,

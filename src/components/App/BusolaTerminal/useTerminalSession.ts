@@ -15,9 +15,9 @@ import {
 import {
   COLOR_ERROR,
   COLOR_WARNING,
-  connectTerminal,
+  connectToPod,
   terminalSystemMessage,
-} from './connectTerminal';
+} from './connectToPod';
 import { TFunction } from 'i18next';
 
 const RECONNECTION_MIN_DELAY_MS = 1_000;
@@ -106,7 +106,7 @@ export function useTerminalSession() {
         const authHeaders = new Headers(headers);
 
         onDataDisposableRef.current?.dispose();
-        const { ws, disposable } = await connectTerminal({
+        const { ws, disposable } = await connectToPod({
           authHeaders,
           term,
           podName: sessionInfo.podName,
@@ -202,6 +202,7 @@ export function useTerminalSession() {
       deprovisioningRef.current = true;
       await deprovisionPod();
     }
+    setSessionInfo((prev) => ({ ...prev, status: 'idle' }));
   }, [abortController, deprovisionPod]);
 
   return { connect, disconnect };

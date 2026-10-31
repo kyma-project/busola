@@ -78,7 +78,7 @@ function buildAttachUrl({
 }
 
 // Auth encoded into Sec-WebSocket-Protocol — browser WebSocket has no headers param
-export async function connectTerminal({
+export async function connectToPod({
   authHeaders,
   term,
   podName,
