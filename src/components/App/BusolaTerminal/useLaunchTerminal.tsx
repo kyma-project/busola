@@ -13,7 +13,7 @@ import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { ssoDataAtom } from 'state/ssoDataAtom';
 import { SetStateAction } from 'react';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import {
   configFeaturesNames,
@@ -37,7 +37,7 @@ export function useLaunchTerminal() {
   const cluster = useAtomValue(clusterAtom);
   const ssoData = useAtomValue(ssoDataAtom);
   const fetchFn = useFetch();
-  const setSession = useSetAtom(terminalSessionAtom);
+  const setSessionInfo = useSetAtom(terminalSessionAtom);
 
   return () => {
     (async () => {
