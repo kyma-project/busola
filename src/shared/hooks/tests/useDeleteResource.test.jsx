@@ -16,14 +16,6 @@ vi.mock('react-router', async (importOriginal) => ({
   useNavigate: () => mockNavigate,
 }));
 
-vi.mock('shared/contexts/NotificationContext', () => ({
-  useNotification: () => ({ notifySuccess: vi.fn(), notifyError: vi.fn() }),
-}));
-
-vi.mock('hooks/useUrl', () => ({
-  useUrl: () => ({ resourceListUrl: () => '/pods' }),
-}));
-
 const pod = { kind: 'Pod', metadata: { name: 'pod-a', namespace: 'default' } };
 
 const initialLayout = {

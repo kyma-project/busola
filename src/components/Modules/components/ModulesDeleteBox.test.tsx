@@ -4,17 +4,10 @@ import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { ModulesDeleteBox } from './ModulesDeleteBox';
 
 const mockDeleteResources = vi.fn();
-vi.mock('../deleteModulesHelpers', () => ({
-  checkIfAllResourcesAreDeleted: vi.fn(),
-  checkIfAssociatedResourceLeft: () => false,
+vi.mock('../deleteModulesHelpers', async (importOriginal) => ({
+  ...(await importOriginal()),
   deleteResources: (...args: unknown[]) => mockDeleteResources(...args),
-  fetchResourceCounts: async () => ({}),
-  generateAssociatedResourcesUrls: async () => [],
-  getAssociatedResources: () => [],
-  getCommunityResources: async () => [],
   getCommunityResourceUrls: async () => ['/apis/example.com/v1/apples/a'],
-  getCRResource: () => [],
-  handleItemClick: vi.fn(),
 }));
 
 const mockNavigate = vi.fn();
@@ -27,21 +20,6 @@ vi.mock('state/navigation/allNodesAtom', async () => {
   const { atom } = await import('jotai');
   return { allNodesAtomSync: atom([]) };
 });
-
-vi.mock('shared/hooks/BackendAPI/useGet', () => ({
-  useGetScope: () => vi.fn(),
-  useSingleGet: () => vi.fn(),
-}));
-vi.mock('shared/hooks/BackendAPI/useMutation', () => ({
-  useDelete: () => vi.fn(),
-}));
-vi.mock('shared/hooks/BackendAPI/usePost', () => ({
-  usePost: () => vi.fn(),
-}));
-
-vi.mock('shared/contexts/NotificationContext', () => ({
-  useNotification: () => ({ notifySuccess: vi.fn(), notifyError: vi.fn() }),
-}));
 
 vi.mock('hooks/useUrl', () => ({
   useUrl: () => ({
