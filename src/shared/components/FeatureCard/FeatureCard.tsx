@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { isSystemThemeDark, themeAtom } from 'state/settings/themeAtom';
 import modulesIllustration from './assets/Modules/modulesIllustration.svg';
 import modulesIllustrationHC from './assets/Modules/modulesIllustrationHC.svg';
+import Satellite from './assets/Satellite/Satellite.svg';
 import AiIllustrationLight from './assets/AI/AiIllustrationLight.svg';
 import AiIllustrationDark from './assets/AI/AiIllustrationDark.svg';
 import AiIllustrationHClight from './assets/AI/AiIllustrationHClight.svg';
@@ -35,6 +36,8 @@ const getIllustration = (
       return DiscoveryIllustration;
     case 'KymaCLI':
       return KymaCLIIllustration;
+    case 'Satellite':
+      return Satellite;
     case 'Terminal':
       return TerminalIllustration;
     case 'Teched':

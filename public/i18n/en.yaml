@@ -1,5 +1,10 @@
 apps:
   title: Apps
+cloud-manager:
+  banner:
+    description: Do you rely on hyperscaler services in your work? Help us decide what Cloud Manager should support next.
+    open: Sign Up
+    title: What services do you need?
 cluster-overview:
   headers:
     btp-account: SAP BTP Accounts
