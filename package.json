@@ -161,7 +161,7 @@
     "prismjs": "1.30.0",
     "react-json-tree": "^0.20.0",
     "underscore": "^1.13.8",
-    "undici": "^7.29.1"
+    "undici": "^7.30.1"
   },
   "nyc": {
     "report-dir": "coverage/component",
