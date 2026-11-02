@@ -223,7 +223,7 @@ describe('useTerminalSession', () => {
     expect(abortSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('disconnect does not reset session state, preventing a concurrent connect from being overwritten', async () => {
+  it('disconnect sets the session status to idle', async () => {
     const { result } = renderHook(() => useTerminalSession());
     await act(async () => {
       await result.current.connect(makeTerm() as any);
@@ -234,7 +234,9 @@ describe('useTerminalSession', () => {
       await result.current.disconnect();
     });
 
-    expect(setSession).not.toHaveBeenCalled();
+    const updater = setSession.mock.calls.at(-1)?.[0];
+    expect(typeof updater).toBe('function');
+    expect(updater(mockSessionInfo)).toMatchObject({ status: 'idle' });
   });
 
   it('cancels a pending reconnect on disconnect so it cannot revive a torn-down terminal', async () => {

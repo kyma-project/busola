@@ -57,7 +57,7 @@ export function BusolaTerminal({
   const observerRef = useRef<ResizeObserver | null>(null);
   const location = useLocation();
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
-  const [sessionInfo, setSessionInfo] = useAtom(terminalSessionAtom);
+  const sessionInfo = useAtomValue(terminalSessionAtom);
   const { connect, disconnect } = useTerminalSession();
   const disconnectRef = useRef(disconnect);
   const cluster = useAtomValue(clusterAtom);

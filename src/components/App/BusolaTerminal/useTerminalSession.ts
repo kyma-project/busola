@@ -205,7 +205,7 @@ export function useTerminalSession() {
       await deprovisionPod();
     }
     setSessionInfo((prev) => ({ ...prev, status: 'idle' }));
-  }, [abortController, deprovisionPod]);
+  }, [abortController, deprovisionPod, setSessionInfo]);
 
   return { connect, disconnect };
 }

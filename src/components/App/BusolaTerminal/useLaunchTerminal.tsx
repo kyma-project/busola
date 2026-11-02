@@ -13,7 +13,7 @@ import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { ssoDataAtom } from 'state/ssoDataAtom';
 import { SetStateAction } from 'react';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import {
   configFeaturesNames,
@@ -58,7 +58,7 @@ export function useLaunchTerminal() {
       // Launch provision in background, open terminal view immediately.
       createBusolaTerminalPod(
         fetchFn,
-        setSession,
+        setSessionInfo,
         image,
         podName,
         TERMINAL_NAMESPACE_NAME,
@@ -68,7 +68,7 @@ export function useLaunchTerminal() {
       setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }));
     })().catch((e) => {
       console.error('Failed to launch terminal', e);
-      setSession((prev) => ({
+      setSessionInfo((prev) => ({
         ...prev,
         status: 'idle',
         errorMessage: String(e),
