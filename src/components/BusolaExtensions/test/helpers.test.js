@@ -122,48 +122,71 @@ describe('extractValueColumns', () => {
 describe('createExtensibilityTemplate', () => {
   const t = (key) => key;
 
-  it('sets general.resource fields from the CRD spec', () => {
-    const { general } = createExtensibilityTemplate(makeCrd(), t);
-    expect(general.resource.kind).toBe('Widget');
-    expect(general.resource.group).toBe('example.com');
-    expect(general.resource.version).toBe('v1');
-  });
+  it('returns the expected template for the default CRD', () => {
+    const valueColumns = [
+      {
+        path: 'spec.color',
+        type: 'string',
+        name: 'color',
+        isSelected: true,
+        required: true,
+      },
+      {
+        path: 'spec.replicas',
+        type: 'integer',
+        name: 'replicas',
+        isSelected: true,
+        required: false,
+      },
+      { path: 'spec.color', type: 'string', name: 'Color', isSelected: true },
+    ];
 
-  it('sets scope to namespace for a Namespaced CRD', () => {
-    const { general } = createExtensibilityTemplate(makeCrd(), t);
-    expect(general.scope).toBe('namespace');
+    expect(createExtensibilityTemplate(makeCrd(), t)).toEqual({
+      general: {
+        resource: { kind: 'Widget', group: 'example.com', version: 'v1' },
+        name: 'Widgets',
+        category: 'custom-resources.title',
+        urlPath: 'widgets',
+        scope: 'namespace',
+      },
+      form: [
+        {
+          path: 'spec.color',
+          type: 'string',
+          name: 'color',
+          isSelected: true,
+          required: true,
+        },
+        {
+          path: 'spec.replicas',
+          type: 'integer',
+          name: 'replicas',
+          isSelected: true,
+          required: false,
+        },
+      ],
+      list: valueColumns,
+      details: {
+        header: [],
+        body: [
+          { name: 'Summary', widget: 'Panel', children: valueColumns },
+          { source: 'spec', widget: 'CodeViewer' },
+        ],
+      },
+      translations: {
+        en: {
+          'metadata.annotations': 'Annotations',
+          'metadata.labels': 'Labels',
+          'metadata.creationTimestamp': 'Created at',
+        },
+      },
+    });
   });
 
   it('sets scope to cluster for a Cluster-scoped CRD', () => {
     const crd = makeCrd({ spec: { ...makeCrd().spec, scope: 'Cluster' } });
     const { general } = createExtensibilityTemplate(crd, t);
     expect(general.scope).toBe('cluster');
-  });
-
-  it('sets urlPath to the CRD plural name', () => {
-    const { general } = createExtensibilityTemplate(makeCrd(), t);
-    expect(general.urlPath).toBe('widgets');
-  });
-
-  it('populates form with scalar spec properties', () => {
-    const { form } = createExtensibilityTemplate(makeCrd(), t);
-    const paths = form.map((f) => f.path);
-    expect(paths).toContain('spec.color');
-    expect(paths).toContain('spec.replicas');
-  });
-
-  it('excludes object and array properties from form', () => {
-    const { form } = createExtensibilityTemplate(makeCrd(), t);
-    const paths = form.map((f) => f.path);
-    expect(paths).not.toContain('spec.config');
-    expect(paths).not.toContain('spec.tags');
-  });
-
-  it('creates a details section with header and body', () => {
-    const { details } = createExtensibilityTemplate(makeCrd(), t);
-    expect(details).toHaveProperty('header');
-    expect(details).toHaveProperty('body');
-    expect(Array.isArray(details.body)).toBe(true);
   });
 
   it('falls back to a creationTimestamp child when there are no value columns', () => {

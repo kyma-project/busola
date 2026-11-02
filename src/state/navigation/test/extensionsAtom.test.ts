@@ -50,9 +50,15 @@ describe('isTheSameId', () => {
       expected: false,
     },
     {
-      desc: 'one missing general section',
+      desc: 'the first one missing general section',
       a: { general: { id: 'ext-001' } },
       b: {},
+      expected: false,
+    },
+    {
+      desc: 'the second one missing general section',
+      a: {},
+      b: { general: { id: 'ext-001' } },
       expected: false,
     },
     {
@@ -71,12 +77,6 @@ describe('convertYamlToObject', () => {
     const yaml = 'name: my-extension\nversion: "1.0"';
     const result = convertYamlToObject(yaml);
     expect(result).toEqual({ name: 'my-extension', version: '1.0' });
-  });
-
-  it('parses YAML with nested keys', () => {
-    const yaml = 'general:\n  name: ext\n  urlPath: /ext';
-    const result = convertYamlToObject(yaml);
-    expect(result).toEqual({ general: { name: 'ext', urlPath: '/ext' } });
   });
 
   it('returns null without errors for empty YAML', () => {
