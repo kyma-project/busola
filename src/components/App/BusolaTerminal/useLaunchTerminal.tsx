@@ -12,7 +12,7 @@ import {
 import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { ssoDataAtom } from 'state/ssoDataAtom';
-import { SetStateAction } from 'react';
+import { SetStateAction, useRef } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import {
@@ -33,13 +33,26 @@ export function useLaunchTerminal() {
     configFeaturesNames.TERMINAL,
   );
   const setShowTerminal = useSetAtom(showTerminalAtom);
+  const showTerminal = useAtomValue(showTerminalAtom);
   const authData = useAtomValue(authDataAtom);
   const cluster = useAtomValue(clusterAtom);
   const ssoData = useAtomValue(ssoDataAtom);
   const fetchFn = useFetch();
   const setSessionInfo = useSetAtom(terminalSessionAtom);
 
+  const launchingRef = useRef(false);
+
   return () => {
+    if (showTerminal.isOpen) {
+      setShowTerminal((prev) => ({ ...prev, isOpen: false }));
+      return;
+    }
+    if (launchingRef.current) {
+      return;
+    }
+
+    launchingRef.current = true;
+    setShowTerminal((prev) => ({ ...prev, isOpen: true }));
     (async () => {
       const clusterServer =
         cluster?.currentContext?.cluster?.cluster?.server ?? '';
@@ -55,8 +68,7 @@ export function useLaunchTerminal() {
         authHeaders.get('X-Client-Certificate-Data') ??
         '';
       const podName = await generateTerminalPodName(clusterServer, credential);
-      // Launch provision in background, open terminal view immediately.
-      createBusolaTerminalPod(
+      await createBusolaTerminalPod(
         fetchFn,
         setSessionInfo,
         image,
@@ -65,15 +77,18 @@ export function useLaunchTerminal() {
         TERMINAL_CONTAINER_NAME,
         abortController,
       );
-      setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }));
-    })().catch((e) => {
-      console.error('Failed to launch terminal', e);
-      setSessionInfo((prev) => ({
-        ...prev,
-        status: 'idle',
-        errorMessage: String(e),
-      }));
-    });
+    })()
+      .catch((e) => {
+        console.error('Failed to launch terminal', e);
+        setSessionInfo((prev) => ({
+          ...prev,
+          status: 'idle',
+          errorMessage: String(e),
+        }));
+      })
+      .finally(() => {
+        launchingRef.current = false;
+      });
   };
 }
 
@@ -86,12 +101,17 @@ async function createBusolaTerminalPod(
   containerName: string,
   abortController: AbortController,
 ): Promise<void> {
-  setSession((prev) => ({
-    ...prev,
+  setSession({
+    connectionType: ConnectionType.Attach,
+    podName: podName,
+    container: TERMINAL_CONTAINER_NAME,
+    namespace,
+    command: TERMINAL_COMMAND,
     abortController,
     status: 'provisioning',
     deprovisionPod: deprovisionPod(fetchFn, namespace, podName, setSession),
-  }));
+    errorMessage: null,
+  });
   try {
     await provisionPod({
       fetchFn,
@@ -106,17 +126,10 @@ async function createBusolaTerminalPod(
     throw e;
   }
 
-  setSession({
-    connectionType: ConnectionType.Attach,
-    podName: podName,
-    container: TERMINAL_CONTAINER_NAME,
-    namespace,
-    command: TERMINAL_COMMAND,
+  setSession((prev) => ({
+    ...prev,
     status: 'provisioned',
-    errorMessage: null,
-    abortController,
-    deprovisionPod: deprovisionPod(fetchFn, namespace, podName, setSession),
-  });
+  }));
 }
 
 function deprovisionPod(

@@ -84,7 +84,6 @@ export function useTerminalSession() {
   const wsRef = useRef<WebSocket | null>(null);
   const onDataDisposableRef = useRef<{ dispose: () => void } | null>(null);
   const disconnectedRef = useRef(false);
-  const deprovisioningRef = useRef(false);
   const reconnectTimer = useRef<NodeJS.Timeout>(undefined);
   const sessionRenewalTimer = useRef<NodeJS.Timeout>(undefined);
   const attemptRef = useRef(0);
@@ -96,7 +95,6 @@ export function useTerminalSession() {
   const connect = useCallback(
     async (term: Terminal, silent = false) => {
       disconnectedRef.current = false;
-      deprovisioningRef.current = false;
       if (wsRef.current && wsRef.current.readyState !== WebSocket.CLOSED) {
         wsRef.current.close();
         wsRef.current = null;
@@ -200,10 +198,7 @@ export function useTerminalSession() {
       wsRef.current.close();
     }
     wsRef.current = null;
-    if (!deprovisioningRef.current) {
-      deprovisioningRef.current = true;
-      await deprovisionPod();
-    }
+    await deprovisionPod();
     setSessionInfo((prev) => ({ ...prev, status: 'idle' }));
   }, [abortController, deprovisionPod, setSessionInfo]);
 
