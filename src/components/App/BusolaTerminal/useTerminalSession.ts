@@ -23,7 +23,7 @@ import { TFunction } from 'i18next';
 const RECONNECTION_MIN_DELAY_MS = 1_000;
 const RECONNECTION_MAX_DELAY_MS = 30_000;
 // Headroom before the hard cap for the re-provision + re-attach to finish.
-const PROACTIVE_RECONNECT_SAFETY_BUFFER_MS = 30_000;
+const SESSION_RENEWAL_SAFETY_BUFFER_MS = 30_000;
 const MAX_ATTEMPTS = 10;
 
 const reconnect = (
@@ -44,7 +44,7 @@ const reconnect = (
         t('terminal.messages.reconnect-failed'),
       ),
     );
-    setSession((prev) => ({ ...prev, status: 'idle' }));
+    setSession((prev) => ({ ...prev, status: 'error' }));
     return;
   }
 
@@ -86,7 +86,7 @@ export function useTerminalSession() {
   const disconnectedRef = useRef(false);
   const deprovisioningRef = useRef(false);
   const reconnectTimer = useRef<NodeJS.Timeout>(undefined);
-  const proactiveReconnectTimer = useRef<NodeJS.Timeout>(undefined);
+  const sessionRenewalTimer = useRef<NodeJS.Timeout>(undefined);
   const attemptRef = useRef(0);
 
   const connectRef = useRef<
@@ -101,8 +101,8 @@ export function useTerminalSession() {
         wsRef.current.close();
         wsRef.current = null;
       }
-      clearTimeout(proactiveReconnectTimer.current);
-      proactiveReconnectTimer.current = undefined;
+      clearTimeout(sessionRenewalTimer.current);
+      sessionRenewalTimer.current = undefined;
 
       try {
         const headers = createHeaders(authData, cluster, ssoData);
@@ -122,8 +122,8 @@ export function useTerminalSession() {
           t,
           silent,
           scheduleReconnect: (term: Terminal) => {
-            clearTimeout(proactiveReconnectTimer.current);
-            proactiveReconnectTimer.current = undefined;
+            clearTimeout(sessionRenewalTimer.current);
+            sessionRenewalTimer.current = undefined;
             reconnect(
               attemptRef,
               term,
@@ -137,17 +137,17 @@ export function useTerminalSession() {
             attemptRef.current = 0;
             clearTimeout(reconnectTimer.current);
             reconnectTimer.current = undefined;
-            clearTimeout(proactiveReconnectTimer.current);
-            proactiveReconnectTimer.current = undefined;
+            clearTimeout(sessionRenewalTimer.current);
+            sessionRenewalTimer.current = undefined;
             // Re-arm per connection; the cap is per-socket.
             if (
               maxSessionDurationMs &&
-              maxSessionDurationMs > PROACTIVE_RECONNECT_SAFETY_BUFFER_MS
+              maxSessionDurationMs > SESSION_RENEWAL_SAFETY_BUFFER_MS
             ) {
               const delay =
-                maxSessionDurationMs - PROACTIVE_RECONNECT_SAFETY_BUFFER_MS;
-              proactiveReconnectTimer.current = setTimeout(() => {
-                proactiveReconnectTimer.current = undefined;
+                maxSessionDurationMs - SESSION_RENEWAL_SAFETY_BUFFER_MS;
+              sessionRenewalTimer.current = setTimeout(() => {
+                sessionRenewalTimer.current = undefined;
                 connectRef.current(term, true);
               }, delay);
             }
@@ -191,8 +191,8 @@ export function useTerminalSession() {
     // Cancel scheduled reconnects so they can't revive a torn-down terminal.
     clearTimeout(reconnectTimer.current);
     reconnectTimer.current = undefined;
-    clearTimeout(proactiveReconnectTimer.current);
-    proactiveReconnectTimer.current = undefined;
+    clearTimeout(sessionRenewalTimer.current);
+    sessionRenewalTimer.current = undefined;
     attemptRef.current = 0;
     onDataDisposableRef.current?.dispose();
     onDataDisposableRef.current = null;

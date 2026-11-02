@@ -59,9 +59,14 @@ export function BusolaTerminal({
   const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
   const [sessionInfo, setSessionInfo] = useAtom(terminalSessionAtom);
   const { connect, disconnect } = useTerminalSession();
+  const disconnectRef = useRef(disconnect);
   const cluster = useAtomValue(clusterAtom);
   const openedOnClusterRef = useRef(cluster?.name);
   const isOnClustersPage = location.pathname === '/clusters';
+
+  useEffect(() => {
+    disconnectRef.current = disconnect;
+  }, [disconnect]);
 
   useEffect(() => {
     if (cluster?.name !== openedOnClusterRef.current || isOnClustersPage) {
@@ -119,17 +124,16 @@ export function BusolaTerminal({
       console.log('Cleaning on dismount');
       observerRef.current?.disconnect();
       observerRef.current = null;
-      disconnect();
+      disconnectRef.current();
       termRef.current?.dispose();
       termRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleClose = () => {
     console.log('closing');
     setSessionInfo((prev) => ({ ...prev, status: 'disconnecting' }));
-    disconnect();
+    disconnectRef.current();
     setShowTerminal((prev) => ({ ...prev, isOpen: false }));
   };
 
