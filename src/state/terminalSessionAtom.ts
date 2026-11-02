@@ -6,7 +6,6 @@ export type TerminalSessionStatus =
   | 'provisioned'
   | 'connected'
   | 'error'
-  | 'disconnecting'
   | 'reconnecting';
 
 export enum ConnectionType {

@@ -77,8 +77,6 @@ export function BusolaTerminal({
   }, [cluster?.name, setShowTerminal, disconnect, isOnClustersPage]);
 
   useEffect(() => {
-    console.log(sessionInfo.status);
-
     if (!termDOM?.current) return;
     switch (sessionInfo.status) {
       case 'reconnecting': {
@@ -121,7 +119,6 @@ export function BusolaTerminal({
   useEffect(() => {
     return () => {
       //   cleanup on dismount
-      console.log('Cleaning on dismount');
       observerRef.current?.disconnect();
       observerRef.current = null;
       disconnectRef.current();
@@ -131,8 +128,6 @@ export function BusolaTerminal({
   }, []);
 
   const handleClose = () => {
-    console.log('closing');
-    setSessionInfo((prev) => ({ ...prev, status: 'disconnecting' }));
     disconnectRef.current();
     setShowTerminal((prev) => ({ ...prev, isOpen: false }));
   };
