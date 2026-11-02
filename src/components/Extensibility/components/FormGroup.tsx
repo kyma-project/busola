@@ -16,7 +16,7 @@ import { Widget } from './Widget';
 import './FormGroup.scss';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 
-function FormItemWidget({
+export function FormItemWidget({
   children,
   value,
   structure,
@@ -119,6 +119,7 @@ export function FormGroup({
       className="extensibility-read-form-group"
       layout="S1 M1 L1 XL1"
       labelSpan="S12 M4 L4 XL4"
+      itemSpacing="Large"
     >
       <Group {...props} />
     </Form>

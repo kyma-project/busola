@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { Button, Title } from '@ui5/webcomponents-react';
+import {
+  Button,
+  Form,
+  FormGroup as UI5FormGroup,
+  Title,
+} from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { mapValues } from 'lodash';
 import classNames from 'classnames';
@@ -7,7 +12,8 @@ import classNames from 'classnames';
 import { base64Decode } from 'shared/helpers';
 
 import { useCreateResourceDescription, useGetTranslation } from '../helpers';
-import { Widget, InlineWidget } from './Widget';
+import { FormItemWidget } from './FormGroup';
+import { Widget } from './Widget';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
 interface PanelProps {
@@ -34,7 +40,7 @@ export function Panel({
 
   const [isDecoded, setDecoded] = useState(false);
 
-  const bodyClassNames = classNames({
+  const formClassNames = classNames({
     'no-padding': structure?.disablePadding,
   });
 
@@ -77,20 +83,27 @@ export function Panel({
       description={description}
     >
       {Array.isArray(structure?.children) && (
-        <div className={bodyClassNames}>
-          {structure.children.map((def: any, idx: number) => (
-            <Widget
-              key={idx}
-              value={value}
-              structure={def}
-              schema={schema}
-              inlineRenderer={InlineWidget}
-              singleRootResource={singleRootResource}
-              embedResource={embedResource}
-              {...props}
-            />
-          ))}
-        </div>
+        <Form
+          layout="S1 M1 L1 XL1"
+          labelSpan="S12 M4 L4 XL4"
+          itemSpacing="Large"
+          className={formClassNames || undefined}
+        >
+          <UI5FormGroup>
+            {structure.children.map((def: any, idx: number) => (
+              <Widget
+                key={idx}
+                value={value}
+                structure={def}
+                schema={schema}
+                inlineRenderer={FormItemWidget}
+                singleRootResource={singleRootResource}
+                embedResource={embedResource}
+                {...props}
+              />
+            ))}
+          </UI5FormGroup>
+        </Form>
       )}
     </UI5Panel>
   );

@@ -1,5 +1,7 @@
+import { Form, FormGroup as UI5FormGroup } from '@ui5/webcomponents-react';
 import { useCreateResourceDescription, useGetTranslation } from '../helpers';
-import { Widget, InlineWidget } from './Widget';
+import { FormItemWidget } from './FormGroup';
+import { Widget } from './Widget';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 interface CardProps {
@@ -31,23 +33,29 @@ export function CardWidget({
       description={description}
     >
       {Array.isArray(structure?.children) && (
-        <div>
-          {items.map((item: any, itemIdx: number) =>
-            structure.children.map((def: any, idx: number) => (
-              <Widget
-                key={`${itemIdx}-${idx}`}
-                value={item}
-                arrayItems={[...arrayItems, item]}
-                singleRootResource={item}
-                structure={def}
-                schema={schema}
-                inlineRenderer={InlineWidget}
-                embedResource={embedResource}
-                {...props}
-              />
-            )),
-          )}
-        </div>
+        <Form
+          layout="S1 M1 L1 XL1"
+          labelSpan="S12 M4 L4 XL4"
+          itemSpacing="Large"
+        >
+          <UI5FormGroup>
+            {items.map((item: any, itemIdx: number) =>
+              structure.children.map((def: any, idx: number) => (
+                <Widget
+                  key={`${itemIdx}-${idx}`}
+                  value={item}
+                  arrayItems={[...arrayItems, item]}
+                  singleRootResource={item}
+                  structure={def}
+                  schema={schema}
+                  inlineRenderer={FormItemWidget}
+                  embedResource={embedResource}
+                  {...props}
+                />
+              )),
+            )}
+          </UI5FormGroup>
+        </Form>
       )}
     </UI5Card>
   );
