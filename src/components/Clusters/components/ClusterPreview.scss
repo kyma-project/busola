@@ -7,38 +7,32 @@
     line-height: unset;
   }
 
-  &__subtitle {
+  &__step {
+    margin-bottom: 1.5rem;
+  }
+
+  &__step-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
     border-bottom: 1px solid var(--sapList_BorderColor);
   }
 
-  &__content {
-    display: grid;
-    grid-template-columns: 1fr 100px;
-    justify-content: start;
-    gap: 30px;
-    width: 100%;
-
-    @media screen and (max-width: 380px) {
-      display: flex;
-      flex-direction: column;
-    }
-  }
-
-  &__token {
-    display: flex;
-    width: 100%;
-    overflow-wrap: break-word;
-    word-break: break-all;
+  &__subtitle {
+    margin: 0;
   }
 
   &__edit-button {
-    align-self: center;
-    width: 80%;
+    flex-shrink: 0;
   }
 
-  &__storage-container {
-    overflow: hidden;
-    text-overflow: ellipsis;
+  &__token {
+    display: block;
+    width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-all;
   }
 }
