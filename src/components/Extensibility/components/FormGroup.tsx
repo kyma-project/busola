@@ -35,9 +35,15 @@ export function FormItemWidget({
       ? value
       : emptyLeafPlaceholder;
 
+  const labelText = widgetT(structure);
+
   return (
-    <FormItem labelContent={<Label showColon>{widgetT(structure)}</Label>}>
-      <div className="sap-margin-y-tiny">{displayValue}</div>
+    <FormItem
+      labelContent={
+        labelText ? <Label showColon>{labelText}</Label> : undefined
+      }
+    >
+      <div>{displayValue}</div>
     </FormItem>
   );
 }

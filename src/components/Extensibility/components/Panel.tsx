@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-  Button,
-  Form,
-  FormGroup as UI5FormGroup,
-  Title,
-} from '@ui5/webcomponents-react';
+import { Button, Title } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { mapValues } from 'lodash';
 import classNames from 'classnames';
@@ -15,6 +10,7 @@ import { useCreateResourceDescription, useGetTranslation } from '../helpers';
 import { FormItemWidget } from './FormGroup';
 import { Widget } from './Widget';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
 
 interface PanelProps {
   value: any;
@@ -83,27 +79,23 @@ export function Panel({
       description={description}
     >
       {Array.isArray(structure?.children) && (
-        <Form
+        <ResourceDetailsForm
           layout="S1 M1 L1 XL1"
-          labelSpan="S12 M4 L4 XL4"
-          itemSpacing="Large"
           className={formClassNames || undefined}
         >
-          <UI5FormGroup>
-            {structure.children.map((def: any, idx: number) => (
-              <Widget
-                key={idx}
-                value={value}
-                structure={def}
-                schema={schema}
-                inlineRenderer={FormItemWidget}
-                singleRootResource={singleRootResource}
-                embedResource={embedResource}
-                {...props}
-              />
-            ))}
-          </UI5FormGroup>
-        </Form>
+          {structure.children.map((def: any, idx: number) => (
+            <Widget
+              key={idx}
+              value={value}
+              structure={def}
+              schema={schema}
+              inlineRenderer={FormItemWidget}
+              singleRootResource={singleRootResource}
+              embedResource={embedResource}
+              {...props}
+            />
+          ))}
+        </ResourceDetailsForm>
       )}
     </UI5Panel>
   );
