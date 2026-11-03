@@ -57,34 +57,15 @@ function PodTemplateTable({
   );
 }
 
-interface ContainersPanelProps {
-  title: string;
-  containers: Record<string, any>[];
-}
-
-export function ContainersPanel({ title, containers }: ContainersPanelProps) {
-  return (
-    <div className="pod-template-panel sap-margin-small">
-      <Text className="pod-template-section-title">{title}</Text>
-      <div className="pod-template-groups">
-        {containers?.map((container) => (
-          <ContainerComponent key={container.name} container={container} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-interface ContainerComponentProps {
+interface ContainerFieldsProps {
   container: Record<string, any>;
 }
 
-function ContainerComponent({ container }: ContainerComponentProps) {
+export function ContainerFields({ container }: ContainerFieldsProps) {
   const { t } = useTranslation();
 
   return (
-    <div>
-      <Text className="pod-template-group-title">{container.name}</Text>
+    <>
       <PodTemplateRow
         label={t('pods.labels.image')}
         component={
@@ -164,32 +145,14 @@ function ContainerComponent({ container }: ContainerComponentProps) {
           component={<p className="code-block">{container.args.join(' ')}</p>}
         />
       )}
-    </div>
+    </>
   );
 }
 
-interface VolumesPanelProps {
-  title: string;
-  volumes: any[];
-}
-
-export function VolumesPanel({ title, volumes }: VolumesPanelProps) {
-  return (
-    <div className="pod-template-panel sap-margin-small">
-      <Text className="pod-template-section-title">{title}</Text>
-      <div className="pod-template-groups">
-        {volumes.map((volume) => (
-          <VolumeComponent key={volume.name} volume={volume} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function VolumeComponent({ volume }: { volume: any }) {
+export function VolumeFields({ volume }: { volume: any }) {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
-  const { name, configMap, secret } = volume;
+  const { configMap, secret } = volume;
 
   const getTypeLabel = () => {
     switch (true) {
@@ -209,8 +172,7 @@ function VolumeComponent({ volume }: { volume: any }) {
   const k8sResourceName = configMap?.name || secret?.secretName;
 
   return (
-    <div>
-      <Text className="pod-template-group-title">{name}</Text>
+    <>
       <PodTemplateRow
         label={t('common.labels.type')}
         component={<Text>{typeLabel}</Text>}
@@ -250,6 +212,6 @@ function VolumeComponent({ volume }: { volume: any }) {
           }
         />
       )}
-    </div>
+    </>
   );
 }

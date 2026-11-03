@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
 import { Labels } from '../Labels/Labels';
-import { ContainersPanel, VolumesPanel } from './components';
-import { Card, CardHeader, Text } from '@ui5/webcomponents-react';
+import { ContainerFields, VolumeFields } from './components';
+import { Card, CardHeader, FormGroup, Text } from '@ui5/webcomponents-react';
 import { PodTemplateRow } from './PodTemplateRow';
+import { ResourceDetailsForm } from '../ResourceDetails/ResourceDetailsForm';
 
 import './PodTemplate.scss';
 
@@ -17,34 +18,45 @@ export function PodTemplate({ template }: { template: any }) {
       key="pod-template"
       header={<CardHeader titleText={t('pods.labels.pod-template')} />}
     >
-      <PodTemplateRow
-        label={t('pods.labels.restart-policy')}
-        component={<Text>{template.spec.restartPolicy}</Text>}
-      />
-      <PodTemplateRow
-        label={t('common.headers.labels')}
-        component={<Labels labels={template.metadata.labels} />}
-      />
-      <div className="pod-template-groups">
-        {template.spec.containers && (
-          <ContainersPanel
-            title={t('pods.labels.containers')}
-            containers={template.spec.containers}
+      <ResourceDetailsForm>
+        <FormGroup columnSpan={2}>
+          <PodTemplateRow
+            label={t('pods.labels.restart-policy')}
+            component={<Text>{template.spec.restartPolicy}</Text>}
           />
-        )}
-        {template.spec.initContainers && (
-          <ContainersPanel
-            title={t('pods.labels.init-containers')}
-            containers={template.spec.initContainers}
+          <PodTemplateRow
+            label={t('common.headers.labels')}
+            component={<Labels labels={template.metadata.labels} />}
           />
-        )}
-        {template.spec.volumes && (
-          <VolumesPanel
-            title={t('pods.labels.volumes')}
-            volumes={template.spec.volumes}
-          />
-        )}
-      </div>
+        </FormGroup>
+        {template.spec.containers?.map((container: Record<string, any>) => (
+          <FormGroup
+            key={container.name}
+            headerLevel="H5"
+            headerText={container.name}
+          >
+            <ContainerFields container={container} />
+          </FormGroup>
+        ))}
+        {template.spec.initContainers?.map((container: Record<string, any>) => (
+          <FormGroup
+            key={container.name}
+            headerLevel="H5"
+            headerText={`${container.name} (${t('pods.labels.init-container')})`}
+          >
+            <ContainerFields container={container} />
+          </FormGroup>
+        ))}
+        {template.spec.volumes?.map((volume: any) => (
+          <FormGroup
+            key={volume.name}
+            headerLevel="H5"
+            headerText={volume.name}
+          >
+            <VolumeFields volume={volume} />
+          </FormGroup>
+        ))}
+      </ResourceDetailsForm>
     </Card>
   );
 }
