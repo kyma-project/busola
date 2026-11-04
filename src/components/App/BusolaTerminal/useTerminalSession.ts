@@ -95,7 +95,7 @@ export function useTerminalSession() {
   const connect = useCallback(
     async (term: Terminal, silent = false) => {
       disconnectedRef.current = false;
-      if (wsRef.current && wsRef.current.readyState !== WebSocket.CLOSED) {
+      if (wsRef.current) {
         wsRef.current.close();
         wsRef.current = null;
       }
@@ -151,6 +151,11 @@ export function useTerminalSession() {
             }
           },
         });
+        if (sessionInfo.abortController?.signal.aborted) {
+          ws.close();
+          disposable.dispose();
+          return;
+        }
         wsRef.current = ws;
         onDataDisposableRef.current = disposable;
       } catch (err: any) {
@@ -194,7 +199,7 @@ export function useTerminalSession() {
     attemptRef.current = 0;
     onDataDisposableRef.current?.dispose();
     onDataDisposableRef.current = null;
-    if (wsRef.current && wsRef.current.readyState !== WebSocket.CLOSED) {
+    if (wsRef.current) {
       wsRef.current.close();
     }
     wsRef.current = null;

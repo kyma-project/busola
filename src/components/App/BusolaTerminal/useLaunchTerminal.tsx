@@ -13,7 +13,7 @@ import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { ssoDataAtom } from 'state/ssoDataAtom';
 import { SetStateAction, useRef } from 'react';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import {
   configFeaturesNames,
@@ -37,26 +37,19 @@ export function useLaunchTerminal() {
   const cluster = useAtomValue(clusterAtom);
   const ssoData = useAtomValue(ssoDataAtom);
   const fetchFn = useFetch();
-  const setSessionInfo = useSetAtom(terminalSessionAtom);
+  const [sessionInfo, setSessionInfo] = useAtom(terminalSessionAtom);
   const abortCtrlRef = useRef<AbortController | null>(null);
 
   return () => {
     setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }));
 
-    if (abortCtrlRef.current) {
-      //cancel previous pod provision
-      abortCtrlRef.current.abort();
-      abortCtrlRef.current = null;
-    }
+    //cancel previous pod provision
+    abortCtrlRef.current?.abort();
+    abortCtrlRef.current = null;
 
     if (showTerminal.isOpen) {
       // Terminal will be closed, there is no need to provision new pod
-      deprovisionPod(
-        fetchFn,
-        TERMINAL_NAMESPACE_NAME,
-        TERMINAL_CONTAINER_NAME,
-        setSessionInfo,
-      );
+      sessionInfo.deprovisionPod();
       return;
     }
 

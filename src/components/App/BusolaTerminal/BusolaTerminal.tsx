@@ -25,11 +25,11 @@ function createXTerm() {
 function createResizeObserver(
   fitAddon: FitAddon,
   termDOM: RefObject<HTMLDivElement | null>,
-  onMinHeightComputed?: (minHeight: number) => void,
+  setMinHeight?: (minHeight: number) => void,
 ) {
   return new ResizeObserver(() => {
     fitAddon.fit();
-    if (onMinHeightComputed && termDOM.current) {
+    if (setMinHeight && termDOM.current) {
       const xtermRow =
         termDOM.current.querySelector<HTMLElement>('.xterm-rows > div');
       const cardHeader = termDOM.current
@@ -38,18 +38,16 @@ function createResizeObserver(
       const cellHeight = xtermRow?.offsetHeight ?? 20;
       const headerHeight = cardHeader ?? 60;
       const contentPadding = 40; // margin (0.5rem+1rem) + padding (2×0.5rem)
-      onMinHeightComputed(
-        Math.ceil(headerHeight + contentPadding + cellHeight),
-      );
+      setMinHeight(Math.ceil(headerHeight + contentPadding + cellHeight));
     }
   });
 }
 export function BusolaTerminal({
   dockedHeight,
-  onMinHeightComputed,
+  setMinHeight,
 }: {
   dockedHeight?: number;
-  onMinHeightComputed?: (minHeight: number) => void;
+  setMinHeight?: (minHeight: number) => void;
 }) {
   const { t } = useTranslation();
   const termDOM = useRef<HTMLDivElement>(null);
@@ -90,16 +88,13 @@ export function BusolaTerminal({
         term.open(termDOM.current);
         termRef.current = term;
         connect(term);
-        const observer = createResizeObserver(
-          fitAddon,
-          termDOM,
-          onMinHeightComputed,
-        );
+        const observer = createResizeObserver(fitAddon, termDOM, setMinHeight);
         observerRef.current = observer;
         observer.observe(termDOM.current);
         break;
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionInfo.status]);
 
   useEffect(() => {
