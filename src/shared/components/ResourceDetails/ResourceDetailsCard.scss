@@ -40,7 +40,7 @@
 // fills the box and its lines fall back to start alignment, leaving a gap to
 // the value. Align the text to the end as well.
 @container (width >=600px) {
-  .resource-card-layout ui5-label {
+  .resource-card-layout ui5-label[slot='labelContent'] {
     text-align: end;
   }
 }
