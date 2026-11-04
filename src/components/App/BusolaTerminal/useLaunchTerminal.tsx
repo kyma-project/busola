@@ -13,7 +13,7 @@ import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { ssoDataAtom } from 'state/ssoDataAtom';
 import { SetStateAction, useRef } from 'react';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import {
   configFeaturesNames,
@@ -32,27 +32,34 @@ export function useLaunchTerminal() {
   const { config } = useFeature<TerminalFeatureConfig>(
     configFeaturesNames.TERMINAL,
   );
-  const setShowTerminal = useSetAtom(showTerminalAtom);
-  const showTerminal = useAtomValue(showTerminalAtom);
+  const [showTerminal, setShowTerminal] = useAtom(showTerminalAtom);
   const authData = useAtomValue(authDataAtom);
   const cluster = useAtomValue(clusterAtom);
   const ssoData = useAtomValue(ssoDataAtom);
   const fetchFn = useFetch();
   const setSessionInfo = useSetAtom(terminalSessionAtom);
-
-  const launchingRef = useRef(false);
+  const abortCtrlRef = useRef<AbortController | null>(null);
 
   return () => {
-    if (showTerminal.isOpen) {
-      setShowTerminal((prev) => ({ ...prev, isOpen: false }));
-      return;
+    setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }));
+
+    if (abortCtrlRef.current) {
+      //cancel previous pod provision
+      abortCtrlRef.current.abort();
+      abortCtrlRef.current = null;
     }
-    if (launchingRef.current) {
+
+    if (showTerminal.isOpen) {
+      // Terminal will be closed, there is no need to provision new pod
+      deprovisionPod(
+        fetchFn,
+        TERMINAL_NAMESPACE_NAME,
+        TERMINAL_CONTAINER_NAME,
+        setSessionInfo,
+      );
       return;
     }
 
-    launchingRef.current = true;
-    setShowTerminal((prev) => ({ ...prev, isOpen: true }));
     (async () => {
       const clusterServer =
         cluster?.currentContext?.cluster?.cluster?.server ?? '';
@@ -60,6 +67,7 @@ export function useLaunchTerminal() {
       const image: string = config?.image ?? DEFAULT_IMAGE;
 
       const abortController = new AbortController();
+      abortCtrlRef.current = abortController;
       const authHeaders = new Headers(
         createHeaders(authData, cluster, ssoData),
       );
@@ -68,7 +76,7 @@ export function useLaunchTerminal() {
         authHeaders.get('X-Client-Certificate-Data') ??
         '';
       const podName = await generateTerminalPodName(clusterServer, credential);
-      await createBusolaTerminalPod(
+      createBusolaTerminalPod(
         fetchFn,
         setSessionInfo,
         image,
@@ -87,7 +95,7 @@ export function useLaunchTerminal() {
         }));
       })
       .finally(() => {
-        launchingRef.current = false;
+        abortCtrlRef.current = null;
       });
   };
 }
