@@ -28,9 +28,10 @@
   padding-bottom: 0;
 }
 
-// disablePadding: remove the inline padding UI5 adds inside shadow DOM.
+// disablePadding: remove the padding UI5 adds inside shadow DOM.
+.resource-card-layout.no-padding::part(layout),
 .resource-card-layout.no-padding::part(column) {
-  padding-inline: 0;
+  padding: 0;
 }
 
 // Spec: 0.25rem below a stacked label + 0.3125rem above the value; UI5 adds
