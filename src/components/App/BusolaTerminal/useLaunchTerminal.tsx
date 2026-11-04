@@ -120,7 +120,7 @@ async function createBusolaTerminalPod(
   setSession({
     connectionType: ConnectionType.Attach,
     podName: podName,
-    container: TERMINAL_CONTAINER_NAME,
+    container: containerName,
     namespace,
     command: TERMINAL_COMMAND,
     abortController,
