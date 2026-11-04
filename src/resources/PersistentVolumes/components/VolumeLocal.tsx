@@ -1,4 +1,4 @@
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 
@@ -13,9 +13,12 @@ export const VolumeLocal = ({ local }: VolumeLocalProps) => {
 
   return (
     <>
-      <LayoutPanelRow name={t('pv.headers.type')} value={t('pv.local.type')} />
-      <LayoutPanelRow
-        name={t('pv.local.path')}
+      <ResourceDetailsFormItem
+        label={t('pv.headers.type')}
+        value={t('pv.local.type')}
+      />
+      <ResourceDetailsFormItem
+        label={t('pv.local.path')}
         value={local?.path || EMPTY_TEXT_PLACEHOLDER}
       />
     </>

@@ -12,6 +12,7 @@ import './ResourceDetailsCard.scss';
 interface ResourceDetailsFormProps {
   children: ReactNode;
   className?: string;
+  layout?: string;
 }
 
 // Children.toArray stops at fragments, which is how card content arrives.
@@ -36,6 +37,7 @@ const isFormGroup = (node: ReactNode) =>
 export function ResourceDetailsForm({
   children,
   className = '',
+  layout = 'S1 M2 L2 XL2',
 }: ResourceDetailsFormProps) {
   const items = flattenItems(children);
   const half = Math.ceil(items.length / 2);
@@ -51,7 +53,7 @@ export function ResourceDetailsForm({
 
   return (
     <Form
-      layout="S1 M2 L2 XL2"
+      layout={layout}
       labelSpan="S12 M4 L4 XL4"
       itemSpacing="Large"
       className={`resource-card-layout ${className}`.trim()}

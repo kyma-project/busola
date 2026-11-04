@@ -40,7 +40,7 @@
 // fills the box and its lines fall back to start alignment, leaving a gap to
 // the value. Align the text to the end as well.
 @container (width >=600px) {
-  .resource-card-layout ui5-label {
+  .resource-card-layout ui5-label[slot='labelContent'] {
     text-align: end;
   }
 }
@@ -48,6 +48,11 @@
 // Spec: a label lines up with the first line of its value; UI5 centers it.
 .resource-card-layout ui5-form-item::part(layout) {
   align-items: start;
+}
+
+// UI5 clips the value cell; long tokens such as base64 data must wrap instead.
+.resource-card-layout ui5-form-item::part(content) {
+  overflow-wrap: anywhere;
 }
 
 // UI5 clips the value cell, which would cut the hint button's hit area.

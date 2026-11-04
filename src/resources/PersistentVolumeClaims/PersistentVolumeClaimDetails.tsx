@@ -1,12 +1,14 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { isEqual } from 'lodash';
+import { isEqual, upperFirst } from 'lodash';
 
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
+import { FormGroup } from '@ui5/webcomponents-react';
 import { Tokens } from 'shared/components/Tokens';
 import { RelatedPods } from 'shared/components/RelatedPods';
 import { Selector } from 'shared/components/Selector/Selector';
@@ -24,7 +26,6 @@ import {
 } from 'resources/PersistentVolumeClaims';
 import { Link } from 'shared/components/Link/Link';
 
-import './PersistentVolumeClaim.scss';
 import { PersistentVolumeType } from 'resources/PersistentVolumes';
 
 type RelatedVolumesProps = {
@@ -91,98 +92,91 @@ export const PVCConfiguration = (pvc: PersistentVolumeClaim) => {
           )}
           keyComponent={'pvc-resources'}
         >
-          <div
-            className={
-              pvc.spec.resources?.requests && pvc.spec.resources?.limits
-                ? 'grid-requests'
-                : ''
-            }
-          >
+          <ResourceDetailsForm>
             {pvc.spec.resources?.requests && (
-              <div>
-                {Object.entries(pvc.spec.resources?.requests).map(
-                  (requests) => {
-                    return (
-                      <LayoutPanelRow
-                        name={requests[0] + ' Requests'}
-                        value={
-                          (requests[1] || EMPTY_TEXT_PLACEHOLDER) as string
-                        }
-                        key={requests[0]}
-                        capitalize={true}
-                      />
-                    );
-                  },
+              <FormGroup>
+                {Object.entries(pvc.spec.resources.requests).map(
+                  ([resource, quantity]) => (
+                    <ResourceDetailsFormItem
+                      key={resource}
+                      label={`${upperFirst(resource)} Requests`}
+                      value={quantity}
+                    />
+                  ),
                 )}
-              </div>
+              </FormGroup>
             )}
             {pvc.spec.resources?.limits && (
-              <div>
-                {Object.entries(pvc.spec.resources?.limits).map((limits) => {
-                  return (
-                    <LayoutPanelRow
-                      name={limits[0] + ' Limits'}
-                      value={(limits[1] || EMPTY_TEXT_PLACEHOLDER) as string}
-                      key={limits[0]}
+              <FormGroup>
+                {Object.entries(pvc.spec.resources.limits).map(
+                  ([resource, quantity]) => (
+                    <ResourceDetailsFormItem
+                      key={resource}
+                      label={`${upperFirst(resource)} Limits`}
+                      value={quantity}
                     />
-                  );
-                })}
-              </div>
+                  ),
+                )}
+              </FormGroup>
             )}
-          </div>
+          </ResourceDetailsForm>
         </UI5Card>
       )}
       <UI5Card
         title={t('common.headers.specification')}
         keyComponent={'pvc-specification'}
       >
-        <LayoutPanelRow
-          key={pvc.spec?.volumeMode}
-          name={t('persistent-volume-claims.headers.volume-mode')}
-          value={pvc.spec?.volumeMode}
-        />
-        <LayoutPanelRow
-          key={pvc.spec?.accessModes?.toString()}
-          name={t('persistent-volume-claims.headers.access-modes')}
-          value={<Tokens tokens={pvc.spec?.accessModes} />}
-        />
-        <LayoutPanelRow
-          key={pvc.spec?.volumeName}
-          name={t('persistent-volume-claims.headers.volume-name')}
-          value={
-            pvc.spec?.volumeName ? (
-              <Link
-                url={clusterUrl(`persistentvolumes/${pvc.spec?.volumeName}`)}
-              >
-                {pvc.spec?.volumeName}
-              </Link>
-            ) : (
-              <p>{EMPTY_TEXT_PLACEHOLDER}</p>
-            )
-          }
-        />
-        <LayoutPanelRow
-          key={pvc.spec?.storageClassName}
-          name={t('persistent-volume-claims.headers.storage-class-name')}
-          value={
-            storageClasses?.find(
-              ({ metadata }: { metadata: any }) =>
-                metadata.name === pvc.spec?.storageClassName,
-            ) ? (
-              <Link
-                url={clusterUrl(`storageclasses/${pvc.spec?.storageClassName}`)}
-              >
-                {pvc.spec?.storageClassName}
-              </Link>
-            ) : (
-              <p>
-                {pvc.spec?.storageClassName !== ''
-                  ? pvc.spec?.storageClassName
-                  : EMPTY_TEXT_PLACEHOLDER}
-              </p>
-            )
-          }
-        />
+        <ResourceDetailsForm>
+          <ResourceDetailsFormItem
+            key={pvc.spec?.volumeMode}
+            label={t('persistent-volume-claims.headers.volume-mode')}
+            value={pvc.spec?.volumeMode}
+          />
+          <ResourceDetailsFormItem
+            key={pvc.spec?.accessModes?.toString()}
+            label={t('persistent-volume-claims.headers.access-modes')}
+            value={<Tokens tokens={pvc.spec?.accessModes} />}
+          />
+          <ResourceDetailsFormItem
+            key={pvc.spec?.volumeName}
+            label={t('persistent-volume-claims.headers.volume-name')}
+            value={
+              pvc.spec?.volumeName ? (
+                <Link
+                  url={clusterUrl(`persistentvolumes/${pvc.spec?.volumeName}`)}
+                >
+                  {pvc.spec?.volumeName}
+                </Link>
+              ) : (
+                <p>{EMPTY_TEXT_PLACEHOLDER}</p>
+              )
+            }
+          />
+          <ResourceDetailsFormItem
+            key={pvc.spec?.storageClassName}
+            label={t('persistent-volume-claims.headers.storage-class-name')}
+            value={
+              storageClasses?.find(
+                ({ metadata }: { metadata: any }) =>
+                  metadata.name === pvc.spec?.storageClassName,
+              ) ? (
+                <Link
+                  url={clusterUrl(
+                    `storageclasses/${pvc.spec?.storageClassName}`,
+                  )}
+                >
+                  {pvc.spec?.storageClassName}
+                </Link>
+              ) : (
+                <p>
+                  {pvc.spec?.storageClassName !== ''
+                    ? pvc.spec?.storageClassName
+                    : EMPTY_TEXT_PLACEHOLDER}
+                </p>
+              )
+            }
+          />
+        </ResourceDetailsForm>
       </UI5Card>
     </Fragment>
   );
@@ -198,6 +192,13 @@ export function PersistentVolumeClaimDetails(
       value: (pvc: PersistentVolumeClaim) => (
         <Tokens tokens={pvc?.status?.accessModes} />
       ),
+    },
+    {
+      header: t('persistent-volume-claims.headers.capacity'),
+      value: (pvc: PersistentVolumeClaim) =>
+        Object.entries(pvc?.status?.capacity ?? {})
+          .map(([resource, quantity]) => `${resource}: ${quantity}`)
+          .join(', ') || EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 
@@ -235,27 +236,6 @@ export function PersistentVolumeClaimDetails(
           <>{EMPTY_TEXT_PLACEHOLDER}</>
         )
       }
-      customConditionsComponents={[
-        {
-          header: t('persistent-volume-claims.headers.capacity'),
-          value: (pvc) =>
-            pvc.status.capacity ? (
-              Object.entries(pvc?.status?.capacity).map((capacity) => {
-                return (
-                  <LayoutPanelRow
-                    name={capacity[0]}
-                    value={(capacity[1] || EMPTY_TEXT_PLACEHOLDER) as string}
-                    key={capacity[0]}
-                  />
-                );
-              })
-            ) : (
-              <div className="content bsl-has-color-text-1 sap-margin-begin-small sap-margin-bottom-small">
-                {EMPTY_TEXT_PLACEHOLDER}
-              </div>
-            ),
-        },
-      ]}
       customStatusColumns={customStatusColumns}
       customComponents={[
         PVCConfiguration,

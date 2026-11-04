@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { Tokens } from 'shared/components/Tokens';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
@@ -66,92 +67,96 @@ export function PersistentVolumeDetails({
         title={t('common.headers.specification')}
         accessibleName={t('common.accessible-name.specification')}
       >
-        <LayoutPanelRow
-          name={t('pv.headers.finalizers')}
-          value={<Tokens tokens={metadata.finalizers} />}
-        />
-        <LayoutPanelRow
-          name={t('pv.headers.capacity')}
-          value={spec.capacity?.storage}
-        />
-        <LayoutPanelRow
-          name={t('pv.headers.mount-options')}
-          value={<Tokens tokens={spec.mountOptions} />}
-        />
-        <LayoutPanelRow
-          name={t('pv.headers.access-modes')}
-          value={<Tokens tokens={spec.accessModes} />}
-        />
-        <LayoutPanelRow
-          name={t('pv.headers.reclaim-policy')}
-          value={spec.persistentVolumeReclaimPolicy}
-        />
-        <LayoutPanelRow
-          name={t('pv.headers.storage-class-name')}
-          value={
-            storageClasses?.find(
-              ({ metadata }) => metadata.name === spec?.storageClassName,
-            ) ? (
-              <Link
-                url={resourceUrl({
-                  kind: 'StorageClass',
-                  metadata: {
-                    name: spec?.storageClassName,
-                  } as any,
-                })}
-              >
-                {spec?.storageClassName}
-              </Link>
-            ) : (
-              <p>{spec?.storageClassName || EMPTY_TEXT_PLACEHOLDER}</p>
-            )
-          }
-        />
-        <LayoutPanelRow
-          name={t('pv.headers.claim-name')}
-          value={
-            persistentVolumeClaims?.find(
-              ({ metadata }) => metadata.name === spec?.claimRef?.name,
-            ) ? (
-              <Link
-                url={resourceUrl(
-                  {
-                    kind: 'PersistentVolumeClaim',
+        <ResourceDetailsForm>
+          <ResourceDetailsFormItem
+            label={t('pv.headers.finalizers')}
+            value={<Tokens tokens={metadata.finalizers} />}
+          />
+          <ResourceDetailsFormItem
+            label={t('pv.headers.capacity')}
+            value={spec.capacity?.storage}
+          />
+          <ResourceDetailsFormItem
+            label={t('pv.headers.mount-options')}
+            value={<Tokens tokens={spec.mountOptions} />}
+          />
+          <ResourceDetailsFormItem
+            label={t('pv.headers.access-modes')}
+            value={<Tokens tokens={spec.accessModes} />}
+          />
+          <ResourceDetailsFormItem
+            label={t('pv.headers.reclaim-policy')}
+            value={spec.persistentVolumeReclaimPolicy}
+          />
+          <ResourceDetailsFormItem
+            label={t('pv.headers.storage-class-name')}
+            value={
+              storageClasses?.find(
+                ({ metadata }) => metadata.name === spec?.storageClassName,
+              ) ? (
+                <Link
+                  url={resourceUrl({
+                    kind: 'StorageClass',
                     metadata: {
-                      name: spec?.claimRef?.name,
+                      name: spec?.storageClassName,
                     } as any,
-                  },
-                  { namespace: spec?.claimRef?.namespace },
-                )}
-              >
-                {spec?.claimRef?.name}
-              </Link>
-            ) : (
-              <p>{spec?.claimRef?.name || EMPTY_TEXT_PLACEHOLDER}</p>
-            )
-          }
-        />
-        <LayoutPanelRow
-          name={t('pv.headers.volumeMode')}
-          value={spec?.volumeMode}
-        />
+                  })}
+                >
+                  {spec?.storageClassName}
+                </Link>
+              ) : (
+                <p>{spec?.storageClassName || EMPTY_TEXT_PLACEHOLDER}</p>
+              )
+            }
+          />
+          <ResourceDetailsFormItem
+            label={t('pv.headers.claim-name')}
+            value={
+              persistentVolumeClaims?.find(
+                ({ metadata }) => metadata.name === spec?.claimRef?.name,
+              ) ? (
+                <Link
+                  url={resourceUrl(
+                    {
+                      kind: 'PersistentVolumeClaim',
+                      metadata: {
+                        name: spec?.claimRef?.name,
+                      } as any,
+                    },
+                    { namespace: spec?.claimRef?.namespace },
+                  )}
+                >
+                  {spec?.claimRef?.name}
+                </Link>
+              ) : (
+                <p>{spec?.claimRef?.name || EMPTY_TEXT_PLACEHOLDER}</p>
+              )
+            }
+          />
+          <ResourceDetailsFormItem
+            label={t('pv.headers.volumeMode')}
+            value={spec?.volumeMode}
+          />
+        </ResourceDetailsForm>
       </UI5Card>
 
       <UI5Card
         title={t('pv.headers.volumeType')}
         accessibleName={`${t('pv.headers.volumeType')} panel`}
       >
-        {spec.nfs && <VolumeNFS nfs={spec.nfs} />}
-        {spec.csi && <VolumeCSI csi={spec.csi} />}
-        {spec.fc && <VolumeFC fc={spec.fc} />}
-        {spec.hostPath && <VolumeHostPath hostPath={spec.hostPath} />}
-        {spec.iscsi && (
-          <VolumeISCSI
-            iscsi={spec.iscsi}
-            secret={findSecret(spec.iscsi?.secretRef?.name)}
-          />
-        )}
-        {spec.local && <VolumeLocal local={spec.local} />}
+        <ResourceDetailsForm>
+          {spec.nfs && <VolumeNFS nfs={spec.nfs} />}
+          {spec.csi && <VolumeCSI csi={spec.csi} />}
+          {spec.fc && <VolumeFC fc={spec.fc} />}
+          {spec.hostPath && <VolumeHostPath hostPath={spec.hostPath} />}
+          {spec.iscsi && (
+            <VolumeISCSI
+              iscsi={spec.iscsi}
+              secret={findSecret(spec.iscsi?.secretRef?.name)}
+            />
+          )}
+          {spec.local && <VolumeLocal local={spec.local} />}
+        </ResourceDetailsForm>
       </UI5Card>
     </>
   );
