@@ -12,7 +12,7 @@ import {
 import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { ssoDataAtom } from 'state/ssoDataAtom';
-import { SetStateAction, useRef } from 'react';
+import { SetStateAction, useCallback, useRef } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import {
@@ -40,7 +40,7 @@ export function useLaunchTerminal() {
   const [sessionInfo, setSessionInfo] = useAtom(terminalSessionAtom);
   const abortCtrlRef = useRef<AbortController | null>(null);
 
-  return () => {
+  const launch = useCallback(() => {
     setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }));
 
     //cancel previous pod provision
@@ -49,6 +49,7 @@ export function useLaunchTerminal() {
 
     if (showTerminal.isOpen) {
       // Terminal will be closed, there is no need to provision new pod
+      sessionInfo.abortController?.abort();
       sessionInfo.deprovisionPod();
       return;
     }
@@ -69,7 +70,7 @@ export function useLaunchTerminal() {
         authHeaders.get('X-Client-Certificate-Data') ??
         '';
       const podName = await generateTerminalPodName(clusterServer, credential);
-      createBusolaTerminalPod(
+      await createBusolaTerminalPod(
         fetchFn,
         setSessionInfo,
         image,
@@ -90,7 +91,18 @@ export function useLaunchTerminal() {
       .finally(() => {
         abortCtrlRef.current = null;
       });
-  };
+  }, [
+    authData,
+    cluster,
+    config?.image,
+    fetchFn,
+    sessionInfo,
+    setSessionInfo,
+    setShowTerminal,
+    showTerminal.isOpen,
+    ssoData,
+  ]);
+  return launch;
 }
 
 async function createBusolaTerminalPod(

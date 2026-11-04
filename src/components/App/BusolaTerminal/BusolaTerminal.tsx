@@ -94,6 +94,7 @@ export function BusolaTerminal({
         break;
       }
     }
+    // It should only be triggered on sessionInfo.status change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionInfo.status]);
 

@@ -60,7 +60,7 @@ const reconnect = (
       COLOR_WARNING,
       t('terminal.messages.reconnecting', {
         delay: Math.round(delay / 1000),
-        current: attempt,
+        current: attempt + 1,
         max: MAX_ATTEMPTS,
       }),
     ),
