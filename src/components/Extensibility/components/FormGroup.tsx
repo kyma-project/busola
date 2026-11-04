@@ -16,7 +16,7 @@ import { Widget } from './Widget';
 import './FormGroup.scss';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 
-function FormItemWidget({
+export function FormItemWidget({
   children,
   value,
   structure,
@@ -35,9 +35,15 @@ function FormItemWidget({
       ? value
       : emptyLeafPlaceholder;
 
+  const labelText = widgetT(structure);
+
   return (
-    <FormItem labelContent={<Label showColon>{widgetT(structure)}</Label>}>
-      <div className="sap-margin-y-tiny">{displayValue}</div>
+    <FormItem
+      labelContent={
+        labelText ? <Label showColon>{labelText}</Label> : undefined
+      }
+    >
+      <div>{displayValue}</div>
     </FormItem>
   );
 }
@@ -119,6 +125,7 @@ export function FormGroup({
       className="extensibility-read-form-group"
       layout="S1 M1 L1 XL1"
       labelSpan="S12 M4 L4 XL4"
+      itemSpacing="Large"
     >
       <Group {...props} />
     </Form>
