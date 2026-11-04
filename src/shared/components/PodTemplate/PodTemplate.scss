@@ -5,3 +5,8 @@
 .pod-template {
   container-type: inline-size;
 }
+
+.code-block,
+.pod-template ui5-table-cell {
+  overflow-wrap: anywhere;
+}
