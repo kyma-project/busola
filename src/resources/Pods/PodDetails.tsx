@@ -151,7 +151,6 @@ export function PodDetails({
     <PodExecDialog
       open={execDialogOpen}
       close={() => setExecDialogOpen(false)}
-      // TODO: move it to podExecDialog?
       launchTerminal={() =>
         setShowTerminalState((prev) => ({ ...prev, isOpen: true }))
       }

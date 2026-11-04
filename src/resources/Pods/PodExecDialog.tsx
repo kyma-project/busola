@@ -14,16 +14,17 @@ import { Label } from 'shared/ResourceForm/components/Label';
 import { useState } from 'react';
 import { useSetAtom } from 'jotai';
 import { ConnectionType, terminalSessionAtom } from 'state/terminalSessionAtom';
-import InputType from '@ui5/webcomponents/types/InputType';
+import InputType from '@ui5/webcomponents/dist/types/InputType.js';
 
 export type PodExecDialogProps = {
   open: boolean;
-  close: Function;
-  launchTerminal: Function;
+  close: () => void;
+  launchTerminal: () => void;
   podResource: Record<any, any>;
 };
 
 const DEFAULT_COMMAND = 'sh';
+
 export function PodExecDialog({
   open,
   close,
