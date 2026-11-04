@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: terminal-test
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-terminal
+  namespace: terminal-test
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest

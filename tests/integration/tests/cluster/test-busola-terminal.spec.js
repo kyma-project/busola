@@ -180,7 +180,7 @@ context('Test Busola Terminal', () => {
     // pod is being created
     cy.get('.terminal-card__status').should(
       'contain.text',
-      'Creating Terminal…',
+      'Creating Terminal...',
     );
 
     // flip to Running, the next poll resolves and the WebSocket connects
