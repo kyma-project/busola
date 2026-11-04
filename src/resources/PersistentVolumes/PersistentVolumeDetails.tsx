@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
 import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
@@ -105,7 +104,7 @@ export function PersistentVolumeDetails({
                   {spec?.storageClassName}
                 </Link>
               ) : (
-                <p>{spec?.storageClassName || EMPTY_TEXT_PLACEHOLDER}</p>
+                spec?.storageClassName
               )
             }
           />
@@ -129,7 +128,7 @@ export function PersistentVolumeDetails({
                   {spec?.claimRef?.name}
                 </Link>
               ) : (
-                <p>{spec?.claimRef?.name || EMPTY_TEXT_PLACEHOLDER}</p>
+                spec?.claimRef?.name
               )
             }
           />

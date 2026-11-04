@@ -31,6 +31,12 @@ describe('ResourceDetailsFormItem', () => {
     cy.contains('false').should('be.visible');
   });
 
+  it('shows 0 as text', () => {
+    mountRow(0);
+
+    cy.contains('ui5-text', '0').should('be.visible');
+  });
+
   it('shows a component that renders bare text', () => {
     mountRow(<BareText />);
 

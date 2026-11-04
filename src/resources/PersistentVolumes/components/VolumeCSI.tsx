@@ -1,5 +1,4 @@
 import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 import { Labels } from 'shared/components/Labels/Labels';
 
@@ -21,18 +20,12 @@ export const VolumeCSI = ({ csi }: VolumeCSIProps) => {
         label={t('pv.headers.type')}
         value={t('pv.csi.type')}
       />
-      <ResourceDetailsFormItem
-        label={t('pv.csi.driver')}
-        value={csi?.driver || EMPTY_TEXT_PLACEHOLDER}
-      />
+      <ResourceDetailsFormItem label={t('pv.csi.driver')} value={csi?.driver} />
       <ResourceDetailsFormItem
         label={t('pv.csi.volumeHandle')}
-        value={csi?.volumeHandle || EMPTY_TEXT_PLACEHOLDER}
+        value={csi?.volumeHandle}
       />
-      <ResourceDetailsFormItem
-        label={t('pv.csi.fsType')}
-        value={csi?.fsType || EMPTY_TEXT_PLACEHOLDER}
-      />
+      <ResourceDetailsFormItem label={t('pv.csi.fsType')} value={csi?.fsType} />
       <ResourceDetailsFormItem
         label={t('pv.csi.volumeAttributes')}
         value={

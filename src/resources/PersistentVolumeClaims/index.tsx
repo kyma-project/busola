@@ -29,7 +29,9 @@ export type PersistentVolumeClaim = {
   };
   status: {
     accessModes?: string[];
-    capacity?: Record<string, string>;
+    capacity?: {
+      storage?: string;
+    };
     phase: string;
   };
 };

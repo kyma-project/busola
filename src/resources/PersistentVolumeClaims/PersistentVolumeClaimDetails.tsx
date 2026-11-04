@@ -128,32 +128,26 @@ export const PVCConfiguration = (pvc: PersistentVolumeClaim) => {
       >
         <ResourceDetailsForm>
           <ResourceDetailsFormItem
-            key={pvc.spec?.volumeMode}
             label={t('persistent-volume-claims.headers.volume-mode')}
             value={pvc.spec?.volumeMode}
           />
           <ResourceDetailsFormItem
-            key={pvc.spec?.accessModes?.toString()}
             label={t('persistent-volume-claims.headers.access-modes')}
             value={<Tokens tokens={pvc.spec?.accessModes} />}
           />
           <ResourceDetailsFormItem
-            key={pvc.spec?.volumeName}
             label={t('persistent-volume-claims.headers.volume-name')}
             value={
-              pvc.spec?.volumeName ? (
+              pvc.spec?.volumeName && (
                 <Link
                   url={clusterUrl(`persistentvolumes/${pvc.spec?.volumeName}`)}
                 >
                   {pvc.spec?.volumeName}
                 </Link>
-              ) : (
-                <p>{EMPTY_TEXT_PLACEHOLDER}</p>
               )
             }
           />
           <ResourceDetailsFormItem
-            key={pvc.spec?.storageClassName}
             label={t('persistent-volume-claims.headers.storage-class-name')}
             value={
               storageClasses?.find(
@@ -168,11 +162,7 @@ export const PVCConfiguration = (pvc: PersistentVolumeClaim) => {
                   {pvc.spec?.storageClassName}
                 </Link>
               ) : (
-                <p>
-                  {pvc.spec?.storageClassName !== ''
-                    ? pvc.spec?.storageClassName
-                    : EMPTY_TEXT_PLACEHOLDER}
-                </p>
+                pvc.spec?.storageClassName
               )
             }
           />
@@ -196,9 +186,7 @@ export function PersistentVolumeClaimDetails(
     {
       header: t('persistent-volume-claims.headers.capacity'),
       value: (pvc: PersistentVolumeClaim) =>
-        Object.entries(pvc?.status?.capacity ?? {})
-          .map(([resource, quantity]) => `${resource}: ${quantity}`)
-          .join(', ') || EMPTY_TEXT_PLACEHOLDER,
+        pvc?.status?.capacity?.storage || EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 

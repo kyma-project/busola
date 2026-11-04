@@ -1,5 +1,4 @@
 import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 
 type VolumeHostPathProps = {
@@ -19,7 +18,7 @@ export const VolumeHostPath = ({ hostPath }: VolumeHostPathProps) => {
       />
       <ResourceDetailsFormItem
         label={t('pv.hostPath.path')}
-        value={hostPath?.path || EMPTY_TEXT_PLACEHOLDER}
+        value={hostPath?.path}
       />
     </>
   );

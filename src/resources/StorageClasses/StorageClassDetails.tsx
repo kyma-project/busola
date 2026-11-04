@@ -7,7 +7,6 @@ import {
   ResourceDetailsProps,
 } from 'shared/components/ResourceDetails/ResourceDetails';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
@@ -45,21 +44,19 @@ export function StorageClassDetails(props: StorageClassDetailsProps) {
           <FormGroup>
             <ResourceDetailsFormItem
               label={t('storage-classes.headers.provisioner')}
-              value={storageclass.provisioner || EMPTY_TEXT_PLACEHOLDER}
+              value={storageclass.provisioner}
             />
             <ResourceDetailsFormItem
               label={t('storage-classes.headers.reclaim-policy')}
-              value={storageclass.reclaimPolicy || EMPTY_TEXT_PLACEHOLDER}
+              value={storageclass.reclaimPolicy}
             />
             <ResourceDetailsFormItem
               label={t('storage-classes.headers.volume-binding-mode')}
-              value={storageclass.volumeBindingMode || EMPTY_TEXT_PLACEHOLDER}
+              value={storageclass.volumeBindingMode}
             />
             <ResourceDetailsFormItem
               label={t('storage-classes.headers.allow-volume-expansion')}
-              value={
-                storageclass.allowVolumeExpansion || EMPTY_TEXT_PLACEHOLDER
-              }
+              value={storageclass.allowVolumeExpansion}
             />
           </FormGroup>
           <FormGroup headerText={t('storage-classes.headers.parameters')}>
@@ -68,7 +65,7 @@ export function StorageClassDetails(props: StorageClassDetailsProps) {
                 return (
                   <ResourceDetailsFormItem
                     label={parameter[0]}
-                    value={parameter[1] || EMPTY_TEXT_PLACEHOLDER}
+                    value={parameter[1]}
                     key={parameter[0]}
                   />
                 );

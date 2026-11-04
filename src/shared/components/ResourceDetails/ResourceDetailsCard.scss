@@ -56,7 +56,8 @@
   align-items: start;
 }
 
-// UI5 clips the value cell; long tokens such as base64 data must wrap instead.
+// UI5 clips the value cell; long tokens such as CSI volume handles must wrap
+// instead.
 .resource-card-layout ui5-form-item::part(content) {
   overflow-wrap: anywhere;
 }
