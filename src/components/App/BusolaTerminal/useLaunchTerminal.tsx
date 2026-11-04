@@ -40,7 +40,7 @@ export function useLaunchTerminal() {
   const [sessionInfo, setSessionInfo] = useAtom(terminalSessionAtom);
   const abortCtrlRef = useRef<AbortController | null>(null);
 
-  const launch = useCallback(() => {
+  return useCallback(() => {
     setShowTerminal((prev) => ({ ...prev, isOpen: !prev.isOpen }));
 
     //cancel previous pod provision
@@ -80,13 +80,17 @@ export function useLaunchTerminal() {
         abortController,
       );
     })()
-      .catch((e) => {
-        console.error('Failed to launch terminal', e);
+      .catch((err) => {
+        if ((err as Error)?.name === 'AbortError') {
+          console.warn('Aborting provisioning of Terminal pod');
+          return;
+        }
         setSessionInfo((prev) => ({
           ...prev,
           status: 'idle',
           errorMessage: String(e),
         }));
+        throw err;
       })
       .finally(() => {
         abortCtrlRef.current = null;
@@ -102,7 +106,6 @@ export function useLaunchTerminal() {
     showTerminal.isOpen,
     ssoData,
   ]);
-  return launch;
 }
 
 async function createBusolaTerminalPod(
