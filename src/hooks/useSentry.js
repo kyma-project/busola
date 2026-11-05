@@ -16,7 +16,6 @@ const initSentry = (dsn) => {
       // Session Replay
       replaysSessionSampleRate: 0.1,
       replaysOnErrorSampleRate: 1.0,
-      // Drop error events originating from local development
       denyUrls: [/localhost/, /127\.0\.0\.1/, /\[::1\]/],
     });
   } catch (e) {
