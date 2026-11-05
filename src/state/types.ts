@@ -70,6 +70,7 @@ export const configFeaturesNames = {
   COMMUNITY_MODULES: 'COMMUNITY_MODULES',
   TERMINAL: 'TERMINAL',
   FORCE_CONFIRM_DELETE: 'FORCE_CONFIRM_DELETE',
+  ADOBE_ANALYTICS: 'ADOBE_ANALYTICS',
 } as const;
 
 // Protected config features. Installation-only.
