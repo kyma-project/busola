@@ -88,7 +88,7 @@ export function useLaunchTerminal() {
         setSessionInfo((prev) => ({
           ...prev,
           status: 'idle',
-          errorMessage: String(e),
+          errorMessage: String(err),
         }));
         throw err;
       })
