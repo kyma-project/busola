@@ -171,7 +171,7 @@ export const UpdateModuleButton = ({
       >
         {t('kyma-modules.update')}
       </Button>
-      {true && (
+      {isDialogOpen && (
         <MessageBox
           className="update-module-dialog"
           open={isDialogOpen}
@@ -194,7 +194,7 @@ export const UpdateModuleButton = ({
               <span style={{ fontWeight: 'bold' }}></span>
             </Trans>
           </Text>
-          <ResourceDetailsForm className="module-versions-info">
+          <ResourceDetailsForm singleColumn className="module-versions-info">
             <FormItem
               labelContent={
                 <Label showColon>
