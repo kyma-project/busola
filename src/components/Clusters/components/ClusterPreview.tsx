@@ -1,4 +1,12 @@
-import { Button, Label, Text, Title } from '@ui5/webcomponents-react';
+import {
+  Button,
+  Form,
+  FormItem,
+  Label,
+  Text,
+  Title,
+} from '@ui5/webcomponents-react';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import './ClusterPreview.scss';
 import {
@@ -6,7 +14,6 @@ import {
   findInitialValues,
 } from '../views/EditCluster/EditCluster';
 import { getUserIndex } from '../shared';
-import { ChooseStorage } from './ChooseStorage';
 import { isOIDCExec } from './oidc-params';
 import {
   Kubeconfig,
@@ -15,6 +22,46 @@ import {
   ValidKubeconfig,
 } from 'types';
 import { Tokens } from 'shared/components/Tokens';
+
+const PreviewStep = ({
+  index,
+  title,
+  onEdit,
+  children,
+}: {
+  index: number;
+  title: string;
+  onEdit: () => void;
+  children: ReactNode;
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="cluster-preview__step">
+      <div className="cluster-preview__step-header">
+        <Title level="H5" className="cluster-preview__subtitle">
+          {`${index}. ${title}`}
+        </Title>
+        <Button
+          design="Transparent"
+          onClick={onEdit}
+          className="cluster-preview__edit-button"
+          accessibleName={`${t('common.buttons.edit')} ${title}`}
+        >
+          {t('common.buttons.edit')}
+        </Button>
+      </div>
+      <Form
+        className="cluster-preview__form"
+        layout="S1 M1 L1 XL1"
+        labelSpan="S12 M4 L4 XL4"
+        itemSpacing="Large"
+      >
+        {children}
+      </Form>
+    </div>
+  );
+};
 
 const TokenData = ({
   token,
@@ -28,17 +75,17 @@ const TokenData = ({
   return (
     <>
       {execCommand && (
-        <>
-          <Label className="sap-margin-bottom-tiny" showColon>
-            {t('clusters.wizard.auth.exec-command')}
-          </Label>
+        <FormItem
+          labelContent={
+            <Label showColon>{t('clusters.wizard.auth.exec-command')}</Label>
+          }
+        >
           <Text>{execCommand}</Text>
-        </>
+        </FormItem>
       )}
-      <Label className="sap-margin-top-small sap-margin-bottom-tiny" showColon>
-        {t('clusters.token')}
-      </Label>
-      {token && <Text className="cluster-preview__token">{token}</Text>}
+      <FormItem labelContent={<Label showColon>{t('clusters.token')}</Label>}>
+        {token && <Text className="cluster-preview__token">{token}</Text>}
+      </FormItem>
     </>
   );
 };
@@ -59,45 +106,38 @@ const OidcData = ({
   return (
     <>
       {issuerUrl && (
-        <>
-          <Label className="sap-margin-bottom-tiny" showColon>
-            {t('clusters.labels.issuer-url')}
-          </Label>
+        <FormItem
+          labelContent={
+            <Label showColon>{t('clusters.labels.issuer-url')}</Label>
+          }
+        >
           <Text>{issuerUrl}</Text>
-        </>
+        </FormItem>
       )}
       {clientId && (
-        <>
-          <Label
-            className="sap-margin-top-small sap-margin-bottom-tiny"
-            showColon
-          >
-            {t('clusters.labels.client-id')}
-          </Label>
+        <FormItem
+          labelContent={
+            <Label showColon>{t('clusters.labels.client-id')}</Label>
+          }
+        >
           <Text>{clientId}</Text>
-        </>
+        </FormItem>
       )}
       {clientSecret && (
-        <>
-          <Label
-            className="sap-margin-top-small sap-margin-bottom-tiny"
-            showColon
-          >
-            {t('clusters.labels.client-secret')}
-          </Label>
+        <FormItem
+          labelContent={
+            <Label showColon>{t('clusters.labels.client-secret')}</Label>
+          }
+        >
           <Text>{clientSecret}</Text>
-        </>
+        </FormItem>
       )}
       {extraScopes && (
-        <>
-          <Label
-            className="sap-margin-top-small sap-margin-bottom-tiny"
-            showColon
-          >
-            {t('clusters.labels.scopes')}
-          </Label>
+        <FormItem
+          labelContent={<Label showColon>{t('clusters.labels.scopes')}</Label>}
+        >
           <Tokens tokens={extraScopes} />
-        </>
+        </FormItem>
       )}
     </>
   );
@@ -147,87 +187,60 @@ export function ClusterPreview({
     kubeconfig?.users?.[userIndex]?.user as KubeconfigNonOIDCAuthToken
   )?.token;
 
+  const storageText = `${t(`clusters.storage.labels.${storage}`)}: ${t(
+    `clusters.storage.descriptions.${storage}`,
+  )}`;
+
   return (
     <div className="cluster-preview">
       <div className="add-cluster__content-container">
         <Title level="H5" className="sap-margin-bottom-medium">
           {t('clusters.wizard.review')}
         </Title>
-        <Title
-          level="H5"
-          className="cluster-preview__subtitle sap-margin-y-small"
-        >{`1. ${t('common.headers.configuration')}`}</Title>
-        <div className="cluster-preview__content sap-margin-y-small">
-          <div>
-            <Label className="sap-margin-bottom-tiny" showColon>
-              {t('clusters.name_singular')}
-            </Label>
+        <PreviewStep
+          index={1}
+          title={t('common.headers.configuration')}
+          onEdit={() => setSelected(1)}
+        >
+          <FormItem
+            labelContent={
+              <Label showColon>{t('clusters.name_singular')}</Label>
+            }
+          >
             <Text>{kubeconfig?.['current-context']}</Text>
-          </div>
-          <Button
-            design="Transparent"
-            onClick={() => setSelected(1)}
-            className="cluster-preview__edit-button"
-            accessibleName={`${t('common.buttons.edit')} ${t(
-              'common.headers.configuration',
-            )}`}
+          </FormItem>
+        </PreviewStep>
+        <PreviewStep
+          index={2}
+          title={t('clusters.wizard.authentication')}
+          onEdit={() => (hasAuth ? setSelected(1) : setSelected(2))}
+        >
+          {authenticationType === 'token' ? (
+            <TokenData token={token} execCommand={exec?.command} />
+          ) : (
+            <OidcData
+              issuerUrl={issuerUrl}
+              clientId={clientId}
+              clientSecret={clientSecret}
+              extraScopes={extraScopes}
+            />
+          )}
+        </PreviewStep>
+        <PreviewStep
+          index={3}
+          title={t('clusters.wizard.storage')}
+          onEdit={() => (hasAuth ? setSelected(2) : setSelected(3))}
+        >
+          <FormItem
+            labelContent={
+              <Label showColon>
+                {t('clusters.storage.storage-preference')}
+              </Label>
+            }
           >
-            {t('common.buttons.edit')}
-          </Button>
-        </div>
-        <Title
-          level="H5"
-          className="cluster-preview__subtitle sap-margin-y-small"
-        >{`2. ${t('clusters.wizard.authentication')}`}</Title>
-
-        <div className="cluster-preview__content sap-margin-y-small">
-          <div className="cluster-preview__auth">
-            {authenticationType === 'token' ? (
-              <TokenData token={token} execCommand={exec?.command} />
-            ) : (
-              <OidcData
-                issuerUrl={issuerUrl}
-                clientId={clientId}
-                clientSecret={clientSecret}
-                extraScopes={extraScopes}
-              />
-            )}
-          </div>
-          <Button
-            design="Transparent"
-            onClick={() => (hasAuth ? setSelected(1) : setSelected(2))}
-            className="cluster-preview__edit-button"
-            accessibleName={`${t('common.buttons.edit')} ${t(
-              'clusters.wizard.authentication',
-            )}`}
-          >
-            {t('common.buttons.edit')}
-          </Button>
-        </div>
-        <Title
-          level="H5"
-          className="cluster-preview__subtitle sap-margin-y-small"
-        >{`3. ${t('clusters.wizard.storage')}`}</Title>
-        <div className="cluster-preview__content sap-margin-y-small">
-          <ChooseStorage
-            storage={storage}
-            setStorage={() => {}}
-            disabled
-            name="storage-preview"
-          />
-          <Button
-            design="Transparent"
-            onClick={() => {
-              hasAuth ? setSelected(2) : setSelected(3);
-            }}
-            className="cluster-preview__edit-button"
-            accessibleName={`${t('common.buttons.edit')} ${t(
-              'clusters.wizard.storage',
-            )}`}
-          >
-            {t('common.buttons.edit')}
-          </Button>
-        </div>
+            <Text>{storageText}</Text>
+          </FormItem>
+        </PreviewStep>
       </div>
     </div>
   );
