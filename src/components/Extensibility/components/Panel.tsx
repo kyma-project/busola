@@ -7,8 +7,10 @@ import classNames from 'classnames';
 import { base64Decode } from 'shared/helpers';
 
 import { useCreateResourceDescription, useGetTranslation } from '../helpers';
-import { Widget, InlineWidget } from './Widget';
+import { FormItemWidget } from './FormGroup';
+import { Widget } from './Widget';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
 
 interface PanelProps {
   value: any;
@@ -34,7 +36,7 @@ export function Panel({
 
   const [isDecoded, setDecoded] = useState(false);
 
-  const bodyClassNames = classNames({
+  const formClassNames = classNames({
     'no-padding': structure?.disablePadding,
   });
 
@@ -77,20 +79,23 @@ export function Panel({
       description={description}
     >
       {Array.isArray(structure?.children) && (
-        <div className={bodyClassNames}>
+        <ResourceDetailsForm
+          layout="S1 M1 L1 XL1"
+          className={formClassNames || undefined}
+        >
           {structure.children.map((def: any, idx: number) => (
             <Widget
               key={idx}
               value={value}
               structure={def}
               schema={schema}
-              inlineRenderer={InlineWidget}
+              inlineRenderer={FormItemWidget}
               singleRootResource={singleRootResource}
               embedResource={embedResource}
               {...props}
             />
           ))}
-        </div>
+        </ResourceDetailsForm>
       )}
     </UI5Panel>
   );

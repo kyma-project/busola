@@ -13,6 +13,7 @@ interface ResourceDetailsFormProps {
   children: ReactNode;
   className?: string;
   singleColumn?: boolean;
+  layout?: string;
 }
 
 // Children.toArray stops at fragments, which is how card content arrives.
@@ -33,27 +34,40 @@ function flattenItems(children: ReactNode, prefix = ''): ReactNode[] {
 const isFormGroup = (node: ReactNode) =>
   isValidElement(node) && (node as ReactElement).type === FormGroup;
 
+function columnsFromLayout(layout: string): number {
+  const m = layout.match(/M(\d+)/);
+  return m ? parseInt(m[1], 10) : 2;
+}
+
 // itemSpacing="Large" is UI5's spacing for read-only forms.
 export function ResourceDetailsForm({
   children,
   className = '',
   singleColumn = false,
+  layout = singleColumn ? 'S1 M1 L1 XL1' : 'S1 M2 L2 XL2',
 }: ResourceDetailsFormProps) {
   const items = flattenItems(children);
-  const half = singleColumn ? items.length : Math.ceil(items.length / 2);
+  const columns = columnsFromLayout(layout);
   // Mixed FormGroup/FormItem children would nest FormGroups; not supported.
   const content = items.every(isFormGroup) ? (
     items
+  ) : columns >= 2 ? (
+    (() => {
+      const half = Math.ceil(items.length / 2);
+      return (
+        <>
+          <FormGroup>{items.slice(0, half)}</FormGroup>
+          {items.length > half && <FormGroup>{items.slice(half)}</FormGroup>}
+        </>
+      );
+    })()
   ) : (
-    <>
-      <FormGroup>{items.slice(0, half)}</FormGroup>
-      {items.length > half && <FormGroup>{items.slice(half)}</FormGroup>}
-    </>
+    <FormGroup>{items}</FormGroup>
   );
 
   return (
     <Form
-      layout={singleColumn ? 'S1 M1 L1 XL1' : 'S1 M2 L2 XL2'}
+      layout={layout}
       labelSpan="S12 M4 L4 XL4"
       itemSpacing="Large"
       className={`resource-card-layout ${className}`.trim()}

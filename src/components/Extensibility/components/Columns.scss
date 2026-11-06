@@ -16,3 +16,8 @@
     display: none;
   }
 }
+
+// Inside a Card or Panel the surrounding form already provides the padding.
+.resource-card-layout .extensibility-columns::part(layout) {
+  padding: 0;
+}
