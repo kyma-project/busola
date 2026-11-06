@@ -339,7 +339,7 @@ export default function App() {
                     ? effectiveTerminalHeight
                     : undefined
                 }
-                onMinHeightComputed={setTerminalMinHeight}
+                setMinHeight={setTerminalMinHeight}
               />
             )}
           </div>

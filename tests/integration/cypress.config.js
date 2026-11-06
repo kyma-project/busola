@@ -43,6 +43,7 @@ module.exports = defineConfig({
       'tests/cluster/test-download-a-kubeconfig.spec.js',
       'tests/cluster/test-edit-cluster.spec.js',
       'tests/cluster/test-busola-terminal.spec.js',
+      'tests/cluster/test-busola-terminal-exec-pod.spec.js',
       'tests/cluster/test-cluster-overview.spec.js',
       'tests/cluster/test-cluster-role-bindings.spec.js',
       'tests/cluster/test-feedback.spec.js',
