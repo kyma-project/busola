@@ -43,6 +43,11 @@
   .resource-card-layout ui5-label {
     text-align: end;
   }
+
+  // The value cell adds 0.25rem; the label supplies the rest of the 1rem gap.
+  .resource-card-layout ui5-form-item::part(label) {
+    padding-inline-end: 0.75rem;
+  }
 }
 
 // Spec: a label lines up with the first line of its value; UI5 centers it.

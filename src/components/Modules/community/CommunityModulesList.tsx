@@ -172,18 +172,18 @@ export const CommunityModulesList = ({
           const installedModule = installedModules.find(
             (m) => m.name === entry.name,
           );
-          if (!repoTpl || !installedModule) return null;
+          //if (!repoTpl || !installedModule) return null;
           const oldModuleTemplates = moduleTemplates.items.filter(
             (tpl) =>
               tpl.metadata.creationTimestamp !== undefined &&
               getModuleName(tpl) === entry.name &&
-              tpl.spec.version !== repoTpl.spec.version,
+              tpl.spec.version !== repoTpl?.spec.version,
           );
           return (
             <UpdateModuleButton
               moduleName={entry.name}
               currentVersion={installedModule.version}
-              newVersion={repoTpl.spec.version}
+              newVersion={repoTpl?.spec.version}
               moduleTpl={repoTpl}
               oldModuleTemplates={oldModuleTemplates}
             />

@@ -12,6 +12,7 @@ import './ResourceDetailsCard.scss';
 interface ResourceDetailsFormProps {
   children: ReactNode;
   className?: string;
+  singleColumn?: boolean;
 }
 
 // Children.toArray stops at fragments, which is how card content arrives.
@@ -36,9 +37,10 @@ const isFormGroup = (node: ReactNode) =>
 export function ResourceDetailsForm({
   children,
   className = '',
+  singleColumn = false,
 }: ResourceDetailsFormProps) {
   const items = flattenItems(children);
-  const half = Math.ceil(items.length / 2);
+  const half = singleColumn ? items.length : Math.ceil(items.length / 2);
   // Mixed FormGroup/FormItem children would nest FormGroups; not supported.
   const content = items.every(isFormGroup) ? (
     items
@@ -51,7 +53,7 @@ export function ResourceDetailsForm({
 
   return (
     <Form
-      layout="S1 M2 L2 XL2"
+      layout={singleColumn ? 'S1 M1 L1 XL1' : 'S1 M2 L2 XL2'}
       labelSpan="S12 M4 L4 XL4"
       itemSpacing="Large"
       className={`resource-card-layout ${className}`.trim()}
