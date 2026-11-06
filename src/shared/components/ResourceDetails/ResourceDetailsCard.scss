@@ -28,6 +28,12 @@
   padding-bottom: 0;
 }
 
+// disablePadding: remove the padding UI5 adds inside shadow DOM.
+.resource-card-layout.no-padding::part(layout),
+.resource-card-layout.no-padding::part(column) {
+  padding: 0;
+}
+
 // Spec: 0.25rem below a stacked label + 0.3125rem above the value; UI5 adds
 // neither.
 @container (width < 600px) {
@@ -40,7 +46,7 @@
 // fills the box and its lines fall back to start alignment, leaving a gap to
 // the value. Align the text to the end as well.
 @container (width >=600px) {
-  .resource-card-layout ui5-label {
+  .resource-card-layout ui5-label[slot='labelContent'] {
     text-align: end;
   }
 }
