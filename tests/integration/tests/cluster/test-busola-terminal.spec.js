@@ -28,6 +28,16 @@ context('Test Terminal Banner', () => {
   it('Terminal banner is rendered on the cluster overview page', () => {
     cy.goToClusterOverview();
 
+    // Another banner (e.g. CloudManagerBanner) may occupy the first carousel slot
+    // on localhost. Navigate to the terminal banner if it is not already active.
+    cy.get('ui5-card[accessible-name="Try the terminal"]').then(($card) => {
+      if (!$card.is(':visible')) {
+        cy.get('.banner-carousel').then(($el) => {
+          $el[0].navigateTo(1);
+        });
+      }
+    });
+
     cy.get('ui5-card[accessible-name="Try the terminal"]').should('be.visible');
   });
 

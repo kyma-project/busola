@@ -1,5 +1,5 @@
 # this is a Dockerfile for single deployment app - both backend and frontend
-FROM --platform=$BUILDPLATFORM node:26.11-alpine3.24 AS builder
+FROM --platform=$BUILDPLATFORM node:26.12-alpine3.24 AS builder
 
 ARG default_tag
 ARG tag
@@ -28,7 +28,7 @@ RUN npm run build
 RUN npm prune --omit=dev
 
 # ---- Environments Configuration ----
-FROM --platform=$BUILDPLATFORM node:26.11-alpine3.24 AS configuration
+FROM --platform=$BUILDPLATFORM node:26.12-alpine3.24 AS configuration
 WORKDIR /kyma
 
 RUN apk add make
@@ -40,7 +40,7 @@ RUN npm ci
 RUN make prepare-configuration
 
 # ---- Copy result ----
-FROM node:26.11-alpine3.24
+FROM node:26.12-alpine3.24
 WORKDIR /app
 
 RUN apk del apk-tools alpine-baselayout zlib

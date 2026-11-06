@@ -1,8 +1,9 @@
 import { Button, Card, Text, Title } from '@ui5/webcomponents-react';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { isSystemThemeDark, themeAtom } from 'state/settings/themeAtom';
 import modulesIllustration from './assets/Modules/modulesIllustration.svg';
 import modulesIllustrationHC from './assets/Modules/modulesIllustrationHC.svg';
+import Satellite from './assets/Satellite/Satellite.svg';
 import AiIllustrationLight from './assets/AI/AiIllustrationLight.svg';
 import AiIllustrationDark from './assets/AI/AiIllustrationDark.svg';
 import AiIllustrationHClight from './assets/AI/AiIllustrationHClight.svg';
@@ -11,7 +12,8 @@ import DiscoveryIllustration from './assets/Discovery/Team.png';
 import KymaCLIIllustration from './assets/KymaCLI/KymaCLIIllustration.svg';
 import TerminalIllustration from './assets/Terminal/Terminal.svg';
 import TechEdIllustration from './assets/TechEd/TechEd.svg';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
+import { dismissedBannersAtom } from 'state/settings/dismissedBannersAtom';
 import {
   BackgroundStyle,
   DesignType,
@@ -34,6 +36,8 @@ const getIllustration = (
       return DiscoveryIllustration;
     case 'KymaCLI':
       return KymaCLIIllustration;
+    case 'Satellite':
+      return Satellite;
     case 'Terminal':
       return TerminalIllustration;
     case 'Teched':
@@ -67,9 +71,6 @@ const getIllustration = (
   }
 };
 
-const isBannerHidden = (hideBannerKey: string): boolean =>
-  localStorage.getItem(hideBannerKey) === 'true';
-
 export function FeatureCardBanner({
   id,
   title,
@@ -81,17 +82,17 @@ export function FeatureCardBanner({
   className = '',
 }: FeatureCardBannerProps) {
   const { t } = useTranslation();
-  const hideBannerKey = `hideBanner${id}`;
-  const [hideBanner, setHideBanner] = useState(() =>
-    isBannerHidden(hideBannerKey),
-  );
+  const [dismissedBanners, setDismissedBanners] = useAtom(dismissedBannersAtom);
+  const hideBanner = dismissedBanners.includes(id);
   const theme = useAtomValue(themeAtom);
-  const [prevId, setPrevId] = useState(id);
 
-  if (id !== prevId) {
-    setPrevId(id);
-    setHideBanner(isBannerHidden(hideBannerKey));
-  }
+  useEffect(() => {
+    const legacyKey = `hideBanner${id}`;
+    if (localStorage.getItem(legacyKey) === 'true') {
+      setDismissedBanners((prev) => (prev.includes(id) ? prev : [...prev, id]));
+      localStorage.removeItem(legacyKey);
+    }
+  }, [id, setDismissedBanners]);
 
   if (!id || hideBanner) {
     return <></>;
@@ -132,8 +133,7 @@ export function FeatureCardBanner({
   };
 
   const handleToggle = () => {
-    setHideBanner(true);
-    localStorage.setItem(hideBannerKey, 'true');
+    setDismissedBanners((prev) => (prev.includes(id) ? prev : [...prev, id]));
   };
   const illustration = getIllustration(image, theme);
   const isInnerContainerVisible = title || description || buttons;

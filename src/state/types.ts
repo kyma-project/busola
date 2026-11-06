@@ -40,6 +40,10 @@ export interface ForceConfirmDeleteFeature extends ConfigFeature {
   };
 }
 
+export interface CloudManagerBannerFeature extends ConfigFeature {
+  internalOnly?: boolean;
+}
+
 export type ConfigFeaturesNames =
   (typeof configFeaturesNames)[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {

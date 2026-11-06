@@ -17,3 +17,24 @@
   display: flex;
   gap: 0.25rem;
 }
+
+.cluster-overview-column {
+  display: contents;
+}
+
+.cluster-overview-modules {
+  order: 1;
+}
+
+@container resource-details (min-width: 600px) {
+  .cluster-overview-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  .cluster-overview-modules {
+    order: 0;
+  }
+}

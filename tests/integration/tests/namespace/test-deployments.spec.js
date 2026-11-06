@@ -81,7 +81,7 @@ context('Test Deployments', () => {
     cy.url().should('match', new RegExp(`\/deployments\/${DEPLOYMENT_NAME}`));
 
     cy.getMidColumn()
-      .contains('ui5-title', DEPLOYMENT_NAME)
+      .contains('ui5-dynamic-page-title', DEPLOYMENT_NAME)
       .should('be.visible');
 
     cy.getMidColumn()
@@ -95,7 +95,7 @@ context('Test Deployments', () => {
     cy.clickGenericListLink(DEPLOYMENT_NAME);
 
     cy.getMidColumn()
-      .contains('ui5-title', DEPLOYMENT_NAME)
+      .contains('ui5-dynamic-page-title', DEPLOYMENT_NAME)
       .should('be.visible');
 
     cy.getMidColumn().inspectTab('Edit');

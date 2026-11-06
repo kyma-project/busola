@@ -25,12 +25,13 @@ import { LabelProps } from './Label';
 import { FormFieldProps } from './FormField';
 import { TitleProps } from './Title';
 import { SkinCreateFn, useCreateResource } from '../useCreateResource';
-import { K8sNameField, KeyValueField } from '../fields';
+import { K8sNameField } from '../fields/K8sNameField';
+import { KeyValueField } from '../fields/KeyValueField';
 import jp from 'jsonpath';
 import { Form } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom, useStore } from 'jotai';
 import {
   editViewModeAtom,
   EditViewTypes,
@@ -328,15 +329,15 @@ export const ResourceForm: ResourceFormType = (({
     </Form>
   );
 
-  const isResourceEdited = useAtomValue(isResourceEditedAtom);
-  const [isFormOpen, setIsFormOpen] = useAtom(isFormOpenAtom);
+  const setIsFormOpen = useSetAtom(isFormOpenAtom);
+  const store = useStore();
   const { navigateSafely } = useFormNavigation();
   const [resetBtnClicked, setResetBtnClicked] = useState(false);
 
   const handleRevert = () => {
     setResetBtnClicked(true);
-    if (isResourceEdited?.isEdited) {
-      setIsFormOpen({ ...isFormOpen, leavingForm: true });
+    if (store.get(isResourceEditedAtom).isEdited) {
+      setIsFormOpen({ ...store.get(isFormOpenAtom), leavingForm: true });
     }
     navigateSafely(() => {
       setIsFormOpen({ formOpen: true, leavingForm: false });

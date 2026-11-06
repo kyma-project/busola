@@ -23,7 +23,7 @@ import {
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom, useStore } from 'jotai';
 import { columnLayoutAtom, ShowEdit } from 'state/columnLayoutAtom';
 import { HintButton } from '../HintButton/HintButton';
 import {
@@ -148,8 +148,9 @@ export const DynamicPageComponent = ({
   const [showTitleDescription, setShowTitleDescription] = useState(false);
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
   const { t } = useTranslation();
-  const [isResourceEdited, setIsResourceEdited] = useAtom(isResourceEditedAtom);
-  const [isFormOpen, setIsFormOpen] = useAtom(isFormOpenAtom);
+  const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
+  const setIsFormOpen = useSetAtom(isFormOpenAtom);
+  const store = useStore();
   const { navigateSafely } = useFormNavigation();
   const [searchParams] = useSearchParams();
   const editColumn = searchParams.get('editColumn');
@@ -399,6 +400,8 @@ export const DynamicPageComponent = ({
           ref={tabContainerRef}
           collapsed
           onTabSelect={(e) => {
+            const isResourceEdited = store.get(isResourceEditedAtom);
+            const isFormOpen = store.get(isFormOpenAtom);
             if (customActionIfFormOpen) {
               customActionIfFormOpen(
                 isResourceEdited,
