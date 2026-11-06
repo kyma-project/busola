@@ -1,10 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { connectTerminal } from './connectTerminal';
+import { connectToPod } from './connectToPod';
 import { encodeBase64Url } from 'shared/utils/base64url';
+import { ConnectionType } from 'state/terminalSessionAtom';
 import { TFunction } from 'i18next';
 
 const NS = 'busola-terminal';
 const POD = 'busola-terminal-aabbccdd';
+const CONTAINER = 'busola-terminal';
+const COMMAND = '/bin/bash';
 
 const AUTH_HEADERS = new Headers({
   'X-Cluster-Url': 'https://cluster.example.com',
@@ -75,10 +78,14 @@ async function attach(
   const term = makeTerm();
   const sess = vi.fn();
   const onConnected = vi.fn();
-  const { ws, disposable } = await connectTerminal({
+  const { ws, disposable } = await connectToPod({
     authHeaders: AUTH_HEADERS,
     term: term as any,
     podName: POD,
+    containerName: CONTAINER,
+    command: COMMAND,
+    connectionType: ConnectionType.Attach,
+    namespace: NS,
     setSession: sess,
     signal,
     t,
