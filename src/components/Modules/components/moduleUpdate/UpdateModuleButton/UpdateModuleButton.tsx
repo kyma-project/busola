@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Button, Label, MessageBox, Text } from '@ui5/webcomponents-react';
+import {
+  Button,
+  FormItem,
+  Label,
+  MessageBox,
+  Text,
+} from '@ui5/webcomponents-react';
 import {
   DEFAULT_K8S_NAMESPACE,
   ModuleTemplateType,
@@ -9,6 +15,7 @@ import { useAtomValue } from 'jotai';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
 import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import { fetchResourcesToApply } from '../../../community/communityModulesHelpers';
 import { uploadResource } from '../../../community/communityModulesInstallHelpers';
@@ -187,26 +194,35 @@ export const UpdateModuleButton = ({
               <span style={{ fontWeight: 'bold' }}></span>
             </Trans>
           </Text>
-          <div className="module-versions-container sap-margin-top-small">
-            <Label style={{ textAlign: 'right' }}>
-              {`${t('modules.community.update.current-version')}: `}
-            </Label>
-            <Text>{currentVersion}</Text>
-            <div />
-            <Label style={{ textAlign: 'right' }}>
-              {`${t('modules.community.update.latest-version')}: `}
-            </Label>
-            <Text>{newVersion}</Text>
-            {/*TODO: Has to be adjusted when we get Release Notes in modules - 
+          <ResourceDetailsForm singleColumn className="module-versions-info">
+            <FormItem
+              labelContent={
+                <Label showColon>
+                  {t('modules.community.update.current-version')}
+                </Label>
+              }
+            >
+              <Text>{currentVersion}</Text>
+            </FormItem>
+            <FormItem
+              labelContent={
+                <Label showColon>
+                  {t('modules.community.update.latest-version')}
+                </Label>
+              }
+            >
+              <Text>{newVersion}</Text>
+            </FormItem>
+          </ResourceDetailsForm>
+          {/*TODO: Has to be adjusted when we get Release Notes in modules -
             https://github.com/kyma-project/busola/issues/4826*/}
-            {/* {moduleTpl?.spec?.info?.releaseNotes && (
+          {/* {moduleTpl?.spec?.info?.releaseNotes && (
               <ExternalLink
                 linkClassName="release-notes-link"
                 url={moduleTpl.spec.info.releaseNotes}
                 text="Release Notes"
               />
             )} */}
-          </div>
           <DeleteOldModulesCheck
             oldModuleTemplates={oldModuleTemplates}
             deleteOldTemplate={deleteOldTemplate}

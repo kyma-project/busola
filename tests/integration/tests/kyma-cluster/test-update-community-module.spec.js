@@ -114,11 +114,15 @@ context('Test Update Community Module', () => {
     cy.get('.update-module-dialog').contains(MODULE_NAME).should('be.visible');
 
     cy.get('.update-module-dialog')
-      .contains(`Current version: ${OLD_VERSION}`)
+      .contains('ui5-form-item', 'Current version')
+      .find('ui5-text')
+      .should('have.text', OLD_VERSION)
       .should('be.visible');
 
     cy.get('.update-module-dialog')
-      .contains(`Latest version: ${NEW_VERSION}`)
+      .contains('ui5-form-item', 'Latest version')
+      .find('ui5-text')
+      .should('have.text', NEW_VERSION)
       .should('be.visible');
 
     cy.get('.update-module-dialog')

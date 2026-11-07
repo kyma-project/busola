@@ -54,7 +54,6 @@ export const DeleteOldModulesCheck = ({
       {oldModuleTemplates.length > 0 && (
         <CheckBox
           data-testid="delete-old-template"
-          className="sap-margin-top-small"
           checked={deleteOldTemplate}
           onChange={(e) => setDeleteOldTemplate(e.target.checked)}
           text={t('modules.community.update.delete-old-templates')}
