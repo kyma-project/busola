@@ -1,12 +1,17 @@
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
-
-export const TERMINAL_NAMESPACE = 'busola-terminal';
-export const CONTAINER_NAME = 'dev-toolbox';
+import { SetStateAction } from 'jotai';
+import {
+  TerminalSessionState,
+  TerminalSessionStatus,
+} from 'state/terminalSessionAtom';
 
 const POD_TTL_MS = 60 * 60 * 1000;
 const POD_POLL_INTERVAL_MS = 2000;
 const POD_POLL_TIMEOUT_MS = 120_000;
+
+const TERMINAL_POD_LABEL_KEY = 'run';
+const TERMINAL_POD_LABEL_VALUE = 'busola-terminal';
 
 export async function generateTerminalPodName(
   clusterServer: string,
@@ -20,22 +25,27 @@ export async function generateTerminalPodName(
   return `busola-terminal-${hex.slice(0, 16)}`;
 }
 
-function buildPodManifest(podName: string, image: string) {
+function buildPodManifest(
+  podName: string,
+  namespace: string,
+  containerName: string,
+  image: string,
+) {
   const ttl = new Date(Date.now() + POD_TTL_MS).toISOString();
   return {
     apiVersion: 'v1',
     kind: 'Pod',
     metadata: {
       name: podName,
-      namespace: TERMINAL_NAMESPACE,
-      labels: { run: 'busola-terminal' },
+      namespace,
+      labels: { [TERMINAL_POD_LABEL_KEY]: TERMINAL_POD_LABEL_VALUE },
       annotations: { 'busola.io/time-to-live': ttl },
     },
     spec: {
       containers: [
         {
           image,
-          name: CONTAINER_NAME,
+          name: containerName,
           resources: {
             requests: { cpu: '100m', memory: '128Mi' },
             limits: { cpu: '500m', memory: '256Mi' },
@@ -51,6 +61,9 @@ function buildPodManifest(podName: string, image: string) {
               name: 'PROMPT_COMMAND',
               value: 'printf "%*s\\r" "${COLUMNS:-80}" ""',
             },
+            // It's timeout for Bash to logout user after time of inactivity.
+            // Gluing it with policy Restart: never will make the pod to go `Completed` and nothing left running will be on th cluster.
+            { name: 'TMOUT', value: '5' },
           ],
         },
       ],
@@ -59,7 +72,6 @@ function buildPodManifest(podName: string, image: string) {
   };
 }
 
-// 409 (already exists) is treated as success.
 async function createIfMissing(
   fetchFn: FetchFn,
   relativeUrl: string,
@@ -77,20 +89,20 @@ async function createIfMissing(
       },
     });
   } catch (err) {
+    // 409 (already exists) is treated as success.
     if (!(err instanceof HttpError && err.code === 409)) throw err;
   }
 }
 
-// Waits until a pod that is currently Terminating (has deletionTimestamp) is
-// fully deleted. If the pod does not exist or is not terminating, returns
-// immediately. The caller should re-create the pod afterwards.
 async function waitIfTerminating(
   fetchFn: FetchFn,
   podName: string,
+  namespace: string,
   abortController: AbortController,
   deadline: number,
+  setSession: (update: SetStateAction<TerminalSessionState>) => void,
 ): Promise<void> {
-  const podUrl = `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/${podName}`;
+  const podUrl = `/api/v1/namespaces/${namespace}/pods/${podName}`;
   let isTerminating: boolean;
   try {
     const res = await fetchFn({ relativeUrl: podUrl, abortController });
@@ -101,6 +113,7 @@ async function waitIfTerminating(
     throw err;
   }
   if (!isTerminating) return;
+  setSession((prev) => ({ ...prev, status: TerminalSessionStatus.Recreating }));
 
   while (Date.now() < deadline) {
     if (abortController.signal.aborted)
@@ -121,6 +134,7 @@ async function waitIfTerminating(
 async function pollPodReady(
   fetchFn: FetchFn,
   podName: string,
+  namespace: string,
   abortController: AbortController,
   deadline: number,
 ): Promise<void> {
@@ -128,7 +142,7 @@ async function pollPodReady(
     if (abortController.signal.aborted)
       throw new DOMException('Aborted', 'AbortError');
     const res = await fetchFn({
-      relativeUrl: `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/${podName}`,
+      relativeUrl: `/api/v1/namespaces/${namespace}/pods/${podName}`,
       abortController,
     });
     const pod = await res.json();
@@ -142,16 +156,59 @@ async function pollPodReady(
   throw new Error('Timed out waiting for terminal pod to become ready.');
 }
 
+export async function cleanupAllCompletedTerminals({
+  fetchFn,
+  namespace,
+}: {
+  fetchFn: FetchFn;
+  namespace: string;
+}): Promise<void> {
+  try {
+    const query = new URLSearchParams({
+      labelSelector: `${TERMINAL_POD_LABEL_KEY}=${TERMINAL_POD_LABEL_VALUE}`,
+    });
+    const res = await fetchFn({
+      relativeUrl: `/api/v1/namespaces/${namespace}/pods?${query}`,
+    });
+    const podList = await res.json();
+    const completedPods = (podList?.items ?? []).filter(
+      (pod: any) => pod?.status?.phase === 'Succeeded',
+    );
+
+    await Promise.all(
+      completedPods.map(async (pod: any) => {
+        const name = pod?.metadata?.name;
+        try {
+          await fetchFn({
+            relativeUrl: `/api/v1/namespaces/${namespace}/pods/${name}`,
+            init: { method: 'DELETE' },
+          });
+        } catch (err) {
+          console.warn(`Failed to delete completed terminal pod ${name}:`, err);
+        }
+      }),
+    );
+  } catch (err) {
+    console.warn('Failed to clean up completed terminal pods:', err);
+  }
+}
+
 export async function provisionPod({
   fetchFn,
   podName,
   image,
+  namespace,
+  containerName,
   abortController,
+  setSession,
 }: {
   fetchFn: FetchFn;
   podName: string;
   image: string;
+  namespace: string;
+  containerName: string;
   abortController: AbortController;
+  setSession: (update: SetStateAction<TerminalSessionState>) => void;
 }): Promise<void> {
   const deadline = Date.now() + POD_POLL_TIMEOUT_MS;
   await createIfMissing(
@@ -160,16 +217,23 @@ export async function provisionPod({
     {
       apiVersion: 'v1',
       kind: 'Namespace',
-      metadata: { name: TERMINAL_NAMESPACE },
+      metadata: { name: namespace },
     },
     abortController,
   );
-  await waitIfTerminating(fetchFn, podName, abortController, deadline);
+  await waitIfTerminating(
+    fetchFn,
+    podName,
+    namespace,
+    abortController,
+    deadline,
+    setSession,
+  );
   await createIfMissing(
     fetchFn,
-    `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods`,
-    buildPodManifest(podName, image),
+    `/api/v1/namespaces/${namespace}/pods`,
+    buildPodManifest(podName, namespace, containerName, image),
     abortController,
   );
-  await pollPodReady(fetchFn, podName, abortController, deadline);
+  await pollPodReady(fetchFn, podName, namespace, abortController, deadline);
 }
