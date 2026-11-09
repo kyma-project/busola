@@ -32,7 +32,7 @@ context('Accessibility test Custom Resources', () => {
   });
 
   it('Acc test Custom Resources overview', () => {
-    cy.getLeftNav().contains('Custom Resources').click();
+    cy.navigateTo('Configuration', 'Custom Resources');
 
     cy.contains('ui5-title', 'Custom Resources').should('be.visible');
 
@@ -68,7 +68,7 @@ context('Accessibility test Custom Resources', () => {
   });
 
   it('Acc test Tcluster Custom Resource details', () => {
-    cy.getLeftNav().contains('Custom Resources').click();
+    cy.navigateTo('Configuration', 'Custom Resources');
 
     cy.typeInSearch('cypress');
 

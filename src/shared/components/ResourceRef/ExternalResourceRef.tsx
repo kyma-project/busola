@@ -105,8 +105,7 @@ export function ExternalResourceRef({
   }));
 
   let filteredResourcesOptions:
-    | { key: string; text: string; namespace: string }[]
-    | undefined = [];
+    { key: string; text: string; namespace: string }[] | undefined = [];
   if (value?.namespace?.length) {
     filteredResourcesOptions = allResourcesOptions?.filter(
       (resource) => value?.namespace === resource.namespace,

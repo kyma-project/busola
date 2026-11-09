@@ -22,7 +22,7 @@ interface ClusterWithName extends Cluster {
 // null - no cluster choosen
 export type ActiveClusterState = ClusterWithName | null | undefined;
 
-const CLUSTER_NAME_STORAGE_KEY = 'busola.current-cluster-name';
+export const CLUSTER_NAME_STORAGE_KEY = 'busola.current-cluster-name';
 
 const getClusters = () => {
   try {
@@ -78,3 +78,8 @@ export const clusterAtom = atom<ActiveClusterState, [ActiveClusterState], void>(
   },
 );
 clusterAtom.debugLabel = 'clusterAtom';
+
+// Lets a login that starts after the cluster was cleared restore it on return.
+export function persistActiveClusterName(name: string): void {
+  localStorage.setItem(CLUSTER_NAME_STORAGE_KEY, name);
+}

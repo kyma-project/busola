@@ -1,8 +1,18 @@
-import { Menu, MenuItem } from '@ui5/webcomponents-react';
-import { MenuDomRef, Ui5CustomEvent } from '@ui5/webcomponents-react';
+import {
+  Menu,
+  MenuDomRef,
+  MenuItem,
+  type ShellBarDomRef,
+  Ui5CustomEvent,
+} from '@ui5/webcomponents-react';
 import { MenuItemClickEventDetail } from '@ui5/webcomponents/dist/Menu.js';
 
 import { useGetHelpLinks } from './SidebarMenu/useGetHelpLinks';
+import { type RefObject, useState } from 'react';
+import { ShellBarAction } from 'header/ShellBarAction';
+import { useTranslation } from 'react-i18next';
+import { createPortal } from 'react-dom';
+import { resolveOpener } from 'header/helpers';
 
 interface GetHelpLink {
   label: string;
@@ -10,14 +20,13 @@ interface GetHelpLink {
 }
 
 interface GetHelpMenuProps {
-  isMenuOpen: boolean;
-  onClose: () => void;
+  shellbarRef: RefObject<ShellBarDomRef | null>;
 }
 
-export function GetHelpMenu({
-  isMenuOpen,
-  onClose: handleClose,
-}: GetHelpMenuProps) {
+export function GetHelpMenu({ shellbarRef }: GetHelpMenuProps) {
+  const { t } = useTranslation();
+  const [isGetHelpOpen, setIsGetHelpOpen] = useState(false);
+  const [opener, setOpener] = useState<HTMLElement | undefined>();
   const getHelpLinks = useGetHelpLinks();
 
   const openNewWindow = (link: string) => {
@@ -35,19 +44,35 @@ export function GetHelpMenu({
     }
   };
   return (
-    <Menu
-      open={isMenuOpen}
-      opener="openGetHelpMenu"
-      onClose={handleClose}
-      onItemClick={handleMenuItemClick}
-    >
-      {getHelpLinks.map((getHelpLint: GetHelpLink) => (
-        <MenuItem
-          key={getHelpLint.link}
-          text={getHelpLint.label}
-          icon="inspect"
-        />
-      ))}
-    </Menu>
+    <>
+      <ShellBarAction
+        onClick={() => {
+          const resolvedOpener = resolveOpener('openGetHelpMenu', shellbarRef);
+          setOpener(resolvedOpener);
+          setIsGetHelpOpen(true);
+        }}
+        id="openGetHelpMenu"
+        icon="sys-help"
+        text={t('navigation.menu.get-help')}
+        title={t('navigation.menu.get-help')}
+      />
+      {createPortal(
+        <Menu
+          open={isGetHelpOpen}
+          opener={opener}
+          onClose={() => setIsGetHelpOpen(false)}
+          onItemClick={handleMenuItemClick}
+        >
+          {getHelpLinks.map((getHelpLint: GetHelpLink) => (
+            <MenuItem
+              key={getHelpLint.link}
+              text={getHelpLint.label}
+              icon="inspect"
+            />
+          ))}
+        </Menu>,
+        document.body,
+      )}
+    </>
   );
 }

@@ -9,7 +9,16 @@ export type FeatureCardBannerProps = {
   className?: string;
 };
 
-export type IllustrationType = 'None' | 'AI' | 'Modules' | 'Discovery' | string;
+export type IllustrationType =
+  | 'None'
+  | 'AI'
+  | 'Modules'
+  | 'Discovery'
+  | 'Terminal'
+  | 'Teched'
+  | 'Satellite'
+  | string;
+
 export type ThemeType =
   | 'sap_horizon_hcw'
   | 'sap_horizon_hcb'
@@ -23,7 +32,4 @@ export interface BackgroundStyle {
 }
 
 export type DesignType =
-  | 'information-1'
-  | 'information-2'
-  | 'information-3'
-  | string;
+  'information-1' | 'information-2' | 'information-3' | 'Teched' | string;

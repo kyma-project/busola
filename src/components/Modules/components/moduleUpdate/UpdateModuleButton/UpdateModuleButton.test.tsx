@@ -99,9 +99,9 @@ describe('UpdateModuleButton', () => {
     expect(screen.queryByText('modules.community.update.title')).toBeNull();
   });
 
-  it('opens the confirmation dialog when the button is clicked', () => {
+  it('opens the confirmation dialog when the button is clicked', async () => {
     render(<UpdateModuleButton {...defaultProps} />);
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('kyma-modules.update'));
     });
     expect(
@@ -109,42 +109,42 @@ describe('UpdateModuleButton', () => {
     ).toBeInTheDocument();
   });
 
-  it('shows current and new version in the dialog', () => {
+  it('shows current and new version in the dialog', async () => {
     render(<UpdateModuleButton {...defaultProps} />);
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('kyma-modules.update'));
     });
     expect(screen.getByText('1.0.0')).toBeInTheDocument();
     expect(screen.getByText('2.0.0')).toBeInTheDocument();
   });
 
-  it('closes the dialog when Cancel is clicked', () => {
+  it('closes the dialog when Cancel is clicked', async () => {
     render(<UpdateModuleButton {...defaultProps} />);
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('kyma-modules.update'));
     });
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('common.buttons.cancel'));
     });
     expect(screen.queryByText('modules.community.update.title')).toBeNull();
   });
 
-  it('does not render DeleteOldModulesCheck when no old templates are provided', () => {
+  it('does not render DeleteOldModulesCheck when no old templates are provided', async () => {
     render(<UpdateModuleButton {...defaultProps} />);
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('kyma-modules.update'));
     });
     expect(screen.queryByTestId('delete-old-check')).toBeNull();
   });
 
-  it('renders DeleteOldModulesCheck when old templates are provided', () => {
+  it('renders DeleteOldModulesCheck when old templates are provided', async () => {
     render(
       <UpdateModuleButton
         {...defaultProps}
         oldModuleTemplates={[makeTpl('busola', '1.0.0')]}
       />,
     );
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('kyma-modules.update'));
     });
     expect(screen.getByTestId('delete-old-check')).toBeInTheDocument();
@@ -152,12 +152,12 @@ describe('UpdateModuleButton', () => {
 
   it('notifies update-started and closes dialog on confirm', async () => {
     render(<UpdateModuleButton {...defaultProps} />);
-    act(() => {
+    await act(async () => {
       fireEvent.click(screen.getByText('kyma-modules.update'));
     });
 
     // click the Update action inside the dialog (second "kyma-modules.update" text)
-    act(() => {
+    await act(async () => {
       const buttons = screen.getAllByText('kyma-modules.update');
       fireEvent.click(buttons[buttons.length - 1]);
     });

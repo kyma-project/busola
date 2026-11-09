@@ -58,7 +58,7 @@ export const UI5Panel = ({
           stickyHeader.style['top'] = headerTop;
         }
       });
-  });
+  }, [headerTop]);
   return (
     <NestedContainerContext.Provider value={true}>
       <Panel

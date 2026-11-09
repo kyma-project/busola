@@ -5,6 +5,7 @@ import {
 } from 'components/Modules/support';
 import { compareVersions } from 'compare-versions';
 import { PostFn } from 'shared/hooks/BackendAPI/usePost';
+import { retryOnError } from 'shared/utils/retry';
 
 export type VersionInfo = {
   version: string;
@@ -280,7 +281,9 @@ export async function getAllResourcesYamls(
     const yamlRes = await Promise.all(
       links.map(async (link) => {
         if (link) {
-          return await postForCommunityResources(post, link);
+          return await retryOnError(() =>
+            postForCommunityResources(post, link),
+          );
         }
       }),
     );

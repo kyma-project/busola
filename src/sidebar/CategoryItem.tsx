@@ -18,7 +18,7 @@ import {
   DataSourcesContextProvider,
 } from 'components/Extensibility/contexts/DataSources';
 import { cloneDeep } from 'lodash';
-import { SideNavigationItemClickEventDetail } from '@ui5/webcomponents-fiori/dist/SideNavigationItemBase';
+import { SideNavigationItemClickEventDetail } from '@ui5/webcomponents-fiori/dist/SideNavigationItemBase.js';
 import { useLocation } from 'react-router';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { clusterAtom } from 'state/clusterAtom';
@@ -103,11 +103,12 @@ export function CategoryItem({
     return clonedDataSources;
   };
 
-  const children = category.items?.map((nn, index) => {
+  const children = category.items?.map((nn) => {
     const isNodeSelected = checkIsSelected(nn);
+    const nodeKey = nn.pathSegment || nn.externalUrl || nn.label;
 
     return (
-      <React.Fragment key={`${nn.pathSegment}-${index}`}>
+      <React.Fragment key={nodeKey}>
         {nn.dataSources ? (
           <DataSourcesContextProvider
             dataSources={handleEmptyNamespace(nn.dataSources)}
@@ -136,7 +137,7 @@ export function CategoryItem({
   return (
     <SideNavigationItem
       unselectable
-      key={isExpanded + category.key}
+      key={category.key}
       expanded={isExpanded}
       selected={false}
       icon={category.icon}

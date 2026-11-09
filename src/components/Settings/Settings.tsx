@@ -25,6 +25,7 @@ import ThemeChooser from './ThemeChooser';
 
 import './Settings.scss';
 import EditViewSettings from './EditViewSettings';
+import BannerSettings from './BannerSettings';
 
 export function Settings() {
   const { t } = useTranslation();
@@ -154,7 +155,10 @@ export function Settings() {
               <ResourceValidationSettings />
             </Tab>
             <Tab key="other-settings" text={t('settings.other.title')}>
-              <OtherSettings />
+              <div>
+                <OtherSettings />
+                <BannerSettings />
+              </div>
             </Tab>
           </TabContainer>
         </VerticalTabs.Content>

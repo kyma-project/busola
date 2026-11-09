@@ -6,7 +6,7 @@ context('Test NAT Gateway IP Addresses display', () => {
 
   it('Shows NAT Gateway IP Addresses in cluster overview', () => {
     cy.loginAndSelectCluster();
-    cy.getLeftNav().contains('Cluster Overview').click();
+    cy.goToClusterOverview();
 
     cy.contains('NAT Gateway IP Addresses').should('be.visible');
   });

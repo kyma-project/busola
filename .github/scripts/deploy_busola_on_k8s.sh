@@ -23,7 +23,10 @@ ENV=${ENV?"env is not set"}
 IMG=$1
 
 kubectl delete configmap environment --ignore-not-found=true
-kubectl create configmap environment --from-literal=ENVIRONMENT="${ENV}" --from-literal=JWT_CHECK_BYPASS=true
+# ALLOW_PRIVATE_IPS is required here because Busola runs in-cluster and the
+# kubeconfig points at kubernetes.default.svc (a private ClusterIP). This is a
+# trusted, self-hosted deployment; hosted environments never set this flag.
+kubectl create configmap environment --from-literal=ENVIRONMENT="${ENV}" --from-literal=JWT_CHECK_BYPASS=true --from-literal=ALLOW_PRIVATE_IPS=true
 echo "### Deploying busola from: ${IMG}"
 
 cd resources

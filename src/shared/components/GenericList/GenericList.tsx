@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty, isEqual } from 'lodash';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAtom, useAtomValue } from 'jotai';
@@ -33,8 +33,8 @@ import './GenericList.scss';
 import { asyncSort } from 'components/Extensibility/helpers/sortBy';
 import { useDebounce } from 'hooks/useDebounce';
 import { K8sResource } from 'types';
-import { TableRowClickEventDetail } from '@ui5/webcomponents/dist/Table';
-import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout';
+import { TableRowClickEventDetail } from '@ui5/webcomponents/dist/Table.js';
+import FCLLayout from '@ui5/webcomponents-fiori/dist/types/FCLLayout.js';
 
 type AsyncSortFunction = {
   asyncFn: (a: any, b: any) => Promise<any>;
@@ -250,7 +250,8 @@ export const GenericList = ({
         searchQuery,
         searchSettings?.textSearchProperties,
       );
-      setFilteredEntries(filtered);
+      // keep the reference stable when unchanged so polling refreshes don't re-render the search input
+      setFilteredEntries((prev) => (isEqual(prev, filtered) ? prev : filtered));
     };
     getFilteredEntries();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -430,6 +431,10 @@ export const GenericList = ({
     return 'Popin';
   };
 
+  const renderPagination =
+    pagination &&
+    (!pagination.autoHide || filteredEntries.length > AVAILABLE_PAGE_SIZES[0]);
+
   return (
     <UI5Panel
       title={title}
@@ -437,97 +442,99 @@ export const GenericList = ({
       testid={testid}
       className={className}
       accessibleName={`${title} panel`}
+      stickyHeader={!disableHiding}
     >
-      <Table
-        noData={
-          <div>
-            {!serverDataError &&
-              !serverDataLoading &&
-              !entries?.length &&
-              !searchQuery &&
-              !filteredEntries?.length &&
-              (emptyListProps?.simpleEmptyListMessage === false ||
-              (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
-                <EmptyListComponent
-                  titleText={emptyListProps.titleText ?? ''}
-                  subtitleText={emptyListProps.subtitleText}
-                  showButton={emptyListProps.showButton}
-                  buttonText={emptyListProps.buttonText}
-                  url={emptyListProps.url ?? ''}
-                  onClick={emptyListProps.onClick ?? (() => null)}
-                  image={emptyListProps?.image}
-                />
-              ) : (
-                <p>
-                  {emptyListProps?.titleText ? (
-                    <Trans
-                      i18nKey={emptyListProps?.titleText}
-                      defaults={emptyListProps?.titleText}
-                    />
-                  ) : (
-                    t(notFoundMessage, { defaultValue: notFoundMessage })
-                  )}
-                </p>
-              ))}
-          </div>
-        }
-        overflowMode={setOverflowMode()}
-        accessibleName={accessibleName ?? title}
-        rowActionCount={displayArrow ? 1 : 0}
-        className={`ui5-generic-list ${
-          hasDetailsView && filteredEntries.length && enableColumnLayout
-            ? 'cursor-pointer'
-            : ''
-        }`}
-        onMouseDown={() => {
-          window.getSelection()?.removeAllRanges();
-        }}
-        onRowClick={(e) => {
-          const selection = window.getSelection()?.toString();
-          if (!hasDetailsView || (selection?.length && selection?.length > 0))
-            return;
-          navigateSafely(() => handleRowClick(e));
-        }}
-        headerRow={
-          <HeaderRenderer
-            actions={actions}
-            headerRenderer={headerRenderer}
-            columnWidths={columnWidths}
-            disableHiding={disableHiding}
-            noHideFields={noHideFields ?? []}
-          />
-        }
-      >
-        <TableBody
-          serverDataError={serverDataError}
-          serverDataLoading={serverDataLoading}
-          filteredEntries={filteredEntries}
-          searchQuery={searchQuery}
-          searchSettings={searchSettings}
-          entries={entries}
-          pagination={pagination}
-          currentPage={currentPage}
-          layoutState={layoutState}
-          entrySelected={entrySelected}
-          entrySelectedNamespace={entrySelectedNamespace}
-          actions={actions}
-          rowRenderer={rowRenderer}
-          displayArrow={displayArrow}
-          hasRowDetails={hasRowDetails}
-          enableColumnLayout={!!enableColumnLayout}
-        />
-      </Table>
-      {pagination &&
-        (!pagination.autoHide ||
-          filteredEntries.length > AVAILABLE_PAGE_SIZES[0]) && (
-          <Pagination
-            itemsTotal={filteredEntries.length}
+      <div style={{ containerType: 'inline-size', width: '100%' }}>
+        <Table
+          noData={
+            <div>
+              {!serverDataError &&
+                !serverDataLoading &&
+                !entries?.length &&
+                !searchQuery &&
+                !filteredEntries?.length &&
+                (emptyListProps?.simpleEmptyListMessage === false ||
+                (emptyListProps && !emptyListProps.simpleEmptyListMessage) ? (
+                  <EmptyListComponent
+                    titleText={emptyListProps.titleText ?? ''}
+                    subtitleText={emptyListProps.subtitleText}
+                    showButton={emptyListProps.showButton}
+                    buttonText={emptyListProps.buttonText}
+                    url={emptyListProps.url ?? ''}
+                    onClick={emptyListProps.onClick ?? (() => null)}
+                    image={emptyListProps?.image}
+                  />
+                ) : (
+                  <p>
+                    {emptyListProps?.titleText ? (
+                      <Trans
+                        i18nKey={emptyListProps?.titleText}
+                        defaults={emptyListProps?.titleText}
+                      />
+                    ) : (
+                      t(notFoundMessage, { defaultValue: notFoundMessage })
+                    )}
+                  </p>
+                ))}
+            </div>
+          }
+          overflowMode={setOverflowMode()}
+          accessibleName={accessibleName ?? title}
+          rowActionCount={displayArrow ? 1 : 0}
+          className={`ui5-generic-list ${
+            hasDetailsView && filteredEntries.length && enableColumnLayout
+              ? 'cursor-pointer'
+              : ''
+          }`}
+          onMouseDown={() => {
+            window.getSelection()?.removeAllRanges();
+          }}
+          onRowClick={(e) => {
+            const selection = window.getSelection()?.toString();
+            if (!hasDetailsView || (selection?.length && selection?.length > 0))
+              return;
+            navigateSafely(() => handleRowClick(e));
+          }}
+          headerRow={
+            <HeaderRenderer
+              actions={actions}
+              headerRenderer={headerRenderer}
+              columnWidths={columnWidths}
+              disableHiding={disableHiding}
+              noHideFields={noHideFields ?? []}
+              stickyHeader={!disableHiding}
+            />
+          }
+        >
+          <TableBody
+            serverDataError={serverDataError}
+            serverDataLoading={serverDataLoading}
+            filteredEntries={filteredEntries}
+            searchQuery={searchQuery}
+            searchSettings={searchSettings}
+            entries={entries}
+            pagination={pagination}
             currentPage={currentPage}
-            itemsPerPage={pagination.itemsPerPage ?? 0}
-            onChangePage={setCurrentPage}
-            setLocalPageSize={setPageSize}
+            layoutState={layoutState}
+            entrySelected={entrySelected}
+            entrySelectedNamespace={entrySelectedNamespace}
+            actions={actions}
+            rowRenderer={rowRenderer}
+            displayArrow={displayArrow}
+            hasRowDetails={hasRowDetails}
+            enableColumnLayout={!!enableColumnLayout}
           />
-        )}
+        </Table>
+      </div>
+      {renderPagination && (
+        <Pagination
+          itemsTotal={filteredEntries.length}
+          currentPage={currentPage}
+          itemsPerPage={pagination?.itemsPerPage ?? 0}
+          onChangePage={setCurrentPage}
+          setLocalPageSize={setPageSize}
+        />
+      )}
     </UI5Panel>
   );
 };

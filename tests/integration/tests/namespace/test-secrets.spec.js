@@ -86,7 +86,6 @@ context('Test Secrets', () => {
   });
 
   it('Edit a secret', () => {
-    cy.wait(500);
     cy.inspectTab('Edit');
 
     cy.get('ui5-textarea[placeholder="Enter value"]:visible')
@@ -110,7 +109,6 @@ context('Test Secrets', () => {
   });
 
   it('Checking an updated secret', () => {
-    cy.wait(1000);
     cy.inspectTab('View');
 
     cy.contains('ui5-button', 'Decode').click();

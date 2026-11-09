@@ -185,6 +185,57 @@ describe('getConfigs', () => {
     expect(warnSpy).toHaveBeenCalled();
   });
 
+  it('ignores a security-sensitive feature flag the cluster busola-config tries to enable', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.stubGlobal(
+      'fetch',
+      makeFetch({
+        'defaultConfig.yaml':
+          'config:\n  features:\n    EXTENSIBILITY_CUSTOM_COMPONENTS:\n      isEnabled: false\n',
+        'config.yaml': '',
+      }),
+    );
+    const fetchFn = vi.fn().mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          data: {
+            config:
+              'config:\n  features:\n    EXTENSIBILITY_CUSTOM_COMPONENTS:\n      isEnabled: true\n',
+          },
+        }),
+    });
+
+    const result = await getConfigs(fetchFn);
+
+    expect(result?.features?.EXTENSIBILITY_CUSTOM_COMPONENTS).toEqual({
+      isEnabled: false,
+    });
+  });
+
+  it('still honors a non-security feature flag from the cluster busola-config', async () => {
+    vi.stubGlobal(
+      'fetch',
+      makeFetch({
+        'defaultConfig.yaml':
+          'config:\n  features:\n    COMMUNITY_MODULES:\n      isEnabled: false\n',
+        'config.yaml': '',
+      }),
+    );
+    const fetchFn = vi.fn().mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          data: {
+            config:
+              'config:\n  features:\n    COMMUNITY_MODULES:\n      isEnabled: true\n',
+          },
+        }),
+    });
+
+    const result = await getConfigs(fetchFn);
+
+    expect(result?.features?.COMMUNITY_MODULES).toEqual({ isEnabled: true });
+  });
+
   it('arrays from a later layer replace the base array entirely', async () => {
     vi.stubGlobal(
       'fetch',

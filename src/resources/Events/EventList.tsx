@@ -21,7 +21,7 @@ export interface EventListProps {
   resourceUrl: string;
   defaultType?: { key: string; text: string };
   hideInvolvedObjects?: boolean;
-  filter?: (resource: any) => boolean;
+  filter?: (resource: any) => boolean | Promise<boolean>;
   isCompact?: boolean;
   isClusterView?: boolean;
   displayArrow?: boolean;
@@ -43,6 +43,16 @@ function useEventUrl(resourceType: string, clusterView?: boolean) {
       namespace: resource.metadata.namespace,
     });
   };
+}
+
+type EventSeverity = 'Error' | 'Warning' | 'Normal';
+
+function getEventSeverity(e: {
+  type?: string;
+  message?: string;
+}): EventSeverity {
+  if (e.type !== 'Warning') return 'Normal';
+  return e.message?.startsWith('Error') ? 'Error' : 'Warning';
 }
 
 export function EventList({
@@ -93,7 +103,7 @@ export function EventList({
                 aria-label="Error"
                 icon={<Icon accessibleName="Error" name="error" />}
                 state="Negative"
-                title={e.type}
+                title={t('node-details.error')}
               />
             ) : (
               <ObjectStatus
@@ -105,11 +115,11 @@ export function EventList({
             )
           ) : (
             <ObjectStatus
-              aria-label="Normal"
+              aria-label="Information"
               className="bsl-icon-m"
-              icon={<Icon accessibleName="Normal" name="information" />}
+              icon={<Icon accessibleName="Information" name="information" />}
               state="Information"
-              title={e.type}
+              title={t('node-details.information')}
             />
           )}
         </div>
@@ -117,7 +127,8 @@ export function EventList({
     },
     {
       header: t('events.headers.message'),
-      value: (e) => <p>{e.message}</p>,
+      width: '20cqi',
+      value: (e) => <Text>{e.message}</Text>,
     },
     {
       header: t('common.headers.name'),
@@ -146,7 +157,6 @@ export function EventList({
       ? [
           {
             header: t('common.headers.namespace'),
-            width: '20ch',
             value: (entry: any) => entry.metadata.namespace,
             id: 'namespace',
           },
@@ -167,11 +177,11 @@ export function EventList({
     {
       header: t('events.headers.count'),
       width: '10ch',
-      value: (e) => <p>{e.count || EMPTY_TEXT_PLACEHOLDER}</p>,
+      value: (e) => <Text>{e.count || EMPTY_TEXT_PLACEHOLDER}</Text>,
     },
     {
       header: t('events.headers.last-seen'),
-      width: '26ch',
+      width: '14ch',
       value: (e) => <ReadableCreationTimestamp timestamp={e.lastTimestamp} />,
     },
   ];
@@ -194,10 +204,9 @@ export function EventList({
       filter={async (res) => {
         const typeFilter =
           displayType.key === EVENT_MESSAGE_TYPE.ALL.key ||
-          res.type === displayType.key;
+          getEventSeverity(res) === displayType.key;
 
         const propsFilter = filter ? await filter(res) : true;
-
         return typeFilter && propsFilter;
       }}
       searchSettings={{

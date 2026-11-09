@@ -11,7 +11,7 @@ Busola is a web-based UI for managing Kubernetes resources, with optional Kyma-s
 
 **Stack:** React 18, TypeScript, Vite, React Router 7, Jotai, SAP UI5 WebComponents (@ui5/webcomponents-react), Express 5, Vitest, Cypress.
 
-**Requirements:** Node 24.x, npm 11.x.
+**Requirements:** Node 26.x, npm 11.x.
 
 ## Setup
 

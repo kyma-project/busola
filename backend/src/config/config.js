@@ -1,4 +1,3 @@
-/* global process */
 import fs from 'node:fs';
 import jsyaml from 'js-yaml';
 import merge from 'lodash.merge';
@@ -12,7 +11,6 @@ const configPaths = {
 
 function getEnvDir() {
   const environment = process.env.ENVIRONMENT;
-
   if (environment) {
     return path.join('environments', environment);
   }
@@ -49,6 +47,26 @@ function getDefaultConfig(basePath) {
   );
 }
 
+// Deploy/test environments (for example an in-cluster smoke test that must
+// reach kubernetes.default.svc) can opt into private-IP access via the
+// ALLOW_PRIVATE_IPS=true backend environment variable, mirroring how
+// JWT_CHECK_BYPASS is injected. This is a deployer-controlled backend env var
+// (not the tenant-facing cluster ConfigMap), so it does not weaken the
+// secure-by-default posture for hosted deployments, which never set it.
+function applyEnvOverrides(config) {
+  if (!config) {
+    return;
+  }
+
+  if (process.env.ALLOW_PRIVATE_IPS === 'true') {
+    config.features = config.features || {};
+    config.features.ALLOW_PRIVATE_IPS = {
+      ...(config.features.ALLOW_PRIVATE_IPS || {}),
+      isEnabled: true,
+    };
+  }
+}
+
 export function loadConfig(basePath) {
   let mergedConfig = {};
 
@@ -65,6 +83,8 @@ export function loadConfig(basePath) {
     if (!isEmpty(envConfig)) {
       merge(mergedConfig, envConfig.config);
     }
+
+    applyEnvOverrides(mergedConfig);
   } catch (e) {
     console.warn('Error loading config:', e);
   }

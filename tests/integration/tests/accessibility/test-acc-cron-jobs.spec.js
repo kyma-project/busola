@@ -22,7 +22,7 @@ context('Accessibility test Cron Jobs', () => {
   it('Acc test Cron Jobs list', () => {
     cy.loginAndSelectCluster();
 
-    cy.getLeftNav().contains('Namespaces').click();
+    cy.navigateTo('Namespaces');
 
     cy.wait(1000);
 

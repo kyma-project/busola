@@ -1,19 +1,19 @@
 import { useTranslation } from 'react-i18next';
 
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import {
   ResourceDetails,
   ResourceDetailsProps,
 } from 'shared/components/ResourceDetails/ResourceDetails';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
 import { PersistentVolumesList } from './PersistentVolumesList';
 import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
 import StorageClassCreate from './StorageClassCreate';
-import { Text } from '@ui5/webcomponents-react';
+import { FormGroup, FormItem, Text } from '@ui5/webcomponents-react';
 import { ResourceDescription } from 'resources/StorageClasses';
 
 type StorageClassDetailsProps = {
@@ -40,41 +40,43 @@ export function StorageClassDetails(props: StorageClassDetailsProps) {
         title={t('storage-classes.headers.configuration')}
         accessibleName={t('common.accessible-name.configuration')}
       >
-        <LayoutPanelRow
-          name={t('storage-classes.headers.provisioner')}
-          value={storageclass.provisioner || EMPTY_TEXT_PLACEHOLDER}
-        />
-        <LayoutPanelRow
-          name={t('storage-classes.headers.reclaim-policy')}
-          value={storageclass.reclaimPolicy || EMPTY_TEXT_PLACEHOLDER}
-        />
-        <LayoutPanelRow
-          name={t('storage-classes.headers.volume-binding-mode')}
-          value={storageclass.volumeBindingMode || EMPTY_TEXT_PLACEHOLDER}
-        />
-        <LayoutPanelRow
-          name={t('storage-classes.headers.allow-volume-expansion')}
-          value={storageclass.allowVolumeExpansion || EMPTY_TEXT_PLACEHOLDER}
-        />
-        <UI5Card
-          keyComponent={'storageclass-parameters'}
-          title={t('storage-classes.headers.parameters')}
-          accessibleName={t('storage-classes.accessible-name.parameters')}
-        >
-          {Object.keys(parameters).length > 0 ? (
-            Object.entries(parameters).map((parameter: [string, any]) => {
-              return (
-                <LayoutPanelRow
-                  name={parameter[0]}
-                  value={parameter[1] || EMPTY_TEXT_PLACEHOLDER}
-                  key={parameter[0]}
-                />
-              );
-            })
-          ) : (
-            <Text>{t('common.messages.no-entries-found')}</Text>
-          )}
-        </UI5Card>
+        <ResourceDetailsForm>
+          <FormGroup>
+            <ResourceDetailsFormItem
+              label={t('storage-classes.headers.provisioner')}
+              value={storageclass.provisioner}
+            />
+            <ResourceDetailsFormItem
+              label={t('storage-classes.headers.reclaim-policy')}
+              value={storageclass.reclaimPolicy}
+            />
+            <ResourceDetailsFormItem
+              label={t('storage-classes.headers.volume-binding-mode')}
+              value={storageclass.volumeBindingMode}
+            />
+            <ResourceDetailsFormItem
+              label={t('storage-classes.headers.allow-volume-expansion')}
+              value={storageclass.allowVolumeExpansion}
+            />
+          </FormGroup>
+          <FormGroup headerText={t('storage-classes.headers.parameters')}>
+            {Object.keys(parameters).length > 0 ? (
+              Object.entries(parameters).map((parameter: [string, any]) => {
+                return (
+                  <ResourceDetailsFormItem
+                    label={parameter[0]}
+                    value={parameter[1]}
+                    key={parameter[0]}
+                  />
+                );
+              })
+            ) : (
+              <FormItem>
+                <Text>{t('common.messages.no-entries-found')}</Text>
+              </FormItem>
+            )}
+          </FormGroup>
+        </ResourceDetailsForm>
       </UI5Card>
     );
   };

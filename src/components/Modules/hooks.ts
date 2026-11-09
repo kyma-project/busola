@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
+import { isEqual } from 'lodash';
 import pluralize from 'pluralize';
 import { useGet, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
@@ -8,6 +9,7 @@ import { getUrl } from 'resources/Namespaces/YamlUpload/useUploadResources';
 import {
   ConditionType,
   DEFAULT_K8S_NAMESPACE,
+  fetchLiveResource,
   getResourceListPath,
   getResourcePath,
   KymaResourceType,
@@ -24,6 +26,7 @@ import {
 import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { usePopulateWithNamespace } from 'hooks/usePopulateWithNamespace';
 import { useTranslation } from 'react-i18next';
 
 export function useModuleStatus(resource: KymaResourceType) {
@@ -152,7 +155,7 @@ export const useFetchModuleData = (
 
       // Don't clear data during polling if all fetches fail
       if (Object.keys(cache).length > 0 || !isPolling) {
-        setData(cache);
+        setData((prev) => (isEqual(prev, cache) ? prev : cache));
       }
       if (errors.length) setError(errors.join('\n'));
       setLoading(false);
@@ -184,7 +187,7 @@ export const useFetchModuleData = (
   return { loading, error, data, getItem };
 };
 
-const COMMUNITY_MODULES_POLLING_INTERVAL = 5000; // 5 seconds
+export const COMMUNITY_MODULES_POLLING_INTERVAL = 5000; // 5 seconds
 
 export const useGetInstalledNotInstalledModules = (
   moduleTemplates: ModuleTemplateListType,
@@ -208,38 +211,40 @@ export const useGetInstalledNotInstalledModules = (
     COMMUNITY_MODULES_POLLING_INTERVAL,
   );
 
-  if (moduleTemplatesLoading) {
-    return {
-      installed: { items: [] },
-      notInstalled: { items: [] },
-      installedVersions: new Map(),
-      loading: true,
-      error: null,
-    };
-  }
-  if (!moduleTemplates) {
-    return {
-      installed: { items: [] },
-      notInstalled: { items: [] },
-      installedVersions: new Map(),
-      loading: false,
-      error: null,
-    };
-  }
+  return useMemo(() => {
+    if (moduleTemplatesLoading) {
+      return {
+        installed: { items: [] },
+        notInstalled: { items: [] },
+        installedVersions: new Map(),
+        loading: true,
+        error: null,
+      };
+    }
+    if (!moduleTemplates) {
+      return {
+        installed: { items: [] },
+        notInstalled: { items: [] },
+        installedVersions: new Map(),
+        loading: false,
+        error: null,
+      };
+    }
 
-  const { items: installedItems, installedVersions } = getInstalledModules(
-    moduleTemplates,
-    managers,
-  );
-  const notInstalled = getNotInstalledModules(moduleTemplates, managers);
+    const { items: installedItems, installedVersions } = getInstalledModules(
+      moduleTemplates,
+      managers,
+    );
+    const notInstalled = getNotInstalledModules(moduleTemplates, managers);
 
-  return {
-    installed: { items: installedItems },
-    notInstalled,
-    installedVersions,
-    loading,
-    error,
-  };
+    return {
+      installed: { items: installedItems },
+      notInstalled,
+      installedVersions,
+      loading,
+      error,
+    };
+  }, [moduleTemplates, managers, moduleTemplatesLoading, loading, error]);
 };
 
 export function useGetManagerStatus(manager?: ModuleManagerType) {
@@ -315,35 +320,75 @@ export function useGetManagerStatus(manager?: ModuleManagerType) {
   return { data, error };
 }
 
-export const useGetModuleResource = (resource: any) => {
+// A community module is "installed" once its operator is present, which does not
+// imply a CR instance exists on the cluster — probe each and map name → live CR.
+export const useModulesLiveResources = (
+  installedModules: { name: string; resource?: any }[],
+  loading?: boolean,
+  pollingInterval?: number,
+): Map<string, any> => {
   const fetch = useFetch();
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  const listPath = getResourceListPath(resource);
+  const populateWithNamespace = usePopulateWithNamespace();
+  const [liveResources, setLiveResources] = useState<Map<string, any>>(
+    new Map(),
+  );
+
+  // Stable dependency: re-probe only when the modules (by name + CR identity)
+  // actually change, not on every render's new array reference.
+  const modulesKey = useMemo(
+    () =>
+      JSON.stringify(
+        (installedModules ?? []).map((module) => ({
+          name: module?.name,
+          kind: module?.resource?.kind,
+          apiVersion: module?.resource?.apiVersion,
+          resourceName: module?.resource?.metadata?.name,
+          namespace: module?.resource?.metadata?.namespace,
+        })),
+      ),
+    [installedModules],
+  );
 
   useEffect(() => {
-    async function fetchResource() {
-      if (!resource) return;
-      try {
-        const response = await fetch({ relativeUrl: listPath });
-        const list = await response.json();
-        const moduleResource = list?.items?.[0] ?? null;
-        setData(moduleResource);
-      } catch (e) {
-        if (e instanceof Error) {
-          setError(e);
-        }
-      } finally {
-        setLoading(false);
+    let cancelled = false;
+
+    async function checkLiveResources() {
+      if (loading || !installedModules?.length) {
+        if (!cancelled) setLiveResources(new Map());
+        return;
       }
+
+      const found = new Map<string, any>();
+      await Promise.allSettled(
+        installedModules.map(async (module) => {
+          if (!module?.resource || !module?.name) return;
+          // populateWithNamespace returns false when scope can't be resolved
+          // (e.g. the CRD is gone) — treat that as "no live resource".
+          const populated = await populateWithNamespace(module.resource);
+          if (populated === false) return;
+          const liveResource = await fetchLiveResource(fetch, populated);
+          if (liveResource) found.set(module.name, liveResource);
+        }),
+      );
+
+      if (!cancelled) setLiveResources(found);
     }
 
-    fetchResource();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listPath]);
+    checkLiveResources();
 
-  return { data, loading, error };
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+    if (pollingInterval) {
+      intervalId = setInterval(checkLiveResources, pollingInterval);
+    }
+
+    return () => {
+      cancelled = true;
+      if (intervalId) clearInterval(intervalId);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modulesKey, loading, pollingInterval]);
+
+  return liveResources;
 };
 
 export function useGetAllSourceYAMLModuleTemplates(sourceURLs: string[]) {

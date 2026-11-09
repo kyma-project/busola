@@ -1,4 +1,4 @@
-import { FlexBox, Label, Option, Select } from '@ui5/webcomponents-react';
+import { FormItem, Label, Option, Select } from '@ui5/webcomponents-react';
 import { ModuleDisplayInfo } from 'components/Modules/community/communityModulesHelpers';
 
 export type ModuleInfoProps = {
@@ -16,8 +16,7 @@ export default function CommunityModuleVersionSelect({
   }
 
   return (
-    <FlexBox direction="Column" style={{ gap: '0.5rem' }} key={module?.name}>
-      <Label>{`${module.name}:`}</Label>
+    <FormItem labelContent={<Label showColon>{module.name}</Label>}>
       <Select
         accessibleName={`${module.name} version select`}
         onChange={(event) => {
@@ -37,6 +36,6 @@ export default function CommunityModuleVersionSelect({
           </Option>
         ))}
       </Select>
-    </FlexBox>
+    </FormItem>
   );
 }

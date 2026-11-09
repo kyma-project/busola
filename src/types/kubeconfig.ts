@@ -12,6 +12,7 @@ export type LoginCommand = {
   apiVersion: 'client.authentication.k8s.io/v1beta1';
   command: string;
   args: Array<string>;
+  interactiveMode?: 'Never' | 'IfAvailable' | 'Always';
 };
 
 export type KubeconfigOIDCAuth = {

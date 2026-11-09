@@ -5,12 +5,15 @@ import {
   TableHeaderCell,
 } from '@ui5/webcomponents-react';
 
+import './HeaderRenderer.scss';
+
 type HeaderRendererProps = {
   actions: any[];
   headerRenderer: () => any;
   columnWidths?: (string | undefined)[];
   disableHiding: boolean;
   noHideFields: string[];
+  stickyHeader: boolean;
 };
 
 export const HeaderRenderer = ({
@@ -19,6 +22,7 @@ export const HeaderRenderer = ({
   columnWidths,
   disableHiding = true,
   noHideFields,
+  stickyHeader,
 }: HeaderRendererProps) => {
   const { t } = useTranslation();
   let emptyColumn = null;
@@ -60,16 +64,20 @@ export const HeaderRenderer = ({
     } else if (h === 'Popin') {
       return '100%';
     } else if (disableHiding && (h === 'Name' || h === '')) {
-      return '200px';
+      return '150px';
     } else if (disableHiding) {
-      return 'auto';
+      return '75px';
     } else {
       return '100px';
     }
   };
   const Header =
     headerRenderer()?.length || emptyColumn ? (
-      <TableHeaderRow slot="headerRow">
+      <TableHeaderRow
+        slot="headerRow"
+        sticky={stickyHeader}
+        className={stickyHeader ? 'sticky-header-row' : ''}
+      >
         {headerRenderer()?.map((h: any, index: number) => {
           return (
             <TableHeaderCell

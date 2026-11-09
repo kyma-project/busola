@@ -1,12 +1,13 @@
 import { useCallback, useEffect } from 'react';
 import { isResourceEditedAtom } from 'state/resourceEditedAtom';
 import { isFormOpenAtom } from 'state/formOpenAtom';
-import { useAtom } from 'jotai';
+import { useSetAtom, useStore } from 'jotai';
 import { Blocker } from 'react-router';
 
 export function useFormNavigation(blocker?: Blocker) {
-  const [isResourceEdited, setIsResourceEdited] = useAtom(isResourceEditedAtom);
-  const [{ formOpen }, setIsFormOpen] = useAtom(isFormOpenAtom);
+  const setIsResourceEdited = useSetAtom(isResourceEditedAtom);
+  const setIsFormOpen = useSetAtom(isFormOpenAtom);
+  const store = useStore();
 
   useEffect(() => {
     if (blocker && blocker.state === 'blocked') {
@@ -20,8 +21,11 @@ export function useFormNavigation(blocker?: Blocker) {
 
   const navigateSafely = useCallback(
     (action: () => void) => {
-      // Check if we should show the confirmation dialog
-      if (formOpen && isResourceEdited.isEdited) {
+      // live read: after a save the atoms clear before this closure re-renders
+      const { formOpen } = store.get(isFormOpenAtom);
+      const { isEdited } = store.get(isResourceEditedAtom);
+
+      if (formOpen && isEdited) {
         // Store the navigation action for later use if the user confirms
         setIsResourceEdited((prevState) => ({
           ...prevState,
@@ -33,28 +37,33 @@ export function useFormNavigation(blocker?: Blocker) {
 
       action();
     },
-    [formOpen, isResourceEdited.isEdited, setIsFormOpen, setIsResourceEdited],
+    [store, setIsFormOpen, setIsResourceEdited],
   );
 
   const confirmDiscard = useCallback(
     (leaveFormOpen = false) => {
-      if (isResourceEdited.discardAction) {
-        isResourceEdited.discardAction();
+      const { discardAction } = store.get(isResourceEditedAtom);
+      if (discardAction) {
+        discardAction();
       }
 
       // Reset states
       setIsFormOpen({ formOpen: leaveFormOpen, leavingForm: false });
       setIsResourceEdited({ isEdited: false });
     },
-    [isResourceEdited, setIsFormOpen, setIsResourceEdited],
+    [store, setIsFormOpen, setIsResourceEdited],
   );
 
   const cancelDiscard = useCallback(() => {
     setIsFormOpen({ formOpen: true, leavingForm: false });
+    setIsResourceEdited((prevState) => ({
+      ...prevState,
+      discardAction: undefined,
+    }));
     if (blocker && blocker?.state === 'blocked') {
       blocker.reset();
     }
-  }, [setIsFormOpen, blocker]);
+  }, [setIsFormOpen, setIsResourceEdited, blocker]);
 
   return {
     navigateSafely,

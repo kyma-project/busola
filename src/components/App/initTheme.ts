@@ -1,5 +1,5 @@
 import { isSystemThemeDark } from 'state/settings/themeAtom';
-import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme';
+import { setTheme } from '@ui5/webcomponents-base';
 
 // you must initially load the themeAtom to
 //let the App know what theme to choose

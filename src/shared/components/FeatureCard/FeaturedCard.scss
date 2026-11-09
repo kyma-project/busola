@@ -125,11 +125,25 @@
     top: 8px;
     right: 8px;
     color: var(--sapContent_IconColor);
+
+    &.teched-btn {
+      color: #ffffff;
+    }
   }
 
   .illustration {
     height: 100%;
     max-width: 50%;
+  }
+
+  .teched {
+    padding: 0 0 0 32px;
+    height: 266px;
+
+    .illustration {
+      height: 100%;
+      max-width: 100%;
+    }
   }
 }
 

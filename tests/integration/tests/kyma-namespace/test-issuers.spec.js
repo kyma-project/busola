@@ -10,8 +10,6 @@ context('Test Issuers', () => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
 
-    cy.wait(1000);
-
     cy.navigateTo('Configuration', 'Secrets');
 
     cy.openCreate();
@@ -27,7 +25,7 @@ context('Test Issuers', () => {
   });
 
   it('Create an issuer', () => {
-    cy.getLeftNav().contains('Issuers').click();
+    cy.navigateTo('Configuration', 'Issuers');
 
     cy.openCreate();
 
@@ -59,14 +57,7 @@ context('Test Issuers', () => {
   it('Edit an issuer', () => {
     cy.inspectTab('Edit');
 
-    cy.get('[placeholder="Select Issuer type"]')
-      .filter(':visible')
-      .find('input')
-      .click()
-      .clear()
-      .type('ACME');
-
-    cy.get('ui5-cb-item:visible').contains('ACME').click({ force: true });
+    chooseComboboxOption('[placeholder="Select Issuer type"]', 'ACME', true);
 
     cy.get('[placeholder="ACME Server URL"]:visible')
       .find('input')

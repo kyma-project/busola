@@ -22,7 +22,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-
+backend-production.cjs
+backend-production.cjs.LICENSE*
 backend-production.js
 backend-production.js.LICENSE*
 core-ui

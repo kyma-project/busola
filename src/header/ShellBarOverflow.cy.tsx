@@ -52,7 +52,10 @@ describe('ShellBar overflow actions', () => {
       .find('#ui5-shellbar-overflow-button')
       .should('be.visible')
       .click();
-    cy.contains('ui5-li', 'Target action').click();
+    cy.get('ui5-shellbar-item[text="Target action"]')
+      .shadow()
+      .find('ui5-li')
+      .click();
 
     cy.get('@onAction').should('have.been.calledOnce');
   });

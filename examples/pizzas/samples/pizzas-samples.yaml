@@ -16,6 +16,19 @@ spec:
     - 'Please, make my pizza quickly.'
     - Margherita is a delicious pizza!
   description: 'Margherita is a simple, vegetarian pizza.'
+  recipe: |-
+    ## How to bake a Margherita
+
+    1. **Preheat** the oven to 250°C (480°F) with a pizza stone inside.
+    2. Roll out the dough into a thin, round base.
+    3. Spread a thin layer of **garlic sauce**.
+    4. Add the toppings:
+       - Tomato sauce
+       - Cheese
+       - Fresh basil
+    5. Bake for *8–10 minutes* until the crust is golden.
+
+    > Tip: finish with a drizzle of olive oil before serving.
   sauce: GARLIC
   toppings:
     - name: Tomato sauce
@@ -47,6 +60,19 @@ spec:
     - I would like the spiciest pizza.
     - I would like to ask for a discount for students.
   description: 'Diavola is such a spicy pizza, it includes hot salami and pickled jalapeños!'
+  recipe: |-
+    ## How to bake a Diavola
+
+    1. **Preheat** the oven to 250°C (480°F).
+    2. Stretch the dough into a thin base.
+    3. Spread the **tomato sauce** evenly, leaving a border for the crust.
+    4. Add the toppings:
+       - Hot salami
+       - Pickled jalapeños
+       - Cheese
+    5. Bake for *8–10 minutes* until bubbling.
+
+    > Tip: a splash of chili oil before serving makes it extra spicy!
   toppings:
     - name: Hot salami
       price: 10

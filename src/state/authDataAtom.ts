@@ -5,18 +5,39 @@ import {
 import { User, UserManager } from 'oidc-client-ts';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
-import { clusterAtom } from './clusterAtom';
+import { clusterAtom, persistActiveClusterName } from './clusterAtom';
 import { getPreviousPath } from './useAfterInitHook';
+import {
+  getIntendedPath,
+  saveIntendedPath,
+  toClusterRelative,
+} from './intendedPathAtom';
 import { openapiLastFetchedAtom } from 'state/openapi/openapiLastFetchedAtom';
 import { isEqual } from 'lodash';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { attachSilentRenewHandlers } from './silentRenewSetup';
 import { useReauthenticate } from './useReauthenticate';
 import { renewingAtom } from './renewingAtom';
-import { isOwnOidcCallback } from './utils/isOwnOidcCallback';
-import { ssoDataAtom } from './ssoDataAtom';
+import {
+  decideOidcCallbackAction,
+  OidcErrorParams,
+  reportStoppedLogin,
+} from './utils/oidcCallbackDecision';
+import {
+  isAuthRedirectLoop,
+  registerAuthRedirect,
+  resetAuthRedirectGuard,
+  resetReauthRedirectClaim,
+  tryClaimReauthRedirect,
+} from './utils/authRedirectLoopGuard';
+import { useNotifyLoginFailure } from './useLoginFailureNotification';
+import {
+  restartSSOLogin,
+  ssoDataAtom,
+  ssoLoginStoppedAtom,
+} from './ssoDataAtom';
 import { configFeaturesNames } from './types';
 import { useFeature } from 'hooks/useFeature';
 import { configurationAtom } from './configuration/configurationAtom';
@@ -28,7 +49,6 @@ export const hasNonOidcAuth = (
     return true;
   }
 
-  // either token or a pair (client CA, client key) is present
   if ('token' in user) {
     return !!user.token;
   } else {
@@ -47,13 +67,12 @@ type handleLoginProps = {
   setAuth: (_auth: AuthDataState) => void;
   onAfterLogin: () => void;
   onError: (error: Error) => void;
+  onLoginFailed: (failure?: OidcErrorParams) => void;
   onRenewingChange?: (renewing: boolean) => void;
-  // Returns false if a newer cluster has taken over; caller should abort.
   isCurrent?: () => boolean;
 };
 
-// Returned so callers can detach the silent-renew listeners on cluster change
-// or unmount; without cleanup the handlers stack across cluster switches.
+// Call cleanup() on cluster change or unmount; silent-renew handlers stack otherwise.
 export type HandleLoginResult = {
   userManager: UserManager;
   cleanup: () => void;
@@ -94,9 +113,7 @@ export function createUserManager(
     scope: `openid ${[...uniqueScopes].join(' ')}`,
     response_type: 'code',
     response_mode: 'query',
-    // Disable the library's built-in silent renewal so our custom handler is
-    // the only signinSilent() call in flight. Two racing calls consume the
-    // rotating refresh token and the second one gets invalid_grant.
+    // Two racing signinSilent() calls consume a rotating refresh token; the second gets invalid_grant.
     automaticSilentRenew: false,
   });
 }
@@ -106,6 +123,7 @@ async function handleLogin({
   setAuth,
   onAfterLogin,
   onError,
+  onLoginFailed,
   onRenewingChange,
   isCurrent,
 }: handleLoginProps): Promise<HandleLoginResult | null> {
@@ -118,17 +136,39 @@ async function handleLogin({
     const storedUser = await userManager.getUser();
 
     let user: User;
-    if (storedUser && !storedUser.expired) {
-      user = storedUser;
+    const validStoredUser =
+      storedUser && !storedUser.expired ? storedUser : null;
+    const decision = decideOidcCallbackAction(oidcParams.clientId);
+    if (validStoredUser && decision.action === 'process-callback') {
+      // The new login must win: the old session can't renew and would redirect again.
+      user = await userManager
+        .signinRedirectCallback(window.location.href)
+        .catch((e) => {
+          console.warn('Login callback failed, keeping the stored user:', e);
+          return validStoredUser;
+        });
+    } else if (validStoredUser) {
+      user = validStoredUser;
     } else {
-      const hasCode = new URLSearchParams(window.location.search).has('code');
-      if (hasCode && !isOwnOidcCallback(oidcParams.clientId)) {
+      if (decision.action === 'foreign-callback') {
         // Callback belongs to another manager (e.g. SSO); let it run.
         return null;
       }
-      if (!hasCode) {
-        await userManager.clearStaleState();
-        await userManager.signinRedirect();
+      if (reportStoppedLogin(decision, 'Cluster', onLoginFailed)) {
+        return null;
+      }
+      if (decision.action === 'redirect') {
+        if (tryClaimReauthRedirect()) {
+          try {
+            registerAuthRedirect();
+            await userManager.clearStaleState();
+            await userManager.signinRedirect();
+          } catch (redirectError) {
+            // Still on this page, so allow another attempt.
+            resetReauthRedirectClaim();
+            throw redirectError;
+          }
+        }
         return null;
       }
       user = await userManager.signinRedirectCallback(window.location.href);
@@ -139,8 +179,7 @@ async function handleLogin({
     setAuth({ token: getToken(user, useAccessToken) });
     const { cleanup } = attachSilentRenewHandlers(userManager, {
       onRenewed: (renewedUser) => {
-        // A late renew from a superseded cluster must not overwrite the
-        // current cluster's authData.
+        // A late renew from a superseded cluster must not overwrite current cluster's authData.
         if (isCurrent && !isCurrent()) return;
         setAuth({ token: getToken(renewedUser, useAccessToken) });
       },
@@ -149,34 +188,38 @@ async function handleLogin({
         setAuth(null);
         onError(e);
       },
-      // App-global counter; must be balanced even if this cluster was
-      // superseded mid-renew.
+      // App-global counter; call even if this cluster was superseded mid-renew.
       onRenewingChange,
     });
     onAfterLogin();
     return { userManager, cleanup };
   } catch (e) {
     if (e instanceof Error) {
-      // 'No state in response' means no login was in progress; 'authority
-      // mismatch' means stale storage from a prior issuer. Both recover
-      // by starting fresh.
+      // 'No state in response' = no login was in progress; 'authority mismatch' = stale storage from a prior issuer.
       if (
-        e.message.includes('No state in response') ||
-        e.message.includes('authority mismatch')
+        (e.message.includes('No state in response') ||
+          e.message.includes('authority mismatch')) &&
+        !isAuthRedirectLoop()
       ) {
-        try {
-          await userManager.clearStaleState();
-          await userManager.signinRedirect();
-        } catch (redirectError) {
-          console.warn('Login restart failed:', redirectError);
-          onError(
-            redirectError instanceof Error
-              ? redirectError
-              : new Error(String(redirectError)),
-          );
+        if (tryClaimReauthRedirect()) {
+          try {
+            registerAuthRedirect();
+            await userManager.clearStaleState();
+            await userManager.signinRedirect();
+          } catch (redirectError) {
+            console.warn('Login restart failed:', redirectError);
+            // Still on this page, so let onError redirect.
+            resetReauthRedirectClaim();
+            onError(
+              redirectError instanceof Error
+                ? redirectError
+                : new Error(String(redirectError)),
+            );
+          }
         }
       } else {
-        alert('Login error: ' + e);
+        console.error('Cluster login failed:', e);
+        onLoginFailed({ error: e.message });
       }
     } else {
       throw e;
@@ -187,7 +230,7 @@ async function handleLogin({
 
 export function useAuthHandler() {
   const notification = useNotification();
-  const cluster = useAtomValue(clusterAtom);
+  const [cluster, setCluster] = useAtom(clusterAtom);
   const setAuth = useSetAtom(authDataAtom);
   const navigate = useNavigate();
   const setLastFetched = useSetAtom(openapiLastFetchedAtom);
@@ -195,20 +238,30 @@ export function useAuthHandler() {
   const prevClusterRef = useRef<typeof cluster>(null);
   const cleanupRef = useRef<(() => void) | null>(null);
   const userManagerRef = useRef<UserManager | null>(null);
-  // Bumped on every cluster change; a late `handleLogin` resolution with an
-  // outdated generation cleans itself up instead of overwriting the refs.
+  // Stale handleLogin resolutions clean up instead of overwriting refs.
   const loginGenRef = useRef(0);
   const setRenewing = useSetAtom(renewingAtom);
   const reauth = useReauthenticate({ notifyError: notification.notifyError });
+  const notifyLoginFailure = useNotifyLoginFailure();
   const ssoData = useAtomValue(ssoDataAtom);
+  const ssoLoginStopped = useAtomValue(ssoLoginStoppedAtom);
   const isSSOEnabled = useFeature(configFeaturesNames.SSO_LOGIN)?.isEnabled;
   const configuration = useAtomValue(configurationAtom);
 
   useEffect(() => {
     if (!configuration?.features) return;
-    if (!ssoData && isSSOEnabled) return;
+    if (!ssoData && isSSOEnabled) {
+      if (!ssoLoginStopped) return;
+      // The cluster login can't finish without an SSO session, so start the SSO login again.
+      // No prompt: 'login' as on Retry: the user only opened a cluster, and the loop guard catches a repeat.
+      if (cluster) {
+        restartSSOLogin();
+        return;
+      }
+    }
+    // A configuration reload re-runs this effect; an unchanged cluster keeps its handlers.
+    if (cluster && isEqual(prevClusterRef.current, cluster)) return;
     if (cleanupRef.current) {
-      // Detach the previous cluster's silent-renew listeners before switching.
       cleanupRef.current();
       cleanupRef.current = null;
       userManagerRef.current = null;
@@ -217,10 +270,10 @@ export function useAuthHandler() {
     const gen = ++loginGenRef.current;
 
     if (!cluster) {
+      prevClusterRef.current = null;
       setAuth(null);
       setIsLoading(false);
     } else {
-      if (isEqual(prevClusterRef.current, cluster)) return;
       prevClusterRef.current = cluster;
 
       const userCredentials = cluster.currentContext?.user?.user;
@@ -268,11 +321,50 @@ export function useAuthHandler() {
           reauth(userManagerRef.current, error);
         };
 
+        const onLoginFailed = (failure?: OidcErrorParams) => {
+          if (gen !== loginGenRef.current) return;
+          setIsLoading(false);
+          setAuth(null);
+          // Clear the cluster so picking it again (or Retry) starts a new login.
+          setCluster(null);
+          // Still on this page, so let a later retry redirect.
+          resetReauthRedirectClaim();
+          const relative = toClusterRelative(
+            window.location.pathname + window.location.search,
+          );
+          // Keep the kubeconfigID of a pending deep link, or the path is restored on the wrong cluster.
+          const kubeconfigId = getIntendedPath()?.kubeconfigId;
+          notifyLoginFailure(failure, {
+            // prompt: 'login' so a stale IdP session can't send us straight back into the loop.
+            // handleLogin returned no manager, so create one from the cluster's OIDC settings.
+            onRetry: () => {
+              // Saved on Retry only; after Close it would be restored on the next cluster opened.
+              if (relative) saveIntendedPath(relative, kubeconfigId);
+              resetAuthRedirectGuard();
+              tryClaimReauthRedirect();
+              // The cluster was cleared above; store its name so the login callback can restore it.
+              persistActiveClusterName(cluster.name);
+              const userManager = createUserManager(
+                parseOIDCparams(userCredentials as KubeconfigOIDCAuth),
+              );
+              userManager
+                .clearStaleState()
+                .then(() => userManager.signinRedirect({ prompt: 'login' }))
+                .catch(() => {
+                  resetReauthRedirectClaim();
+                  navigate(`/cluster/${encodeURIComponent(cluster.name)}`);
+                });
+            },
+          });
+          navigate('/clusters');
+        };
+
         handleLogin({
           userCredentials: userCredentials as KubeconfigOIDCAuth,
           setAuth,
           onAfterLogin,
           onError,
+          onLoginFailed,
           onRenewingChange: setRenewing,
           isCurrent: () => gen === loginGenRef.current,
         }).then((result) => {
@@ -291,7 +383,7 @@ export function useAuthHandler() {
     setLastFetched(null);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster, ssoData, isSSOEnabled, configuration]);
+  }, [cluster, ssoData, ssoLoginStopped, isSSOEnabled, configuration]);
 
   useEffect(() => {
     return () => {
@@ -310,9 +402,7 @@ export function useAuthHandler() {
 export const authDataAtom = atom<AuthDataState>(null);
 authDataAtom.debugLabel = 'authDataAtom';
 
-// Module-scoped mirror of `useAuthHandler`'s current UserManager so
-// `useResourceSchemas` can invoke `useReauthenticate` without re-parsing
-// the kubeconfig. Set on cluster change, cleared on unmount.
+// Shared so useResourceSchemas can call useReauthenticate without re-parsing the kubeconfig.
 export const authUserManagerRef: { current: UserManager | null } = {
   current: null,
 };

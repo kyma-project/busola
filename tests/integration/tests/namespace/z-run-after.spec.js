@@ -9,12 +9,7 @@ context('Clean up Namespace', () => {
   });
 
   it('Delete the Namespace (step 1)', () => {
-    cy.getLeftNav()
-      .find('ui5-side-navigation-item')
-      .contains('Namespaces')
-      .click();
-
-    cy.wait(2000);
+    cy.navigateTo('Namespaces');
 
     cy.deleteFromGenericList('Namespace', Cypress.env('NAMESPACE_NAME'), {
       clearSearch: false,

@@ -1,4 +1,4 @@
-import { Theme } from 'state/preferences/themeAtom';
+import { Theme } from 'state/settings/themeAtom';
 
 export type ThemePreviewProps = {
   theme: Theme;

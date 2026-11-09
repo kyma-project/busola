@@ -76,7 +76,7 @@ export function EditorActions({
 
     let arrayOfPositions: any[] = [];
     READONLY_FIELDS.forEach((fieldName) => {
-      if (editor.getModel()) {
+      if (editor?.getModel()) {
         arrayOfPositions = arrayOfPositions.concat(
           editor
             .getModel()

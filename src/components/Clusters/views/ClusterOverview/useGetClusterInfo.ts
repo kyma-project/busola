@@ -1,11 +1,26 @@
 import jsyaml from 'js-yaml';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
+export type WorkerPool = {
+  name?: string;
+  machineType?: string;
+  autoScalerMin?: number;
+  autoScalerMax?: number;
+  haZones?: boolean | string[] | number;
+};
+
 export type ClusterInfo = {
   provider?: string;
   natGatewayIps?: string[];
   globalAccountID?: string;
+  region?: string;
+  seedRegion?: string;
   subaccountID?: string;
+  platformRegion?: string;
+  environmentInstanceID?: string;
+  instanceName?: string;
+  networkDetails?: { dualStackIPEnabled?: boolean };
+  workerPools?: Record<string, WorkerPool>;
   [key: string]: unknown;
 };
 

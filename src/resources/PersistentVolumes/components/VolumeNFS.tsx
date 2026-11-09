@@ -1,5 +1,4 @@
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { useTranslation } from 'react-i18next';
 
 type VolumeNFSProps = {
@@ -14,15 +13,12 @@ export const VolumeNFS = ({ nfs }: VolumeNFSProps) => {
 
   return (
     <>
-      <LayoutPanelRow name={t('pv.headers.type')} value={t('pv.nfs.type')} />
-      <LayoutPanelRow
-        name={t('pv.nfs.server')}
-        value={nfs?.server || EMPTY_TEXT_PLACEHOLDER}
+      <ResourceDetailsFormItem
+        label={t('pv.headers.type')}
+        value={t('pv.nfs.type')}
       />
-      <LayoutPanelRow
-        name={t('pv.nfs.path')}
-        value={nfs?.path || EMPTY_TEXT_PLACEHOLDER}
-      />
+      <ResourceDetailsFormItem label={t('pv.nfs.server')} value={nfs?.server} />
+      <ResourceDetailsFormItem label={t('pv.nfs.path')} value={nfs?.path} />
     </>
   );
 };

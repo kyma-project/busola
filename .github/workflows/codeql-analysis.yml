@@ -2,7 +2,7 @@ name: 'CodeQL'
 
 on:
   push:
-    branches: [main, firebase-integration]
+    branches: [main]
   schedule:
     - cron: '45 21 * * 2'
 
@@ -19,12 +19,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - language: javascript
+          - language: javascript-typescript
             build-mode: none
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4

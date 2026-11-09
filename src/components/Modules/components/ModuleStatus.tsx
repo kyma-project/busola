@@ -1,7 +1,7 @@
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { toSentenceCase } from 'shared/utils/helpers';
 import { useModuleStatus } from '../hooks';
-import ValueState from '@ui5/webcomponents-base/dist/types/ValueState';
+import ValueState from '@ui5/webcomponents-base/dist/types/ValueState.js';
 import { ModuleTemplateStatus } from '../support';
 
 export const resolveType = (status: string): ValueState => {

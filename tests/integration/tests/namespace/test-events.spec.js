@@ -4,13 +4,13 @@ context('Test Events', () => {
   Cypress.skipAfterFail();
 
   before(() => {
-    cy.setBusolaFeature('HIDDEN_NAMESPACES', false);
+    cy.setBusolaInstallationFeature('HIDDEN_NAMESPACES', false);
 
     cy.loginAndSelectCluster();
   });
 
   it('Checking list', () => {
-    cy.getLeftNav().contains('Events').click();
+    cy.navigateTo('Events');
 
     cy.get('ui5-table-row#no-data-row').should('not.exist');
 

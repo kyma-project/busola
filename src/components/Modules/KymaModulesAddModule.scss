@@ -51,6 +51,24 @@
       .content {
         padding-left: var(--left-spacing);
       }
+
+      &:hover {
+        .moduleCardHeader::part(native-li) {
+          background-color: var(--sapList_Hover_Background);
+        }
+
+        ui5-li {
+          border-bottom: none;
+        }
+
+        .content {
+          background-color: var(--sapList_Hover_Background);
+        }
+
+        .settings-panel::part(header) {
+          background-color: var(--sapList_Hover_Background);
+        }
+      }
     }
   }
 

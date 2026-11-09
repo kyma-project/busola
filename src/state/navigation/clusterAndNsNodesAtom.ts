@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { isEmpty, partial } from 'lodash';
 import { resourceListAtom } from '../resourceList/resourceListAtom';
 import { activeNamespaceIdAtom } from '../activeNamespaceIdAtom';
-import { openapiPathIdListAtom } from '../openapi/openapiPathIdAtom';
+import { resourcePathsAtom } from 'state/discoverability/resourcePathsAtom';
 import { configurationAtom } from '../configuration/configurationAtom';
 import { permissionSetsAtom } from '../permissionSetsAtom';
 import { NavNode, Scope } from '../types';
@@ -13,7 +13,7 @@ import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
 export const clusterAndNsNodesAtom = atom<Promise<NavNode[]>>(async (get) => {
   const resourceList: NavNode[] = get(resourceListAtom);
   const activeNamespaceId = get(activeNamespaceIdAtom);
-  const openapiPathIdList = get(openapiPathIdListAtom);
+  const openapiPathIdList = get(resourcePathsAtom);
   const permissionSet = await get(permissionSetsAtom);
   const configuration = get(configurationAtom);
   const kymaResources = await get(kymaResourcesAtom);
@@ -27,7 +27,8 @@ export const clusterAndNsNodesAtom = atom<Promise<NavNode[]>>(async (get) => {
     !isEmpty(permissionSet);
 
   if (!areDependenciesInitialized) {
-    return [];
+    // not all deps are ready yet — returning [] would collapse the sidebar mid-load
+    return new Promise<NavNode[]>(() => {});
   }
 
   const configSet = {

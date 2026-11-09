@@ -6,7 +6,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator/useCustomFormValidator';
 
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useStore } from 'jotai';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useFormNavigation } from 'shared/hooks/useFormNavigation';
 import './ResourceCreate.scss';
@@ -71,24 +71,32 @@ export const ResourceCreate = ({
   isProtectedResourceModificationBlocked = false,
 }: ResourceCreateProps) => {
   const { t } = useTranslation();
-  const { isValid, formElementRef, setCustomValid, revalidate } =
-    useCustomFormValidator() as {
-      isValid: boolean;
-      formElementRef: React.RefObject<HTMLFormElement | null>;
-      setCustomValid: (valid: boolean) => void;
-      revalidate: () => void;
-    };
+  const {
+    isValid,
+    emptyFieldsRef,
+    invalidFormatFieldsRef,
+    formElementRef,
+    setCustomValid,
+    revalidate,
+  } = useCustomFormValidator() as {
+    isValid: boolean;
+    emptyFieldsRef: React.RefObject<string[]>;
+    invalidFormatFieldsRef: React.RefObject<string[]>;
+    formElementRef: React.RefObject<HTMLFormElement | null>;
+    setCustomValid: (valid: boolean) => void;
+    revalidate: () => void;
+  };
   const notificationManager = useNotification();
   const navigate = useNavigate();
   const [layoutColumn, setLayoutColumn] = useAtom(columnLayoutAtom);
-  const isResourceEdited = useAtomValue(isResourceEditedAtom);
+  const store = useStore();
 
   const confirmText = confirmTextProp || t('common.buttons.create');
 
   const blocker = useBlocker(({ historyAction }) => {
     const isBrowserNav = historyAction === 'POP';
 
-    return isBrowserNav && isResourceEdited.isEdited;
+    return isBrowserNav && store.get(isResourceEditedAtom).isEdited;
   });
 
   const { navigateSafely } = useFormNavigation(blocker);
@@ -124,8 +132,28 @@ export const ResourceCreate = ({
         new Event('submit', { bubbles: true, cancelable: true }),
       );
     } else {
+      const emptyFields = emptyFieldsRef.current ?? [];
+      const invalidFormatFields = invalidFormatFieldsRef.current ?? [];
+      const allInvalidParts: string[] = [];
+      if (emptyFields.length > 0) {
+        allInvalidParts.push(
+          t('common.messages.must-fill-required-fields', {
+            fields: emptyFields.join(', '),
+          }),
+        );
+      }
+      if (invalidFormatFields.length > 0) {
+        allInvalidParts.push(
+          t('common.messages.invalid-content-fields', {
+            fields: invalidFormatFields.join(', '),
+          }),
+        );
+      }
       notificationManager.notifyError({
-        content: t('common.messages.must-fill-required'),
+        content:
+          allInvalidParts.length > 0
+            ? allInvalidParts.join(' ')
+            : t('common.messages.must-fill-required'),
       });
     }
   }

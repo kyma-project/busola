@@ -20,6 +20,7 @@ import {
 } from 'shared/components/GenericList/GenericList';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
+import { useForceConfirmDelete } from 'shared/hooks/useForceConfirmDelete';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
@@ -30,7 +31,7 @@ import { ProtectedResourceWarning } from '../ProtectedResourcesButton';
 import DeleteResourceModal from '../DeleteResourceModal/DeleteResourceModal';
 import { ResourceListRendererProps } from './types';
 import { K8sResource } from 'types';
-import { LinkClickEventDetail } from '@ui5/webcomponents/dist/Link';
+import { LinkClickEventDetail } from '@ui5/webcomponents/dist/Link.js';
 
 export function ResourceListRenderer({
   resourceUrl,
@@ -79,6 +80,7 @@ export function ResourceListRenderer({
   accessibleName,
   createFormRef = null,
   noRedirectAfterDelete = false,
+  afterDelete,
 }: ResourceListRendererProps) {
   useVersionWarning({
     resourceUrl,
@@ -86,6 +88,7 @@ export function ResourceListRenderer({
   });
   const { t } = useTranslation();
   const { isProtected } = useProtectedResources();
+  const forceConfirmDelete = useForceConfirmDelete(resourceType);
   const navigate = useNavigate();
   const [layoutState, setLayoutColumn] = useAtom(columnLayoutAtom);
 
@@ -100,6 +103,8 @@ export function ResourceListRenderer({
     layoutNumber,
     redirectBack: false,
     parentCrdName,
+    afterDelete,
+    forceConfirmDelete,
   });
 
   const [activeResource, setActiveResource] = useState<Record<
@@ -436,6 +441,7 @@ export function ResourceListRenderer({
           performCancel={performCancel}
           performDelete={performDelete}
           showDeleteDialog={showDeleteDialog}
+          forceConfirmDelete={forceConfirmDelete}
         />,
         document.body,
       )}

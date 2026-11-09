@@ -59,6 +59,12 @@ export default function CommunityModuleCard({
     checkImage();
   }, [iconLink]);
 
+  const selectedTemplate = selectedModules.get(module.name);
+  const defaultTemplate = module.versions[0].moduleTemplate;
+  const selectValue = selectedTemplate
+    ? `${selectedTemplate.metadata.name}|${selectedTemplate.metadata.namespace}`
+    : `${defaultTemplate.name}|${defaultTemplate.namespace}`;
+
   return (
     <Card
       accessibleName={module.name}
@@ -129,12 +135,19 @@ export default function CommunityModuleCard({
             onChange={(event) => {
               onChange(event.detail.selectedOption.value ?? '', false);
             }}
-            value={`${module.versions[0].moduleTemplate.name}|${module.versions[0].moduleTemplate.namespace}`}
+            value={selectValue}
             className="channel-select"
           >
             {module.versions?.map((version: any) => (
               <Option
-                selected={selectedModules.get(module.name)}
+                selected={
+                  selectedTemplate
+                    ? version.moduleTemplate.name ===
+                        selectedTemplate.metadata.name &&
+                      version.moduleTemplate.namespace ===
+                        selectedTemplate.metadata.namespace
+                    : false
+                }
                 key={`option-${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}
                 value={`${version.moduleTemplate.name}|${version.moduleTemplate.namespace}`}
                 additionalText={version.beta ? 'Beta' : ''}

@@ -30,7 +30,7 @@ export const ExpandableListItem = ({
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(status !== 'True');
 
-  let statusType;
+  let statusType: 'Information' | 'Positive' | 'Negative' | 'Critical' | 'None';
   switch (status) {
     case 'True':
       statusType = 'Positive';
@@ -47,7 +47,7 @@ export const ExpandableListItem = ({
   }
 
   if (overrideStatusType !== undefined) {
-    statusType = overrideStatusType;
+    statusType = overrideStatusType as typeof statusType;
   }
 
   return (

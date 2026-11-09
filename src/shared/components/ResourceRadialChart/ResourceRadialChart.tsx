@@ -44,8 +44,9 @@ export function ResourceRadialChart({
       tooltipInfo={tooltipInfo}
       cardClassName={cardClassName}
       color={color}
-      value={formattedValue.value}
-      max={formattedMax.value}
+      // Raw value/max: a coarse unit (Gi) would round small usage to 0 and blank the ring.
+      value={value}
+      max={max}
       titleText={titleText}
       additionalInfo={`${formattedValue.string} / ${formattedMax.string}`}
       accessibleName={accessibleName}

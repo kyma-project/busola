@@ -1,4 +1,3 @@
-/* global process */
 import * as fs from 'node:fs';
 
 export function fillActiveEnvForFrontend(env) {

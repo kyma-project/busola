@@ -19,7 +19,6 @@ export function useAvailableNamespaces() {
     silentRefetch,
   } = useGetList()('/api/v1/namespaces', {
     pollingInterval: 3000,
-    onDataReceived: () => {},
     skip: false,
   }) as {
     loading: boolean;

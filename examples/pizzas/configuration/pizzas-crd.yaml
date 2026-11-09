@@ -29,6 +29,9 @@ spec:
                 description:
                   description: Pizza description
                   type: string
+                recipe:
+                  description: Markdown-formatted recipe with baking instructions
+                  type: string
                 sauce:
                   description: The name of the sauce to use on our pizza
                   type: string

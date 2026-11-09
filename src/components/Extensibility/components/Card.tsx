@@ -1,6 +1,8 @@
 import { useCreateResourceDescription, useGetTranslation } from '../helpers';
-import { Widget, InlineWidget } from './Widget';
+import { FormItemWidget } from './FormGroup';
+import { Widget } from './Widget';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
 
 interface CardProps {
   value: any;
@@ -31,7 +33,7 @@ export function CardWidget({
       description={description}
     >
       {Array.isArray(structure?.children) && (
-        <div>
+        <ResourceDetailsForm layout="S1 M1 L1 XL1">
           {items.map((item: any, itemIdx: number) =>
             structure.children.map((def: any, idx: number) => (
               <Widget
@@ -41,14 +43,13 @@ export function CardWidget({
                 singleRootResource={item}
                 structure={def}
                 schema={schema}
-                inlineRenderer={InlineWidget}
-                inlineContext={true}
+                inlineRenderer={FormItemWidget}
                 embedResource={embedResource}
                 {...props}
               />
             )),
           )}
-        </div>
+        </ResourceDetailsForm>
       )}
     </UI5Card>
   );

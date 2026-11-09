@@ -15,7 +15,6 @@ type ResourceStatusCardContentProps = {
   customStatus?: ReactNode;
   customStatusColumns?: CustomColumnsType;
   filteredStatusColumns: CustomColumn[];
-  filteredStatusColumnsLong: CustomColumn[];
   statusConditions?: (resource: any) => ConditionItem[] | null;
   customConditionsComponents?: CustomColumnsType;
   filteredConditionsComponents?: CustomColumn[];
@@ -27,7 +26,6 @@ export const ResourceStatusCardContent = ({
   customStatus,
   customStatusColumns,
   filteredStatusColumns,
-  filteredStatusColumnsLong,
   statusConditions,
   customConditionsComponents,
   filteredConditionsComponents,
@@ -43,14 +41,6 @@ export const ResourceStatusCardContent = ({
         customStatusColumns?.length ? (
           <ResourceCustomStatusColumns
             filteredStatusColumns={filteredStatusColumns}
-            resource={resource}
-          />
-        ) : null
-      }
-      customColumnsLong={
-        customStatusColumns?.length ? (
-          <ResourceCustomStatusColumns
-            filteredStatusColumns={filteredStatusColumnsLong}
             resource={resource}
           />
         ) : null

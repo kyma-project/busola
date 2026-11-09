@@ -25,12 +25,13 @@ import { LabelProps } from './Label';
 import { FormFieldProps } from './FormField';
 import { TitleProps } from './Title';
 import { SkinCreateFn, useCreateResource } from '../useCreateResource';
-import { K8sNameField, KeyValueField } from '../fields';
+import { K8sNameField } from '../fields/K8sNameField';
+import { KeyValueField } from '../fields/KeyValueField';
 import jp from 'jsonpath';
-import { Form, FormItem } from '@ui5/webcomponents-react';
+import { Form } from '@ui5/webcomponents-react';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
 
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom, useStore } from 'jotai';
 import {
   editViewModeAtom,
   EditViewTypes,
@@ -230,8 +231,8 @@ export const ResourceForm: ResourceFormType = (({
     if (setCustomValid) {
       if (mode === ModeSelector.MODE_YAML) {
         setCustomValid(true);
-        setCustomValid(validationRef.current);
       }
+      setCustomValid(validationRef.current);
     }
     validationRef.current = true;
   }, [setCustomValid, resource, children, mode]);
@@ -285,62 +286,58 @@ export const ResourceForm: ResourceFormType = (({
       )}
       style={{ overflowX: 'hidden' }}
       onChange={onChange}
-      labelSpan="S0 M0 L0 XL0"
+      labelSpan="S12 M4 L4 XL4"
       layout="S1 M1 L1 XL1"
     >
       {(mode === ModeSelector.MODE_FORM || formWithoutPanel) && (
-        <FormItem>
-          <div className="full-width sap-margin-bottom-tiny">
-            <ResourceFormWrapper
-              resource={resource}
-              setResource={setResource}
-              validationRef={validationRef}
-            >
-              {presetsSelector}
+        <ResourceFormWrapper
+          resource={resource}
+          setResource={setResource}
+          validationRef={validationRef}
+        >
+          {presetsSelector}
 
-              {!disableDefaultFields && (
-                <>
-                  <K8sNameField
-                    propertyPath="$.metadata.name"
-                    kind={singularName}
-                    readOnly={readOnly || isEdit}
-                    setValue={handleNameChange}
-                    tooltipContent={nameDesc}
-                    {...nameProps}
-                  />
-                  <KeyValueField
-                    propertyPath="$.metadata.labels"
-                    title={t('common.headers.labels')}
-                    className="sap-margin-top-small"
-                    inputInfo={t('common.tooltips.key-value')}
-                    tooltipContent={labelsDesc}
-                    {...labelsProps}
-                  />
-                  <KeyValueField
-                    propertyPath="$.metadata.annotations"
-                    title={t('common.headers.annotations')}
-                    inputInfo={t('common.tooltips.key-value')}
-                    tooltipContent={annotationsDesc}
-                  />
-                </>
-              )}
-              {children}
-            </ResourceFormWrapper>
-          </div>
-        </FormItem>
+          {!disableDefaultFields && (
+            <>
+              <K8sNameField
+                propertyPath="$.metadata.name"
+                kind={singularName}
+                readOnly={readOnly || isEdit}
+                setValue={handleNameChange}
+                tooltipContent={nameDesc}
+                {...nameProps}
+              />
+              <KeyValueField
+                propertyPath="$.metadata.labels"
+                title={t('common.headers.labels')}
+                className="sap-margin-top-small"
+                inputInfo={t('common.tooltips.key-value')}
+                tooltipContent={labelsDesc}
+                {...labelsProps}
+              />
+              <KeyValueField
+                propertyPath="$.metadata.annotations"
+                title={t('common.headers.annotations')}
+                inputInfo={t('common.tooltips.key-value')}
+                tooltipContent={annotationsDesc}
+              />
+            </>
+          )}
+          {children}
+        </ResourceFormWrapper>
       )}
     </Form>
   );
 
-  const isResourceEdited = useAtomValue(isResourceEditedAtom);
-  const [isFormOpen, setIsFormOpen] = useAtom(isFormOpenAtom);
+  const setIsFormOpen = useSetAtom(isFormOpenAtom);
+  const store = useStore();
   const { navigateSafely } = useFormNavigation();
   const [resetBtnClicked, setResetBtnClicked] = useState(false);
 
   const handleRevert = () => {
     setResetBtnClicked(true);
-    if (isResourceEdited?.isEdited) {
-      setIsFormOpen({ ...isFormOpen, leavingForm: true });
+    if (store.get(isResourceEditedAtom).isEdited) {
+      setIsFormOpen({ ...store.get(isFormOpenAtom), leavingForm: true });
     }
     navigateSafely(() => {
       setIsFormOpen({ formOpen: true, leavingForm: false });

@@ -1,26 +1,28 @@
-/* global  require, process, __dirname */
 import {
   handleK8sRequests,
   k8sRateLimiter,
   requireK8sCredential,
-} from './kubernetes/handler';
-import { proxyHandler } from './proxy.js';
-import { setupJWTCheck } from './jwtCheck';
-import companionRouter from './companion/companionRouter';
-import communityRouter from './modules/communityRouter';
-import { createSlowRequestLogger, pinoMiddleware } from './logging';
-import { serveMonaco, serveStaticApp } from './statics';
+} from './kubernetes/handler.js';
+// Enable after: https://github.com/kyma-project/busola/issues/5299
+// import { proxyHandler } from './proxy.js';
+import { setupJWTCheck } from './jwtCheck.js';
+import companionRouter from './companion/companionRouter.js';
+import communityRouter from './modules/communityRouter.js';
+import oidcDiscoveryRouter from './modules/oidcDiscoveryRouter.js';
+import { createSlowRequestLogger, pinoMiddleware } from './logging/index.js';
+import { serveMonaco, serveStaticApp } from './statics.js';
 import crypto from 'crypto';
-import config from './src/config/config';
+import config from './src/config/config.js';
 
-import { fillActiveEnvForFrontend } from './utils/active-env';
-import registerWebSocket from './src/terminal/handler';
-
-const express = require('express');
-const compression = require('compression');
-const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
+import { fillActiveEnvForFrontend } from './utils/active-env.js';
+import registerWebSocket from './src/terminal/handler.js';
+import express from 'express';
+import compression from 'compression';
+import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
+import https from 'https';
+import http from 'http';
 
 const app = express();
 app.disable('x-powered-by');
@@ -67,11 +69,12 @@ const SLOW_REQUEST_THRESHOLD_MS = parseInt(
 );
 app.use(createSlowRequestLogger(SLOW_REQUEST_THRESHOLD_MS));
 
-app.use('/proxy', proxyHandler);
+// Enable after: https://github.com/kyma-project/busola/issues/5299
+// app.use('/proxy', proxyHandler);
 
 app.get('/backend/kubeconfig', (req, res) => {
   const kubeconfigDir = path.join(
-    __dirname,
+    import.meta.dirname,
     process.env.IS_DOCKER ? '/core-ui/kubeconfig' : '../public/kubeconfig',
   );
   fs.readdir(kubeconfigDir, (err, files) => {
@@ -89,18 +92,16 @@ app.get('/backend/kubeconfig', (req, res) => {
 let server = null;
 
 if (
-  process.env.BUSOLA_SSL_ENABLED === 1 &&
+  process.env.BUSOLA_SSL_ENABLED === '1' &&
   process.env.BUSOLA_SSL_KEY_FILE !== '' &&
   process.env.BUSOLA_SSL_CRT_FILE !== ''
 ) {
-  const https = require('https');
   const options = {
     key: fs.readFileSync(process.env.BUSOLA_SSL_KEY_FILE),
     cert: fs.readFileSync(process.env.BUSOLA_SSL_CRT_FILE),
   };
   server = https.createServer(options, app);
 } else {
-  const http = require('http');
   server = http.createServer(app);
 }
 
@@ -113,12 +114,14 @@ if (isDocker) {
   // yup, order matters here
   serveMonaco(app);
   app.use('/backend/ai-chat', companionRouter);
+  app.use('/backend', oidcDiscoveryRouter);
   app.use('/backend/modules', requireK8sCredential, communityRouter);
   app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
   serveStaticApp(app, '/', '/core-ui');
 } else {
   // Running in prod mode
   app.use('/backend/ai-chat', companionRouter);
+  app.use('/backend', oidcDiscoveryRouter);
   app.use('/backend/modules', requireK8sCredential, communityRouter);
   app.use('/backend', requireK8sCredential, k8sRateLimiter, handleK8sRequests);
 }

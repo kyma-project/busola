@@ -14,13 +14,14 @@ import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { usePrepareLayout } from 'shared/hooks/usePrepareLayout';
 
 export function useDeleteResource({
-  resourceTitle,
+  resourceTitle = /** @type {string | undefined} */ (undefined),
   resourceType,
   navigateToListAfterDelete = false,
-  layoutNumber,
+  layoutNumber = /** @type {string | undefined} */ (undefined),
   redirectBack = true,
-  parentCrdName,
+  parentCrdName = /** @type {string | undefined} */ (undefined),
   forceConfirmDelete = false,
+  afterDelete = /** @type {(() => void) | undefined} */ (undefined),
 }) {
   const { t } = useTranslation();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -50,6 +51,7 @@ export function useDeleteResource({
     async (resource, resourceUrl, deleteFn, noRedirectAfterDelete) => {
       const withoutQueryString = (path) => path?.split('?')?.[0];
       const url = withoutQueryString(resourceUrl);
+      const pathnameAtDelete = window.location.pathname;
 
       const forceRedirect =
         ((layoutColumn.midColumn?.resourceType === resource?.kind ||
@@ -82,9 +84,14 @@ export function useDeleteResource({
             }),
           });
 
+          afterDelete?.();
+
+          // Don't pull users back if they navigated away while the request was running.
+          const stayedOnPage = window.location.pathname === pathnameAtDelete;
           if (
-            navigateToListAfterDelete ||
-            (forceRedirect && !noRedirectAfterDelete)
+            stayedOnPage &&
+            (navigateToListAfterDelete ||
+              (forceRedirect && !noRedirectAfterDelete))
           ) {
             if (window.location.search.includes('layout')) {
               if (window.location.pathname.includes('busolaextensions')) {
@@ -103,17 +110,17 @@ export function useDeleteResource({
               }
 
               if (goToLayout === 'TwoColumnsMidExpanded') {
-                setLayoutColumn({
-                  ...layoutColumn,
+                setLayoutColumn((prev) => ({
+                  ...prev,
                   endColumn: null,
                   layout: goToLayout,
-                });
+                }));
               } else {
-                setLayoutColumn({
-                  ...layoutColumn,
+                setLayoutColumn((prev) => ({
+                  ...prev,
                   midColumn: null,
                   layout: goToLayout,
-                });
+                }));
               }
             } else {
               if (window.location.pathname.includes('busolaextensions')) {
@@ -125,12 +132,12 @@ export function useDeleteResource({
               } else {
                 navigate(resourceListUrl(resource, { resourceType }));
               }
-              setLayoutColumn({
-                ...layoutColumn,
+              setLayoutColumn((prev) => ({
+                ...prev,
                 midColumn: null,
                 endColumn: null,
                 layout: 'OneColumn',
-              });
+              }));
             }
           }
         }
@@ -164,6 +171,7 @@ export function useDeleteResource({
       redirectBack,
       layoutNumber,
       navigateToListAfterDelete,
+      afterDelete,
     ],
   );
 

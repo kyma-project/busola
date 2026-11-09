@@ -4,12 +4,13 @@ import { useAtomValue } from 'jotai';
 import { unwrap } from 'jotai/utils';
 
 import { useGetVersions } from './useGetVersions';
-import { ClusterInfoFields } from './ClusterInfoFields';
+import { useClusterInfoFields } from './ClusterInfoFields';
 import { kymaResourcesAtom } from 'state/kymaResourcesAtom';
 
-import { FormItem, Text, Title, Label, Form } from '@ui5/webcomponents-react';
+import { FormItem, Text, Title, Label } from '@ui5/webcomponents-react';
 import ResourceDetailsCard from 'shared/components/ResourceDetails/ResourceDetailsCard';
 import ClusterModulesCard from './ClusterModulesCard';
+import ClusterWorkerPoolsCard from './ClusterWorkerPoolsCard';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { CommunityModuleContextProvider } from 'components/Modules/community/providers/CommunityModuleProvider';
 import { ModuleTemplatesContextProvider } from 'components/Modules/providers/ModuleTemplatesProvider';
@@ -49,9 +50,14 @@ export default function ClusterDetails({
   const { isEnabled: isCommunityModulesEnabled } = useFeature(
     configFeaturesNames.COMMUNITY_MODULES,
   );
+  const { infrastructure, btpAccount, network } =
+    useClusterInfoFields(kymaResourceLabels);
 
   return (
-    <section aria-labelledby="cluster-details-heading">
+    <section
+      aria-labelledby="cluster-details-heading"
+      className="resource-details-section"
+    >
       <Title
         level="H3"
         size="H3"
@@ -60,67 +66,82 @@ export default function ClusterDetails({
       >
         {t('cluster-overview.headers.cluster-overview')}
       </Title>
-      <Form
-        layout="S1 M2 L2 XL2"
-        labelSpan="S12 M12 L12 XL12"
-        className="form-without-background"
-      >
-        <ResourceDetailsCard
-          titleText={t('cluster-overview.headers.metadata')}
-          content={
-            <>
-              {!loading && k8sVersion && (
+      <div className="resource-details-cards">
+        <div className="cluster-overview-column">
+          <ResourceDetailsCard
+            titleText={t('cluster-overview.headers.infrastructure')}
+            content={
+              <>
+                {!loading && k8sVersion && (
+                  <FormItem
+                    labelContent={
+                      <Label showColon>
+                        {t('clusters.overview.kubernetes-version')}
+                      </Label>
+                    }
+                  >
+                    <Text>{k8sVersion}</Text>
+                  </FormItem>
+                )}
+                {!loading && kymaVersion && (
+                  <FormItem
+                    labelContent={
+                      <Label showColon>
+                        {t('clusters.overview.kyma-version')}
+                      </Label>
+                    }
+                  >
+                    <Text>{kymaVersion}</Text>
+                  </FormItem>
+                )}
+                <FormItem
+                  labelContent={
+                    <Label showColon>{t('clusters.storage.title')}</Label>
+                  }
+                >
+                  <ClusterStorageType clusterConfig={config} />
+                </FormItem>
+                {infrastructure}
                 <FormItem
                   labelContent={
                     <Label showColon>
-                      {t('clusters.overview.kubernetes-version')}
+                      {t('clusters.common.api-server-address')}
                     </Label>
                   }
                 >
-                  <Text>{k8sVersion}</Text>
+                  <Text>
+                    {currentCluster?.currentContext?.cluster?.cluster?.server}
+                  </Text>
                 </FormItem>
-              )}
-              {!loading && kymaVersion && (
-                <FormItem
-                  labelContent={
-                    <Label showColon>
-                      {t('clusters.overview.kyma-version')}
-                    </Label>
-                  }
-                >
-                  <Text>{kymaVersion}</Text>
-                </FormItem>
-              )}
-              <FormItem
-                labelContent={
-                  <Label showColon>{t('clusters.storage.title')}</Label>
-                }
-              >
-                <ClusterStorageType clusterConfig={config} />
-              </FormItem>
-              <FormItem
-                labelContent={
-                  <Label showColon>
-                    {t('clusters.common.api-server-address')}
-                  </Label>
-                }
-              >
-                <Text>
-                  {currentCluster?.currentContext?.cluster?.cluster?.server}
-                </Text>
-              </FormItem>
-              <ClusterInfoFields kymaResourceLabels={kymaResourceLabels} />
-            </>
-          }
-        />
-        {(kymaResources || isCommunityModulesEnabled) && (
-          <ModuleTemplatesContextProvider>
-            <CommunityModuleContextProvider>
-              <ClusterModulesCard />
-            </CommunityModuleContextProvider>
-          </ModuleTemplatesContextProvider>
-        )}
-      </Form>
+              </>
+            }
+          />
+          {network.some(Boolean) && (
+            <ResourceDetailsCard
+              titleText={t('cluster-overview.headers.network')}
+              content={<>{network}</>}
+            />
+          )}
+          {(kymaResources || isCommunityModulesEnabled) && (
+            <div className="cluster-overview-modules">
+              <ModuleTemplatesContextProvider>
+                <CommunityModuleContextProvider>
+                  <ClusterModulesCard />
+                </CommunityModuleContextProvider>
+              </ModuleTemplatesContextProvider>
+            </div>
+          )}
+        </div>
+        <div className="cluster-overview-column">
+          {btpAccount.some(Boolean) && (
+            <ResourceDetailsCard
+              titleText={t('cluster-overview.headers.btp-account')}
+              content={<>{btpAccount}</>}
+            />
+          )}
+          <ClusterWorkerPoolsCard />
+        </div>
+      </div>
     </section>
   );
 }

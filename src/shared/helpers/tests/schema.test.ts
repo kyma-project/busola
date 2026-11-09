@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import schema from 'shared/helpers/tests/fixtures/deployment-schema.json';
 import { getDescription, getPartialSchema } from 'shared/helpers/schema';
 

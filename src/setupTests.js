@@ -1,13 +1,27 @@
 /* global afterEach, global, vi */
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/vitest';
-import { cleanup } from '@testing-library/react';
-import { act } from 'react';
+import { cleanup, act } from '@testing-library/react';
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
 
 Element.prototype.scroll = () => {};
 
 window.ResizeObserver = ResizeObserverPolyfill;
+
+// Node 26 adds localStorage/sessionStorage to globalThis as undefined, which causes
+// Vitest's populateGlobal to skip them (they're already "in global" but not in its
+// hardcoded KEYS list). Re-bridge them from jsdom's window explicitly.
+if (typeof localStorage === 'undefined' && global.jsdom) {
+  const jsdomWindow = global.jsdom.window;
+  Object.defineProperty(global, 'localStorage', {
+    get: () => jsdomWindow.localStorage,
+    configurable: true,
+  });
+  Object.defineProperty(global, 'sessionStorage', {
+    get: () => jsdomWindow.sessionStorage,
+    configurable: true,
+  });
+}
 
 const originalConsoleError = console.error;
 const originalConsoleWarn = console.warn;
@@ -33,7 +47,7 @@ export const ignoreConsoleWarns = (patterns) => {
 ignoreConsoleErrors(['2']);
 
 // Suppress third-party warnings that are not actionable in tests
-ignoreConsoleWarns(['Lit is in dev mode']);
+ignoreConsoleWarns(['Lit is in dev mode', '[LocaleData]']);
 
 // Mock IntersectionObserver
 class IntersectionObserver {

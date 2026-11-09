@@ -6,6 +6,7 @@ import {
   ComboBox,
   Label,
   FlexBox,
+  Icon,
 } from '@ui5/webcomponents-react';
 import { sidebarNavigationNodesAtom } from 'state/navigation/sidebarNavigationNodesAtom';
 import { expandedCategoriesAtom } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
@@ -138,7 +139,13 @@ export function SidebarNavigation() {
               >
                 <ComboBox
                   id="NamespaceComboBox"
-                  className="combobox-with-dimension-icon"
+                  icon={
+                    <Icon
+                      name="dimension"
+                      className="namespace-combobox-icon"
+                      aria-hidden
+                    />
+                  }
                   onSelectionChange={(e) => {
                     navigateSafely(() => {
                       const newNamespace =
@@ -223,14 +230,18 @@ export function SidebarNavigation() {
         />
       )}
       {topLevelNodes.map((node) =>
-        node.items?.map((item, index) => (
-          <NavItem node={item} key={index} sidebarRef={sidebarRef} />
+        node.items?.map((item) => (
+          <NavItem
+            node={item}
+            key={item.pathSegment || item.externalUrl || item.label}
+            sidebarRef={sidebarRef}
+          />
         )),
       )}
-      {categoryNodes.map((category, index) => (
+      {categoryNodes.map((category) => (
         <CategoryItem
           category={category}
-          key={index}
+          key={category.key}
           expandedCategories={expandedCategories}
           handleExpandedCategories={setExpandedCategories}
           sidebarRef={sidebarRef}

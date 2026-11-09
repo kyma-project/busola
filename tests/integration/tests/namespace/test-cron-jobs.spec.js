@@ -97,8 +97,6 @@ context('Test Cron Jobs', () => {
   });
 
   it('Edit Cron Job', () => {
-    cy.wait(1000);
-
     cy.getMidColumn().inspectTab('Edit');
 
     cy.get('[placeholder="Hour"]')

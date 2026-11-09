@@ -6,7 +6,7 @@ This is a REST proxy for Busola
 
 ## Prerequisites
 
-- Node.js v12
+- Node.js v26
 - npm or Yarn
 
 ## Installation
@@ -47,6 +47,6 @@ Backend feature flags include:
 
 - **GZIP** - Response compression (default: enabled)
 - **KYMA_COMPANION** - Kyma Companion AI assistant configuration
-- **ALLOW_PRIVATE_IPS** - Control private IP access for local development (default: disabled, secure)
+- **ALLOW_PRIVATE_IPS** - Control private IP access for local development (default: disabled, secure). Can also be enabled with the `ALLOW_PRIVATE_IPS=true` backend environment variable for self-hosted, in-cluster deployments.
 
 **For detailed configuration, defaults, and security considerations, see [docs/features.md](../docs//user//technical-reference/feature-flags.md#configurable-flags-for-backend).**

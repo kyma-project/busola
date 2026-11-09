@@ -20,14 +20,13 @@ export function FeaturedCard({
       description={description}
       image={illustration}
       design={design}
-      buttons={structure.children?.slice(0, 2).map((def, idx) => (
+      buttons={structure.children?.slice(0, 3).map((def, idx) => (
         <Widget
           key={idx}
           value={value}
           structure={def}
           schema={schema}
           inlineRenderer={InlineWidget}
-          inlineContext={true}
           {...props}
         />
       ))}

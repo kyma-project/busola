@@ -3,6 +3,7 @@ import 'cypress-file-upload';
 
 const CERT_NAME = 'cypress-test-name';
 const CERT_COMMON_NAME = 'cypress-test-common-name';
+const CERT_SECRTET = 'cypress-test-secret';
 const ANNOTATION_KEY = 'annotation';
 const ANNOTATION_VALUE = 'value';
 
@@ -28,6 +29,11 @@ context('Test Certificates', () => {
       .find('input')
       .click()
       .type(CERT_COMMON_NAME, { force: true });
+
+    cy.get('ui5-input[accessible-name="Secret Name"')
+      .find('input')
+      .click()
+      .type(CERT_SECRTET, { force: true });
 
     cy.saveChanges('Create');
 

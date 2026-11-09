@@ -21,8 +21,8 @@ const useGetHook = (processDataFn) =>
   function (
     path,
     {
-      pollingInterval,
-      onDataReceived,
+      pollingInterval = 0,
+      onDataReceived = undefined,
       skip = false,
       errorTolerancy = undefined,
       compareEntireResource = false,
@@ -39,7 +39,6 @@ const useGetHook = (processDataFn) =>
     const fetch = useFetch();
     const abortController = useRef(new AbortController());
     const errorTolerancyCounter = useRef(0);
-    const currentRequestId = uuid();
     const requestData = useRef({});
     const previousRequestNotFinished = useRef(null);
     const intervalIdRef = useRef(null);
@@ -71,6 +70,7 @@ const useGetHook = (processDataFn) =>
           }
         }
 
+        const currentRequestId = uuid();
         try {
           previousRequestNotFinished.current = path;
           requestData.current[currentRequestId] = { start: Date.now() };
@@ -114,6 +114,9 @@ const useGetHook = (processDataFn) =>
           // Let's wait a moment, because the current request may load
           // and showing the error to the user will not be necessary.
           setTimeout((_) => processError(e), 100);
+        } finally {
+          // drop our own entry so requestData stays bounded; in-flight requests keep theirs for the staleness check
+          delete requestData.current[currentRequestId];
         }
 
         if (!isSilent && !abortController.current.signal.aborted)
@@ -129,23 +132,26 @@ const useGetHook = (processDataFn) =>
       }
     }, []);
 
+    // Hold the latest poll action in a ref so the interval effect doesn't depend
+    // on `refetch` (new identity each render) or `data` (changes each poll) —
+    // which would otherwise tear down and recreate the interval constantly.
+    const savedPollCallback = useRef(null);
     useEffect(() => {
-      const receivedForbidden = error?.code === 403;
+      savedPollCallback.current = () => refetch(true, data)();
+    });
 
+    const receivedForbidden = error?.code === 403;
+
+    useEffect(() => {
       cleanupPolling();
       // POLLING
       if (!pollingInterval || receivedForbidden || shouldSkip) return;
-      intervalIdRef.current = setInterval(refetch(true, data), pollingInterval);
+      intervalIdRef.current = setInterval(
+        () => savedPollCallback.current?.(),
+        pollingInterval,
+      );
       return cleanupPolling;
-    }, [
-      path,
-      pollingInterval,
-      data,
-      error,
-      shouldSkip,
-      refetch,
-      cleanupPolling,
-    ]);
+    }, [path, pollingInterval, receivedForbidden, shouldSkip, cleanupPolling]);
 
     useEffect(() => {
       // INITIAL FETCH on path being set/changed
@@ -398,6 +404,7 @@ function handleSingleDataReceived(
   newData,
   oldData,
   setDataFn,
+  lastResourceVersionRef, // unused here; matches the shared processDataFn signature
   compareEntireResource,
 ) {
   if (

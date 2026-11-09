@@ -43,6 +43,15 @@ function buildPodManifest(podName: string, image: string) {
           command: ['/bin/bash'],
           stdin: true,
           tty: true,
+          // Prints COLUMNS spaces + \r before each prompt: if the cursor is
+          // mid-line (e.g. curl output without a trailing newline) the spaces
+          // wrap to the next line so the prompt never shares a line with output.
+          env: [
+            {
+              name: 'PROMPT_COMMAND',
+              value: 'printf "%*s\\r" "${COLUMNS:-80}" ""',
+            },
+          ],
         },
       ],
       restartPolicy: 'Never',
@@ -72,12 +81,49 @@ async function createIfMissing(
   }
 }
 
+// Waits until a pod that is currently Terminating (has deletionTimestamp) is
+// fully deleted. If the pod does not exist or is not terminating, returns
+// immediately. The caller should re-create the pod afterwards.
+async function waitIfTerminating(
+  fetchFn: FetchFn,
+  podName: string,
+  abortController: AbortController,
+  deadline: number,
+): Promise<void> {
+  const podUrl = `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/${podName}`;
+  let isTerminating: boolean;
+  try {
+    const res = await fetchFn({ relativeUrl: podUrl, abortController });
+    const pod = await res.json();
+    isTerminating = Boolean(pod?.metadata?.deletionTimestamp);
+  } catch (err) {
+    if (err instanceof HttpError && err.code === 404) return;
+    throw err;
+  }
+  if (!isTerminating) return;
+
+  while (Date.now() < deadline) {
+    if (abortController.signal.aborted)
+      throw new DOMException('Aborted', 'AbortError');
+    try {
+      const res = await fetchFn({ relativeUrl: podUrl, abortController });
+      const pod = await res.json();
+      if (!pod?.metadata?.deletionTimestamp) return;
+    } catch (err) {
+      if (err instanceof HttpError && err.code === 404) return;
+      throw err;
+    }
+    await new Promise((resolve) => setTimeout(resolve, POD_POLL_INTERVAL_MS));
+  }
+  throw new Error('Timed out waiting for terminal pod to finish terminating.');
+}
+
 async function pollPodReady(
   fetchFn: FetchFn,
   podName: string,
   abortController: AbortController,
+  deadline: number,
 ): Promise<void> {
-  const deadline = Date.now() + POD_POLL_TIMEOUT_MS;
   while (Date.now() < deadline) {
     if (abortController.signal.aborted)
       throw new DOMException('Aborted', 'AbortError');
@@ -107,6 +153,7 @@ export async function provisionPod({
   image: string;
   abortController: AbortController;
 }): Promise<void> {
+  const deadline = Date.now() + POD_POLL_TIMEOUT_MS;
   await createIfMissing(
     fetchFn,
     '/api/v1/namespaces',
@@ -117,11 +164,12 @@ export async function provisionPod({
     },
     abortController,
   );
+  await waitIfTerminating(fetchFn, podName, abortController, deadline);
   await createIfMissing(
     fetchFn,
     `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods`,
     buildPodManifest(podName, image),
     abortController,
   );
-  await pollPodReady(fetchFn, podName, abortController);
+  await pollPodReady(fetchFn, podName, abortController, deadline);
 }

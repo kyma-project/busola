@@ -25,7 +25,7 @@ import pluralize from 'pluralize';
 import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { cloneDeep } from 'lodash';
 import { KymaResourceType, ModuleTemplateListType } from '../support';
-import { columnLayoutAtom, ColumnLayoutState } from 'state/columnLayoutAtom';
+import { ColumnLayoutState } from 'state/columnLayoutAtom';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { SetStateAction, useAtomValue } from 'jotai';
 import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
@@ -99,7 +99,6 @@ export const ModulesDeleteBox = ({
     boolean | null
   >(null);
 
-  const layoutColumn = useAtomValue(columnLayoutAtom);
   const notification = useNotification();
 
   const moduleName =
@@ -172,7 +171,10 @@ export const ModulesDeleteBox = ({
       setAssociatedResourcesUrls(urls);
       setCrUrls(Array.isArray(crUrl) ? crUrl : [crUrl]);
     };
-    fetchCounts();
+    fetchCounts().catch((e) => {
+      // the dialog can unmount mid-fetch on navigation; counts just stay empty
+      console.warn('Failed to fetch module resource counts:', e);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [associatedResources]);
 
@@ -191,6 +193,7 @@ export const ModulesDeleteBox = ({
   }, [resourceCounts, associatedResources]);
 
   const deleteAllResources = async () => {
+    const pathnameAtDelete = window.location.pathname;
     try {
       if (allowForceDelete && associatedResourcesUrls.length > 0) {
         await deleteResources(deleteFn, associatedResourcesUrls);
@@ -239,18 +242,20 @@ export const ModulesDeleteBox = ({
       return;
     }
 
-    if (detailsOpen) {
-      setLayoutColumn({
-        ...layoutColumn,
+    // Don't pull users back if they navigated away while the requests were running.
+    if (detailsOpen && window.location.pathname === pathnameAtDelete) {
+      setLayoutColumn((prev) => ({
+        ...prev,
         layout: 'OneColumn',
         midColumn: null,
         endColumn: null,
-      });
+      }));
       navigate(kymaModulesUrl);
     }
   };
 
   const deleteCommunityResources = async (moduleName: string) => {
+    const pathnameAtDelete = window.location.pathname;
     try {
       if (allowForceDelete && associatedResourcesUrls.length) {
         await deleteResources(deleteFn, associatedResourcesUrls);
@@ -290,14 +295,14 @@ export const ModulesDeleteBox = ({
       return;
     }
 
-    if (detailsOpen) {
-      setLayoutColumn({
-        ...layoutColumn,
+    if (detailsOpen && window.location.pathname === pathnameAtDelete) {
+      setLayoutColumn((prev) => ({
+        ...prev,
         layout: 'OneColumn',
         startColumn: null,
         midColumn: null,
         endColumn: null,
-      });
+      }));
       navigate(kymaModulesUrl);
     }
   };

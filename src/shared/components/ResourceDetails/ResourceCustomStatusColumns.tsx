@@ -1,11 +1,11 @@
-import { DynamicPageComponent } from '../DynamicPageComponent/DynamicPageComponent';
+import { FormItem, Label, Text } from '@ui5/webcomponents-react';
+import { ResourceDetailsForm } from './ResourceDetailsForm';
 
 export type CustomColumn = {
   header?: string;
   id?: string;
   value: (resource: any) => React.ReactNode;
   conditionComponent?: boolean;
-  fullWidth?: boolean;
   visibility?: (
     resource: any,
   ) =>
@@ -25,12 +25,15 @@ export function ResourceCustomStatusColumns({
   resource,
 }: ResourceCustomStatusColumnsProps) {
   return (
-    <>
+    <ResourceDetailsForm>
       {filteredStatusColumns?.map((col) => (
-        <DynamicPageComponent.Column key={col.header} title={col.header ?? ''}>
-          {col.value(resource)}
-        </DynamicPageComponent.Column>
+        <FormItem
+          key={col.header}
+          labelContent={<Label showColon>{col.header ?? ''}</Label>}
+        >
+          <Text>{col.value(resource)}</Text>
+        </FormItem>
       ))}
-    </>
+    </ResourceDetailsForm>
   );
 }

@@ -48,6 +48,8 @@ export default function ClusterRoutes() {
 
   useEffect(() => {
     if (cluster?.name === currentClusterName) return;
+    // A stopped login is already navigating away; selecting the cluster again would restart it.
+    if (!window.location.pathname.startsWith('/cluster/')) return;
     const currentCluster = clusters?.[currentClusterName];
     const kubeconfigId = search.get('kubeconfigID');
     if (!currentCluster && !kubeconfigId) {

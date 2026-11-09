@@ -18,6 +18,7 @@ import * as DaemonSets from './DaemonSets';
 import * as ConfigMaps from './ConfigMaps';
 import * as ServiceAccounts from './ServiceAccounts';
 import * as LimitRanges from './LimitRanges';
+import * as PodDisruptionBudgets from './PodDisruptionBudgets';
 
 // //cluster
 import * as ClusterRoles from './ClusterRoles';
@@ -32,6 +33,7 @@ import * as ResourceQuotas from './ResourceQuotas';
 export const resources = [
   // namespace resources
   Events,
+  PodDisruptionBudgets,
   // workloads
   StatefulSets,
   Jobs,

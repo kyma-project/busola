@@ -201,14 +201,15 @@ export default function KymaModulesAddModule(props: ResourceFormProps) {
     [],
   );
 
+  const { setIsAddDisabled } = props;
+  const allModulesAdded =
+    modulesAddData?.length === 0 && !!kymaResource?.spec?.modules;
+
   useEffect(() => {
     if (!loading && kymaResource) {
-      props.setIsAddDisabled?.(
-        modulesAddData?.length === 0 && !!kymaResource?.spec?.modules,
-      );
+      setIsAddDisabled?.(allModulesAdded);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modulesAddData, kymaResource?.spec?.modules]);
+  }, [loading, kymaResource, allModulesAdded, setIsAddDisabled]);
 
   if (loading || !kymaResource) {
     return (

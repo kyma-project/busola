@@ -16,6 +16,8 @@ import { ResourceGraphConfig } from '../ResourceGraph/types';
 import { ResourceComponent } from './ResourceComponent';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { K8sResource, LayoutColumnName } from 'types';
+import { useAtomValue } from 'jotai';
+import { isFormOpenAtom } from 'state/formOpenAtom';
 
 export const ResourceDetailContext = createContext(false);
 
@@ -86,12 +88,14 @@ export function ResourceDetails(props: ResourceDetailsProps) {
 }
 
 function ResourceDetailsRenderer(props: ResourceDetailsProps) {
+  // Pause polling while editing, so it can't overwrite in-progress form edits.
+  const { formOpen } = useAtomValue(isFormOpenAtom);
   const {
     loading = true,
     error,
     data: resource,
   } = useGet(props.resourceUrl, {
-    pollingInterval: 3000,
+    pollingInterval: formOpen ? 0 : 3000,
     /*@ts-expect-error Type mismatch between js and ts*/
     errorTolerancy: props.isModule ? 0 : undefined,
   });
