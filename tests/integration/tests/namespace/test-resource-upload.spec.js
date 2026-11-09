@@ -26,7 +26,7 @@ context('Test resource upload', () => {
 
     cy.contains('ui5-button', 'Upload YAML').click();
 
-    cy.wrap(loadValidResources(Cypress.env('NAMESPACE_NAME'))).then(
+    cy.wrap(loadValidResources(Cypress.expose('NAMESPACE_NAME'))).then(
       (resources) => {
         const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
         cy.pasteToMonaco(input);
@@ -56,7 +56,7 @@ context('Test resource upload', () => {
   });
 
   it('Upserts resources', () => {
-    cy.wrap(loadValidResources(Cypress.env('NAMESPACE_NAME'))).then(
+    cy.wrap(loadValidResources(Cypress.expose('NAMESPACE_NAME'))).then(
       (resources) => {
         resources[0].metadata.name = 'echo-server-upload-yaml-2';
         const input = resources.map((r) => jsyaml.dump(r)).join('\n---\n');
@@ -77,7 +77,7 @@ context('Test resource upload', () => {
   });
 
   it('Handles errors', () => {
-    cy.wrap(loadValidResources(Cypress.env('NAMESPACE_NAME'))).then(
+    cy.wrap(loadValidResources(Cypress.expose('NAMESPACE_NAME'))).then(
       (resources) => {
         resources[0].metadata.name = 'echo-server-upload-yaml';
         resources[0].apiVersion = '/apis/errors';

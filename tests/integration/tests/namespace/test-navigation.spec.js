@@ -15,7 +15,7 @@ context('Test navigation features', () => {
     cy.navigateTo('Workloads', 'Deployments');
     cy.url().then((url) => {
       const newurl = url.replace(
-        Cypress.env('NAMESPACE_NAME'),
+        Cypress.expose('NAMESPACE_NAME'),
         'non-exist-namespace',
       );
       cy.visit(newurl);
@@ -68,7 +68,7 @@ context('Test navigation features', () => {
 
     cy.url().should(
       'include',
-      `resourceNamespace=${Cypress.env('NAMESPACE_NAME')}`,
+      `resourceNamespace=${Cypress.expose('NAMESPACE_NAME')}`,
     );
 
     cy.get('ui5-dynamic-page')
@@ -91,7 +91,7 @@ context('Test navigation features', () => {
 
     cy.url().should(
       'include',
-      `resourceNamespace=${Cypress.env('NAMESPACE_NAME')}`,
+      `resourceNamespace=${Cypress.expose('NAMESPACE_NAME')}`,
     );
 
     cy.getMidColumn()
@@ -100,7 +100,7 @@ context('Test navigation features', () => {
 
     cy.url().should(
       'include',
-      `resourceNamespace=${Cypress.env('NAMESPACE_NAME')}`,
+      `resourceNamespace=${Cypress.expose('NAMESPACE_NAME')}`,
     );
 
     cy.closeMidColumn();

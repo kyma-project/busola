@@ -28,6 +28,7 @@ module.exports = defineConfig({
     includeShadowDom: true,
     testIsolation: false,
     experimentalRunAllSpecs: true,
+    allowCypressEnv: false,
     setupNodeEvents(on, config) {
       return require('./plugins')(on, config);
     },
