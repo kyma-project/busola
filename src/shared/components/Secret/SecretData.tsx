@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import { Button } from '@ui5/webcomponents-react';
-import { LayoutPanelRow } from '../LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import './SecretData.scss';
 import { base64Decode } from 'shared/helpers';
 import { UI5Card } from '../UI5Card/UI5Card';
@@ -21,8 +22,8 @@ const SecretComponent = ({
   showEncoded,
   isInitial,
 }: SecretComponentProps) => (
-  <LayoutPanelRow
-    name={name}
+  <ResourceDetailsFormItem
+    label={name}
     value={
       <pre className={'secret'}>
         {isInitial ? '*****' : showEncoded ? value : base64Decode(value)}
@@ -66,7 +67,8 @@ export default function SecretData({
     }
 
     return (
-      <>
+      // One column: values such as certificates need the full width.
+      <ResourceDetailsForm layout="S1 M1 L1 XL1">
         {Object.keys(secret.data).map((key) => (
           <SecretComponent
             name={key}
@@ -76,7 +78,7 @@ export default function SecretData({
             isInitial={isInitial}
           />
         ))}
-      </>
+      </ResourceDetailsForm>
     );
   };
 
