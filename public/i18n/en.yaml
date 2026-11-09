@@ -1546,8 +1546,6 @@ stateful-sets:
 storage:
   title: Storage
 storage-classes:
-  accessible-name:
-    parameters: Parameters panel
   description: <0>Storage Class</0> provides a way for administrators to describe the "classes" of storage they offer.
   headers:
     allow-volume-expansion: Allow Volume Expansion
