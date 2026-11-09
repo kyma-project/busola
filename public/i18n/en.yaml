@@ -794,7 +794,6 @@ ingresses:
     apiGroup: API Group
     backend: Backend
     default-backend: Default Backend
-    host: Host
     host-name: Host name
     hosts: Hosts
     ingress-class-name: Ingress class name
@@ -1095,19 +1094,14 @@ network-policies:
     end-port: End Port
     exceptions: Exceptions
     ingress: Ingress
-    ip-block: IP Block
-    key: Key
-    match-labels: Matched Labels
     namespace-selector: Namespace Selector
-    operator: Operator
+    peer: Peer
     pod-selector: Pod Selector
-    policy-peer: Network Policy Peers
     policy-port: Network Policy Ports
     policy-types: Policy Types
     port: Port
     ports: Ports
     protocol: Protocol
-    values: Values
   name_singular: NetworkPolicy
   present-but-empty: Present but empty selector selects all pods / namespaces.
 no-permissions:
