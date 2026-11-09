@@ -113,7 +113,7 @@ export function FeatureCardBanner({
       case 'information-3':
         return {
           background:
-            'linear-gradient(to right, var(--sapContent_Illustrative_Color25), var(--sapContent_Illustrative_Color27))',
+            'linear-gradient(to right, var(--sapLegendBackgroundColor10), var(--sapLegendBackgroundColor11))',
         };
       case 'information-4':
         return {
