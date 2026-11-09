@@ -11,7 +11,8 @@ import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { ResourceDescription } from 'resources/ReplicaSets';
 import { EventsList } from 'shared/components/EventsList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { filterByResource } from 'hooks/useMessageList';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
@@ -61,40 +62,43 @@ export function ReplicaSetsDetails(props: ReplicaSetsDetailsProps) {
         accessibleName={t('common.accessible-name.specification')}
         keyComponent="specification-panel"
       >
-        {containers?.[0].resources?.limits && (
-          <LayoutPanelRow
-            name={t('replica-sets.headers.limits')}
-            value={
-              <Fragment key="limits">
-                {containers.map((c: any) => (
-                  <Fragment key={c.name}>
-                    {t('replica-sets.cpu')}: {c.resources?.limits?.cpu}
-                    <br />
-                    {t('replica-sets.memory')}: {c.resources?.limits?.memory}
-                    <br />
-                  </Fragment>
-                ))}
-              </Fragment>
-            }
-          />
-        )}
-        {containers?.[0].resources?.requests && (
-          <LayoutPanelRow
-            name={t('replica-sets.headers.requests')}
-            value={
-              <Fragment key="requests">
-                {containers.map((c: any) => (
-                  <Fragment key={c.name}>
-                    {t('replica-sets.cpu')}: {c.resources?.requests?.cpu}
-                    <br />
-                    {t('replica-sets.memory')}: {c.resources?.requests?.memory}
-                    <br />
-                  </Fragment>
-                ))}
-              </Fragment>
-            }
-          />
-        )}
+        <ResourceDetailsForm>
+          {containers?.[0].resources?.limits && (
+            <ResourceDetailsFormItem
+              label={t('replica-sets.headers.limits')}
+              value={
+                <Fragment key="limits">
+                  {containers.map((c: any) => (
+                    <Fragment key={c.name}>
+                      {t('replica-sets.cpu')}: {c.resources?.limits?.cpu}
+                      <br />
+                      {t('replica-sets.memory')}: {c.resources?.limits?.memory}
+                      <br />
+                    </Fragment>
+                  ))}
+                </Fragment>
+              }
+            />
+          )}
+          {containers?.[0].resources?.requests && (
+            <ResourceDetailsFormItem
+              label={t('replica-sets.headers.requests')}
+              value={
+                <Fragment key="requests">
+                  {containers.map((c: any) => (
+                    <Fragment key={c.name}>
+                      {t('replica-sets.cpu')}: {c.resources?.requests?.cpu}
+                      <br />
+                      {t('replica-sets.memory')}:{' '}
+                      {c.resources?.requests?.memory}
+                      <br />
+                    </Fragment>
+                  ))}
+                </Fragment>
+              }
+            />
+          )}
+        </ResourceDetailsForm>
       </UI5Card>
     );
   };

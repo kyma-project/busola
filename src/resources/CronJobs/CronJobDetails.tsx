@@ -19,7 +19,8 @@ import { ResourceDescription } from 'resources/CronJobs';
 import { Link } from 'shared/components/Link/Link';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 type CronJobDetailsProps = Omit<
@@ -92,18 +93,20 @@ export function CronJobDetails({
       title={t('common.headers.specification')}
       accessibleName={t('common.accessible-name.specification')}
     >
-      <LayoutPanelRow
-        name={t('cron-jobs.schedule')}
-        value={<CronJobSchedule schedule={spec.schedule} />}
-      />
-      <LayoutPanelRow
-        name={t('cron-jobs.concurrency-policy.title')}
-        value={
-          <CronJobConcurrencyPolicy
-            concurrencyPolicy={spec.concurrencyPolicy}
-          />
-        }
-      />
+      <ResourceDetailsForm>
+        <ResourceDetailsFormItem
+          label={t('cron-jobs.schedule')}
+          value={<CronJobSchedule schedule={spec.schedule} />}
+        />
+        <ResourceDetailsFormItem
+          label={t('cron-jobs.concurrency-policy.title')}
+          value={
+            <CronJobConcurrencyPolicy
+              concurrencyPolicy={spec.concurrencyPolicy}
+            />
+          }
+        />
+      </ResourceDetailsForm>
     </UI5Card>
   );
 

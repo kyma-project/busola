@@ -1319,7 +1319,6 @@ resource-quotas:
       cpu: CPU Requests
       memory: Memory Requests
     resource: Resource
-    scope-selectors: Scope Selectors
     scopes: Scopes
     used: Used
     values: Values
