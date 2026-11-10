@@ -20,6 +20,7 @@ import { AllNamespacesDetails } from './AllNamespacesDetails';
 
 import { ResourceDescription } from 'resources/Namespaces';
 import { useSetAtom } from 'jotai';
+import { NodeJsVulnerabilityBanner } from 'components/NodeJsVulnerabilityBanner/NodeJsVulnerabilityBanner';
 
 export type NamespaceDetailsProps = Omit<
   ResourceDetailsProps,
@@ -107,6 +108,7 @@ export default function NamespaceDetails(props: NamespaceDetailsProps) {
       windowTitle={t('namespaces.namespace-overview')}
       customColumns={customColumns}
       headerActions={headerActions}
+      banner={<NodeJsVulnerabilityBanner />}
       customHealthCards={[
         () => (
           <ResourcesUsage namespace={props.resourceName} key="resourcesUsage" />

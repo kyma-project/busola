@@ -13,6 +13,8 @@ import YamlUploadDialog from './YamlUpload/YamlUploadDialog';
 import { showYamlUploadDialogAtom } from 'state/showYamlUploadDialogAtom';
 import { useSetAtom } from 'jotai';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
+import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
+import { NodeJsVulnerabilityBanner } from 'components/NodeJsVulnerabilityBanner/NodeJsVulnerabilityBanner';
 import './AllNamespaceDetails.scss';
 
 export function AllNamespacesDetails() {
@@ -77,27 +79,32 @@ export function AllNamespacesDetails() {
     <DynamicPageComponent
       title={t('navigation.all-namespaces')}
       content={
-        <section
-          aria-labelledby="namespace-monitoring-heading"
-          className="monitoring-section"
-        >
-          <Title
-            level="H3"
-            size="H3"
-            className="sap-margin-y-small"
-            id="namespace-monitoring-heading"
+        <>
+          <BannerCarousel>
+            <NodeJsVulnerabilityBanner />
+          </BannerCarousel>
+          <section
+            aria-labelledby="namespace-monitoring-heading"
+            className="monitoring-section"
           >
-            {t('common.headers.monitoring-and-health')}
-          </Title>
-          <div className="cluster-stats">
-            <ResourcesUsage />
-            <NamespaceWorkloads />
-          </div>
-          {LimitRangesList}
-          {ResourceQuotasList}
-          {PodDisruptionBudgets}
-          {Events}
-        </section>
+            <Title
+              level="H3"
+              size="H3"
+              className="sap-margin-y-small"
+              id="namespace-monitoring-heading"
+            >
+              {t('common.headers.monitoring-and-health')}
+            </Title>
+            <div className="cluster-stats">
+              <ResourcesUsage />
+              <NamespaceWorkloads />
+            </div>
+            {LimitRangesList}
+            {ResourceQuotasList}
+            {PodDisruptionBudgets}
+            {Events}
+          </section>
+        </>
       }
       actions={headerActions}
     />

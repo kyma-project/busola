@@ -82,6 +82,7 @@ export function ResourceComponent({
   headerContent,
   className,
   headerDescription,
+  banner,
   isEntireListProtected = false,
 }: ResourceProps) {
   useVersionWarning({ resourceUrl, resourceType });
@@ -234,6 +235,7 @@ export function ResourceComponent({
         content={
           <>
             <BannerCarousel>
+              {banner}
               <Injections
                 destination={resourceType}
                 slot="banner"
