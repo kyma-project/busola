@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { FormItem, Label } from '@ui5/webcomponents-react';
+import { FlexBox, Label } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -13,7 +13,6 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { Link } from 'shared/components/Link/Link';
 import { createPortal } from 'react-dom';
 import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
-import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
 
 type CustomResourcesOfTypeProps = {
   crdName: string;
@@ -78,23 +77,16 @@ export default function CustomResourcesOfType({
           />
         }
       >
-        <ResourceDetailsForm singleColumn>
-          <FormItem
-            labelContent={
-              <Label showColon>
-                {t('custom-resource-definitions.name_singular')}
-              </Label>
-            }
+        <FlexBox alignItems="Baseline" style={{ gap: '0.25rem' }}>
+          <Label showColon>
+            {t('custom-resource-definitions.name_singular')}
+          </Label>
+          <Link
+            url={clusterUrl(`customresourcedefinitions/${crd?.metadata?.name}`)}
           >
-            <Link
-              url={clusterUrl(
-                `customresourcedefinitions/${crd?.metadata?.name}`,
-              )}
-            >
-              {crd?.metadata?.name}
-            </Link>
-          </FormItem>
-        </ResourceDetailsForm>
+            {crd?.metadata?.name}
+          </Link>
+        </FlexBox>
       </DynamicPageComponent>
       {createPortal(<YamlUploadDialog />, document.body)}
     </>

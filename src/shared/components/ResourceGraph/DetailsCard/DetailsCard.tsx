@@ -34,7 +34,7 @@ export function DetailsCard({
         <p className="resource-kind">{resource.kind}</p>
       </header>
       <section className="details-content">
-        <ResourceDetailsForm singleColumn>
+        <ResourceDetailsForm layout="S1 M1 L1 XL1">
           <FormItem
             labelContent={
               <Label showColon>{t('common.headers.created')}</Label>

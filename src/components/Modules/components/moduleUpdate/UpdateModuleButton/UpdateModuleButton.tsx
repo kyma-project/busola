@@ -194,7 +194,7 @@ export const UpdateModuleButton = ({
               <span style={{ fontWeight: 'bold' }}></span>
             </Trans>
           </Text>
-          <ResourceDetailsForm singleColumn className="module-versions-info">
+          <ResourceDetailsForm layout="S1 M1 L1 XL1" className="no-padding">
             <FormItem
               labelContent={
                 <Label showColon>

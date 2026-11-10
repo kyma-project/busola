@@ -12,7 +12,6 @@ import './ResourceDetailsCard.scss';
 interface ResourceDetailsFormProps {
   children: ReactNode;
   className?: string;
-  singleColumn?: boolean;
   layout?: string;
 }
 
@@ -43,8 +42,7 @@ function columnsFromLayout(layout: string): number {
 export function ResourceDetailsForm({
   children,
   className = '',
-  singleColumn = false,
-  layout = singleColumn ? 'S1 M1 L1 XL1' : 'S1 M2 L2 XL2',
+  layout = 'S1 M2 L2 XL2',
 }: ResourceDetailsFormProps) {
   const items = flattenItems(children);
   const columns = columnsFromLayout(layout);

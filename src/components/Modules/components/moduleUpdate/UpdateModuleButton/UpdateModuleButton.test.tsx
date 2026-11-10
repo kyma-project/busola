@@ -136,6 +136,7 @@ describe('UpdateModuleButton', () => {
     expect(form).toHaveAttribute('layout', 'S1 M1 L1 XL1');
     expect(form).toHaveAttribute('label-span', 'S12 M4 L4 XL4');
     expect(form).toHaveAttribute('item-spacing', 'Large');
+    expect(form).toHaveClass('no-padding');
     expect(form.querySelectorAll('ui5-form-group')).toHaveLength(1);
     expect(form).toContainElement(latestVersionItem);
   });
