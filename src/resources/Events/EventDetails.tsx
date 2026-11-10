@@ -4,18 +4,14 @@ import { useUrl } from 'hooks/useUrl';
 import { FormatInvolvedObject, FormatSourceObject } from 'hooks/useMessageList';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Icon, ObjectStatus, Text } from '@ui5/webcomponents-react';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import { ResourceDescription } from 'resources/Events';
 import EventCreate from './EventYaml';
 import { Link } from 'shared/components/Link/Link';
-
-type RowComponentProps = {
-  name: string;
-  value: any;
-};
 
 type EventDetailsProps = {
   resourceName: string;
@@ -31,9 +27,6 @@ type EventDetailsProps = {
   [key: string]: any;
 };
 
-const RowComponent = ({ name, value }: RowComponentProps) =>
-  value ? <LayoutPanelRow name={name} value={value} /> : null;
-
 const Specification = (event: any) => {
   const { t } = useTranslation();
 
@@ -43,67 +36,69 @@ const Specification = (event: any) => {
       accessibleName={t('common.accessible-name.configuration')}
       keyComponent="configuration"
     >
-      <RowComponent
-        name={t('events.headers.type')}
-        value={
-          <Text style={{ display: 'flex', alignItems: 'center' }}>
-            {event.type}{' '}
-            {event.type === 'Warning' ? (
-              event.message.startsWith('Error') ? (
-                <ObjectStatus
-                  aria-label="Error"
-                  icon={<Icon accessibleName="Error" name="error" />}
-                  className="sap-margin-begin-tiny"
-                  state="Negative"
-                  title={event.type}
-                />
+      <ResourceDetailsForm>
+        <ResourceDetailsFormItem
+          label={t('events.headers.type')}
+          value={
+            <Text style={{ display: 'flex', alignItems: 'center' }}>
+              {event.type}{' '}
+              {event.type === 'Warning' ? (
+                event.message.startsWith('Error') ? (
+                  <ObjectStatus
+                    aria-label="Error"
+                    icon={<Icon accessibleName="Error" name="error" />}
+                    className="sap-margin-begin-tiny"
+                    state="Negative"
+                    title={event.type}
+                  />
+                ) : (
+                  <ObjectStatus
+                    aria-label="Warning"
+                    icon={<Icon accessibleName="Warning" name="warning" />}
+                    className="sap-margin-begin-tiny"
+                    state="Critical"
+                    title={event.type}
+                  />
+                )
               ) : (
                 <ObjectStatus
-                  aria-label="Warning"
-                  icon={<Icon accessibleName="Warning" name="warning" />}
+                  aria-label="Normal"
+                  icon={<Icon accessibleName="Normal" name="information" />}
                   className="sap-margin-begin-tiny"
-                  state="Critical"
+                  state="Information"
                   title={event.type}
                 />
-              )
-            ) : (
-              <ObjectStatus
-                aria-label="Normal"
-                icon={<Icon accessibleName="Normal" name="information" />}
-                className="sap-margin-begin-tiny"
-                state="Information"
-                title={event.type}
-              />
-            )}
-          </Text>
-        }
-      />
-      <RowComponent
-        name={t('events.headers.message')}
-        value={event.message || EMPTY_TEXT_PLACEHOLDER}
-      />
-      <RowComponent
-        name={t('events.headers.reason')}
-        value={event.reason || EMPTY_TEXT_PLACEHOLDER}
-      />
-      <RowComponent
-        name={t('events.headers.involved-object')}
-        value={FormatInvolvedObject(
-          event.involvedObject || EMPTY_TEXT_PLACEHOLDER,
-        )}
-      />
-      <RowComponent
-        name={t('events.headers.source')}
-        value={FormatSourceObject(event.source || EMPTY_TEXT_PLACEHOLDER)}
-      />
-      <RowComponent
-        name={t('events.headers.reporting-component')}
-        value={event.reportingComponent || EMPTY_TEXT_PLACEHOLDER}
-      />
-      <RowComponent
-        name={t('events.headers.count')}
-        value={event.count || EMPTY_TEXT_PLACEHOLDER}
-      />
+              )}
+            </Text>
+          }
+        />
+        <ResourceDetailsFormItem
+          label={t('events.headers.message')}
+          value={event.message}
+        />
+        <ResourceDetailsFormItem
+          label={t('events.headers.reason')}
+          value={event.reason}
+        />
+        <ResourceDetailsFormItem
+          label={t('events.headers.involved-object')}
+          value={FormatInvolvedObject(
+            event.involvedObject || EMPTY_TEXT_PLACEHOLDER,
+          )}
+        />
+        <ResourceDetailsFormItem
+          label={t('events.headers.source')}
+          value={FormatSourceObject(event.source)}
+        />
+        <ResourceDetailsFormItem
+          label={t('events.headers.reporting-component')}
+          value={event.reportingComponent}
+        />
+        <ResourceDetailsFormItem
+          label={t('events.headers.count')}
+          value={event.count}
+        />
+      </ResourceDetailsForm>
     </UI5Card>
   );
 };
