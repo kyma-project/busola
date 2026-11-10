@@ -12,6 +12,7 @@ import DiscoveryIllustration from './assets/Discovery/Team.png';
 import KymaCLIIllustration from './assets/KymaCLI/KymaCLIIllustration.svg';
 import TerminalIllustration from './assets/Terminal/Terminal.svg';
 import TechEdIllustration from './assets/TechEd/TechEd.svg';
+import SafeIllustration from './assets/Safe/Safe.svg';
 import { useAtom, useAtomValue } from 'jotai';
 import { dismissedBannersAtom } from 'state/settings/dismissedBannersAtom';
 import {
@@ -42,6 +43,8 @@ const getIllustration = (
       return TerminalIllustration;
     case 'Teched':
       return TechEdIllustration;
+    case 'Safe':
+      return SafeIllustration;
     case 'AI':
       switch (theme) {
         case 'sap_horizon_hcw':
@@ -119,6 +122,11 @@ export function FeatureCardBanner({
         return {
           background:
             'linear-gradient(to right, var(--sapLegendBackgroundColor6), var(--sapLegendBackgroundColor18))',
+        };
+      case 'critical':
+        return {
+          background:
+            'linear-gradient(to right, var(--sapLegendBackgroundColor1), var(--sapLegendBackgroundColor4))',
         };
       case 'Teched':
         return {

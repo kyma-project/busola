@@ -21,6 +21,7 @@ import YamlUploadDialog from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import BannerCarousel from 'shared/components/FeatureCard/BannerCarousel';
 import { TerminalBanner } from 'components/TerminalBanner/TerminalBanner';
 import { CloudManagerBanner } from 'components/CloudManagerBanner/CloudManagerBanner';
+import { NodeJsVulnerabilityBanner } from 'components/NodeJsVulnerabilityBanner/NodeJsVulnerabilityBanner';
 import { columnLayoutAtom } from 'state/columnLayoutAtom';
 import { useCheckSAPUser } from 'hooks/useCheckSAPUser';
 
@@ -105,6 +106,7 @@ export function ClusterOverview() {
         content={
           <>
             <BannerCarousel>
+              <NodeJsVulnerabilityBanner />
               {isSapUser && <CloudManagerBanner />}
               {isTerminalEnabled && <TerminalBanner />}
               <Suspense fallback={null}>

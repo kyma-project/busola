@@ -77,6 +77,7 @@ export type ResourceDetailsProps = {
   headerContent?: ReactNode;
   className?: string;
   headerDescription?: string;
+  banner?: ReactNode;
 };
 
 export function ResourceDetails(props: ResourceDetailsProps) {

@@ -16,6 +16,7 @@ export type IllustrationType =
   | 'Discovery'
   | 'Terminal'
   | 'Teched'
+  | 'Safe'
   | 'Satellite'
   | string;
 
@@ -32,4 +33,9 @@ export interface BackgroundStyle {
 }
 
 export type DesignType =
-  'information-1' | 'information-2' | 'information-3' | 'Teched' | string;
+  | 'information-1'
+  | 'information-2'
+  | 'information-3'
+  | 'critical'
+  | 'Teched'
+  | string;
