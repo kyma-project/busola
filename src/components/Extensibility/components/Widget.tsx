@@ -6,15 +6,15 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
-import { useGetPlaceholder, useGetTranslation } from '../helpers';
+import { FormItemWidget } from './FormGroup';
 import { useJsonata } from '../hooks/useJsonata';
 import { valuePreprocessors, widgets } from './index';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
+import './Widget.scss';
 
 export const SimpleRenderer = ({ children }: { children: ReactNode }) => {
   return children;
@@ -28,26 +28,15 @@ type InlineWidgetProps = {
   [key: string]: any;
 };
 
-export function InlineWidget({
-  children,
-  value,
-  structure,
-  ...props
-}: InlineWidgetProps) {
-  const { widgetT } = useGetTranslation();
-  const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
-
-  let displayValue;
-  if (!isNil(children)) {
-    displayValue = children;
-  } else if (!isNil(value)) {
-    displayValue = value;
-  } else {
-    displayValue = emptyLeafPlaceholder;
-  }
-
+// Rows outside a Card or Panel each get a one-row display form.
+export function InlineWidget(props: InlineWidgetProps) {
   return (
-    <LayoutPanelRow name={widgetT(structure)} value={displayValue} {...props} />
+    <ResourceDetailsForm
+      layout="S1 M1 L1 XL1"
+      className="extensibility-inline-row no-padding"
+    >
+      <FormItemWidget {...props} />
+    </ResourceDetailsForm>
   );
 }
 InlineWidget.copyable = (Renderer: any) => Renderer?.copyable;

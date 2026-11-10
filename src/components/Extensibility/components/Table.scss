@@ -54,7 +54,8 @@ ui5-table-row.collapse-content {
   > :first-child {
     overflow: auto;
 
-    &:not(ui5-panel) {
+    // A row's form needs its full width, not the width of its content.
+    &:not(ui5-panel, ui5-form) {
       display: flex;
     }
 

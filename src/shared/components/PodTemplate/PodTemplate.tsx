@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Labels } from '../Labels/Labels';
 import { ContainerFields, VolumeFields } from './components';
-import { Card, CardHeader, FormGroup, Text } from '@ui5/webcomponents-react';
-import { PodTemplateRow } from './PodTemplateRow';
+import { Card, CardHeader, FormGroup } from '@ui5/webcomponents-react';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { ResourceDetailsForm } from '../ResourceDetails/ResourceDetailsForm';
 
 import './PodTemplate.scss';
@@ -20,13 +20,13 @@ export function PodTemplate({ template }: { template: any }) {
     >
       <ResourceDetailsForm>
         <FormGroup>
-          <PodTemplateRow
+          <ResourceDetailsFormItem
             label={t('pods.labels.restart-policy')}
-            component={<Text>{template.spec.restartPolicy}</Text>}
+            value={template.spec.restartPolicy}
           />
-          <PodTemplateRow
+          <ResourceDetailsFormItem
             label={t('common.headers.labels')}
-            component={<Labels labels={template.metadata.labels} />}
+            value={<Labels labels={template.metadata.labels} />}
           />
         </FormGroup>
         {template.spec.containers?.map((container: Record<string, any>) => (

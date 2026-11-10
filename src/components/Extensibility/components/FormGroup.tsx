@@ -102,7 +102,6 @@ function Group({
             structure={def}
             schema={schema}
             inlineRenderer={FormItemWidget}
-            inlineContext={true}
             singleRootResource={singleRootResource}
             embedResource={embedResource}
             {...props}
