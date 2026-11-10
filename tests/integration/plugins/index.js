@@ -58,7 +58,7 @@ module.exports = (on, config) => {
   config.expose.NAMESPACE_NAME = namespaceName;
   config.expose.STORAGE_CLASS_NAME = randomName;
   config.expose.APP_NAME = randomName;
-  config.expose.ACC_AMP_TOKEN = process.env.ACC_AMP_TOKEN;
+  config.env.ACC_AMP_TOKEN = process.env.ACC_AMP_TOKEN;
   config.expose.IS_PR = process.env.IS_PR;
   config.expose.AMP_REPORT_NAME = reportName;
   config.expose.DOMAIN = config.env.DOMAIN;

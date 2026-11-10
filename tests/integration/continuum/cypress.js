@@ -119,7 +119,7 @@ const submitAccessibilityConcernsToAMP = (
   reportTitle = 'Busola ACC',
   moduleName,
 ) => {
-  if (!Cypress.expose('ACC_AMP_TOKEN')) {
+  if (!cy.env('ACC_AMP_TOKEN')) {
     return;
   }
   const accessibilityConcerns = Continuum.getAccessibilityConcerns();
