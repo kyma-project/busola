@@ -9,6 +9,12 @@ const genericListProps: { current: any } = { current: null };
 // the live CR is wired through (guards against the dead-prop regression).
 const modulesListRowsProps: { current: any } = { current: null };
 
+const getUpdateTemplateMock = vi.hoisted(() => vi.fn());
+vi.mock('./communityModulesHelpers', async () => {
+  const actual: any = await vi.importActual('./communityModulesHelpers');
+  return { ...actual, getUpdateTemplate: getUpdateTemplateMock };
+});
+
 vi.mock('shared/components/GenericList/GenericList', () => ({
   GenericList: (props: any) => {
     genericListProps.current = props;
@@ -111,6 +117,16 @@ const installedModule = {
   },
 };
 
+const updateTemplate = {
+  metadata: { name: 'foo-template-2', namespace: 'foo-ns' },
+  spec: { version: '2.0.0' },
+};
+
+const updateAction = () =>
+  genericListProps.current.actions.find(
+    (action: any) => action.name === 'update',
+  );
+
 const renderList = (setOpenedModuleIndex = vi.fn()) => {
   render(
     <CommunityModulesList
@@ -132,6 +148,31 @@ describe('CommunityModulesList', () => {
     modulesListRowsProps.current = null;
     navigateMock.mockReset();
     fetchMock.mockClear();
+    getUpdateTemplateMock.mockReset();
+  });
+
+  it('does not render an update button when no update template is available', () => {
+    renderList();
+
+    expect(updateAction().component(installedModule)).toBeNull();
+  });
+
+  it('does not render an update button when the module is not installed', () => {
+    getUpdateTemplateMock.mockReturnValue(updateTemplate);
+    renderList();
+
+    expect(updateAction().component({ name: 'missing-module' })).toBeNull();
+  });
+
+  it('passes both versions and the available template to the update button', () => {
+    getUpdateTemplateMock.mockReturnValue(updateTemplate);
+    renderList();
+
+    expect(updateAction().component(installedModule).props).toMatchObject({
+      currentVersion: installedModule.version,
+      newVersion: updateTemplate.spec.version,
+      moduleTpl: updateTemplate,
+    });
   });
 
   it('does not pass namespaceColIndex to GenericList (regression #4798)', () => {
