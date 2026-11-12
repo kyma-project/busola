@@ -40,7 +40,7 @@ jobs:
         uses: ./.github/actions/merge
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version: 26
       - name: setup_busola
         shell: bash
         run: |

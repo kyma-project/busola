@@ -3,30 +3,74 @@
   height: min-content;
 }
 
-.form-without-background {
-  &::part(layout) {
-    background-color: var(--sapBackgroundColor);
-    padding: 0;
-  }
-
-  &::part(column) {
-    padding-top: 0;
-  }
-}
-.resource-card-layout {
-  ui5-label {
-    margin-bottom: 4px;
-  }
-
-  &::part(column) {
-    padding-bottom: 0;
-  }
+// Container query so the cards follow the FCL column, not the viewport.
+// Grid rather than flex so a lone card keeps its half width.
+.resource-details-section {
+  container-type: inline-size;
+  container-name: resource-details;
 }
 
-@container (max-width: 420px) {
-  .resource-card-layout::part(layout) {
-    grid-template-columns: 1fr !important;
+.resource-details-cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@container resource-details (min-width: 600px) {
+  .resource-details-cards {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
+}
+
+// Spec: 1rem from header to first row; UI5 adds 1.5rem.
+.resource-card-layout::part(column) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+// disablePadding: remove the padding UI5 adds inside shadow DOM.
+.resource-card-layout.no-padding::part(layout),
+.resource-card-layout.no-padding::part(column) {
+  padding: 0;
+}
+
+// Spec: 0.25rem below a stacked label + 0.3125rem above the value; UI5 adds
+// neither.
+@container (width < 600px) {
+  .resource-card-layout ui5-label[slot='labelContent'] {
+    padding-bottom: 0.5625rem;
+  }
+}
+
+// UI5 right-aligns the label box, but a label that wraps
+// fills the box and its lines fall back to start alignment, leaving a gap to
+// the value. Align the text to the end as well.
+@container (width >=600px) {
+  .resource-card-layout ui5-label[slot='labelContent'] {
+    text-align: end;
+  }
+
+  // The value cell adds 0.25rem; the label supplies the rest of the 1rem gap.
+  .resource-card-layout ui5-form-item::part(label) {
+    padding-inline-end: 0.75rem;
+  }
+}
+
+// Spec: a label lines up with the first line of its value; UI5 centers it.
+.resource-card-layout ui5-form-item::part(layout) {
+  align-items: start;
+}
+
+// UI5 clips the value cell; long tokens such as CSI volume handles must wrap
+// instead.
+.resource-card-layout ui5-form-item::part(content) {
+  overflow-wrap: anywhere;
+}
+
+// UI5 clips the value cell, which would cut the hint button's hit area.
+.resource-card-layout ui5-form-item:has(.hint-button-slot)::part(content) {
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 .labels-annotations-panel {
@@ -38,12 +82,8 @@
 }
 
 .labels-annotations-panel__content {
+  // The panel supplies the bottom inset.
   &::part(layout) {
-    padding-top: 0;
     padding-bottom: 0;
-  }
-
-  ui5-label {
-    margin-bottom: 4px;
   }
 }

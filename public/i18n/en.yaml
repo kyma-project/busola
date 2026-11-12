@@ -1,13 +1,26 @@
 apps:
   title: Apps
+cloud-manager:
+  banner:
+    description: Do you rely on hyperscaler services in your work? Help us decide what Cloud Manager should support next.
+    open: Sign Up
+    title: What services do you need?
 cluster-overview:
   headers:
+    btp-account: SAP BTP Accounts
     cluster-overview: Cluster Overview
     cpu: CPU
+    cpu-requests: CPU Requests
+    cpu-usage: CPU Usage
+    infrastructure: Infrastructure
     memory: Memory
+    memory-requests: Memory Requests
+    memory-usage: Memory Usage
     metadata: Metadata
     metrics: Metrics
+    network: Network
     nodes: Nodes
+    nodes-title: Nodes ({{count}})
   statistics:
     cpu-limits: CPU limits
     cpu-limits-tooltip: The maximum amount of CPU resources your Pods can consume. Monitor these limits to understand your cluster's resource allocation and scaling capacity. Kubernetes allows the total limits across a node to exceed 100% of physical capacity (overcommitment), which is configurable.
@@ -48,9 +61,6 @@ cluster-overview:
     total-statefulsets: Total Stateful Sets
     unhealthy-daemonsets: Unhealthy Daemon Sets
     unhealthy-statefulsets: Unhealthy Stateful Sets
-  tooltips:
-    cpu-used-percentage: 'CPU used: {{percentage}}'
-    memory-used-percentage: 'Memory used: {{percentage}}'
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: ClusterRoleBinding
@@ -136,15 +146,26 @@ clusters:
   name_singular: Cluster
   oidc: OIDC
   overview:
+    dual-stack-ip: Dual Stack IP
+    environment-instance-id: Environment Instance ID
     global-account-id: Global Account ID
+    instance-name: Instance Name
     kubernetes-version: Kubernetes Version
     kyma-version: Kyma Version
     nat-gateway-ips: NAT Gateway IP Addresses
+    platform-region: Platform Region
     region: Worker Node Region
     seed-region: Kubernetes Control Plane Region
     subaccount-id: Subaccount ID
     title-all-clusters: Clusters
     title-current-cluster: Cluster Overview
+    worker-pools:
+      ha-zones: HA Zones
+      machine-type: Machine Type
+      max-nodes: Max Nodes
+      min-nodes: Min Nodes
+      pool: Pool
+      title: Worker Pools
   statuses:
     localstorage: Local Storage
     sessionstorage: Session Storage
@@ -327,7 +348,7 @@ common:
     idp-rejected-login: 'The identity provider rejected the login: {{error}}.'
     login-error: 'The login attempt failed: {{error}}.'
     login-failed: Login failed
-    login-loop-stopped: Login was stopped after several attempts failed in a row. Check the identity provider configuration and try again.
+    login-loop-stopped: Your session could not be restored. Choose Retry to sign in again. If the problem persists, check the identity provider configuration.
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions
     no-permissions-message: Contact your administrator to grant you access.
@@ -369,6 +390,8 @@ common:
   labels:
     category: Category
     data: Data
+    disabled: Disabled
+    enabled: Enabled
     last-transition: Last Transition Time
     message-type: Message Type
     name: Name
@@ -382,13 +405,16 @@ common:
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     type: Type
     version: 'Kyma Dashboard version:'
+    'yes': 'Yes'
   messages:
     cannot-load: 'Cannot load {{value}}: {{error.message}}.'
     choose: Choose {{value}}
     discard-changes-warning: You haven't saved your changes. Navigating out will discard them.
     error: 'Error: {{error}}'
     fill-required-data: Fill the remaining required data.
+    invalid-content-fields: 'Correct the content of: {{fields}}'
     must-fill-required: You must fill in all required data.
+    must-fill-required-fields: 'Fill in required fields: {{fields}}'
     no-entries-found: No entries found
     no-instances-found: No matching {{value}} found
     no-instances-found-namespace: No matching {{value}} found in this Namespace
@@ -707,6 +733,7 @@ extensibility:
     messages:
       error: Failed to upsert UI configuration.
       no-columns: No example values could be inferred from the CRD.
+      select-crd: Select a resource from the list.
       success: UI configuration upserted.
   title: Extensions
   version:
@@ -1105,6 +1132,8 @@ no-permissions:
   enter-namespace-name-placeholder: Enter Namespace name
 node-details:
   all: All messages
+  error: Error
+  errors: Errors
   information: Information
   machine-info:
     architecture: Architecture
@@ -1125,6 +1154,11 @@ node-details:
   region: Region
   warnings: Warnings
   zone: Zone
+node-js-vulnerability:
+  banner:
+    description: A critical vulnerability affects Node.js Brotli decompression. Update your container image to Node.js 22.23.4, 24.22.1, or 26.12.1.
+    open: View SAP Note
+    title: Update your workloads
 nodes:
   description: Kubernetes executes your workload by grouping containers into Pods that operate on <0>Nodes</0>, which can be virtual or physical machines depending on the cluster configuration. The control plane monitors each node, which includes the services required to run Pods.
   title: Nodes
@@ -1179,6 +1213,7 @@ pods:
     filter-timeframe: 'Filter timeframe by:'
     image: Image
     image-pull-policy: Image Pull Policy
+    init-container: Init Container
     init-containers: Init Containers
     logs: Logs
     mount-path: Mount Path
@@ -1306,7 +1341,6 @@ resource-quotas:
       cpu: CPU Requests
       memory: Memory Requests
     resource: Resource
-    scope-selectors: Scope Selectors
     scopes: Scopes
     used: Used
     values: Values
@@ -1483,6 +1517,7 @@ settings:
   general:
     description: Cluster interaction, resource validation
     disableResourceProtection: Allow for modification of protected resources
+    dismissed-banners: Dismissed banners
     dontConfirmDelete: Delete without confirmation
     edit-view:
       always-form: Always form
@@ -1498,6 +1533,7 @@ settings:
       validateResources: Validate Resources
       validation-disabled: Resource validation is disabled
       validation-policies: Validation Policies
+    restore-banners: Restore all
     showHiddenNamespaces: Show hidden Namespaces
     title: Advanced Options
   language:
@@ -1531,8 +1567,6 @@ stateful-sets:
 storage:
   title: Storage
 storage-classes:
-  accessible-name:
-    parameters: Parameters panel
   description: <0>Storage Class</0> provides a way for administrators to describe the "classes" of storage they offer.
   headers:
     allow-volume-expansion: Allow Volume Expansion

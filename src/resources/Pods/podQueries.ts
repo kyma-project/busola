@@ -176,7 +176,7 @@ export function usePodsMetricsQuery(namespace?: string) {
           }
           return acc;
         },
-        [],
+        [] as UsageMetrics[],
       );
       return podsWithMetrics;
     }

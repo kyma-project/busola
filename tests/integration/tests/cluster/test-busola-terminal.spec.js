@@ -28,6 +28,18 @@ context('Test Terminal Banner', () => {
   it('Terminal banner is rendered on the cluster overview page', () => {
     cy.goToClusterOverview();
 
+    cy.get('.banner-carousel').then(($carousel) => {
+      const terminalBannerIndex = $carousel
+        .children()
+        .toArray()
+        .findIndex((banner) =>
+          banner.querySelector('ui5-card[accessible-name="Try the terminal"]'),
+        );
+
+      expect(terminalBannerIndex).to.be.greaterThan(-1);
+      $carousel[0].navigateTo(terminalBannerIndex);
+    });
+
     cy.get('ui5-card[accessible-name="Try the terminal"]').should('be.visible');
   });
 

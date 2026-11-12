@@ -130,7 +130,10 @@ export function Header() {
         ref={shellbarRef}
       >
         <SnowFeature />
-        <FeedbackPopover shellbarRef={shellbarRef} />
+        <FeedbackPopover
+          shellbarRef={shellbarRef}
+          isSearchOpen={isSearchOpen}
+        />
         <AIAssistantFeature />
         <TerminalFeature />
         <GetHelpMenu shellbarRef={shellbarRef} />

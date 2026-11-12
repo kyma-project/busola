@@ -1,5 +1,5 @@
 import { WebSocketServer } from 'ws';
-import { WebSocketConnection } from './connection';
+import { WebSocketConnection } from './connection.js';
 
 // Stand-in for the GCP load balancer that drops idle connections but keeps them
 // alive on any frame (incl. a ping). Reproduces the idle-drop locally.

@@ -153,8 +153,7 @@ const ColumnWrapper = ({
         (!midColumnComponent
           ? 'OneColumn'
           : layoutState?.layout || 'OneColumn') as
-          | FCLLayout
-          | keyof typeof FCLLayout
+          FCLLayout | keyof typeof FCLLayout
       }
       startColumn={<div className="column-content">{startColumnComponent}</div>}
       midColumn={<div className="column-content">{midColumnComponent}</div>}

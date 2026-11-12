@@ -8,6 +8,8 @@ import { getEnv, Envs } from 'shared/utils/env';
 import { attachSilentRenewHandlers } from './silentRenewSetup';
 import { renewingAtom } from './renewingAtom';
 import {
+  clearIntendedPath,
+  getIntendedPath,
   saveIntendedPath,
   toClusterRelative,
   savePendingKubeconfigId,
@@ -24,6 +26,7 @@ import {
   isAuthRedirectLoop,
   registerAuthRedirect,
   resetAuthRedirectGuard,
+  tryClaimReauthRedirect,
 } from './utils/authRedirectLoopGuard';
 import { useNotifyLoginFailure } from './useLoginFailureNotification';
 
@@ -31,11 +34,13 @@ const SSO_KEY = 'SSO';
 
 export type SsoDataState = User | null;
 
-const defaultValue: SsoDataState = getSSOAuthData();
+// Ignore an expired stored token, or the cluster login starts before the SSO login has finished.
+const defaultValue: SsoDataState = hasValidStoredSSOToken()
+  ? getSSOAuthData()
+  : null;
 
 export const ssoDataAtom = atom<SsoDataState>(defaultValue);
 
-// Set to true when the SSO login was stopped (IdP error or redirect loop).
 export const ssoLoginStoppedAtom = atom(false);
 
 export function setSSOAuthData(data: SsoDataState) {
@@ -59,7 +64,6 @@ export function useIsSSOEnabled() {
   return configuration?.features?.SSO_LOGIN?.isEnabled ?? false;
 }
 
-// Mutable SSO module state, kept in one object.
 const session: {
   userManager: UserManager | null;
   handlersAttached: boolean;
@@ -80,11 +84,10 @@ async function trySilentRefresh(): Promise<boolean> {
   return !!refreshedUser;
 }
 
-// Session-drop recovery outside React. Saves the current cluster-relative
-// path, then redirects through the IdP; on failure falls back to a full
-// load of /clusters. The saved path restores the location afterwards.
+// Session-drop recovery. Redirects through the IdP; falls back to /clusters on failure.
 function triggerReauthRedirect(userManager: UserManager | null) {
-  // Both paths re-enter login after a page load, count them for the loop guard.
+  // One expiry can fire several handlers; only the first should redirect.
+  if (!tryClaimReauthRedirect()) return;
   registerAuthRedirect();
   const fullPath = window.location.pathname + window.location.search;
   const relative = toClusterRelative(fullPath);
@@ -94,9 +97,7 @@ function triggerReauthRedirect(userManager: UserManager | null) {
   );
   if (kubeconfigId) savePendingKubeconfigId(kubeconfigId);
   if (!userManager) {
-    // No manager means handleSSOLogin never ran this page-load (the token
-    // was still valid at mount). The stored SSO entry is already cleared,
-    // so the full load at /clusters re-enters handleSSOLogin.
+    // Nothing to renew with on this load; a full reload re-enters handleSSOLogin.
     window.location.assign('/clusters');
     return;
   }
@@ -107,6 +108,30 @@ function triggerReauthRedirect(userManager: UserManager | null) {
       console.warn('SSO re-auth redirect failed:', e);
       window.location.assign('/clusters');
     });
+}
+
+export function restartSSOLogin() {
+  triggerReauthRedirect(session.userManager);
+}
+
+// prompt: 'login' so a stale IdP session can't send us straight back into the loop.
+function triggerForcedLogin(
+  userManager: UserManager | null,
+  relative: string | null,
+  kubeconfigId?: string,
+) {
+  resetAuthRedirectGuard();
+  // Claimed so the chunk loader knows a redirect is in flight.
+  tryClaimReauthRedirect();
+  if (relative) saveIntendedPath(relative, kubeconfigId);
+  if (!userManager) {
+    window.location.assign('/clusters');
+    return;
+  }
+  userManager
+    .clearStaleState()
+    .then(() => userManager.signinRedirect({ prompt: 'login' }))
+    .catch(() => window.location.assign('/clusters'));
 }
 
 export function createSSOUserManager(oidcConfig: {
@@ -135,6 +160,56 @@ function getOrCreateUserManager(ssoConfig: ConfigFeature): UserManager {
   return session.userManager;
 }
 
+function attachSSORenew(
+  userManager: UserManager,
+  setSsoState: (user: SsoDataState) => void,
+  setRenewing?: (renewing: boolean) => void,
+) {
+  if (session.handlersAttached) return;
+  session.handlersAttached = true;
+
+  const { cleanup, renew } = attachSilentRenewHandlers(userManager, {
+    onRenewed: (refreshedUser) => {
+      setSSOAuthData(refreshedUser);
+      setSsoState(refreshedUser);
+    },
+    onRenewError: (err) => {
+      console.warn('SSO silent renew failed', err);
+      setSsoState(null);
+      setSSOAuthData(null);
+      triggerReauthRedirect(userManager);
+    },
+    onRenewingChange: setRenewing,
+  });
+  // Share the same single-flight as the event handlers.
+  session.silentRefreshFn = renew;
+  userManager.events.addUserUnloaded(() => {
+    cleanup();
+    session.handlersAttached = false;
+    session.silentRefreshFn = null;
+    setSsoState(null);
+    setSSOAuthData(null);
+    // Covers IdP-side session revocation; harmless if onRenewError
+    // already started a redirect.
+    triggerReauthRedirect(userManager);
+  });
+}
+
+// A load with a live token skips handleSSOLogin; without this nothing would renew the token.
+async function resumeSSOSession(
+  ssoConfig: ConfigFeature,
+  setSsoState: (user: SsoDataState) => void,
+  setRenewing?: (renewing: boolean) => void,
+) {
+  if (!ssoConfig.config || session.handlersAttached) return;
+  const userManager = getOrCreateUserManager(ssoConfig);
+  // getUser() also arms the library's expiry timers.
+  const storedUser = await userManager.getUser();
+  // No library user, nothing to renew with; expiry falls back to a re-login.
+  if (!storedUser || storedUser.expired) return;
+  attachSSORenew(userManager, setSsoState, setRenewing);
+}
+
 async function handleSSOLogin(
   ssoConfig: ConfigFeature,
   setSsoState: (user: SsoDataState) => void,
@@ -152,12 +227,20 @@ async function handleSSOLogin(
     const storedUser = await userManager?.getUser();
 
     let user: User;
-    if (storedUser && !storedUser.expired) {
-      user = storedUser;
+    const validStoredUser =
+      storedUser && !storedUser.expired ? storedUser : null;
+    const decision = decideOidcCallbackAction(ssoConfig.config.clientId);
+    // The new login must win: the old session can't renew and would redirect again.
+    if (validStoredUser && decision.action !== 'process-callback') {
+      user = validStoredUser;
     } else {
-      const decision = decideOidcCallbackAction(ssoConfig.config.clientId);
       if (decision.action === 'foreign-callback') {
-        // Callback belongs to another manager (e.g. cluster OIDC); let it run.
+        if (isAuthRedirectLoop()) {
+          reportStoppedLogin({ action: 'stop-loop' }, 'SSO', onLoginFailed);
+          return;
+        }
+        // No SSO session while the cluster login waits for one; it restarts after the SSO login.
+        triggerReauthRedirect(userManager);
         return;
       }
       if (reportStoppedLogin(decision, 'SSO', onLoginFailed)) {
@@ -167,52 +250,32 @@ async function handleSSOLogin(
         triggerReauthRedirect(userManager);
         return;
       }
-      user = await userManager?.signinRedirectCallback(window.location.href);
+      try {
+        user = await userManager?.signinRedirectCallback(window.location.href);
+      } catch (e) {
+        if (!validStoredUser) throw e;
+        console.warn('SSO login callback failed, keeping the stored user:', e);
+        user = validStoredUser;
+      }
+      // Drop the callback parameters, or the cluster login waits for a foreign callback and never starts.
+      const url = new URL(window.location.href);
+      url.searchParams.delete('code');
+      url.searchParams.delete('iss');
+      url.searchParams.delete('state');
+      url.searchParams.delete('session_state');
       // Restore kubeconfigID that was saved before the SSO redirect so
       // useLoginWithKubeconfigID can still find it in the URL.
       const pendingKubeconfigId = consumePendingKubeconfigId();
       if (pendingKubeconfigId) {
-        const url = new URL(window.location.href);
-        // Remove OAuth callback parameters to prevent re-triggering auth
-        url.searchParams.delete('code');
-        url.searchParams.delete('iss');
-        url.searchParams.delete('state');
-        url.searchParams.delete('session_state');
         url.searchParams.set('kubeconfigID', pendingKubeconfigId);
         window.history.replaceState({}, '', url.toString());
         window.location.href = url.toString();
+      } else {
+        window.history.replaceState(window.history.state, '', url.toString());
       }
     }
 
-    if (!session.handlersAttached) {
-      session.handlersAttached = true;
-
-      const { cleanup, renew } = attachSilentRenewHandlers(userManager, {
-        onRenewed: (refreshedUser) => {
-          setSSOAuthData(refreshedUser);
-          setSsoState(refreshedUser);
-        },
-        onRenewError: (err) => {
-          console.warn('SSO silent renew failed', err);
-          setSsoState(null);
-          setSSOAuthData(null);
-          triggerReauthRedirect(userManager);
-        },
-        onRenewingChange: setRenewing,
-      });
-      // Share the same single-flight as the event handlers.
-      session.silentRefreshFn = renew;
-      userManager.events.addUserUnloaded(() => {
-        cleanup();
-        session.handlersAttached = false;
-        session.silentRefreshFn = null;
-        setSsoState(null);
-        setSSOAuthData(null);
-        // Covers IdP-side session revocation; harmless if onRenewError
-        // already started a redirect.
-        triggerReauthRedirect(userManager);
-      });
-    }
+    attachSSORenew(userManager, setSsoState, setRenewing);
 
     setSSOAuthData(user);
     setSsoState(user);
@@ -242,35 +305,48 @@ export function useSSOLogin() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!isSSOEnabled || !window.isSecureContext || !ssoConfig) return;
     // An expired stored user must fall through so handleSSOLogin can start
     // a new signinRedirect.
     const hasValidLive =
       ssoState?.id_token &&
       (typeof ssoState.expires_at !== 'number' ||
         ssoState.expires_at * 1000 > Date.now());
-    if (
-      !isSSOEnabled ||
-      !window.isSecureContext ||
-      !ssoConfig ||
-      hasValidLive ||
-      hasValidStoredSSOToken()
-    ) {
-      return;
-    }
 
     const startLogin = async () => {
       const bypass = await getEnv(Envs.SSO_LOGIN_BYPASS);
       if (bypass === 'true') return;
+      if (hasValidLive || hasValidStoredSSOToken()) {
+        resumeSSOSession(ssoConfig, setSsoState, setRenewing);
+        return;
+      }
       handleSSOLogin(ssoConfig, setSsoState, setRenewing, (failure) => {
         // Unblock the app behind the dialog, navigating also removes the error params.
-        setSsoLoginStopped(true);
+        // Read the path before the navigation below replaces the URL; on a callback page it is the one saved before the redirect.
+        const saved = getIntendedPath();
+        const relative =
+          toClusterRelative(
+            window.location.pathname + window.location.search,
+          ) ??
+          saved?.path ??
+          null;
+        // Take the saved target out of storage: after Close it must not land on the next cluster or SSO login.
+        clearIntendedPath();
+        const pendingKubeconfigId = consumePendingKubeconfigId();
+        // Clear the cluster first; a selected cluster would restart the stopped SSO login.
         setCluster(null);
+        setSsoLoginStopped(true);
         navigate('/clusters', { replace: true });
         notifyLoginFailure(failure, {
-          // Retry reloads the page, so SSO login starts again with a clean URL.
           onRetry: () => {
-            resetAuthRedirectGuard();
-            window.location.assign('/clusters');
+            if (pendingKubeconfigId)
+              savePendingKubeconfigId(pendingKubeconfigId);
+            // Keep the entry's kubeconfigID, or the path is restored on the wrong cluster.
+            triggerForcedLogin(
+              session.userManager,
+              relative,
+              saved?.kubeconfigId,
+            );
           },
         });
       });

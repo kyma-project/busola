@@ -49,7 +49,7 @@ jobs:
       name: busola-backend
       dockerfile: Dockerfile
       context: backend
-      tags: ${{ inputs.tag != '' && inputs.tag || 'latest' }}
+      tags: ${{ inputs.tag != '' && inputs.tag || (github.event_name == 'push' && 'latest' || '') }}
 
   extract-image-tag:
     name: Extract image tag

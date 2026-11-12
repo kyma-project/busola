@@ -1,8 +1,8 @@
 import { WebSocketServer } from 'ws';
-import parseProtocolHeaders from './protocolHeaderParser';
-import { pinoWebSocketLogger } from '../../logging/';
-import { InvalidInputError } from '../errors/errors';
-import { WebSocketConnection } from './connection';
+import parseProtocolHeaders from './protocolHeaderParser.js';
+import { pinoWebSocketLogger } from '../../logging/index.js';
+import { InvalidInputError } from '../errors/errors.js';
+import { WebSocketConnection } from './connection.js';
 
 function buildRemoteURL(url, remoteURL) {
   const remoteServerAddress = remoteURL.replace('https://', '');

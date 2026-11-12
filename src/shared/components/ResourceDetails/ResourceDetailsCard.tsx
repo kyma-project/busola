@@ -1,5 +1,6 @@
-import { Card, CardHeader, Form } from '@ui5/webcomponents-react';
+import { Card, CardHeader } from '@ui5/webcomponents-react';
 import { ReactNode } from 'react';
+import { ResourceDetailsForm } from './ResourceDetailsForm';
 import './ResourceDetailsCard.scss';
 
 interface ResourceDetailsCardProps {
@@ -20,13 +21,7 @@ export default function ResourceDetailsCard({
       className={`resource-card ${className}`}
       header={<CardHeader titleText={titleText} />}
     >
-      <Form
-        layout="S2 M2 L2 XL2"
-        labelSpan="S12 M4 L4 XL4"
-        className="resource-card-layout"
-      >
-        {content}
-      </Form>
+      <ResourceDetailsForm>{content}</ResourceDetailsForm>
       {bottomContent && <div>{bottomContent}</div>}
     </Card>
   );

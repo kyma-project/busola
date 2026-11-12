@@ -1,8 +1,9 @@
 import { Button, Card, Text, Title } from '@ui5/webcomponents-react';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { isSystemThemeDark, themeAtom } from 'state/settings/themeAtom';
 import modulesIllustration from './assets/Modules/modulesIllustration.svg';
 import modulesIllustrationHC from './assets/Modules/modulesIllustrationHC.svg';
+import Satellite from './assets/Satellite/Satellite.svg';
 import AiIllustrationLight from './assets/AI/AiIllustrationLight.svg';
 import AiIllustrationDark from './assets/AI/AiIllustrationDark.svg';
 import AiIllustrationHClight from './assets/AI/AiIllustrationHClight.svg';
@@ -10,7 +11,10 @@ import AiIllustrationHCdark from './assets/AI/AiIllustrationHCdark.svg';
 import DiscoveryIllustration from './assets/Discovery/Team.png';
 import KymaCLIIllustration from './assets/KymaCLI/KymaCLIIllustration.svg';
 import TerminalIllustration from './assets/Terminal/Terminal.svg';
-import { useAtomValue } from 'jotai';
+import TechEdIllustration from './assets/TechEd/TechEd.svg';
+import SafeIllustration from './assets/Safe/Safe.svg';
+import { useAtom, useAtomValue } from 'jotai';
+import { dismissedBannersAtom } from 'state/settings/dismissedBannersAtom';
 import {
   BackgroundStyle,
   DesignType,
@@ -33,8 +37,14 @@ const getIllustration = (
       return DiscoveryIllustration;
     case 'KymaCLI':
       return KymaCLIIllustration;
+    case 'Satellite':
+      return Satellite;
     case 'Terminal':
       return TerminalIllustration;
+    case 'Teched':
+      return TechEdIllustration;
+    case 'Safe':
+      return SafeIllustration;
     case 'AI':
       switch (theme) {
         case 'sap_horizon_hcw':
@@ -64,9 +74,6 @@ const getIllustration = (
   }
 };
 
-const isBannerHidden = (hideBannerKey: string): boolean =>
-  localStorage.getItem(hideBannerKey) === 'true';
-
 export function FeatureCardBanner({
   id,
   title,
@@ -78,17 +85,17 @@ export function FeatureCardBanner({
   className = '',
 }: FeatureCardBannerProps) {
   const { t } = useTranslation();
-  const hideBannerKey = `hideBanner${id}`;
-  const [hideBanner, setHideBanner] = useState(() =>
-    isBannerHidden(hideBannerKey),
-  );
+  const [dismissedBanners, setDismissedBanners] = useAtom(dismissedBannersAtom);
+  const hideBanner = dismissedBanners.includes(id);
   const theme = useAtomValue(themeAtom);
-  const [prevId, setPrevId] = useState(id);
 
-  if (id !== prevId) {
-    setPrevId(id);
-    setHideBanner(isBannerHidden(hideBannerKey));
-  }
+  useEffect(() => {
+    const legacyKey = `hideBanner${id}`;
+    if (localStorage.getItem(legacyKey) === 'true') {
+      setDismissedBanners((prev) => (prev.includes(id) ? prev : [...prev, id]));
+      localStorage.removeItem(legacyKey);
+    }
+  }, [id, setDismissedBanners]);
 
   if (!id || hideBanner) {
     return <></>;
@@ -109,12 +116,21 @@ export function FeatureCardBanner({
       case 'information-3':
         return {
           background:
-            'linear-gradient(to right, var(--sapContent_Illustrative_Color25), var(--sapContent_Illustrative_Color27))',
+            'linear-gradient(to right, var(--sapLegendBackgroundColor10), var(--sapLegendBackgroundColor11))',
         };
       case 'information-4':
         return {
           background:
             'linear-gradient(to right, var(--sapLegendBackgroundColor6), var(--sapLegendBackgroundColor18))',
+        };
+      case 'critical':
+        return {
+          background:
+            'linear-gradient(to right, var(--sapLegendBackgroundColor1), var(--sapLegendBackgroundColor4))',
+        };
+      case 'Teched':
+        return {
+          background: 'linear-gradient(to right, #00144A, #002A86)',
         };
       default:
         return {
@@ -125,10 +141,10 @@ export function FeatureCardBanner({
   };
 
   const handleToggle = () => {
-    setHideBanner(true);
-    localStorage.setItem(hideBannerKey, 'true');
+    setDismissedBanners((prev) => (prev.includes(id) ? prev : [...prev, id]));
   };
   const illustration = getIllustration(image, theme);
+  const isInnerContainerVisible = title || description || buttons;
   return (
     <div className={`sap-margin-top-small ${className}`}>
       <Card accessibleName={title} className="feature-card-container">
@@ -136,37 +152,39 @@ export function FeatureCardBanner({
           <Button
             design="Transparent"
             icon="decline"
-            className="decline-button"
+            className={`decline-button ${design.toLowerCase()}-btn`}
             onClick={handleToggle}
             accessibleName={t('common.buttons.close')}
           />
-          <div className="outer-container">
-            <div className="inner-container">
-              <div style={{ width: '100%' }} className="title-container">
-                <Title
-                  level="H2"
-                  size="H1"
-                  wrappingType="Normal"
-                  style={{
-                    display: 'inline-flex',
-                  }}
-                >
-                  {/* This extra span element is for the ability to add additional styles that cannot be added to the Title component. */}
-                  <span className="banner-title">{title}</span>
-                </Title>
-                {titleIcon && (
-                  <img
-                    src={titleIcon}
-                    alt="Title Icon"
-                    className="bsl-icon-xxl"
-                  />
-                )}
+          <div className={`outer-container ${design.toLowerCase()}`}>
+            {isInnerContainerVisible && (
+              <div className="inner-container">
+                <div style={{ width: '100%' }} className="title-container">
+                  <Title
+                    level="H2"
+                    size="H1"
+                    wrappingType="Normal"
+                    style={{
+                      display: 'inline-flex',
+                    }}
+                  >
+                    {/* This extra span element is for the ability to add additional styles that cannot be added to the Title component. */}
+                    <span className="banner-title">{title}</span>
+                  </Title>
+                  {titleIcon && (
+                    <img
+                      src={titleIcon}
+                      alt="Title Icon"
+                      className="bsl-icon-xxl"
+                    />
+                  )}
+                </div>
+                <Text>{description}</Text>
+                <div className="button-container sap-margin-top-small">
+                  {buttons && buttons}
+                </div>
               </div>
-              <Text>{description}</Text>
-              <div className="button-container sap-margin-top-small">
-                {buttons && buttons}
-              </div>
-            </div>
+            )}
             {illustration && (
               <img
                 src={illustration}

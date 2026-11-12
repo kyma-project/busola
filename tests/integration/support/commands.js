@@ -62,7 +62,7 @@ Cypress.Commands.add('clickListLink', (resourceName) => {
 });
 
 Cypress.Commands.add('goToNamespaceDetails', (namespace) => {
-  const name = namespace ?? Cypress.env('NAMESPACE_NAME');
+  const name = namespace ?? Cypress.expose('NAMESPACE_NAME');
 
   cy.getLeftNav()
     .find('ui5-side-navigation-item')

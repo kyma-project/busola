@@ -1,4 +1,3 @@
-/* global process */
 const isDockerDesktopCluster = process.env.DOCKER_DESKTOP_CLUSTER === 'true';
 const isDocker = process.env.IS_DOCKER === 'true';
 

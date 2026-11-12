@@ -1,6 +1,6 @@
 import { ComboBox, ComboBoxItem, Text } from '@ui5/webcomponents-react';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { k8sNamePattern } from 'shared/components/K8sNameInput/K8sNameInput';
+import { k8sDnsSubdomainPattern } from 'shared/components/K8sNameInput/K8sNameInput';
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
 import ValueState from '@ui5/webcomponents-base/dist/types/ValueState.js';
@@ -134,7 +134,7 @@ function K8sResourceSelect({
       valueState={getValidationState()?.state}
       valueStateMessage={<Text>{getValidationState()?.text}</Text>}
       //@ts-expect-error Property 'pattern' doesn't exist on ComboBox types, but it is probably supported
-      pattern={k8sNamePattern}
+      pattern={k8sDnsSubdomainPattern}
     >
       {options.map((option) => (
         <ComboBoxItem key={option.key} text={option.text} />

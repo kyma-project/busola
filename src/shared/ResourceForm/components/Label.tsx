@@ -8,6 +8,8 @@ export type LabelProps = {
   showColon?: boolean;
   wrappingType?: WrappingType | keyof typeof WrappingType;
   style?: React.CSSProperties;
+  // Set by UI5 slot props (e.g. labelContent); must reach the DOM
+  slot?: string;
 };
 
 export function Label({
@@ -17,6 +19,7 @@ export function Label({
   showColon = true,
   wrappingType,
   style,
+  slot,
 }: LabelProps) {
   return (
     <UI5Label
@@ -25,6 +28,7 @@ export function Label({
       showColon={showColon}
       wrappingType={wrappingType}
       style={style}
+      slot={slot}
     >
       {children}
     </UI5Label>

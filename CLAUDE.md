@@ -18,6 +18,7 @@ Available skills:
 - `.agents/skills/review-code/` — Review current branch changes against a GitHub issue's requirements and acceptance criteria
 - `.agents/skills/check-unused-translations/` — Find translation keys in public/i18n/en.yaml that are not used in src/
 - `.agents/skills/analyze-pr-tests` — Analyze Cypress integration test failures on a given PR
+- `.agents/skills/bump-dependency/` — Safely bump a single npm dependency: fetch changelog, check for breaking changes, scan codebase, optionally apply fixes, run lint/typecheck
 - `.agents/skills/watch-and-rerun-ci-pr/` — Watch a PR's CI checks and rerun flaky failures until the PR is green
 - `.agents/skills/watch-and-rerun-ci-release/` — Watch a release workflow run's CI and rerun only the failed (flaky) jobs until the release run is green
 - `.agents/skills/watch-and-rerun-ci-mq/` — Watch a PR's merge queue CI and re-add to the queue on flaky failures until the PR is merged

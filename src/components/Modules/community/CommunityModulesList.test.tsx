@@ -1,9 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 
 // Capture props the GenericList is rendered with so we can assert behavior
 // without standing up the entire UI5 + router + jotai stack.
 const genericListProps: { current: any } = { current: null };
+
+// Capture the props the row renderer hands to ModulesListRows so we can assert
+// the live CR is wired through (guards against the dead-prop regression).
+const modulesListRowsProps: { current: any } = { current: null };
+
+const getUpdateTemplateMock = vi.hoisted(() => vi.fn());
+vi.mock('./communityModulesHelpers', async () => {
+  const actual: any = await vi.importActual('./communityModulesHelpers');
+  return { ...actual, getUpdateTemplate: getUpdateTemplateMock };
+});
 
 vi.mock('shared/components/GenericList/GenericList', () => ({
   GenericList: (props: any) => {
@@ -45,7 +55,10 @@ vi.mock('shared/hooks/BackendAPI/useFetch', () => ({
 }));
 
 vi.mock('components/Modules/components/ModulesListRows', () => ({
-  ModulesListRows: () => ['name-cell'],
+  ModulesListRows: (props: any) => {
+    modulesListRowsProps.current = props;
+    return ['name-cell'];
+  },
 }));
 
 vi.mock('components/Modules/support', async () => {
@@ -104,6 +117,16 @@ const installedModule = {
   },
 };
 
+const updateTemplate = {
+  metadata: { name: 'foo-template-2', namespace: 'foo-ns' },
+  spec: { version: '2.0.0' },
+};
+
+const updateAction = () =>
+  genericListProps.current.actions.find(
+    (action: any) => action.name === 'update',
+  );
+
 const renderList = (setOpenedModuleIndex = vi.fn()) => {
   render(
     <CommunityModulesList
@@ -122,8 +145,34 @@ const renderList = (setOpenedModuleIndex = vi.fn()) => {
 describe('CommunityModulesList', () => {
   beforeEach(() => {
     genericListProps.current = null;
+    modulesListRowsProps.current = null;
     navigateMock.mockReset();
     fetchMock.mockClear();
+    getUpdateTemplateMock.mockReset();
+  });
+
+  it('does not render an update button when no update template is available', () => {
+    renderList();
+
+    expect(updateAction().component(installedModule)).toBeNull();
+  });
+
+  it('does not render an update button when the module is not installed', () => {
+    getUpdateTemplateMock.mockReturnValue(updateTemplate);
+    renderList();
+
+    expect(updateAction().component({ name: 'missing-module' })).toBeNull();
+  });
+
+  it('passes both versions and the available template to the update button', () => {
+    getUpdateTemplateMock.mockReturnValue(updateTemplate);
+    renderList();
+
+    expect(updateAction().component(installedModule).props).toMatchObject({
+      currentVersion: installedModule.version,
+      newVersion: updateTemplate.spec.version,
+      moduleTpl: updateTemplate,
+    });
   });
 
   it('does not pass namespaceColIndex to GenericList (regression #4798)', () => {
@@ -163,6 +212,36 @@ describe('CommunityModulesList', () => {
 
     expect(setOpenedModuleIndex).not.toHaveBeenCalled();
     expect(navigateMock).not.toHaveBeenCalled();
+  });
+
+  it('gates community row details on a live CR instance', () => {
+    renderList();
+    const hasRowDetails = genericListProps.current.hasRowDetails;
+    expect(typeof hasRowDetails).toBe('function');
+
+    // "Installed" means the operator is present, not that a CR instance exists.
+    // Without a live CR on the cluster the row must NOT expose details.
+    expect(hasRowDetails(installedModule)).toBe(false);
+
+    // Once a live CR instance is found, details become available.
+    expect(hasRowDetails({ ...installedModule, hasLiveResource: true })).toBe(
+      true,
+    );
+  });
+
+  it('forwards the probed live CR to ModulesListRows via the liveResource prop', async () => {
+    renderList();
+
+    // The list-level probe resolves the live CR asynchronously; once it lands,
+    // the row renderer must hand that exact instance to ModulesListRows so the
+    // State/Namespace columns reflect the real CR (guards against the dead-prop
+    // regression where liveResource was accepted but never passed).
+    await waitFor(() => {
+      genericListProps.current.rowRenderer(installedModule);
+      expect(modulesListRowsProps.current?.liveResource).toEqual({
+        metadata: { name: 'foo-instance', namespace: 'foo-ns' },
+      });
+    });
   });
 
   it('does not navigate or update state when hasDetailsLink is false', async () => {

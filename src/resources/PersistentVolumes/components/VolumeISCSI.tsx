@@ -1,5 +1,4 @@
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'shared/components/Link/Link';
 import { Tokens } from 'shared/components/Tokens';
@@ -29,41 +28,38 @@ export const VolumeISCSI = ({ iscsi, secret }: VolumeISCSIProps) => {
 
   return (
     <>
-      <LayoutPanelRow name={t('pv.headers.type')} value={t('pv.iscsi.type')} />
-      <LayoutPanelRow
-        name={t('pv.iscsi.targetPortal')}
-        value={iscsi?.targetPortal || EMPTY_TEXT_PLACEHOLDER}
+      <ResourceDetailsFormItem
+        label={t('pv.headers.type')}
+        value={t('pv.iscsi.type')}
       />
-      <LayoutPanelRow
-        name={t('pv.iscsi.iqn')}
-        value={iscsi?.iqn || EMPTY_TEXT_PLACEHOLDER}
+      <ResourceDetailsFormItem
+        label={t('pv.iscsi.targetPortal')}
+        value={iscsi?.targetPortal}
       />
-      <LayoutPanelRow
-        name={t('pv.iscsi.lun')}
-        value={`${iscsi?.lun}` || EMPTY_TEXT_PLACEHOLDER}
+      <ResourceDetailsFormItem label={t('pv.iscsi.iqn')} value={iscsi?.iqn} />
+      <ResourceDetailsFormItem label={t('pv.iscsi.lun')} value={iscsi?.lun} />
+      <ResourceDetailsFormItem
+        label={t('pv.iscsi.iscsiInterface')}
+        value={iscsi?.iscsiInterface}
       />
-      <LayoutPanelRow
-        name={t('pv.iscsi.iscsiInterface')}
-        value={iscsi?.iscsiInterface || EMPTY_TEXT_PLACEHOLDER}
+      <ResourceDetailsFormItem
+        label={t('pv.iscsi.fsType')}
+        value={iscsi?.fsType}
       />
-      <LayoutPanelRow
-        name={t('pv.iscsi.fsType')}
-        value={iscsi?.fsType || EMPTY_TEXT_PLACEHOLDER}
-      />
-      <LayoutPanelRow
-        name={t('pv.iscsi.portals')}
+      <ResourceDetailsFormItem
+        label={t('pv.iscsi.portals')}
         value={<Tokens tokens={iscsi?.portals || []} />}
       />
-      <LayoutPanelRow
-        name={t('pv.iscsi.chapAuthDiscovery')}
-        value={iscsi?.chapAuthDiscovery || EMPTY_TEXT_PLACEHOLDER}
+      <ResourceDetailsFormItem
+        label={t('pv.iscsi.chapAuthDiscovery')}
+        value={iscsi?.chapAuthDiscovery}
       />
-      <LayoutPanelRow
-        name={t('pv.iscsi.chapAuthSession')}
-        value={iscsi?.chapAuthSession || EMPTY_TEXT_PLACEHOLDER}
+      <ResourceDetailsFormItem
+        label={t('pv.iscsi.chapAuthSession')}
+        value={iscsi?.chapAuthSession}
       />
-      <LayoutPanelRow
-        name={t('pv.iscsi.secretRef')}
+      <ResourceDetailsFormItem
+        label={t('pv.iscsi.secretRef')}
         value={
           secret && iscsi?.secretRef?.name ? (
             <Link
@@ -87,7 +83,7 @@ export const VolumeISCSI = ({ iscsi, secret }: VolumeISCSIProps) => {
               {iscsi.secretRef.name}
             </Link>
           ) : (
-            <p>{iscsi?.secretRef?.name || EMPTY_TEXT_PLACEHOLDER}</p>
+            iscsi?.secretRef?.name
           )
         }
       />

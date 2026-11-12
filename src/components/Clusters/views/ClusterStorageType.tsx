@@ -31,6 +31,7 @@ export function ClusterStorageType({ clusterConfig }: ClusterStorageTypeProps) {
         showTitleDescription={showDescription}
         description={tooltipContent}
         ariaTitle={storageType}
+        inline
       />
     </div>
   );

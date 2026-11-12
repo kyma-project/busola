@@ -172,6 +172,23 @@ export const getResourceListPath = (resource: any) => {
   return `${basePath}?fieldSelector=metadata.name=${encodeURIComponent(resourceName)}`;
 };
 
+// Probe the cluster for a single CR instance; returns the live resource or null.
+export const fetchLiveResource = async (
+  fetch: (opts: { relativeUrl: string }) => Promise<Response>,
+  resource: any,
+): Promise<any> => {
+  if (!resource) return null;
+  try {
+    const response = await fetch({
+      relativeUrl: getResourceListPath(resource),
+    });
+    const list = await response.json();
+    return list?.items?.[0] ?? null;
+  } catch {
+    return null;
+  }
+};
+
 export const findChannel = (
   module: { name: string; channels: { version: string; channel: string }[] },
   channel: string,
@@ -192,6 +209,20 @@ export const findExtension = (resourceKind: string, extensions: any) => {
       jsyaml.load(ext.data.general, { json: true }) || ({} as any);
     return extensionResource.kind === resourceKind;
   });
+};
+
+// Returns the identifier the detail renderer (useGetCRbyPath) resolves an
+// extension by — its `general.urlPath`, falling back to pluralize(kind).
+// Navigation must emit the SAME identifier or the CR pane stays empty.
+export const getExtensionUrlPath = (extension: any, kind?: string): string => {
+  const fallback = pluralize((kind || '').toLowerCase());
+  if (!extension?.data?.general) return fallback;
+  try {
+    const general = jsyaml.load(extension.data.general, { json: true }) as any;
+    return general?.urlPath || fallback;
+  } catch {
+    return fallback;
+  }
 };
 
 export const findModuleStatus = (
@@ -313,13 +344,17 @@ export const createModulePartialPath = (
   },
   moduleCrd?: { metadata?: { name: string } },
   isNamespaced?: boolean,
+  extensionUrlPath?: string,
 ) => {
+  // Extension segment must match useGetCRbyPath's key (urlPath), not the bare plural.
+  const extensionSegment =
+    extensionUrlPath ||
+    pluralize(moduleStatusResource?.kind || '').toLowerCase();
+
   // Taking info for path from extension or crd
   const pathName = `${
     hasExtension
-      ? `${pluralize(moduleStatusResource?.kind || '').toLowerCase()}/${
-          moduleStatusResource?.metadata?.name
-        }`
+      ? `${extensionSegment}/${moduleStatusResource?.metadata?.name}`
       : `${moduleCrd?.metadata?.name}/${moduleStatusResource?.metadata?.name}`
   }`;
 

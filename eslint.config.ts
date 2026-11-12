@@ -17,6 +17,7 @@ export default defineConfig(
       '**/__mocks__/**',
       '**/build/**',
       'backend/core-ui',
+      'backend/backend-production.cjs',
       'backend/backend-production.js',
     ]),
 
@@ -75,6 +76,15 @@ export default defineConfig(
         // Misc
         'no-unused-vars': 'off',
         'prefer-const': 'error',
+      },
+    },
+
+    {
+      files: ['backend/**/*.{js,cjs,mjs}', 'kyma/**/*.{js,cjs,mjs}'],
+      languageOptions: {
+        globals: {
+          ...globals.node,
+        },
       },
     },
   ],

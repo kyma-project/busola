@@ -45,6 +45,16 @@ function useEventUrl(resourceType: string, clusterView?: boolean) {
   };
 }
 
+type EventSeverity = 'Error' | 'Warning' | 'Normal';
+
+function getEventSeverity(e: {
+  type?: string;
+  message?: string;
+}): EventSeverity {
+  if (e.type !== 'Warning') return 'Normal';
+  return e.message?.startsWith('Error') ? 'Error' : 'Warning';
+}
+
 export function EventList({
   defaultType,
   hideInvolvedObjects,
@@ -93,7 +103,7 @@ export function EventList({
                 aria-label="Error"
                 icon={<Icon accessibleName="Error" name="error" />}
                 state="Negative"
-                title={e.type}
+                title={t('node-details.error')}
               />
             ) : (
               <ObjectStatus
@@ -105,11 +115,11 @@ export function EventList({
             )
           ) : (
             <ObjectStatus
-              aria-label="Normal"
+              aria-label="Information"
               className="bsl-icon-m"
-              icon={<Icon accessibleName="Normal" name="information" />}
+              icon={<Icon accessibleName="Information" name="information" />}
               state="Information"
-              title={e.type}
+              title={t('node-details.information')}
             />
           )}
         </div>
@@ -194,10 +204,9 @@ export function EventList({
       filter={async (res) => {
         const typeFilter =
           displayType.key === EVENT_MESSAGE_TYPE.ALL.key ||
-          res.type === displayType.key;
+          getEventSeverity(res) === displayType.key;
 
         const propsFilter = filter ? await filter(res) : true;
-
         return typeFilter && propsFilter;
       }}
       searchSettings={{

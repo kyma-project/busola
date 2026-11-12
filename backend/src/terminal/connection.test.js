@@ -1,4 +1,4 @@
-import { WebSocketConnection, HEARTBEAT_INTERVAL_MS } from './connection';
+import { WebSocketConnection, HEARTBEAT_INTERVAL_MS } from './connection.js';
 import { WebSocket } from 'ws';
 
 // Stub the `ws` module; each `new WebSocket()` is the upstream k8s socket.

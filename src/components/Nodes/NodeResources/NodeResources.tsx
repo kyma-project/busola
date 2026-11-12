@@ -28,7 +28,7 @@ export function NodeResources({ metrics, resources }: NodeResourcesProps) {
   const { t } = useTranslation();
   const { cpu, memory } = metrics || {};
 
-  return cpu && memory ? (
+  return cpu?.usage != null && memory?.usage != null ? (
     <>
       <ResourceRadialChart
         tooltipInfo={t('cluster-overview.statistics.cpu-usage-tooltip')}

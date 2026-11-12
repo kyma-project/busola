@@ -15,7 +15,7 @@ import {
   ModuleTemplateListType,
   ModuleTemplateType,
 } from 'components/Modules/support';
-import { Button, Form, FormItem, MessageStrip } from '@ui5/webcomponents-react';
+import { Button, Form, MessageStrip } from '@ui5/webcomponents-react';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { UnsavedMessageBox } from 'shared/components/UnsavedMessageBox/UnsavedMessageBox';
 import { createPortal } from 'react-dom';
@@ -190,7 +190,7 @@ export default function CommunityModulesEdit() {
 
   if (isCommunityModulesEnabled) {
     return (
-      <section>
+      <section className="sap-margin-top-small">
         <UI5Panel
           testid={'community-modules-edit'}
           title={''}
@@ -212,44 +212,40 @@ export default function CommunityModulesEdit() {
           }
         >
           <div className={'community-modules'}>
-            <Form
-              className="resource-form ui5-content-density-compact"
-              labelSpan="S0 M0 L0 XL0"
-              layout="S1 M1 L1 XL1"
-            >
-              <FormItem>
-                <div className={'sap-margin-bottom-tiny'}>
-                  <CollapsibleSection
-                    defaultTitleType
-                    defaultOpen={true}
-                    className="collapsible-margins"
-                    title={t('modules.community.title')}
+            <div className={'sap-margin-bottom-tiny'}>
+              <CollapsibleSection
+                defaultTitleType
+                defaultOpen={true}
+                className="collapsible-margins"
+                title={t('modules.community.title')}
+              >
+                {communityModulesToDisplay.length !== 0 ? (
+                  <Form
+                    className="resource-form ui5-content-density-compact"
+                    layout="S1 M2 L2 XL2"
+                    labelSpan="S12 M4 L4 XL4"
                   >
-                    {communityModulesToDisplay.length !== 0 ? (
-                      <div className={'edit'}>
-                        {communityModulesToDisplay.map((module, idx) => (
-                          <CommunityModuleVersionSelect
-                            key={`${module.name}+${idx}`}
-                            module={module}
-                            onChange={handleVersionChange}
-                          />
-                        ))}
-                      </div>
-                    ) : installedCommunityModules.length !== 0 ? (
-                      <Spinner />
-                    ) : (
-                      <MessageStrip
-                        design="Critical"
-                        hideCloseButton
-                        className="sap-margin-top-small"
-                      >
-                        {t('modules.community.no-modules-installed')}
-                      </MessageStrip>
-                    )}
-                  </CollapsibleSection>
-                </div>
-              </FormItem>
-            </Form>
+                    {communityModulesToDisplay.map((module, idx) => (
+                      <CommunityModuleVersionSelect
+                        key={`${module.name}+${idx}`}
+                        module={module}
+                        onChange={handleVersionChange}
+                      />
+                    ))}
+                  </Form>
+                ) : installedCommunityModules.length !== 0 ? (
+                  <Spinner />
+                ) : (
+                  <MessageStrip
+                    design="Critical"
+                    hideCloseButton
+                    className="sap-margin-top-small"
+                  >
+                    {t('modules.community.no-modules-installed')}
+                  </MessageStrip>
+                )}
+              </CollapsibleSection>
+            </div>
           </div>
         </UI5Panel>
         {createPortal(<UnsavedMessageBox />, document.body)}

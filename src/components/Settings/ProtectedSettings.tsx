@@ -1,4 +1,5 @@
-import { Label, Switch } from '@ui5/webcomponents-react';
+import { Switch } from '@ui5/webcomponents-react';
+import { FormField } from 'shared/ResourceForm/components/FormField';
 import { useFeature } from 'hooks/useFeature';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
@@ -19,23 +20,17 @@ export default function ProtectedSettings() {
   if (!protectedResourcesEnabled) return null;
 
   return (
-    <div className="settings-row">
-      <Label
-        for="disable-resource-protection-switch"
-        className="bsl-has-color-status-4"
-      >
-        {t('settings.general.disableResourceProtection')}
-      </Label>
-      <div>
+    <FormField
+      label={t('settings.general.disableResourceProtection')}
+      input={(props) => (
         <Switch
-          id="disable-resource-protection-switch"
-          accessibleName={t('settings.general.disableResourceProtection')}
+          {...props}
           checked={disableResourceProtection}
           onChange={() =>
             setDisableResourceProtection((prevState) => !prevState)
           }
         />
-      </div>
-    </div>
+      )}
+    />
   );
 }

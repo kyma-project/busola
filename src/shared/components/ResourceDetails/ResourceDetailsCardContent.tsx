@@ -13,8 +13,8 @@ import {
   Text,
   Panel,
   FormGroup,
-  Form,
 } from '@ui5/webcomponents-react';
+import { ResourceDetailsForm } from './ResourceDetailsForm';
 
 type ResourceDetailsCardContentProps = {
   resource: K8sResource & Resource;
@@ -42,12 +42,6 @@ export const ResourceDetailsCardContent = ({
   hideAnnotations,
 }: ResourceDetailsCardContentProps) => {
   const { t } = useTranslation();
-
-  const totalItems =
-    2 + // Resource Type + Age always present
-    (!hideLastUpdate ? 1 : 0) +
-    filteredDetailsCardColumns.length;
-  const needsPadding = totalItems % 2 !== 0;
 
   const labelsAnnotationsHeader = () => {
     if (!hideLabels && !hideAnnotations)
@@ -89,7 +83,7 @@ export const ResourceDetailsCardContent = ({
     <ResourceDetailsCard
       titleText={t('cluster-overview.headers.metadata')}
       content={
-        <div>
+        <>
           <FormItem
             key="Resource Type"
             labelContent={
@@ -105,6 +99,7 @@ export const ResourceDetailsCardContent = ({
                   showTitleDescription={showTitleDescription}
                   description={description}
                   ariaTitle={resource?.kind}
+                  inline
                 />
               )}
             </div>
@@ -137,12 +132,7 @@ export const ResourceDetailsCardContent = ({
               <div>{col.value(resource)}</div>
             </FormItem>
           ))}
-          {needsPadding && (
-            <FormItem key="padding" labelContent={<Label />}>
-              <span />
-            </FormItem>
-          )}
-        </div>
+        </>
       }
       bottomContent={
         hideLabels && hideAnnotations ? null : (
@@ -151,14 +141,10 @@ export const ResourceDetailsCardContent = ({
             className="labels-annotations-panel"
             collapsed
           >
-            <Form
-              className="labels-annotations-panel__content"
-              labelSpan="S12 M4 L4 XL4"
-              layout="S2 M2 L2 XL2"
-            >
+            <ResourceDetailsForm className="labels-annotations-panel__content">
               {!hideLabels && labels}
               {!hideAnnotations && annotations}
-            </Form>
+            </ResourceDetailsForm>
           </Panel>
         )
       }

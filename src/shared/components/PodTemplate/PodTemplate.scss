@@ -6,25 +6,7 @@
   container-type: inline-size;
 }
 
-.pod-template-row {
-  display: grid;
-  grid-template-columns: 1fr 5fr;
-  grid-auto-flow: row;
-  gap: 40px;
-}
-
-.pod-template-row-label {
-  text-align: end;
-}
-
-@container (max-width: 650px) {
-  .pod-template-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 5px;
-  }
-
-  .pod-template-row-label {
-    text-align: start;
-  }
+.code-block,
+.pod-template ui5-table-cell {
+  overflow-wrap: anywhere;
 }

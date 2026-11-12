@@ -54,7 +54,7 @@ jobs:
       - uses: actions/setup-node@v7
         name: Setup node
         with:
-          node-version: 24
+          node-version: 26
       - name: Setup Busola
         shell: bash
         run: |

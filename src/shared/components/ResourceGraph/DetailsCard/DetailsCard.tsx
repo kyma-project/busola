@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router';
 import { useUrl } from 'hooks/useUrl';
 import { useAtom, useAtomValue } from 'jotai';
 
-import { Button } from '@ui5/webcomponents-react';
+import { Button, FormItem, Label, Text } from '@ui5/webcomponents-react';
 import { Labels } from 'shared/components/Labels/Labels';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
 import { K8sResource } from 'types';
 import { allNodesAtomSync } from 'state/navigation/allNodesAtom';
 import pluralize from 'pluralize';
@@ -33,18 +34,24 @@ export function DetailsCard({
         <p className="resource-kind">{resource.kind}</p>
       </header>
       <section className="details-content">
-        <p className="title">
-          {t('common.headers.created')}&nbsp;
-          <span>
-            <ReadableCreationTimestamp
-              timestamp={resource.metadata.creationTimestamp}
-            />
-          </span>
-        </p>
-        <div>
-          <p className="title">{t('common.headers.labels')}</p>
-          <Labels labels={resource.metadata.labels} />
-        </div>
+        <ResourceDetailsForm layout="S1 M1 L1 XL1">
+          <FormItem
+            labelContent={
+              <Label showColon>{t('common.headers.created')}</Label>
+            }
+          >
+            <Text>
+              <ReadableCreationTimestamp
+                timestamp={resource.metadata.creationTimestamp}
+              />
+            </Text>
+          </FormItem>
+          <FormItem
+            labelContent={<Label showColon>{t('common.headers.labels')}</Label>}
+          >
+            <Labels labels={resource.metadata.labels} />
+          </FormItem>
+        </ResourceDetailsForm>
       </section>
       <div className="buttons-wrapper">
         <Button

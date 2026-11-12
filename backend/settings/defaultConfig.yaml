@@ -16,3 +16,6 @@ config:
         skipAuth: false
     ALLOW_PRIVATE_IPS:
       isEnabled: false
+    COMMUNITY_PROXY:
+      maxResponseBytes: 1048576 # 1 MB
+      fetchTimeoutMs: 10000 # 10 s

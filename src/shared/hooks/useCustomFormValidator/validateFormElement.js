@@ -14,6 +14,8 @@ export function validateFormElement(element, isRequired) {
     (!isRequired && element?.children.length === 0);
   let isPartiallyFilled = false; // tracks if at least one child has been filled out (important for the validation of non-required FormGroups)
   let isComplete = true; // tracks if all children have been filled out (important for the validation of non-required GenericLists)
+  const emptyFields = [];
+  const invalidFormatFields = [];
 
   for (const child of element?.children || []) {
     if (isRequired && !isValid) break;
@@ -33,10 +35,33 @@ export function validateFormElement(element, isRequired) {
         const contentParent =
           contentWrapper?.parentNode === content ? contentWrapper : content;
 
-        const { valid, filled, complete } = validateFormElement(
-          contentParent,
-          required,
-        );
+        const {
+          valid,
+          filled,
+          complete,
+          emptyFields: nestedEmpty,
+          invalidFormatFields: nestedInvalidFormat,
+        } = validateFormElement(contentParent, required);
+        const sectionName = child.getAttribute('accessible-name');
+        const prefix = (field) =>
+          sectionName ? `${sectionName} > ${field}` : field;
+        const beforeEmpty = emptyFields.length;
+        const beforeInvalidFormat = invalidFormatFields.length;
+        emptyFields.push(...(nestedEmpty?.map(prefix) || []));
+        invalidFormatFields.push(...(nestedInvalidFormat?.map(prefix) || []));
+        // Fallback: if the section failed but no specific fields were identified, report the section itself
+        if (
+          !valid &&
+          sectionName &&
+          emptyFields.length === beforeEmpty &&
+          invalidFormatFields.length === beforeInvalidFormat
+        ) {
+          if (!filled) {
+            emptyFields.push(sectionName);
+          } else {
+            invalidFormatFields.push(sectionName);
+          }
+        }
         // GenericList
         if (child.querySelector('.actions')?.innerText === 'Add') {
           isPartiallyFilled = isPartiallyFilled || filled || !valid;
@@ -80,15 +105,23 @@ export function validateFormElement(element, isRequired) {
       default:
         continue;
     }
-    const { valid, filled, required } = validationFunction(...args);
+    const { valid, filled, required, label, reason } = validationFunction(
+      ...args,
+    );
     isValid = isValid && valid;
     isPartiallyFilled = isPartiallyFilled || filled;
     isComplete = isComplete && filled;
     isRequired = required || isRequired;
+    if (!valid && label) {
+      if (reason === 'empty') emptyFields.push(label);
+      else invalidFormatFields.push(label);
+    }
   }
   return {
     valid: isValid || (!isRequired && !isPartiallyFilled),
     filled: isPartiallyFilled || isComplete,
     complete: isComplete,
+    emptyFields,
+    invalidFormatFields,
   };
 }

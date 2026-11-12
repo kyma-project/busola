@@ -1,22 +1,29 @@
-form .resource-form {
-  overflow: auto;
-  flex-grow: 1;
-  order: 2;
-}
-
 .resource-form {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-
-  ui5-form-item::part(layout) {
-    grid-template-columns: none;
-    padding-inline: 1rem;
-  }
-
   &::part(layout) {
     padding: 0;
+    // 1fr = minmax(auto, 1fr): the widest item would set the minimum for all
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  // + UI5's .25rem content padding = 1rem from the edge (spec)
+  & > ui5-form-item::part(layout) {
+    padding: 0 0.75rem;
+  }
+
+  & > ui5-form-item:not(.form-field__info) {
+    padding-top: 0.5rem;
+  }
+
+  @container (width < 600px) {
+    // Spec: ~5px below a stacked label; UI5's default has none
+    ui5-form-item:not(.form-field__info) {
+      --ui5-form-item-label-padding: 0.625rem 0.25rem 0.3125rem 0.25rem;
+    }
+
+    // Cancels UI5's .5rem bottom margin on every even child
+    & > :nth-child(2n) {
+      margin-bottom: 0;
+    }
   }
 
   form {
@@ -45,7 +52,19 @@ form .resource-form {
     margin: -3px 0;
   }
 
-  .form-field + .resource-form__collapsible-section {
+  // Outside a UI5 Form (dialogs): no responsive container, and fr tracks would
+  // inflate a content-sized dialog — keep stacked
+  form > ui5-form-item {
+    --ui5-form-item-layout: 1fr;
+    --ui5-form-item-label-justify: start;
+
+    &:not(.form-field__info) {
+      --ui5-form-item-label-padding: 0.625rem 0.25rem 0.3125rem 0.25rem;
+    }
+  }
+
+  .form-field + .resource-form__collapsible-section,
+  .form-field__info + .resource-form__collapsible-section {
     padding-top: 16px;
   }
 
@@ -62,6 +81,10 @@ form .resource-form {
   .card-shadow {
     overflow: visible;
   }
+}
+
+.resource-form--panel {
+  isolation: isolate;
 }
 
 .resource-form--panel,
