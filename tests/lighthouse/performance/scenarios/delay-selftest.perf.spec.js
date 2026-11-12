@@ -35,6 +35,12 @@ async function coldLoad(page) {
 // constant. The only difference between the two runs is a 1500ms delay injected
 // into the fixture route, so the measured load must grow by (most of) that delay.
 test('injected fixture delay increases measured timing', async ({ page }) => {
+  // Throwaway warmup: without this the fast run is cold-JIT while the slow run
+  // benefits from hot-compiled React paths, partially cancelling the injected delay.
+  await installPodRoutes(page, { count: 50, delayMs: 0 });
+  await coldLoad(page);
+
+  await page.unroute('**/backend/**');
   await installPodRoutes(page, { count: 50, delayMs: 0 });
   const fast = await coldLoad(page);
 
