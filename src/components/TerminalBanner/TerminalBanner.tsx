@@ -1,10 +1,9 @@
 import { Button } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { useSetAtom } from 'jotai';
 import { useFeature } from 'hooks/useFeature';
 import { configFeaturesNames } from 'state/types';
-import { showTerminalAtom } from 'state/showTerminalAtom';
 import { FeatureCardBanner } from 'shared/components/FeatureCard/FeatureCard';
+import { useLaunchTerminal } from 'components/App/BusolaTerminal/useLaunchTerminal';
 
 const TERMINAL_DOCS_URL =
   'https://help.sap.com/docs/btp/sap-business-technology-platform/kyma-dashboard-terminal';
@@ -15,16 +14,13 @@ const TERMINAL_BLOGPOST_URL =
 export function TerminalBanner() {
   const { t } = useTranslation();
   const { isEnabled } = useFeature(configFeaturesNames.TERMINAL);
-  const setShowTerminal = useSetAtom(showTerminalAtom);
+  const launch = useLaunchTerminal();
 
   if (!isEnabled) return null;
 
   const buttons = (
     <>
-      <Button
-        design="Emphasized"
-        onClick={() => setShowTerminal((prev) => ({ ...prev, isOpen: true }))}
-      >
+      <Button design="Emphasized" onClick={launch}>
         {t('terminal.banner.open')}
       </Button>
       <Button
