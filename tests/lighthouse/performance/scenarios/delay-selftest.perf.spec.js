@@ -35,18 +35,35 @@ async function coldLoad(page) {
 // constant. The only difference between the two runs is a 1500ms delay injected
 // into the fixture route, so the measured load must grow by (most of) that delay.
 test('injected fixture delay increases measured timing', async ({ page }) => {
-  // Throwaway warmup: without this the fast run is cold-JIT while the slow run
-  // benefits from hot-compiled React paths, partially cancelling the injected delay.
+  // One full cold load: establishes the cluster session in localStorage and warms
+  // the JIT. Not measured — it's the setup for the two measurements below.
   await installPodRoutes(page, { count: 50, delayMs: 0 });
   await coldLoad(page);
 
+  // connectCluster persists the session to localStorage ("Local storage" option),
+  // so direct navigation to the pods URL works without re-connecting. Measuring
+  // just the pods navigation (not the full reconnect cycle) eliminates the
+  // ±1000ms CI variance from the k3d cluster round-trips and multi-step wizard.
+  const m = page.url().match(/\/cluster\/([^/?#]+)/);
+  if (!m)
+    throw new Error(`could not extract cluster name from URL: ${page.url()}`);
+  const podsUrl = `${ADDRESS}/cluster/${m[1]}/namespaces/default/pods`;
+
+  await page.goto(`${ADDRESS}/cluster/${m[1]}`);
   await page.unroute('**/backend/**');
   await installPodRoutes(page, { count: 50, delayMs: 0 });
-  const fast = await coldLoad(page);
+  const fast = await measureUntil(page, {
+    action: async () => page.goto(podsUrl),
+    readyScript: LOAD_READY,
+  });
 
+  await page.goto(`${ADDRESS}/cluster/${m[1]}`);
   await page.unroute('**/backend/**');
   await installPodRoutes(page, { count: 50, delayMs: 1500 });
-  const slow = await coldLoad(page);
+  const slow = await measureUntil(page, {
+    action: async () => page.goto(podsUrl),
+    readyScript: LOAD_READY,
+  });
 
   expect(
     slow,
