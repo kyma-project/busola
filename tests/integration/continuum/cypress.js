@@ -35,22 +35,30 @@ const setUpContinuum = (configFilePath) => {
     },
   );
 
-  return cy
-    .readFile(configFilePath)
-    .then((configFileContents) => window.eval(configFileContents))
-    .window()
-    .then((windowUnderTest) =>
-      cy
-        .readFile(accessEngineFilePath)
-        .then((accessEngineFileContents) =>
-          windowUnderTest.eval(
-            Continuum.createInjectableAccessEngineCode(
-              accessEngineFileContents,
+  return cy.env(['ACC_AMP_TOKEN']).then(({ ACC_AMP_TOKEN }) =>
+    cy
+      .readFile(configFilePath)
+      .then((configFileContents) => {
+        window.eval(configFileContents);
+        if (window.LevelAccess_AccessContinuumConfiguration) {
+          window.LevelAccess_AccessContinuumConfiguration.ampApiToken =
+            ACC_AMP_TOKEN;
+        }
+      })
+      .window()
+      .then((windowUnderTest) =>
+        cy
+          .readFile(accessEngineFilePath)
+          .then((accessEngineFileContents) =>
+            windowUnderTest.eval(
+              Continuum.createInjectableAccessEngineCode(
+                accessEngineFileContents,
+              ),
             ),
-          ),
-        )
-        .then(() => Continuum.setUp(null, configFilePath, windowUnderTest)),
-    );
+          )
+          .then(() => Continuum.setUp(null, configFilePath, windowUnderTest)),
+      ),
+  );
 };
 
 const runAllAccessibilityTests = () =>
@@ -119,40 +127,42 @@ const submitAccessibilityConcernsToAMP = (
   reportTitle = 'Busola ACC',
   moduleName,
 ) => {
-  if (!Cypress.env('ACC_AMP_TOKEN')) {
-    return;
-  }
-  const accessibilityConcerns = Continuum.getAccessibilityConcerns();
-  if (accessibilityConcerns.length <= 0) {
-    return;
-  }
+  cy.env(['ACC_AMP_TOKEN']).then(({ ACC_AMP_TOKEN }) => {
+    if (!ACC_AMP_TOKEN) {
+      return;
+    }
+    const accessibilityConcerns = Continuum.getAccessibilityConcerns();
+    if (accessibilityConcerns.length <= 0) {
+      return;
+    }
 
-  cy.log('Submitting accessibility concerns to AMP...');
+    cy.log('Submitting accessibility concerns to AMP...');
 
-  cy.title({ log: false }).then((pageTitle) => {
-    cy.url({ log: false }).then({ timeout: 30000 }, async (pageUrl) => {
-      const ampReportingService = Continuum.AMPReportingService;
+    cy.title({ log: false }).then((pageTitle) => {
+      cy.url({ log: false }).then({ timeout: 30000 }, async (pageUrl) => {
+        const ampReportingService = Continuum.AMPReportingService;
 
-      await ampReportingService.setActiveOrganization(10274); // ID of AMP organization to submit test results to
-      await ampReportingService.setActiveAsset(38893); // ID of AMP asset to submit test results to
-      await ampReportingService.setActiveReportByName(reportTitle);
-      await ampReportingService.setActiveModuleByName(
-        moduleName ?? pageTitle,
-        pageUrl,
-      );
-      await ampReportingService.setActiveReportManagementStrategy(
-        ReportManagementStrategy.APPEND,
-      );
-      await ampReportingService.setActiveModuleManagementStrategy(
-        ModuleManagementStrategy.APPEND,
-      );
-      await ampReportingService.submitAccessibilityConcernsToAMP(
-        accessibilityConcerns,
-      );
+        await ampReportingService.setActiveOrganization(10274); // ID of AMP organization to submit test results to
+        await ampReportingService.setActiveAsset(38893); // ID of AMP asset to submit test results to
+        await ampReportingService.setActiveReportByName(reportTitle);
+        await ampReportingService.setActiveModuleByName(
+          moduleName ?? pageTitle,
+          pageUrl,
+        );
+        await ampReportingService.setActiveReportManagementStrategy(
+          ReportManagementStrategy.APPEND,
+        );
+        await ampReportingService.setActiveModuleManagementStrategy(
+          ModuleManagementStrategy.APPEND,
+        );
+        await ampReportingService.submitAccessibilityConcernsToAMP(
+          accessibilityConcerns,
+        );
 
-      cy.log(
-        `Accessibility concerns submitted to AMP: ${ampReportingService.activeModule.getAMPUrl()}`,
-      );
+        cy.log(
+          `Accessibility concerns submitted to AMP: ${ampReportingService.activeModule.getAMPUrl()}`,
+        );
+      });
     });
   });
 };

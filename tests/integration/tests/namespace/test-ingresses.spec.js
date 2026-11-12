@@ -30,7 +30,7 @@ context('Test Ingresses', () => {
 
     cy.openCreate();
 
-    cy.wrap(loadIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
+    cy.wrap(loadIngress(NAME, Cypress.expose('NAMESPACE_NAME'))).then(
       (INGRESS_CONFIG) => {
         const INGRESS = JSON.stringify(INGRESS_CONFIG);
         cy.pasteToMonaco(INGRESS);
