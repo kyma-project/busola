@@ -3,6 +3,7 @@ import {
   Icon,
   Dialog,
   Bar,
+  Form,
   ListDomRef,
 } from '@ui5/webcomponents-react';
 import { useRef, useState } from 'react';
@@ -128,7 +129,9 @@ export function Settings() {
             contentBackgroundDesign="Transparent"
           >
             <Tab key="language-settings" text={t('settings.language.title')}>
-              <LanguageSettings />
+              <Form labelSpan="S12 M4 L4 XL4" layout="S1 M1 L1 XL1">
+                <LanguageSettings />
+              </Form>
             </Tab>
           </TabContainer>
         </VerticalTabs.Content>
@@ -141,12 +144,12 @@ export function Settings() {
               key="cluster-interaction"
               text={t('settings.general.interaction.title')}
             >
-              <div>
+              <Form labelSpan="S12 M4 L4 XL4" layout="S1 M1 L1 XL1">
                 <NamespaceSettings />
                 <ConfirmationSettings />
                 <ProtectedSettings />
                 <EditViewSettings />
-              </div>
+              </Form>
             </Tab>
             <Tab
               key="resource-validation"
@@ -155,10 +158,10 @@ export function Settings() {
               <ResourceValidationSettings />
             </Tab>
             <Tab key="other-settings" text={t('settings.other.title')}>
-              <div>
+              <Form labelSpan="S12 M4 L4 XL4" layout="S1 M1 L1 XL1">
                 <OtherSettings />
                 <BannerSettings />
-              </div>
+              </Form>
             </Tab>
           </TabContainer>
         </VerticalTabs.Content>

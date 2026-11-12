@@ -48,7 +48,7 @@ context('Test resource validation', () => {
       .parentsUntil('[role=tab]')
       .click({ force: true });
 
-    cy.contains('.resource-validation-container', 'Validate Resources')
+    cy.contains('.form-field', 'Validate Resources')
       .find('ui5-switch')
       .find('div[role="switch"')
       .click({ force: true });
@@ -68,7 +68,7 @@ context('Test resource validation', () => {
 
     cy.contains('warnings').should('not.exist');
 
-    cy.contains('.resource-validation-container', 'Validate Resources')
+    cy.contains('.form-field', 'Validate Resources')
       .find('ui5-switch')
       .find('div[role="switch"')
       .click({ force: true });
