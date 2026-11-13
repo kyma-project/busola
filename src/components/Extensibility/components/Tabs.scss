@@ -1,0 +1,9 @@
+.extensibility-tab__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  // UI5 scrolls the tab content, which would clip the bottom border.
+  padding: 1rem;
+}

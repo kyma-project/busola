@@ -1,5 +1,6 @@
 import { Form } from '@ui5/webcomponents-react';
 import { Widget } from './Widget';
+import 'shared/components/ResourceDetails/ResourceDetailsCard.scss';
 import './Columns.scss';
 
 interface ColumnsProps {
@@ -16,9 +17,10 @@ export function Columns({ structure, ...props }: ColumnsProps) {
   if (allFormGroups) {
     return (
       <Form
-        className="extensibility-columns"
+        className="resource-card-layout extensibility-columns"
         layout="S1 M2 L2 XL2"
         labelSpan="S12 M4 L4 XL4"
+        itemSpacing="Large"
         data-testid="extensibility-columns"
       >
         {children.map((child: any) => (
