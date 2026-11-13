@@ -13,6 +13,7 @@ import {
   useGetTranslation,
 } from '../helpers';
 import { Widget } from './Widget';
+import 'shared/components/ResourceDetails/ResourceDetailsCard.scss';
 import './FormGroup.scss';
 import { HintButton } from 'shared/components/HintButton/HintButton';
 
@@ -121,7 +122,7 @@ export function FormGroup({
 
   return (
     <Form
-      className="extensibility-read-form-group"
+      className="resource-card-layout extensibility-read-form-group"
       layout="S1 M1 L1 XL1"
       labelSpan="S12 M4 L4 XL4"
       itemSpacing="Large"

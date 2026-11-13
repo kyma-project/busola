@@ -22,6 +22,11 @@
   }
 }
 
+// Outside a card, values would inherit the page's larger font size.
+.resource-card-layout {
+  font-size: var(--sapFontSize);
+}
+
 // Spec: 1rem from header to first row; UI5 adds 1.5rem.
 .resource-card-layout::part(column) {
   padding-top: 0;
@@ -53,6 +58,12 @@
   // The value cell adds 0.25rem; the label supplies the rest of the 1rem gap.
   .resource-card-layout ui5-form-item::part(label) {
     padding-inline-end: 0.75rem;
+  }
+
+  // UI5 pads the label cell 0.125rem from the top but not the value cell, so
+  // with top alignment the label text would sit lower than the value's.
+  .resource-card-layout ui5-form-item::part(content) {
+    padding-top: 0.125rem;
   }
 }
 
