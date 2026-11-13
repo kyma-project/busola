@@ -47,4 +47,24 @@ describe('ResourceDetailsForm', () => {
 
     cy.get('ui5-form-group').should('have.length', 2);
   });
+
+  it('supports a single-column layout without form padding', () => {
+    cy.mount(
+      <ResourceDetailsForm layout="S1 M1 L1 XL1" className="no-padding">
+        {['a', 'b'].map(item)}
+      </ResourceDetailsForm>,
+    );
+
+    cy.get('ui5-form').should('have.attr', 'layout', 'S1 M1 L1 XL1');
+    cy.get('ui5-form-group').should('have.length', 1);
+    cy.get('ui5-form-group').children().should('have.length', 2);
+    cy.get('ui5-form')
+      .shadow()
+      .find('[part="layout"]')
+      .should('have.css', 'padding', '0px');
+    cy.get('ui5-form')
+      .shadow()
+      .find('[part="column"]')
+      .should('have.css', 'padding', '0px');
+  });
 });

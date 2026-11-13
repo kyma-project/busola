@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
-import { Label, Button } from '@ui5/webcomponents-react';
+import { Button } from '@ui5/webcomponents-react';
+import { FormField } from 'shared/ResourceForm/components/FormField';
 import { dismissedBannersAtom } from 'state/settings/dismissedBannersAtom';
 
 export default function BannerSettings() {
@@ -8,19 +9,18 @@ export default function BannerSettings() {
   const [dismissedBanners, setDismissedBanners] = useAtom(dismissedBannersAtom);
 
   return (
-    <div className="settings-row">
-      <Label className="bsl-has-color-status-4">
-        {t('settings.general.dismissed-banners')}
-      </Label>
-      <div>
+    <FormField
+      label={t('settings.general.dismissed-banners')}
+      input={({ className: _className, ...props }) => (
         <Button
+          {...props}
           design="Default"
           disabled={dismissedBanners.length === 0}
           onClick={() => setDismissedBanners([])}
         >
           {t('settings.general.restore-banners')}
         </Button>
-      </div>
-    </div>
+      )}
+    />
   );
 }

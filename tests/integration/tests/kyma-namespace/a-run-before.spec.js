@@ -37,11 +37,11 @@ context('Create Namespace', () => {
       .find('ui5-input[accessible-name="Namespace name"]:visible')
       .find('input')
       .should('not.be.disabled', { timeout: 5000 })
-      .type(Cypress.env('NAMESPACE_NAME'));
+      .type(Cypress.expose('NAMESPACE_NAME'));
 
     cy.saveChanges('Create');
 
-    cy.contains('ui5-title', Cypress.env('NAMESPACE_NAME')).should(
+    cy.contains('ui5-title', Cypress.expose('NAMESPACE_NAME')).should(
       'be.visible',
     );
 

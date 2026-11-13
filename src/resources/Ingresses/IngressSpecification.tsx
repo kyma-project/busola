@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { Tokens } from 'shared/components/Tokens';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -21,10 +22,12 @@ export const IngressSpecification = ({
         accessibleName={t('common.accessible-name.specification')}
       >
         {resource.spec.ingressClassName && (
-          <LayoutPanelRow
-            name={t('ingresses.labels.ingress-class-name')}
-            value={resource.spec.ingressClassName}
-          />
+          <ResourceDetailsForm>
+            <ResourceDetailsFormItem
+              label={t('ingresses.labels.ingress-class-name')}
+              value={resource.spec.ingressClassName}
+            />
+          </ResourceDetailsForm>
         )}
         {resource.spec?.tls && (
           <GenericList

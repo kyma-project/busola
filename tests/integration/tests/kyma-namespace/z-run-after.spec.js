@@ -11,7 +11,7 @@ context('Clean up Namespace', () => {
   it('Delete the Namespace (step 1)', () => {
     cy.navigateTo('Namespaces');
 
-    cy.deleteFromGenericList('Namespace', Cypress.env('NAMESPACE_NAME'), {
+    cy.deleteFromGenericList('Namespace', Cypress.expose('NAMESPACE_NAME'), {
       clearSearch: false,
       checkIfResourceIsRemoved: false,
       selectSearchResult: true,

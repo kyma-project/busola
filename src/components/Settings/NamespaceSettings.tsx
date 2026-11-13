@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
-import { Label, Switch } from '@ui5/webcomponents-react';
+import { Switch } from '@ui5/webcomponents-react';
+import { FormField } from 'shared/ResourceForm/components/FormField';
 import { showHiddenNamespacesAtom } from 'state/settings/showHiddenNamespacesAtom';
 
 export default function NamespaceSettings() {
@@ -14,21 +15,15 @@ export default function NamespaceSettings() {
   };
 
   return (
-    <div className="settings-row">
-      <Label
-        for="show-hidden-namespaces-switch"
-        className="bsl-has-color-status-4"
-      >
-        {t('settings.general.showHiddenNamespaces')}
-      </Label>
-      <div>
+    <FormField
+      label={t('settings.general.showHiddenNamespaces')}
+      input={(props) => (
         <Switch
-          id="show-hidden-namespaces-switch"
-          accessibleName={t('settings.general.showHiddenNamespaces')}
+          {...props}
           checked={showHiddenNamespaces}
           onChange={toggleVisibility}
         />
-      </div>
-    </div>
+      )}
+    />
   );
 }

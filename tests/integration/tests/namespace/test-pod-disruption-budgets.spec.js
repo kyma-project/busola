@@ -26,12 +26,12 @@ context('Test Pod Disruption Budgets', () => {
 
     cy.openCreate();
 
-    cy.wrap(loadPDB(PDB_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
-      (PDB_CONFIG) => {
-        const PDB = JSON.stringify(PDB_CONFIG);
-        cy.pasteToMonaco(PDB);
-      },
-    );
+    cy.wrap(
+      loadPDB(PDB_NAME, Cypress.expose('NAMESPACE_NAME'), FILE_NAME),
+    ).then((PDB_CONFIG) => {
+      const PDB = JSON.stringify(PDB_CONFIG);
+      cy.pasteToMonaco(PDB);
+    });
 
     cy.saveChanges('Create');
   });

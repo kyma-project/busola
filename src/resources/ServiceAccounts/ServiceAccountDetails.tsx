@@ -12,7 +12,8 @@ import { TokenRequestModal } from './TokenRequestModal/TokenRequestModal';
 import { ResourceDescription } from 'resources/ServiceAccounts';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 const ServiceAccountSecrets = (serviceAccount: Record<string, any>) => {
@@ -94,14 +95,16 @@ export default function ServiceAccountDetails(
       title={t('common.headers.configuration')}
       accessibleName={t('common.accessible-name.configuration')}
     >
-      <LayoutPanelRow
-        name={t('service-accounts.headers.auto-mount-token')}
-        value={
-          <ServiceAccountTokenStatus
-            automount={value.automountServiceAccountToken}
-          />
-        }
-      />
+      <ResourceDetailsForm>
+        <ResourceDetailsFormItem
+          label={t('service-accounts.headers.auto-mount-token')}
+          value={
+            <ServiceAccountTokenStatus
+              automount={value.automountServiceAccountToken}
+            />
+          }
+        />
+      </ResourceDetailsForm>
     </UI5Card>
   );
   const headerActions = [

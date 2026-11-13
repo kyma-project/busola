@@ -1,5 +1,6 @@
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { useTranslation } from 'react-i18next';
 import { useUrl } from 'hooks/useUrl';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
@@ -24,52 +25,56 @@ export function ReleaseDataPanel({
       accessibleName={t('helm-releases.accessible-name.chart-information')}
       keyComponent="chart-information"
     >
-      {secret?.metadata && (
-        <LayoutPanelRow
-          name={t('secrets.name_singular')}
-          value={
-            <Link
-              url={namespaceUrl(`secrets/${secret.metadata.name}`, {
-                namespace: secret.metadata.namespace,
-              })}
-            >
-              {secret.metadata.name}
-            </Link>
-          }
+      <ResourceDetailsForm>
+        {secret?.metadata && (
+          <ResourceDetailsFormItem
+            label={t('secrets.name_singular')}
+            value={
+              <Link
+                url={namespaceUrl(`secrets/${secret.metadata.name}`, {
+                  namespace: secret.metadata.namespace,
+                })}
+              >
+                {secret.metadata.name}
+              </Link>
+            }
+          />
+        )}
+        <ResourceDetailsFormItem
+          label={t('helm-releases.headers.chart-version')}
+          value={chart?.metadata?.version}
         />
-      )}
-      <LayoutPanelRow
-        name={t('helm-releases.headers.chart-version')}
-        value={chart?.metadata?.version}
-      />
-      <LayoutPanelRow
-        name={t('helm-releases.headers.chart-name')}
-        value={chart?.metadata?.name}
-      />
-      {chart?.metadata?.description && (
-        <LayoutPanelRow
-          name={t('helm-releases.headers.chart-description')}
-          value={chart.metadata.description}
+        <ResourceDetailsFormItem
+          label={t('helm-releases.headers.chart-name')}
+          value={chart?.metadata?.name}
         />
-      )}
-      {chart?.metadata?.appVersion && (
-        <LayoutPanelRow
-          name={t('helm-releases.headers.app-version')}
-          value={chart?.metadata?.appVersion}
-        />
-      )}
-      {info.first_deployed && (
-        <LayoutPanelRow
-          name={t('helm-releases.headers.first-deployed')}
-          value={<ReadableCreationTimestamp timestamp={info.first_deployed} />}
-        />
-      )}
-      {info.last_deployed && (
-        <LayoutPanelRow
-          name={t('helm-releases.headers.last-deployed')}
-          value={<ReadableCreationTimestamp timestamp={info.last_deployed} />}
-        />
-      )}
+        {chart?.metadata?.description && (
+          <ResourceDetailsFormItem
+            label={t('helm-releases.headers.chart-description')}
+            value={chart.metadata.description}
+          />
+        )}
+        {chart?.metadata?.appVersion && (
+          <ResourceDetailsFormItem
+            label={t('helm-releases.headers.app-version')}
+            value={chart?.metadata?.appVersion}
+          />
+        )}
+        {info.first_deployed && (
+          <ResourceDetailsFormItem
+            label={t('helm-releases.headers.first-deployed')}
+            value={
+              <ReadableCreationTimestamp timestamp={info.first_deployed} />
+            }
+          />
+        )}
+        {info.last_deployed && (
+          <ResourceDetailsFormItem
+            label={t('helm-releases.headers.last-deployed')}
+            value={<ReadableCreationTimestamp timestamp={info.last_deployed} />}
+          />
+        )}
+      </ResourceDetailsForm>
     </UI5Card>
   );
 }

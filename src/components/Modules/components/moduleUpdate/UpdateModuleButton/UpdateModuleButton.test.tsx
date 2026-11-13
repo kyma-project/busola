@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { act, render, screen, fireEvent } from '@testing-library/react';
+import { act, render, screen, fireEvent, within } from '@testing-library/react';
 
 vi.mock('react-i18next', async () => {
   const actual: any = await vi.importActual('react-i18next');
@@ -109,13 +109,36 @@ describe('UpdateModuleButton', () => {
     ).toBeInTheDocument();
   });
 
-  it('shows current and new version in the dialog', async () => {
+  it('shows current and new version in a single-column display form', async () => {
     render(<UpdateModuleButton {...defaultProps} />);
     await act(async () => {
       fireEvent.click(screen.getByText('kyma-modules.update'));
     });
-    expect(screen.getByText('1.0.0')).toBeInTheDocument();
-    expect(screen.getByText('2.0.0')).toBeInTheDocument();
+    const currentVersionItem = screen
+      .getByText('1.0.0')
+      .closest<HTMLElement>('ui5-form-item')!;
+    const latestVersionItem = screen
+      .getByText('2.0.0')
+      .closest<HTMLElement>('ui5-form-item')!;
+
+    expect(
+      within(currentVersionItem).getByText(
+        'modules.community.update.current-version',
+      ),
+    ).toHaveAttribute('show-colon');
+    expect(
+      within(latestVersionItem).getByText(
+        'modules.community.update.latest-version',
+      ),
+    ).toHaveAttribute('show-colon');
+
+    const form = currentVersionItem.closest<HTMLElement>('ui5-form')!;
+    expect(form).toHaveAttribute('layout', 'S1 M1 L1 XL1');
+    expect(form).toHaveAttribute('label-span', 'S12 M4 L4 XL4');
+    expect(form).toHaveAttribute('item-spacing', 'Large');
+    expect(form).toHaveClass('no-padding');
+    expect(form.querySelectorAll('ui5-form-group')).toHaveLength(1);
+    expect(form).toContainElement(latestVersionItem);
   });
 
   it('closes the dialog when Cancel is clicked', async () => {

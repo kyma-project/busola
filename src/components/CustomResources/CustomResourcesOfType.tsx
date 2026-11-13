@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { Form, FormGroup, FormItem, Label } from '@ui5/webcomponents-react';
+import { FlexBox, Label } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { DynamicPageComponent } from 'shared/components/DynamicPageComponent/DynamicPageComponent';
@@ -77,25 +77,16 @@ export default function CustomResourcesOfType({
           />
         }
       >
-        <Form layout="S1 M1 L1 XL1">
-          <FormGroup>
-            <FormItem
-              labelContent={
-                <Label showColon>
-                  {t('custom-resource-definitions.name_singular')}
-                </Label>
-              }
-            >
-              <Link
-                url={clusterUrl(
-                  `customresourcedefinitions/${crd?.metadata?.name}`,
-                )}
-              >
-                {crd?.metadata?.name}
-              </Link>
-            </FormItem>
-          </FormGroup>
-        </Form>
+        <FlexBox alignItems="Baseline" style={{ gap: '0.25rem' }}>
+          <Label showColon>
+            {t('custom-resource-definitions.name_singular')}
+          </Label>
+          <Link
+            url={clusterUrl(`customresourcedefinitions/${crd?.metadata?.name}`)}
+          >
+            {crd?.metadata?.name}
+          </Link>
+        </FlexBox>
       </DynamicPageComponent>
       {createPortal(<YamlUploadDialog />, document.body)}
     </>

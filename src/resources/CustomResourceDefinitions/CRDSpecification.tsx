@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { Tokens } from 'shared/components/Tokens';
 import { UI5Panel } from 'shared/components/UI5Panel/UI5Panel';
+import { FormGroup } from '@ui5/webcomponents-react';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 export const CRDSpecification = ({ spec }: { spec: any }) => {
@@ -14,49 +16,49 @@ export const CRDSpecification = ({ spec }: { spec: any }) => {
       title={t('common.headers.specification')}
       accessibleName={t('common.accessible-name.specification')}
     >
-      <LayoutPanelRow
-        name={t('custom-resource-definitions.headers.scope')}
-        value={spec?.scope}
-      />
-      <LayoutPanelRow
-        name={t('custom-resource-definitions.headers.categories')}
-        value={<Tokens tokens={spec.names?.categories} />}
-      />
-      <LayoutPanelRow
-        name={t('custom-resource-definitions.headers.group')}
-        value={spec?.group}
-      />
-
-      <UI5Panel
-        title={t('custom-resource-definitions.headers.conversion')}
-        accessibleName={`${t('custom-resource-definitions.headers.conversion')} panel`}
-      >
+      <ResourceDetailsForm>
+        <FormGroup>
+          <ResourceDetailsFormItem
+            label={t('custom-resource-definitions.headers.scope')}
+            value={spec?.scope}
+          />
+          <ResourceDetailsFormItem
+            label={t('custom-resource-definitions.headers.categories')}
+            value={<Tokens tokens={spec.names?.categories} />}
+          />
+          <ResourceDetailsFormItem
+            label={t('custom-resource-definitions.headers.group')}
+            value={spec?.group}
+          />
+        </FormGroup>
         {spec.conversion && (
-          <>
-            <LayoutPanelRow
-              name={t('custom-resource-definitions.headers.strategy')}
+          <FormGroup
+            headerText={t('custom-resource-definitions.headers.conversion')}
+          >
+            <ResourceDetailsFormItem
+              label={t('custom-resource-definitions.headers.strategy')}
               value={spec.conversion.strategy}
             />
             {spec.conversion?.webhook && (
               <>
-                <LayoutPanelRow
-                  name={t('custom-resource-definitions.headers.service-name')}
+                <ResourceDetailsFormItem
+                  label={t('custom-resource-definitions.headers.service-name')}
                   value={spec.conversion?.webhook?.clientConfig?.service?.name}
                 />
-                <LayoutPanelRow
-                  name={t(
+                <ResourceDetailsFormItem
+                  label={t(
                     'custom-resource-definitions.headers.service-namespace',
                   )}
                   value={
                     spec.conversion?.webhook?.clientConfig?.service?.namespace
                   }
                 />
-                <LayoutPanelRow
-                  name={t('custom-resource-definitions.headers.service-port')}
+                <ResourceDetailsFormItem
+                  label={t('custom-resource-definitions.headers.service-port')}
                   value={spec.conversion?.webhook?.clientConfig?.service?.port}
                 />
-                <LayoutPanelRow
-                  name={t(
+                <ResourceDetailsFormItem
+                  label={t(
                     'custom-resource-definitions.headers.conversion-review-versions',
                   )}
                   value={
@@ -69,9 +71,9 @@ export const CRDSpecification = ({ spec }: { spec: any }) => {
                 />
               </>
             )}
-          </>
+          </FormGroup>
         )}
-      </UI5Panel>
+      </ResourceDetailsForm>
       {spec?.versions && (
         <GenericList
           title={t('custom-resource-definitions.headers.versions')}

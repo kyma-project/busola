@@ -69,11 +69,11 @@ context('Accessibility test Pizza Orders', () => {
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
-    if (Cypress.env('IS_PR') === 'true')
+    if (Cypress.expose('IS_PR') === 'true')
       cy.log('Skipping AMP submission for PR');
     else
       cy.submitAccessibilityConcernsToAMP(
-        Cypress.env('AMP_REPORT_NAME'),
+        Cypress.expose('AMP_REPORT_NAME'),
         'Pizza Orders list',
       );
   });
@@ -83,11 +83,11 @@ context('Accessibility test Pizza Orders', () => {
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
-    if (Cypress.env('IS_PR') === 'true')
+    if (Cypress.expose('IS_PR') === 'true')
       cy.log('Skipping AMP submission for PR');
     else
       cy.submitAccessibilityConcernsToAMP(
-        Cypress.env('AMP_REPORT_NAME'),
+        Cypress.expose('AMP_REPORT_NAME'),
         'Pizza Orders create',
       );
   });
@@ -99,11 +99,11 @@ context('Accessibility test Pizza Orders', () => {
 
     cy.runAllAccessibilityTests().printAccessibilityTestResults();
 
-    if (Cypress.env('IS_PR') === 'true')
+    if (Cypress.expose('IS_PR') === 'true')
       cy.log('Skipping AMP submission for PR');
     else
       cy.submitAccessibilityConcernsToAMP(
-        Cypress.env('AMP_REPORT_NAME'),
+        Cypress.expose('AMP_REPORT_NAME'),
         'Pizza Orders details',
       );
   });
