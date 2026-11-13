@@ -1,5 +1,4 @@
-// A row outside a Card or Panel sits on whatever is behind it, for example the
-// page, so its form must not paint a background of its own.
+// Outside a Card or Panel, the row sits on the page background.
 .extensibility-inline-row {
   --sapGroup_ContentBackground: transparent;
 }

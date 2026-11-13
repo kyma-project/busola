@@ -28,7 +28,6 @@ type InlineWidgetProps = {
   [key: string]: any;
 };
 
-// Rows outside a Card or Panel each get a one-row display form.
 export function InlineWidget(props: InlineWidgetProps) {
   return (
     <ResourceDetailsForm
