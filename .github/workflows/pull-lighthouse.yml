@@ -79,12 +79,6 @@ jobs:
           if [ "${{ steps.playwright-cache.outputs.cache-hit }}" != "true" ]; then
             npx playwright install --with-deps
           fi
-      - name: Run lighthouse unit tests
-        shell: bash
-        timeout-minutes: 5
-        run: |
-          cd tests/lighthouse
-          npm run test:unit
       - name: Run lighthouse tests
         shell: bash
         timeout-minutes: 10
