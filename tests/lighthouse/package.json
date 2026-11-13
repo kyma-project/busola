@@ -4,15 +4,19 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "test:local": "NODE_OPTIONS='--no-experimental-strip-types' LOCAL=1 npx playwright test",
-    "test": "NODE_OPTIONS='--no-experimental-strip-types' npx playwright test"
+    "test:local": "NODE_OPTIONS='--no-experimental-strip-types' LOCAL=1 npx playwright test lighthouse.spec.js",
+    "test": "NODE_OPTIONS='--no-experimental-strip-types' npx playwright test lighthouse.spec.js",
+    "test:performance:local": "NODE_OPTIONS='--no-experimental-strip-types' LOCAL=1 npx playwright test performance.spec.js",
+    "test:performance": "NODE_OPTIONS='--no-experimental-strip-types' npx playwright test performance.spec.js",
+    "test:unit": "vitest run"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "lighthouse": "^13.3.0",
     "playwright": "^1.60.0",
     "playwright-lighthouse": "^4.0.0",
-    "@playwright/browser-chromium": "^1.60.0"
+    "@playwright/browser-chromium": "^1.60.0",
+    "vitest": "^4.1.8"
   },
   "author": "",
   "license": "ISC"

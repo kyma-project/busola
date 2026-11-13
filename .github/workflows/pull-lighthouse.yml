@@ -79,6 +79,12 @@ jobs:
           if [ "${{ steps.playwright-cache.outputs.cache-hit }}" != "true" ]; then
             npx playwright install --with-deps
           fi
+      - name: Run lighthouse unit tests
+        shell: bash
+        timeout-minutes: 5
+        run: |
+          cd tests/lighthouse
+          npm run test:unit
       - name: Run lighthouse tests
         shell: bash
         timeout-minutes: 10
@@ -86,13 +92,21 @@ jobs:
           k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
           cd tests/lighthouse
           npm run "test"
+      - name: Run lighthouse performance tests
+        shell: bash
+        timeout-minutes: 20
+        run: |
+          k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
+          cd tests/lighthouse
+          npm run "test:performance"
       - name: Uploads artifacts
         uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
           name: playwright-${{ github.job }}
           path: |
-            tests/lighthouse/test-results/
+            tests/lighthouse/test-results/lighthouse-performance/
+            tests/lighthouse/test-results/lighthouse-reports/
           retention-days: 30
       - name: Upload Busola logs
         uses: actions/upload-artifact@v7

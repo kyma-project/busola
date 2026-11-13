@@ -8,6 +8,7 @@ export default mergeConfig(
     test: {
       environment: 'jsdom',
       include: ['**/?(*.)+(test).[jt]s?(x)'],
+      exclude: ['**/node_modules/**', '**/dist/**', 'tests/lighthouse/**'],
       plugins: [viteTsconfigPaths()],
       globals: true, // Enable globals for Vitest
       setupFiles: ['./src/setupTests.js'],
