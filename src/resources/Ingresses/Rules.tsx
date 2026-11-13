@@ -3,7 +3,8 @@ import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { FormGroup } from '@ui5/webcomponents-react';
 import { useAtomValue } from 'jotai';
 import { activeNamespaceIdAtom } from 'state/activeNamespaceIdAtom';
 import { useUrl } from 'hooks/useUrl';
@@ -27,17 +28,17 @@ const Port = ({ serviceName, port, services }: PortProps) => {
     <span>{serviceName || EMPTY_TEXT_PLACEHOLDER}</span>
   );
 
-  if (port?.number) {
-    return port.name ? (
-      `${port.name}:${port.number}`
-    ) : (
-      <>
-        {serviceLink}:{port.number}
-      </>
-    );
-  } else {
+  // A service backend refers to its port either by number or by name.
+  const portValue = port?.number ?? port?.name;
+  if (!portValue) {
     return EMPTY_TEXT_PLACEHOLDER;
   }
+
+  return (
+    <>
+      {serviceLink}:{portValue}
+    </>
+  );
 };
 
 interface RulesProps {
@@ -93,43 +94,39 @@ export const Rules = ({ rules }: RulesProps) => {
   };
 
   return (
-    <>
-      {rules.map((rule, i) => (
-        <UI5Card
-          key={`rule-${i}`}
-          title={t('ingresses.labels.rules')}
-          accessibleName={t('ingresses.accessible-name.rules')}
-        >
-          {rule.host && (
-            <LayoutPanelRow
-              name={t('ingresses.labels.host')}
-              value={rule.host}
+    <UI5Card
+      title={t('ingresses.labels.rules')}
+      accessibleName={t('ingresses.accessible-name.rules')}
+    >
+      {/* One column: each rule's group holds its paths table. */}
+      <ResourceDetailsForm layout="S1 M1 L1 XL1">
+        {rules.map((rule, i) => (
+          // A rule without a host matches every host; kubectl shows it as *.
+          <FormGroup key={`rule-${i}`} headerText={rule.host ?? '*'}>
+            <GenericList
+              title={t('ingresses.labels.paths')}
+              headerRenderer={() => [
+                t('ingresses.labels.path'),
+                t('ingresses.labels.path-type'),
+                t('ingresses.labels.backend'),
+              ]}
+              rowRenderer={(path: any) => [
+                path.path,
+                path.pathType,
+                <Backend
+                  key={path.path}
+                  backend={path.backend}
+                  services={services}
+                />,
+              ]}
+              entries={rule?.http?.paths}
+              searchSettings={{
+                showSearchField: false,
+              }}
             />
-          )}
-          <GenericList
-            key={`rules${i}`}
-            title={t('ingresses.labels.paths')}
-            headerRenderer={() => [
-              t('ingresses.labels.path'),
-              t('ingresses.labels.path-type'),
-              t('ingresses.labels.backend'),
-            ]}
-            rowRenderer={(path: any) => [
-              path.path,
-              path.pathType,
-              <Backend
-                key={path.path}
-                backend={path.backend}
-                services={services}
-              />,
-            ]}
-            entries={rule?.http?.paths}
-            searchSettings={{
-              showSearchField: false,
-            }}
-          />
-        </UI5Card>
-      ))}
-    </>
+          </FormGroup>
+        ))}
+      </ResourceDetailsForm>
+    </UI5Card>
   );
 };
