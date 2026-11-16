@@ -35,11 +35,9 @@ import {
 import { useNotifyLoginFailure } from './useLoginFailureNotification';
 import {
   restartSSOLogin,
-  ssoDataAtom,
   ssoLoginStoppedAtom,
+  useIsSSOReady,
 } from './ssoDataAtom';
-import { configFeaturesNames } from './types';
-import { useFeature } from 'hooks/useFeature';
 import { configurationAtom } from './configuration/configurationAtom';
 
 export const hasNonOidcAuth = (
@@ -243,14 +241,13 @@ export function useAuthHandler() {
   const setRenewing = useSetAtom(renewingAtom);
   const reauth = useReauthenticate({ notifyError: notification.notifyError });
   const notifyLoginFailure = useNotifyLoginFailure();
-  const ssoData = useAtomValue(ssoDataAtom);
+  const isSSOReady = useIsSSOReady();
   const ssoLoginStopped = useAtomValue(ssoLoginStoppedAtom);
-  const isSSOEnabled = useFeature(configFeaturesNames.SSO_LOGIN)?.isEnabled;
   const configuration = useAtomValue(configurationAtom);
 
   useEffect(() => {
     if (!configuration?.features) return;
-    if (!ssoData && isSSOEnabled) {
+    if (!isSSOReady) {
       if (!ssoLoginStopped) return;
       // The cluster login can't finish without an SSO session, so start the SSO login again.
       // No prompt: 'login' as on Retry: the user only opened a cluster, and the loop guard catches a repeat.
@@ -383,7 +380,7 @@ export function useAuthHandler() {
     setLastFetched(null);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster, ssoData, ssoLoginStopped, isSSOEnabled, configuration]);
+  }, [cluster, isSSOReady, ssoLoginStopped, configuration]);
 
   useEffect(() => {
     return () => {
