@@ -11,9 +11,6 @@ Busola connected to a real (k3d) cluster:
   only on a broken audit or an invalid/missing measurement — never on a slow
   score. Performance-budget gates are intentionally deferred.
 
-Pure helper logic (metric extraction/validation, median aggregation, report
-assembly, sanitization) lives in `lib/` and is covered by Vitest unit tests.
-
 ## Layout
 
 | Path                       | Purpose                                                      |
@@ -23,20 +20,11 @@ assembly, sanitization) lives in `lib/` and is covered by Vitest unit tests.
 | `lib/metrics.js`           | Extract + validate the five metrics from a Lighthouse result |
 | `lib/aggregate.js`         | Median / per-metric summary across samples                   |
 | `lib/report.js`            | Metadata, per-sample & summary reports, report sanitization  |
-| `lib/*.test.js`            | Vitest unit tests for the helpers                            |
 | `fixtures/kubeconfig.yaml` | The cluster the audits connect to (git-ignored)              |
 
 ## Running locally
 
-### 1. Unit tests (no cluster needed)
-
-```bash
-cd tests/lighthouse
-npm install
-npm run test:unit
-```
-
-### 2. Browser audits (need a running Busola + cluster)
+### Browser audits (need a running Busola + cluster)
 
 Audits run against a **production build**, matching CI. Bring one up (from the
 repo root — this mirrors `.github/scripts/setup_local_busola.sh`):
