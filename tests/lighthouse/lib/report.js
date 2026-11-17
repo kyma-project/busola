@@ -12,11 +12,8 @@ export const resolveSampleCount = (raw, fallback = 3) => {
     return fallback;
   }
   const text = `${raw}`.trim();
-  if (!Number.isInteger(Number(text))) {
-    throw new Error(`invalid sample count: ${raw} (expected a positive integer)`);
-  }
-  const count = Number.parseInt(text, 10);
-  if (count <= 0) {
+  const count = Number(text);
+  if (!Number.isInteger(count) || count <= 0) {
     throw new Error(`invalid sample count: ${raw} (expected a positive integer)`);
   }
   return count;

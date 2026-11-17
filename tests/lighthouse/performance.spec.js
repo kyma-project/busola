@@ -163,16 +163,26 @@ async function runSample({
     );
 
     const client = await context.newCDPSession(page);
-    await client.send('Network.clearBrowserCache');
 
     await page.goto(url);
 
     await verify(page);
 
+    // Evict the HTTP cache AFTER the warm-up navigation and immediately before
+    // the measured audit, so Lighthouse's navigation is a genuine cold load.
+    // The setCacheDisabled toggle mirrors Lighthouse's own clearBrowserCaches,
+    // evicting the in-memory cache as well as disk.
+    await client.send('Network.clearBrowserCache');
+    await client.send('Network.setCacheDisabled', { cacheDisabled: true });
+    await client.send('Network.setCacheDisabled', { cacheDisabled: false });
+
     const result = await playAudit({
       page,
       port: DEBUG_PORT,
       thresholds: { performance: 0 }, // reporting-only: score never gates
+      // disableStorageReset stays true so Lighthouse leaves localStorage (the
+      // injected cluster auth) untouched — we own cache clearing above, done
+      // right before this audit, so the measured navigation is still cold.
       opts: { disableStorageReset: true },
       config: PERF_CONFIG,
       reports: {
@@ -209,7 +219,6 @@ test('Busola performance audits (clusters + cluster overview)', async () => {
 
   const settings = {
     ...PERF_SETTINGS,
-    disableStorageReset: true,
     cacheCleared: true,
     samples: SAMPLES,
   };
