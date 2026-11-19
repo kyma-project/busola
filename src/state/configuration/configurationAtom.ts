@@ -12,7 +12,7 @@ import { ConfigFeatureList } from '../types';
 import { apiGroupAtom } from '../discoverability/apiGroupsAtom';
 import { getFeatures } from './getFeatures';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
-import { getConfigDir } from 'shared/utils/env';
+import { Envs, getEnvs, toConfigDir } from 'shared/utils/env';
 
 const apiGroupAtomSync = unwrap(apiGroupAtom, (prev) => prev ?? null);
 
@@ -64,7 +64,8 @@ export const getConfigs = async (fetchFn: FetchFn | undefined) => {
       await defaultConfigResponse.text(),
     ) as Config;
 
-    const configDir = await getConfigDir();
+    const envs = await getEnvs();
+    const configDir = toConfigDir(envs.get(Envs.ENVIRONMENT));
 
     let configMapResponse: ConfigMapResponse;
     if (fetchFn) {
@@ -100,12 +101,23 @@ export const getConfigs = async (fetchFn: FetchFn | undefined) => {
       }
     };
 
-    return mergeWith(
+    const config = mergeWith(
       defaultParams?.config,
       configParams?.config,
       filterOutProtectedFeatures(mapParams?.config),
       customizer,
     ) as Configuration;
+
+    if (
+      envs.get(Envs.SSO_LOGIN_BYPASS) === 'true' &&
+      config?.features?.SSO_LOGIN
+    ) {
+      config.features.SSO_LOGIN = {
+        ...config.features.SSO_LOGIN,
+        isEnabled: false,
+      };
+    }
+    return config;
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
     return null;
