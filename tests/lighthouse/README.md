@@ -53,7 +53,7 @@ used for measurement.
 
 ## Reading the report
 
-The run writes to `test-results/performance/`:
+`npm run test:performance` writes to `test-results/performance/`:
 
 - `performance.json` — per-sample timings, medians, dataset sizes, and the build
   version (git sha) + browser version.
