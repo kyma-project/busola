@@ -63,6 +63,22 @@ i18next
     },
   });
 
+// Gardener login redirects to the bare-origin redirect_uri (the one registered
+// with the IdP), so its OIDC callback lands at "/". Bounce it to the
+// /gardener-login route (which finishes the login), preserving the OIDC query.
+// Guarded by a one-shot marker set in GardenerLogin, so normal SSO/cluster
+// callbacks (which never set it) are untouched. Runs before React mounts.
+const gardenerCallbackParams = new URLSearchParams(window.location.search);
+if (
+  sessionStorage.getItem('gardener-oidc-return') &&
+  gardenerCallbackParams.has('code') &&
+  gardenerCallbackParams.has('state') &&
+  window.location.pathname !== '/gardener-login'
+) {
+  sessionStorage.removeItem('gardener-oidc-return');
+  window.location.replace('/gardener-login' + window.location.search);
+}
+
 savePreviousPath();
 
 initIntendedPathFromUrl();
