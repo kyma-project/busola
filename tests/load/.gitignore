@@ -1,0 +1,6 @@
+# Load-test outputs and secrets — never commit
+reports/
+fixtures/
+.certs/
+.bin/
+*.pem

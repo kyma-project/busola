@@ -1,0 +1,17 @@
+{
+  "ratePerMinute": 600,
+  "durationSec": 30,
+  "warmupSec": 5,
+  "maxWorkers": 50,
+  "timeoutMs": 10000,
+  "backendUrl": "http://localhost:3001",
+  "authMode": "token",
+  "upstream": {
+    "port": 8443,
+    "payloadSize": "small"
+  },
+  "endpoints": [
+    { "path": "/api/v1/namespaces/default/pods", "kind": "list" },
+    { "path": "/api/v1/namespaces/default/pods/pod-0", "kind": "detail" }
+  ]
+}
