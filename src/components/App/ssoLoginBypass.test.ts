@@ -11,9 +11,7 @@ import { useLoginWithKubeconfigID } from './useLoginWithKubeconfigID';
 const managerMock = vi.hoisted(() => ({
   getUser: vi.fn().mockResolvedValue(null),
   signinRedirect: vi.fn().mockResolvedValue(undefined),
-  signinRedirectCallback: vi.fn(),
   clearStaleState: vi.fn().mockResolvedValue(undefined),
-  events: { addUserUnloaded: vi.fn() },
 }));
 
 vi.mock('oidc-client-ts', () => ({
@@ -22,7 +20,6 @@ vi.mock('oidc-client-ts', () => ({
       return managerMock;
     }
   },
-  User: class {},
 }));
 
 const RESPONSES: Record<string, string> = {
