@@ -15,6 +15,17 @@ const LOAD_READY =
   "document.querySelectorAll('ui5-table-row').length > 0 && " +
   "document.body.innerText.includes('perf-pod-')";
 
+// Readiness after the WARM navigation into the pods list. Stricter than
+// LOAD_READY because the warm phase starts from another list (Deployments) that
+// — via the same pod mock — can render pod rows too. We therefore require:
+//   - the URL is actually the /pods route (not /deployments),
+//   - more than one row is present (the full, unfiltered list), which a stale or
+//     search-filtered page cannot satisfy.
+const WARM_LOAD_READY =
+  "location.pathname.endsWith('/pods') && " +
+  "document.querySelectorAll('ui5-table-row').length > 1 && " +
+  "document.body.innerText.includes('perf-pod-')";
+
 // Readiness after sort: modal closed and perf-pod-0999 is the first visible row.
 // Sorting descending by name makes perf-pod-0999 appear first; this confirms
 // the sort actually reordered the data, not just dismissed the dialog.
@@ -29,6 +40,21 @@ const SORT_READY =
 const SEARCH_READY =
   "document.querySelectorAll('ui5-table-row').length === 1 && " +
   "document.body.innerText.includes('perf-pod-0500')";
+
+// Clear the search input and wait until the filter is actually lifted (the full
+// list returns). UI5 ui5-input keeps its value in shadow DOM, so we focus it and
+// clear via keyboard the same way measureSearch types into it.
+async function clearSearch(page) {
+  const search = page.locator('ui5-input.search-input');
+  await search.click();
+  await page.keyboard.press('ControlOrMeta+A');
+  await page.keyboard.press('Delete');
+  await page.waitForFunction(
+    () => document.querySelectorAll('ui5-table-row').length > 1,
+    null,
+    { timeout: 15000 },
+  );
+}
 
 async function measureSort(page) {
   return measureUntil(page, {
@@ -47,11 +73,19 @@ async function measureSort(page) {
         .click({ force: true });
       // Sort descending by name so the fixture (ascending by default) is
       // genuinely reordered; SORT_READY then verifies perf-pod-0999 is first.
-      // sortBy=name is the default selection — clicking it again after the DESC
-      // radio causes a UI5 dialog re-render that makes it transiently not-visible,
-      // so we skip it and rely on the default.
+      //
+      // We click the LIST ROW (ui5-li-custom), not the ui5-radio-button inside it.
+      // The radio renders with a zero bounding rect (tab-index=-1, no intrinsic
+      // size) so Playwright reports it "not visible" indefinitely. The row is the
+      // real interaction target: SortModalPanel wires the List's onItemClick to
+      // read the selected order/name from the row, so clicking the row drives the
+      // sort exactly as a user would. sortBy=name is already the default selection,
+      // so only the order row needs clicking.
       await page
-        .locator('ui5-radio-button[name="sortOrder"][value="DESC"]')
+        .locator('ui5-li-custom')
+        .filter({
+          has: page.locator('ui5-radio-button[name="sortOrder"][value="DESC"]'),
+        })
         .click();
       await page
         .locator('ui5-button[design="Emphasized"]')
@@ -116,6 +150,13 @@ export async function collectResourceList(browser) {
     cold.sort.push(await measureSort(page));
     cold.search.push(await measureSearch(page));
 
+    // Clear the search filter before the warm phase. measureSearch leaves
+    // 'perf-pod-0500' in the shared search box, which (a) keeps the list filtered
+    // to a single row — so warm.sort could never surface perf-pod-0999 — and
+    // (b) keeps the text 'perf-pod-' in document.body.innerText on EVERY page,
+    // which would let the warm readiness predicate pass on the wrong page.
+    await clearSearch(page);
+
     // Warm: same context (HTTP cache primed), React still running on the pods
     // page. Navigate to Deployments (another Workloads sub-item) via sidebar
     // click — in-app React Router navigation, no JS context teardown.
@@ -127,13 +168,32 @@ export async function collectResourceList(browser) {
     await page.waitForURL(/\/namespaces\/default\/deployments\/?/, {
       timeout: 15000,
     });
+    // Wait for the sidebar to settle on the new selection before measuring the
+    // click back to Pods. Clicking Pods while the side-nav is still committing
+    // the Deployments selection drops the click (the nav never fires). This
+    // mirrors the repo's own navigateTo command, which asserts selected===true
+    // after each sidebar click.
+    await page.waitForFunction(
+      () =>
+        /** @type {any} */ (
+          document.querySelector(
+            'ui5-side-navigation-sub-item[text="Deployments"]',
+          )
+        )?.selected === true,
+      null,
+      { timeout: 15000 },
+    );
 
     // 1. Warm load: React Router navigation from Deployments to Pods.
+    // WARM_LOAD_READY (unlike LOAD_READY) asserts we are actually ON the /pods
+    // route and more than one row has rendered — a stale Deployments DOM (empty
+    // state has a single "no entries" row) cannot satisfy it, so the measurement
+    // reflects the real navigation.
     warm.load.push(
       await measureUntil(page, {
         action: async () =>
           page.locator('ui5-side-navigation-sub-item[text="Pods"]').click(),
-        readyScript: LOAD_READY,
+        readyScript: WARM_LOAD_READY,
       }),
     );
 
