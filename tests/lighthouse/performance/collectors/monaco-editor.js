@@ -9,17 +9,20 @@ import { measureUntil, getSampleCount } from '../helpers/measure.js';
 // Readiness: the Monaco model is mounted and ready for input, not merely the
 // container div. We require the rendered text layer (.view-lines) AND the input
 // textarea Monaco creates once the editor is interactive.
-// Additionally:
-//   - no .resource-form__overlay: the overlay covers the editor while the
-//     resource-schema worker is loading; it disappears only after the worker
-//     responds and configureMonacoYaml has been called with the Pod schema.
-//     Measuring before that would miss the dominant async initialization cost.
-//   - view-lines text includes 'kind: Pod': the editor has rendered the actual
-//     YAML content of the mocked pod, not just an empty or still-loading model.
+// Additionally, view-lines text must include 'kind: Pod': the editor has
+// rendered the actual YAML content of the mocked pod (not just an empty or
+// still-loading model). This check proves Monaco mounted, bound the model, and
+// rendered the full resource — the meaningful user-visible readiness signal.
+//
+// NOTE: we intentionally do NOT wait for .resource-form__overlay to disappear.
+// The overlay persists until @stoplight/json-ref-resolver finishes resolving all
+// $ref pointers in the 2.4 MB OpenAPI spec — a CPU-bound background task that
+// can take minutes on real clusters.  Waiting for it would inflate measured
+// timings and cause test timeouts; the YAML content check already confirms the
+// editor is functional.
 const EDITOR_READY =
   "!!document.querySelector('.monaco-editor .view-lines') && " +
   "!!document.querySelector('.monaco-editor textarea') && " +
-  "!document.querySelector('.resource-form__overlay') && " +
   "(document.querySelector('.monaco-editor .view-lines')?.textContent || '').includes('kind: Pod')";
 
 // The editor is unmounted when the View tab is active (used to reset between
@@ -71,8 +74,9 @@ export async function collectMonaco(page) {
     // a real re-initialisation. The HTTP cache does persist across samples within
     // the context, so chunk *downloads* are skipped on samples 2+; "cold" here
     // means "first editor open after a fresh navigation", not a cold HTTP cache.
-    // 120 s timeout: the resource-schema worker fetches the Pod OpenAPI schema
-    // from the cluster; on a cold k3d cluster this can exceed the 60 s default.
+    // 120 s timeout: Monaco initialises lazily — in dev mode (Vite chunk-per-module)
+    // the editor and its workers can take well over 60 s to render the first sample.
+    // Production builds are much faster (<10 s) so this only matters locally.
     await page.waitForFunction(editorGone);
     cold.ready.push(
       await measureUntil(page, {

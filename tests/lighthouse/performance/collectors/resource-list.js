@@ -33,16 +33,25 @@ const SEARCH_READY =
 async function measureSort(page) {
   return measureUntil(page, {
     action: async () => {
+      // Wait for the sort button to be fully enabled — UI5 Toolbar briefly marks
+      // buttons as disabled while computing overflow layout after a navigation.
+      await page
+        .locator(
+          'ui5-toolbar-button[accessible-name="open-sort-modal"]:not([disabled])',
+        )
+        .waitFor();
+      // force: true bypasses pointer-event interception from the ToolbarChildContainer
+      // wrapper that UI5 renders over button content during overflow layout.
       await page
         .locator('ui5-toolbar-button[accessible-name="open-sort-modal"]')
-        .click();
+        .click({ force: true });
       // Sort descending by name so the fixture (ascending by default) is
       // genuinely reordered; SORT_READY then verifies perf-pod-0999 is first.
+      // sortBy=name is the default selection — clicking it again after the DESC
+      // radio causes a UI5 dialog re-render that makes it transiently not-visible,
+      // so we skip it and rely on the default.
       await page
         .locator('ui5-radio-button[name="sortOrder"][value="DESC"]')
-        .click();
-      await page
-        .locator('ui5-radio-button[name="sortBy"][value="name"]')
         .click();
       await page
         .locator('ui5-button[design="Emphasized"]')
@@ -108,40 +117,22 @@ export async function collectResourceList(browser) {
     cold.search.push(await measureSearch(page));
 
     // Warm: same context (HTTP cache primed), React still running on the pods
-    // page. Navigate to Namespace Overview via sidebar click (in-app, not
-    // measured) so the warm load is a pure React Router route change — no JS
-    // context teardown, assets served from HTTP cache.
+    // page. Navigate to Deployments (another Workloads sub-item) via sidebar
+    // click — in-app React Router navigation, no JS context teardown.
+    // Using a sibling Workloads item keeps the Workloads group expanded, so
+    // the Pods sub-item remains directly clickable without any expand logic.
     await page
-      .locator('ui5-side-navigation-item[text="Namespace Overview"]')
+      .locator('ui5-side-navigation-sub-item[text="Deployments"]')
       .click();
-    await page.waitForURL(/\/namespaces\/default\/?$/, { timeout: 15000 });
+    await page.waitForURL(/\/namespaces\/default\/deployments\/?/, {
+      timeout: 15000,
+    });
 
-    // Expand Workloads in the sidebar if the Pods sub-item is not yet visible.
-    const podsSubItem = page.locator(
-      'ui5-side-navigation-sub-item[text="Pods"]',
-    );
-    if (!(await podsSubItem.isVisible())) {
-      await page.locator('ui5-side-navigation-item[text="Workloads"]').click();
-    }
-    // waitFor({ state: 'visible' }) is unreliable for UI5 shadow-DOM components:
-    // the host element can pass the check while still collapsed (zero bounding
-    // rect). Use waitForFunction to verify actual interactability before clicking.
-    await page.waitForFunction(
-      () => {
-        const el = document.querySelector(
-          'ui5-side-navigation-sub-item[text="Pods"]',
-        );
-        if (!el) return false;
-        const rect = el.getBoundingClientRect();
-        return rect.height > 0 && rect.width > 0;
-      },
-      { timeout: 10000 },
-    );
-
-    // 1. Warm load: React Router navigation from namespace overview to pods.
+    // 1. Warm load: React Router navigation from Deployments to Pods.
     warm.load.push(
       await measureUntil(page, {
-        action: async () => podsSubItem.click(),
+        action: async () =>
+          page.locator('ui5-side-navigation-sub-item[text="Pods"]').click(),
         readyScript: LOAD_READY,
       }),
     );
