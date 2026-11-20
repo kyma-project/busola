@@ -5,6 +5,7 @@ import { devices } from '@playwright/test';
 const config = {
   testDir: './performance',
   testMatch: ['**/*.perf.spec.js', 'helpers.spec.js'],
+  outputDir: 'test-results/performance',
   timeout: 180 * 1000,
   expect: { timeout: 20 * 1000 },
   retries: 0,

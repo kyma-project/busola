@@ -8,11 +8,19 @@ import { measureUntil, getSampleCount } from '../helpers/measure.js';
 
 // Readiness: the Monaco model is mounted and ready for input, not merely the
 // container div. We require the rendered text layer (.view-lines) AND the input
-// textarea Monaco creates once the editor is interactive — "editor visible" is
-// not the same as "ready for input".
+// textarea Monaco creates once the editor is interactive.
+// Additionally:
+//   - no .resource-form__overlay: the overlay covers the editor while the
+//     resource-schema worker is loading; it disappears only after the worker
+//     responds and configureMonacoYaml has been called with the Pod schema.
+//     Measuring before that would miss the dominant async initialization cost.
+//   - view-lines text includes 'kind: Pod': the editor has rendered the actual
+//     YAML content of the mocked pod, not just an empty or still-loading model.
 const EDITOR_READY =
   "!!document.querySelector('.monaco-editor .view-lines') && " +
-  "!!document.querySelector('.monaco-editor textarea')";
+  "!!document.querySelector('.monaco-editor textarea') && " +
+  "!document.querySelector('.resource-form__overlay') && " +
+  "(document.querySelector('.monaco-editor .view-lines')?.textContent || '').includes('kind: Pod')";
 
 // The editor is unmounted when the View tab is active (used to reset between
 // cold and warm so the warm measurement starts from a no-editor state).

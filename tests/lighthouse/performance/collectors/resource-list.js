@@ -15,11 +15,13 @@ const LOAD_READY =
   "document.querySelectorAll('ui5-table-row').length > 0 && " +
   "document.body.innerText.includes('perf-pod-')";
 
-// Readiness after sort: the sort modal has closed and pod rows are present.
+// Readiness after sort: modal closed and perf-pod-0999 is the first visible row.
+// Sorting descending by name makes perf-pod-0999 appear first; this confirms
+// the sort actually reordered the data, not just dismissed the dialog.
 const SORT_READY =
   "!document.querySelector('.sorting-modal[open]') && " +
   "document.querySelectorAll('ui5-table-row').length > 0 && " +
-  "document.body.innerText.includes('perf-pod-')";
+  "(document.querySelectorAll('ui5-table-row')[0]?.innerText || '').includes('perf-pod-0999')";
 
 // Readiness after search: exactly one row remains and it is the pod we searched
 // for. Only 1 of the 1000 generated names matches 'perf-pod-0500', so the list
@@ -28,82 +30,115 @@ const SEARCH_READY =
   "document.querySelectorAll('ui5-table-row').length === 1 && " +
   "document.body.innerText.includes('perf-pod-0500')";
 
-export async function collectResourceList(page) {
+async function measureSort(page) {
+  return measureUntil(page, {
+    action: async () => {
+      await page
+        .locator('ui5-toolbar-button[accessible-name="open-sort-modal"]')
+        .click();
+      // Sort descending by name so the fixture (ascending by default) is
+      // genuinely reordered; SORT_READY then verifies perf-pod-0999 is first.
+      await page
+        .locator('ui5-radio-button[name="sortOrder"][value="DESC"]')
+        .click();
+      await page
+        .locator('ui5-radio-button[name="sortBy"][value="name"]')
+        .click();
+      await page
+        .locator('ui5-button[design="Emphasized"]')
+        .filter({ hasText: 'OK' })
+        .click();
+    },
+    readyScript: SORT_READY,
+  });
+}
+
+async function measureSearch(page) {
+  return measureUntil(page, {
+    action: async () => {
+      const search = page.locator('ui5-input.search-input');
+      await search.click();
+      await page.keyboard.type('perf-pod-0500');
+    },
+    readyScript: SEARCH_READY,
+  });
+}
+
+export async function collectResourceList(browser) {
   const samples = getSampleCount();
   const cold = { load: [], sort: [], search: [] };
   const warm = { load: [], sort: [], search: [] };
-  await installPodRoutes(page, { count: LARGE_LIST_SIZE });
+
+  // Setup: run connectCluster once to get a valid storageState (localStorage with
+  // cluster config). This runs in a throw-away context so each cold sample can get a
+  // truly fresh context (empty HTTP cache) without re-running the connection wizard.
+  const setupCtx = await browser.newContext();
+  const setupPage = await setupCtx.newPage();
+  await installPodRoutes(setupPage, { count: LARGE_LIST_SIZE });
+  await connectCluster(setupPage);
+  const m = setupPage.url().match(/\/cluster\/([^/?#]+)/);
+  if (!m)
+    throw new Error(
+      `could not extract cluster name from URL: ${setupPage.url()}`,
+    );
+  const clusterName = m[1];
+  const storageState = await setupCtx.storageState();
+  await setupCtx.close();
+
+  const podsUrl = `${ADDRESS}/cluster/${encodeURIComponent(clusterName)}/namespaces/default/pods`;
 
   for (let i = 0; i < samples; i++) {
-    await page.context().clearCookies();
-    await page.goto(ADDRESS);
-    await page.evaluate(() => {
-      localStorage.clear();
-    });
-    await connectCluster(page);
+    // Cold: fresh context = empty HTTP cache + fresh JS runtime; cluster config
+    // pre-seeded via storageState so we skip the connection UI flow.
+    const ctx = await browser.newContext({ storageState });
+    const page = await ctx.newPage();
+    await installPodRoutes(page, { count: LARGE_LIST_SIZE });
 
-    // Extract cluster name from the post-connect URL set by connectCluster
-    // (e.g. http://localhost:8080/cluster/k3d-perfCluster). There is no trailing
-    // path segment, so match up to the next /, ? or #. Throw on a miss rather
-    // than falling back to a guess: a wrong cluster name redirects to /clusters
-    // and we would silently measure the wrong page.
-    const m = page.url().match(/\/cluster\/([^/?#]+)/);
-    if (!m)
-      throw new Error(`could not extract cluster name from URL: ${page.url()}`);
-    const clusterName = m[1];
-    const podsUrl = `${ADDRESS}/cluster/${encodeURIComponent(clusterName)}/namespaces/default/pods`;
-    const clustersUrl = `${ADDRESS}/clusters`;
+    // 1. Cold load: first ever navigation to the pods URL — HTTP cache is empty,
+    //    JS runtime is fresh.
+    cold.load.push(
+      await measureUntil(page, {
+        action: async () => page.goto(podsUrl),
+        readyScript: LOAD_READY,
+      }),
+    );
 
-    const measureListInteractions = async (bucket) => {
-      // 1. Load: navigate to pod list and wait for pod rows.
-      bucket.load.push(
-        await measureUntil(page, {
-          action: async () => page.goto(podsUrl),
-          readyScript: LOAD_READY,
-        }),
-      );
+    // 2. Cold sort and search: in-page interactions on the loaded pods list.
+    cold.sort.push(await measureSort(page));
+    cold.search.push(await measureSearch(page));
 
-      // 2. Sort: open sort modal, select "name" column, confirm.
-      //    Measured on the full LARGE_LIST_SIZE list for a meaningful signal.
-      bucket.sort.push(
-        await measureUntil(page, {
-          action: async () => {
-            await page
-              .locator('ui5-toolbar-button[accessible-name="open-sort-modal"]')
-              .click();
-            await page
-              .locator('ui5-radio-button[name="sortBy"][value="name"]')
-              .click();
-            await page
-              .locator('ui5-button[design="Emphasized"]')
-              .filter({ hasText: 'OK' })
-              .click();
-          },
-          readyScript: SORT_READY,
-        }),
-      );
+    // Warm: same context (HTTP cache primed), React still running on the pods
+    // page. Navigate to Namespace Overview via sidebar click (in-app, not
+    // measured) so the warm load is a pure React Router route change — no JS
+    // context teardown, assets served from HTTP cache.
+    await page
+      .locator('ui5-side-navigation-item[text="Namespace Overview"]')
+      .click();
+    await page.waitForURL(/\/namespaces\/default\/?$/, { timeout: 15000 });
 
-      // 3. Search: type into the search input and wait for the filtered result.
-      //    Runs after sort so the full list is still visible when search starts.
-      //    ui5-input is a web component (not a native input), so fill() is not
-      //    allowed — click to focus then type via the keyboard.
-      bucket.search.push(
-        await measureUntil(page, {
-          action: async () => {
-            const search = page.locator('ui5-input.search-input');
-            await search.click();
-            await page.keyboard.type('perf-pod-0500');
-          },
-          readyScript: SEARCH_READY,
-        }),
-      );
-    };
+    // Expand Workloads in the sidebar if the Pods sub-item is not yet visible.
+    const podsSubItem = page.locator(
+      'ui5-side-navigation-sub-item[text="Pods"]',
+    );
+    if (!(await podsSubItem.isVisible())) {
+      await page.locator('ui5-side-navigation-item[text="Workloads"]').click();
+      await podsSubItem.waitFor({ state: 'visible', timeout: 5000 });
+    }
 
-    await measureListInteractions(cold);
+    // 1. Warm load: React Router navigation from namespace overview to pods.
+    warm.load.push(
+      await measureUntil(page, {
+        action: async () => podsSubItem.click(),
+        readyScript: LOAD_READY,
+      }),
+    );
 
-    // Warm: navigate away so the second load is a real navigation with a primed cache.
-    await page.goto(clustersUrl);
-    await measureListInteractions(warm);
+    // 2. Warm sort and search: same in-page interactions as cold.
+    warm.sort.push(await measureSort(page));
+    warm.search.push(await measureSearch(page));
+
+    await ctx.close();
   }
+
   return { cold, warm };
 }

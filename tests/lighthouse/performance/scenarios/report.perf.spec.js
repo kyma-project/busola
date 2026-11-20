@@ -9,17 +9,17 @@ import { getMeta } from '../helpers/meta.js';
 // Orchestrator: run all three journeys, aggregate, and write the combined
 // report (performance.json + summary.md). Each scenario's own *.perf.spec.js
 // also runs standalone for focused validation; this spec produces the artifact.
-test('collect all scenarios and write report', async ({ page }) => {
+test('collect all scenarios and write report', async ({ page, browser }) => {
   // Runs three full scenarios (each connects + samples), so allow ample time.
   test.setTimeout(10 * 60 * 1000);
 
   const scenarios = [];
-  for (const [name, fn] of [
-    ['cluster-overview', collectClusterOverview],
-    ['resource-list', collectResourceList],
-    ['monaco-editor', collectMonaco],
+  for (const [name, fn, arg] of [
+    ['cluster-overview', collectClusterOverview, browser],
+    ['resource-list', collectResourceList, browser],
+    ['monaco-editor', collectMonaco, page],
   ]) {
-    const { cold, warm } = await fn(page);
+    const { cold, warm } = await fn(arg);
     const agg = aggregateScenario(name, { cold, warm });
     expect(
       agg.invalid,

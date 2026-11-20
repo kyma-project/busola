@@ -17,46 +17,55 @@ const READY =
   "document.querySelectorAll('.counting-card').length > 0 && " +
   'document.querySelectorAll(\'.ui5-illustrated-message, [class*="skeleton"]\').length === 0';
 
-export async function collectClusterOverview(page) {
+export async function collectClusterOverview(browser) {
   const samples = getSampleCount();
   const cold = { ready: [] };
   const warm = { ready: [] };
-  await installPodRoutes(page, { count: 3 });
-  for (let i = 0; i < samples; i++) {
-    await page.context().clearCookies();
-    await page.goto(ADDRESS);
-    await page.evaluate(() => {
-      localStorage.clear();
-    });
-    await connectCluster(page);
-    // After connectCluster the browser is already on the cluster overview.
-    // Capture the URL (e.g. /cluster/k3d-perfCluster/overview) so we can
-    // navigate back to it for measurements.
-    const overviewUrl = page.url();
 
-    // Cold: navigate from /clusters → overview (no HTTP-cache benefit; first visit).
-    // performance.now() on the /clusters page is small (just loaded), so
-    // measureUntil will record a positive elapsed value once overview content arrives.
-    await page.goto(ADDRESS + '/clusters');
+  // Setup: run connectCluster once to get a valid storageState (localStorage with
+  // cluster config). This runs in a throw-away context so each cold sample can get a
+  // truly fresh context (empty HTTP cache) without re-running the connection wizard.
+  const setupCtx = await browser.newContext();
+  const setupPage = await setupCtx.newPage();
+  await installPodRoutes(setupPage, { count: 3 });
+  await connectCluster(setupPage);
+  const overviewPath = new URL(setupPage.url()).pathname;
+  const storageState = await setupCtx.storageState();
+  await setupCtx.close();
+
+  for (let i = 0; i < samples; i++) {
+    // Cold: fresh context = empty HTTP cache + fresh JS runtime; cluster config
+    // pre-seeded via storageState so we skip the connection UI flow.
+    const ctx = await browser.newContext({ storageState });
+    const page = await ctx.newPage();
+    await installPodRoutes(page, { count: 3 });
+
     cold.ready.push(
       await measureUntil(page, {
-        action: async () => page.goto(overviewUrl),
+        action: async () => page.goto(ADDRESS + overviewPath),
         readyScript: READY,
       }),
     );
 
-    // Warm: navigate from /clusters → overview again (browser HTTP-cache and JS module
-    // cache are primed by the cold visit).  Using a fresh /clusters page as the source
-    // keeps performance.now() small before capture, avoiding the cross-navigation clock
-    // mismatch that page.reload() introduces (old-page perf.now() > new-page perf.now()
-    // after reload ⇒ negative, invalid measurement).
-    await page.goto(ADDRESS + '/clusters');
+    // Warm: same context (HTTP cache primed by the cold load), React still running.
+    // Navigate to the Namespaces list via sidebar click (in-app React Router
+    // navigation — no JS context teardown, no full page reload), then measure
+    // the click back to the cluster overview.
+    await page.locator('ui5-side-navigation-item[text="Namespaces"]').click();
+    await page.waitForURL(/\/namespaces\/?$/, { timeout: 15000 });
+
     warm.ready.push(
       await measureUntil(page, {
-        action: async () => page.goto(overviewUrl),
+        action: async () =>
+          page
+            .locator('ui5-side-navigation-item[text="Cluster Overview"]')
+            .click(),
         readyScript: READY,
       }),
     );
+
+    await ctx.close();
   }
+
   return { cold, warm };
 }

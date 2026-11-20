@@ -2,8 +2,8 @@ import { test, expect } from '@playwright/test';
 import { collectClusterOverview } from '../collectors/cluster-overview.js';
 import { aggregateScenario } from '../helpers/aggregate.js';
 
-test('cluster overview readiness', async ({ page }) => {
-  const { cold, warm } = await collectClusterOverview(page);
+test('cluster overview readiness', async ({ browser }) => {
+  const { cold, warm } = await collectClusterOverview(browser);
   const agg = aggregateScenario('cluster-overview', { cold, warm });
   expect(
     agg.invalid,

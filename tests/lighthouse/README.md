@@ -59,9 +59,12 @@ used for measurement.
   version (git sha) + browser version.
 - `summary.md` — a median table by scenario × metric × cold vs warm.
 
-**Cold** is a fresh session (cleared storage/cache, first navigation); **warm**
-is a repeat in the same primed session. They are reported as separate series and
-never averaged together.
+**Cold** is a fresh browser context (empty HTTP cache, fresh JS runtime) with
+cluster config pre-seeded in localStorage; the measured navigation is the first
+ever visit to that URL. **Warm** is a repeat in the same context (HTTP cache
+primed, React still running) using in-app navigation — a sidebar click handled
+by React Router — so no JS context is torn down. They are reported as separate
+series and never averaged together.
 
 A failed scenario, or any missing/invalid (`NaN`/`≤ 0`) measurement, fails the
 run. Timing budgets are intentionally not enforced yet — these tests establish
