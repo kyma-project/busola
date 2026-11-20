@@ -1566,7 +1566,7 @@ terminal:
     open: Exec
     title: Exec options
   messages:
-    closed: Connection closed.
+    closed: Connection closed for {{name}}.
     connected: Connected to terminal.
     connection-error: WebSocket connection error.
     connection-lost: Connection lost, reconnecting to Busola backend...

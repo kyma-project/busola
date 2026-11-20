@@ -83,6 +83,24 @@ export function BusolaTerminal({
           : console.warn('Reconnecting to not existing terminal, aborting');
         break;
       }
+      case 'attach': {
+        console.log(termRef);
+        if (!termRef.current) {
+          const { term, fitAddon } = createXTerm();
+          term.open(termDOM.current);
+          termRef.current = term;
+          const observer = createResizeObserver(
+            fitAddon,
+            termDOM,
+            setMinHeight,
+          );
+          observerRef.current = observer;
+          observer.observe(termDOM.current);
+        }
+        console.log(termRef);
+        connect(termRef.current);
+        break;
+      }
       case 'provisioned': {
         const { term, fitAddon } = createXTerm();
         term.open(termDOM.current);
