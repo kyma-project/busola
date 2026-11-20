@@ -8,7 +8,15 @@
   justify-content: center;
 
   z-index: 1000000;
-  background-color: rgba(0, 0, 0, 0.3);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--sapBlockLayer_Background);
+    opacity: var(--sapBlockLayer_Opacity);
+    pointer-events: none;
+  }
 
   &__wrapper {
     display: flex;
