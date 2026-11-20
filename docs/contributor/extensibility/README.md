@@ -61,3 +61,15 @@ For more information about extensibility in Busola, see [Configure a Config Map 
 6. Click **Create**.
 
 To see an exemplary configuration of the Busola extensibility feature, check the [Pizza example](../../../examples/pizzas/README.md).
+
+## Validate Your Extension
+
+Before opening a pull request, you can validate an extension configuration against these rules with the **validate-extension** agent skill. Given a file path, a directory, or a PR number, it loads the rules documented here, checks each configuration section (`general`, `list`, `details`, `form`, `dataSources`, `injections`, `translations`, `presets`), cross-checks JSONata data-source references, runs security checks on custom scripts, and emits a structured report of violations with suggested fixes. The check is read-only — it reports, it does not modify your extension.
+
+Run it with the `/validate-extension` slash command, for example:
+
+```
+/validate-extension examples/pizzas/
+```
+
+See [`.agents/skills/validate-extension/SKILL.md`](../../../.agents/skills/validate-extension/SKILL.md) for the full workflow.
