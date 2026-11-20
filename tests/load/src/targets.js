@@ -8,8 +8,8 @@ export function endpointUrl(config, endpoint) {
  * target format wants header values as arrays of strings. GET only — the
  * backend rejects HEAD/OPTIONS on non-proxy paths.
  *
- * @param {object} config resolved config (Task 2)
- * @param {object} headers plain auth headers (Task 3)
+ * @param {object} config resolved config
+ * @param {object} headers plain auth headers
  * @returns {{method:string,url:string,header:object}[]}
  */
 export function buildTargets(config, headers) {

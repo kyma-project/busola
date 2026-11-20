@@ -7,8 +7,8 @@ import { endpointUrl } from './targets.js';
  *  - list  → body has an `items` array
  *  - detail → body has `kind` and `metadata`
  *
- * @param {object} config resolved config (Task 2)
- * @param {object} headers plain auth headers (Task 3)
+ * @param {object} config resolved config
+ * @param {object} headers plain auth headers
  */
 export async function preflight(config, headers) {
   for (const endpoint of config.endpoints) {

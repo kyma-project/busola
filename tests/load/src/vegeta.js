@@ -9,7 +9,7 @@ import { spawn } from 'child_process';
  * successful measurement.
  *
  * @param {object} opts
- * @param {object[]} opts.targets Vegeta JSON targets (Task 4 buildTargets)
+ * @param {object[]} opts.targets Vegeta JSON targets
  * @param {number} [opts.ratePerMinute] used as "<n>/1m" unless rateSpec is given
  * @param {string} [opts.rateSpec] explicit Vegeta rate string (e.g. "2500/5s");
  *   overrides ratePerMinute. Used by the rejection workload to exceed the cap.

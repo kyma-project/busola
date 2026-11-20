@@ -18,8 +18,8 @@ import { writeReport } from './report.js';
  * Returns the parsed metrics. Throws if no 429 is observed (limit not
  * enforced, or insufficient load).
  *
- * @param {object} config resolved config (Task 2)
- * @param {object} creds proxy credentials (Task 6 resolveCreds)
+ * @param {object} config resolved config
+ * @param {object} creds proxy credentials
  * @param {{vegetaBin?:string, totalRequests?:number, durationSec?:number, maxWorkers?:number}} [opts]
  */
 export async function runRejection(config, creds, opts = {}) {
@@ -29,7 +29,7 @@ export async function runRejection(config, creds, opts = {}) {
   const maxWorkers = opts.maxWorkers || 200;
 
   // Use a dedicated credential so the rejection burst cannot poison a measured
-  // workload's rate-limit bucket regardless of run order (plan Task 7). The
+  // workload's rate-limit bucket regardless of run order. The
   // backend keys the limiter on the token/client-cert; a distinct token =
   // distinct bucket. (Cert-mode isolation would need a distinct cert; rejection
   // runs in token mode by default.)

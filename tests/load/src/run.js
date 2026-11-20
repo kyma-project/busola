@@ -51,8 +51,8 @@ function buildMeta(config, workload, vegetaBin) {
  * non-200 status in the measured set, or any measured timeout — so an invalid
  * run never produces a "successful" baseline.
  *
- * @param {object} config resolved config (Task 2)
- * @param {object} creds proxy credentials (Task 6 resolveCreds)
+ * @param {object} config resolved config
+ * @param {object} creds proxy credentials
  * @param {{vegetaBin?:string, workload?:string}} [opts]
  * @returns {Promise<{warmup, measured, meta}>}
  */

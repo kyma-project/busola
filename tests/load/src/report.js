@@ -39,7 +39,7 @@ function renderSummary({ kind, meta, metrics }) {
  * Write a JSON result and a readable summary for one phase to reports/.
  * No secrets or response bodies are included — only metrics and run metadata.
  *
- * @param {object} metrics parsed metrics (Task 5)
+ * @param {object} metrics parsed metrics
  * @param {object} meta {workload, endpoint, authMode, revision, vegetaVersion, settings}
  * @param {'warmup'|'measured'|'rejection'} kind
  * @returns {{jsonPath:string, summaryPath:string}}
