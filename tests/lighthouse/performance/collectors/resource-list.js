@@ -122,8 +122,21 @@ export async function collectResourceList(browser) {
     );
     if (!(await podsSubItem.isVisible())) {
       await page.locator('ui5-side-navigation-item[text="Workloads"]').click();
-      await podsSubItem.waitFor({ state: 'visible', timeout: 5000 });
     }
+    // waitFor({ state: 'visible' }) is unreliable for UI5 shadow-DOM components:
+    // the host element can pass the check while still collapsed (zero bounding
+    // rect). Use waitForFunction to verify actual interactability before clicking.
+    await page.waitForFunction(
+      () => {
+        const el = document.querySelector(
+          'ui5-side-navigation-sub-item[text="Pods"]',
+        );
+        if (!el) return false;
+        const rect = el.getBoundingClientRect();
+        return rect.height > 0 && rect.width > 0;
+      },
+      { timeout: 10000 },
+    );
 
     // 1. Warm load: React Router navigation from namespace overview to pods.
     warm.load.push(

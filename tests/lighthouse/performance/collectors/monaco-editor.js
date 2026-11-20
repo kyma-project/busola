@@ -71,11 +71,14 @@ export async function collectMonaco(page) {
     // a real re-initialisation. The HTTP cache does persist across samples within
     // the context, so chunk *downloads* are skipped on samples 2+; "cold" here
     // means "first editor open after a fresh navigation", not a cold HTTP cache.
+    // 120 s timeout: the resource-schema worker fetches the Pod OpenAPI schema
+    // from the cluster; on a cold k3d cluster this can exceed the 60 s default.
     await page.waitForFunction(editorGone);
     cold.ready.push(
       await measureUntil(page, {
         action: openEditor,
         readyScript: EDITOR_READY,
+        timeoutMs: 120000,
       }),
     );
 
@@ -87,6 +90,7 @@ export async function collectMonaco(page) {
       await measureUntil(page, {
         action: openEditor,
         readyScript: EDITOR_READY,
+        timeoutMs: 120000,
       }),
     );
   }
