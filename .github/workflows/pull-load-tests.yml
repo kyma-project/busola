@@ -1,0 +1,168 @@
+name: PR Load Tests
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+    paths:
+      - '.github/workflows/pull-load-tests.yml'
+      - '.github/scripts/**'
+      - 'backend/**'
+      - 'tests/load/**'
+  merge_group:
+  workflow_call:
+    inputs:
+      trigger_env:
+        type: string
+        required: false
+
+concurrency:
+  group: pull-load-tests-${{ github.workflow_ref }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  VEGETA_VERSION: '12.12.0'
+  # Bounded settings for CI (well under the 2000/min-per-credential limit).
+  LOAD_RATE_PER_MINUTE: '600'
+  LOAD_DURATION_SEC: '20'
+  LOAD_WARMUP_SEC: '5'
+
+jobs:
+  # Measured load against the controlled synthetic upstream + the real
+  # production backend (start:prod). Reporting-only; execution failures
+  # (invalid config, empty results, unexpected status, timeouts) fail the job.
+  measured:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Merge with latest main
+        if: inputs.trigger_env != 'release-trigger'
+        uses: ./.github/actions/merge
+      - uses: actions/setup-node@v7
+        name: Setup node
+        with:
+          node-version: 26
+      - name: Install Vegeta
+        shell: bash
+        run: |
+          mkdir -p tests/load/.bin
+          curl -sSL "https://github.com/tsenart/vegeta/releases/download/v${VEGETA_VERSION}/vegeta_${VEGETA_VERSION}_linux_amd64.tar.gz" \
+            | tar -xz -C tests/load/.bin vegeta
+          tests/load/.bin/vegeta -version
+      - name: Build and start the production backend
+        shell: bash
+        timeout-minutes: 15
+        run: |
+          # ALLOW_PRIVATE_IPS lets the backend reach the 127.0.0.1 upstream; it
+          # is inherited by the start:prod process launched inside the script.
+          export ALLOW_PRIVATE_IPS=true
+          .github/scripts/setup_local_busola.sh | tee busola.log
+      - name: Run measured load tests
+        shell: bash
+        timeout-minutes: 10
+        run: |
+          cd tests/load
+          for wl in list-small list-medium list-large detail-small detail-medium detail-large; do
+            npm test -- --workload=$wl
+          done
+      - name: Run K8s rejection workload (isolated)
+        shell: bash
+        timeout-minutes: 5
+        run: |
+          cd tests/load
+          npm run rejection
+      - name: Upload load reports
+        uses: actions/upload-artifact@v7
+        if: ${{ always() }}
+        with:
+          name: load-reports-${{ github.job }}
+          path: tests/load/reports/*.json
+          retention-days: 30
+      - name: Upload Busola logs
+        uses: actions/upload-artifact@v7
+        if: ${{ always() }}
+        with:
+          name: busola-logs-${{ github.job }}
+          path: busola.log
+          retention-days: 30
+
+  # Integration verification against a real k3d API server, using a read-only
+  # ServiceAccount token.
+  integration-k3d:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Merge with latest main
+        if: inputs.trigger_env != 'release-trigger'
+        uses: ./.github/actions/merge
+      - name: Create Single Cluster
+        uses: AbsaOSS/k3d-action@4e8b3239042be1dc0aed6c5eb80c13b18200fc79 #v2.4.0
+        with:
+          cluster-name: 'k3dCluster'
+          k3d-version: v5.8.3
+          args: >-
+            --agents 1
+            --port 80:80@loadbalancer
+            --port 443:443@loadbalancer
+            --wait
+      - uses: actions/setup-node@v7
+        name: Setup node
+        with:
+          node-version: 26
+      - name: Install Vegeta
+        shell: bash
+        run: |
+          mkdir -p tests/load/.bin
+          curl -sSL "https://github.com/tsenart/vegeta/releases/download/v${VEGETA_VERSION}/vegeta_${VEGETA_VERSION}_linux_amd64.tar.gz" \
+            | tar -xz -C tests/load/.bin vegeta
+      - name: Build and start the production backend
+        shell: bash
+        timeout-minutes: 15
+        run: |
+          export ALLOW_PRIVATE_IPS=true
+          .github/scripts/setup_local_busola.sh | tee busola.log
+      - name: Create read-only credentials
+        id: creds
+        shell: bash
+        run: |
+          kubectl create serviceaccount load-readonly -n default
+          kubectl create clusterrolebinding load-readonly-view \
+            --clusterrole=view --serviceaccount=default:load-readonly
+          TOKEN=$(kubectl create token load-readonly -n default --duration=1h)
+          SERVER=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
+          kubectl config view --minify --raw \
+            -o jsonpath='{.clusters[0].cluster.certificate-authority-data}' | base64 -d > ca.pem
+          echo "::add-mask::$TOKEN"
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+          echo "server=$SERVER" >> "$GITHUB_OUTPUT"
+      - name: Run integration load test against k3d
+        shell: bash
+        timeout-minutes: 10
+        run: |
+          cd tests/load
+          LOAD_CLUSTER_URL='${{ steps.creds.outputs.server }}' \
+          LOAD_K8S_TOKEN='${{ steps.creds.outputs.token }}' \
+          LOAD_CA_FILE="$GITHUB_WORKSPACE/ca.pem" \
+          LOAD_WORKLOAD=list-small \
+          npm run test:local
+      - name: Upload load reports
+        uses: actions/upload-artifact@v7
+        if: ${{ always() }}
+        with:
+          name: load-reports-${{ github.job }}
+          path: tests/load/reports/*.json
+          retention-days: 30
+      - name: Upload Busola logs
+        uses: actions/upload-artifact@v7
+        if: ${{ always() }}
+        with:
+          name: busola-logs-${{ github.job }}
+          path: busola.log
+          retention-days: 30

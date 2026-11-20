@@ -1,0 +1,4 @@
+{
+  "upstream": { "payloadSize": "large" },
+  "endpoints": [{ "path": "/api/v1/namespaces/default/pods", "kind": "list" }]
+}

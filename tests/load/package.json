@@ -1,0 +1,16 @@
+{
+  "name": "load",
+  "version": "1.0.0",
+  "description": "Vegeta HTTP load tests for the Busola backend Kubernetes proxy",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "upstream": "node upstream/server.js",
+    "preflight": "node src/cli.js preflight",
+    "test": "node src/cli.js test",
+    "test:local": "node src/cli.js test --require-cluster",
+    "rejection": "node src/cli.js rejection"
+  },
+  "author": "",
+  "license": "ISC"
+}
