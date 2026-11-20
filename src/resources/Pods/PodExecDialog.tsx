@@ -12,7 +12,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Label } from 'shared/ResourceForm/components/Label';
 import { useState } from 'react';
-import { useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { ConnectionType, terminalSessionAtom } from 'state/terminalSessionAtom';
 import InputType from '@ui5/webcomponents/dist/types/InputType.js';
 
@@ -51,7 +51,7 @@ export function PodExecDialog({
           <Button
             onClick={() => {
               setTerminalSession({
-                status: 'provisioned',
+                status: 'attach',
                 abortController: null,
                 deprovisionPod: async () => {},
                 podName: podName,
