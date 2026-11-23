@@ -20,6 +20,8 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
+import { useAdobeAnalytics } from 'hooks/useAdobeAnalytics';
+import { useAdobePageView } from 'hooks/useAdobePageView';
 import { useFeature } from 'hooks/useFeature';
 
 import { clusterAtom } from 'state/clusterAtom';
@@ -124,6 +126,8 @@ export default function App() {
   }, [language, i18n]);
 
   useSentry();
+  useAdobeAnalytics();
+  useAdobePageView();
   useAfterInitHook(kubeconfigIdState);
   usePreviousPathTracker();
   useIntendedPathRestore();

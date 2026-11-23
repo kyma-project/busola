@@ -98,3 +98,10 @@ config:
           - kind: ServiceInstance
           - kind: RedisInstance
           - kind: NfsInstance
+    ADOBE_ANALYTICS:
+      isEnabled: false
+      config:
+        # embedUrl can be different depending on the environment
+        # https://assets.adobedtm.com/abc123/launch-def456-staging.min.js
+        # https://assets.adobedtm.com/abc123/launch-ghi789.min.js
+        embedUrl: ''
