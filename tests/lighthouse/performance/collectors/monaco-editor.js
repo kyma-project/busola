@@ -6,24 +6,28 @@ import {
 } from '../helpers/connect.js';
 import { measureUntil, getSampleCount } from '../helpers/measure.js';
 
-// Readiness: the Monaco model is mounted and ready for input, not merely the
-// container div. We require the rendered text layer (.view-lines) AND the input
-// textarea Monaco creates once the editor is interactive.
-// Additionally, view-lines text must include 'kind: Pod': the editor has
-// rendered the actual YAML content of the mocked pod (not just an empty or
-// still-loading model). This check proves Monaco mounted, bound the model, and
-// rendered the full resource — the meaningful user-visible readiness signal.
+// Readiness: Monaco is mounted and the editor model contains the pod YAML.
+// We require .view-lines (Monaco DOM rendered) + textarea (editor interactive)
+// + 'kind:' in Monaco's textContent.
 //
-// NOTE: we intentionally do NOT wait for .resource-form__overlay to disappear.
-// The overlay persists until @stoplight/json-ref-resolver finishes resolving all
-// $ref pointers in the 2.4 MB OpenAPI spec — a CPU-bound background task that
-// can take minutes on real clusters.  Waiting for it would inflate measured
-// timings and cause test timeouts; the YAML content check already confirms the
-// editor is functional.
+// Why textContent on the whole .monaco-editor, not just .view-lines:
+//   - Locally (headed or Vite dev), .view-lines has the visual content and
+//     its textContent includes 'kind:'.
+//   - In CI (headless Chromium), the editor container can start at height 0,
+//     leaving .view-lines empty. Monaco's accessibility widget ([role="code"]
+//     is the .monaco-editor root itself) always holds a text copy of the model
+//     regardless of container height, so .monaco-editor.textContent still
+//     includes the content.
+//
+// Why 'kind:' and NOT 'kind: Pod':
+//   The space after the YAML key is a non-breaking space (U+00A0) in Monaco's
+//   DOM — char code 160, not 32 — which breaks .includes('kind: Pod') with a
+//   regular space. Checking for 'kind:' (without the value) avoids this and is
+//   sufficient to confirm the Pod YAML is loaded.
 const EDITOR_READY =
   "!!document.querySelector('.monaco-editor .view-lines') && " +
   "!!document.querySelector('.monaco-editor textarea') && " +
-  "(document.querySelector('.monaco-editor .view-lines')?.textContent || '').includes('kind: Pod')";
+  "document.querySelector('.monaco-editor')?.textContent?.includes('kind:')";
 
 // The editor is unmounted when the View tab is active (used to reset between
 // cold and warm so the warm measurement starts from a no-editor state).
