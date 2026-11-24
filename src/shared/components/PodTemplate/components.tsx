@@ -9,10 +9,9 @@ import {
   TableHeaderCell,
   TableHeaderRow,
   TableRow,
-  Text,
   Title,
 } from '@ui5/webcomponents-react';
-import { PodTemplateRow } from './PodTemplateRow';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { Link } from '../Link/Link';
 
 interface PodTemplateTableProps {
@@ -66,30 +65,22 @@ export function ContainerFields({ container }: ContainerFieldsProps) {
 
   return (
     <>
-      <PodTemplateRow
+      <ResourceDetailsFormItem
         label={t('pods.labels.image')}
-        component={
-          <Text
-            style={{
-              overflow: 'hidden',
-            }}
-          >
-            {container.image}
-          </Text>
-        }
+        value={container.image}
       />
-      <PodTemplateRow
+      <ResourceDetailsFormItem
         label={t('pods.labels.image-pull-policy')}
-        component={<Text>{container.imagePullPolicy || 'Always'}</Text>}
+        value={container.imagePullPolicy || 'Always'}
       />
-      <PodTemplateRow
+      <ResourceDetailsFormItem
         label={t('pods.labels.ports')}
-        component={<Text>{getPorts(container.ports)}</Text>}
+        value={getPorts(container.ports)}
       />
       {container.env && (
-        <PodTemplateRow
+        <ResourceDetailsFormItem
           label={t('pods.labels.env')}
-          component={
+          value={
             <PodTemplateTable
               className="card-shadow"
               items={container.env}
@@ -111,9 +102,9 @@ export function ContainerFields({ container }: ContainerFieldsProps) {
         />
       )}
       {container.volumeMounts && (
-        <PodTemplateRow
+        <ResourceDetailsFormItem
           label={t('pods.labels.volume-mounts')}
-          component={
+          value={
             <PodTemplateTable
               items={container.volumeMounts}
               columns={[t('common.headers.name'), t('pods.labels.mount-path')]}
@@ -132,17 +123,15 @@ export function ContainerFields({ container }: ContainerFieldsProps) {
         />
       )}
       {container.command && (
-        <PodTemplateRow
+        <ResourceDetailsFormItem
           label={t('pods.labels.command')}
-          component={
-            <p className="code-block">{container.command.join(' ')}</p>
-          }
+          value={<p className="code-block">{container.command.join(' ')}</p>}
         />
       )}
       {container.args && (
-        <PodTemplateRow
+        <ResourceDetailsFormItem
           label={t('pods.labels.args')}
-          component={<p className="code-block">{container.args.join(' ')}</p>}
+          value={<p className="code-block">{container.args.join(' ')}</p>}
         />
       )}
     </>
@@ -173,14 +162,14 @@ export function VolumeFields({ volume }: { volume: any }) {
 
   return (
     <>
-      <PodTemplateRow
+      <ResourceDetailsFormItem
         label={t('common.labels.type')}
-        component={<Text>{typeLabel}</Text>}
+        value={typeLabel}
       />
       {k8sResource && (
-        <PodTemplateRow
+        <ResourceDetailsFormItem
           label={t('common.headers.resource')}
-          component={
+          value={
             <Link
               url={namespaceUrl(
                 `${configMap ? 'configmaps' : 'secrets'}/${k8sResourceName}`,
@@ -192,9 +181,9 @@ export function VolumeFields({ volume }: { volume: any }) {
         />
       )}
       {k8sResource?.items && (
-        <PodTemplateRow
+        <ResourceDetailsFormItem
           label={t('common.headers.items')}
-          component={
+          value={
             <PodTemplateTable
               items={k8sResource.items}
               columns={[t('common.headers.key'), t('common.labels.path')]}
