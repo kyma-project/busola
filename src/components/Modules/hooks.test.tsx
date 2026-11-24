@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
-import { useModulesLiveResources } from './hooks';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { act, renderHook, waitFor } from '@testing-library/react';
+import { useFetchModuleData, useModulesLiveResources } from './hooks';
+import type { ModuleTemplateType } from './support';
 
 const fetchMock = vi.fn();
 vi.mock('shared/hooks/BackendAPI/useFetch', () => ({
@@ -11,6 +12,101 @@ const populateMock = vi.fn(async (resource: any) => resource);
 vi.mock('hooks/usePopulateWithNamespace', () => ({
   usePopulateWithNamespace: () => populateMock,
 }));
+
+vi.mock('state/navigation/allNodesAtom', async () => {
+  const { atom } = await import('jotai');
+  return {
+    allNodesAtomSync: atom([{ resourceType: 'deployments', namespaced: true }]),
+  };
+});
+
+describe('useFetchModuleData', () => {
+  const templates = {
+    items: ['east', 'east', 'west'].map((namespace, i) => ({
+      metadata: { name: `module-${i}`, namespace, labels: {}, annotations: {} },
+      spec: {
+        channel: 'regular',
+        version: '1.0.0',
+        associatedResources: [],
+        data: {},
+        manager: {
+          group: 'apps',
+          version: 'v1',
+          kind: 'Deployment',
+          name: 'manager',
+          namespace,
+        },
+      },
+    })),
+  };
+  const selectManager = (template: ModuleTemplateType) => template.spec.manager;
+  const managerUrl = (namespace: string) =>
+    `/apis/apps/v1/namespaces/${namespace}/deployments?fieldSelector=metadata.name=manager`;
+
+  beforeEach(() => {
+    fetchMock.mockReset();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('shares each deployment lookup across templates and fetches it again on the next poll', async () => {
+    vi.useFakeTimers();
+    let resourceVersion = '1';
+    fetchMock.mockImplementation(async ({ relativeUrl }) => {
+      const namespace = relativeUrl === managerUrl('east') ? 'east' : 'west';
+      return Response.json({
+        items: [{ metadata: { namespace, resourceVersion } }],
+      });
+    });
+    const { result } = renderHook(() =>
+      useFetchModuleData(templates, selectManager, 'manager', false, 5000),
+    );
+    await act(() => vi.advanceTimersByTimeAsync(0));
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledWith({ relativeUrl: managerUrl('east') });
+    expect(fetchMock).toHaveBeenCalledWith({ relativeUrl: managerUrl('west') });
+    for (const { metadata } of templates.items) {
+      expect(result.current.getItem(metadata.name, metadata.namespace)).toEqual(
+        {
+          metadata: { namespace: metadata.namespace, resourceVersion: '1' },
+        },
+      );
+    }
+
+    resourceVersion = '2';
+    await act(() => vi.advanceTimersByTimeAsync(5000));
+    expect(fetchMock).toHaveBeenCalledTimes(4);
+    for (const { metadata } of templates.items) {
+      expect(result.current.getItem(metadata.name, metadata.namespace)).toEqual(
+        {
+          metadata: { namespace: metadata.namespace, resourceVersion: '2' },
+        },
+      );
+    }
+  });
+
+  it('reports a shared failure for each affected template and keeps successful results', async () => {
+    const westManager = { metadata: { namespace: 'west' } };
+    fetchMock.mockImplementation(async ({ relativeUrl }) => {
+      if (relativeUrl === managerUrl('east')) throw new Error('lookup failed');
+      return Response.json({ items: [westManager] });
+    });
+    const { result } = renderHook(() =>
+      useFetchModuleData(templates, selectManager, 'manager'),
+    );
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(result.current.error).toContain(
+      'Error fetching manager for module "module-0": lookup failed',
+    );
+    expect(result.current.error).toContain(
+      'Error fetching manager for module "module-1": lookup failed',
+    );
+    expect(result.current.data).toEqual({ 'module-2:west': westManager });
+  });
+});
 
 describe('useModulesLiveResources', () => {
   beforeEach(() => {
