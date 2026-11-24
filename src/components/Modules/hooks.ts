@@ -165,7 +165,7 @@ export const useFetchModuleData = (
     }
 
     // Don't clear data during polling if all fetches fail
-    if (Object.keys(cache).length > 0 || !isPolling) {
+    if (Object.keys(cache).length > 0 || !isPolling || !errors.length) {
       setData((prev) => (isEqual(prev, cache) ? prev : cache));
     }
     if (errors.length) setError(errors.join('\n'));

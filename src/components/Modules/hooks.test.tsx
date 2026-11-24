@@ -177,6 +177,35 @@ describe('useFetchModuleData', () => {
     }
   });
 
+  it('drops a manager that a later poll no longer finds', async () => {
+    vi.useFakeTimers();
+    let managers = [{ metadata: { namespace: 'east' } }];
+    fetchMock.mockImplementation(async () =>
+      Response.json({ items: managers }),
+    );
+    const { result } = renderPolling(templates);
+    await act(() => vi.advanceTimersByTimeAsync(0));
+    expect(result.current.getItem('module-0', 'east')).toBeDefined();
+
+    managers = [];
+    await act(() => vi.advanceTimersByTimeAsync(5000));
+    expect(result.current.data).toEqual({});
+  });
+
+  it('keeps the last managers when a poll fails', async () => {
+    vi.useFakeTimers();
+    fetchMock.mockImplementation(async () =>
+      Response.json({ items: [{ metadata: { namespace: 'east' } }] }),
+    );
+    const { result } = renderPolling(templates);
+    await act(() => vi.advanceTimersByTimeAsync(0));
+
+    fetchMock.mockRejectedValue(new Error('lookup failed'));
+    await act(() => vi.advanceTimersByTimeAsync(5000));
+    expect(result.current.getItem('module-0', 'east')).toBeDefined();
+    expect(result.current.error).toContain('lookup failed');
+  });
+
   it('reports a shared failure for each affected template and keeps successful results', async () => {
     const westManager = { metadata: { namespace: 'west' } };
     fetchMock.mockImplementation(async ({ relativeUrl }) => {
