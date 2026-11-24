@@ -1,0 +1,49 @@
+name: PR Performance Tests
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+    paths:
+      - '.github/workflows/pull-perf-tests.yml'
+      - 'tests/performance/**'
+      - 'src/shared/components/GenericList/**'
+      - 'src/**'
+      - 'package.json'
+      - 'cypress.config.perf.ts'
+
+concurrency:
+  group: pull-perf-tests-${{ github.workflow_ref }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  run-perf-tests:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      contents: read
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: gardenlinux/workflow-telemetry-action@v2
+        with:
+          comment_on_pr: false
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Merge with latest main
+        uses: ./.github/actions/merge
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+      - name: Install dependencies
+        shell: bash
+        run: npm ci
+      - name: Run performance tests
+        shell: bash
+        run: npm run perf-test
+      - name: Upload performance report
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: perf-report-${{ github.event.pull_request.number }}
+          path: tests/performance/reports/
+          retention-days: 30

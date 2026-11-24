@@ -43,6 +43,13 @@ temp
 **/react-components/index.js
 **/temp
 
+cypress/performance/reports/
+tests/performance/reports/
+cypress/e2e/
+cypress/fixtures/
+cypress/support/commands.ts
+cypress/support/e2e.ts
+
 scripts/clusterRegistry.txt
 
 tests/integration/cypress/*
