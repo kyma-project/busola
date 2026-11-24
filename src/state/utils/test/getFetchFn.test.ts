@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createStore } from 'jotai';
+import { atom, createStore } from 'jotai';
 import { authDataAtom } from 'state/authDataAtom';
 import { clusterAtom } from 'state/clusterAtom';
 import { ssoDataAtom } from 'state/ssoDataAtom';
+import { configurationAtom } from 'state/configuration/configurationAtom';
 
 vi.mock('shared/hooks/BackendAPI/useFetch', () => ({
   createFetchFn: vi.fn(),
@@ -72,8 +73,7 @@ describe('getFetchFn', () => {
     expect(mockCreateFetchFn).toHaveBeenCalledWith({
       authData,
       cluster,
-      ssoData,
-      isSSOEnabled: false,
+      sso: { isReady: true, data: ssoData },
     });
   });
 
@@ -88,8 +88,40 @@ describe('getFetchFn', () => {
     expect(mockCreateFetchFn).toHaveBeenCalledWith({
       authData,
       cluster,
-      ssoData: null,
-      isSSOEnabled: false,
+      sso: { isReady: true, data: null },
     });
+  });
+
+  it('passes a not-ready SSO state while the SSO login has no session', () => {
+    const store = createStore();
+    store.set(authDataAtom, authData);
+    store.set(clusterAtom, cluster);
+    store.set(configurationAtom, {
+      features: { SSO_LOGIN: { isEnabled: true } },
+    });
+    store.set(ssoDataAtom, null);
+
+    getFetchFn(store.get);
+
+    expect(mockCreateFetchFn).toHaveBeenCalledWith(
+      expect.objectContaining({ sso: { isReady: false, data: null } }),
+    );
+  });
+
+  it('does not run again when an unrelated configuration change happens', () => {
+    const store = createStore();
+    store.set(authDataAtom, authData);
+    store.set(clusterAtom, cluster);
+    store.set(configurationAtom, { features: {} });
+    const fetchFnAtom = atom((get) => getFetchFn(get));
+    store.sub(fetchFnAtom, () => {});
+    mockCreateFetchFn.mockClear();
+
+    store.set(configurationAtom, {
+      features: { COMMUNITY_MODULES: { isEnabled: true } },
+    });
+    store.get(fetchFnAtom);
+
+    expect(mockCreateFetchFn).not.toHaveBeenCalled();
   });
 });

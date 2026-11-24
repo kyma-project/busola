@@ -5,19 +5,16 @@ export enum Envs {
   SSO_LOGIN_BYPASS = 'SSO_LOGIN_BYPASS',
 }
 
-export async function getEnv(env: Envs): Promise<string> {
-  const input = await fetchActiveEnv();
-  const envs = readEnv(input);
-  const desiredEnv = envs.get(env);
-  return desiredEnv ? desiredEnv : '';
+export async function getEnvs(): Promise<Map<string, string>> {
+  return readEnv(await fetchActiveEnv());
 }
 
 export async function getConfigDir(): Promise<string> {
-  const environment = await getEnv(Envs.ENVIRONMENT);
-  if (environment) {
-    return joinPaths('environments', environment);
-  }
-  return '';
+  return toConfigDir((await getEnvs()).get(Envs.ENVIRONMENT));
+}
+
+export function toConfigDir(environment?: string): string {
+  return environment ? joinPaths('environments', environment) : '';
 }
 
 function readEnv(input: string): Map<string, string> {

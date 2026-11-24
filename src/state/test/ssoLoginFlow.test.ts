@@ -67,14 +67,6 @@ vi.mock('../useLoginFailureNotification', () => ({
   useNotifyLoginFailure: () => notifyLoginFailureMock,
 }));
 
-vi.mock('shared/utils/env', async () => {
-  const actual =
-    await vi.importActual<typeof import('shared/utils/env')>(
-      'shared/utils/env',
-    );
-  return { ...actual, getEnv: vi.fn().mockResolvedValue(undefined) };
-});
-
 const SSO_CONFIG = {
   isEnabled: true,
   config: { issuerUrl: 'https://idp.example', clientId: 'sso-client' },
@@ -125,7 +117,6 @@ describe('useSSOLogin', () => {
         await import('../configuration/configurationAtom');
       const { attachSilentRenewHandlers: attach } =
         await import('../silentRenewSetup');
-      const { getEnv: env } = await import('shared/utils/env');
       const store = createStore();
       store.set(config, { features: { SSO_LOGIN: SSO_CONFIG } } as any);
       const Wrapper = ({ children }: PropsWithChildren) =>
@@ -135,22 +126,8 @@ describe('useSSOLogin', () => {
           createElement(Provider, { store }, children),
         );
       Wrapper.displayName = 'TestWrapper';
-      return { ...sso, attach, env, store, Wrapper };
+      return { ...sso, attach, store, Wrapper };
     };
-
-    it('does nothing when the login is bypassed', async () => {
-      const m = await load();
-      const user = liveUser();
-      sessionStorage.setItem('SSO', JSON.stringify(user));
-      vi.mocked(m.env).mockResolvedValueOnce('true');
-      m.store.set(m.ssoDataAtom, user as never);
-
-      renderHook(() => m.useSSOLogin(), { wrapper: m.Wrapper });
-      await new Promise((resolve) => setTimeout(resolve, 20));
-
-      expect(managerMock.getUser).not.toHaveBeenCalled();
-      expect(m.attach).not.toHaveBeenCalled();
-    });
 
     it('leaves the token alone when the library has no user to renew with', async () => {
       const m = await load();

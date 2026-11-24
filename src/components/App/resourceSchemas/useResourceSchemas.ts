@@ -17,7 +17,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useAtom, useSetAtom } from 'jotai';
-import { ssoDataAtom, useIsSSOEnabled } from 'state/ssoDataAtom';
+import { useIsSSOReady } from 'state/ssoDataAtom';
 import { renewingAtom } from 'state/renewingAtom';
 import { useReauthenticate } from 'state/useReauthenticate';
 import { authUserManagerRef } from 'state/authDataAtom';
@@ -29,7 +29,6 @@ import {
 export const useResourceSchemas = () => {
   const { cluster: activeClusterName } = useUrl();
   const authData = useAtomValue(authDataAtom);
-  const ssoData = useAtomValue(ssoDataAtom);
   const openApi = useAtomValue(openapiAtom);
   const cluster = useAtomValue(clusterAtom);
   const isClusterList = useMatch({ path: '/clusters' });
@@ -37,7 +36,7 @@ export const useResourceSchemas = () => {
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
   const { currentCluster } = clusterInfo;
-  const isSSOEnabled = useIsSSOEnabled();
+  const isSSOReady = useIsSSOReady();
   const renewing = useAtomValue(renewingAtom);
   // No notifyError: this call site shows its own connection-failed toast.
   const reauth = useReauthenticate();
@@ -72,7 +71,7 @@ export const useResourceSchemas = () => {
       !renewing &&
       !reauthTriggeredRef.current
     ) {
-      if (!isSSOEnabled || ssoData) {
+      if (isSSOReady) {
         reauthTriggeredRef.current = true;
         notification.notifyError({
           content: t('clusters.messages.connection-failed'),
@@ -89,8 +88,7 @@ export const useResourceSchemas = () => {
     openApi.state,
     isClusterList,
     t,
-    ssoData,
-    isSSOEnabled,
+    isSSOReady,
     renewing,
   ]);
 
