@@ -56,32 +56,28 @@ context('Test Secrets', () => {
   it('Checking a secret details', () => {
     cy.getMidColumn().contains(SECRET_NAME);
 
-    cy.getMidColumn()
-      .contains('.layout-panel-row', SECRET2_KEY)
-      .contains('*****');
+    cy.getMidColumn().contains('ui5-form-item', SECRET2_KEY).contains('*****');
 
-    cy.getMidColumn()
-      .contains('.layout-panel-row', SECRET_KEY)
-      .contains('*****');
+    cy.getMidColumn().contains('ui5-form-item', SECRET_KEY).contains('*****');
 
     cy.getMidColumn().contains('Decode').click();
 
     cy.getMidColumn()
-      .contains('.layout-panel-row', SECRET2_KEY)
+      .contains('ui5-form-item', SECRET2_KEY)
       .contains(SECRET2_VALUE);
 
     cy.getMidColumn()
-      .contains('.layout-panel-row', SECRET_KEY)
+      .contains('ui5-form-item', SECRET_KEY)
       .contains(SECRET_VALUE);
 
     cy.getMidColumn().contains('ui5-button', 'Encode').click();
 
     cy.getMidColumn()
-      .contains('.layout-panel-row', SECRET2_KEY)
+      .contains('ui5-form-item', SECRET2_KEY)
       .contains(btoa(SECRET2_VALUE));
 
     cy.getMidColumn()
-      .contains('.layout-panel-row', SECRET_KEY)
+      .contains('ui5-form-item', SECRET_KEY)
       .contains(btoa(SECRET_VALUE));
   });
 
@@ -113,11 +109,11 @@ context('Test Secrets', () => {
 
     cy.contains('ui5-button', 'Decode').click();
 
-    cy.contains('.layout-panel-row', SECRET_KEY).contains(SECRET_VALUE2);
+    cy.contains('ui5-form-item', SECRET_KEY).contains(SECRET_VALUE2);
 
-    cy.contains('.layout-panel-row', SECRET2_KEY).should('not.exist');
+    cy.contains('ui5-form-item', SECRET2_KEY).should('not.exist');
 
-    cy.contains('.layout-panel-row', SECRET3_KEY).contains(SECRET3_VALUE);
+    cy.contains('ui5-form-item', SECRET3_KEY).contains(SECRET3_VALUE);
   });
 
   it('Check list', () => {

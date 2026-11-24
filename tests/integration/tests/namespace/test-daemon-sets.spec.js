@@ -29,7 +29,7 @@ context('Test Daemon Sets', () => {
 
     cy.openCreate();
 
-    cy.wrap(loadDS(DS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
+    cy.wrap(loadDS(DS_NAME, Cypress.expose('NAMESPACE_NAME'), FILE_NAME)).then(
       (DS_CONFIG) => {
         const DS = JSON.stringify(DS_CONFIG);
         cy.pasteToMonaco(DS);

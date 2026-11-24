@@ -28,7 +28,7 @@ context('Test Stateful Sets', () => {
 
     cy.openCreate();
 
-    cy.wrap(loadSS(SS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
+    cy.wrap(loadSS(SS_NAME, Cypress.expose('NAMESPACE_NAME'), FILE_NAME)).then(
       (SS_CONFIG) => {
         const SS = JSON.stringify(SS_CONFIG);
         cy.pasteToMonaco(SS);
@@ -80,7 +80,7 @@ context('Test Stateful Sets', () => {
 
     cy.openCreate();
 
-    cy.wrap(loadSS(SS_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
+    cy.wrap(loadSS(SS_NAME, Cypress.expose('NAMESPACE_NAME'), FILE_NAME)).then(
       (SS_CONFIG) => {
         const SS = JSON.stringify(SS_CONFIG);
         cy.pasteToMonaco(SS);

@@ -22,7 +22,7 @@ context('Test Storage Classes', () => {
 
     cy.openCreate();
 
-    cy.wrap(loadSC(Cypress.env('STORAGE_CLASS_NAME'))).then((SC_CONFIG) => {
+    cy.wrap(loadSC(Cypress.expose('STORAGE_CLASS_NAME'))).then((SC_CONFIG) => {
       const SC = JSON.stringify(SC_CONFIG);
 
       cy.pasteToMonaco(SC);
@@ -33,7 +33,7 @@ context('Test Storage Classes', () => {
 
   it('Checking details', () => {
     cy.getMidColumn()
-      .contains('ui5-title', Cypress.env('STORAGE_CLASS_NAME'))
+      .contains('ui5-title', Cypress.expose('STORAGE_CLASS_NAME'))
       .should('be.visible');
 
     cy.getMidColumn().contains('pd.csi.storage.gke.io').should('be.visible');
@@ -48,7 +48,7 @@ context('Test Storage Classes', () => {
 
     cy.deleteFromGenericList(
       'Storage Class',
-      Cypress.env('STORAGE_CLASS_NAME'),
+      Cypress.expose('STORAGE_CLASS_NAME'),
     );
   });
 });

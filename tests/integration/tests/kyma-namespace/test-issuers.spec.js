@@ -38,7 +38,7 @@ context('Test Issuers', () => {
     cy.wait(500);
     chooseComboboxOption(
       '[placeholder="Select namespace"]',
-      Cypress.env('NAMESPACE_NAME'),
+      Cypress.expose('NAMESPACE_NAME'),
     );
 
     cy.wait(500);

@@ -1,4 +1,4 @@
-const env = Cypress.env();
+const env = Cypress.expose();
 const domain = env.DOMAIN || 'https://local.kyma.dev';
 
 export default {

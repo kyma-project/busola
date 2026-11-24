@@ -1,12 +1,14 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createStore } from 'jotai';
 
-vi.mock('shared/utils/env', () => ({
-  getConfigDir: vi.fn().mockResolvedValue(''),
+vi.mock('shared/utils/env', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('shared/utils/env')>()),
+  getEnvs: vi.fn(),
 }));
 
 // Import after mocks are registered.
 const { configurationAtom, getConfigs } = await import('../configurationAtom');
+const { Envs, getEnvs } = await import('shared/utils/env');
 
 const makeFetch = (responses: Record<string, string>) =>
   vi.fn().mockImplementation((url: string) => {
@@ -77,6 +79,7 @@ describe('configurationAtom', () => {
 describe('getConfigs', () => {
   beforeEach(() => {
     vi.stubGlobal('fetch', undefined);
+    vi.mocked(getEnvs).mockClear().mockResolvedValue(new Map());
   });
 
   afterEach(() => {
@@ -234,6 +237,45 @@ describe('getConfigs', () => {
     const result = await getConfigs(fetchFn);
 
     expect(result?.features?.COMMUNITY_MODULES).toEqual({ isEnabled: true });
+  });
+
+  describe('with SSO_LOGIN_BYPASS', () => {
+    const SSO_ENABLED =
+      'config:\n  features:\n    SSO_LOGIN:\n      isEnabled: true\n      config:\n        clientId: busola\n';
+
+    beforeEach(() => {
+      vi.mocked(getEnvs).mockResolvedValue(
+        new Map([[Envs.SSO_LOGIN_BYPASS, 'true']]),
+      );
+    });
+
+    it('turns the SSO login off', async () => {
+      vi.stubGlobal(
+        'fetch',
+        makeFetch({ 'defaultConfig.yaml': SSO_ENABLED, 'config.yaml': '' }),
+      );
+
+      const result = await getConfigs(undefined);
+
+      expect(result?.features?.SSO_LOGIN).toEqual({
+        isEnabled: false,
+        config: { clientId: 'busola' },
+      });
+    });
+
+    it('keeps the SSO login off when the cluster busola-config enables it', async () => {
+      vi.stubGlobal(
+        'fetch',
+        makeFetch({ 'defaultConfig.yaml': '', 'config.yaml': '' }),
+      );
+      const fetchFn = vi.fn().mockResolvedValue({
+        json: () => Promise.resolve({ data: { config: SSO_ENABLED } }),
+      });
+
+      const result = await getConfigs(fetchFn);
+
+      expect(result?.features?.SSO_LOGIN?.isEnabled).toBe(false);
+    });
   });
 
   it('arrays from a later layer replace the base array entirely', async () => {

@@ -1,8 +1,8 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-const LIMIT_NAME = `${Cypress.env('NAMESPACE_NAME')}-limits`;
-const QUOTA_NAME = `${Cypress.env('NAMESPACE_NAME')}-quotas`;
+const LIMIT_NAME = `${Cypress.expose('NAMESPACE_NAME')}-limits`;
+const QUOTA_NAME = `${Cypress.expose('NAMESPACE_NAME')}-quotas`;
 
 context(
   'Check the namespace overview for limit ranges and resourcequotas',

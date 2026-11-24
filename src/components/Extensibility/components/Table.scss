@@ -10,15 +10,18 @@
   ui5-table-row {
     min-height: fit-content;
     height: auto;
+
     * {
       min-height: fit-content;
       height: auto;
     }
+
     ui5-icon {
       display: flex;
       align-items: center;
     }
   }
+
   ui5-table-cell {
     div {
       min-height: fit-content;
@@ -36,6 +39,7 @@ ui5-table-row.collapse-content {
 
   .extensibility-table {
     margin: 0;
+
     ui5-table {
       min-width: auto;
 
@@ -54,7 +58,7 @@ ui5-table-row.collapse-content {
   > :first-child {
     overflow: auto;
 
-    &:not(ui5-panel) {
+    &:not(ui5-panel, ui5-form) {
       display: flex;
     }
 

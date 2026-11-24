@@ -26,12 +26,12 @@ context('Test Limit Ranges', () => {
 
     cy.openCreate();
 
-    cy.wrap(loadLR(LIMIT_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
-      (LR_CONFIG) => {
-        const LR = JSON.stringify(LR_CONFIG);
-        cy.pasteToMonaco(LR);
-      },
-    );
+    cy.wrap(
+      loadLR(LIMIT_NAME, Cypress.expose('NAMESPACE_NAME'), FILE_NAME),
+    ).then((LR_CONFIG) => {
+      const LR = JSON.stringify(LR_CONFIG);
+      cy.pasteToMonaco(LR);
+    });
 
     cy.saveChanges('Create');
   });

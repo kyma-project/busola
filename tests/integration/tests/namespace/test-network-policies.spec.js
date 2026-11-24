@@ -27,7 +27,7 @@ context('Test Network Policy', () => {
 
     cy.openCreate();
 
-    cy.wrap(loadNetworkPolicy(NAME, Cypress.env('NAMESPACE_NAME'))).then(
+    cy.wrap(loadNetworkPolicy(NAME, Cypress.expose('NAMESPACE_NAME'))).then(
       (NP_CONFIG) => {
         const NP = JSON.stringify(NP_CONFIG);
         cy.pasteToMonaco(NP);

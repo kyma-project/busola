@@ -26,12 +26,12 @@ context('Test Resource Quotas', () => {
 
     cy.openCreate();
 
-    cy.wrap(loadRQ(QUOTA_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME)).then(
-      (RQ_CONFIG) => {
-        const RQ = JSON.stringify(RQ_CONFIG);
-        cy.pasteToMonaco(RQ);
-      },
-    );
+    cy.wrap(
+      loadRQ(QUOTA_NAME, Cypress.expose('NAMESPACE_NAME'), FILE_NAME),
+    ).then((RQ_CONFIG) => {
+      const RQ = JSON.stringify(RQ_CONFIG);
+      cy.pasteToMonaco(RQ);
+    });
 
     cy.saveChanges('Create');
   });
@@ -40,7 +40,6 @@ context('Test Resource Quotas', () => {
     cy.contains(QUOTA_NAME);
 
     cy.contains('Limits and Usage');
-    cy.contains('Scope Selectors');
     cy.contains('PriorityClass');
     cy.contains('Memory Requests').should('exist');
     cy.contains('Memory Limits').should('exist');

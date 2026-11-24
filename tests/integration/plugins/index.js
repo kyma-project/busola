@@ -54,12 +54,15 @@ module.exports = (on, config) => {
     date.getUTCMinutes();
   const reportName = `AMP_REPORT_${todaysDate}`;
 
-  config.env.NAMESPACE_NAME = namespaceName;
-  config.env.STORAGE_CLASS_NAME = randomName;
-  config.env.APP_NAME = randomName;
+  config.expose = config.expose || {};
+  config.expose.NAMESPACE_NAME = namespaceName;
+  config.expose.STORAGE_CLASS_NAME = randomName;
+  config.expose.APP_NAME = randomName;
   config.env.ACC_AMP_TOKEN = process.env.ACC_AMP_TOKEN;
-  config.env.IS_PR = process.env.IS_PR;
-  config.env.AMP_REPORT_NAME = reportName;
+  config.expose.IS_PR = process.env.IS_PR;
+  config.expose.AMP_REPORT_NAME = reportName;
+  config.expose.DOMAIN = config.env.DOMAIN;
+  config.expose.LOCAL_DEV = config.env.LOCAL_DEV;
 
   on('task', {
     removeFile(filePath) {

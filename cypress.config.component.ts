@@ -5,6 +5,7 @@ export default defineConfig({
   component: {
     screenshotOnRunFailure: false,
     includeShadowDom: true,
+    allowCypressEnv: false,
     devServer: {
       framework: 'react',
       bundler: 'vite',

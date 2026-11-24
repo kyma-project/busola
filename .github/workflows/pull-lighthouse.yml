@@ -89,7 +89,7 @@ jobs:
       - name: Run lighthouse performance tests
         shell: bash
         continue-on-error: true
-        timeout-minutes: 20
+        timeout-minutes: 15
         run: |
           k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
           cd tests/lighthouse

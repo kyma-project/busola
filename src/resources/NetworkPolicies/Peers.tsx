@@ -1,56 +1,59 @@
-import { Tokens } from 'shared/components/Tokens';
+import { FormGroup } from '@ui5/webcomponents-react';
 import { useTranslation } from 'react-i18next';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
+import { Tokens } from 'shared/components/Tokens';
 import { LabelSelector, Selector } from './LabelSelector';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { Title } from '@ui5/webcomponents-react';
 
 export type NetworkPolicyPeersProps = {
-  title: string;
   peers: {
-    ipBlock: {
+    ipBlock?: {
       cidr: string;
-      except: any;
+      except?: string[];
     };
-    namespaceSelector: Selector;
-    podSelector: Selector;
+    namespaceSelector?: Selector;
+    podSelector?: Selector;
   }[];
 };
 
-export const NetworkPolicyPeers = ({
-  peers,
-  title,
-}: NetworkPolicyPeersProps) => {
+export const NetworkPolicyPeers = ({ peers }: NetworkPolicyPeersProps) => {
   const { t } = useTranslation();
   if (!peers?.length) return null;
 
-  return peers.map((peer, idx) => {
-    return (
-      <div key={idx}>
-        {peer.ipBlock ? (
-          <>
-            <Title className="sap-margin-x-small" size="H6">
-              {title || t('network-policies.headers.ip-block')}
-            </Title>
-            <LayoutPanelRow
-              name={t('network-policies.headers.cidr')}
-              value={peer.ipBlock.cidr || EMPTY_TEXT_PLACEHOLDER}
+  return (
+    <ResourceDetailsForm>
+      {peers.map((peer, idx) => (
+        // A peer's selectors only match together, so they share one group.
+        <FormGroup
+          key={idx}
+          headerText={`${t('network-policies.headers.peer')} #${idx + 1}`}
+        >
+          {peer.ipBlock && (
+            <>
+              <ResourceDetailsFormItem
+                label={t('network-policies.headers.cidr')}
+                value={peer.ipBlock.cidr}
+              />
+              <ResourceDetailsFormItem
+                label={t('network-policies.headers.exceptions')}
+                value={<Tokens tokens={peer.ipBlock.except} />}
+              />
+            </>
+          )}
+          {peer.namespaceSelector && (
+            <ResourceDetailsFormItem
+              label={t('network-policies.headers.namespace-selector')}
+              value={<LabelSelector selector={peer.namespaceSelector} />}
             />
-            <LayoutPanelRow
-              name={t('network-policies.headers.exceptions')}
-              value={<Tokens tokens={peer.ipBlock?.except} />}
+          )}
+          {peer.podSelector && (
+            <ResourceDetailsFormItem
+              label={t('network-policies.headers.pod-selector')}
+              value={<LabelSelector selector={peer.podSelector} />}
             />
-          </>
-        ) : null}
-        <LabelSelector
-          selector={peer.namespaceSelector}
-          title={t('network-policies.headers.namespace-selector')}
-        />
-        <LabelSelector
-          selector={peer.podSelector}
-          title={t('network-policies.headers.pod-selector')}
-        />
-      </div>
-    );
-  });
+          )}
+        </FormGroup>
+      ))}
+    </ResourceDetailsForm>
+  );
 };

@@ -468,12 +468,14 @@ See the following example:
     - name: columns.left
       widget: Panel
       children:
-        - source: spec.value
+        - name: Value
+          source: spec.value
           placeholder: '-'
     - name: columns.right
       widget: Panel
       children:
-        - source: spec.other-value
+        - name: Other value
+          source: spec.other-value
 ```
 
 <img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget">

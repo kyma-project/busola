@@ -115,7 +115,7 @@ context('Test reduced permissions', () => {
     // service account namespace
     chooseComboboxOption(
       '[id="secret-namespace-combobox-0"][accessible-name="Secret namespace Combobox"]:visible',
-      Cypress.env('NAMESPACE_NAME'),
+      Cypress.expose('NAMESPACE_NAME'),
     );
 
     // service account name
@@ -187,7 +187,7 @@ context('Test reduced permissions', () => {
     cy.loginAndSelectCluster({
       fileName: 'sa-kubeconfig.yaml',
       expectedLocation: new RegExp(
-        `/namespaces/${Cypress.env('NAMESPACE_NAME')}`,
+        `/namespaces/${Cypress.expose('NAMESPACE_NAME')}`,
       ),
       disableClear: true,
     });
