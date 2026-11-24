@@ -1,7 +1,7 @@
 import { configFeaturesNames, ExtWizardConfig } from './../types';
 import jsyaml from 'js-yaml';
-import { mapValues, partial } from 'lodash';
-import { useEffect } from 'react';
+import { mapValues, once, partial } from 'lodash';
+import { useEffect, useState } from 'react';
 import { ExtInjectionConfig, ExtResource } from '../types';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { unwrap } from 'jotai/utils';
@@ -30,10 +30,8 @@ import { CustomResourceDefinition } from 'command-pallette/CommandPalletteUI/han
 import { createPostFn } from 'shared/hooks/BackendAPI/usePost';
 import { getConfigDir } from 'shared/utils/env';
 
-const permissionSetsAtomSync = unwrap(
-  permissionSetsAtom,
-  (prev) => prev ?? null,
-);
+// null while the permissions for the current user and namespace load
+const permissionSetsAtomSync = unwrap(permissionSetsAtom, () => null);
 
 /*
 the order of the overwrting extensions
@@ -102,6 +100,7 @@ async function getConfigMapsWithSelector(
   kubeconfigNamespace: string,
   currentNamespace: string,
   permissionSet: PermissionSetState,
+  getClusterPermissions: () => Promise<PermissionSetState>,
   selector: string,
 ): Promise<Array<ConfigMapResponse>> {
   const clusterCMUrl = `/api/v1/configmaps?labelSelector=${selector}`;
@@ -115,16 +114,10 @@ async function getConfigMapsWithSelector(
     permissionSet,
   );
 
-  const postFn = createPostFn(fetchFn);
-  const clusterPermissionSet = await getPermissionResourceRules(
-    postFn,
-    '',
-    true,
-  );
   const clusterAccess = doesUserHavePermission(
     ['list'],
     { resourceGroupAndVersion: '', resourceKind: 'ConfigMap' },
-    clusterPermissionSet,
+    await getClusterPermissions(),
   );
 
   // if user has no access to clusterwide namespace listing, fall back to namespaced listing
@@ -160,6 +153,7 @@ const getExtensionWizards = async (
   kubeconfigNamespace = 'kube-public',
   currentNamespace: string,
   permissionSet: PermissionSetState,
+  getClusterPermissions: () => Promise<PermissionSetState>,
 ) => {
   if (!fetchFn) {
     return null;
@@ -179,6 +173,7 @@ const getExtensionWizards = async (
       kubeconfigNamespace,
       currentNamespace,
       permissionSet,
+      getClusterPermissions,
       'busola.io/extension=wizard',
     );
 
@@ -247,6 +242,7 @@ const getStatics = async (
   kubeconfigNamespace = 'kube-public',
   currentNamespace: string,
   permissionSet: PermissionSetState,
+  getClusterPermissions: () => Promise<PermissionSetState>,
 ) => {
   if (!fetchFn) {
     return null;
@@ -266,6 +262,7 @@ const getStatics = async (
       kubeconfigNamespace,
       currentNamespace,
       permissionSet,
+      getClusterPermissions,
       'busola.io/extension=statics',
     );
 
@@ -302,6 +299,7 @@ const getExtensions = async (
   kubeconfigNamespace = 'kube-public',
   currentNamespace: string,
   permissionSet: PermissionSetState,
+  getClusterPermissions: () => Promise<PermissionSetState>,
   extCustomComponentsEnabled: boolean,
 ) => {
   if (!fetchFn) {
@@ -326,6 +324,7 @@ const getExtensions = async (
       kubeconfigNamespace,
       currentNamespace,
       permissionSet,
+      getClusterPermissions,
       'busola.io/extension=resource',
     );
 
@@ -495,25 +494,30 @@ export const useGetExtensions = () => {
     });
   }, [crds]);
 
-  useEffect(() => {
-    let cancelled = false;
-    const manageExtensions = async () => {
-      if (!cluster) {
-        setExtensions([]);
-        setStatics([]);
-        setAllExtensions([]);
-        setInjections([]);
-        setWizard([]);
-        return;
-      }
+  const [loadedExtensions, setLoadedExtensions] = useState<{
+    cluster: typeof cluster;
+    configs: ExtResource[] | null;
+    statics: ExtResource[] | null;
+    wizardConfigs: ExtResource[] | null;
+  } | null>(null);
 
-      if (!permissionSet) return;
+  // Loading only depends on what is fetched; OpenAPI paths, CRDs and features
+  // arrive later and only change the filtering below.
+  useEffect(() => {
+    if (!cluster || !permissionSet) return;
+
+    let cancelled = false;
+    const loadExtensions = async () => {
+      const getClusterPermissions = once(() =>
+        getPermissionResourceRules(createPostFn(fetchFn!), '', true),
+      );
 
       const configs = await getExtensions(
         fetchFn,
         cluster.currentContext.namespace || 'kube-public',
         namespace,
         permissionSet,
+        getClusterPermissions,
         isExtensibilityCustomComponentsEnabled ?? false,
       );
 
@@ -522,6 +526,7 @@ export const useGetExtensions = () => {
         cluster.currentContext.namespace,
         namespace,
         permissionSet,
+        getClusterPermissions,
       );
 
       const wizardConfigs = await getExtensionWizards(
@@ -529,85 +534,21 @@ export const useGetExtensions = () => {
         cluster.currentContext.namespace || 'kube-public',
         namespace,
         permissionSet,
+        getClusterPermissions,
       );
 
       // the effect re-ran while we were fetching; drop this result so a stale
       // run can't overwrite a newer one and make nav categories disappear
       if (cancelled) return;
 
-      if (!wizardConfigs || !isExtensibilityWizardEnabled) {
-        setWizard([]);
-      } else {
-        setWizard(wizardConfigs as any);
-        // TODO wizard injections
-      }
-
-      const filteredConfigs: ExtResource[] = [];
-      if (!configs) {
-        setExtensions([]);
-        setAllExtensions([]);
-      } else {
-        const crdResourcePathIds = getCrdResourcePathIds(crds);
-        const configSet = {
-          configFeatures: features!,
-          // CRDs are available immediately, so use them to fill the gap until OpenAPI catches up
-          openapiPathIdList: crdResourcePathIds.length
-            ? [...openapiPathIdList, ...crdResourcePathIds]
-            : openapiPathIdList,
-          permissionSet,
-        };
-
-        const isNodeVisibleForCurrentConfigSet = partial(
-          shouldNodeBeVisible,
-          configSet,
-        );
-
-        configs
-          .filter(
-            (node) =>
-              !(node?.general?.resource === null) &&
-              isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
-          )
-          .forEach((i) => filteredConfigs.push(i));
-
-        setExtensions(filteredConfigs);
-        setAllExtensions(configs);
-        pushExtToEventTypes(filteredConfigs);
-      }
-
-      if (!filteredConfigs && !statics) {
-        setStatics([]);
-        setInjections([]);
-      } else {
-        const injectionsConfigs: ExtInjectionConfig[] = [];
-        filteredConfigs.forEach((config) =>
-          config?.injections?.map((injection) =>
-            injectionsConfigs.push({
-              injection: injection,
-              general: config.general,
-              dataSources: config.dataSources,
-            }),
-          ),
-        );
-        (statics || []).forEach((config) =>
-          config?.injections?.map((injection) =>
-            injectionsConfigs.push({
-              injection: injection,
-              general: {
-                ...config.general,
-                type: 'static',
-              },
-              dataSources: config.dataSources,
-            }),
-          ),
-        );
-        setStatics(statics);
-        if (isExtensibilityInjectionsEnabled) {
-          setInjections(injectionsConfigs);
-        }
-      }
+      setLoadedExtensions({
+        cluster,
+        configs,
+        statics,
+        wizardConfigs,
+      });
     };
-    void manageExtensions();
+    void loadExtensions();
     return () => {
       cancelled = true;
     };
@@ -617,10 +558,102 @@ export const useGetExtensions = () => {
     auth,
     permissionSet,
     namespace,
+    isExtensibilityCustomComponentsEnabled,
+    refreshExtenshions,
+  ]);
+
+  useEffect(() => {
+    if (!cluster) {
+      setExtensions([]);
+      setStatics([]);
+      setAllExtensions([]);
+      setInjections([]);
+      setWizard([]);
+      return;
+    }
+
+    if (!permissionSet || loadedExtensions?.cluster !== cluster) return;
+    const { configs, statics, wizardConfigs } = loadedExtensions;
+
+    if (!wizardConfigs || !isExtensibilityWizardEnabled) {
+      setWizard([]);
+    } else {
+      setWizard(wizardConfigs as any);
+      // TODO wizard injections
+    }
+
+    const filteredConfigs: ExtResource[] = [];
+    if (!configs) {
+      setExtensions([]);
+      setAllExtensions([]);
+    } else {
+      const crdResourcePathIds = getCrdResourcePathIds(crds);
+      const configSet = {
+        configFeatures: features!,
+        // CRDs are available immediately, so use them to fill the gap until OpenAPI catches up
+        openapiPathIdList: crdResourcePathIds.length
+          ? [...openapiPathIdList, ...crdResourcePathIds]
+          : openapiPathIdList,
+        permissionSet,
+      };
+
+      const isNodeVisibleForCurrentConfigSet = partial(
+        shouldNodeBeVisible,
+        configSet,
+      );
+
+      configs
+        .filter(
+          (node) =>
+            !(node?.general?.resource === null) &&
+            isNodeVisibleForCurrentConfigSet(mapExtResourceToNavNode(node)),
+        )
+        .forEach((i) => filteredConfigs.push(i));
+
+      setExtensions(filteredConfigs);
+      setAllExtensions(configs);
+      pushExtToEventTypes(filteredConfigs);
+    }
+
+    if (!filteredConfigs && !statics) {
+      setStatics([]);
+      setInjections([]);
+    } else {
+      const injectionsConfigs: ExtInjectionConfig[] = [];
+      filteredConfigs.forEach((config) =>
+        config?.injections?.map((injection) =>
+          injectionsConfigs.push({
+            injection: injection,
+            general: config.general,
+            dataSources: config.dataSources,
+          }),
+        ),
+      );
+      (statics || []).forEach((config) =>
+        config?.injections?.map((injection) =>
+          injectionsConfigs.push({
+            injection: injection,
+            general: {
+              ...config.general,
+              type: 'static',
+            },
+            dataSources: config.dataSources,
+          }),
+        ),
+      );
+      setStatics(statics);
+      if (isExtensibilityInjectionsEnabled) {
+        setInjections(injectionsConfigs);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    cluster,
+    permissionSet,
+    loadedExtensions,
     openapiPathIdList,
     crds,
     features,
-    refreshExtenshions,
   ]);
 };
 
