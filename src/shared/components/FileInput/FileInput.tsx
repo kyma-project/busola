@@ -17,6 +17,11 @@ type FileInputProps = {
   required?: boolean;
   allowMultiple?: boolean;
   customMessage?: string;
+  // Unique id for the input/label pairing. Defaults to 'file-upload' to keep
+  // existing single-instance usages unchanged; pass a distinct id when more
+  // than one FileInput can be mounted at once (e.g. multi-step wizards) to
+  // avoid duplicate-id label collisions.
+  id?: string;
 };
 
 export function FileInput({
@@ -27,6 +32,7 @@ export function FileInput({
   required,
   allowMultiple,
   customMessage,
+  id = 'file-upload',
 }: FileInputProps) {
   const [fileNames, setFileNames] = useState<string[]>([]);
   const openAddCluster = useAtomValue(showAddClusterWizardAtom);
@@ -91,7 +97,7 @@ export function FileInput({
 
   return (
     <label
-      htmlFor="file-upload"
+      htmlFor={id}
       className={containerClass}
       onDrop={drop}
       onDragEnter={() => setDraggingCounter(draggingOverCounter + 1)}
@@ -103,7 +109,7 @@ export function FileInput({
       <input
         ref={inputRef}
         type="file"
-        id="file-upload"
+        id={id}
         onChange={(e) => {
           if (e.target.files) {
             fileChanged(e.target.files);
