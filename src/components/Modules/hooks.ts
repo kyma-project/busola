@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useAtomValue } from 'jotai';
 import { isEqual } from 'lodash';
 import pluralize from 'pluralize';
@@ -77,98 +84,105 @@ export const useFetchModuleData = (
   const clusterNodes = allNodes.filter((node) => !node.namespaced);
   const namespaceNodes = allNodes.filter((node) => node.namespaced);
 
-  const fetchAll = useCallback(
-    async (isPolling: boolean = false) => {
-      if (isFetching.current) {
-        return;
+  const fetchAll = useEffectEvent(async (isPolling: boolean) => {
+    if (isFetching.current) {
+      return;
+    }
+
+    const items = moduleTemplates?.items ?? [];
+
+    if (!items.length) {
+      if (!isPolling) {
+        setData({});
+        setLoading(false);
       }
+      return;
+    }
 
-      const items = moduleTemplates?.items ?? [];
+    isFetching.current = true;
+    setError(null);
+    const cache: Record<string, any> = {};
+    const errors: string[] = [];
+    const lookups = new Map<string, Promise<K8sResource | null>>();
 
-      if (!items.length) {
-        if (!isPolling) {
-          setData({});
-          setLoading(false);
+    const results = await Promise.allSettled(
+      items.map(async (moduleTemplate) => {
+        const name = moduleTemplate?.metadata?.name;
+        const resource = selector(moduleTemplate);
+
+        if (!name || !resource) {
+          return { name, data: null };
         }
-        return;
-      }
 
-      isFetching.current = true;
-      setError(null);
-      const cache: Record<string, any> = {};
-      const errors: string[] = [];
-      const lookups = new Map<string, Promise<K8sResource | null>>();
+        const resourceKind = resource?.kind;
+        if (resourceKind) {
+          const resourceType = pluralize(resourceKind.toLowerCase());
+          const isKnownResource = allNodes.some(
+            (n: any) => n.resourceType === resourceType,
+          );
+          if (!isKnownResource) return { name, data: null };
+        }
 
-      const results = await Promise.allSettled(
-        items.map(async (moduleTemplate) => {
-          const name = moduleTemplate?.metadata?.name;
-          const resource = selector(moduleTemplate);
-
-          if (!name || !resource) {
-            return { name, data: null };
+        try {
+          const resourceUrl = await getUrl(
+            resource,
+            resource?.metadata?.namespace ||
+              resource?.namespace ||
+              DEFAULT_K8S_NAMESPACE,
+            clusterNodes,
+            namespaceNodes,
+            singleGetFn,
+          );
+          if (!resourceUrl) return { name, data: null };
+          const resourceName = resource?.metadata?.name || resource?.name;
+          const url = `${resourceUrl}?fieldSelector=metadata.name=${encodeURIComponent(resourceName)}`;
+          let lookup = lookups.get(url);
+          if (!lookup) {
+            lookup = fetch({ relativeUrl: url })
+              .then((response) => response.json())
+              .then((list) => list?.items?.[0] ?? null);
+            lookups.set(url, lookup);
           }
+          return { name, data: await lookup };
+        } catch (e) {
+          errors.push(
+            `Error fetching ${label} for module "${name}": ${
+              e instanceof Error ? e.message : 'Unknown error'
+            }`,
+          );
+          return { name, data: null };
+        }
+      }),
+    );
 
-          const resourceKind = resource?.kind;
-          if (resourceKind) {
-            const resourceType = pluralize(resourceKind.toLowerCase());
-            const isKnownResource = allNodes.some(
-              (n: any) => n.resourceType === resourceType,
-            );
-            if (!isKnownResource) return { name, data: null };
-          }
-
-          try {
-            const resourceUrl = await getUrl(
-              resource,
-              resource?.metadata?.namespace ||
-                resource?.namespace ||
-                DEFAULT_K8S_NAMESPACE,
-              clusterNodes,
-              namespaceNodes,
-              singleGetFn,
-            );
-            if (!resourceUrl) return { name, data: null };
-            const resourceName = resource?.metadata?.name || resource?.name;
-            const url = `${resourceUrl}?fieldSelector=metadata.name=${encodeURIComponent(resourceName)}`;
-            let lookup = lookups.get(url);
-            if (!lookup) {
-              lookup = fetch({ relativeUrl: url })
-                .then((response) => response.json())
-                .then((list) => list?.items?.[0] ?? null);
-              lookups.set(url, lookup);
-            }
-            return { name, data: await lookup };
-          } catch (e) {
-            errors.push(
-              `Error fetching ${label} for module "${name}": ${
-                e instanceof Error ? e.message : 'Unknown error'
-              }`,
-            );
-            return { name, data: null };
-          }
-        }),
-      );
-
-      for (const result of results) {
-        if (result.status === 'fulfilled') {
-          const { name, data } = result.value || {};
-          if (name && data) {
-            cache[`${name}:${data.metadata.namespace}`] = data;
-          }
+    for (const result of results) {
+      if (result.status === 'fulfilled') {
+        const { name, data } = result.value || {};
+        if (name && data) {
+          cache[`${name}:${data.metadata.namespace}`] = data;
         }
       }
+    }
 
-      // Don't clear data during polling if all fetches fail
-      if (Object.keys(cache).length > 0 || !isPolling) {
-        setData((prev) => (isEqual(prev, cache) ? prev : cache));
-      }
-      if (errors.length) setError(errors.join('\n'));
-      setLoading(false);
-      isFetching.current = false;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [moduleTemplates, clusterNodes, namespaceNodes],
+    // Don't clear data during polling if all fetches fail
+    if (Object.keys(cache).length > 0 || !isPolling) {
+      setData((prev) => (isEqual(prev, cache) ? prev : cache));
+    }
+    if (errors.length) setError(errors.join('\n'));
+    setLoading(false);
+    isFetching.current = false;
+  });
+
+  // Every template poll delivers a new moduleTemplates object and allNodes
+  // changes several times while extensions load, so restart polling only when
+  // the lookups change or the nodes first arrive.
+  const lookupKey = JSON.stringify(
+    (moduleTemplates?.items ?? []).map((template) => [
+      template?.metadata?.name,
+      selector(template),
+    ]),
   );
+  const hasNodes = allNodes.length > 0;
 
   useEffect(() => {
     if (moduleTemplatesLoading) {
@@ -181,8 +195,7 @@ export const useFetchModuleData = (
       const intervalId = setInterval(() => fetchAll(true), pollingInterval);
       return () => clearInterval(intervalId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [moduleTemplates, moduleTemplatesLoading, pollingInterval]);
+  }, [lookupKey, hasNodes, moduleTemplatesLoading, pollingInterval]);
 
   const getItem = useCallback(
     (name: string, namespace: string) => data[`${name}:${namespace}`],
