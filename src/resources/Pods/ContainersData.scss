@@ -1,0 +1,8 @@
+// The heading is a child of the group, so on wide cards it would otherwise
+// flow into the first of the group's two columns. Inset and border match the
+// form's own group headings.
+.container-group-heading {
+  column-span: all;
+  padding-inline: 0.25rem;
+  border-bottom: none;
+}

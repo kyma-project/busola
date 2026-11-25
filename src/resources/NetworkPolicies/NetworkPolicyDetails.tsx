@@ -13,7 +13,8 @@ import NetworkPolicyCreate from './NetworkPolicyCreate';
 import { ResourceDescription } from 'resources/NetworkPolicies';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 
 type Policy = {
@@ -57,10 +58,12 @@ export function NetworkPolicyDetails({
       accessibleName={t('common.accessible-name.specification')}
       keyComponent="specification-panel"
     >
-      <LayoutPanelRow
-        name={t('network-policies.headers.policy-types')}
-        value={<Tokens tokens={spec.policyTypes || []} />}
-      />
+      <ResourceDetailsForm>
+        <ResourceDetailsFormItem
+          label={t('network-policies.headers.policy-types')}
+          value={<Tokens tokens={spec.policyTypes || []} />}
+        />
+      </ResourceDetailsForm>
     </UI5Card>
   );
 
@@ -80,10 +83,7 @@ export function NetworkPolicyDetails({
         accessibleName={`${t('network-policies.headers.ingress')} #${idx + 1} panel`}
         keyComponent={idx.toString()}
       >
-        <NetworkPolicyPeers
-          peers={ingress.from}
-          title={t('network-policies.headers.policy-peer')}
-        />
+        <NetworkPolicyPeers peers={ingress.from} />
         <NetworkPolicyPorts
           ports={ingress.ports}
           title={t('network-policies.headers.policy-port')}
@@ -108,10 +108,7 @@ export function NetworkPolicyDetails({
         accessibleName={`${t('network-policies.headers.egress')} #${idx + 1} panel`}
         keyComponent={idx.toString()}
       >
-        <NetworkPolicyPeers
-          peers={egress.to}
-          title={t('network-policies.headers.policy-peer')}
-        />
+        <NetworkPolicyPeers peers={egress.to} />
         <NetworkPolicyPorts
           ports={egress.ports}
           title={t('network-policies.headers.policy-port')}

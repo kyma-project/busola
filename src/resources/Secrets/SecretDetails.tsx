@@ -16,7 +16,8 @@ import { ResourceDescription } from 'resources/Secrets';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 
 function HelmReleaseDataWrapper(secret: Record<string, any>) {
   if (secret.type !== 'helm.sh/release.v1') {
@@ -70,7 +71,12 @@ export function SecretDetails(
       title={t('common.headers.configuration')}
       accessibleName={t('common.accessible-name.configuration')}
     >
-      <LayoutPanelRow name={t('secrets.headers.type')} value={secret.type} />
+      <ResourceDetailsForm>
+        <ResourceDetailsFormItem
+          label={t('secrets.headers.type')}
+          value={secret.type}
+        />
+      </ResourceDetailsForm>
     </UI5Card>
   );
 

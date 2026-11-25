@@ -10,7 +10,6 @@ window.LevelAccess_AccessContinuumConfiguration = {
     1471 /* WCAG 2.0 Level A & AA Baseline */,
   ],
   includePotentialAccessibilityConcerns: false,
-  ampApiToken: Cypress.env('ACC_AMP_TOKEN'),
   accessibilityConcerns: {
     includePotentialConcerns: false,
     format: 'amp',

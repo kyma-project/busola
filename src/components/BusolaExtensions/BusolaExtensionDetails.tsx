@@ -5,7 +5,6 @@ import { createPatch } from 'rfc6902';
 import { Button, MessageStrip } from '@ui5/webcomponents-react';
 import { useAtomValue } from 'jotai';
 
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import {
   ControlledBy,
   OwnerReferences,
@@ -15,7 +14,8 @@ import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { useFeature } from 'hooks/useFeature';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { extensibilitySchemasAtom } from 'state/extensibilitySchemasAtom';
@@ -224,14 +224,16 @@ export function BusolaExtensionDetails({
         }
       >
         {showMessage()}
-        <LayoutPanelRow
-          name={t('extensibility.version.current')}
-          value={currentVersion || EMPTY_TEXT_PLACEHOLDER}
-        />
-        <LayoutPanelRow
-          name={t('extensibility.version.latest')}
-          value={getLatestVersion()}
-        />
+        <ResourceDetailsForm>
+          <ResourceDetailsFormItem
+            label={t('extensibility.version.current')}
+            value={currentVersion}
+          />
+          <ResourceDetailsFormItem
+            label={t('extensibility.version.latest')}
+            value={getLatestVersion()}
+          />
+        </ResourceDetailsForm>
       </UI5Card>
     );
   };

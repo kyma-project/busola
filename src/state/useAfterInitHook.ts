@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import { authDataAtom } from './authDataAtom';
 import { clusterAtom } from './clusterAtom';
 import { getIntendedPath, clearIntendedPath } from './intendedPathAtom';
-import { ssoDataAtom, useIsSSOEnabled } from './ssoDataAtom';
+import { useIsSSOReady } from './ssoDataAtom';
 
 const PREVIOUS_PATHNAME_KEY = 'busola.previous-pathname';
 
@@ -69,11 +69,10 @@ export function usePreviousPathTracker() {
 export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
   const cluster = useAtomValue(clusterAtom);
   const authData = useAtomValue(authDataAtom);
-  const ssoData = useAtomValue(ssoDataAtom);
   const [search] = useSearchParams();
   const navigate = useNavigate();
   const initDone = useRef(false);
-  const isSSOEnabled = useIsSSOEnabled();
+  const isSSOReady = useIsSSOReady();
 
   useEffect(() => {
     if (initDone.current === true) {
@@ -84,7 +83,7 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
       return;
     }
 
-    if (isSSOEnabled && !ssoData) {
+    if (!isSSOReady) {
       return;
     }
 
@@ -131,13 +130,5 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
     } else {
       navigate('/clusters');
     }
-  }, [
-    cluster,
-    authData,
-    search,
-    navigate,
-    handledKubeconfigId,
-    ssoData,
-    isSSOEnabled,
-  ]);
+  }, [cluster, authData, search, navigate, handledKubeconfigId, isSSOReady]);
 }

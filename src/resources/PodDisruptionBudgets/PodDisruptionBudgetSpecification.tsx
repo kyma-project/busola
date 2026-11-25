@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { Text } from '@ui5/webcomponents-react';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { UI5Card } from 'shared/components/UI5Card/UI5Card';
 import type { PodDisruptionBudget } from './types';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 
 export default function PodDisruptionBudgetSpecification({
   resource,
@@ -17,18 +16,16 @@ export default function PodDisruptionBudgetSpecification({
       title={t('common.headers.specification')}
       accessibleName={t('common.accessible-name.specification')}
     >
-      <LayoutPanelRow
-        name={t('pod-disruption-budgets.headers.min-available')}
-        value={
-          <Text>{resource.spec.minAvailable ?? EMPTY_TEXT_PLACEHOLDER}</Text>
-        }
-      />
-      <LayoutPanelRow
-        name={t('pod-disruption-budgets.headers.max-unavailable')}
-        value={
-          <Text>{resource.spec.maxUnavailable ?? EMPTY_TEXT_PLACEHOLDER}</Text>
-        }
-      />
+      <ResourceDetailsForm>
+        <ResourceDetailsFormItem
+          label={t('pod-disruption-budgets.headers.min-available')}
+          value={resource.spec.minAvailable}
+        />
+        <ResourceDetailsFormItem
+          label={t('pod-disruption-budgets.headers.max-unavailable')}
+          value={resource.spec.maxUnavailable}
+        />
+      </ResourceDetailsForm>
     </UI5Card>
   ) : null;
 }

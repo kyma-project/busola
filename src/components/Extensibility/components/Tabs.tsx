@@ -2,6 +2,7 @@ import { useGetTranslation } from '../helpers';
 
 import { Widget, InlineWidget } from './Widget';
 import { TabContainer, Tab } from '@ui5/webcomponents-react';
+import './Tabs.scss';
 
 interface TabsProps {
   value: any;
@@ -14,24 +15,26 @@ export function Tabs({ value, structure, schema, ...props }: TabsProps) {
   const { widgetT } = useGetTranslation();
 
   return Array.isArray(structure?.children) ? (
-    <div className="sap-margin-top-small sap-margin-x-small">
+    <div className="sap-margin-top-small">
       <TabContainer tabLayout="Inline" contentBackgroundDesign="Transparent">
         {structure.children.map((child: any, idx: number) => (
           <Tab
             key={`tab-wrapper-${child?.path || child?.name || idx}`}
             text={widgetT(child)}
           >
-            {Array.isArray(child?.children) &&
-              child.children.map((def: any, defIdx: number) => (
-                <Widget
-                  key={`widget-${def?.path || def?.name || ''}-${defIdx}`}
-                  value={value}
-                  structure={def}
-                  schema={schema}
-                  inlineRenderer={InlineWidget}
-                  {...props}
-                />
-              ))}
+            <div className="extensibility-tab__content">
+              {Array.isArray(child?.children) &&
+                child.children.map((def: any, defIdx: number) => (
+                  <Widget
+                    key={`widget-${def?.path || def?.name || ''}-${defIdx}`}
+                    value={value}
+                    structure={def}
+                    schema={schema}
+                    inlineRenderer={InlineWidget}
+                    {...props}
+                  />
+                ))}
+            </div>
           </Tab>
         ))}
       </TabContainer>

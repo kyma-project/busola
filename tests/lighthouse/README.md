@@ -1,42 +1,66 @@
 # Busola Lighthouse tests
 
-This suite runs two kinds of Lighthouse checks against a production build of
-Busola connected to a real (k3d) cluster:
+This directory contains two independent performance test suites that run
+against a production build of Busola connected to a real (k3d) cluster.
 
-- **Accessibility & Best Practices** (`lighthouse.spec.js`) — threshold-gated;
-  a regression below a threshold fails the build.
-- **Performance** (`performance.spec.js`) — **reporting-only**. It collects
-  FCP, LCP, TBT, CLS and the Performance score for `/clusters` and the
-  connected cluster overview, writes per-sample and median reports, and fails
-  only on a broken audit or an invalid/missing measurement — never on a slow
-  score. Performance-budget gates are intentionally deferred.
+## Suite 1 — Lighthouse audits (`lighthouse.spec.js` + `performance.spec.js`)
 
-Pure helper logic (metric extraction/validation, median aggregation, report
-assembly, sanitization) lives in `lib/` and is covered by Vitest unit tests.
+Runs Chrome via Playwright, drives Lighthouse, and reports structured scores.
+
+| Check                          | File                  | CI behaviour                                   |
+| ------------------------------ | --------------------- | ---------------------------------------------- |
+| Accessibility & Best Practices | `lighthouse.spec.js`  | Threshold-gated — a regression fails the build |
+| Performance audits             | `performance.spec.js` | **Reporting-only** — never gates the build     |
+
+The performance audit collects FCP, LCP, TBT, CLS, and Performance score for
+`/clusters` and the connected cluster overview. It writes per-sample JSON
+reports and a median summary to `test-results/lighthouse-performance/`, then
+fails only if an audit errors or a measurement is missing/invalid.
+
+## Suite 2 — User-flow performance measurements (`performance/`)
+
+Measures application-readiness and interaction-responsiveness timings for three
+user journeys against a production build:
+
+1. **Cluster overview readiness** — navigation + async API + stats/charts render.
+2. **Resource list** — `load`, `search`, and `sort` on a large (1 000-item) list,
+   each measured separately.
+3. **Monaco YAML editor readiness** — editor + worker initialisation (no save).
+
+Each metric is measured in-page from an injected start timestamp to a polled
+readiness predicate that checks real content — never fixed sleeps or
+`networkidle`. The Kubernetes API responses are mocked via Playwright route
+interception so dataset sizes are exact and repeatable; k3d and the production
+build still serve the app and the cluster-connection flow.
+
+Results are written to `test-results/performance/`.
 
 ## Layout
 
-| Path                       | Purpose                                                      |
-| -------------------------- | ------------------------------------------------------------ |
-| `lighthouse.spec.js`       | Accessibility + Best Practices audits (unchanged thresholds) |
-| `performance.spec.js`      | Reporting-only performance audits                            |
-| `lib/metrics.js`           | Extract + validate the five metrics from a Lighthouse result |
-| `lib/aggregate.js`         | Median / per-metric summary across samples                   |
-| `lib/report.js`            | Metadata, per-sample & summary reports, report sanitization  |
-| `lib/*.test.js`            | Vitest unit tests for the helpers                            |
-| `fixtures/kubeconfig.yaml` | The cluster the audits connect to (git-ignored)              |
+| Path                          | Purpose                                                             |
+| ----------------------------- | ------------------------------------------------------------------- |
+| `lighthouse.spec.js`          | Accessibility + Best Practices audits (threshold-gated)             |
+| `performance.spec.js`         | Reporting-only Lighthouse performance audits                        |
+| `lib/metrics.js`              | Extract + validate the five Lighthouse metrics from an audit result |
+| `lib/aggregate.js`            | Median / per-metric summary across samples                          |
+| `lib/report.js`               | Metadata, per-sample & summary reports, report sanitization         |
+| `performance/scenarios/`      | User-flow performance scenarios (Suite 2)                           |
+| `performance/helpers.spec.js` | Shared fixtures and helpers for Suite 2                             |
+| `fixtures/kubeconfig.yaml`    | The cluster both suites connect to (git-ignored)                    |
+
+This suite runs two kinds of Lighthouse checks against a production build of
+Busola connected to a real (k3d) cluster:
+
+Both suites run in `.github/workflows/pull-lighthouse.yml`:
+
+- **Suite 1 (Lighthouse audits):** `npm run test` — gating step, 10 min timeout.
+  Performance audits run together with user-flow tests via `npm run test:performance`
+  in a separate non-gating step (`continue-on-error: true`).
+- **Suite 2 (user-flow):** `npm run test:performance` — same non-gating step.
 
 ## Running locally
 
-### 1. Unit tests (no cluster needed)
-
-```bash
-cd tests/lighthouse
-npm install
-npm run test:unit
-```
-
-### 2. Browser audits (need a running Busola + cluster)
+### Suite 1 — Lighthouse audits (need a running Busola + cluster)
 
 Audits run against a **production build**, matching CI. Bring one up (from the
 repo root — this mirrors `.github/scripts/setup_local_busola.sh`):
@@ -47,135 +71,62 @@ cp -r build backend/core-ui
 (cd backend && npm run build && IS_DOCKER=true npm run start:prod &)   # serves http://localhost:3001
 ```
 
-Provide the cluster the audits connect to:
+Copy your kubeconfig:
 
 ```bash
-k3d cluster create k3dCluster --agents 1 --wait
-k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
+cp ~/.kube/config tests/lighthouse/fixtures/kubeconfig.yaml
+cd tests/lighthouse && npm ci
 ```
 
-Then run the audits:
+Run all Lighthouse audits (accessibility + performance):
+
+```bash
+npm run test:local                            # accessibility + best-practices only
+LIGHTHOUSE_SAMPLES=2 npm run test:performance:local  # Lighthouse performance audits (default 3 samples)
+```
+
+### Suite 2 — User-flow performance measurements
 
 ```bash
 cd tests/lighthouse
-npm ci && npx playwright install --with-deps
-npm run test              # accessibility + best practices
-npm run test:performance  # reporting-only performance
+npm run test:performance:local                  # runs both suites (Lighthouse perf + user-flow)
+PERF_SAMPLES=5 npm run test:performance:local   # configurable sample count for user-flow scenarios
+npm run test:performance:trace                  # heavy tracing for user-flow (debugging only — perturbs timings)
 ```
 
-To point at a dev server (`http://localhost:8080`) instead of the production
-backend, use the `:local` variants (`npm run test:local`,
-`npm run test:performance:local`). Note performance numbers from a dev server
-are not comparable to production — use production builds for any real reading.
+## Reading the reports
 
-### Sample count
+**Lighthouse performance** (`test-results/lighthouse-performance/`):
 
-Three samples per page are collected by default. Override with a positive
-integer:
+- `<page>-sample-N.sample.json` — per-sample metrics (FCP, LCP, TBT, CLS, score)
+- `summary.json` — median table across all samples for both audited pages
+- `<page>-sample-N.html` — full Lighthouse HTML report for each sample
 
-```bash
-LIGHTHOUSE_SAMPLES=5 npm run test:performance
-```
+**User-flow performance** (`test-results/performance/`):
 
-Invalid values (`0`, negatives, non-integers) fail immediately before any
-audit runs.
+- `performance.json` — per-sample timings, medians, dataset sizes, and the build
+  version (git sha) + browser version
+- `summary.md` — a median table by scenario × metric × cold vs warm
 
-## Fixtures & authentication
+**Cold** is a fresh browser context (empty HTTP cache, fresh JS runtime) with
+cluster config pre-seeded in localStorage; the measured navigation is the first
+ever visit to that URL. **Warm** is a repeat in the same context (HTTP cache
+primed, React still running) using in-app navigation — a sidebar click handled
+by React Router — so no JS context is torn down. They are reported as separate
+series and never averaged together.
 
-The performance suite connects the cluster **once** through the UI (upload
-`fixtures/kubeconfig.yaml` → choose _Local storage_ → _Connect Cluster_). When
-"Local storage" is chosen, Busola persists the cluster — including its
-credentials — in two `localStorage` keys: `busola.clusters` and
-`busola.current-cluster-name`. The suite snapshots those two keys after the
-connect flow and re-injects them (via `page.addInitScript`) into a fresh,
-isolated browser profile for **every** sample, so each sample measures the same
-authenticated state. The connected cluster's real name (e.g. `k3d-k3dCluster`)
-is read back from that snapshot and used to build the overview URL
-(`/cluster/<name>/overview`) — it is never hard-coded.
+A failed scenario, or any missing/invalid (`NaN`/`≤ 0`) measurement, fails the
+run. Timing budgets are intentionally not enforced yet — these tests establish
+baselines and catch gross regressions, not fixed thresholds.
 
-Each sample runs serially in its own temporary profile directory with the HTTP
-cache explicitly cleared (cold cache, preserved auth).
+## Credentials and security
 
-## Metrics
+`fixtures/kubeconfig.yaml` is git-ignored and never under an uploaded artifact
+path. The Lighthouse performance audit scrubs any credential values extracted
+from the kubeconfig (tokens, certificate data) from every report file before
+upload, and fails the run if any credential survives redaction.
 
-| Key                | Audit                           | Unit     |
-| ------------------ | ------------------------------- | -------- |
-| `fcp`              | First Contentful Paint          | ms       |
-| `lcp`              | Largest Contentful Paint        | ms       |
-| `tbt`              | Total Blocking Time             | ms       |
-| `cls`              | Cumulative Layout Shift         | unitless |
-| `performanceScore` | Lighthouse Performance category | 0–100    |
-
-Audits use explicit desktop settings: `formFactor: desktop`, desktop
-`screenEmulation`, and the Lighthouse desktop throttling preset
-(`throttlingMethod: simulate`, 40 ms RTT, 10 Mbps, 1× CPU).
-
-## Reports & CI artifacts
-
-All performance reports are written to
-`test-results/lighthouse-performance/` and uploaded by the PR Lighthouse CI
-workflow as artifacts:
-
-- `<page>-sample-<n>.html` — the native Lighthouse report for each sample.
-- `<page>-sample-<n>.sample.json` — extracted metrics **plus metadata**:
-  audited URL, revision, tool versions (lighthouse/playwright/node), settings.
-- `summary.json` — the interpretation entry point: metadata plus, per page, all
-  samples and their **median** for each metric.
-
-`summary.json` is the file to read first. Example shape:
-
-```jsonc
-{
-  "schema": "busola-lighthouse-summary",
-  "revision": "<git sha or 'unknown'>",
-  "toolVersions": { "lighthouse": "...", "playwright": "...", "node": "..." },
-  "settings": { "formFactor": "desktop", "throttling": { ... }, "samples": 3, ... },
-  "pages": [
-    { "name": "clusters", "url": "...", "samples": [ ... ], "median": { "fcp": ..., "lcp": ..., "tbt": ..., "cls": ..., "performanceScore": ... } },
-    { "name": "cluster-overview", "url": "...", "samples": [ ... ], "median": { ... } }
-  ]
-}
-```
-
-The native HTML report inherently shows the audited URL, Lighthouse version and
-emulation/throttling settings; the full metadata set (including revision and
-playwright/node versions) lives in the JSON reports and `summary.json`.
-
-### Sanitisation
-
-Credentials must never reach a CI artifact. This is enforced in three layers:
-
-1. Every file under `test-results/lighthouse-performance/` is scrubbed of
-   cluster credentials (kubeconfig token, client cert/key and CA data, and the
-   serialized cluster state) — this runs in a `finally` block, so even a
-   partial/failed run is sanitized before upload.
-2. After scrubbing, the suite asserts no credential survived in any report
-   file (`assertNoSecrets`); a redaction gap **fails the run** instead of
-   leaking.
-3. Playwright tracing is disabled (`trace: 'off'`) and the CI workflow uploads
-   only the report directories — never the Playwright per-test output. A
-   `trace.zip` is a compressed archive that string-based scrubbing cannot
-   reach, so it is kept out of artifacts entirely rather than sanitized.
-
-## Troubleshooting
-
-| Symptom                                  | Likely cause / fix                                                                                                                                        |
-| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `invalid sample count` and no tests run  | `LIGHTHOUSE_SAMPLES` is not a positive integer.                                                                                                           |
-| Audit hangs or `port 9222` errors        | A previous Chromium left the debug port open; the suite runs serially so only one profile uses 9222 at a time — kill stray `chrome`/`chromium` processes. |
-| Overview audit times out at verification | Cluster content ("Nodes (N)") didn't load — the cluster is unreachable or still starting. Check the backend/cluster, not the audit.                       |
-| `failed to capture cluster auth state`   | The connect-cluster flow didn't finish; usually a missing/invalid `fixtures/kubeconfig.yaml`.                                                             |
-| Metrics fail with "invalid measurement"  | Lighthouse returned an errored/partial trace (often flakiness under load). Re-run; a genuinely broken audit is meant to fail.                             |
-
-## Measurement limitations
-
-- **CI-runner variance.** Shared CI runners add noise; treat single-run numbers
-  as indicative, not exact. The median over samples reduces, but does not
-  eliminate, this. This is why performance is reporting-only for now.
-- **Simulated throttling** approximates a mid-tier desktop; it is not a real
-  device and not directly comparable to field data.
-- **Single-navigation audits.** Each audit is a cold load of one URL; it does
-  not capture in-app navigation, warm-cache behaviour, or long sessions.
-- **Dev vs. production.** The `:local` variants hit an unminified dev server and
-  will report worse, non-comparable numbers. Only production builds are
-  meaningful.
+Tracing is disabled in all measurement configs (`trace: 'off'`) to prevent
+network headers and injected localStorage values (which include the cluster
+kubeconfig and bearer token) from being captured in trace archives that would
+otherwise be uploaded as CI artifacts.

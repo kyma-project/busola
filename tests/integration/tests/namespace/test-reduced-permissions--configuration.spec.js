@@ -120,7 +120,7 @@ context('Test reduced permissions 2', () => {
   });
 
   it('Test extension CMs call - user has no access to clusterwide CMs, fallback to namespace wide CMs', () => {
-    const namespaceName = Cypress.env('NAMESPACE_NAME');
+    const namespaceName = Cypress.expose('NAMESPACE_NAME');
 
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

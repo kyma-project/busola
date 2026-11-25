@@ -3,10 +3,11 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { ResourceDescription } from '.';
 import ResourceQuotaCreate from './ResourceQuotaCreate';
 import ResourceQuotaLimits from './ResourceQuotaLimits';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ResourceDetailsForm } from 'shared/components/ResourceDetails/ResourceDetailsForm';
+import { ResourceDetailsFormItem } from 'shared/components/ResourceDetails/ResourceDetailsFormItem';
 import { useTranslation } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
-import { Text, Title } from '@ui5/webcomponents-react';
+import { FormGroup } from '@ui5/webcomponents-react';
 import { UI5RadialChart } from 'shared/components/UI5RadialChart/UI5RadialChart';
 import {
   mapLimitsAndRequestsToChartsData,
@@ -57,41 +58,30 @@ export default function ResourceQuotaDetails(props: any) {
             title={t('common.headers.specification')}
             accessibleName={t('common.accessible-name.specification')}
           >
-            {resource.spec?.scopes && (
-              <LayoutPanelRow
-                name={t('resource-quotas.headers.scopes')}
-                value={<Tokens tokens={resource.spec.scopes} />}
-              />
-            )}
-            {resource.spec?.scopeSelector && (
-              <>
-                <Title
-                  level="H6"
-                  size="H6"
-                  className="resource-quota-spec-subheader sap-margin-small"
-                >
-                  {t('resource-quotas.headers.scope-selectors')}
-                </Title>
-
-                {resource.spec.scopeSelector?.matchExpressions?.map((scope) => (
-                  <Fragment key={scope.scopeName}>
-                    <Title level="H6" size="H6" className=" sap-margin-small">
-                      {scope.scopeName}
-                    </Title>
-                    <LayoutPanelRow
-                      name={t('resource-quotas.headers.operator')}
-                      value={<Text>{scope.operator}</Text>}
+            <ResourceDetailsForm>
+              {resource.spec?.scopes && (
+                <FormGroup>
+                  <ResourceDetailsFormItem
+                    label={t('resource-quotas.headers.scopes')}
+                    value={<Tokens tokens={resource.spec.scopes} />}
+                  />
+                </FormGroup>
+              )}
+              {resource.spec.scopeSelector?.matchExpressions?.map((scope) => (
+                <FormGroup key={scope.scopeName} headerText={scope.scopeName}>
+                  <ResourceDetailsFormItem
+                    label={t('resource-quotas.headers.operator')}
+                    value={scope.operator}
+                  />
+                  {scope.values && (
+                    <ResourceDetailsFormItem
+                      label={t('resource-quotas.headers.values')}
+                      value={<Tokens tokens={scope.values} />}
                     />
-                    {scope.values && (
-                      <LayoutPanelRow
-                        name={t('resource-quotas.headers.values')}
-                        value={<Tokens tokens={scope.values} />}
-                      />
-                    )}
-                  </Fragment>
-                ))}
-              </>
-            )}
+                  )}
+                </FormGroup>
+              ))}
+            </ResourceDetailsForm>
           </UI5Card>
         )}
       </Fragment>

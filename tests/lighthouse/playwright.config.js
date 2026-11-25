@@ -7,6 +7,10 @@ import { devices } from '@playwright/test';
  */
 const config = {
   testDir: './.',
+  // Exclude Lighthouse-performance and user-flow performance specs: they run
+  // under playwright.performance.config.js in a separate non-gating CI step
+  // with its own timeouts and reporters.
+  testIgnore: ['**/*.perf.spec.js', 'performance/**', 'performance.spec.js'],
   timeout: 120 * 1000,
   expect: {
     timeout: 20 * 1000,
