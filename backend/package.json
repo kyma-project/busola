@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.14",
-    "vitest": "^4.1.11",
+    "vitest": "^4.1.12",
     "memfs": "^4.57.6",
     "webpack": "^5.105.4",
     "webpack-cli": "7.0.2",
