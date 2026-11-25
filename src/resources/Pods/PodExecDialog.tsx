@@ -4,7 +4,6 @@ import {
   Dialog,
   Form,
   FormItem,
-  Icon,
   Input,
   Option,
   Select,
@@ -12,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Label } from 'shared/ResourceForm/components/Label';
 import { useState } from 'react';
-import { useAtom, useSetAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { ConnectionType, terminalSessionAtom } from 'state/terminalSessionAtom';
 import InputType from '@ui5/webcomponents/dist/types/InputType.js';
 
