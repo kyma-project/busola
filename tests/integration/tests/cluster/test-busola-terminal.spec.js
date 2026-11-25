@@ -110,53 +110,7 @@ context('Test Busola Terminal', () => {
       },
     );
 
-    // Stub the Kubernetes attach WebSocket so the terminal reaches "connected"
-    // state without a real pod. Echoes ls output when Enter (0x0D) is received
-    // on stdin (Kubernetes attach channel 0).
-    cy.window().then((win) => {
-      const OriginalWebSocket = win.WebSocket;
-      const { CONNECTING, OPEN, CLOSING, CLOSED } = OriginalWebSocket;
-      let fakeWs;
-      const stub = cy.stub(win, 'WebSocket').callsFake((url, protocols) => {
-        if (url.includes('/ws/api/v1/namespaces/busola-terminal/pods/')) {
-          fakeWs = {
-            binaryType: 'arraybuffer',
-            readyState: OPEN,
-            onopen: null,
-            onmessage: null,
-            onclose: null,
-            onerror: null,
-            send(data) {
-              if (!(data instanceof Uint8Array) || data[0] !== 0) return;
-              if (new TextDecoder().decode(data.slice(1)) === '\r') {
-                const out = new TextEncoder().encode('bin  etc  usr\r\n');
-                const frame = new Uint8Array(out.length + 1);
-                frame[0] = 1; // stdout channel
-                frame.set(out, 1);
-                setTimeout(
-                  () => fakeWs?.onmessage?.({ data: frame.buffer }),
-                  50,
-                );
-              }
-            },
-            close() {
-              this.readyState = CLOSED;
-              this.onclose?.({ code: 1000, reason: '' });
-            },
-          };
-          // Expose on window so subsequent tests can interact with the mock directly.
-          win.__terminalWs = fakeWs;
-          setTimeout(() => fakeWs?.onopen?.(), 0);
-          return fakeWs;
-        }
-        return new OriginalWebSocket(url, protocols);
-      });
-      // Preserve static constants so app checks like `ws.readyState === WebSocket.OPEN` work.
-      stub.CONNECTING = CONNECTING;
-      stub.OPEN = OPEN;
-      stub.CLOSING = CLOSING;
-      stub.CLOSED = CLOSED;
-    });
+    cy.stubTerminalWebSocket('/ws/api/v1/namespaces/busola-terminal/pods/');
 
     cy.get('ui5-shellbar')
       .find('ui5-button[icon="command-line-interfaces"]')
@@ -209,16 +163,7 @@ context('Test Busola Terminal', () => {
   });
 
   it('Accepts keyboard input and displays output from the remote shell', () => {
-    // Simulate the stdin frame xterm sends when the user presses Enter after
-    // typing 'ls'. Kubernetes attach protocol: first byte is channel (0 = stdin),
-    // remaining bytes are the character data.
-    cy.window().then((win) => {
-      const enterByte = new TextEncoder().encode('\r');
-      const frame = new Uint8Array(enterByte.length + 1);
-      frame[0] = 0; // stdin channel
-      frame.set(enterByte, 1);
-      win.__terminalWs.send(frame);
-    });
+    cy.sendTerminalEnter();
 
     cy.get('.xterm-rows', { timeout: 5000 }).should(
       'contain.text',
