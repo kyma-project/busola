@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: 0
           ref: ${{ github.ref_name }} # checkout to latest branch changes ( by default this action checkouts to the SHA that triggers action )
@@ -115,7 +115,7 @@ jobs:
       # Checkout the target busola-deploy repository on the dev branch
       - name: Generate GitHub App token
         id: app-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
         with:
           app-id: ${{ secrets.BUSOLA_DEPLOY_APP_ID }}
           private-key: ${{ secrets.BUSOLA_DEPLOY_APP_PRIVATE_KEY }}
@@ -124,7 +124,7 @@ jobs:
           github-api-url: https://github.tools.sap/api/v3
 
       - name: Checkout busola-deploy repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           repository: kyma/busola-deploy
           github-server-url: 'https://github.tools.sap'
@@ -142,7 +142,7 @@ jobs:
 
       # Open a pull request to the dev branch with the updated image versions
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7.0.11
         with:
           token: ${{ steps.app-token.outputs.token }}
           commit-message: 'chore: promote busola images to ${{ github.event.inputs.name }}'
