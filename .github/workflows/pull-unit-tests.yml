@@ -29,16 +29,16 @@ jobs:
       contents: read
     if: github.event.pull_request.draft == false
     steps:
-      - uses: gardenlinux/workflow-telemetry-action@v2
+      - uses: gardenlinux/workflow-telemetry-action@9742ad16c70308bc8fa5f850d6ee6b22f2cce076 # v2
         with:
           comment_on_pr: false
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: 0
       - name: Merge with latest main
         if: inputs.trigger_env != 'release-trigger'
         uses: ./.github/actions/merge
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 26
       - name: setup_busola
@@ -60,26 +60,26 @@ jobs:
         run: |
           npm run coverage:merge
       - name: Upload unit coverage to Coveralls
-        uses: coverallsapp/github-action@v2
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           file: ./coverage/unit/lcov.info
           flag-name: unit
           parallel: true
           fail-on-error: false
       - name: Upload component coverage to Coveralls
-        uses: coverallsapp/github-action@v2
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           file: ./coverage/component/lcov.info
           flag-name: component
           parallel: true
           fail-on-error: false
       - name: Finalize Coveralls coverage
-        uses: coverallsapp/github-action@v2
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           parallel-finished: true
           fail-on-error: false
       - name: Upload coverage report as artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: success() || failure()
         with:
           name: coverage-report
