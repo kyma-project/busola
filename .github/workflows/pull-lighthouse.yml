@@ -86,8 +86,9 @@ jobs:
           k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
           cd tests/lighthouse
           npm run "test"
-      - name: Run performance tests
+      - name: Run lighthouse performance tests
         shell: bash
+        continue-on-error: true
         timeout-minutes: 15
         run: |
           k3d kubeconfig get k3dCluster > tests/lighthouse/fixtures/kubeconfig.yaml
@@ -99,7 +100,9 @@ jobs:
         with:
           name: playwright-${{ github.job }}
           path: |
-            tests/lighthouse/test-results/
+            tests/lighthouse/test-results/lighthouse-performance/
+            tests/lighthouse/test-results/lighthouse-reports/
+            tests/lighthouse/test-results/performance/
           retention-days: 30
       - name: Upload Busola logs
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

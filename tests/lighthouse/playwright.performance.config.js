@@ -3,8 +3,12 @@ import { devices } from '@playwright/test';
 
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
 const config = {
-  testDir: './performance',
-  testMatch: ['**/*.perf.spec.js', 'helpers.spec.js'],
+  testDir: '.',
+  testMatch: [
+    'performance.spec.js',
+    'performance/**/*.perf.spec.js',
+    'performance/helpers.spec.js',
+  ],
   outputDir: 'test-results/performance',
   timeout: 180 * 1000,
   expect: { timeout: 20 * 1000 },

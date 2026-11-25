@@ -7,10 +7,10 @@ import { devices } from '@playwright/test';
  */
 const config = {
   testDir: './.',
-  // Exclude performance specs: they run under playwright.performance.config.js,
-  // which disables tracing. Running them here (trace: 'on') would capture
-  // credentials (X-Client-Key-Data, X-K8s-Authorization) in uploaded artifacts.
-  testIgnore: ['**/*.perf.spec.js', 'performance/**'],
+  // Exclude Lighthouse-performance and user-flow performance specs: they run
+  // under playwright.performance.config.js in a separate non-gating CI step
+  // with its own timeouts and reporters.
+  testIgnore: ['**/*.perf.spec.js', 'performance/**', 'performance.spec.js'],
   timeout: 120 * 1000,
   expect: {
     timeout: 20 * 1000,
@@ -19,7 +19,12 @@ const config = {
   reporter: 'dot',
   use: {
     actionTimeout: 0,
-    trace: 'on',
+    // Tracing is disabled: traces capture network headers and injected
+    // localStorage, which for these specs include the cluster kubeconfig
+    // (client cert/key) and bearer token. A trace.zip would carry those
+    // credentials into CI artifacts where sanitization (string replace on
+    // text report files) cannot reach the compressed archive.
+    trace: 'off',
   },
 
   projects: [

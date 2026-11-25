@@ -1,12 +1,7 @@
+export { median } from '../../lib/aggregate.js';
+
 export function isValidMeasurement(n) {
   return typeof n === 'number' && Number.isFinite(n) && n > 0;
-}
-
-export function median(nums) {
-  if (!nums.length) throw new Error('median() requires a non-empty array');
-  const sorted = [...nums].sort((a, b) => a - b);
-  const mid = Math.floor(sorted.length / 2);
-  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 }
 
 function aggregatePhase(metrics, phase, invalid) {
