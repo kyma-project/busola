@@ -1,15 +1,8 @@
 const METRIC_KEYS = ['fcp', 'lcp', 'tbt', 'cls', 'performanceScore'];
 
 export const median = (values) => {
-  if (!Array.isArray(values) || values.length === 0) {
-    throw new Error('median requires a non-empty array');
-  }
+  if (!values?.length) throw new Error('median requires a non-empty array');
   const sorted = [...values].sort((a, b) => a - b);
-  for (const value of sorted) {
-    if (!Number.isFinite(value)) {
-      throw new Error(`median requires finite values (got ${String(value)})`);
-    }
-  }
   const mid = Math.floor(sorted.length / 2);
   return sorted.length % 2 === 0
     ? (sorted[mid - 1] + sorted[mid]) / 2
