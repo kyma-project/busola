@@ -30,7 +30,7 @@ const AUTH_KEYS = {
   clusters: 'busola.clusters',
   current: 'busola.current-cluster-name',
 };
-const DEBUG_PORT = 9222;
+const DEBUG_PORT_BASE = 9222;
 const METRIC_KEYS = ['fcp', 'lcp', 'tbt', 'cls', 'performanceScore'];
 
 const PERF_SETTINGS = {
@@ -83,7 +83,7 @@ const collectKubeconfigSecrets = (raw) => {
 async function captureAuthState() {
   const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'busola-lh-setup-'));
   const context = await chromium.launchPersistentContext(profileDir, {
-    args: [`--remote-debugging-port=${DEBUG_PORT}`],
+    args: [`--remote-debugging-port=${DEBUG_PORT_BASE}`],
     ignoreHTTPSErrors: true,
   });
   try {
@@ -142,12 +142,13 @@ async function runSample({
   authState,
   verify,
   lhVersionRef,
+  port,
 }) {
   const profileDir = fs.mkdtempSync(
     path.join(os.tmpdir(), `busola-lh-${name}-`),
   );
   const context = await chromium.launchPersistentContext(profileDir, {
-    args: [`--remote-debugging-port=${DEBUG_PORT}`],
+    args: [`--remote-debugging-port=${port}`],
     ignoreHTTPSErrors: true,
   });
   try {
@@ -178,7 +179,7 @@ async function runSample({
 
     const result = await playAudit({
       page,
-      port: DEBUG_PORT,
+      port,
       thresholds: { performance: 0 }, // reporting-only: score never gates
       // disableStorageReset stays true so Lighthouse leaves localStorage (the
       // injected cluster auth) untouched — we own cache clearing above, done
@@ -223,6 +224,7 @@ test('Busola performance audits (clusters + cluster overview)', async () => {
     samples: SAMPLES,
   };
   const lhVersionRef = { value: undefined };
+  let portCounter = DEBUG_PORT_BASE;
 
   const pageDefs = [
     {
@@ -268,6 +270,7 @@ test('Busola performance audits (clusters + cluster overview)', async () => {
           index: i,
           authState,
           lhVersionRef,
+          port: ++portCounter,
         });
         samples.push(metrics);
         const sampleReport = buildSampleReport({

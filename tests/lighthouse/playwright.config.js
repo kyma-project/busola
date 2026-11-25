@@ -7,9 +7,9 @@ import { devices } from '@playwright/test';
  */
 const config = {
   testDir: './.',
-  // Exclude performance specs: they run under playwright.performance.config.js,
-  // which disables tracing. Running them here (trace: 'on') would capture
-  // credentials (X-Client-Key-Data, X-K8s-Authorization) in uploaded artifacts.
+  // Exclude Lighthouse-performance and user-flow performance specs: they run
+  // under playwright.performance.config.js in a separate non-gating CI step
+  // with its own timeouts and reporters.
   testIgnore: ['**/*.perf.spec.js', 'performance/**', 'performance.spec.js'],
   timeout: 120 * 1000,
   expect: {

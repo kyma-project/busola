@@ -4,6 +4,19 @@ import { summarizeSamples } from './aggregate.js';
 
 const REDACTION = '***REDACTED***';
 
+const HTML_ENTITY_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
+
+// Expand a secret into the forms it might take in text report files.
+// Covers the raw value and its HTML-entity-encoded variant.
+// Not covered: JSON \u-escapes, percent-encoding, compressed/zip content,
+// or base64 line-wrapping — trace:off is the primary safeguard for those.
+const secretVariants = (secret) => {
+  const forms = [secret];
+  const html = secret.replace(/[&<>"]/g, (c) => HTML_ENTITY_MAP[c]);
+  if (html !== secret) forms.push(html);
+  return forms;
+};
+
 export const resolveRevision = (env = {}) =>
   env.GITHUB_SHA || env.GIT_SHA || 'unknown';
 
@@ -101,12 +114,13 @@ export const sanitizeReports = ({ directory, secrets }) => {
   if (active.length === 0) {
     return 0;
   }
+  const variants = active.flatMap(secretVariants);
   let modified = 0;
   for (const file of listFiles(directory)) {
     const original = fs.readFileSync(file, 'utf8');
     let content = original;
-    for (const secret of active) {
-      content = content.split(secret).join(REDACTION);
+    for (const variant of variants) {
+      content = content.split(variant).join(REDACTION);
     }
     if (content !== original) {
       fs.writeFileSync(file, content);
@@ -123,10 +137,11 @@ export const assertNoSecrets = ({ directory, secrets }) => {
   if (active.length === 0) {
     return;
   }
+  const variants = active.flatMap(secretVariants);
   for (const file of listFiles(directory)) {
     const content = fs.readFileSync(file, 'utf8');
-    for (const secret of active) {
-      if (content.includes(secret)) {
+    for (const variant of variants) {
+      if (content.includes(variant)) {
         throw new Error(`secret leaked into report file: ${file}`);
       }
     }
