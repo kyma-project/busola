@@ -53,8 +53,8 @@ Results are written to `test-results/performance/`.
 Both suites run in `.github/workflows/pull-lighthouse.yml`:
 
 - **Suite 1 (Lighthouse audits):** `npm run test` — gating step, 10 min timeout.
-  Performance audits (`npm run test:lighthouse-perf` via `playwright.performance.config.js`)
-  run in a separate non-gating step (`continue-on-error: true`).
+  Performance audits run together with user-flow tests via `npm run test:performance`
+  in a separate non-gating step (`continue-on-error: true`).
 - **Suite 2 (user-flow):** `npm run test:performance` — same non-gating step.
 
 ## Running locally
@@ -88,9 +88,9 @@ LIGHTHOUSE_SAMPLES=2 npm run test:performance:local  # Lighthouse performance au
 
 ```bash
 cd tests/lighthouse
-npm run test:performance:local                  # 3 samples per metric (default)
-PERF_SAMPLES=5 npm run test:performance:local   # configurable sample count
-npm run test:performance:trace                  # heavy tracing (debugging only — perturbs timings)
+npm run test:performance:local                  # runs both suites (Lighthouse perf + user-flow)
+PERF_SAMPLES=5 npm run test:performance:local   # configurable sample count for user-flow scenarios
+npm run test:performance:trace                  # heavy tracing for user-flow (debugging only — perturbs timings)
 ```
 
 ## Reading the reports
