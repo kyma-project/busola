@@ -48,8 +48,7 @@ Results are written to `test-results/performance/`.
 | `performance/helpers.spec.js` | Shared fixtures and helpers for Suite 2                             |
 | `fixtures/kubeconfig.yaml`    | The cluster both suites connect to (git-ignored)                    |
 
-This suite runs two kinds of Lighthouse checks against a production build of
-Busola connected to a real (k3d) cluster:
+## Running on CI
 
 Both suites run in `.github/workflows/pull-lighthouse.yml`:
 
