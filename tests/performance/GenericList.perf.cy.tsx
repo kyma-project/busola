@@ -241,6 +241,7 @@ describe('GenericList performance', () => {
             rowRenderer={rowRenderer}
           />,
         );
+        cy.window().should('have.property', '__setFilter');
 
         Cypress._.times(SAMPLES, (i) => {
           cy.get('@profilerData').then((data: any) => data.splice(0));
@@ -295,6 +296,7 @@ describe('GenericList performance', () => {
             rowRenderer={rowRenderer}
           />,
         );
+        cy.window().should('have.property', '__triggerSort');
 
         Cypress._.times(SAMPLES, (i) => {
           cy.get('@profilerData').then((data: any) => data.splice(0));
@@ -406,6 +408,7 @@ describe('GenericList performance', () => {
             rowRenderer={rowRenderer}
           />,
         );
+        cy.window().should('have.property', '__setEntries');
 
         Cypress._.times(SAMPLES, (i) => {
           cy.get('@profilerData').then((data: any) => data.splice(0));
