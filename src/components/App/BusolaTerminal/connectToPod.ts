@@ -1,7 +1,9 @@
 import { Terminal } from '@xterm/xterm';
 import { getClusterConfig } from 'state/utils/getBackendInfo';
-import { TerminalSessionState } from 'state/terminalSessionAtom';
-import { CONTAINER_NAME, TERMINAL_NAMESPACE } from './provisionPod';
+import {
+  ConnectionType,
+  TerminalSessionState,
+} from 'state/terminalSessionAtom';
 import { encodeBase64Url } from 'shared/utils/base64url';
 import { TFunction } from 'i18next';
 
@@ -47,13 +49,26 @@ function buildProtocols(authHeaders: Headers): string[] {
   ];
 }
 
-function buildAttachUrl(podName: string): string {
+function buildAttachUrl({
+  namespace,
+  podName,
+  containerName,
+  command,
+  connectionType,
+}: {
+  namespace: string;
+  podName: string;
+  containerName: string;
+  command: string;
+  connectionType: ConnectionType;
+}): string {
   const { protocol, host } = window.location;
   const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
   const { backendAddress } = getClusterConfig();
-  const attachPath = `/api/v1/namespaces/${TERMINAL_NAMESPACE}/pods/${podName}/attach`;
+  const attachPath = `/api/v1/namespaces/${namespace}/pods/${podName}/${connectionType}`;
   const params = new URLSearchParams({
-    container: CONTAINER_NAME,
+    command: command,
+    container: containerName,
     stdin: 'true',
     stdout: 'true',
     stderr: 'true',
@@ -62,11 +77,15 @@ function buildAttachUrl(podName: string): string {
   return `${wsProtocol}//${host}${backendAddress}/ws${attachPath}?${params}`;
 }
 
-// Auth encoded into Sec-WebSocket-Protocol — browser WebSocket has no headers param; #4920 decodes.
-export async function connectTerminal({
+// Auth encoded into Sec-WebSocket-Protocol — browser WebSocket has no headers param
+export async function connectToPod({
   authHeaders,
   term,
   podName,
+  containerName,
+  command,
+  connectionType,
+  namespace,
   setSession,
   signal,
   t,
@@ -77,10 +96,14 @@ export async function connectTerminal({
   authHeaders: Headers;
   term: Terminal;
   podName: string;
+  containerName: string;
+  command: string;
+  connectionType: ConnectionType;
+  namespace: string;
   setSession: (
     update: (prev: TerminalSessionState) => TerminalSessionState,
   ) => void;
-  signal: AbortSignal;
+  signal?: AbortSignal;
   t: TFunction;
   scheduleReconnect: (term: Terminal) => void;
   onConnected: () => void;
@@ -88,13 +111,19 @@ export async function connectTerminal({
   silent?: boolean;
 }): Promise<{ ws: WebSocket; disposable: { dispose: () => void } }> {
   const ws = new WebSocket(
-    buildAttachUrl(podName),
+    buildAttachUrl({
+      namespace,
+      podName,
+      containerName,
+      command,
+      connectionType,
+    }),
     buildProtocols(authHeaders),
   );
   ws.binaryType = 'arraybuffer';
 
   ws.onopen = () => {
-    if (signal.aborted) return;
+    if (signal?.aborted) return;
     sendResize(ws, term.cols, term.rows);
     if (!silent) {
       setSession((prev) => ({ ...prev, status: 'connected' }));
@@ -113,7 +142,7 @@ export async function connectTerminal({
   };
 
   ws.onclose = (event) => {
-    if (signal.aborted) return;
+    if (signal?.aborted) return;
     const isUnexpectedDrop =
       event.code !== 1000 && event.code !== 1005 && !event.reason;
     if (isUnexpectedDrop) {
@@ -137,7 +166,7 @@ export async function connectTerminal({
   };
 
   ws.onerror = () => {
-    if (signal.aborted) return;
+    if (signal?.aborted) return;
     setSession((prev) => ({
       ...prev,
       status: 'error',

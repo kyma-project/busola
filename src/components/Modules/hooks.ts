@@ -28,6 +28,7 @@ import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { usePopulateWithNamespace } from 'hooks/usePopulateWithNamespace';
 import { useTranslation } from 'react-i18next';
+import type { K8sResource } from 'types';
 
 export function useModuleStatus(resource: KymaResourceType) {
   const fetch = useFetch();
@@ -96,6 +97,7 @@ export const useFetchModuleData = (
       setError(null);
       const cache: Record<string, any> = {};
       const errors: string[] = [];
+      const lookups = new Map<string, Promise<K8sResource | null>>();
 
       const results = await Promise.allSettled(
         items.map(async (moduleTemplate) => {
@@ -128,11 +130,14 @@ export const useFetchModuleData = (
             if (!resourceUrl) return { name, data: null };
             const resourceName = resource?.metadata?.name || resource?.name;
             const url = `${resourceUrl}?fieldSelector=metadata.name=${encodeURIComponent(resourceName)}`;
-            const response = await fetch({ relativeUrl: url });
-            const list = await response.json();
-            const data = list?.items?.[0] ?? null;
-
-            return { name, data };
+            let lookup = lookups.get(url);
+            if (!lookup) {
+              lookup = fetch({ relativeUrl: url })
+                .then((response) => response.json())
+                .then((list) => list?.items?.[0] ?? null);
+              lookups.set(url, lookup);
+            }
+            return { name, data: await lookup };
           } catch (e) {
             errors.push(
               `Error fetching ${label} for module "${name}": ${
@@ -148,7 +153,7 @@ export const useFetchModuleData = (
         if (result.status === 'fulfilled') {
           const { name, data } = result.value || {};
           if (name && data) {
-            cache[`${name}:${result.value.data.metadata.namespace}`] = data;
+            cache[`${name}:${data.metadata.namespace}`] = data;
           }
         }
       }

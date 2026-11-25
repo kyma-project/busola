@@ -1,0 +1,106 @@
+import {
+  connectCluster,
+  installPodRoutes,
+  installSinglePodRoute,
+  ADDRESS,
+} from '../helpers/connect.js';
+import { measureUntil, getSampleCount } from '../helpers/measure.js';
+
+// Readiness: Monaco is mounted and the editor model contains the pod YAML.
+// We require .view-lines (Monaco DOM rendered) + textarea (editor interactive)
+// + 'kind:' in Monaco's textContent.
+//
+// Why textContent on the whole .monaco-editor, not just .view-lines:
+//   - Locally (headed or Vite dev), .view-lines has the visual content and
+//     its textContent includes 'kind:'.
+//   - In CI (headless Chromium), the editor container can start at height 0,
+//     leaving .view-lines empty. Monaco's accessibility widget ([role="code"]
+//     is the .monaco-editor root itself) always holds a text copy of the model
+//     regardless of container height, so .monaco-editor.textContent still
+//     includes the content.
+//
+// Why 'kind:' and NOT 'kind: Pod':
+//   The space after the YAML key is a non-breaking space (U+00A0) in Monaco's
+//   DOM — char code 160, not 32 — which breaks .includes('kind: Pod') with a
+//   regular space. Checking for 'kind:' (without the value) avoids this and is
+//   sufficient to confirm the Pod YAML is loaded.
+const EDITOR_READY =
+  "!!document.querySelector('.monaco-editor .view-lines') && " +
+  "!!document.querySelector('.monaco-editor textarea') && " +
+  "document.querySelector('.monaco-editor')?.textContent?.includes('kind:')";
+
+// The editor is unmounted when the View tab is active (used to reset between
+// cold and warm so the warm measurement starts from a no-editor state).
+const editorGone = () => !document.querySelector('.monaco-editor');
+
+export async function collectMonaco(page) {
+  const samples = getSampleCount();
+  const cold = { ready: [] };
+  const warm = { ready: [] };
+  await installPodRoutes(page, { count: 3 });
+  // Register the single-pod handler AFTER the list handler so it runs first
+  // (Playwright LIFO) and serves the detail-view resource fetch.
+  await installSinglePodRoute(page);
+
+  const openDetail = async () => {
+    await page.goto(ADDRESS);
+    await page.evaluate(() => {
+      localStorage.clear();
+    });
+    await connectCluster(page);
+    const m = page.url().match(/\/cluster\/([^/?#]+)/);
+    if (!m)
+      throw new Error(`could not extract cluster name from URL: ${page.url()}`);
+    await page.goto(`${ADDRESS}/cluster/${m[1]}/namespaces/default/pods`);
+    await page.waitForSelector('ui5-table-row');
+    await page.locator('ui5-table-row').first().click();
+    // Wait for the detail's View/Edit tabs to render before measuring.
+    // exact:true so "Edit" cannot match a future "Edit YAML"/"Editor" tab, nor
+    // the Settings dialog's "Theme" tab.
+    await page.getByRole('tab', { name: 'Edit', exact: true }).waitFor();
+  };
+
+  const openEditor = async () =>
+    page.getByRole('tab', { name: 'Edit', exact: true }).click();
+  const closeEditor = async () =>
+    page.getByRole('tab', { name: 'View', exact: true }).click();
+
+  for (let i = 0; i < samples; i++) {
+    await page.context().clearCookies();
+    await openDetail();
+
+    // Cold: first time the Monaco module + worker initialise this session.
+    // Guard that the editor is absent before measuring (symmetric with warm):
+    // the detail defaults to the View tab, but this makes the ~0 pre-mount state
+    // explicit rather than relying on that default.
+    // NOTE: page.goto() in openDetail re-evaluates the JS context (modules +
+    // worker re-init — the dominant cost), so each sample's cold measure captures
+    // a real re-initialisation. The HTTP cache does persist across samples within
+    // the context, so chunk *downloads* are skipped on samples 2+; "cold" here
+    // means "first editor open after a fresh navigation", not a cold HTTP cache.
+    // 120 s timeout: Monaco initialises lazily — in dev mode (Vite chunk-per-module)
+    // the editor and its workers can take well over 60 s to render the first sample.
+    // Production builds are much faster (<10 s) so this only matters locally.
+    await page.waitForFunction(editorGone);
+    cold.ready.push(
+      await measureUntil(page, {
+        action: openEditor,
+        readyScript: EDITOR_READY,
+        timeoutMs: 120000,
+      }),
+    );
+
+    // Reset to the View tab so the editor unmounts, then re-open for the warm
+    // measurement (Monaco chunks + worker are now cached).
+    await closeEditor();
+    await page.waitForFunction(editorGone);
+    warm.ready.push(
+      await measureUntil(page, {
+        action: openEditor,
+        readyScript: EDITOR_READY,
+        timeoutMs: 120000,
+      }),
+    );
+  }
+  return { cold, warm };
+}

@@ -794,7 +794,6 @@ ingresses:
     apiGroup: API Group
     backend: Backend
     default-backend: Default Backend
-    host: Host
     host-name: Host name
     hosts: Hosts
     ingress-class-name: Ingress class name
@@ -1095,19 +1094,14 @@ network-policies:
     end-port: End Port
     exceptions: Exceptions
     ingress: Ingress
-    ip-block: IP Block
-    key: Key
-    match-labels: Matched Labels
     namespace-selector: Namespace Selector
-    operator: Operator
+    peer: Peer
     pod-selector: Pod Selector
-    policy-peer: Network Policy Peers
     policy-port: Network Policy Ports
     policy-types: Policy Types
     port: Port
     ports: Ports
     protocol: Protocol
-    values: Values
   name_singular: NetworkPolicy
   present-but-empty: Present but empty selector selects all pods / namespaces.
 no-permissions:
@@ -1571,12 +1565,13 @@ terminal:
     connection-error: WebSocket connection error.
     connection-lost: Connection lost, reconnecting to Busola backend...
     reconnect-failed: All attempts to reconnect failed.
-    reconnecting: Reconnecting in {{delay}}s...
+    reconnecting: Reconnecting in {{delay}}s... Attempts [{{current}} of {{max}}]
     unknown-error: Unknown error.
   name: Terminal
   status:
+    connecting: Connecting…
     error: Terminal encountered unexpected error
-    provisioning: Connecting…
+    provisioning: Creating Terminal…
     reconnecting: Reconnecting...
 upload-yaml:
   errors: Errors

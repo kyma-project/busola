@@ -7,10 +7,9 @@ import { authDataAtom, AuthDataState } from '../../../state/authDataAtom';
 import { getClusterConfig } from '../../../state/utils/getBackendInfo';
 import { ActiveClusterState, clusterAtom } from '../../../state/clusterAtom';
 import {
-  ssoDataAtom,
-  SsoDataState,
+  ssoFetchStateAtom,
+  SsoFetchState,
   checkForTokenExpiration,
-  useIsSSOEnabled,
 } from 'state/ssoDataAtom';
 
 export type FetchFn = ({
@@ -27,13 +26,11 @@ export const createFetchFn =
   ({
     authData,
     cluster,
-    ssoData,
-    isSSOEnabled,
+    sso,
   }: {
     authData: AuthDataState;
     cluster: ActiveClusterState;
-    ssoData: SsoDataState;
-    isSSOEnabled: boolean;
+    sso: SsoFetchState;
   }): FetchFn =>
   async ({
     relativeUrl,
@@ -44,17 +41,17 @@ export const createFetchFn =
     init?: any;
     abortController?: AbortController;
   }) => {
-    if (isSSOEnabled && !ssoData) {
+    if (!sso.isReady) {
       throw new Error('SSO login is in progress; request deferred.');
     }
 
-    checkForTokenExpiration(ssoData?.id_token);
+    checkForTokenExpiration(sso.data?.id_token);
 
     init = {
       ...init,
       headers: {
         ...(init?.headers || {}),
-        ...createHeaders(authData, cluster, ssoData),
+        ...createHeaders(authData, cluster, sso.data),
       },
       signal: abortController?.signal,
     };
@@ -71,14 +68,8 @@ export const createFetchFn =
 export const useFetch = () => {
   const authData = useAtomValue(authDataAtom);
   const cluster = useAtomValue(clusterAtom);
-  const ssoData = useAtomValue(ssoDataAtom);
-  const isSSOEnabled = useIsSSOEnabled();
+  const sso = useAtomValue(ssoFetchStateAtom);
 
-  const fetchFn = createFetchFn({
-    authData,
-    cluster,
-    ssoData,
-    isSSOEnabled,
-  });
+  const fetchFn = createFetchFn({ authData, cluster, sso });
   return fetchFn;
 };

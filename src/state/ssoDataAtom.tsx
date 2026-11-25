@@ -4,7 +4,6 @@ import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { configurationAtom } from './configuration/configurationAtom';
 import { ConfigFeature } from './types';
 import { useEffect } from 'react';
-import { getEnv, Envs } from 'shared/utils/env';
 import { attachSilentRenewHandlers } from './silentRenewSetup';
 import { renewingAtom } from './renewingAtom';
 import {
@@ -59,9 +58,28 @@ function hasValidStoredSSOToken(): boolean {
   return stored.expires_at * 1000 > Date.now();
 }
 
+// Also false with SSO_LOGIN_BYPASS, which getConfigs applies to the flag.
+export const isSSOEnabledAtom = atom(
+  (get) => get(configurationAtom)?.features?.SSO_LOGIN?.isEnabled ?? false,
+);
+
+export const isSSOReadyAtom = atom(
+  (get) => !get(isSSOEnabledAtom) || !!get(ssoDataAtom),
+);
+
+export type SsoFetchState = { isReady: boolean; data: SsoDataState };
+
+export const ssoFetchStateAtom = atom<SsoFetchState>((get) => ({
+  isReady: get(isSSOReadyAtom),
+  data: get(ssoDataAtom),
+}));
+
 export function useIsSSOEnabled() {
-  const configuration = useAtomValue(configurationAtom);
-  return configuration?.features?.SSO_LOGIN?.isEnabled ?? false;
+  return useAtomValue(isSSOEnabledAtom);
+}
+
+export function useIsSSOReady() {
+  return useAtomValue(isSSOReadyAtom);
 }
 
 const session: {
@@ -313,45 +331,37 @@ export function useSSOLogin() {
       (typeof ssoState.expires_at !== 'number' ||
         ssoState.expires_at * 1000 > Date.now());
 
-    const startLogin = async () => {
-      const bypass = await getEnv(Envs.SSO_LOGIN_BYPASS);
-      if (bypass === 'true') return;
-      if (hasValidLive || hasValidStoredSSOToken()) {
-        resumeSSOSession(ssoConfig, setSsoState, setRenewing);
-        return;
-      }
-      handleSSOLogin(ssoConfig, setSsoState, setRenewing, (failure) => {
-        // Unblock the app behind the dialog, navigating also removes the error params.
-        // Read the path before the navigation below replaces the URL; on a callback page it is the one saved before the redirect.
-        const saved = getIntendedPath();
-        const relative =
-          toClusterRelative(
-            window.location.pathname + window.location.search,
-          ) ??
-          saved?.path ??
-          null;
-        // Take the saved target out of storage: after Close it must not land on the next cluster or SSO login.
-        clearIntendedPath();
-        const pendingKubeconfigId = consumePendingKubeconfigId();
-        // Clear the cluster first; a selected cluster would restart the stopped SSO login.
-        setCluster(null);
-        setSsoLoginStopped(true);
-        navigate('/clusters', { replace: true });
-        notifyLoginFailure(failure, {
-          onRetry: () => {
-            if (pendingKubeconfigId)
-              savePendingKubeconfigId(pendingKubeconfigId);
-            // Keep the entry's kubeconfigID, or the path is restored on the wrong cluster.
-            triggerForcedLogin(
-              session.userManager,
-              relative,
-              saved?.kubeconfigId,
-            );
-          },
-        });
+    if (hasValidLive || hasValidStoredSSOToken()) {
+      resumeSSOSession(ssoConfig, setSsoState, setRenewing);
+      return;
+    }
+    handleSSOLogin(ssoConfig, setSsoState, setRenewing, (failure) => {
+      // Unblock the app behind the dialog, navigating also removes the error params.
+      // Read the path before the navigation below replaces the URL; on a callback page it is the one saved before the redirect.
+      const saved = getIntendedPath();
+      const relative =
+        toClusterRelative(window.location.pathname + window.location.search) ??
+        saved?.path ??
+        null;
+      // Take the saved target out of storage: after Close it must not land on the next cluster or SSO login.
+      clearIntendedPath();
+      const pendingKubeconfigId = consumePendingKubeconfigId();
+      // Clear the cluster first; a selected cluster would restart the stopped SSO login.
+      setCluster(null);
+      setSsoLoginStopped(true);
+      navigate('/clusters', { replace: true });
+      notifyLoginFailure(failure, {
+        onRetry: () => {
+          if (pendingKubeconfigId) savePendingKubeconfigId(pendingKubeconfigId);
+          // Keep the entry's kubeconfigID, or the path is restored on the wrong cluster.
+          triggerForcedLogin(
+            session.userManager,
+            relative,
+            saved?.kubeconfigId,
+          );
+        },
       });
-    };
-    startLogin();
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSSOEnabled, ssoConfig]);
 }
