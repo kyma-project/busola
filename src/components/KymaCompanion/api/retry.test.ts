@@ -55,6 +55,14 @@ describe('Retry mechanism', () => {
     //THEN
     expect(handleSuccess).toHaveBeenCalled();
     expect(handleError).toHaveBeenCalledTimes(2);
+    expect(handleError).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ attempt: 1, maxAttempts: MAX_ATTEMPTS }),
+    );
+    expect(handleError).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ attempt: 2, maxAttempts: MAX_ATTEMPTS }),
+    );
     expect(result?.finished).toBeTruthy();
   });
 
@@ -75,30 +83,6 @@ describe('Retry mechanism', () => {
     expect(handleError).toHaveBeenCalledTimes(3);
     expect(handleSuccess).toHaveBeenCalledTimes(0);
     expect(result?.finished).toBeFalsy();
-  });
-
-  it('Reports the attempt number and the attempt limit with each error', async () => {
-    //GIVEN
-    const { fetchFn, handleSuccess, handleError } = createFunctions(2);
-
-    //WHEN
-    await retryFetch(
-      fetchFn,
-      handleSuccess,
-      handleError,
-      MAX_ATTEMPTS,
-      RETRY_DELAY,
-    );
-
-    //THEN
-    expect(handleError).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({ attempt: 1, maxAttempts: MAX_ATTEMPTS }),
-    );
-    expect(handleError).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({ attempt: 2, maxAttempts: MAX_ATTEMPTS }),
-    );
   });
 
   it('Stops after the first attempt when the rate limit is hit', async () => {
@@ -127,10 +111,13 @@ describe('Retry mechanism', () => {
     expect(fetchFn).toHaveBeenCalledTimes(1);
     expect(handleError).toHaveBeenCalledTimes(1);
     expect(handleError).toHaveBeenCalledWith(
-      expect.objectContaining({ attempt: 1, maxAttempts: 1 }),
+      expect.objectContaining({
+        statusCode: HTTPStatus.RATE_LIMIT_CODE,
+        attempt: 1,
+        maxAttempts: 1,
+      }),
     );
     expect(result.finished).toBeFalsy();
-    expect(result.error?.statusCode).toEqual(HTTPStatus.RATE_LIMIT_CODE);
   });
 });
 

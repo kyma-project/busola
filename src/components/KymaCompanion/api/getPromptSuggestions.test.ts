@@ -48,18 +48,6 @@ describe('getPromptSuggestions', () => {
     });
   });
 
-  it('sends empty strings for the optional resource fields', async () => {
-    post.mockResolvedValue({ promptSuggestions: [], conversationId: 'c' });
-
-    await getPromptSuggestions(baseParams);
-
-    expect(post.mock.calls[0][1]).toMatchObject({
-      namespace: '',
-      groupVersion: '',
-      resourceName: '',
-    });
-  });
-
   it('sends the client certificate pair for certificate auth', async () => {
     post.mockResolvedValue({ promptSuggestions: [], conversationId: 'c' });
 

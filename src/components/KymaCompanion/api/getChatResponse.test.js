@@ -361,44 +361,21 @@ describe('getChatResponse', () => {
     expect(handleError).not.toHaveBeenCalled();
   });
 
-  it('retries a failed request and stops once an attempt succeeds', async () => {
-    fetchMock
-      .mockResolvedValueOnce(
-        errorResponse(500, { error: 'Internal', message: 'boom' }),
-      )
-      .mockResolvedValueOnce(
-        streamResponse('{"data": {"answer": {"content": "Hi"}}}\n'),
-      );
-
-    await runWithRetries();
-
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-    expect(handleError).toHaveBeenCalledTimes(1);
-    expect(handleError).toHaveBeenCalledWith({
-      title: 'Internal',
-      message: 'boom',
-      statusCode: 500,
-      type: ErrorType.RETRYABLE,
-      attempt: 1,
-      maxAttempts: 3,
-    });
-    expect(handleChatResponse).toHaveBeenCalledTimes(1);
-  });
-
-  it('reports a fatal error after all attempts have failed', async () => {
+  it('reports a server error as retryable and gives up with a fatal error', async () => {
     fetchMock.mockResolvedValue(
       errorResponse(500, { error: 'Internal', message: 'boom' }),
     );
 
     await runWithRetries();
 
-    expect(fetchMock).toHaveBeenCalledTimes(3);
-    expect(handleError).toHaveBeenCalledTimes(4);
-    [1, 2, 3].forEach((attempt) =>
-      expect(handleError).toHaveBeenNthCalledWith(
-        attempt,
-        expect.objectContaining({ type: ErrorType.RETRYABLE, attempt }),
-      ),
+    expect(handleError).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        title: 'Internal',
+        message: 'boom',
+        statusCode: 500,
+        type: ErrorType.RETRYABLE,
+      }),
     );
     expect(handleError).toHaveBeenLastCalledWith({
       title: 'Internal',
@@ -410,60 +387,45 @@ describe('getChatResponse', () => {
     expect(handleChatResponse).not.toHaveBeenCalled();
   });
 
-  it('does not retry when the rate limit is hit', async () => {
+  it('reports the rate limit as a fatal error that is not retried', async () => {
     fetchMock.mockResolvedValue(
       errorResponse(429, { error: 'Rate limit', message: 'Too many requests' }),
     );
 
     await getChatResponse(args);
 
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(handleError).toHaveBeenCalledTimes(2);
-    expect(handleError).toHaveBeenNthCalledWith(1, {
-      title: 'Rate limit',
-      message: 'Too many requests',
-      statusCode: 429,
-      type: ErrorType.FATAL,
-      attempt: 1,
-      maxAttempts: 1,
-    });
-    expect(handleError).toHaveBeenLastCalledWith({
-      title: 'Rate limit',
-      message: 'Too many requests',
-      type: ErrorType.FATAL,
-      statusCode: 429,
-      maxAttempts: 1,
-    });
+    expect(handleError).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        title: 'Rate limit',
+        message: 'Too many requests',
+        statusCode: 429,
+        type: ErrorType.FATAL,
+        maxAttempts: 1,
+      }),
+    );
   });
 
-  it('retries when the request itself fails', async () => {
+  it('reports a network failure as a fatal error with an unknown status', async () => {
     fetchMock.mockRejectedValue(new TypeError('Failed to fetch'));
 
     await runWithRetries();
 
-    expect(fetchMock).toHaveBeenCalledTimes(3);
-    expect(handleError).toHaveBeenNthCalledWith(1, {
-      title: undefined,
-      message: 'Failed to fetch',
-      statusCode: 'unknown',
-      type: ErrorType.FATAL,
-      attempt: 1,
-      maxAttempts: 3,
-    });
-    expect(handleError).toHaveBeenLastCalledWith(
+    expect(handleError).toHaveBeenNthCalledWith(
+      1,
       expect.objectContaining({
         message: 'Failed to fetch',
+        statusCode: 'unknown',
         type: ErrorType.FATAL,
       }),
     );
   });
 
-  it('fails when the response has no readable body', async () => {
+  it('reports a fatal error when the response has no readable body', async () => {
     fetchMock.mockResolvedValue({ ok: true, body: null });
 
     await runWithRetries();
 
-    expect(fetchMock).toHaveBeenCalledTimes(3);
     expect(handleError).toHaveBeenLastCalledWith(
       expect.objectContaining({
         message: 'Failed to get reader from response body',

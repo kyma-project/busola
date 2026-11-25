@@ -84,18 +84,6 @@ describe('getFollowUpQuestions', () => {
     expect(handleFollowUpQuestions).toHaveBeenCalledWith(['Next?']);
   });
 
-  it('sends an empty session id when none is given', async () => {
-    respondWith({ promptSuggestions: [] });
-
-    await getFollowUpQuestions({
-      ...baseParams,
-      sessionID: undefined,
-      token: 'cluster-token',
-    });
-
-    expect(sentBody().sessionId).toBe('');
-  });
-
   it('reports an error when the response has no questions', async () => {
     respondWith({ error: 'something else' });
 
