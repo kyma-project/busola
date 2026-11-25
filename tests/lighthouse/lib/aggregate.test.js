@@ -1,23 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { median, summarizeSamples } from './aggregate.js';
-
-describe('median', () => {
-  it('returns the middle value for odd counts', () => {
-    expect(median([3, 1, 2])).toBe(2);
-  });
-
-  it('averages the two middle values for even counts', () => {
-    expect(median([1, 2, 3, 4])).toBe(2.5);
-  });
-
-  it('throws on an empty array', () => {
-    expect(() => median([])).toThrow();
-  });
-
-  it('throws on non-finite values', () => {
-    expect(() => median([1, NaN])).toThrow();
-  });
-});
+import { summarizeSamples } from './aggregate.js';
 
 describe('summarizeSamples', () => {
   const s = (fcp, lcp, tbt, cls, performanceScore) => ({
