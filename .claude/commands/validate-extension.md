@@ -1,12 +1,12 @@
 ---
 description: Validate a Busola custom-resource extension against the extensibility rules and emit a structured findings report with fixes
 argument-hint: '<file-path | directory | PR-number>'
-allowed-tools: Read, Grep, Glob, Bash
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 Read `.agents/skills/validate-extension/SKILL.md` and follow it. Parse `$ARGUMENTS` for the target to validate (a file path, a directory, or a PR number). If no target is given, infer it from the current branch's changed extension files; if still ambiguous, ask the user before proceeding.
 
-The assessment is read-only — report findings, do not edit the extension unless the user explicitly asks after seeing the report.
+The agent does not edit the extension or any repo file; its only write is the timestamped report under `validate-extension-reports/`. Apply a fix only if the user explicitly asks after seeing the report.
 
 ## Usage
 
