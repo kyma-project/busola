@@ -84,7 +84,6 @@ export function BusolaTerminal({
         break;
       }
       case 'attach': {
-        console.log(termRef);
         if (!termRef.current) {
           const { term, fitAddon } = createXTerm();
           term.open(termDOM.current);
@@ -97,7 +96,6 @@ export function BusolaTerminal({
           observerRef.current = observer;
           observer.observe(termDOM.current);
         }
-        console.log(termRef);
         connect(termRef.current);
         break;
       }
