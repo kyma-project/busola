@@ -29,7 +29,6 @@ jobs:
     continue-on-error: true
     permissions:
       contents: read
-      pull-requests: write
     if: github.event_name == 'push' || github.event.pull_request.draft == false
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
@@ -79,7 +78,7 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Post performance comment
+      - name: Write performance summary
         if: always() && github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
@@ -90,7 +89,7 @@ jobs:
             const baselinePath = '/tmp/baseline/GenericList-summary.json';
 
             if (!fs.existsSync(currentPath)) {
-              core.warning('No performance report found — tests may have failed before writing output');
+              await core.summary.addRaw('> ⚠️ No performance report found — tests may have failed before writing output').write();
               return;
             }
 
@@ -109,58 +108,34 @@ jobs:
               return `${v}${unit} (${sign}${pct.toFixed(0)}%${flag})`;
             };
 
+            const heading = hasBaseline
+              ? '⏱ Performance results vs. baseline from `main`'
+              : '⏱ Performance results (no baseline on `main` yet — merge to establish one)';
+
             const rows = current.scenarios.map(s => {
               const b = baseline?.scenarios.find(
                 x => x.scenario === s.scenario && x.datasetSize === s.datasetSize,
               );
               return [
-                `| ${s.scenario}`,
+                s.scenario,
                 s.datasetSize,
                 fmt(s.median.actualDuration, b?.median.actualDuration),
                 fmt(s.median.baseDuration, b?.median.baseDuration),
                 fmt(s.median.commitCount, b?.median.commitCount, ''),
-              ].join(' | ') + ' |';
+              ];
             });
 
-            const header = hasBaseline
-              ? '### ⏱ Performance results vs. baseline from `main`'
-              : '### ⏱ Performance results (no baseline on `main` yet — merge to establish one)';
-
-            const table = [
-              '| Scenario | Size | actualDuration | baseDuration | commitCount |',
-              '|----------|------|----------------|--------------|-------------|',
-              ...rows,
-            ].join('\n');
-
-            const body = [
-              '<!-- perf-report -->',
-              header,
-              '',
-              table,
-              '',
-              `_${current.settings.samples} samples · ${current.generatedAt}_`,
-            ].join('\n');
-
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            });
-
-            const existing = comments.find(c => c.body?.includes('<!-- perf-report -->'));
-
-            if (existing) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: existing.id,
-                body,
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body,
-              });
-            }
+            await core.summary
+              .addHeading(heading, 3)
+              .addTable([
+                [
+                  { data: 'Scenario', header: true },
+                  { data: 'Size', header: true },
+                  { data: 'actualDuration', header: true },
+                  { data: 'baseDuration', header: true },
+                  { data: 'commitCount', header: true },
+                ],
+                ...rows,
+              ])
+              .addRaw(`_${current.settings.samples} samples · ${current.generatedAt}_`)
+              .write();
