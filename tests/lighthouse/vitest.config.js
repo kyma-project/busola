@@ -4,6 +4,8 @@ export default defineConfig({
   test: {
     include: ['lib/**/*.test.js'],
     environment: 'node',
-    pool: 'forks',
+    experimental: {
+      viteModuleRunner: false,
+    },
   },
 });
