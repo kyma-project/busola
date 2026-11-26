@@ -1,6 +1,14 @@
 name: PR Performance Tests
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pull-perf-tests.yml'
+      - 'tests/performance/**'
+      - 'src/**'
+      - 'package.json'
+      - 'cypress.config.perf.ts'
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
     paths:
@@ -21,7 +29,8 @@ jobs:
     continue-on-error: true
     permissions:
       contents: read
-    if: github.event.pull_request.draft == false
+      pull-requests: write
+    if: github.event_name == 'push' || github.event.pull_request.draft == false
     steps:
       - uses: gardenlinux/workflow-telemetry-action@v2
         with:
@@ -30,6 +39,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Merge with latest main
+        if: github.event_name == 'pull_request'
         uses: ./.github/actions/merge
       - uses: actions/setup-node@v7
         with:
@@ -44,6 +54,113 @@ jobs:
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: perf-report-${{ github.event.pull_request.number }}
+          name: ${{ github.event_name == 'push' && 'perf-baseline' || format('perf-report-{0}', github.event.pull_request.number) }}
           path: tests/performance/reports/
-          retention-days: 30
+          retention-days: 90
+      - name: Download baseline from main
+        if: always() && github.event_name == 'pull_request'
+        id: get-baseline
+        shell: bash
+        run: |
+          BASELINE_RUN=$(gh api \
+            "repos/$GITHUB_REPOSITORY/actions/workflows/pull-perf-tests.yml/runs?event=push&branch=main&per_page=1" \
+            --jq '.workflow_runs[0].id // empty')
+
+          if [ -z "$BASELINE_RUN" ]; then
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          mkdir -p /tmp/baseline
+          if gh run download "$BASELINE_RUN" --name perf-baseline --dir /tmp/baseline 2>/dev/null; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Post performance comment
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const currentPath = 'tests/performance/reports/GenericList-summary.json';
+            const baselinePath = '/tmp/baseline/GenericList-summary.json';
+
+            if (!fs.existsSync(currentPath)) {
+              core.warning('No performance report found — tests may have failed before writing output');
+              return;
+            }
+
+            const current = JSON.parse(fs.readFileSync(currentPath, 'utf8'));
+            const hasBaseline = fs.existsSync(baselinePath);
+            const baseline = hasBaseline
+              ? JSON.parse(fs.readFileSync(baselinePath, 'utf8'))
+              : null;
+
+            const fmt = (val, baseVal, unit = 'ms') => {
+              const v = val.toFixed(1);
+              if (baseVal == null) return `${v}${unit}`;
+              const pct = ((val - baseVal) / baseVal) * 100;
+              const sign = pct >= 0 ? '+' : '';
+              const flag = pct > 15 ? ' ⚠️' : pct < -5 ? ' ✅' : '';
+              return `${v}${unit} (${sign}${pct.toFixed(0)}%${flag})`;
+            };
+
+            const rows = current.scenarios.map(s => {
+              const b = baseline?.scenarios.find(
+                x => x.scenario === s.scenario && x.datasetSize === s.datasetSize,
+              );
+              return [
+                `| ${s.scenario}`,
+                s.datasetSize,
+                fmt(s.median.actualDuration, b?.median.actualDuration),
+                fmt(s.median.baseDuration, b?.median.baseDuration),
+                fmt(s.median.commitCount, b?.median.commitCount, ''),
+              ].join(' | ') + ' |';
+            });
+
+            const header = hasBaseline
+              ? '### ⏱ Performance results vs. baseline from `main`'
+              : '### ⏱ Performance results (no baseline on `main` yet — merge to establish one)';
+
+            const table = [
+              '| Scenario | Size | actualDuration | baseDuration | commitCount |',
+              '|----------|------|----------------|--------------|-------------|',
+              ...rows,
+            ].join('\n');
+
+            const body = [
+              '<!-- perf-report -->',
+              header,
+              '',
+              table,
+              '',
+              `_${current.settings.samples} samples · ${current.generatedAt}_`,
+            ].join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body?.includes('<!-- perf-report -->'));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
