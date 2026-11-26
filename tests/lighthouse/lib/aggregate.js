@@ -13,6 +13,13 @@ export const summarizeSamples = (samples) => {
   if (!Array.isArray(samples) || samples.length === 0) {
     throw new Error('summarizeSamples requires a non-empty sample set');
   }
+  for (const sample of samples) {
+    for (const key of METRIC_KEYS) {
+      if (!(key in sample)) {
+        throw new Error(`sample is missing required metric: ${key}`);
+      }
+    }
+  }
   const summary = {};
   for (const key of METRIC_KEYS) {
     summary[key] = median(samples.map((sample) => sample[key]));
