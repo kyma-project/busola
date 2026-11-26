@@ -48,11 +48,6 @@ jobs:
         name: Setup node
         with:
           node-version: 26
-      - name: Run busola
-        shell: bash
-        timeout-minutes: 15
-        run: |
-          .github/scripts/setup_local_busola.sh | tee busola.log
       - name: Get Playwright version
         id: playwright-version
         run: echo "version=$(node -e "console.log(require('./tests/lighthouse/package-lock.json').packages['node_modules/@playwright/test'].version)")" >> $GITHUB_OUTPUT
@@ -85,6 +80,11 @@ jobs:
         run: |
           cd tests/lighthouse
           npm run test:unit
+      - name: Run busola
+        shell: bash
+        timeout-minutes: 15
+        run: |
+          .github/scripts/setup_local_busola.sh | tee busola.log
       - name: Run lighthouse tests
         shell: bash
         timeout-minutes: 10
