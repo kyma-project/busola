@@ -1,0 +1,61 @@
+# Expected findings when the validate-extension skill is run against
+# broken-extension.yaml. This is the human-readable baseline for the eval: the
+# skill's report should surface at least these findings (one per seeded
+# violation). There is no automated test harness — run the skill manually and
+# compare its report against this file.
+fixture: broken-extension.yaml
+findings:
+  - id: missing-extension-version-label
+    section: labels
+    severity: error
+    rule: docs/contributor/extensibility/120-resource-extensions.md
+    description: >-
+      The required `busola.io/extension-version` label is missing from
+      metadata.labels. Busola only loads extensions carrying a supported version
+      label.
+    fix: "Add `busola.io/extension-version: '0.5'` to metadata.labels."
+
+  - id: invalid-general-scope
+    section: general
+    severity: error
+    rule: docs/contributor/extensibility/120-resource-extensions.md
+    description: general.scope is `worldwide`; it must be `namespace` or `cluster`.
+    fix: 'Set scope to `namespace` or `cluster`.'
+
+  - id: security-arbitrary-custom-script
+    section: customScript
+    severity: error
+    rule: docs/contributor/extensibility/80-custom-extensions.md
+    description: >-
+      data.customScript (a sibling of data.general) runs arbitrary JavaScript and
+      here POSTs document.cookie to an external origin — a data-exfiltration
+      pattern. It also requires the EXTENSIBILITY_CUSTOM_COMPONENTS feature flag.
+    fix: >-
+      Remove the external POST / document.cookie access. Only use customScript
+      with trusted code and the feature flag enabled.
+
+  - id: invalid-list-widget
+    section: list
+    severity: error
+    rule: docs/contributor/extensibility/50-list-and-details-widgets.md
+    description: '`Badgee` is not a valid display widget — likely a typo for `Badge`.'
+    fix: 'Replace `widget: Badgee` with `widget: Badge`.'
+
+  - id: undefined-datasource-reference
+    section: details
+    severity: error
+    rule: docs/contributor/extensibility/90-datasources.md
+    description: >-
+      The JSONata `$missingPods()` references a dataSource that is not defined in
+      the dataSources section (only `pizzaPods` exists). `$missingPods` is not a
+      JSONata built-in or a preset function.
+    fix: 'Reference the defined `$pizzaPods()`, or add a `missingPods` dataSource.'
+
+  - id: form-field-missing-path
+    section: form
+    severity: error
+    rule: docs/contributor/extensibility/40-form-fields.md
+    description: >-
+      The form item named `OrphanNoPath` has no `path`. Every form field requires
+      a `path` (array fields use `[]` notation) unless it is a variable field.
+    fix: 'Add a `path` (for example `spec.orphan`) to the form item.'
