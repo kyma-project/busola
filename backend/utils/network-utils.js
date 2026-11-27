@@ -1,12 +1,13 @@
 import net from 'net';
 import dns from 'dns/promises';
+import { PrivateIPUsedError } from './http-errors.js';
 
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 Minutes
 const MAX_CACHE_SIZE = 1000;
 
 const dnsCache = new Map();
 
-export class PrivateIPUsedError extends Error {}
+export { PrivateIPUsedError } from './http-errors.js';
 
 export function isLocalDomain(hostname) {
   const localDomains = ['localhost', '127.0.0.1', '::1'];
@@ -23,21 +24,36 @@ export function isValidHost(hostname) {
   return !isLocalDomain(hostname) && net.isIP(hostname) === 0;
 }
 
+const privateBlockList = new net.BlockList();
+privateBlockList.addSubnet('0.0.0.0', 8, 'ipv4'); // unspecified / this-host
+privateBlockList.addSubnet('10.0.0.0', 8, 'ipv4');
+privateBlockList.addSubnet('100.64.0.0', 10, 'ipv4'); // CGNAT
+privateBlockList.addSubnet('127.0.0.0', 8, 'ipv4'); // loopback
+privateBlockList.addSubnet('169.254.0.0', 16, 'ipv4'); // link-local
+privateBlockList.addSubnet('172.16.0.0', 12, 'ipv4');
+privateBlockList.addSubnet('192.168.0.0', 16, 'ipv4');
+privateBlockList.addAddress('::', 'ipv6'); // unspecified
+privateBlockList.addAddress('::1', 'ipv6'); // loopback
+privateBlockList.addSubnet('fc00::', 7, 'ipv6'); // unique local
+privateBlockList.addSubnet('fe80::', 10, 'ipv6'); // link-local
+
+function embeddedIpv4(ip) {
+  const lower = ip.toLowerCase();
+  if (lower.startsWith('::ffff:')) return lower.slice(7); // IPv4-mapped
+  if (lower.startsWith('::') && lower.includes('.')) return lower.slice(2); // IPv4-compatible
+  return null;
+}
+
 export function isPrivateIp(ip) {
   if (net.isIPv4(ip)) {
-    const parts = ip.split('.').map(Number);
-    if (parts[0] === 10) return true; // 10.0.0.0/8
-    if (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) return true; // 172.16.0.0/12
-    if (parts[0] === 192 && parts[1] === 168) return true; // 192.168.0.0/16
-    if (parts[0] === 127) return true; // 127.0.0.0/8
-    if (parts[0] === 169 && parts[1] === 254) return true; // 169.254.0.0/16
+    return privateBlockList.check(ip, 'ipv4');
   }
   if (net.isIPv6(ip)) {
-    const lowerIp = ip.toLowerCase();
-    if (lowerIp.startsWith('::ffff:')) return isPrivateIp(lowerIp.slice(7)); // IPv4-mapped IPv6
-    if (lowerIp.startsWith('fc') || lowerIp.startsWith('fd')) return true; // Unique local
-    if (lowerIp.startsWith('fe80:')) return true; // Link-local
-    if (lowerIp === '::1') return true; // Localhost
+    const embedded = embeddedIpv4(ip);
+    if (embedded && net.isIPv4(embedded)) {
+      return isPrivateIp(embedded);
+    }
+    return privateBlockList.check(ip, 'ipv6');
   }
   return false;
 }

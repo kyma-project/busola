@@ -156,6 +156,41 @@ describe('isPrivateIp', () => {
   it('allows IPv4-mapped IPv6 public addresses', () => {
     expect(isPrivateIp('::ffff:20.11.11.11')).toBe(false);
   });
+
+  it('blocks the unspecified addresses 0.0.0.0 and ::', () => {
+    expect(isPrivateIp('0.0.0.0')).toBe(true);
+    expect(isPrivateIp('0.1.2.3')).toBe(true);
+    expect(isPrivateIp('::')).toBe(true);
+    expect(isPrivateIp('::0')).toBe(true);
+  });
+
+  it('blocks noncanonical IPv6 loopback and unspecified forms', () => {
+    expect(isPrivateIp('0:0:0:0:0:0:0:1')).toBe(true);
+    expect(isPrivateIp('0000:0000:0000:0000:0000:0000:0000:0001')).toBe(true);
+    expect(isPrivateIp('::01')).toBe(true);
+    expect(isPrivateIp('0:0:0:0:0:0:0:0')).toBe(true);
+  });
+
+  it('blocks IPv4 embedded in hex-form and IPv4-compatible IPv6', () => {
+    expect(isPrivateIp('::ffff:7f00:1')).toBe(true); // 127.0.0.1 in hex
+    expect(isPrivateIp('::127.0.0.1')).toBe(true); // IPv4-compatible loopback
+  });
+
+  it('blocks the CGNAT range 100.64.0.0/10', () => {
+    expect(isPrivateIp('100.64.0.1')).toBe(true);
+    expect(isPrivateIp('100.127.255.255')).toBe(true);
+    expect(isPrivateIp('100.63.255.255')).toBe(false);
+    expect(isPrivateIp('100.128.0.0')).toBe(false);
+  });
+
+  it('allows public addresses near private boundaries', () => {
+    expect(isPrivateIp('8.8.8.8')).toBe(false);
+    expect(isPrivateIp('172.15.0.1')).toBe(false);
+    expect(isPrivateIp('172.32.0.1')).toBe(false);
+    expect(isPrivateIp('192.169.0.1')).toBe(false);
+    expect(isPrivateIp('2606:4700:4700::1111')).toBe(false);
+    expect(isPrivateIp('::ffff:8.8.8.8')).toBe(false);
+  });
 });
 
 describe('resolveOrBlockPrivateIpAddress with IPv4-mapped IPv6', () => {
