@@ -121,6 +121,7 @@ jobs:
                 s.datasetSize,
                 fmt(s.median.actualDuration, b?.median.actualDuration),
                 fmt(s.median.baseDuration, b?.median.baseDuration),
+                fmt(s.median.browserDuration, b?.median.browserDuration),
                 fmt(s.median.commitCount, b?.median.commitCount, ''),
               ];
             });
@@ -133,6 +134,7 @@ jobs:
                   { data: 'Size', header: true },
                   { data: 'actualDuration', header: true },
                   { data: 'baseDuration', header: true },
+                  { data: 'browserDuration', header: true },
                   { data: 'commitCount', header: true },
                 ],
                 ...rows,
