@@ -6,6 +6,7 @@ export type TerminalSessionStatus =
   | 'provisioned'
   | 'connected'
   | 'error'
+  | 'attach'
   | 'reconnecting';
 
 export enum ConnectionType {
@@ -17,7 +18,7 @@ export type TerminalSessionState = {
   status: TerminalSessionStatus;
   abortController: AbortController | null;
   podName: string;
-  errorMessage: string | null;
+  errorMessage?: string | null;
   command: string;
   namespace: string;
   container: string;

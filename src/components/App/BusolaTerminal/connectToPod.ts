@@ -160,7 +160,12 @@ export async function connectToPod({
         term.write(terminalSystemMessage(COLOR_ERROR, event.reason));
       }
       term.write(
-        terminalSystemMessage(COLOR_WARNING, t('terminal.messages.closed')),
+        terminalSystemMessage(
+          COLOR_WARNING,
+          t('terminal.messages.closed', {
+            name: `${podName}/${namespace}`,
+          }),
+        ),
       );
     }
   };
