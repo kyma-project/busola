@@ -1,11 +1,19 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   getContext,
   getUserIndex,
   getUser,
   hasKubeconfigAuth,
+  deleteCluster,
+  addByContext,
 } from '../shared';
 import { ValidKubeconfig } from 'types';
+import { hasNonOidcAuth, createUserManager } from 'state/authDataAtom';
+
+vi.mock('state/authDataAtom', () => ({
+  hasNonOidcAuth: vi.fn(),
+  createUserManager: vi.fn(),
+}));
 
 const makeKubeconfig = (
   overrides: Partial<ValidKubeconfig> = {},
@@ -29,17 +37,15 @@ const makeKubeconfig = (
   ...overrides,
 });
 
-describe('getContext', () => {
-  it('returns first cluster and user when contexts array is empty', () => {
-    //given
-    const kubeconfig = makeKubeconfig({ contexts: [], 'current-context': '' });
-    //when
-    const result = getContext(kubeconfig, '');
-    //then
-    expect(result.cluster).toEqual(kubeconfig.clusters[0]);
-    expect(result.user).toEqual(kubeconfig.users[0]);
-  });
+const makeClustersInfo = () => ({
+  setClusters: vi.fn(),
+  setCurrentCluster: vi.fn(),
+  navigate: vi.fn(),
+  currentCluster: null,
+  clusters: {},
+});
 
+describe('getContext', () => {
   it('returns first cluster and user when no current-context is set', () => {
     //given
     const kubeconfig = makeKubeconfig({ contexts: [], 'current-context': '' });
@@ -50,10 +56,16 @@ describe('getContext', () => {
     expect(result.user?.name).toBe('dev-user');
   });
 
-  it('returns correct cluster, user, and namespace for a named context', () => {
-    //given
+  it('returns the matched cluster and user for a named context', () => {
     const kubeconfig = makeKubeconfig();
-    const kubeconfigWithNamespace = makeKubeconfig({
+    const result = getContext(kubeconfig, 'dev');
+    expect(result.cluster?.name).toBe('dev-cluster');
+    expect(result.user?.name).toBe('dev-user');
+    expect(result.namespace).toBeUndefined();
+  });
+
+  it('includes namespace when the context defines one', () => {
+    const kubeconfig = makeKubeconfig({
       contexts: [
         {
           name: 'dev',
@@ -65,19 +77,41 @@ describe('getContext', () => {
         },
       ],
     });
-    //when
-    const result = getContext(kubeconfig, 'dev');
-    const resultWithNamespace = getContext(kubeconfigWithNamespace, 'dev');
-    //then
-    expect(result.cluster?.name).toBe('dev-cluster');
-    expect(result.user?.name).toBe('dev-user');
-    expect(result.namespace).toBeUndefined();
-    expect(resultWithNamespace.namespace).toBe('my-ns');
+    expect(getContext(kubeconfig, 'dev').namespace).toBe('my-ns');
   });
 
   it('falls back to current-context when contextName is empty', () => {
     //given
-    const kubeconfig = makeKubeconfig({ 'current-context': 'dev' });
+    const kubeconfig = makeKubeconfig({
+      'current-context': 'dev',
+      clusters: [
+        {
+          name: 'dev-cluster',
+          cluster: {
+            server: 'https://dev.example.com',
+            'certificate-authority-data': 'abc',
+          },
+        },
+        {
+          name: 'other-cluster',
+          cluster: {
+            server: 'https://other.example.com',
+            'certificate-authority-data': 'xyz',
+          },
+        },
+      ],
+      users: [
+        { name: 'dev-user', user: { token: 'dev-token' } },
+        { name: 'other-user', user: { token: 'other-token' } },
+      ],
+      contexts: [
+        { name: 'dev', context: { cluster: 'dev-cluster', user: 'dev-user' } },
+        {
+          name: 'other',
+          context: { cluster: 'other-cluster', user: 'other-user' },
+        },
+      ],
+    });
     //when
     const result = getContext(kubeconfig, '');
     //then
@@ -150,6 +184,39 @@ describe('getContext', () => {
     expect(result.cluster?.name).toBe('prod-cluster');
     expect(result.user?.name).toBe('prod-user');
   });
+
+  it('uses the first matching context when context names are duplicated', () => {
+    const kubeconfig = makeKubeconfig({
+      clusters: [
+        {
+          name: 'cluster-1',
+          cluster: {
+            server: 'https://c1.example.com',
+            'certificate-authority-data': 'abc',
+          },
+        },
+        {
+          name: 'cluster-2',
+          cluster: {
+            server: 'https://c2.example.com',
+            'certificate-authority-data': 'xyz',
+          },
+        },
+      ],
+      users: [
+        { name: 'user-1', user: { token: 'token-1' } },
+        { name: 'user-2', user: { token: 'token-2' } },
+      ],
+      contexts: [
+        { name: 'dev', context: { cluster: 'cluster-1', user: 'user-1' } },
+        { name: 'dev', context: { cluster: 'cluster-2', user: 'user-2' } },
+      ],
+    });
+
+    const result = getContext(kubeconfig, 'dev');
+    expect(result.cluster?.name).toBe('cluster-1');
+    expect(result.user?.name).toBe('user-1');
+  });
 });
 
 describe('getUserIndex', () => {
@@ -175,11 +242,15 @@ describe('getUserIndex', () => {
   it('uses the first context when current-context is -all-', () => {
     const kubeconfig = makeKubeconfig({
       'current-context': '-all-',
+      users: [
+        { name: 'other-user', user: { token: 'other' } },
+        { name: 'dev-user', user: { token: 'dev-token' } },
+      ],
       contexts: [
         { name: 'dev', context: { cluster: 'dev-cluster', user: 'dev-user' } },
       ],
     });
-    expect(getUserIndex(kubeconfig)).toBe(0);
+    expect(getUserIndex(kubeconfig)).toBe(1);
   });
 
   it('returns 0 when the user referenced by the context is not found', () => {
@@ -234,7 +305,7 @@ describe('hasKubeconfigAuth', () => {
         },
       ],
     });
-    expect(hasKubeconfigAuth(kubeconfig)).toBeTruthy();
+    expect(hasKubeconfigAuth(kubeconfig)).toBe(true);
   });
 
   it('returns false when the user has client-key-data but no client-certificate-data', () => {
@@ -306,5 +377,249 @@ describe('hasKubeconfigAuth', () => {
   it('returns false when kubeconfig has no contexts', () => {
     const kubeconfig = makeKubeconfig({ contexts: [] });
     expect(hasKubeconfigAuth(kubeconfig)).toBeFalsy();
+  });
+});
+
+describe('deleteCluster', () => {
+  beforeEach(() => {
+    vi.mocked(hasNonOidcAuth).mockReset();
+    vi.mocked(createUserManager).mockReset();
+  });
+
+  it('removes the cluster from the map for a non-OIDC user without calling removeUser', () => {
+    vi.mocked(hasNonOidcAuth).mockReturnValue(true);
+
+    let capturedUpdater: ((prev: any) => any) | undefined;
+    const setClusters = vi.fn((updater) => {
+      capturedUpdater = updater;
+    });
+
+    deleteCluster('dev', { setClusters } as any);
+
+    const prev = {
+      dev: { currentContext: { user: { user: { token: 'dev-token' } } } },
+      other: { currentContext: { user: { user: { token: 'other-token' } } } },
+    };
+    const result = capturedUpdater!(prev);
+
+    expect(result).toEqual({
+      other: { currentContext: { user: { user: { token: 'other-token' } } } },
+    });
+    expect(createUserManager).not.toHaveBeenCalled();
+  });
+
+  it('calls userManager.removeUser and removes the cluster when deleting an OIDC cluster', () => {
+    const removeUser = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(hasNonOidcAuth).mockReturnValue(false);
+    vi.mocked(createUserManager).mockReturnValue({ removeUser } as any);
+
+    let capturedUpdater: ((prev: any) => any) | undefined;
+    const setClusters = vi.fn((updater) => {
+      capturedUpdater = updater;
+    });
+
+    deleteCluster('oidc-cluster', { setClusters } as any);
+
+    const prev = {
+      'oidc-cluster': {
+        currentContext: {
+          user: {
+            user: {
+              exec: {
+                args: [
+                  '--oidc-issuer-url=https://idp.example.com',
+                  '--oidc-client-id=my-client',
+                ],
+              },
+            },
+          },
+        },
+      },
+    };
+    const result = capturedUpdater!(prev);
+
+    expect(createUserManager).toHaveBeenCalled();
+    expect(removeUser).toHaveBeenCalled();
+    expect(result).toEqual({});
+  });
+
+  it('does not crash when the cluster name is not present in the map', () => {
+    vi.mocked(hasNonOidcAuth).mockReturnValue(true);
+    const setClusters = vi.fn((updater) => updater({}));
+
+    expect(() =>
+      deleteCluster('missing', { setClusters } as any),
+    ).not.toThrow();
+  });
+});
+
+describe('addByContext', () => {
+  beforeEach(() => {
+    vi.mocked(hasNonOidcAuth).mockReset();
+    vi.mocked(createUserManager).mockReset();
+  });
+
+  it('adds the cluster to the store and navigates when auth is present', () => {
+    const kubeconfig = makeKubeconfig();
+    const clustersInfo = makeClustersInfo();
+
+    addByContext(
+      {
+        kubeconfig,
+        context: kubeconfig.contexts[0],
+        storage: 'sessionStorage',
+        config: {},
+      },
+      clustersInfo as any,
+    );
+
+    expect(clustersInfo.setClusters).toHaveBeenCalled();
+    expect(clustersInfo.navigate).toHaveBeenCalledWith(
+      expect.stringContaining('/cluster/'),
+    );
+  });
+
+  it('throws when the kubeconfig contains no matching cluster', () => {
+    const kubeconfig = makeKubeconfig();
+    const badContext = {
+      name: 'dev',
+      context: { cluster: 'missing-cluster', user: 'dev-user' },
+    };
+
+    expect(() =>
+      addByContext(
+        {
+          kubeconfig,
+          context: badContext,
+          storage: 'sessionStorage',
+          config: {},
+        },
+        makeClustersInfo() as any,
+      ),
+    ).toThrow('Unable to add context');
+  });
+
+  it('throws when kubeconfig has no auth and no manualKubeConfigId', () => {
+    const kubeconfig = makeKubeconfig({
+      users: [{ name: 'dev-user', user: {} as any }],
+    });
+
+    expect(() =>
+      addByContext(
+        {
+          kubeconfig,
+          context: kubeconfig.contexts[0],
+          storage: 'sessionStorage',
+          config: {},
+        },
+        makeClustersInfo() as any,
+      ),
+    ).toThrow('Unable to add context');
+  });
+
+  it('opens the auth form and returns without adding when manualKubeConfigId has no auth yet', () => {
+    const kubeconfig = makeKubeconfig({
+      users: [{ name: 'dev-user', user: {} as any }],
+    });
+    const setManualKubeConfigId = vi.fn();
+    const clustersInfo = makeClustersInfo();
+
+    addByContext(
+      {
+        kubeconfig,
+        context: kubeconfig.contexts[0],
+        storage: 'sessionStorage',
+        config: {},
+      },
+      clustersInfo as any,
+      {
+        manualKubeConfigId: { formOpen: false, auth: null },
+        setManualKubeConfigId,
+      },
+    );
+
+    expect(setManualKubeConfigId).toHaveBeenCalledWith(expect.any(Function));
+    const [capturedFn] = vi.mocked(setManualKubeConfigId).mock.calls[0];
+    expect(capturedFn({ formOpen: false, auth: null })).toMatchObject({
+      formOpen: true,
+    });
+    expect(clustersInfo.setClusters).not.toHaveBeenCalled();
+  });
+
+  it('injects the provided auth and adds the cluster when manualKubeConfigId carries auth', () => {
+    const kubeconfig = makeKubeconfig({
+      users: [{ name: 'dev-user', user: {} as any }],
+    });
+    const setManualKubeConfigId = vi.fn();
+    const clustersInfo = makeClustersInfo();
+
+    addByContext(
+      {
+        kubeconfig,
+        context: kubeconfig.contexts[0],
+        storage: 'sessionStorage',
+        config: {},
+      },
+      clustersInfo as any,
+      {
+        manualKubeConfigId: {
+          formOpen: false,
+          auth: { token: 'injected-token' },
+        },
+        setManualKubeConfigId,
+      },
+    );
+
+    const [updaterFn] = vi.mocked(clustersInfo.setClusters).mock.calls[0];
+    const stored = updaterFn({});
+    expect(stored['dev'].kubeconfig.users).toContainEqual(
+      expect.objectContaining({
+        user: expect.objectContaining({ token: 'injected-token' }),
+      }),
+    );
+
+    expect(setManualKubeConfigId).toHaveBeenCalled();
+    const [clearFn] = vi.mocked(setManualKubeConfigId).mock.calls[0];
+    expect(
+      clearFn({ formOpen: false, auth: { token: 'injected-token' } }),
+    ).toMatchObject({ auth: null });
+  });
+
+  it('adds the cluster to the store without navigating when switchCluster is false', () => {
+    const kubeconfig = makeKubeconfig();
+    const clustersInfo = makeClustersInfo();
+
+    addByContext(
+      {
+        kubeconfig,
+        context: kubeconfig.contexts[0],
+        storage: 'sessionStorage',
+        switchCluster: false,
+        config: {},
+      },
+      clustersInfo as any,
+    );
+
+    expect(clustersInfo.setClusters).toHaveBeenCalled();
+    expect(clustersInfo.navigate).not.toHaveBeenCalled();
+  });
+
+  it('adopts an unnamed user with auth when no named user exists for the context', () => {
+    const kubeconfig = makeKubeconfig({
+      users: [{ name: '', user: { token: 'unnamed-token' } as any }],
+    });
+    const clustersInfo = makeClustersInfo();
+
+    addByContext(
+      {
+        kubeconfig,
+        context: kubeconfig.contexts[0],
+        storage: 'sessionStorage',
+        config: {},
+      },
+      clustersInfo as any,
+    );
+
+    expect(clustersInfo.setClusters).toHaveBeenCalled();
   });
 });
