@@ -20,5 +20,11 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "cypress/cypress.d.ts", "eslint.config.ts"]
+  "include": [
+    "src",
+    "cypress/cypress.d.ts",
+    "cypress.config.perf.ts",
+    "tests/performance",
+    "eslint.config.ts"
+  ]
 }

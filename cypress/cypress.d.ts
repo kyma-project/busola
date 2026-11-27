@@ -2,13 +2,20 @@
 
 declare namespace Cypress {
   interface Chainable {
-    /**
-     * Custom command to mount a React component with common providers
-     * @param component - React component to mount
-     * @param options - Options for mount, may include initializeJotai function
-     * @example cy.mount(<MyComponent />, { initializeJotai: [[atom, value]] })
-     */
     mount(
+      component: React.ReactNode,
+      options?: {
+        initializeJotai?: Array<[any, any]>;
+        [key: string]: any;
+      },
+    ): Chainable<any>;
+
+    /**
+     * Mount with React.Profiler — exposes collected render data via @profilerData alias.
+     * Use in performance tests only (cypress.config.perf.ts).
+     * @example cy.mountWithProfiler(<MyComponent />); cy.get('@profilerData').then(data => ...)
+     */
+    mountWithProfiler(
       component: React.ReactNode,
       options?: {
         initializeJotai?: Array<[any, any]>;
