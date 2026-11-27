@@ -6,7 +6,12 @@ import {
   handleChatResponseFn,
   retryFetch,
 } from 'components/KymaCompanion/api/retry';
-import { ErrorType, ErrResponse, MessageChunk } from '../components/Chat/types';
+import {
+  ErrorType,
+  ErrResponse,
+  HTTPStatus,
+  MessageChunk,
+} from '../components/Chat/types';
 
 const successCall = 'Success';
 const errorCall = 'Attempt Failed';
@@ -50,6 +55,14 @@ describe('Retry mechanism', () => {
     //THEN
     expect(handleSuccess).toHaveBeenCalled();
     expect(handleError).toHaveBeenCalledTimes(2);
+    expect(handleError).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ attempt: 1, maxAttempts: MAX_ATTEMPTS }),
+    );
+    expect(handleError).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ attempt: 2, maxAttempts: MAX_ATTEMPTS }),
+    );
     expect(result?.finished).toBeTruthy();
   });
 
@@ -70,6 +83,41 @@ describe('Retry mechanism', () => {
     expect(handleError).toHaveBeenCalledTimes(3);
     expect(handleSuccess).toHaveBeenCalledTimes(0);
     expect(result?.finished).toBeFalsy();
+  });
+
+  it('Stops after the first attempt when the rate limit is hit', async () => {
+    //GIVEN
+    const handleSuccess = vitest.fn();
+    const handleError = vitest.fn();
+    const fetchFn = vitest.fn<fetchFn>(async (_, handleError) => {
+      handleError({
+        message: errorCall,
+        type: ErrorType.FATAL,
+        statusCode: HTTPStatus.RATE_LIMIT_CODE,
+      });
+      return false;
+    });
+
+    //WHEN
+    const result = await retryFetch(
+      fetchFn,
+      handleSuccess,
+      handleError,
+      MAX_ATTEMPTS,
+      RETRY_DELAY,
+    );
+
+    //THEN
+    expect(fetchFn).toHaveBeenCalledTimes(1);
+    expect(handleError).toHaveBeenCalledTimes(1);
+    expect(handleError).toHaveBeenCalledWith(
+      expect.objectContaining({
+        statusCode: HTTPStatus.RATE_LIMIT_CODE,
+        attempt: 1,
+        maxAttempts: 1,
+      }),
+    );
+    expect(result.finished).toBeFalsy();
   });
 });
 

@@ -1,5 +1,8 @@
-import { vi, describe, it, expect } from 'vitest';
-import { extractJsonObjectsFromChunk, readChunk } from './getChatResponse';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import getChatResponse, {
+  extractJsonObjectsFromChunk,
+  readChunk,
+} from './getChatResponse';
 import { ErrorType } from '../components/Chat/types';
 
 describe('readChunk', () => {
@@ -234,5 +237,213 @@ describe('extractJsonObjectsFromChunk', () => {
     const result = extractJsonObjectsFromChunk(input);
     expect(result.completeObjects).toEqual(['{"a": {\n  "b": "c"\n}}']);
     expect(result.remainingBuffer).toBe('');
+  });
+});
+
+describe('getChatResponse', () => {
+  const RETRY_DELAY = 1_000;
+  const fetchMock = vi.fn();
+  const handleChatResponse = vi.fn();
+  const handleError = vi.fn();
+  const t = (key) => key;
+
+  const args = {
+    query: 'Why is my pod failing?',
+    resourceType: 'Pod',
+    sessionID: 'session-1',
+    handleChatResponse,
+    handleError,
+    clusterUrl: 'https://api.cluster.example',
+    clusterAuth: { token: 'cluster-token' },
+    certificateAuthorityData: 'ca-data',
+    t,
+  };
+
+  const streamResponse = (...chunks) => {
+    const read = vi.fn();
+    chunks.forEach((chunk) =>
+      read.mockResolvedValueOnce({
+        done: false,
+        value: new TextEncoder().encode(chunk),
+      }),
+    );
+    read.mockResolvedValue({ done: true });
+    return { ok: true, body: { getReader: () => ({ read }) } };
+  };
+
+  const errorResponse = (status, body) => ({
+    ok: false,
+    status,
+    json: async () => body,
+  });
+
+  const runWithRetries = async (overrides = {}) => {
+    const promise = getChatResponse({ ...args, ...overrides });
+    await vi.advanceTimersByTimeAsync(3 * RETRY_DELAY);
+    await promise;
+  };
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    fetchMock.mockReset();
+    vi.stubGlobal('fetch', fetchMock);
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it('rejects without calling the backend when no credentials are given', async () => {
+    await expect(getChatResponse({ ...args, clusterAuth: {} })).rejects.toThrow(
+      'Missing authentication credentials',
+    );
+    await expect(
+      getChatResponse({
+        ...args,
+        clusterAuth: { clientCertificateData: 'cert' },
+      }),
+    ).rejects.toThrow('Missing authentication credentials');
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('posts the query and streams the answer to the response handler', async () => {
+    fetchMock.mockResolvedValue(
+      streamResponse('{"data": {"answer": {"content": "Hi"}}}\n'),
+    );
+
+    await getChatResponse({
+      ...args,
+      namespace: 'default',
+      groupVersion: 'v1',
+      resourceName: 'my-pod',
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe('/backend/ai-chat/messages');
+    expect(init.method).toBe('POST');
+    expect(JSON.parse(init.body)).toEqual({
+      query: 'Why is my pod failing?',
+      namespace: 'default',
+      resourceType: 'Pod',
+      groupVersion: 'v1',
+      resourceName: 'my-pod',
+      clusterUrl: 'https://api.cluster.example',
+      certificateAuthorityData: 'ca-data',
+      sessionId: 'session-1',
+      clusterToken: 'cluster-token',
+    });
+    expect(handleChatResponse).toHaveBeenCalledWith({
+      data: { answer: { content: 'Hi' } },
+    });
+    expect(handleError).not.toHaveBeenCalled();
+  });
+
+  it('accepts a client certificate pair and defaults the optional fields', async () => {
+    fetchMock.mockResolvedValue(streamResponse());
+
+    await getChatResponse({
+      ...args,
+      clusterAuth: { clientCertificateData: 'cert', clientKeyData: 'key' },
+    });
+
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+    expect(body).toMatchObject({
+      namespace: '',
+      groupVersion: '',
+      resourceName: '',
+      clientCertificateData: 'cert',
+      clientKeyData: 'key',
+    });
+    expect(body).not.toHaveProperty('clusterToken');
+    expect(handleError).not.toHaveBeenCalled();
+  });
+
+  it('reports a server error as retryable and gives up with a fatal error', async () => {
+    fetchMock.mockResolvedValue(
+      errorResponse(500, { error: 'Internal', message: 'boom' }),
+    );
+
+    await runWithRetries();
+
+    expect(handleError).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        title: 'Internal',
+        message: 'boom',
+        statusCode: 500,
+        type: ErrorType.RETRYABLE,
+      }),
+    );
+    expect(handleError).toHaveBeenLastCalledWith({
+      title: 'Internal',
+      message: 'boom',
+      type: ErrorType.FATAL,
+      statusCode: 500,
+      maxAttempts: 3,
+    });
+    expect(handleChatResponse).not.toHaveBeenCalled();
+  });
+
+  it('reports the rate limit as a fatal error that is not retried', async () => {
+    fetchMock.mockResolvedValue(
+      errorResponse(429, { error: 'Rate limit', message: 'Too many requests' }),
+    );
+
+    await getChatResponse(args);
+
+    expect(handleError).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        title: 'Rate limit',
+        message: 'Too many requests',
+        statusCode: 429,
+        type: ErrorType.FATAL,
+        maxAttempts: 1,
+      }),
+    );
+  });
+
+  it('reports a network failure as a fatal error with an unknown status', async () => {
+    fetchMock.mockRejectedValue(new TypeError('Failed to fetch'));
+
+    await runWithRetries();
+
+    expect(handleError).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        message: 'Failed to fetch',
+        statusCode: 'unknown',
+        type: ErrorType.FATAL,
+      }),
+    );
+  });
+
+  it('reports a fatal error when the response has no readable body', async () => {
+    fetchMock.mockResolvedValue({ ok: true, body: null });
+
+    await runWithRetries();
+
+    expect(handleError).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        message: 'Failed to get reader from response body',
+        type: ErrorType.FATAL,
+      }),
+    );
+  });
+
+  it('falls back to a translated message when the error has none', async () => {
+    fetchMock.mockRejectedValue(new Error(''));
+
+    await runWithRetries();
+
+    expect(handleError).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        message: 'kyma-companion.error.internal_server_error-message',
+        type: ErrorType.FATAL,
+      }),
+    );
   });
 });
